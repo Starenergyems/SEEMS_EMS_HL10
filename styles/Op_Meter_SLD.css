@@ -1,0 +1,480 @@
+.subNavBar .default_sNB {
+    background-color: #F2F8E6;
+}
+
+.M_Page {
+    background-color: #F2F8E6;
+}
+
+.singleLineD {
+    display: inline-block;
+    background-color: #FFFFFF;
+    padding: 24px 0px 11px;
+    margin: 10px 0.416% 7px 1.488%;
+    border-radius: 5px;
+    position: relative;
+}
+
+.singleLineD h2 {
+    display: inline-block;
+    background-color: #CBE198;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    font-size: 36px;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+
+.singleLineD .status_CB {
+    display: inline-block;
+    background-color: #236E37;
+    box-sizing: border-box;
+    height: 20px;
+    width: 20px;
+    border: 1px solid #000000;
+    position: absolute;
+}
+
+.singleLineD .status_CB.setToClose {
+    background-color: #FF0000;
+}
+
+.singleLineD .ctrlable {
+    box-sizing: border-box;
+    height: 14px;
+    width: 14px;
+    border: 3px solid #000000;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+}
+
+.singleLineD #MVCB {
+    left: 709px;
+    top: 168px;
+}
+
+.singleLineD #VCB_1 {
+    left: 140px;
+    top: 307px;
+}
+
+.singleLineD #VCB_2 {
+    left: 424px;
+    top: 307px;
+}
+
+.singleLineD #VCB_3 {
+    left: 708px;
+    top: 307px;
+}
+
+.singleLineD #VCB_4 {
+    left: 994px;
+    top: 307px;
+}
+
+.singleLineD #VCB_aux {
+    left: 1278px;
+    top: 307px;
+}
+
+.singleLineD #ACB_1_1 {
+    left: 140px;
+    top: 394px;
+}
+
+.singleLineD #ACB_1_2 {
+    left: 73px;
+    top: 484px;
+}
+
+.singleLineD #ACB_1_3 {
+    left: 207px;
+    top: 484px;
+}
+
+.singleLineD #ACB_2_1 {
+    left: 424px;
+    top: 394px;
+}
+
+.singleLineD #ACB_2_2 {
+    left: 357px;
+    top: 484px;
+}
+
+.singleLineD #ACB_2_3 {
+    left: 491px;
+    top: 484px;
+}
+
+.singleLineD #ACB_3_1 {
+    left: 708px;
+    top: 394px;
+}
+
+.singleLineD #ACB_3_2 {
+    left: 641px;
+    top: 484px;
+}
+
+.singleLineD #ACB_3_3 {
+    left: 775px;
+    top: 484px;
+}
+
+.singleLineD #ACB_4_1 {
+    left: 994px;
+    top: 394px;
+}
+
+.singleLineD .status_Rly,
+.singleLineD .status_Recloser {
+    display: inline-block;
+    background-color: #B6B6B6;
+    box-sizing: border-box;
+    height: 20px;
+    width: 20px;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.singleLineD #Rly_MVCB {
+    left: 560px;
+    top: 155px;
+}
+
+.singleLineD #Recloser_MVCB {
+    left: 560px;
+    top: 178px;
+}
+
+.singleLineD #Rly_VCB_1 {
+    left: 15px;
+    top: 307px;
+}
+
+.singleLineD #Rly_VCB_2 {
+    left: 299px;
+    top: 307px;
+}
+
+.singleLineD #Rly_VCB_3 {
+    left: 583px;
+    top: 307px;
+}
+
+.singleLineD #Rly_VCB_4 {
+    left: 869px;
+    top: 307px;
+}
+
+.singleLineD #Rly_VCB_aux {
+    left: 1138px;
+    top: 307px;
+}
+
+.oilTemp_legend {
+    display: inline-block;
+    width: 12.767%;
+    margin: 10px 0.357%;
+    vertical-align: top;
+    min-width: 200px;
+    /* background-color: #fa0; */
+}
+
+.oilTemp {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    padding: 5px 0px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+
+}
+
+.oilTemp h3 {
+    background-color: #CBE198;
+    margin: 5px 4.65%;
+    font-size: 32px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 25px;
+}
+
+.oilTemp .no_of_TR {
+    background-color: #CBE19880;
+    box-sizing: border-box;
+    width: calc(90.7% - 38px);
+    padding: 0px 0px 0px 4.65%;
+    margin: 5px 4.65%;
+    font-size: 24px;
+    line-height: 35px;
+    position: relative;
+}
+
+.oilTemp .BG_thermo {
+    background-color: #FFFFFF;
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0px;
+    right: -38px;
+}
+
+.oilTemp img {
+    position: absolute;
+    bottom: 12.5px;
+    right: 26.5px;
+}
+
+.oilTemp .thermoBar {
+    background-color: #FE922D;
+    height: 20px;
+    width: 3px;
+    border-radius: 1.5px;
+    position: absolute;
+    bottom: 24px;
+    right: 36px;
+}
+
+.oilTemp .thermoBottom {
+    background-color: #FE922D;
+    height: 9px;
+    width: 9px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 19px;
+    right: 33px;
+}
+
+/* /////////////////////////////////////////////////// */
+.oilTemp #bar_TR2 {
+    background-color: #236E37;
+    height: 2px;
+}
+
+.oilTemp #bottom_TR2 {
+    background-color: #236E37;
+}
+
+.oilTemp #bar_TR3 {
+    background-color: #E53935;
+    height: 32px;
+}
+
+.oilTemp #bottom_TR3 {
+    background-color: #E53935;
+}
+
+/* /////////////////////////////////////////////////// */
+
+.oilTemp .temp_of_TR {
+    background-color: #CBE19880;
+    box-sizing: border-box;
+    padding: 0px 80px 0px 0px;
+    margin: 5px 4.65%;
+    font-size: 24px;
+    line-height: 35px;
+    text-align: right;
+    border-radius: 0px 0px 0px 10px;
+}
+
+.oilTemp label {
+    display: inline-block;
+    padding: 0px 5px 0px 0px;
+    font-size: 24px;
+}
+
+.legend {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    padding: 0px 4.65%;
+    margin-top: 10px;
+    font-size: 28px;
+    line-height: 40px;
+    border-radius: 5px;
+}
+
+.legend .legendLine {
+    display: inline-block;
+    width: 47%;
+    font-size: 28px;
+    line-height: 40px;
+}
+
+.legend .status_CB {
+    display: inline-block;
+    background-color: #FF0000;
+    box-sizing: border-box;
+    height: 20px;
+    width: 20px;
+    border: 1px solid #000000;
+    position: relative;
+}
+
+.legend .status_CB.open {
+    background-color: #236E37;
+}
+
+.legend .status_CB.noBG {
+    background-color: transparent;
+}
+
+.legend .ctrlable {
+    box-sizing: border-box;
+    height: 14px;
+    width: 14px;
+    border: 3px solid #000000;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+}
+
+.Meter {
+    background-color: #FFFFFF;
+    width: 97.024%;
+    margin: 8px 0.595% 10px 1.488%;
+    border-radius: 5px;
+}
+
+.Meter table {
+    box-sizing: border-box;
+    /* border-collapse: collapse; */
+    padding: 7px 14px;
+    border-spacing: 0px 3px;
+}
+
+.Meter table tr td {
+    box-sizing: border-box;
+    height: 35px;
+    border: 1px solid #FFFFFF;
+    font-size: 24px;
+}
+
+.Meter table .col_01 {
+    width: 175px;
+    padding: 0px 0px 0px 10px;
+}
+
+.Meter table .col_other {
+    text-align: right;
+    width: 285px;
+    padding: 0px 90px 0px 0px;
+}
+
+.Meter table .row_01 td {
+    height: 50px;
+    padding: 0px;
+    font-size: 32px;
+    text-align: center;
+    border-radius: 25px;
+}
+
+.Meter table .row_01 .col_other {
+    background-color: #CBE198;
+}
+
+/* .Meter table .row_01 td {
+    border-radius: 25px;
+    font-size: 32px;
+} */
+
+.Meter table .row_other {
+    background-color: #CBE19880;
+}
+
+.Meter label {
+    font-size: 24px;
+}
+
+.popUpWindow.info_Recloser {
+    height: calc(165px + 35px*4);
+    top: 225px;
+    /* left: -100px; */
+}
+
+.popUpWindow .DL_Line {
+    margin: 0px 10px;
+}
+
+.popUpWindow .DL_Line.firstLine {
+    margin-top: 20px;
+}
+
+.info_Recloser .closeWindowButton {
+    margin: 20px 0px 0px 130px;
+}
+
+.popUpWindow.info_RelayMVCB {
+    height: calc(165px + 35px*10);
+    width: 850px;
+    left: 295px;
+    top: 120px;
+}
+
+.info_RelayMVCB .titlePUW {
+    margin: 25px 285px 0px;
+}
+
+.info_RelayMVCB .columnDLL {
+    display: inline-block;
+    width: 280px;
+    margin-top: 20px;
+    vertical-align: top;
+}
+
+.info_RelayMVCB .DL_Line {
+    padding-left: 5px;
+}
+
+.info_RelayMVCB .DL_Line .dataLight {
+    right: 5px;
+}
+
+.info_RelayMVCB .closeWindowButton {
+    margin: 20px 0px 0px 395px;
+}
+
+.popUpWindow.info_RelayVCB {
+    height: calc(165px + 35px*8);
+    width: 570px;
+    left: 435px;
+    top: 155px;
+}
+
+.info_RelayVCB .titlePUW {
+    margin: 25px 145px 0px;
+}
+
+.info_RelayVCB .columnDLL {
+    display: inline-block;
+    width: 280px;
+    margin-top: 20px;
+    vertical-align: top;
+}
+
+.info_RelayVCB .DL_Line {
+    padding-left: 5px;
+}
+
+.info_RelayVCB .DL_Line .dataLight {
+    right: 5px;
+}
+
+.info_RelayVCB .closeWindowButton {
+    margin: 20px 0px 0px 255px;
+}
+
+/* //////////////////////////////////////////////////////////////////////////// */
+/* .popUpWindow.dataStatus_Set {
+    display: block;
+} */
+
+
+
+
+/* //////////////////////////////////////////////////////////////////////////// */

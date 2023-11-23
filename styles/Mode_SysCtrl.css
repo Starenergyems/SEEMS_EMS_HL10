@@ -1,0 +1,648 @@
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar #sNB_01 {
+    left: 15px;
+}
+
+.subNavBar #sNB_02 {
+    left: 0px;
+}
+
+.subNavBar .default_sNB {
+    background-color: #F2F8E6;
+}
+
+.M_Page {
+    background-color: #F2F8E6;
+    padding-top: 30px;
+}
+
+.sysInfo {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    width: 26.19%;
+    margin: 10px 0.297% 0px 1.488%;
+    border-radius: 20px;
+    vertical-align: top;
+    min-width: 370px;
+}
+
+.sysInfo .title {
+    padding: 10px 2.27%;
+}
+
+.sysInfo h2 {
+    background-color: #CBE198;
+    font-size: 36px;
+    line-height: 50px;
+    border-radius: 25px;
+}
+
+.sysInfo .bigInfo {
+    width: 33.333%;
+    min-width: 122px;
+}
+
+.sysInfo .BG_bigInfo {
+    height: 120px;
+    width: 120px;
+    margin-top: 0px;
+}
+
+.sysInfo .subBG_bigInfo {
+    height: 96px;
+    width: 96px;
+    padding: 70px 0px 0px;
+    left: 12px;
+    top: 12px;
+}
+
+.sysInfo .BG_bigInfo label {
+    /* width: 120px; */
+    font-size: 28px;
+    font-weight: bold;
+    left: 0px;
+    top: 46px;
+}
+
+.sysInfo .bigInfo p {
+    margin-bottom: 5px;
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.sysInfo table {
+    box-sizing: border-box;
+    padding: 0px 0px 5px;
+    border-spacing: 10px 5px;
+}
+
+.sysInfo tr td {
+    box-sizing: border-box;
+    height: 35px;
+    border: 1px solid #CBE198;
+    font-size: 24px;
+}
+
+.sysInfo table .col_01 {
+    background-color: #CBE19880;
+    width: 190px;
+    border-radius: 10px 0px 10px 0px;
+}
+
+.sysInfo table .col_02 {
+    background-color: #FFFFFF;
+    width: 220px;
+    padding: 0px 0px 0px 12%;
+    border-radius: 0px 20px 20px 0px;
+    position: relative;
+}
+
+.sysInfo table .col_01 span {
+    display: inline-block;
+    width: 150px;
+    margin-left: calc(50% - 75px);
+    font-size: 24px;
+}
+
+.sysInfo .col_02.data_R_align {
+    padding: 0px 15% 0px 0px;
+    text-align: right;
+}
+
+.sysInfo table label {
+    font-size: 24px;
+}
+
+.sysInfo .data_R_align label {
+    padding: 0px 5% 0px 0px;
+}
+
+.sysInfo table .BG_button {
+    box-sizing: border-box;
+    height: 35px;
+    width: 35px;
+    border: 1px solid #CBE198;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.sysInfo table button {
+    background: linear-gradient(170deg, #86B41E, #FFFFFF, #86B41E);
+    box-sizing: border-box;
+    height: 33px;
+    width: 33px;
+    font-size: 14px;
+    border-radius: 50%;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+}
+
+.sysInfo table .data_Light {
+    background: none;
+    background-color: #B6B6B6;
+}
+
+.EdReg {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    width: 70.238%;
+    margin: 10px 0.595% 0px 0.297%;
+    border-radius: 20px;
+    vertical-align: top;
+}
+
+.EdReg .title {
+    padding: 10px 0.847%;
+}
+
+.EdReg h2 {
+    background-color: #CBE198;
+    font-size: 36px;
+    line-height: 50px;
+    border-radius: 25px;
+}
+
+.EdReg table {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 39.83%;
+    padding: 0px 0px 0px 0.423%;
+    border-spacing: 5px 10px;
+    min-width: 430px;
+}
+
+.EdReg tr td {
+    background-color: #CBE19880;
+    box-sizing: border-box;
+    height: 40px;
+    padding: 0px 0px 0px 10px;
+    font-size: 24px;
+    position: relative;
+}
+
+.EdReg .col_01 {
+    width: 235px;
+}
+
+.EdReg .col_02 {
+    width: 215px;
+}
+
+.EdReg .row_01,
+.EdReg .row_08 {
+    background-color: #CBE198;
+}
+
+.EdReg label {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 35%;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: right;
+    position: absolute;
+    right: 55px;
+    top: 0px;
+}
+
+.EdReg .row_other p {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 15%;
+    font-size: 24px;
+    line-height: 40px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.EdReg .row_08 button {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 35px;
+    width: 35px;
+    margin: 2.5px 0px 0px 0px;
+    font-size: 14px;
+    border-radius: 50%;
+    vertical-align: top;
+}
+
+.EdReg .row_08 p {
+    display: inline-block;
+    width: 36%;
+    font-size: 24px;
+    line-height: 40px;
+}
+
+.EdReg .chart_freqVsP {
+    display: inline-block;
+    height: 400px;
+    width: 59.322%;
+    vertical-align: top;
+    min-width: 600px;
+}
+
+.subSysInfo {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    width: 97.024%;
+    margin: 15px 0.595% 10px 1.488%;
+    border-radius: 20px;
+    min-width: 1120px;
+}
+
+.subSysInfo .title {
+    padding: 10px 0.613%;
+}
+
+.subSysInfo h2 {
+    display: inline-block;
+    background-color: #CBE198;
+    width: 26%;
+    font-size: 36px;
+    line-height: 50px;
+    border-radius: 25px;
+}
+
+.subSysInfo table {
+    border-collapse: collapse;
+}
+
+.subSysInfo tr td {
+    box-sizing: border-box;
+    height: 40px;
+    font-size: 24px;
+}
+
+.subSysInfo .col_01 {
+    width: 310px;
+    padding: 0px 0px 0px 20px;
+}
+
+.subSysInfo .col_other {
+    width: 330px;
+    border-left: 1px solid #B6B6B6;
+}
+
+.subSysInfo .row_01 td {
+    background-color: #CBE19880;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.subSysInfo .row_01 .col_01 {
+    border-radius: 10px 0px 0px 10px;
+}
+
+.subSysInfo .row_01 .col_last {
+    border-radius: 0px 10px 10px 0px;
+}
+
+.subSysInfo .row_other {
+    border-bottom: 1px solid #B6B6B6;
+}
+
+.subSysInfo .row_relative td {
+    position: relative;
+}
+
+.subSysInfo .data_val {
+    display: inline-block;
+    width: 25%;
+    margin: 0px 0px 0px 35%;
+    font-size: 24px;
+    text-align: right;
+}
+
+.subSysInfo .data_light {
+    display: inline-block;
+    background-color: #000000;
+    box-sizing: border-box;
+    height: 32px;
+    width: 32px;
+    border: 2px solid #B6B6B6;
+    margin: 3px 0px 0px 35%;
+    border-radius: 50%;
+}
+
+.subSysInfo .data_status {
+    display: inline-block;
+    width: 35%;
+    margin: 7px 0px 0px 10px;
+    font-size: 24px;
+    vertical-align: top;
+}
+
+.subSysInfo .row_relative .data_light.setToClose {
+    background-color: #236E37;
+}
+
+.subSysInfo .row_relative button {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 32px;
+    width: 32px;
+    border: 2px solid #B6B6B6;
+    font-size: 14px;
+    border-radius: 50%;
+    position: absolute;
+    right: 10px;
+    top: 3px
+}
+
+.subSysInfo .row_last {
+    border-bottom: none;
+}
+
+.popUpWindow.freqVsP_Set {
+    height: 460px;
+    width: 600px;
+    left: 420px;
+    top: 210px;
+}
+
+.freqVsP_Set .titlePUW {
+    display: inline-block;
+    width: 220px;
+    margin: 25px 0px 0px 55px;
+}
+
+.freqVsP_Set .titleP {
+    margin-left: 40px;
+}
+
+.freqVsP_Set .freqRef,
+.freqVsP_Set .powerRef {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 220px;
+    padding: 0px 0px 0px 5px;
+    border: 1px solid #B6B6B6;
+    margin: 5px 0px 0px 55px;
+    font-size: 24px;
+    line-height: 28px;
+    position: relative;
+}
+
+.freqVsP_Set .powerRef {
+    margin-left: 40px;
+}
+
+.freqVsP_Set .freq_A_Ref,
+.freqVsP_Set .power_t_Ref {
+    margin-top: 35px;
+}
+
+.freqVsP_Set .Freq_valSet,
+.freqVsP_Set .P_valSet {
+    width: 70px;
+    font-size: 24px;
+    text-align: right;
+    position: absolute;
+    right: 45px;
+    top: 0px;
+}
+
+.freqVsP_Set .freqRef p,
+.freqVsP_Set .powerRef p {
+    display: inline-block;
+    width: 40px;
+    font-size: 24px;
+    text-align: center;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+}
+
+.freqVsP_Set .P_valSet {
+    right: 55px;
+}
+
+.freqVsP_Set .rangeFreq,
+.freqVsP_Set .rangePower {
+    display: inline-block;
+    width: 220px;
+    margin: 5px 0px 0px 55px;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.freqVsP_Set .rangePower {
+    margin-left: 40px;
+}
+
+.freqVsP_Set .alertInfo {
+    margin: 25px 175px 0px;
+}
+
+.freqVsP_Set #closeWB_Yes {
+    margin-left: 240px;
+}
+
+.popUpWindow.socRef_Set {
+    height: 400px;
+    width: 440px;
+    left: 500px;
+    top: 240px;
+}
+
+.socRef_Set .titlePUW {
+    margin: 25px 80px 0px;
+}
+
+.socRef_Set table {
+    margin: 35px 0px 0px 25px;
+    border-collapse: collapse;
+}
+
+.socRef_Set tr td {
+    box-sizing: border-box;
+    height: 30px;
+    border: 1px solid #B6B6B6;
+    font-size: 24px;
+}
+
+.socRef_Set .col_01 {
+    width: 160px;
+    padding: 0px 0px 0px 5px;
+}
+
+.socRef_Set .col_02 {
+    width: 110px;
+    padding: 0px 0px 0px 23px;
+}
+
+.socRef_Set .col_03 {
+    width: 110px;
+    padding: 0px 0px 0px 17px;
+}
+
+.socRef_Set .row_01 td {
+    padding: 0px;
+    text-align: center;
+}
+
+.socRef_Set .socRefVal {
+    width: 64px;
+    font-size: 24px;
+    text-align: right;
+}
+
+.socRef_Set .voltRefVal {
+    width: 76px;
+    font-size: 24px;
+    text-align: right;
+}
+
+.socRef_Set .rangeSOC,
+.socRef_Set .rangeVolt {
+    margin: 5px 25px 0px;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.socRef_Set .alertInfo {
+    height: 20px;
+    margin: 15px 95px 0px;
+}
+
+.socRef_Set #closeWB_Yes {
+    margin-left: 160px;
+}
+
+.popUpWindow.alert_WrongDataSet {
+    height: 200px;
+    width: 320px;
+    left: 560px;
+    top: 340px;
+}
+
+.alert_WrongDataSet p {
+    margin: 40px 35px 0px;
+    font-size: 24px;
+    line-height: 30px;
+    color: #FF0000;
+}
+
+.alert_WrongDataSet #closeWB_No {
+    margin: 25px 130px 0px;
+}
+
+/* ///////////////////////////////////////////////// */
+.block_temp {
+    display: none;
+    background-color: #FFAA00;
+    width: 300px;
+    height: 280px;
+    position: absolute;
+    right: 40px;
+    top: 50px;
+}
+
+.block_temp input[type="text"] {
+    display: block;
+    height: 20px;
+    width: 200px;
+    border: 1px solid #000000;
+    font-size: 15px;
+}
+
+.block_temp .demo_1 label {
+    font-size: 15px;
+}
+
+.block_temp .demo_1 input[type="number"] {
+    height: 20px;
+    width: 80px;
+    border: 1px solid #000000;
+    font-size: 15px;
+}
+
+.block_temp .demo_1 input[type="submit"] {
+    height: 20px;
+    width: 60px;
+    border: 1px solid #000000;
+    font-size: 15px;
+    border-radius: 5px;
+}
+
+.block_temp .demo_1 .Unit {
+    display: inline-block;
+    width: 40px;
+}
+
+.block_temp .demo_2 input[type="submit"] {
+    box-sizing: border-box;
+    width: 60px;
+    padding: 2px 0px;
+    border: 1px solid #444444;
+    margin: 0px 2px;
+    font-size: 15px;
+}
+
+.block_temp .demo_2 button {
+    box-sizing: border-box;
+    width: 160px;
+    padding: 2px 10px;
+    border: 1px solid #444444;
+    margin: 0px 2px;
+    font-size: 15px;
+}
+
+.block_temp .demo_2 .Red_Light {
+    background-color: #000000;
+    display: inline-block;
+    box-sizing: border-box;
+    height: 20px;
+    width: 20px;
+    border: 3px solid #CCCCCC;
+    border-radius: 50%;
+}
+
+.block_temp .demo_2 .Green_Light {
+    background-color: #000000;
+    display: inline-block;
+    box-sizing: border-box;
+    height: 20px;
+    width: 20px;
+    border: 3px solid #CCCCCC;
+    border-radius: 50%;
+    vertical-align: bottom;
+}
+
+.block_temp #spare_Status {
+    display: inline-block;
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+.block_temp #spare_Light {
+    background-color: #000000;
+    display: inline-block;
+    box-sizing: border-box;
+    height: 20px;
+    width: 20px;
+    border: 3px solid #CCCCCC;
+    border-radius: 50%;
+}
+
+.block_temp #spare_Light.setToClose {
+    background-color: #00FF00;
+}
+
+.block_temp .data_val {
+    display: inline-block;
+    width: 70px;
+    margin: 0px 10px 0px 0px;
+    font-size: 20px;
+}

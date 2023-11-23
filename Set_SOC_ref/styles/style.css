@@ -1,0 +1,76 @@
+* {
+    padding: 0px;
+    border: none;
+    margin: 0px;
+    /* font-size: 0; */
+}
+
+html {
+    background-color: #9DC9F0;
+    font-family: "Lato", sans-serif;
+}
+
+#table_01 {
+    padding: 0px;
+    border: 1px solid #000000;
+    margin: 50px 10px;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+}
+
+table tr td {
+    padding: 10px;
+    border: 1px solid #000000;
+    font-size: 15px;
+}
+
+#table_01 .col_01 {
+    box-sizing: border-box;
+    width: 120px;
+    padding: 0px 0px 0px 10px;
+    background-color: #DDDDFF;
+}
+
+#table_01 .col_02 {
+    box-sizing: border-box;
+    width: 100px;
+    /* border-left: 1px solid #000000; */
+}
+
+#table_01 .col_03 {
+    box-sizing: border-box;
+    width: 100px;
+    /* border-left: 1px solid #000000; */
+}
+
+#table_01 .row_other .col_02 {
+    text-align: right;
+    padding: 10px 30px 10px 0px;
+}
+
+#table_01 .row_other .col_03 {
+    text-align: right;
+    padding: 10px 25px 10px 0px;
+}
+
+#table_01 .row_01 {
+    text-align: center;
+    background-color: #DDDDFF;
+    /* border-bottom: 1px solid #000000; */
+}
+
+/* .CloseWindow {
+    background-color: #ff0;
+    display: block;
+    padding: 10px;
+}
+
+.CloseWindow button {
+    display: block;
+    box-sizing: border-box;
+    width: 80px;
+    padding: 2px 10px;
+    border: 1px solid #444444;
+    margin: 0px auto;
+    font-size: 15px;
+} */

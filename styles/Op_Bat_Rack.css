@@ -1,0 +1,237 @@
+.subNavBar .default_sNB {
+    background-color: #FFFBED;
+}
+
+.M_Page {
+    background-color: #FFFBED;
+}
+
+.Title {
+    background-color: #F9E06CB3;
+    height: 50px;
+    margin: 10px 1.488%;
+    border-radius: 25px;
+    position: relative;
+}
+
+.Title h2 {
+    display: inline-block;
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.Title label {
+    display: inline-block;
+    width: 55px;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 50px;
+}
+
+.Title a {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 40px;
+    width: 210px;
+    border: 2px solid #F9E06C;
+    margin-top: 5px;
+    font-size: 30px;
+    color: #000000;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 20px;
+    vertical-align: top;
+}
+
+.Title #infoBMS {
+    background-color: #F9E06C;
+    border-color: #FFFFFF;
+    margin-left: 5%;
+    text-decoration: none;
+}
+
+.Title .preNext {
+    height: 30px;
+    width: 80px;
+    border: 1px solid #D9D9D9;
+    font-size: 20px;
+    line-height: 28px;
+    text-decoration: none;
+    border-radius: 10px;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+}
+
+.Title #previousBMS {
+    right: 105px;
+}
+
+.Rack {
+    background-color: #FFFFFF;
+    margin: 10px 1.488%;
+    border-radius: 10px;
+}
+
+.Rack table {
+    padding: 3px 0.185%;
+    border-spacing: 0.1234% 2px;
+}
+
+.Rack tr td {
+    box-sizing: border-box;
+    background-color: #F9E06C80;
+    height: 35px;
+    font-size: 20px;
+}
+
+.Rack .col_01 {
+    /* width: 11.852%; */
+    width: 192px;
+    padding: 0px 0px 0px 0.308%;
+    min-width: 130px;
+}
+
+.Rack .col_other {
+    /* width: 7.222%; */
+    width: 117px;
+    text-align: right;
+    padding: 0px 1.234% 0px 0px;
+    min-width: 90px;
+}
+
+.Rack .row_head td {
+    background-color: #F9E06CC0;
+    height: 40px;
+    padding: 0px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.Rack .row_head .col_01 {
+    border-radius: 20px 0px 0px 20px;
+}
+
+.Rack .row_head .col_last {
+    border-radius: 0px 20px 20px 0px;
+}
+
+.Rack .row_spare td {
+    background-color: transparent;
+    height: 2px;
+}
+
+.Rack .row_rackStatus .col_other {
+    padding: 0px;
+    text-align: center;
+}
+
+.Rack table label {
+    font-size: 20px;
+}
+
+.Rack .row_position .col_other {
+    padding-right: 1.358%;
+}
+
+.Rack .No_BMU {
+    display: inline-block;
+    width: 30%;
+    margin: 0px 10.67% 0px 0px;
+}
+
+.Rack .No_Cell {
+    display: inline-block;
+    width: 30%;
+}
+
+/* //////@@@@@@@@///////########/////$$$$$$$$$//////%%%%%%%%%%///////&&&&&&////////// */
+.Rack #V_cell_MaxDiff_R01,
+.Rack #V_cell_MaxDiff_R02,
+.Rack #V_cell_MaxDiff_R03,
+.Rack #T_cell_MaxDiff_R01,
+.Rack #T_cell_MaxDiff_R02,
+.Rack #T_cell_MaxDiff_R03,
+.Rack #T_cell_MaxDiff_R04 {
+    background-color: #FF0000;
+}
+
+.Rack #V_cell_MaxDiff_R04,
+.Rack #V_cell_MaxDiff_R05,
+.Rack #T_cell_MaxDiff_R05,
+.Rack #T_cell_MaxDiff_R06,
+.Rack #T_cell_MaxDiff_R07 {
+    background-color: #EF860F;
+}
+
+.Rack #V_cell_MaxDiff_R06,
+.Rack #V_cell_MaxDiff_R07,
+.Rack #T_cell_MaxDiff_R08,
+.Rack #T_cell_MaxDiff_R09 {
+    background-color: #FFFF00;
+}
+
+/* //////@@@@@@@@///////########/////$$$$$$$$$//////%%%%%%%%%%///////&&&&&&////////// */
+
+.Rack .row_dataLight .col_other {
+    padding: 0px;
+    text-align: center;
+}
+
+.Rack .row_dataLight .dataLight {
+    display: inline-block;
+    background-color: #236E37;
+    box-sizing: border-box;
+    height: 28px;
+    width: 28px;
+    border: 2px solid #B6B6B6;
+    margin: 3px 0px 0px;
+    border-radius: 50%;
+}
+
+.Rack .row_DL_1st .col_other {
+    position: relative;
+}
+
+.Rack .openRackAlm {
+    height: 109px;
+    width: 50px;
+    position: absolute;
+    left: calc(50% - 25px);
+    top: 0px;
+}
+
+.popUpWindow.info_RackAlm {
+    height: calc(145px + 32px*19);
+    width: 850px;
+    left: 295px;
+    top: 0px;
+}
+
+.info_RackAlm .titlePUW {
+    display: inline-block;
+    width: 260px;
+    margin: 25px 10px 0px;
+}
+
+.info_RackAlm .columnDLL {
+    display: inline-block;
+    width: 280px;
+    margin-top: 10px;
+    vertical-align: top;
+}
+
+.info_RackAlm .closeWindowButton {
+    margin: 15px 0px 0px 395px;
+}
+
+.info_RackAlm .DL_Line {
+    padding-left: 5px;
+    margin: 0px 10px;
+    line-height: 32px;
+}
+
+.info_RackAlm .DL_Line .dataLight {
+    top: 2px;
+}

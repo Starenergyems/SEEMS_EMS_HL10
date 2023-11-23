@@ -1,0 +1,172 @@
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar .default_sNB {
+    background-color: #F2F8E6;
+}
+
+.M_Page {
+    background-color: #F2F8E6;
+}
+
+.title {
+    background-color: #CBE198;
+    height: 50px;
+    margin: 10px 1.488% 5px;
+    border-radius: 25px;
+    position: relative;
+}
+
+.title h2 {
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.title #addAccount {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 120px;
+    border: 2px solid #808080;
+    font-size: 24px;
+    line-height: 36px;
+    border-radius: 10px;
+    position: absolute;
+    right: 20px;
+    bottom: 5px;
+}
+
+.accountManage {
+    background-color: #FFFFFF80;
+    padding: 5px 0px;
+    margin: 10px 1.488%;
+    border-radius: 10px;
+}
+
+table.dataTable thead th {
+    background-color: #CBE19880;
+}
+
+table.dataTable tbody .even {
+    background-color: #CBE19880;
+}
+
+table.dataTable tbody td {
+    padding: 3px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #CBE19880;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: #CBE198;
+}
+
+.dataTables_wrapper .btn_Edit {
+    background: linear-gradient(170deg, #B6B6B6, #CCCCCC, #B6B6B6);
+    box-sizing: border-box;
+    height: 25px;
+    width: 70px;
+    border: 1px solid #808080;
+    font-size: 18px;
+    color: #FFFFFF;
+    border-radius: 10px;
+}
+
+.popUpWindow.addEditAccount {
+    height: 400px;
+    top: 180px;
+}
+
+.addEditAccount .titlePUW {
+    margin: 25px 50px 0px;
+}
+
+.addEditAccount .infoPUW {
+    box-sizing: border-box;
+    padding: 0px 0px 0px 5px;
+    border: 1px solid #B6B6B6;
+    margin: 5px 30px 0px;
+    font-size: 24px;
+    line-height: 28px;
+    position: relative;
+}
+
+.addEditAccount .infoPUW.firstInfo {
+    margin-top: 20px;
+}
+
+.addEditAccount .infoName {
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.addEditAccount .infoAccount {
+    width: 120px;
+    font-size: 24px;
+    line-height: 28px;
+    text-align: center;
+    position: absolute;
+    right: 16px;
+}
+
+.addEditAccount .accountName {
+    display: none;
+}
+
+.addEditAccount .accountName.appear {
+    display: inline-block;
+}
+
+.addEditAccount .inputAccount {
+    width: 120px;
+    font-size: 24px;
+    line-height: 28px;
+    text-align: center;
+    position: absolute;
+    right: 16px;
+}
+
+.addEditAccount .dropDown_Logo {
+    padding: 8px 0px 7px;
+    position: absolute;
+    right: 4px;
+    cursor: pointer;
+}
+
+.addEditAccount .accNavBar {
+    display: none;
+    border-top: 1px solid #B6B6B6;
+    position: absolute;
+    right: 15px;
+    top: 28px;
+    z-index: 1;
+}
+
+.addEditAccount .accNavBar.appear {
+    display: block;
+}
+
+.addEditAccount .navBarOpt {
+    display: block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 120px;
+    border: 1px solid #B6B6B6;
+    border-top: none;
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.addEditAccount #id_openBut {
+    display: none;
+    font-size: 20px;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+
+.addEditAccount .closeWindowButton {
+    margin-top: 50px;
+}

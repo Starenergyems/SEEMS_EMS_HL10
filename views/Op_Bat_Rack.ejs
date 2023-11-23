@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
+    <title>Rack資訊</title>
+    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="styles/Op_Bat_Rack.css" rel="stylesheet" type="text/css" />
+    <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
+</head>
+
+<body>
+    <div class="T_Main">
+        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
+        <div class="dateTime_Username">
+            <label id="dateTime_Now">2000/01/01 23:59:59</label>
+            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label for="qaz" id="userAccount">Administrator</label>
+            <div class="accountNavBar">
+                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
+                <a href="AccountManage.html" id="accNB_02">人員管理</a>
+                <a href="Login.html" id="accNB_03">登出</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="L_Main">
+        <div class="systemStatus">
+            <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
+            <div class="sumAWNum sumAlarmNum">
+                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalAlarmNum">999</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <div class="sumAW_EachArea sumAlarm_EachArea">
+                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
+                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
+                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env">11</label></div>
+                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF">54</label></div>
+                </div>
+            </div>
+            <div class="sumAWNum sumWarningNum">
+                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalWarningNum">52</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <div class="sumAW_EachArea sumWarning_EachArea">
+                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
+                    </div>
+                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS">3</label></div>
+                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env">99</label></div>
+                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF">87</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="Op_Meter_SLD.html"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+        </div>
+        <div class="systemInfo">
+            <p class="subTitle">|| 系統資訊 ||</p>
+
+            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq">60.123</label>
+                <p class="dataUnit">Hz</p>
+            </div>
+            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP">12345.6</label>
+                <p class="dataUnit">kW</p>
+            </div>
+            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
+                <p class="dataUnit">kVar</p>
+            </div>
+            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage">23.456</label>
+                <p class="dataUnit">kV</p>
+            </div>
+            <div class="DV_Line">電流<label class="dataValue" id="L_M_current">78.87</label>
+                <p class="dataUnit">A</p>
+            </div>
+            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
+                <p class="dataUnit"></p>
+            </div>
+            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
+                <p class="dataUnit">%</p>
+            </div>
+
+            <div class="DV_Line spareLine">當日充放電量</div>
+
+            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+        </div>
+        <div class="eStop">
+            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <p class="epo_word">緊急停止鈕</p>
+        </div>
+
+        <div class="popUpWindow epo">
+            <h2 class="titlePUW">緊急停止設定</h2>
+
+            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <p class="epoInfo">確認停機</p>
+
+            <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+            <button class="closeWindowButton" id="closeWB_No">取消</button>
+        </div>
+    </div>
+
+    <div class="R_Main">
+        <div class="subNavBar" id="sub_NavBar">
+            <!-- <h2>模式控制</h2> -->
+            <div class="button_sNB" id="sNB_01">
+                <a href="Op_Meter_SLD.html" class="name_button_sNB">單線圖</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
+                <div class="ssNavBar">
+                    <a href="Op_Meter_SLD.html" id="ssNB_01">電力單線圖</a>
+                    <a href="Op_Meter_MainMeter.html" id="ssNB_02">主電表</a>
+                    <a href="Op_Meter_AuxMeter.html" id="ssNB_03">輔電表</a>
+                </div>
+            </div>
+            <div class="button_sNB" id="sNB_02">
+                <a href="Op_PCS_InfoSummary.html" class="name_button_sNB">PCS</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
+                <div class="ssNavBar">
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_01">PCS 1-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_02">PCS 1-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_03">PCS 2-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_04">PCS 2-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_05">PCS 3-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_06">PCS 3-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_07">PCS 4</a>
+                </div>
+            </div>
+            <div class="button_sNB button_sNB_last default_sNB" id="sNB_03">
+                <a href="Op_Bat_InfoSummary.html" class="name_button_sNB">電池</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
+                <div class="ssNavBar">
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_01">BMS 1-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_02">BMS 1-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_03">BMS 2-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_04">BMS 2-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_05">BMS 3-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_06">BMS 3-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_07">BMS 4</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="M_Page">
+            <div class="Title">
+                <h2>【BMS</h2><label for="qaz" id="No_of_BMS">1-1</label>
+                <h2>】</h2>
+                <a href="Op_Bat_InfoDetail.html" class="infoStatus" id="infoBMS">狀態與數值</a>
+                <a href="#" class="infoStatus" id="infoRack">Rack資訊</a>
+                <a href="#" class="preNext" id="previousBMS">上一頁</a>
+                <a href="#" class="preNext" id="nextBMS">下一頁</a>
+            </div>
+
+            <div class="Rack">
+                <table>
+                    <tr class="row_head">
+                        <td class="col_01"></td>
+                        <td class="col_other">Rack&nbsp01</td>
+                        <td class="col_other">Rack&nbsp02</td>
+                        <td class="col_other">Rack&nbsp03</td>
+                        <td class="col_other">Rack&nbsp04</td>
+                        <td class="col_other">Rack&nbsp05</td>
+                        <td class="col_other">Rack&nbsp06</td>
+                        <td class="col_other">Rack&nbsp07</td>
+                        <td class="col_other">Rack&nbsp08</td>
+                        <td class="col_other">Rack&nbsp09</td>
+                        <td class="col_other">Rack&nbsp10</td>
+                        <td class="col_other">Rack&nbsp11</td>
+                        <td class="col_other col_last">Rack&nbsp12</td>
+                    </tr>
+
+                    <tr class="row_spare">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr class="row_other row_rackStatus">
+                        <td class="col_01">工作狀態</td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R01">開機</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R02">自檢測</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R03">工作</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R04">故障</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R05">關機</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R06">升級</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R07">ADC校正</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R08">測試</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R09">工作</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R10">工作</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R11">工作</label></td>
+                        <td class="col_other"><label class="dataStatus" id="Mode_R12">工作</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電壓&nbsp(V)</td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R01">1234.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R02">1234.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R03">1234.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R04">1234.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R05">1234.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R06">1234.6</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R07">1234.7</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R08">1234.8</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R09">1234.9</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R10">935.0</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R11">935.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_rack_R12">935.2</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電流&nbsp(A)</td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R01">-132.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R02">-132.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R03">-132.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R04">-132.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R05">-132.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R06">-132.6</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R07">-132.7</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R08">-132.8</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R09">-132.9</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R10">33.0</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R11">3.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="I_rack_R12">-3.2</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">SOC&nbsp(%)</td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R01">100.00</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R02">100.00</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R03">99.30</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R04">99.40</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R05">99.50</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R06">99.60</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R07">12.70</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R08">12.80</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R09">12.90</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R10">13.00</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R11">5.10</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOC_R12">5.20</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">SOH&nbsp(%)</td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R01">100.00</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R02">100.00</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R03">99.30</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R04">99.40</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R05">99.50</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R06">99.60</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R07">99.70</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R08">99.80</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R09">90.90</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R10">90.00</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R11">90.10</label></td>
+                        <td class="col_other"><label class="dataValue" id="SOH_R12">90.20</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">絕緣阻抗&nbsp(kΩ)</td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R01">12345.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R02">12345.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R03">12345.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R04">1234.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R05">1234.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R06">1234.6</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R07">123.7</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R08">123.8</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R09">123.9</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R10">12.0</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R11">1.0</label></td>
+                        <td class="col_other"><label class="dataValue" id="Impedance_R12">0.0</label></td>
+                    </tr>
+
+                    <tr class="row_spare">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr class="row_other">
+                        <td class="col_01">最高電芯電壓&nbsp(V)</td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R01">4.0001</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R02">4.0002</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R03">4.0003</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R04">4.0004</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R05">4.0005</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R06">4.0006</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R07">4.0007</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R08">4.0008</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R09">4.0009</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R10">4.0010</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R11">4.0011</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Max_R12">4.0012</label></td>
+                    </tr>
+                    <tr class="row_other row_position">
+                        <td class="col_01">位置&nbsp(BMU/Cell)</td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R01">24</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R01">01</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R02">23</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R02">02</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R03">22</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R03">03</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R04">21</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R04">04</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R05">20</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R05">05</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R06">19</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R06">06</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R07">18</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R07">07</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R08">17</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R08">08</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R09">16</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R09">09</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R10">15</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R10">10</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R11">14</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R11">02</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R12">13</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R12">12</label>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">最低電芯電壓&nbsp(V)</td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R01">2.5001</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R02">2.5002</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R03">2.5003</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R04">2.5004</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R05">2.5005</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R06">2.5006</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R07">2.5007</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R08">2.5008</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R09">2.5009</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R10">2.5010</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R11">2.5011</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_Min_R12">2.5012</label></td>
+                    </tr>
+                    <tr class="row_other row_position">
+                        <td class="col_01">位置&nbsp(BMU/Cell)</td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R01">13</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R01">01</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R02">14</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R02">02</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R03">15</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R03">03</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R04">16</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R04">04</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R05">17</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R05">05</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R06">18</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R06">06</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R07">19</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R07">07</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R08">20</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R08">08</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R09">21</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R09">09</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R10">22</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R10">10</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R11">23</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R11">11</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R12">24</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R12">12</label>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">最大電芯壓差&nbsp(mV)</td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R01">1234.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R02">50.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R03">50.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R04">40.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R05">40.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R06">30.6</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R07">30.7</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R08">10.8</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R09">10.9</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R10">9.0</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R11">9.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="V_cell_MaxDiff_R12">9.2</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">最高電芯溫度&nbsp(&#176C)</td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R01">123.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R02">123.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R03">123.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R04">123.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R05">123.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R06">123.6</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R07">45.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R08">45.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R09">45.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R10">45.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R11">45.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Max_R12">45.6</label></td>
+                    </tr>
+                    <tr class="row_other row_position">
+                        <td class="col_01">位置&nbsp(BMU/Cell)</td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R01">24</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R01">12</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R02">23</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R02">11</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R03">22</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R03">10</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R04">21</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R04">09</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R05">20</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R05">08</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R06">19</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R06">07</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R07">18</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R07">06</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R08">17</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R08">05</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R09">16</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R09">04</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R10">15</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R10">03</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R11">14</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R11">02</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R12">13</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R12">01</label>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">最低電芯溫度&nbsp(&#176C)</td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R01">-123.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R02">-123.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R03">-123.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R04">-123.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R05">-45.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R06">-45.6</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R07">23.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R08">23.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R09">23.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R10">23.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R11">23.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_Min_R12">23.6</label></td>
+                    </tr>
+                    <tr class="row_other row_position">
+                        <td class="col_01">位置&nbsp(BMU/Cell)</td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R01">13</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R01">12</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R02">14</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R02">11</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R03">15</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R03">10</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R04">16</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R04">09</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R05">17</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R05">08</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R06">18</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R06">07</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R07">19</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R07">06</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R08">20</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R08">05</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R09">21</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R09">04</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R10">22</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R10">03</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R11">23</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R11">02</label>
+                        </td>
+                        <td class="col_other">
+                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R12">24</label>/
+                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R12">01</label>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">最大電芯溫差&nbsp(&#176C)</td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R01">123.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R02">6.2</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R03">6.3</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R04">6.4</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R05">4.5</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R06">4.6</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R07">4.7</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R08">2.8</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R09">2.9</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R10">1.0</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R11">1.1</label></td>
+                        <td class="col_other"><label class="dataValue" id="T_cell_MaxDiff_R12">0.2</label></td>
+                    </tr>
+
+                    <tr class="row_spare">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr class="row_other row_dataLight row_DL_1st">
+                        <td class="col_01">CMU&nbsp告警</td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R01"></div>
+                            <div class="openRackAlm" id="openRackAlm_R01"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R02"></div>
+                            <div class="openRackAlm" id="openRackAlm_R02"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R03"></div>
+                            <div class="openRackAlm" id="openRackAlm_R03"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R04"></div>
+                            <div class="openRackAlm" id="openRackAlm_R04"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R05"></div>
+                            <div class="openRackAlm" id="openRackAlm_R05"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R06"></div>
+                            <div class="openRackAlm" id="openRackAlm_R06"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R07"></div>
+                            <div class="openRackAlm" id="openRackAlm_R07"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R08"></div>
+                            <div class="openRackAlm" id="openRackAlm_R08"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R09"></div>
+                            <div class="openRackAlm" id="openRackAlm_R09"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R10"></div>
+                            <div class="openRackAlm" id="openRackAlm_R10"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R11"></div>
+                            <div class="openRackAlm" id="openRackAlm_R11"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight OG_L" id="alarmCMU_R12"></div>
+                            <div class="openRackAlm" id="openRackAlm_R12"></div>
+                        </td>
+                    </tr>
+                    <tr class="row_other row_dataLight">
+                        <td class="col_01">CMU&nbsp故障</td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R01"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R02"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R03"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R04"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R05"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R06"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R07"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R08"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R09"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R10"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R11"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="faultCMU_R12"></div>
+                        </td>
+                    </tr>
+                    <tr class="row_other row_dataLight">
+                        <td class="col_01">硬體狀態</td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R01"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R02"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R03"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R04"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R05"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R06"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R07"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R08"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R09"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R10"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R11"></div>
+                        </td>
+                        <td class="col_other">
+                            <div class="dataLight RG_L" id="statusHW_R12"></div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="popUpWindow info_RackAlm">
+                    <h2 class="titlePUW titleAlarmCMU">RackXX&nbspCMU告警</h2>
+                    <h2 class="titlePUW titleFaultCMU">RackXX&nbspCMU故障</h2>
+                    <h2 class="titlePUW titleStatusHW">RackXX&nbsp硬體狀態</h2>
+
+                    <div class="columnDLL">
+                        <div class="DL_Line">電芯過壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_0"></label>
+                        </div>
+                        <div class="DL_Line">電芯欠壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_1"></label>
+                        </div>
+                        <div class="DL_Line">總壓過壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_2"></label>
+                        </div>
+                        <div class="DL_Line">總壓欠壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_3"></label>
+                        </div>
+                        <div class="DL_Line">Pack過壓告警<label for="qaz" class="dataLight OB_L"
+                                id="alarmCMU_bit_4"></label>
+                        </div>
+                        <div class="DL_Line">Pack欠壓告警<label for="qaz" class="dataLight OB_L"
+                                id="alarmCMU_bit_5"></label>
+                        </div>
+                        <div class="DL_Line">電芯壓差告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_6"></label>
+                        </div>
+                        <div class="DL_Line">Pack壓差告警<label for="qaz" class="dataLight OB_L"
+                                id="alarmCMU_bit_8"></label>
+                        </div>
+                        <div class="DL_Line">電芯過溫告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_9"></label>
+                        </div>
+                        <div class="DL_Line">電芯低溫告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_10"></label>
+                        </div>
+                        <div class="DL_Line">電芯溫差告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_11"></label>
+                        </div>
+                        <div class="DL_Line">絕緣漏電告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_12"></label>
+                        </div>
+                        <div class="DL_Line">過流告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_20"></label>
+                        </div>
+                    </div>
+                    <div class="columnDLL">
+                        <div class="DL_Line">電芯過壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_0"></label>
+                        </div>
+                        <div class="DL_Line">電芯欠壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_1"></label>
+                        </div>
+                        <div class="DL_Line">總壓過壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_2"></label>
+                        </div>
+                        <div class="DL_Line">總壓欠壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_3"></label>
+                        </div>
+                        <div class="DL_Line">Pack過壓故障<label for="qaz" class="dataLight RB_L"
+                                id="faultCMU_bit_4"></label>
+                        </div>
+                        <div class="DL_Line">Pack欠壓故障<label for="qaz" class="dataLight RB_L"
+                                id="faultCMU_bit_5"></label>
+                        </div>
+                        <div class="DL_Line">總壓壓差故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_7"></label>
+                        </div>
+                        <div class="DL_Line">電芯過溫故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_9"></label>
+                        </div>
+                        <div class="DL_Line">電芯低溫故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_10"></label>
+                        </div>
+                        <div class="DL_Line">絕緣漏電故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_12"></label>
+                        </div>
+                        <div class="DL_Line">CMU-BMU通訊故障<label for="qaz" class="dataLight RB_L"
+                                id="faultCMU_bit_13"></label>
+                        </div>
+                        <div class="DL_Line">電壓採樣故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_14"></label>
+                        </div>
+                        <div class="DL_Line">溫度採樣故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_15"></label>
+                        </div>
+                        <div class="DL_Line">電流採樣故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_17"></label>
+                        </div>
+                        <div class="DL_Line">CMU-SMU通訊故障<label for="qaz" class="dataLight RB_L"
+                                id="faultCMU_bit_18"></label>
+                        </div>
+                        <div class="DL_Line">過流故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_20"></label>
+                        </div>
+                        <div class="DL_Line">極性反接故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_21"></label>
+                        </div>
+                        <div class="DL_Line">熔絲故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_22"></label>
+                        </div>
+                        <div class="DL_Line">接觸器故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_23"></label>
+                        </div>
+                    </div>
+                    <div class="columnDLL">
+                        <div class="DL_Line">主正繼電器投入<label for="qaz" class="dataLight GB_L" id="statusHW_bit_0"></label>
+                        </div>
+                        <div class="DL_Line">主正繼電器切離<label for="qaz" class="dataLight GB_L" id="statusHW_bit_1"></label>
+                        </div>
+                        <div class="DL_Line">主正繼電器故障<label for="qaz" class="dataLight RB_L" id="statusHW_bit_2"></label>
+                        </div>
+                        <div class="DL_Line">主正繼電器投入失敗<label for="qaz" class="dataLight RB_L"
+                                id="statusHW_bit_3"></label>
+                        </div>
+                        <div class="DL_Line">主負繼電器投入<label for="qaz" class="dataLight GB_L" id="statusHW_bit_4"></label>
+                        </div>
+                        <div class="DL_Line">主負繼電器切離<label for="qaz" class="dataLight GB_L" id="statusHW_bit_5"></label>
+                        </div>
+                        <div class="DL_Line">主負繼電器故障<label for="qaz" class="dataLight RB_L" id="statusHW_bit_6"></label>
+                        </div>
+                        <div class="DL_Line">主負繼電器投入失敗<label for="qaz" class="dataLight RB_L"
+                                id="statusHW_bit_7"></label>
+                        </div>
+                        <div class="DL_Line">熔絲投入<label for="qaz" class="dataLight GB_L" id="statusHW_bit_8"></label>
+                        </div>
+                        <div class="DL_Line">熔絲切離<label for="qaz" class="dataLight GB_L" id="statusHW_bit_9"></label>
+                        </div>
+                        <div class="DL_Line">BMU反向菊花鏈啟用<label for="qaz" class="dataLight GB_L"
+                                id="statusHW_bit_12"></label>
+                        </div>
+                    </div>
+
+                    <button class="closeWindowButton" id="closeWB_No">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/script_template.js"></script>
+    <script src="scripts/Op_Bat_Rack.js"></script>
+</body>
+
+</html>

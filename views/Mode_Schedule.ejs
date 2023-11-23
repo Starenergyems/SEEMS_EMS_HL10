@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
+    <title>排程設置</title>
+    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="styles/Mode_Schedule.css" rel="stylesheet" type="text/css" />
+    <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
+</head>
+
+<body>
+    <div class="T_Main">
+        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
+        <div class="dateTime_Username">
+            <label id="dateTime_Now">2000/01/01 23:59:59</label>
+            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label for="qaz" id="userAccount">Administrator</label>
+            <div class="accountNavBar">
+                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
+                <a href="AccountManage.html" id="accNB_02">人員管理</a>
+                <a href="Login.html" id="accNB_03">登出</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="L_Main">
+        <div class="systemStatus">
+            <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
+            <div class="sumAWNum sumAlarmNum">
+                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalAlarmNum">999</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <div class="sumAW_EachArea sumAlarm_EachArea">
+                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
+                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
+                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env">11</label></div>
+                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF">54</label></div>
+                </div>
+            </div>
+            <div class="sumAWNum sumWarningNum">
+                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalWarningNum">52</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <div class="sumAW_EachArea sumWarning_EachArea">
+                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
+                    </div>
+                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS">3</label></div>
+                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env">99</label></div>
+                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF">87</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <a href="Mode_SysCtrl.html"><button class="button_nB default_nB" id="nB_Mode">模式控制</button></a>
+            <a href="Op_Meter_SLD.html"><button class="button_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+        </div>
+        <div class="systemInfo">
+            <p class="subTitle">|| 系統資訊 ||</p>
+
+            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq">60.123</label>
+                <p class="dataUnit">Hz</p>
+            </div>
+            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP">12345.6</label>
+                <p class="dataUnit">kW</p>
+            </div>
+            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
+                <p class="dataUnit">kVar</p>
+            </div>
+            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage">23.456</label>
+                <p class="dataUnit">kV</p>
+            </div>
+            <div class="DV_Line">電流<label class="dataValue" id="L_M_current">78.87</label>
+                <p class="dataUnit">A</p>
+            </div>
+            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
+                <p class="dataUnit"></p>
+            </div>
+            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
+                <p class="dataUnit">%</p>
+            </div>
+
+            <div class="DV_Line spareLine">當日充放電量</div>
+
+            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+        </div>
+        <div class="eStop">
+            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <p class="epo_word">緊急停止鈕</p>
+        </div>
+
+        <div class="popUpWindow epo">
+            <h2 class="titlePUW">緊急停止設定</h2>
+
+            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <p class="epoInfo">確認停機</p>
+
+            <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+            <button class="closeWindowButton" id="closeWB_No">取消</button>
+        </div>
+    </div>
+
+    <div class="R_Main">
+        <div class="subNavBar" id="sub_NavBar">
+            <!-- <h2>模式控制</h2> -->
+            <div class="button_sNB" id="sNB_01">
+                <a href="Mode_SysCtrl.html" class="name_button_sNB">系統控制</a>
+            </div>
+            <div class="button_sNB default_sNB" id="sNB_02">
+                <a href="Mode_Schedule.html" class="name_button_sNB">排程設置</a>
+            </div>
+        </div>
+
+        <div class="M_Page">
+            <div class="emergencyCmd">
+                <div class="title">
+                    <h2>【緊急調度充放電指令】</h2>
+                </div>
+                <table class="table_01">
+                    <tr class="row_01">
+                        <td class="col_01"></td>
+                        <td class="col_02">指令狀態</td>
+                        <td class="col_03">開始日期時間</td>
+                        <td class="col_04">結束日期時間</td>
+                        <td class="col_05">充放電執行量</td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">執行指令</td>
+                        <td class="col_02"><label for="qaz" class="cmdIndicator" id="exeCmdInd">Done</label><label
+                                for="qaz" class="cmdStatus" id="exeCmdStatus">執行結束</label></td>
+                        <td class="col_03">
+                            <label class="cmdDateTime" id="exeCmd_StartDT">2023/01/02&nbsp02:03:04</label>
+                        </td>
+                        <td class="col_04">
+                            <label class="cmdDateTime" id="exeCmd_StopDT">2023/01/02&nbsp03:04:05</label>
+                        </td>
+                        <td class="col_05"><label for="qaz" class="cmd_P" id="exeCmd_P">-9000</label>kW</td>
+                    </tr>
+                    <tr class="row_other row_last">
+                        <td class="col_01">待命指令</td>
+                        <td class="col_02"><label for="qaz" class="cmdIndicator" id="sbyCmdInd">Standby</label><label
+                                for="qaz" class="cmdStatus" id="sbyCmdStatus">待命中</label></td>
+                        <td class="col_03">
+                            <label class="cmdDateTime" id="sbyCmd_StartDT">2023/02/03&nbsp10:11:12</label>
+                        </td>
+                        <td class="col_04">
+                            <label class="cmdDateTime" id="sbyCmd_StopDT">2023/02/03&nbsp13:14:15</label>
+                        </td>
+                        <td class="col_05"><label for="qaz" class="cmd_P" id="sbyCmd_P">-9000</label>kW</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="scheduleSwitch">
+                <div class="switch">
+                    <button id="switch_SchdOnOff">OFF</button>
+                </div>
+                <h2>排程模式</h2>
+            </div>
+
+            <div class="schedule">
+                <div class="title">
+                    <h2>【充放電排程】</h2>
+                </div>
+                <div class="schdToday">
+                    <div class="subTitle">
+                        <p>今日排程(2023/01/01)</p>
+                    </div>
+                    <table>
+                        <tr class="row_01">
+                            <td colspan="12">
+                                <!-- <button class="setAllTP">全日得標</button><button class="resetAllTP">全日未得標</button> -->
+                                得標狀態設定
+                                <button class="setButton" id="setBut_SchdToday">Set</button>
+                                <!-- <button class="refSOC">SOC參考值</button> -->
+                                <div class="refSOC">SOC參考值
+                                    <button class="setButton" id="setBut_refSOCToday">Get</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="row row_head">
+                            <td rowspan="2" class="col_01">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4">轉移量(kW)</td>
+                            <td rowspan="2" class="col_07">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4" class="col_last">轉移量(kW)</td>
+                        </tr>
+                        <tr class="row row_head">
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td>45~00</td>
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td class="col_last">45~00</td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">00</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_00">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_3">0</label>
+                            </td>
+                            <td class="col_07">12</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_12">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_3">-5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">01</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_01">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_3">0</label>
+                            </td>
+                            <td class="col_07">13</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_13">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_3">-5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">02</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_02">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_3">0</label>
+                            </td>
+                            <td class="col_07">14</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_14">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">03</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_03">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_3">-5000</label>
+                            </td>
+                            <td class="col_07">15</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_15">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">04</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_04">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_3">-5000</label>
+                            </td>
+                            <td class="col_07">16</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_16">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">05</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_05">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_0">-2220</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_1">-2220</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_2">-2220</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_3">-2220</label>
+                            </td>
+                            <td class="col_07">17</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_17">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">06</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_06">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_3">0</label>
+                            </td>
+                            <td class="col_07">18</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_18">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">07</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_07">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_3">0</label>
+                            </td>
+                            <td class="col_07">19</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_19">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">08</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_08">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_3">0</label>
+                            </td>
+                            <td class="col_07">20</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_20">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">09</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_09">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_3">0</label>
+                            </td>
+                            <td class="col_07">21</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_21">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">10</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_10">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_3">0</label>
+                            </td>
+                            <td class="col_07">22</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_22">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row row_last">
+                            <td class="col_01">11</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_11">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_3">0</label>
+                            </td>
+                            <td class="col_07">23</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_23">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_3">0</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="schdTomorrow">
+                    <div class="subTitle">
+                        <p>明日排程(2023/01/02)</p>
+                    </div>
+                    <table>
+                        <tr class="row_01">
+                            <td colspan="12">
+                                <!-- <button class="setAllTP">全日得標</button><button class="resetAllTP">全日未得標</button> -->
+                                得標狀態設定
+                                <button class="setButton" id="setBut_SchdTomorrow">Set</button>
+                                <!-- <button class="refSOC">SOC參考值</button> -->
+                                <div class="refSOC">SOC參考值
+                                    <button class="setButton" id="setBut_refSOCTomorrow">Get</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="row row_head">
+                            <td rowspan="2" class="col_01">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4">轉移量(kW)</td>
+                            <td rowspan="2" class="col_07">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4" class="col_last">轉移量(kW)</td>
+                        </tr>
+                        <tr class="row row_head">
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td>45~00</td>
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td class="col_last">45~00</td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">00</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_00">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_00_3">0</label>
+                            </td>
+                            <td class="col_07">12</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_12">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_12_3">-5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">01</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_01">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_01_3">0</label>
+                            </td>
+                            <td class="col_07">13</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_13">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_13_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">02</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_02">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_02_3">-5000</label>
+                            </td>
+                            <td class="col_07">14</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_14">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_14_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">03</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_03">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_0">-2220</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_1">-2220</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_2">-2220</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_03_3">-2220</label>
+                            </td>
+                            <td class="col_07">15</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_15">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_15_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">04</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_04">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_04_3">-5000</label>
+                            </td>
+                            <td class="col_07">16</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_16">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_16_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">05</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_05">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_0">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_1">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_2">-5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_05_3">-5000</label>
+                            </td>
+                            <td class="col_07">17</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_17">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_17_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">06</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_06">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_06_3">0</label>
+                            </td>
+                            <td class="col_07">18</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_18">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_18_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">07</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_07">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_07_3">0</label>
+                            </td>
+                            <td class="col_07">19</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_19">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_0">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_1">5000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_2">5000</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_19_3">5000</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">08</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_08">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_08_3">0</label>
+                            </td>
+                            <td class="col_07">20</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_20">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_20_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">09</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_09">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_09_3">0</label>
+                            </td>
+                            <td class="col_07">21</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_21">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_2">0</label>
+                            </td>
+                            <td class="col_P_cmd  col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_21_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01">10</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_10">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_10_3">0</label>
+                            </td>
+                            <td class="col_07">22</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_22">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_22_3">0</label>
+                            </td>
+                        </tr>
+                        <tr class="row row_last">
+                            <td class="col_01">11</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_11">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_2">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_11_3">0</label>
+                            </td>
+                            <td class="col_07">23</td>
+                            <td class="col_P_schd">
+                                <label for="qaz" class="P_schd" id="P_schd_23">10000</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_0">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_1">0</label>
+                            </td>
+                            <td class="col_P_cmd">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_2">0</label>
+                            </td>
+                            <td class="col_P_cmd col_last">
+                                <label for="qaz" class="P_cmd" id="P_cmd_23_3">0</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="popUpWindow setSchedule today">
+                <div class="titlePUW_closeWB dataStatus_Set">
+                    <h2 class="titlePUW">今日得標設定</h2>
+
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1_today" class="option"
+                            id="option_1">全日得標</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1_today">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2_today" class="option"
+                            id="option_2">全日未得標</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2_today">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_3"><label for="radioOpt_3_today" class="option"
+                            id="option_3">選項3</label>
+                        <input type="radio" name="dataStatus" value="3" class="radioOpt" id="radioOpt_3_today">
+                        <div class="checkBox" id="checkBoxOpt_3"></div>
+                    </div>
+
+                    <p class="alertInfo"></p>
+
+                    <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                    <button class="closeWindowButton" id="closeWB_No">取消</button>
+                </div>
+                <div class="scheduleTable">
+                    <table>
+                        <tr class="row row_head">
+                            <td rowspan="2" class="col_01">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4">轉移量(kW)</td>
+                            <td rowspan="2" class="col_07">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4" class="col_last">轉移量(kW)</td>
+                        </tr>
+                        <tr class="row row_head">
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td>45~00</td>
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td class="col_last">45~00</td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_00" class="timePeriod" id="TP_0_00">00</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_00">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_00_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_00_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_00_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_00_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_12" class="timePeriod" id="TP_0_12">12</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_12">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_12_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_12_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_12_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_12_3">-5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_01" class="timePeriod" id="TP_0_01">01</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_01">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_01_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_01_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_01_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_01_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_13" class="timePeriod" id="TP_0_13">13</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_13">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_13_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_13_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_13_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_13_3">-5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_02" class="timePeriod" id="TP_0_02">02</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_02">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_02_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_02_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_02_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_02_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_14" class="timePeriod" id="TP_0_14">14</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_14">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_14_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_14_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_14_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_14_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_03" class="timePeriod" id="TP_0_03">03</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_03">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_03_0">-2220</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_03_1">-2220</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_03_2">-2220</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_03_3">-2220</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_15" class="timePeriod" id="TP_0_15">15</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_15">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_15_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_15_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_15_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_15_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_04" class="timePeriod" id="TP_0_04">04</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_04">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_04_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_04_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_04_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_04_3">-5000</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_16" class="timePeriod" id="TP_0_16">16</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_16">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_16_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_16_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_16_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_16_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_05" class="timePeriod" id="TP_0_05">05</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_05">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_05_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_05_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_05_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_05_3">-5000</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_17" class="timePeriod" id="TP_0_17">17</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_17">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_17_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_17_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_17_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_17_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_06" class="timePeriod" id="TP_0_06">06</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_06">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_06_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_06_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_06_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_06_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_18" class="timePeriod" id="TP_0_18">18</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_18">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_18_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_18_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_18_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_18_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_07" class="timePeriod" id="TP_0_07">07</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_07">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_07_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_07_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_07_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_07_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_19" class="timePeriod" id="TP_0_19">19</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_19">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_19_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_19_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_19_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_19_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_08" class="timePeriod" id="TP_0_08">08</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_08">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_08_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_08_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_08_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_08_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_20" class="timePeriod" id="TP_0_20">20</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_20">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_20_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_20_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_20_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_20_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_09" class="timePeriod" id="TP_0_09">09</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_09">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_09_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_09_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_09_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_09_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_21" class="timePeriod" id="TP_0_21">21</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_21">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_21_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_21_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_21_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_21_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_10" class="timePeriod" id="TP_0_10">10</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_10">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_10_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_10_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_10_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_10_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_22" class="timePeriod" id="TP_0_22">22</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_22">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_22_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_22_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_22_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_22_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_0_11" class="timePeriod" id="TP_0_11">11</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_11">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_11_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_11_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_11_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_11_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_0_23" class="timePeriod" id="TP_0_23">23</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_0_23">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_23_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_23_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_23_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_0_23_3">0</label></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="popUpWindow setSchedule tomorrow">
+                <div class="titlePUW_closeWB dataStatus_Set">
+                    <h2 class="titlePUW">明日得標設定</h2>
+
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1_tomorrow" class="option"
+                            id="option_1">全日得標</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1_tomorrow">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2_tomorrow" class="option"
+                            id="option_2">全日未得標</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2_tomorrow">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_3"><label for="radioOpt_3_tomorrow" class="option"
+                            id="option_3">選項3</label>
+                        <input type="radio" name="dataStatus" value="3" class="radioOpt" id="radioOpt_3_tomorrow">
+                        <div class="checkBox" id="checkBoxOpt_3"></div>
+                    </div>
+
+                    <p class="alertInfo"></p>
+
+                    <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                    <button class="closeWindowButton" id="closeWB_No">取消</button>
+                </div>
+                <div class="scheduleTable">
+                    <table>
+                        <tr class="row row_head">
+                            <td rowspan="2" class="col_01">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4">轉移量(kW)</td>
+                            <td rowspan="2" class="col_07">時段</td>
+                            <td rowspan="2">得標量<br>(kW)</td>
+                            <td colspan="4" class="col_last">轉移量(kW)</td>
+                        </tr>
+                        <tr class="row row_head">
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td>45~00</td>
+                            <td>00~15</td>
+                            <td>15~30</td>
+                            <td>30~45</td>
+                            <td class="col_last">45~00</td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_00" class="timePeriod" id="TP_1_00">00</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_00">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_00_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_00_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_00_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_00_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_12" class="timePeriod" id="TP_1_12">12</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_12">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_12_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_12_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_12_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_12_3">-5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_01" class="timePeriod" id="TP_1_01">01</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_01">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_01_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_01_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_01_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_01_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_13" class="timePeriod" id="TP_1_13">13</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_13">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_13_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_13_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_13_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_13_3">-5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_02" class="timePeriod" id="TP_1_02">02</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_02">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_02_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_02_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_02_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_02_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_14" class="timePeriod" id="TP_1_14">14</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_14">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_14_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_14_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_14_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_14_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_03" class="timePeriod" id="TP_1_03">03</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_03">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_03_0">-2220</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_03_1">-2220</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_03_2">-2220</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_03_3">-2220</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_15" class="timePeriod" id="TP_1_15">15</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_15">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_15_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_15_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_15_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_15_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_04" class="timePeriod" id="TP_1_04">04</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_04">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_04_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_04_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_04_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_04_3">-5000</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_16" class="timePeriod" id="TP_1_16">16</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_16">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_16_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_16_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_16_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_16_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_05" class="timePeriod" id="TP_1_05">05</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_05">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_05_0">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_05_1">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_05_2">-5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_05_3">-5000</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_17" class="timePeriod" id="TP_1_17">17</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_17">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_17_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_17_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_17_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_17_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_06" class="timePeriod" id="TP_1_06">06</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_06">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_06_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_06_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_06_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_06_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_18" class="timePeriod" id="TP_1_18">18</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_18">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_18_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_18_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_18_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_18_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_07" class="timePeriod" id="TP_1_07">07</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_07">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_07_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_07_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_07_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_07_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_19" class="timePeriod" id="TP_1_19">19</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_19">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_19_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_19_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_19_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_19_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_08" class="timePeriod" id="TP_1_08">08</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_08">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_08_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_08_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_08_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_08_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_20" class="timePeriod" id="TP_1_20">20</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_20">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_20_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_20_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_20_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_20_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_09" class="timePeriod" id="TP_1_09">09</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_09">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_09_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_09_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_09_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_09_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_21" class="timePeriod" id="TP_1_21">21</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_21">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_21_0">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_21_1">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_21_2">5000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_21_3">5000</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_10" class="timePeriod" id="TP_1_10">10</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_10">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_10_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_10_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_10_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_10_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_22" class="timePeriod" id="TP_1_22">22</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_22">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_22_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_22_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_22_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_22_3">0</label></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col_01"><label for="chkBox_TP_1_11" class="timePeriod" id="TP_1_11">11</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_11">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_11_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_11_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_11_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_11_3">0</label></td>
+                            <td class="col_07"><label for="chkBox_TP_1_23" class="timePeriod" id="TP_1_23">23</label>
+                            </td>
+                            <td class="col_P_schd"><label class="P_schd_set" id="P_schd_set_1_23">10000</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_23_0">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_23_1">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_23_2">0</label></td>
+                            <td class="col_P_cmd"><label class="P_cmd_set" id="P_cmd_set_1_23_3">0</label></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="popUpWindow socRef">
+                <h2 class="titlePUW">SOC參考值&nbsp(%)</h2>
+
+                <table>
+                    <tr class="row_01">
+                        <td class="col_01">時段</td>
+                        <td class="col_other">00~15</td>
+                        <td class="col_other">15~30</td>
+                        <td class="col_other">30~45</td>
+                        <td class="col_other">45~00</td>
+                        <td class="col_01">時段</td>
+                        <td class="col_other">00~15</td>
+                        <td class="col_other">15~30</td>
+                        <td class="col_other">30~45</td>
+                        <td class="col_other">45~00</td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">00</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_00_1">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_00_2">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_00_3">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_00_4">18.8</label></td>
+                        <td class="col_01">12</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_12_1">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_12_2">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_12_3">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_12_4">81.2</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">01</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_01_1">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_01_2">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_01_3">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_01_4">18.8</label></td>
+                        <td class="col_01">13</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_13_1">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_13_2">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_13_3">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_13_4">81.2</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">02</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_02_1">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_02_2">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_02_3">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_02_4">18.8</label></td>
+                        <td class="col_01">14</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_14_1">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_14_2">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_14_3">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_14_4">81.2</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">03</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_03_1">21.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_03_2">21.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_03_3">21.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_03_4">21.0</label></td>
+                        <td class="col_01">15</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_15_1">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_15_2">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_15_3">81.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_15_4">81.2</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">04</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_04_1">35.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_04_2">35.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_04_3">35.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_04_4">35.0</label></td>
+                        <td class="col_01">16</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_16_1">65.6</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_16_2">65.6</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_16_3">65.6</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_16_4">65.6</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">05</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_05_1">49.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_05_2">49.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_05_3">49.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_05_4">49.0</label></td>
+                        <td class="col_01">17</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_17_1">65.6</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_17_2">65.6</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_17_3">65.6</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_17_4">65.6</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">06</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_06_1">49.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_06_2">49.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_06_3">49.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_06_4">49.0</label></td>
+                        <td class="col_01">18</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_18_1">50.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_18_2">50.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_18_3">50.0</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_18_4">50.0</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">07</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_07_1">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_07_2">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_07_3">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_07_4">53.1</label></td>
+                        <td class="col_01">19</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_19_1">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_19_2">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_19_3">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_19_4">34.4</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">08</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_08_1">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_08_2">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_08_3">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_08_4">53.1</label></td>
+                        <td class="col_01">20</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_20_1">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_20_2">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_20_3">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_20_4">34.4</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">09</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_09_1">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_09_2">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_09_3">53.1</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_09_4">53.1</label></td>
+                        <td class="col_01">21</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_21_1">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_21_2">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_21_3">34.4</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_21_4">34.4</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">10</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_10_1">67.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_10_2">67.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_10_3">67.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_10_4">67.2</label></td>
+                        <td class="col_01">22</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_22_1">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_22_2">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_22_3">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_22_4">8.8</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">11</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_11_1">67.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_11_2">67.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_11_3">67.2</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_11_4">67.2</label></td>
+                        <td class="col_01">23</td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_23_1">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_23_2">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_23_3">18.8</label></td>
+                        <td class="col_other"><label class="socRefVal" id="socRef_23_4">8.8</label></td>
+                    </tr>
+                </table>
+
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+
+            <div class="block_temp">
+                00
+                <input type="checkbox" name="todayTP_Enable" value="1" class="chkBox_TP_0" id="chkBox_TP_0_00">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="1" class="chkBox_TP_1" id="chkBox_TP_1_00"><br>
+
+                01
+                <input type="checkbox" name="todayTP_Enable" value="2" class="chkBox_TP_0" id="chkBox_TP_0_01">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="2" class="chkBox_TP_1" id="chkBox_TP_1_01"><br>
+
+                02
+                <input type="checkbox" name="todayTP_Enable" value="4" class="chkBox_TP_0" id="chkBox_TP_0_02">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="4" class="chkBox_TP_1" id="chkBox_TP_1_02"><br>
+
+                03
+                <input type="checkbox" name="todayTP_Enable" value="8" class="chkBox_TP_0" id="chkBox_TP_0_03">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="8" class="chkBox_TP_1" id="chkBox_TP_1_03"><br>
+
+                04
+                <input type="checkbox" name="todayTP_Enable" value="16" class="chkBox_TP_0" id="chkBox_TP_0_04">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="16" class="chkBox_TP_1" id="chkBox_TP_1_04"><br>
+
+                05
+                <input type="checkbox" name="todayTP_Enable" value="32" class="chkBox_TP_0" id="chkBox_TP_0_05">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="32" class="chkBox_TP_1" id="chkBox_TP_1_05"><br>
+
+                06
+                <input type="checkbox" name="todayTP_Enable" value="64" class="chkBox_TP_0" id="chkBox_TP_0_06">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="64" class="chkBox_TP_1" id="chkBox_TP_1_06"><br>
+
+                07
+                <input type="checkbox" name="todayTP_Enable" value="128" class="chkBox_TP_0" id="chkBox_TP_0_07">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="128" class="chkBox_TP_1" id="chkBox_TP_1_07"><br>
+
+                08
+                <input type="checkbox" name="todayTP_Enable" value="256" class="chkBox_TP_0" id="chkBox_TP_0_08">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="256" class="chkBox_TP_1" id="chkBox_TP_1_08"><br>
+
+                09
+                <input type="checkbox" name="todayTP_Enable" value="512" class="chkBox_TP_0" id="chkBox_TP_0_09">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="512" class="chkBox_TP_1" id="chkBox_TP_1_09"><br>
+
+                10
+                <input type="checkbox" name="todayTP_Enable" value="1024" class="chkBox_TP_0" id="chkBox_TP_0_10">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="1024" class="chkBox_TP_1"
+                    id="chkBox_TP_1_10"><br>
+
+                11
+                <input type="checkbox" name="todayTP_Enable" value="2048" class="chkBox_TP_0" id="chkBox_TP_0_11">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="2048" class="chkBox_TP_1"
+                    id="chkBox_TP_1_11"><br>
+
+                12
+                <input type="checkbox" name="todayTP_Enable" value="4096" class="chkBox_TP_0" id="chkBox_TP_0_12">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="4096" class="chkBox_TP_1"
+                    id="chkBox_TP_1_12"><br>
+
+                13
+                <input type="checkbox" name="todayTP_Enable" value="8192" class="chkBox_TP_0" id="chkBox_TP_0_13">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="8192" class="chkBox_TP_1"
+                    id="chkBox_TP_1_13"><br>
+
+                14
+                <input type="checkbox" name="todayTP_Enable" value="16384" class="chkBox_TP_0" id="chkBox_TP_0_14">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="16384" class="chkBox_TP_1"
+                    id="chkBox_TP_1_14"><br>
+
+                15
+                <input type="checkbox" name="todayTP_Enable" value="32768" class="chkBox_TP_0" id="chkBox_TP_0_15">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="32768" class="chkBox_TP_1"
+                    id="chkBox_TP_1_15"><br>
+
+                16
+                <input type="checkbox" name="todayTP_Enable" value="1" class="chkBox_TP_0" id="chkBox_TP_0_16">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="1" class="chkBox_TP_1" id="chkBox_TP_1_16"><br>
+
+                17
+                <input type="checkbox" name="todayTP_Enable" value="2" class="chkBox_TP_0" id="chkBox_TP_0_17">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="2" class="chkBox_TP_1" id="chkBox_TP_1_17"><br>
+
+                18
+                <input type="checkbox" name="todayTP_Enable" value="4" class="chkBox_TP_0" id="chkBox_TP_0_18">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="4" class="chkBox_TP_1" id="chkBox_TP_1_18"><br>
+
+                19
+                <input type="checkbox" name="todayTP_Enable" value="8" class="chkBox_TP_0" id="chkBox_TP_0_19">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="8" class="chkBox_TP_1" id="chkBox_TP_1_19"><br>
+
+                20
+                <input type="checkbox" name="todayTP_Enable" value="16" class="chkBox_TP_0" id="chkBox_TP_0_20">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="16" class="chkBox_TP_1" id="chkBox_TP_1_20"><br>
+
+                21
+                <input type="checkbox" name="todayTP_Enable" value="32" class="chkBox_TP_0" id="chkBox_TP_0_21">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="32" class="chkBox_TP_1" id="chkBox_TP_1_21"><br>
+
+                22
+                <input type="checkbox" name="todayTP_Enable" value="64" class="chkBox_TP_0" id="chkBox_TP_0_22">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="64" class="chkBox_TP_1" id="chkBox_TP_1_22"><br>
+
+                23
+                <input type="checkbox" name="todayTP_Enable" value="128" class="chkBox_TP_0" id="chkBox_TP_0_23">
+                &nbsp&nbsp&nbsp
+                <input type="checkbox" name="tomorrowTP_Enable" value="128" class="chkBox_TP_1" id="chkBox_TP_1_23"><br>
+
+                <br>
+                <label class="schdStatus" id="schdStatusToday_1">-1</label>
+                <label class="schdStatus" id="schdStatusToday_2">-2</label><br>
+                <label class="schdStatus" id="schdStatusTomorrow_1">-3</label>
+                <label class="schdStatus" id="schdStatusTomorrow_2">-4</label>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/script_template.js"></script>
+    <script src="scripts/Mode_Schedule.js"></script>
+</body>
+
+</html>

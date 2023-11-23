@@ -1,0 +1,421 @@
+.Title {
+    background-color: #F9E06CB3;
+    height: 50px;
+    margin: 10px 25px 2px;
+    border-radius: 25px;
+    position: relative;
+}
+
+.Title h2 {
+    display: inline-block;
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.Title label {
+    display: inline-block;
+    width: 55px;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 50px;
+}
+
+.Title a {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 40px;
+    width: 210px;
+    border: 2px solid #F9E06C;
+    margin-top: 5px;
+    font-size: 30px;
+    color: #000000;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 20px;
+    vertical-align: top;
+}
+
+.Title #infoBMS {
+    margin-left: 5%;
+}
+
+.Title #infoRack {
+    background-color: #F9E06C;
+    border-color: #FFFFFF;
+    text-decoration: none;
+}
+
+.Title .preNext {
+    height: 30px;
+    width: 80px;
+    border: 1px solid #D9D9D9;
+    font-size: 20px;
+    line-height: 28px;
+    text-decoration: none;
+    border-radius: 10px;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+}
+
+.Title #previousBMS {
+    right: 105px;
+}
+
+.overviewInfo {
+    display: inline-block;
+    width: 75.595%;
+    margin: 3px 5px 5px 25px;
+    min-width: 405px;
+    /* background-color: #ff00aa; */
+}
+
+.overview {
+    background-color: #FFFFFF80;
+    margin: 0px 0px 5px;
+    border-radius: 5px;
+    min-width: 405px;
+}
+
+.overview .bigInfo {
+    width: 12.5%;
+    min-width: 135px;
+}
+
+.overview .bigInfo p {
+    margin: 10px 0px 5px;
+    font-size: 24px;
+    line-height: 35px;
+    text-align: center;
+}
+
+.overview .BG_bigInfo {
+    height: 130px;
+    width: 130px;
+    margin: 0px auto 10px;
+}
+
+.overview .subBG_bigInfo {
+    height: 104px;
+    width: 104px;
+    left: 13px;
+    top: 13px;
+    padding-top: 70px;
+}
+
+.overview .BG_bigInfo label {
+    width: 104px;
+    left: 13px;
+    top: 53px;
+}
+
+.overview .bI_onlineNum .subBG_bigInfo {
+    padding: 40px 0px 0px 48px;
+    text-align: left;
+}
+
+.overview #onlineNum {
+    box-sizing: border-box;
+    width: 40px;
+    text-align: right;
+}
+
+.info {
+    display: inline-block;
+    width: 49.606%;
+    margin: 5px 0.39% 0px 0px;
+    min-width: 340px;
+}
+
+.infoBlock {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    box-sizing: border-box;
+    margin: 5px;
+    border-radius: 5px;
+    vertical-align: top;
+}
+
+.infoBlock h3 {
+    background-color: #F9E06C80;
+    padding-left: 20px;
+    margin: 3px 2px 2px;
+    font-size: 28px;
+    line-height: 40px;
+    border-radius: 20px;
+}
+
+.infoBlock .DV_Line {
+    /* padding-left: 15px; */
+    line-height: 39px;
+    min-width: 260px;
+    vertical-align: top;
+    /* background-color: #ffdd00; */
+}
+
+.infoBlock .dataValue {
+    width: 30%;
+    right: calc(25px + 2%);
+    top: 7px;
+    /* background-color: #ff8888; */
+}
+
+.infoBlock .dataUnit {
+    width: 25px;
+    top: 7px;
+    /* background-color: #ddff00; */
+}
+
+.rackInfo {
+    width: 100%;
+    margin: 0px 0px 5px;
+}
+
+.rackInfo .DV_Line {
+    display: inline-block;
+    width: 42%;
+    padding-left: 2.35%;
+    min-width: 250px;
+}
+
+.infoBlock .DP_Line {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 58%;
+    padding-left: 3.15%;
+    font-size: 24px;
+    line-height: 39px;
+    position: relative;
+    min-width: 340px;
+    /* background-color: #22ff88; */
+}
+
+.infoBlock .dataP {
+    width: 8%;
+    font-size: 24px;
+    text-align: right;
+    position: absolute;
+    right: 1%;
+    top: 7px;
+    /* background-color: #ff8888; */
+}
+
+.infoBlock .DP_1st {
+    right: 12%;
+}
+
+.infoBlock .DP_Line p {
+    width: 2%;
+    font-size: 24px;
+    position: absolute;
+    right: 9%;
+    top: 7px;
+    /* background-color: #ddff00; */
+}
+
+.cellInfo {
+    width: 100%;
+    margin: 5px 0px;
+}
+
+.cellInfo .DV_Line {
+    display: inline-block;
+    width: 52%;
+    padding-left: 2.35%;
+    min-width: 280px;
+}
+
+.cellInfo .dataValue {
+    right: calc(40px + 2%);
+}
+
+.cellInfo .dataUnit {
+    width: 40px;
+}
+
+.cellInfo .DP_Line {
+    width: 48%;
+    min-width: 280px;
+}
+
+.cellInfo .dataP {
+    width: 10%;
+    right: 4%;
+}
+
+.cellInfo .DP_Line .p_2nd {
+    right: 14%;
+}
+
+.cellInfo .DP_2nd {
+    right: 17%;
+}
+
+.cellInfo .DP_Line .p_1st {
+    right: 27%;
+}
+
+.cellInfo .DP_1st {
+    right: 30%;
+}
+
+.totalE {
+    width: 53.968%;
+    margin: 5px 0.79% 0px 0px;
+    min-width: 310px;
+}
+
+.totalE .DV_Line {
+    padding-left: 4.4%;
+}
+
+.totalE .dataValue {
+    width: 40%;
+    right: calc(20% + 2%);
+}
+
+.totalE .dataUnit {
+    width: 20%;
+}
+
+.info .lastLine {
+    margin-bottom: 1px;
+}
+
+.tempAmbient {
+    width: 44.444%;
+    margin: 5px 0px 0px 0.79%;
+    min-width: 260px;
+}
+
+.tempAmbient .DV_Line {
+    padding-left: 5.3%;
+}
+
+.tempAmbient .dataValue {
+    right: calc(15% + 2%);
+}
+
+.tempAmbient .dataUnit {
+    width: 15%;
+}
+
+.FApositionDI {
+    display: inline-block;
+    width: 24.409%;
+    margin: 5px 0.39% 0px;
+    vertical-align: top;
+    min-width: 280px;
+}
+
+.FAposition {
+    width: 100%;
+    margin: 0px 0px 5px;
+}
+
+.FAposition .DV_Line {
+    padding-left: 4.8%;
+}
+
+.FAposition .dataValue {
+    width: 10%;
+    right: 3%;
+}
+
+.FAposition .dataUnit {
+    width: 60px;
+    right: calc(13% - 3px);
+}
+
+.statusDI {
+    width: 100%;
+    margin: 5px 0px 0px;
+}
+
+.infoBlock .DL_Line {
+    padding-left: 4.8%;
+    line-height: 39px;
+}
+
+.infoBlock .dataLight {
+    background-color: #236E37;
+    right: 5%;
+    top: 5px;
+}
+
+.statusDI .lastLine {
+    margin-bottom: 17px;
+}
+
+.faultHWSMUSOC {
+    display: inline-block;
+    width: 24.409%;
+    margin: 5px 0px 0px 0.39%;
+    vertical-align: top;
+    min-width: 280px;
+}
+
+.faultHW {
+    width: 100%;
+    margin: 0px 0px 5px;
+}
+
+.faultSMU {
+    width: 100%;
+    margin: 5px 0px;
+}
+
+.SOCcalibration {
+    width: 100%;
+    margin: 5px 0px 0px;
+}
+
+.SOCcalibration .lastLine {
+    margin-bottom: 40px;
+}
+
+.faultAlarm {
+    width: 20.833%;
+    margin: 3px 10px 5px 5px;
+    min-width: 300px;
+    position: relative;
+    /* background-color: #ff00aa; */
+}
+
+.faultAlarm h3 {
+    padding-left: 4%;
+    margin-top: 2px;
+    line-height: 33px;
+}
+
+.faultAlarm p {
+    width: 18%;
+    font-size: 24px;
+    text-align: center;
+    position: absolute;
+    right: 0px;
+    top: 6px;
+}
+
+.faultAlarm .titleAlarm {
+    right: 18%;
+}
+
+.faultAlarm .DL_Line {
+    padding-left: 15px;
+    line-height: 34px;
+}
+
+.faultAlarm .dataLight {
+    right: calc(9% - 14px);
+    top: 3px;
+}
+
+.faultAlarm .OG_L {
+    right: calc(27% - 14px);
+}
+
+.faultAlarm .spareL {
+    background-color: #000000;
+}

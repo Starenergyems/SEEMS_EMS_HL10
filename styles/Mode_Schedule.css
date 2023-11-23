@@ -1,0 +1,543 @@
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar #sNB_01 {
+    left: 15px;
+}
+
+.subNavBar #sNB_02 {
+    left: 0px;
+}
+
+.emergencyCmd {
+    background-color: #FFFFFF;
+    width: 97.619%;
+    padding-bottom: 5px;
+    margin: 10px 1.19% 0px;
+    border-radius: 10px;
+}
+
+.emergencyCmd .title {
+    background-color: #F9E06C;
+    box-sizing: border-box;
+    height: 50px;
+    border: 5px solid #FFFFFF;
+    border-radius: 20px;
+}
+
+.emergencyCmd h2 {
+    display: inline-block;
+    font-size: 36px;
+    margin: 2px 0px 0px 0px;
+    vertical-align: top;
+}
+
+.emergencyCmd table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.emergencyCmd tr td {
+    box-sizing: border-box;
+    height: 40px;
+    border: 1px solid #BBBBBB;
+    font-size: 20px;
+}
+
+.emergencyCmd table .col_01 {
+    width: 14%;
+    text-align: center;
+    border-left: none;
+}
+
+.emergencyCmd table .col_02 {
+    width: 18%;
+}
+
+.emergencyCmd table .col_03 {
+    width: 25%;
+}
+
+.emergencyCmd table .col_04 {
+    width: 25%;
+}
+
+.emergencyCmd table .col_05 {
+    border-right: none;
+}
+
+.emergencyCmd .row_other .col_05 {
+    text-align: right;
+    padding-right: calc(9% - 50px);
+}
+
+.emergencyCmd table .row_01 {
+    text-align: center;
+}
+
+.emergencyCmd .cmdIndicator {
+    display: inline-block;
+    background-color: #BBBBBB;
+    box-sizing: border-box;
+    height: 30px;
+    width: 60px;
+    border: 2px solid #808080;
+    margin: 4px 0px;
+    margin-left: calc(50% - 75px);
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+    vertical-align: top;
+    border-radius: 10px;
+}
+
+.emergencyCmd #sbyCmdInd {
+    background-color: #F9E06C;
+}
+
+.emergencyCmd .cmdStatus {
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 9px 0px 0px 10px;
+    font-size: 20px;
+    vertical-align: top;
+}
+
+.emergencyCmd table .cmdDateTime {
+    margin-left: calc(50% - 90px);
+    font-size: 20px;
+}
+
+.emergencyCmd .cmd_P {
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0px 10px 0px 0px;
+    font-size: 20px;
+}
+
+.scheduleSwitch {
+    background-color: #F9E06C;
+    box-sizing: border-box;
+    height: 70px;
+    width: 97.619%;
+    border: 5px solid #FFFFFF;
+    margin: 10px 1.19% 0px;
+    border-radius: 20px;
+}
+
+.scheduleSwitch .switch {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 38px;
+    width: 72px;
+    border: 1px solid #000000;
+    margin: 11px 0px 0px 10px;
+    border-radius: 30px;
+    position: relative;
+}
+
+.scheduleSwitch button {
+    background-color: #FF0000;
+    color: #FFFFFF;
+    box-sizing: border-box;
+    height: 32px;
+    width: 32px;
+    border: 1px solid #D9D9D9;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 15px;
+}
+
+@keyframes scheduleSW_On {
+    0% {
+        left: 2px;
+        background-color: #FF0000;
+    }
+
+    100% {
+        left: 36px;
+        background-color: #236E37;
+    }
+}
+
+@keyframes scheduleSW_Off {
+    0% {
+        left: 36px;
+        background-color: #236E37;
+    }
+
+    100% {
+        left: 2px;
+        background-color: #FF0000;
+    }
+}
+
+.scheduleSwitch h2 {
+    display: inline-block;
+    font-size: 36px;
+    margin: 12px 0px 0px 10px;
+    vertical-align: top;
+}
+
+.schedule {
+    background-color: #FFFFFF;
+    width: 97.619%;
+    margin: 10px 1.19% 10px;
+    border-radius: 10px;
+}
+
+.schedule .title {
+    background-color: #F9E06C;
+    box-sizing: border-box;
+    height: 50px;
+    border: 5px solid #FFFFFF;
+    border-radius: 20px;
+}
+
+.schedule h2 {
+    display: inline-block;
+    margin: 2px 0px 0px 0px;
+    font-size: 36px;
+    vertical-align: top;
+}
+
+.schdToday {
+    display: inline-block;
+    width: 49.39%;
+    margin: 0px 0.304% 5px;
+    min-width: 660px;
+}
+
+.schedule .subTitle {
+    box-sizing: border-box;
+    height: 40px;
+    border: 1px solid #F9E06C;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+.schedule p {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 7px 0px 0px;
+    font-size: 24px;
+
+}
+
+.schedule table {
+    border-collapse: collapse;
+    background-color: #EEEEEE;
+    border-radius: 20px;
+}
+
+.schedule tr td {
+    box-sizing: border-box;
+    height: 30px;
+    border: 1px solid #BBBBBB;
+    font-size: 20px;
+}
+
+.schedule .row_01 td {
+    height: 40px;
+    padding-left: 15px;
+    border: none;
+    font-size: 24px;
+    line-height: 39px;
+    position: relative;
+}
+
+.schedule button {
+    display: inline-block;
+    background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C);
+    box-sizing: border-box;
+    height: 36px;
+    width: 36px;
+    border: 2px solid #B6B6B6;
+    margin-top: 2px;
+    font-size: 16px;
+    border-radius: 50%;
+    vertical-align: top;
+}
+
+.schedule .refSOC {
+    background-color: #FFFFFF80;
+    box-sizing: border-box;
+    height: 36px;
+    width: 180px;
+    padding: 0px 0px 0px 10px;
+    border: 1px solid #808080;
+    font-size: 24px;
+    line-height: 34px;
+    border-radius: 10px;
+    position: absolute;
+    right: 15px;
+    top: 2px;
+}
+
+.schedule #setBut_refSOCToday,
+.schedule #setBut_refSOCTomorrow {
+    height: 30px;
+    width: 30px;
+    font-size: 14px;
+}
+
+/* .schedule button {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 4px 0px 4px;
+    border: 1px solid #695A14;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.schedule .setAllTP {
+    background-color: #F9E06C;
+    width: 120px;
+    margin: 0px 0px 0px 20px;
+}
+
+.schedule .resetAllTP {
+    background-color: #F9E06C;
+    width: 120px;
+    margin: 0px 0px 0px 5px;
+}
+
+.schedule .refSOC {
+    background-color: #FFFFFF;
+    width: 120px;
+    position: absolute;
+    right: 20px;
+} */
+
+.schedule .row_head {
+    text-align: center;
+}
+
+.schedule .row_last td {
+    border-bottom: none;
+}
+
+/* .schedule .schdToday .row_last .col_last { */
+.schedule .schdToday .col_last {
+    border-right: none;
+}
+
+.schedule .col_01,
+.schedule .col_07 {
+    text-align: center;
+    /* width: 6.173%; */
+    width: 50px;
+}
+
+.schedule .schdToday .col_01 {
+    border-left: none;
+}
+
+.schedule .col_P_schd {
+    text-align: right;
+    /* width: 75px; */
+    width: 9.259%;
+}
+
+.schedule .col_P_cmd {
+    text-align: right;
+    width: 8.642%;
+    /* width: 70px; */
+}
+
+.schedule .col_P_schd label {
+    font-size: 20px;
+    margin: 0px 7px 0px 0px;
+}
+
+.schedule .col_P_cmd label {
+    font-size: 20px;
+    margin: 0px 6px 0px 0px;
+}
+
+.schdTomorrow {
+    display: inline-block;
+    width: 49.39%;
+    margin: 0px 0.304% 5px;
+    min-width: 660px;
+}
+
+/* .schedule .schdTomorrow .row_last .col_01 { */
+.schedule .schdTomorrow .col_01 {
+    border-left: none;
+}
+
+.schedule .schdTomorrow .col_last {
+    border-right: none;
+}
+
+.popUpWindow.setSchedule {
+    height: 460px;
+    width: 1060px;
+    left: 190px;
+    top: 150px;
+}
+
+.setSchedule .titlePUW_closeWB {
+    display: inline-block;
+    width: 280px;
+    vertical-align: top;
+}
+
+.setSchedule .titlePUW {
+    margin-top: 100px;
+}
+
+.setSchedule .setToOpt {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.setSchedule .setToOpt_3 {
+    display: none;
+}
+
+.dataStatus_Set #radioOpt_1_today:checked~#checkBoxOpt_1::after,
+.dataStatus_Set #radioOpt_2_today:checked~#checkBoxOpt_2::after,
+.dataStatus_Set #radioOpt_3_today:checked~#checkBoxOpt_3::after,
+.dataStatus_Set #radioOpt_1_tomorrow:checked~#checkBoxOpt_1::after,
+.dataStatus_Set #radioOpt_2_tomorrow:checked~#checkBoxOpt_2::after,
+.dataStatus_Set #radioOpt_3_tomorrow:checked~#checkBoxOpt_3::after {
+    display: block;
+}
+
+.setSchedule .alertInfo {
+    margin: 25px 20px 0px;
+}
+
+.setSchedule #closeWB_Yes {
+    margin-left: 85px;
+}
+
+.setSchedule .scheduleTable {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.scheduleTable table {
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+.scheduleTable tr td {
+    box-sizing: border-box;
+    height: 30px;
+    border: 1px solid #B6B6B6;
+    font-size: 20px;
+}
+
+.scheduleTable .col_01,
+.scheduleTable .col_07 {
+    text-align: center;
+    width: 45px;
+}
+
+.scheduleTable .col_P_schd {
+    text-align: right;
+    width: 70px;
+}
+
+.scheduleTable .col_P_cmd {
+    text-align: right;
+    width: 65px;
+}
+
+.scheduleTable .row_head td {
+    text-align: center;
+}
+
+.scheduleTable label {
+    font-size: 20px;
+}
+
+.scheduleTable .P_schd_set,
+.scheduleTable .P_cmd_set {
+    margin-right: 6px;
+}
+
+.scheduleTable .timePeriod {
+    display: block;
+    line-height: 29px;
+}
+
+.scheduleTable .timePeriod.setTo0 {
+    background-color: #B6B6B6;
+}
+
+.popUpWindow.socRef {
+    height: 505px;
+    width: 650px;
+    left: 50%;
+    top: 406px;
+}
+
+.socRef .titlePUW {
+    margin: 15px 180px 0px;
+}
+
+.socRef table {
+    width: calc(100% - 20px);
+    margin: 10px 10px 0px;
+    border-collapse: collapse;
+}
+
+.socRef tr td {
+    box-sizing: border-box;
+    height: 30px;
+    border: 1px solid #B6B6B6;
+    font-size: 20px;
+    text-align: center;
+}
+
+.socRef tr .col_01 {
+    width: 50px;
+}
+
+.socRef tr .col_other {
+    width: 65px;
+}
+
+.socRef .row_other .col_other {
+    padding-right: 10px;
+    text-align: right;
+}
+
+.socRef .socRefVal {
+    font-size: 20px;
+}
+
+.socRef .closeWindowButton {
+    margin-left: 295px;
+}
+
+.popUpWindow.socRef.tomorrow {
+    left: calc(50% - 650px);
+}
+
+.block_temp {
+    display: none;
+    background-color: #aaf;
+    height: 560px;
+    width: 150px;
+    font-size: 20px;
+    position: absolute;
+    right: 50px;
+    top: 20px
+}
+
+.block_temp .schdStatus {
+    display: inline-block;
+    width: 70px;
+    font-size: 20px;
+}

@@ -1,0 +1,197 @@
+.Title {
+    background-color: #F9E06CB3;
+    height: 50px;
+    margin: 10px 25px 2px;
+    border-radius: 25px;
+    position: relative;
+}
+
+.Title h2 {
+    display: inline-block;
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.overview {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    width: calc(100% - 50px);
+    margin: 3px 25px;
+    border-radius: 5px;
+    min-width: 405px;
+}
+
+.overview .bigInfo {
+    width: 11.111%;
+    min-width: 135px;
+}
+
+.overview .BG_bigInfo {
+    height: 130px;
+    width: 130px;
+    margin: 10px auto 0px;
+}
+
+.overview .subBG_bigInfo {
+    height: 104px;
+    width: 104px;
+    left: 13px;
+    top: 13px;
+    padding-top: 70px;
+}
+
+.overview .BG_bigInfo label {
+    width: 104px;
+    left: 13px;
+    top: 53px;
+}
+
+.overview .bI_onlineNum .subBG_bigInfo {
+    padding: 40px 0px 0px 48px;
+    text-align: left;
+}
+
+.overview #onlineNum {
+    box-sizing: border-box;
+    padding: 0px 0px 0px 28px;
+    text-align: left;
+}
+
+.overview .bigInfo p {
+    margin: 0px 0px 10px;
+    font-size: 24px;
+    line-height: 35px;
+    text-align: center;
+}
+
+.infoLC {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    width: 23.81%;
+    margin: 2px 5px 5px;
+    border-radius: 5px;
+    vertical-align: top;
+    min-width: 320px;
+}
+
+.infoLC_1 {
+    margin-left: 25px;
+}
+
+.infoLC .titleLC {
+    position: relative;
+    /* background-color: #AAAAFF; */
+}
+
+.infoLC h3 {
+    background-color: #F9E06CB3;
+    box-sizing: border-box;
+    padding-left: 20px;
+    margin: 3px 3px 2px;
+    font-size: 30px;
+    line-height: 40px;
+    border-radius: 20px;
+}
+
+.infoLC .setButton {
+    display: inline-block;
+    background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C);
+    box-sizing: border-box;
+    height: 36px;
+    width: 36px;
+    border: 2px solid #B6B6B6;
+    font-size: 16px;
+    border-radius: 50%;
+    position: absolute;
+    right: 10px;
+    top: 2px;
+}
+
+.infoLC .DV_Line {
+    padding-left: 15px;
+    font-size: 20px;
+    line-height: 32px;
+    min-width: 300px;
+}
+
+.infoLC .DV_Line .dataValue,
+.infoLC .DV_Line .dataUnit {
+    font-size: 20px;
+    top: 6px;
+}
+
+.infoLC .DV_Line .dataValue {
+    right: calc(8% + 60px);
+}
+
+.infoLC .DV_onlineNum .dataValue {
+    right: calc(35% + 6px);
+}
+
+.infoLC .DV_onlineNum .dataUnit {
+    width: 35%;
+}
+
+.infoLC .DS_Line {
+    padding-left: 15px;
+    font-size: 20px;
+    line-height: 32px;
+    min-width: 300px;
+}
+
+.infoLC .DS_Line .dataStatus {
+    width: 45%;
+    font-size: 20px;
+    right: 35px;
+    top: 6px;
+}
+
+.infoLC .DS_Line .setButton {
+    height: 28px;
+    width: 28px;
+    font-size: 12px;
+    right: 5px;
+}
+
+.titleFaultAlarm {
+    background-color: #F9E06C80;
+    text-align: right;
+}
+
+.titleFaultAlarm .titleBMS {
+    display: inline-block;
+    width: 40%;
+    font-size: 20px;
+    line-height: 32px;
+    text-align: center;
+}
+
+.infoLC .DL_Line {
+    padding-left: 15px;
+    font-size: 20px;
+    line-height: 32px;
+}
+
+.infoLC .DL_Line .dataLight {
+    background-color: #236E37;
+    height: 26px;
+    width: 26px;
+    right: calc(20% - 13px);
+}
+
+.infoLC .DL_Line .DL_1st {
+    right: calc(60% - 13px);
+}
+
+.infoLC .lastLine {
+    margin-bottom: 1px;
+}
+
+.infoLC_4 .titleFaultAlarm .titleBMS_2nd {
+    opacity: 0;
+}
+
+.dataStatus_Set {
+    height: 355px;
+    top: 200px;
+}

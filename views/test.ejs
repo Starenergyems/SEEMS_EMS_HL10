@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEST</title>
+  </head>
+  <body>
+    <h1>all data</h1>
+    <ul>
+      <% data.forEach(dataItem => { %>
+      <li>
+        <strong>_id:</strong> <%= dataItem._id %>
+        <br />
+        <strong>time:</strong> <%= dataItem.time %>
+        <ul>
+          <% Object.keys(dataItem).forEach(key => { %> <% if (key !== '_id' &&
+          key !== 'time') { %>
+          <li>
+            <strong><%= key %>:</strong>
+            <% renderData(dataItem[key]); %>
+          </li>
+          <% } %> <% }) %>
+        </ul>
+      </li>
+      <% }) %>
+    </ul>
+
+    <% function renderData(obj) { %>
+    <ul>
+      <% Object.keys(obj).forEach(subKey => { %>
+      <li>
+        <strong><%= subKey %>:</strong>
+        <% if (typeof obj[subKey] === 'object') { %> <% renderData(obj[subKey]);
+        %> <% } else { %> <%= obj[subKey] %> <% } %>
+      </li>
+      <% }) %>
+    </ul>
+    <% } %>
+  </body>
+</html>

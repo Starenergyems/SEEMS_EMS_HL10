@@ -1,0 +1,225 @@
+.Title {
+    background-color: #F9E06CB3;
+    height: 50px;
+    margin: 10px 25px 5px;
+    border-radius: 25px;
+    position: relative;
+}
+
+.Title h2 {
+    display: inline-block;
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.Title label {
+    display: inline-block;
+    width: 55px;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 50px;
+}
+
+.Title a {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 40px;
+    width: 210px;
+    border: 2px solid #F9E06C;
+    margin: 5px 0px 0px;
+    font-size: 30px;
+    color: #000000;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 20px;
+    vertical-align: top;
+}
+
+.Title #infoPCS {
+    background-color: #F9E06C;
+    border-color: #FFFFFF;
+    margin-left: 5%;
+    text-decoration: none;
+}
+
+.Title .preNext {
+    height: 30px;
+    width: 80px;
+    border: 1px solid #D9D9D9;
+    /* margin-top: 10px; */
+    font-size: 20px;
+    line-height: 28px;
+    text-decoration: none;
+    border-radius: 10px;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+}
+
+.Title #previousPCS {
+    right: 105px;
+}
+
+.overview {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    width: 39.88%;
+    margin: 5px 5px 5px 25px;
+    border-radius: 5px;
+    min-width: 310px;
+}
+
+.overview .bigInfo {
+    width: 25%;
+}
+
+.overview .BG_bigInfo {
+    background-color: #E5393580;
+}
+
+.overview .bI_noOverallAlarm .BG_bigInfo,
+.overview .bI_noAlarm .BG_bigInfo {
+    background-color: #F9E06C;
+}
+
+.overview .subBG_bigInfo {
+    line-height: 100px;
+}
+
+.overview label {
+    top: 80px;
+}
+
+.overallFault {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    box-sizing: border-box;
+    width: 37.5%;
+    margin: 5px;
+    border-radius: 5px;
+    vertical-align: top;
+    min-width: 260px;
+}
+
+.M_Page h3 {
+    background-color: #F9E06CB2;
+    box-sizing: border-box;
+    padding: 0px 0px 0px 20px;
+    margin: 5px;
+    font-size: 30px;
+    line-height: 40px;
+    border-radius: 20px;
+}
+
+.columnDLL {
+    box-sizing: border-box;
+    padding: 0px 15px;
+    min-width: 260px;
+    /* background-color: #FFAA00; */
+}
+
+.DL_Line {
+    min-width: 230px;
+}
+
+.M_Page .dataLight {
+    background-color: #236E37;
+}
+
+.overallFault .columnDLL {
+    display: inline-block;
+    width: 50%;
+}
+
+.overallFault .lastLine {
+    margin: 0px 0px 5px;
+}
+
+.overallAlarm {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    box-sizing: border-box;
+    width: 18.45%;
+    margin: 5px 10px 5px 5px;
+    border-radius: 5px;
+    vertical-align: top;
+    min-width: 260px;
+}
+
+.overallAlarm .lastLine {
+    margin: 0px 0px 5px;
+}
+
+.Alarm {
+    display: inline-block;
+    /* background-color: #FFFFFF80; */
+    box-sizing: border-box;
+    width: 20.83%;
+    margin: 5px 5px 5px 25px;
+    border-radius: 5px;
+    vertical-align: top;
+    min-width: 300px;
+    position: relative;
+}
+
+.Alarm h3 {
+    position: relative;
+    z-index: 3;
+}
+
+.Alarm .columnDLL {
+    margin-top: 5px;
+    background-color: #FFFFFF80;
+    border-radius: 5px;
+}
+
+.Alarm .columnDLL_0 {
+    background-color: #FFFFFF80;
+    height: 155px;
+    width: 100%;
+    border-radius: 5px;
+    position: absolute;
+    left: 0px;
+    top: -5px;
+    z-index: 2;
+}
+
+.Alarm .columnDLL_1st {
+    background-color: transparent;
+    position: relative;
+    z-index: 3;
+}
+
+.Fault {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    box-sizing: border-box;
+    width: 75.595%;
+    margin: 5px 10px 5px 5px;
+    border-radius: 5px;
+    vertical-align: top;
+    min-width: 260px;
+}
+
+.Fault .columnDLL {
+    display: inline-block;
+    width: 25%;
+    vertical-align: top;
+}
+
+.Fault .DL_Line {
+    line-height: 39px;
+}
+
+.Fault .gapLine {
+    margin-bottom: 39px;
+}
+
+.Fault .lastLine {
+    margin-bottom: 43px;
+}
+
+.Fault .dataLight {
+    top: 5px;
+}

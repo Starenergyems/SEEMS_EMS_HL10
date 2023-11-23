@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
+    <title>BMS詳細資訊</title>
+    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="styles/Op_Bat_InfoDetail.css" rel="stylesheet" type="text/css" />
+    <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
+</head>
+
+<body>
+    <div class="T_Main">
+        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
+        <div class="dateTime_Username">
+            <label id="dateTime_Now">2000/01/01 23:59:59</label>
+            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label for="qaz" id="userAccount">Administrator</label>
+            <div class="accountNavBar">
+                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
+                <a href="AccountManage.html" id="accNB_02">人員管理</a>
+                <a href="Login.html" id="accNB_03">登出</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="L_Main">
+        <div class="systemStatus">
+            <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
+            <div class="sumAWNum sumAlarmNum">
+                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalAlarmNum">999</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <div class="sumAW_EachArea sumAlarm_EachArea">
+                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
+                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
+                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env">11</label></div>
+                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF">54</label></div>
+                </div>
+            </div>
+            <div class="sumAWNum sumWarningNum">
+                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalWarningNum">52</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <div class="sumAW_EachArea sumWarning_EachArea">
+                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
+                    </div>
+                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS">3</label></div>
+                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env">99</label></div>
+                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF">87</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="Op_Meter_SLD.html"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+        </div>
+        <div class="systemInfo">
+            <p class="subTitle">|| 系統資訊 ||</p>
+
+            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq">60.123</label>
+                <p class="dataUnit">Hz</p>
+            </div>
+            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP">12345.6</label>
+                <p class="dataUnit">kW</p>
+            </div>
+            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
+                <p class="dataUnit">kVar</p>
+            </div>
+            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage">23.456</label>
+                <p class="dataUnit">kV</p>
+            </div>
+            <div class="DV_Line">電流<label class="dataValue" id="L_M_current">78.87</label>
+                <p class="dataUnit">A</p>
+            </div>
+            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
+                <p class="dataUnit"></p>
+            </div>
+            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
+                <p class="dataUnit">%</p>
+            </div>
+
+            <div class="DV_Line spareLine">當日充放電量</div>
+
+            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+        </div>
+        <div class="eStop">
+            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <p class="epo_word">緊急停止鈕</p>
+        </div>
+
+        <div class="popUpWindow epo">
+            <h2 class="titlePUW">緊急停止設定</h2>
+
+            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <p class="epoInfo">確認停機</p>
+
+            <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+            <button class="closeWindowButton" id="closeWB_No">取消</button>
+        </div>
+    </div>
+
+    <div class="R_Main">
+        <div class="subNavBar" id="sub_NavBar">
+            <!-- <h2>模式控制</h2> -->
+            <div class="button_sNB" id="sNB_01">
+                <a href="Op_Meter_SLD.html" class="name_button_sNB">單線圖</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
+                <div class="ssNavBar">
+                    <a href="Op_Meter_SLD.html" id="ssNB_01">電力單線圖</a>
+                    <a href="Op_Meter_MainMeter.html" id="ssNB_02">主電表</a>
+                    <a href="Op_Meter_AuxMeter.html" id="ssNB_03">輔電表</a>
+                </div>
+            </div>
+            <div class="button_sNB" id="sNB_02">
+                <a href="Op_PCS_InfoSummary.html" class="name_button_sNB">PCS</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
+                <div class="ssNavBar">
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_01">PCS 1-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_02">PCS 1-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_03">PCS 2-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_04">PCS 2-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_05">PCS 3-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_06">PCS 3-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_07">PCS 4</a>
+                </div>
+            </div>
+            <div class="button_sNB button_sNB_last default_sNB" id="sNB_03">
+                <a href="Op_Bat_InfoSummary.html" class="name_button_sNB">電池</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
+                <div class="ssNavBar">
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_01">BMS 1-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_02">BMS 1-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_03">BMS 2-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_04">BMS 2-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_05">BMS 3-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_06">BMS 3-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_07">BMS 4</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="M_Page">
+            <div class="Title">
+                <h2>【BMS</h2><label for="qaz" id="No_of_BMS">1-1</label>
+                <h2>】</h2>
+                <a href="#" class="infoStatus" id="infoBMS">狀態與數值</a>
+                <a href="Op_Bat_Rack.html" class="infoStatus" id="infoRack">Rack資訊</a>
+                <a href="#" class="preNext" id="previousBMS">上一頁</a>
+                <a href="#" class="preNext" id="nextBMS">下一頁</a>
+            </div>
+
+            <div class="overviewInfo">
+                <div class="overview">
+                    <div class="bigInfo bI_BMSMode">
+                        <p>系統模式</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo"></div>
+                            <label for="qaz" class="data_val" id="BMSMode">正常</label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_onlineNum">
+                        <p>Rack在線數</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">/&nbsp16</div>
+                            <label for="qaz" class="data_val" id="onlineNum">15</label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_onlineV">
+                        <p>在線電壓</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">V</div>
+                            <label for="qaz" class="data_val" id="onlineV">1234.0</label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_BMSsystemV">
+                        <p>系統電壓</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">V</div>
+                            <label for="qaz" class="data_val" id="BMSsystemV">1500.0</label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_BMSsystemI">
+                        <p>系統電流</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">A</div>
+                            <label for="qaz" class="data_val" id="BMSsystemI">-3570.0</label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_BMSsystemSOC">
+                        <p>SOC</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">%</div>
+                            <label for="qaz" class="data_val" id="BMSsystemSOC">78.9</label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_BMSsystemSOH">
+                        <p>SOH</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">%</div>
+                            <label for="qaz" class="data_val" id="BMSsystemSOH">100.0</label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_heartBeat">
+                        <p>心跳</p>
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo"></div>
+                            <label for="qaz" class="data_val" id="heartBeat">123456</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info">
+                    <div class="infoBlock rackInfo">
+                        <h3>電池機櫃(Rack)</h3>
+                        <div class="DV_Line">Rack電壓差<label for="qaz" class="dataValue" id="rackVoltDiff">700.0</label>
+                            <p class="dataUnit">V</p>
+                        </div>
+                        <div class="DP_Line">最高/最低Rack電壓位置<label class="dataP DP_1st" id="rackNoVmax">10</label>
+                            <p>/</p>
+                            <label class="dataP DP_2nd" id="rackNoVmin">9</label>
+                        </div>
+                        <div class="DV_Line">Rack電流差<label for="qaz" class="dataValue" id="rackCurrDiff">450.0</label>
+                            <p class="dataUnit">A</p>
+                        </div>
+                        <div class="DP_Line">最高/最低Rack電流位置<label class="dataP DP_1st" id="rackNoImax">8</label>
+                            <p>/</p>
+                            <label class="dataP DP_2nd" id="rackNoImin">10</label>
+                        </div>
+                        <div class="DV_Line">在線SOC差<label for="qaz" class="dataValue" id="rackSOCDiff">100.0</label>
+                            <p class="dataUnit">%</p>
+                        </div>
+                    </div>
+
+                    <div class="infoBlock cellInfo">
+                        <h3>電池電芯(Cell)</h3>
+                        <div class="DV_Line">最高電芯電壓<label for="qaz" class="dataValue" id="V_cell_Max">4.0001</label>
+                            <p class="dataUnit">V</p>
+                        </div>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoVcMax">10</label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoVcMax">26</label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoVcMax">20</label>
+                        </div>
+                        <div class="DV_Line">最低電芯電壓<label for="qaz" class="dataValue" id="V_cell_Min">2.5001</label>
+                            <p class="dataUnit">V</p>
+                        </div>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoVcMin">9</label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoVcMin">25</label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoVcMin">21</label>
+                        </div>
+                        <div class="DV_Line">最大電芯壓差<label for="qaz" class="dataValue" id="V_cell_MaxDiff">98.7</label>
+                            <p class="dataUnit">mV</p>
+                        </div>
+
+                        <div class="DV_Line">最高電芯溫度<label for="qaz" class="dataValue" id="T_cell_Max">123.4</label>
+                            <p class="dataUnit">&#176C</p>
+                        </div>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoTcMax">8</label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoTcMax">1</label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoTcMax">2</label>
+                        </div>
+                        <div class="DV_Line">最低電芯溫度<label for="qaz" class="dataValue" id="T_cell_Min">-123.4</label>
+                            <p class="dataUnit">&#176C</p>
+                        </div>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoTcMin">7</label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoTcMin">24</label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoTcMin">22</label>
+                        </div>
+                        <div class="DV_Line">最大電芯溫差<label for="qaz" class="dataValue" id="T_cell_MaxDiff">65.4</label>
+                            <p class="dataUnit">&#176C</p>
+                        </div>
+                    </div>
+
+                    <div class="infoBlock totalE">
+                        <h3>總充放電量</h3>
+                        <div class="DV_Line">總充電量<label for="qaz" class="dataValue" id="totalChgE">1234567.8</label>
+                            <p class="dataUnit">MWh</p>
+                        </div>
+                        <div class="DV_Line lastLine">總放電量<label for="qaz" class="dataValue"
+                                id="totalDcgE">2345678.9</label>
+                            <p class="dataUnit">MWh</p>
+                        </div>
+                    </div>
+
+                    <div class="infoBlock tempAmbient">
+                        <h3>環境溫度</h3>
+                        <div class="DV_Line">環境溫度_1<label for="qaz" class="dataValue" id="tempAmb_1">23.4</label>
+                            <p class="dataUnit">&#176C</p>
+                        </div>
+                        <div class="DV_Line lastLine">環境溫度_2<label for="qaz" class="dataValue"
+                                id="tempAmb_2">34.5</label>
+                            <p class="dataUnit">&#176C</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="FApositionDI">
+                    <div class="infoBlock FAposition">
+                        <h3>故障告警位置</h3>
+                        <div class="DV_Line">CMU告警<label for="qaz" class="dataValue" id="rackNo_alarmCMU">20</label>
+                            <p class="dataUnit">Rack</p>
+                        </div>
+                        <div class="DV_Line">CMU故障<label for="qaz" class="dataValue" id="rackNo_faultCMU">1</label>
+                            <p class="dataUnit">Rack</p>
+                        </div>
+                        <div class="DV_Line">正繼電器故障<label for="qaz" class="dataValue" id="rackNo_faultPRelay">2</label>
+                            <p class="dataUnit">Rack</p>
+                        </div>
+                        <div class="DV_Line">負繼電器故障<label for="qaz" class="dataValue" id="rackNo_faultNRelay">5</label>
+                            <p class="dataUnit">Rack</p>
+                        </div>
+                        <div class="DV_Line">熔絲故障<label for="qaz" class="dataValue" id="rackNo_faultFuse">6</label>
+                            <p class="dataUnit">Rack</p>
+                        </div>
+                        <div class="DV_Line">SMU-CMU通訊<label for="qaz" class="dataValue"
+                                id="rackNo_commSMUCMU">10</label>
+                            <p class="dataUnit">Rack</p>
+                        </div>
+                    </div>
+
+                    <div class="infoBlock statusDI">
+                        <h3>DI狀態</h3>
+                        <div class="DL_Line">DI#01狀態<label for="qaz" class="dataLight OG_L" id="statusDI01"></label>
+                        </div>
+                        <div class="DL_Line">DI#02狀態<label for="qaz" class="dataLight OG_L" id="statusDI02"></label>
+                        </div>
+                        <div class="DL_Line">DI#03狀態<label for="qaz" class="dataLight OG_L" id="statusDI03"></label>
+                        </div>
+                        <div class="DL_Line">DI#04狀態<label for="qaz" class="dataLight OG_L" id="statusDI04"></label>
+                        </div>
+                        <div class="DL_Line">DI#05狀態<label for="qaz" class="dataLight OG_L" id="statusDI05"></label>
+                        </div>
+                        <div class="DL_Line lastLine">DI#06狀態<label for="qaz" class="dataLight OG_L"
+                                id="statusDI06"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faultHWSMUSOC">
+                    <div class="infoBlock faultHW">
+                        <h3>硬體故障</h3>
+                        <div class="DL_Line">主正繼電器故障<label for="qaz" class="dataLight RG_L" id="faultPRelay"></label>
+                        </div>
+                        <div class="DL_Line">主負繼電器故障<label for="qaz" class="dataLight RG_L" id="faultNRelay"></label>
+                        </div>
+                        <div class="DL_Line">主正繼電器閉合失敗<label for="qaz" class="dataLight RG_L"
+                                id="closeFailPRelay"></label>
+                        </div>
+                        <div class="DL_Line">主負繼電器閉合失敗<label for="qaz" class="dataLight RG_L"
+                                id="closeFailNRelay"></label>
+                        </div>
+                        <div class="DL_Line">熔絲斷開<label for="qaz" class="dataLight RG_L" id="blownFuse"></label>
+                        </div>
+                    </div>
+
+                    <div class="infoBlock faultSMU">
+                        <h3>SMU故障</h3>
+                        <div class="DL_Line">SMU-CMU通訊<label for="qaz" class="dataLight RG_L" id="commSMUCMU"></label>
+                        </div>
+                        <div class="DL_Line">Rack數量保護<label for="qaz" class="dataLight RG_L" id="rackNoProtect"></label>
+                        </div>
+                        <div class="DL_Line">系統停止<label for="qaz" class="dataLight RG_L" id="systemStop"></label>
+                        </div>
+                    </div>
+
+                    <div class="infoBlock SOCcalibration">
+                        <h3>SOC校準</h3>
+                        <div class="DL_Line">一級SOC校準提示<label for="qaz" class="dataLight OG_L" id="1stSOCcal"></label>
+                        </div>
+                        <div class="DL_Line lastLine">二級SOC校準提示<label for="qaz" class="dataLight OG_L"
+                                id="2ndSOCcal"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="infoBlock faultAlarm">
+                <h3>CMU故障告警</h3>
+                <p class="titleAlarm">告警</p>
+                <p class="titleFault">故障</p>
+                <div class="DL_Line">電芯過壓<label for="qaz" class="dataLight OG_L" id="cellOV_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="cellOV_Fault"></label>
+                </div>
+                <div class="DL_Line">電芯欠壓<label for="qaz" class="dataLight OG_L" id="cellUV_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="cellUV_Fault"></label>
+                </div>
+                <div class="DL_Line">總壓過壓<label for="qaz" class="dataLight OG_L" id="rackOV_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="rackOV_Fault"></label>
+                </div>
+                <div class="DL_Line">總壓欠壓<label for="qaz" class="dataLight OG_L" id="rackUV_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="rackUV_Fault"></label>
+                </div>
+                <div class="DL_Line">Pack過壓<label for="qaz" class="dataLight OG_L" id="packOV_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="packOV_Fault"></label>
+                </div>
+                <div class="DL_Line">Pack欠壓<label for="qaz" class="dataLight OG_L" id="packUV_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="packUV_Fault"></label>
+                </div>
+                <div class="DL_Line">電芯壓差<label for="qaz" class="dataLight OG_L" id="cellVDiff_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L spareL" id="cellVDiff_Fault"></label>
+                </div>
+                <div class="DL_Line">總壓壓差<label for="qaz" class="dataLight OG_L spareL" id="rackVDiff_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="rackVDiff_Fault"></label>
+                </div>
+                <div class="DL_Line">Pack壓差<label for="qaz" class="dataLight OG_L" id="packVDiff_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L spareL" id="packVDiff_Fault"></label>
+                </div>
+                <div class="DL_Line">電芯過溫<label for="qaz" class="dataLight OG_L" id="cellOT_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="cellOT_Fault"></label>
+                </div>
+                <div class="DL_Line">電芯低溫<label for="qaz" class="dataLight OG_L" id="cellUT_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="cellUT_Fault"></label>
+                </div>
+                <div class="DL_Line">電芯溫差<label for="qaz" class="dataLight OG_L" id="cellTDiff_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L spareL" id="cellTDiff_Fault"></label>
+                </div>
+                <div class="DL_Line">絕緣漏電<label for="qaz" class="dataLight OG_L" id="leakageI_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="leakageI_Fault"></label>
+                </div>
+                <div class="DL_Line">CMU-BMU通訊<label for="qaz" class="dataLight OG_L spareL"
+                        id="commCMUBMU_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="commCMUBMU_Fault"></label>
+                </div>
+                <div class="DL_Line">電壓採樣<label for="qaz" class="dataLight OG_L spareL" id="voltSample_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="voltSample_Fault"></label>
+                </div>
+                <div class="DL_Line">溫度採樣<label for="qaz" class="dataLight OG_L spareL" id="tempSample_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="tempSample_Fault"></label>
+                </div>
+                <div class="DL_Line">電流採樣<label for="qaz" class="dataLight OG_L spareL"
+                        id="currentSample_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="currentSample_Fault"></label>
+                </div>
+                <div class="DL_Line">CMU-SMU通訊<label for="qaz" class="dataLight OG_L spareL"
+                        id="commCMUSMU_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="commCMUSMU_Fault"></label>
+                </div>
+                <div class="DL_Line">過流<label for="qaz" class="dataLight OG_L" id="overCurrent_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="overCurrent_Fault"></label>
+                </div>
+                <div class="DL_Line">極性反接<label for="qaz" class="dataLight OG_L spareL"
+                        id="polarityReverse_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="polarityReverse_Fault"></label>
+                </div>
+                <div class="DL_Line">熔絲故障<label for="qaz" class="dataLight OG_L spareL" id="fuse_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="fuse_Fault"></label>
+                </div>
+                <div class="DL_Line">接觸器故障<label for="qaz" class="dataLight OG_L spareL" id="contactor_Alarm"></label>
+                    <label for="qaz" class="dataLight RG_L" id="contactor_Fault"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/script_template.js"></script>
+    <script src="scripts/Op_Bat_InfoDetail.js"></script>
+</body>
+
+</html>

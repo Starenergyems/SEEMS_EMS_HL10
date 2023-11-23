@@ -1,0 +1,46 @@
+html {
+    background-color: #9DC9F0;
+}
+
+body {
+    width: 1000px;
+    /* 總寬度= width + 右padding + 左padding + 左&右border */
+    padding: 0px 20px 50px 80px;
+    /* 上 右 下 左 */
+    border: 5px solid black;
+    margin: 1% auto;
+    /* 上&下 右&左 */
+    background-color: #EFAF66;
+    font-family: "Lato", sans-serif;
+}
+
+h1 {
+    color: orchid;
+    font-size: 40px;
+    text-align: center;
+    padding: 40px 0px 20px;
+    /* 上 右&左 下*/
+    margin: 0px;
+    text-shadow: 3px 3px 4px black;
+    /* 右位移 下位移 模糊度 顏色*/
+}
+
+p,
+li {
+    width: 500px;
+    font-size: 16px;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    padding: 0px;
+    border: 1px dashed black;
+    margin: 10px 0px;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+.test_a:active {
+    background-color: #00FFFF;
+}

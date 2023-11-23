@@ -1,0 +1,152 @@
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar #sNB_01 {
+    left: 15px;
+}
+
+.subNavBar #sNB_02 {
+    left: 0px;
+}
+
+.title {
+    background-color: #F9E06CB3;
+    /* height: 50px; */
+    margin: 10px 1.488% 10px;
+    border-radius: 25px;
+}
+
+.title h2 {
+    display: inline-block;
+    font-size: 36px;
+    line-height: 50px;
+    vertical-align: top;
+}
+
+.title #filtNone,
+.title .filter,
+.title .timeRangeQuery p {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 6%;
+    border: 2px solid #808080;
+    margin: 5px 0px 0px 5px;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+    border-radius: 10px;
+    vertical-align: top;
+    position: relative;
+}
+
+.title .filter {
+    width: 150px;
+    padding-right: 15px;
+    text-align: center;
+}
+
+.title .filter p {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+}
+
+.title .filter img {
+    position: absolute;
+    right: 3px;
+    top: 13px;
+}
+
+.title .filtOptions {
+    display: none;
+    border-top: 0.5px solid #D9D9D9;
+    position: absolute;
+    left: -5px;
+    top: 38px;
+    z-index: 1;
+}
+
+.title .filtOptions.appear {
+    display: block;
+}
+
+.title .filtOpt {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 35px;
+    width: 135px;
+    border: 0.5px solid #D9D9D9;
+    border-top: none;
+    font-size: 20px;
+}
+
+.title .space_div {
+    display: inline-block;
+    width: calc(100% - 6% - 1395px);
+    min-width: 10px;
+}
+
+.title .timeRangeQuery {
+    display: inline-block;
+}
+
+.title .timeRangeQuery p {
+    width: 160px;
+    margin: 5px 10px 0px 15px;
+    text-align: center;
+}
+
+.title .setStartEnd {
+    display: inline-block;
+}
+
+.title .setStartTime,
+.title .setEndTime {
+    font-size: 20px;
+}
+
+.title .setStartEnd img {
+    display: inline-block;
+    margin: 2px 0px 0px 1px;
+}
+
+.title .setStartEnd input {
+    display: inline-block;
+    box-sizing: border-box;
+    height: 21px;
+    border: 0.5px solid #000000;
+    margin-top: 2px;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+.title .setStartEnd input[type="time"] {
+    margin-left: 1px;
+}
+
+.title .timeRangeQuery .btn_Query {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 30px;
+    width: 60px;
+    border: 1px solid #000000;
+    margin: 10px 10px 0px 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    vertical-align: top;
+}
+
+.almHistory {
+    background-color: #FFFFFF80;
+    padding: 5px 0px;
+    margin: 10px 1.488% 10px;
+    border-radius: 10px;
+}
+
+table.dataTable tbody td {
+    /* padding-top: 5px; */
+    padding-top: 6px;
+}

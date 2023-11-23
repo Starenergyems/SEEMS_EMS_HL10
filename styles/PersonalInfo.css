@@ -1,0 +1,174 @@
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar .default_sNB {
+    background-color: #F2F8E6;
+}
+
+.M_Page {
+    background-color: #F2F8E6;
+}
+
+.title {
+    background-color: #CBE198;
+    height: 50px;
+    margin: 10px 1.488% 5px;
+    border-radius: 25px;
+    position: relative;
+}
+
+.title h2 {
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.title #goToAccountManage {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 120px;
+    border: 2px solid #808080;
+    font-size: 24px;
+    color: #000000;
+    line-height: 36px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 10px;
+    position: absolute;
+    right: 20px;
+    bottom: 5px;
+}
+
+.BG_personalInfo {
+    background-color: #FFFFFF80;
+    margin: 10px 1.488%;
+    border-radius: 10px;
+}
+
+.BG_personalInfo .perInfo_changePW {
+    display: inline-block;
+    width: 46.93%;
+    vertical-align: top;
+}
+
+.perInfo_changePW table {
+    box-sizing: border-box;
+    padding: 8px 0.392% 8px 1.046%;
+    border-spacing: 0.261% 2px;
+}
+
+.perInfo_changePW tr td {
+    background-color: #CBE19880;
+    box-sizing: border-box;
+    height: 48px;
+    font-size: 28px;
+    text-align: center;
+}
+
+.perInfo_changePW .col_01 {
+    width: 280px;
+    font-weight: bold;
+}
+
+.perInfo_changePW .col_other {
+    width: 62.069%;
+}
+
+.perInfo_changePW .dataValue {
+    font-size: 28px;
+}
+
+.BG_personalInfo h3 {
+    background-color: #CBE198;
+    padding-left: 20px;
+    margin: 42px 0.653% 0px 1.307%;
+    font-size: 32px;
+    line-height: 50px;
+    border-radius: 25px;
+}
+
+.perInfo_changePW .row_confirm td {
+    height: 130px;
+}
+
+.perInfo_changePW .changePW tr .col_other {
+    text-align: right;
+}
+
+.perInfo_changePW .input_PW {
+    box-sizing: border-box;
+    width: 93%;
+    padding: 0px 5px;
+    border: 1px solid #CBE198;
+    margin: 0px 3.5%;
+    font-size: 28px;
+    line-height: 38px;
+    border-radius: 10px;
+}
+
+.perInfo_changePW #changePassword {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 100px;
+    border: 2px solid #808080;
+    margin: 10px 3.5% 0px 0px;
+    font-size: 20px;
+    line-height: 36px;
+    border-radius: 10px;
+}
+
+.BG_personalInfo .operationRecord {
+    display: inline-block;
+    width: 53.07%;
+    vertical-align: top;
+}
+
+.operationRecord h3 {
+    margin: 10px 1.156% 10px 0.578%;
+}
+
+.operationRecord .opRecord {
+    margin: 10px 1.156% 10px 0.578%;
+}
+
+table.dataTable thead th {
+    background-color: #CBE19880;
+}
+
+table thead .col_00 {
+    border-radius: 0px;
+}
+
+table thead .col_last {
+    border-radius: 0px;
+}
+
+table.dataTable tbody tr,
+table.dataTable tbody .even {
+    background-color: #CBE19880;
+}
+
+table.dataTable tbody td {
+    padding: 7px 0px 7px;
+}
+
+table.dataTable tbody .text-align-left {
+    padding-left: 5px;
+    text-align: left;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 1px;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 1px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #CBE19880;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: #CBE198;
+}

@@ -1,0 +1,9 @@
+npm init
+npm install express express ejs
+設定app.js
+node app.js 執行並確認有出現(伺服器正在聆聽 port 3000...)
+
+C:\Test\DB_test\package.json(可以確認已下載套件及版本)
+schema type 查詢(https://mongoosejs.com/docs/schematypes.html)
+
+npm i cors

@@ -1,0 +1,329 @@
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar .default_sNB {
+    background-color: #F2F8E6;
+}
+
+.M_Page {
+    background-color: #F2F8E6;
+}
+
+.commArchiD {
+    display: block;
+    background-color: #FFFFFF;
+    padding: 0px 15px 4px;
+    margin: 10px 25px 0px 25px;
+    position: relative;
+}
+
+.commArchiD img {
+    display: block;
+}
+
+.commArchiD label {
+    display: inline-block;
+    background-color: #00FF75;
+    box-sizing: border-box;
+    height: 20px;
+    width: 20px;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.commArchiD #EMS_1 {
+    left: 260px;
+    top: 435px;
+}
+
+.commArchiD #EMS_2 {
+    left: 378px;
+    top: 435px;
+}
+
+.commArchiD #DC {
+    left: 496px;
+    top: 435px;
+}
+
+.commArchiD #HMI {
+    left: 614px;
+    top: 435px;
+}
+
+.commArchiD #GC_1 {
+    left: 496px;
+    top: 550px;
+}
+
+.commArchiD #GC_2 {
+    left: 614px;
+    top: 550px;
+}
+
+.commArchiD #HVAC_1 {
+    left: 260px;
+    top: 665px;
+}
+
+.commArchiD #HVAC_2 {
+    left: 378px;
+    top: 665px;
+}
+
+.commArchiD #UPS_EMS {
+    left: 496px;
+    top: 665px;
+}
+
+.commArchiD #UPS_CCTV {
+    left: 614px;
+    top: 665px;
+}
+
+.commArchiD #RIO_CtrlRoom {
+    left: 378px;
+    top: 550px;
+}
+
+.commArchiD #FreqMeter {
+    left: 496px;
+    top: 85px;
+}
+
+.commArchiD #AuxM_MVCB {
+    left: 614px;
+    top: 200px;
+}
+
+.commArchiD #Relay_MVCB {
+    left: 378px;
+    top: 200px;
+}
+
+.commArchiD #UPS_MVCB {
+    left: 260px;
+    top: 200px;
+}
+
+.commArchiD #Recloser {
+    left: 496px;
+    top: 200px;
+}
+
+.commArchiD #RIO_MVCB_1 {
+    left: 260px;
+    top: 85px;
+}
+
+.commArchiD #RIO_MVCB_2 {
+    left: 378px;
+    top: 85px;
+}
+
+.commArchiD #Relay_VCB1 {
+    left: 745px;
+    top: 85px;
+}
+
+.commArchiD #Relay_VCB2 {
+    left: 745px;
+    top: 200px;
+}
+
+.commArchiD #Relay_VCB3 {
+    left: 863px;
+    top: 85px;
+}
+
+.commArchiD #Relay_VCB4 {
+    left: 863px;
+    top: 200px;
+}
+
+.commArchiD #Relay_VCB_Aux {
+    left: 981px;
+    top: 85px;
+}
+
+.commArchiD #TR_Aux {
+    left: 981px;
+    top: 200px;
+}
+
+.commArchiD #AuxM_total {
+    left: 1101px;
+    top: 85px;
+}
+
+.commArchiD #AuxM_ESS1_1 {
+    left: 1225px;
+    top: 85px;
+}
+
+.commArchiD #AuxM_ESS1_2 {
+    left: 1225px;
+    top: 200px;
+}
+
+.commArchiD #AuxM_ESS2_1 {
+    left: 1343px;
+    top: 85px;
+}
+
+.commArchiD #AuxM_ESS2_2 {
+    left: 1343px;
+    top: 200px;
+}
+
+.commArchiD #AuxM_ESS3_1 {
+    left: 1461px;
+    top: 85px;
+}
+
+.commArchiD #AuxM_ESS3_2 {
+    left: 1461px;
+    top: 200px;
+}
+
+.commArchiD #AuxM_ESS4 {
+    left: 1579px;
+    top: 85px;
+}
+
+.commArchiD #AuxM_CtrlRoom {
+    left: 1579px;
+    top: 200px;
+}
+
+.commArchiD #TR_1 {
+    left: 1461px;
+    top: 321px;
+}
+
+.commArchiD #TR_2 {
+    left: 1579px;
+    top: 321px;
+}
+
+.commArchiD #TR_3 {
+    left: 1461px;
+    top: 435px;
+}
+
+.commArchiD #TR_4 {
+    left: 1579px;
+    top: 435px;
+}
+
+.commArchiD #ACMeter1 {
+    left: 745px;
+    top: 435px;
+}
+
+.commArchiD #ACMeter2 {
+    left: 863px;
+    top: 435px;
+}
+
+.commArchiD #ACMeter3 {
+    left: 981px;
+    top: 435px;
+}
+
+.commArchiD #ACMeter4 {
+    left: 1101px;
+    top: 435px;
+}
+
+.commArchiD #LC_1 {
+    left: 863px;
+    top: 611px;
+}
+
+.commArchiD #LC_2 {
+    left: 1101px;
+    top: 611px;
+}
+
+.commArchiD #LC_3 {
+    left: 1339px;
+    top: 611px;
+}
+
+.commArchiD #LC_4 {
+    left: 1577px;
+    top: 611px;
+}
+
+.commArchiD #PCS1_1 {
+    left: 863px;
+    top: 770px;
+}
+
+.commArchiD #PCS1_2 {
+    left: 863px;
+    top: 800px;
+}
+
+.commArchiD #BMS1_1 {
+    left: 745px;
+    top: 770px;
+}
+
+.commArchiD #BMS1_2 {
+    left: 745px;
+    top: 800px;
+}
+
+.commArchiD #PCS2_1 {
+    left: 1101px;
+    top: 770px;
+}
+
+.commArchiD #PCS2_2 {
+    left: 1101px;
+    top: 800px;
+}
+
+.commArchiD #BMS2_1 {
+    left: 981px;
+    top: 770px;
+}
+
+.commArchiD #BMS2_2 {
+    left: 981px;
+    top: 800px;
+}
+
+.commArchiD #PCS3_1 {
+    left: 1337px;
+    top: 770px;
+}
+
+.commArchiD #PCS3_2 {
+    left: 1337px;
+    top: 800px;
+}
+
+.commArchiD #BMS3_1 {
+    left: 1225px;
+    top: 770px;
+}
+
+.commArchiD #BMS3_2 {
+    left: 1225px;
+    top: 800px;
+}
+
+.commArchiD #PCS4 {
+    left: 1579px;
+    top: 770px;
+}
+
+.commArchiD #BMS4 {
+    left: 1461px;
+    top: 770px;
+}

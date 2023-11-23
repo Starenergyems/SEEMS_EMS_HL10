@@ -1,0 +1,122 @@
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar #sNB_01 {
+    left: 15px;
+}
+
+.subNavBar #sNB_02 {
+    left: 0px;
+}
+
+.subNavBar .default_sNB {
+    background-color: #F2F8E6;
+}
+
+.M_Page {
+    background-color: #F2F8E6;
+}
+
+.title {
+    background-color: #CBE198;
+    height: 50px;
+    margin: 10px 1.488% 10px;
+    border-radius: 25px;
+}
+
+.title h2 {
+    display: inline-block;
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.title #filtNone,
+.title .filter {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 6%;
+    border: 2px solid #808080;
+    margin: 5px 0px 0px 5px;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+    border-radius: 10px;
+    vertical-align: top;
+    position: relative;
+}
+
+.title .filter {
+    width: 150px;
+    padding-right: 15px;
+    text-align: center;
+}
+
+.title .filter p {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+}
+
+.title .filter img {
+    position: absolute;
+    right: 3px;
+    top: 13px;
+}
+
+.title .filtOptions {
+    display: none;
+    border-top: 0.5px solid #D9D9D9;
+    position: absolute;
+    left: -5px;
+    top: 38px;
+    z-index: 1;
+}
+
+.title .filtOptions.appear {
+    display: block;
+}
+
+.title .filtOpt {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 35px;
+    width: 135px;
+    border: 0.5px solid #D9D9D9;
+    border-top: none;
+    font-size: 20px;
+}
+
+.almRealTime {
+    background-color: #FFFFFF80;
+    padding: 5px 0px;
+    margin: 10px 1.488% 10px;
+    border-radius: 10px;
+}
+
+table.dataTable thead th {
+    background-color: #CBE198C0;
+}
+
+table.dataTable tbody .even {
+    background-color: #CBE19880;
+}
+
+table.dataTable tbody td {
+    padding-top: 5px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #CBE19880;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: #CBE198;
+}
+
+.dataTables_wrapper .chb_Ack {
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+}

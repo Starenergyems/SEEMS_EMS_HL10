@@ -1,0 +1,157 @@
+.R_Main {
+    min-width: 1330px;
+}
+
+.subNavBar .button_sNB {
+    padding-right: 15px;
+}
+
+.subNavBar .default_sNB {
+    background-color: #FFFBED;
+}
+
+.M_Page {
+    background-color: #FFFBED;
+}
+
+.title {
+    background-color: #F9E06CB3;
+    height: 50px;
+    margin: 10px 1.488% 5px;
+    border-radius: 25px;
+}
+
+.title h2 {
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.environSC {
+    background-color: #FFFFFF80;
+    margin: 5px 1.488% 10px;
+    border-radius: 10px;
+}
+
+.environSC table {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 3px 0.1843%;
+    border-spacing: 0.1226% 2px;
+}
+
+.environSC tr td {
+    background-color: #F9E06C80;
+    box-sizing: border-box;
+    height: 34px;
+    font-size: 20px;
+    /* line-height: 34px; */
+    text-align: center;
+    position: relative;
+}
+
+.environSC .col_01 {
+    width: 12.638%;
+}
+
+.environSC .col_other {
+    width: 12.27%;
+}
+
+.environSC .row_head td {
+    background-color: #F9E06CC0;
+    font-size: 30px;
+    line-height: 40px;
+}
+
+.environSC .row_head .col_01 {
+    border-radius: 20px 0px 0px 20px;
+}
+
+.environSC .row_head .col_last {
+    border-radius: 0px 20px 20px 0px;
+}
+
+.environSC .row_spare td {
+    background-color: transparent;
+    height: 2px;
+}
+
+.environSC .dataStatus {
+    display: inline-block;
+    padding: 7px 0px;
+    width: 52%;
+    font-size: 20px;
+    line-height: 1;
+    /* background-color: #ffaa00; */
+}
+
+.environSC .setButton {
+    background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C);
+    box-sizing: border-box;
+    height: 28px;
+    width: 28px;
+    border: 2px solid #B6B6B6;
+    font-size: 14px;
+    border-radius: 50%;
+    position: absolute;
+    right: 5px;
+    top: 3px;
+}
+
+.environSC .dataValue {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 45%;
+    padding-right: 10%;
+    font-size: 20px;
+    line-height: 34px;
+    text-align: right;
+    /* background-color: #af0; */
+}
+
+.environSC .row_set .dataValue {
+    padding-right: 17%;
+}
+
+.environSC .row_set .col_last .dataValue {
+    padding-right: 10%;
+}
+
+.environSC .row_ACU .col_other,
+.environSC .row_TH .col_other {
+    text-align: right;
+}
+
+.environSC .row_ACU .dataStatus {
+    text-align: center;
+}
+
+.environSC .row_ACU .dataValue {
+    width: 40%;
+}
+
+.environSC .row_upsMode .dataStatus {
+    width: 90%;
+}
+
+.environSC .dataLight {
+    display: inline-block;
+    background-color: #236E37;
+    box-sizing: border-box;
+    height: 28px;
+    width: 28px;
+    border: 2px solid #B6B6B6;
+    margin: 3px 0px;
+    border-radius: 50%;
+    vertical-align: top;
+}
+
+
+
+
+
+
+
+
+
+/* /////////////////////////////// */

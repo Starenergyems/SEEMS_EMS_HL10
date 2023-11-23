@@ -1,0 +1,84 @@
+// var myHeading = document.querySelector("h1");
+// myHeading.textContent = "Hello world!";
+
+let schedule_01 = setInterval(updateDateTime, 100);
+function updateDateTime() {
+    const dateTime = document.querySelector(".dateTime_Username #dateTime_Now");
+    let rawDateTime = new Date();
+    let yy = rawDateTime.getFullYear();
+    let mm = String(rawDateTime.getMonth() + 1).padStart(2, '0');
+    let dd = String(rawDateTime.getDate()).padStart(2, '0');
+    let hh = String(rawDateTime.getHours()).padStart(2, '0');
+    let m = String(rawDateTime.getMinutes()).padStart(2, '0');
+    let ss = String(rawDateTime.getSeconds()).padStart(2, '0');
+    dateTime.textContent = yy + "/" + mm + "/" + dd + " " + hh + ":" + m + ":" + ss;
+}
+
+const account_NavBar = document.querySelector(".T_Main .accountNavBar");
+
+const user_Account = document.querySelector(".T_Main #userAccount");
+user_Account.addEventListener("click", showHide_accNavBar);
+function showHide_accNavBar() {
+    account_NavBar.classList.toggle("appear");
+}
+
+document.addEventListener("click", hide_accNavBar);
+function hide_accNavBar(clickItem) {
+    if ((clickItem.target.id !== "userAccount") && (clickItem.target.id !== "accNB_01") && (clickItem.target.id !== "accNB_02") && (clickItem.target.id !== "accNB_03")) {
+        account_NavBar.classList.remove("appear");
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const sumAlarm_EachArea = document.querySelector(".systemStatus .sumAlarm_EachArea");
+const sumWarning_EachArea = document.querySelector(".systemStatus .sumWarning_EachArea");
+
+const dDL_sumAlarmNum = document.querySelector(".systemStatus #dD_Logo_sumAlarmNum");
+dDL_sumAlarmNum.addEventListener("click", showHide_sumAlarm_EA);
+function showHide_sumAlarm_EA() {
+    sumAlarm_EachArea.classList.toggle("appear");
+    sumWarning_EachArea.classList.remove("appear");
+}
+
+const dDL_sumWarningNum = document.querySelector(".systemStatus #dD_Logo_sumWarningNum");
+dDL_sumWarningNum.addEventListener("click", showHide_sumWarning_EA);
+function showHide_sumWarning_EA() {
+    sumWarning_EachArea.classList.toggle("appear");
+    sumAlarm_EachArea.classList.remove("appear");
+}
+
+document.addEventListener("click", hide_sumAW_EachArea);
+function hide_sumAW_EachArea(clickItem) {
+    if ((clickItem.target.id !== "dD_Logo_sumAlarmNum") && (clickItem.target.id !== "dD_Logo_sumWarningNum")) {
+        sumAlarm_EachArea.classList.remove("appear");
+        sumWarning_EachArea.classList.remove("appear");
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const window_epo = document.querySelector(".L_Main .epo");
+
+const epoLogo = document.querySelector(".L_Main #epo_Logo");
+epoLogo.addEventListener("click", show_epo);
+function show_epo() {
+    window_epo.classList.add("appear");
+}
+
+const closeWB_Yes_epo = document.querySelector(".L_Main .epo #closeWB_Yes");
+closeWB_Yes_epo.addEventListener("click", closePopup_epo_Yes);
+function closePopup_epo_Yes() {
+    window_epo.classList.remove("appear");
+}
+
+const closeWB_No_epo = document.querySelector(".L_Main .epo #closeWB_No");
+closeWB_No_epo.addEventListener("click", closePopup_epo_No);
+function closePopup_epo_No() {
+    window_epo.classList.remove("appear");
+}
+
+
+
+
+
