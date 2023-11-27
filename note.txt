@@ -1,9 +1,32 @@
+專案初始設定
+
+下載node (版本 20.10.0)
+https://nodejs.org/en
+
+
 npm init
 npm install express express ejs
+npm install mongoose
+npm install method-override
+
 設定app.js
 node app.js 執行並確認有出現(伺服器正在聆聽 port 3000...)
 
 C:\Test\DB_test\package.json(可以確認已下載套件及版本)
 schema type 查詢(https://mongoosejs.com/docs/schematypes.html)
 
+如果有遇到Cors的問題再下載
 npm i cors
+
+
+Html 轉 ejs
+檔案名稱與位置要修改
+html檔案要轉ejs結尾
+連結其他檔案需更改位置 新增/views  (特別注意最前面的斜線)
+連結圖片需更改位置 
+    原本 <img src="/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
+    修改後  <img src="/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
+
+    log要記得定期刪除
+    dns層 指到不同網域
+    反向代理 
