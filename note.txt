@@ -22,7 +22,7 @@ npm i cors
 Html 轉 ejs
 檔案名稱與位置要修改
 html檔案要轉ejs結尾
-連結其他檔案需更改位置 新增/views  (特別注意最前面的斜線)
+連結其他檔案需更改位置　依照router去修改
 連結圖片需更改位置 
     原本 <img src="/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
     修改後  <img src="/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
