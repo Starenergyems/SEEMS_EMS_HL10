@@ -44,8 +44,8 @@
 
 .chartSettings {
     display: inline-block;
+    background-color: #FFFFFF;
     width: 190px;
-    padding-left: 15px;
     margin: 5px 5px 10px;
     vertical-align: top;
 }
@@ -53,7 +53,7 @@
 .chartSettings .btn_chtSet {
     background-color: #FFFFFF;
     border: 2px solid #000000;
-    margin: 0px 0px 0px 5px;
+    margin: 5px 0px 0px 5px;
     border-radius: 8px;
     cursor: pointer;
 }
@@ -63,10 +63,414 @@
     padding: 6px;
 }
 
-.chartSettings .btn_test {
+.chartSettings .timeRangeSet,
+.chartSettings .registerData {
+    margin-top: 15px;
+    position: relative;
+    /* background-color: #ffaa0030; */
+}
+
+.chartSettings .timeRangeSet p,
+.chartSettings .registerData p {
+    background-color: #CBE198;
+    box-sizing: border-box;
+    padding-left: 5px;
+    font-size: 20px;
+    line-height: 35px;
+}
+
+.chartSettings .durationSet {
+    padding-left: 5px;
+    margin: 3px 0px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.chartSettings .inText_Set {
+    box-sizing: border-box;
+    height: 24px;
+    width: 50px;
+    border: 1px solid #000000;
+    font-size: 16px;
+    text-align: right;
+    vertical-align: top;
+}
+
+.chartSettings .select_Set {
+    box-sizing: border-box;
+    height: 24px;
+    border: 1px solid #000000;
+    margin-left: 3px;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+.chartSettings .select_Set option {
+    font-size: 16px;
+}
+
+.timeRangeSet #btn_Set {
+    box-sizing: border-box;
+    width: 50px;
+    border: 1px solid #000000;
+    margin: 1px 0px 0px 70px;
+    font-size: 18px;
+    line-height: 23px;
+    border-radius: 5px;
+}
+
+.registerData #config_rD {
+    padding: 3px;
+    position: absolute;
+    right: 1px;
+    top: 0px;
+}
+
+.registerData .regData_List {
+    height: 250px;
+    border: 1px solid #000000;
+    margin: 5px;
+    overflow: auto;
+    user-select: none;
+}
+
+.registerData .regData {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    padding-left: 10px;
+    border-bottom: 1px solid #a0a0a0;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.registerData .regData:hover {
+    background-color: #E6F0FA;
+}
+
+.registerData .regData.selected {
+    background-color: #5AA2ED;
+    color: #FFFFFF;
+}
+
+.popUpWindow.editRegData {
+    height: 430px;
+    width: 700px;
+    left: 320px;
+    /* left: 370px; */
+    top: 165px;
+}
+
+.editRegData .chooseEditRD {
+    display: inline-block;
+    width: 300px;
+    vertical-align: top;
+    /* background-color: #00800050; */
+}
+
+.editRegData .chooseEditRD span {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 160px;
+    margin: 40px 0px 5px 30px;
+    font-size: 24px;
+    line-height: 30px;
+}
+
+.editRegData .btnCommon {
+    display: inline-block;
+    background-color: #D9D9D9;
+    box-sizing: border-box;
+    height: 25px;
+    width: 90px;
+    border: 1px solid #5A5A5A;
+    margin: 42px 0px 0px;
+    font-size: 20px;
+    border-radius: 5px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.editRegData .regData_List {
+    box-sizing: border-box;
+    height: 250px;
+    border: 1px solid #B6B6B6;
+    margin: 0px 20px 0px 30px;
+    overflow: auto;
+    user-select: none;
+}
+
+.editRegData .regData {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    padding-left: 10px;
+    border-bottom: 1px solid #a0a0a0;
+    font-size: 20px;
+    line-height: 24px;
+    cursor: pointer;
+}
+
+.editRegData .regData.chosen {
+    background-color: #5AA2ED;
+    color: #FFFFFF;
+}
+
+.editRegData #closeWB_Yes {
+    margin: 30px 125px 0px;
+}
+
+.editRegData .editRegDataSetting {
+    display: inline-block;
+    width: calc(100% - 300px);
+    vertical-align: top;
+    /* background-color: #80800030; */
+}
+
+.editRegData .editRegDataSetting .titlePUW {
+    margin: 30px 100px 0px 90px;
+    font-size: 24px;
+    line-height: 33px;
+}
+
+.editRegData .infoPUW {
+    box-sizing: border-box;
+    padding-left: 5px;
+    border: 1px solid #B6B6B6;
+    margin: 5px 30px 0px 20px;
+    font-size: 20px;
+    line-height: 23px;
+    position: relative;
+}
+
+.editRegData .firstInfo {
+    margin-top: 20px;
+}
+
+.editRegData .addressInfo,
+.addRegData .addressInfo {
+    height: 53px;
+}
+
+.editRegData .infoEditRD {
+    width: 220px;
+    font-size: 20px;
+    line-height: 23px;
+    position: absolute;
+    right: 0px;
+}
+
+.editRegData #eRDAddress,
+.addRegData #aRDAddress {
+    box-sizing: border-box;
+    height: 51px;
+    width: 220px;
+    padding-left: 4px;
+    border: 1px solid #000000;
+    font-size: 16px;
+    border-radius: 5px;
+    position: absolute;
+    right: 0px;
+}
+
+.editRegData .inputEditRD,
+.addRegData .inputAddRD {
+    box-sizing: border-box;
+    width: 140px;
+    padding-left: 4px;
+    border: 1px solid #000000;
+    font-size: 17px;
+    line-height: 21px;
+    border-radius: 5px;
+    position: absolute;
+    right: 80px;
+}
+
+.editRegData #eRDColor,
+.addRegData #aRDColor {
+    height: 23px;
+    width: 60px;
+    position: absolute;
+    right: 160px;
+}
+
+.editRegData .selectEditRD,
+.addRegData .selectAddRD {
+    width: 90px;
+    border: 1px solid #000000;
+    font-size: 17px;
+    border-radius: 5px;
+    position: absolute;
+    right: 130px;
+}
+
+.editRegData .selectEditRD option,
+.addRegData .selectAddRD option {
+    font-size: 17px;
+}
+
+.editRegData #btn_updateEditRD {
+    margin: 17px 0px 0px 100px;
+}
+
+.editRegData #btn_deleteEditRD {
+    margin: 17px 0px 0px 10px;
+}
+
+.popUpWindow.addRegData {
+    height: 430px;
+    width: 410px;
+    left: 1030px;
+    top: 165px;
+}
+
+.addRegData .titlePUW {
+    margin: 30px 100px 0px;
+    font-size: 24px;
+    line-height: 33px;
+}
+
+.addRegData .infoPUW {
+    box-sizing: border-box;
+    padding-left: 5px;
+    border: 1px solid #B6B6B6;
+    margin: 5px 30px 0px;
+    font-size: 20px;
+    line-height: 23px;
+    position: relative;
+}
+
+.addRegData .firstInfo {
+    margin-top: 20px;
+}
+
+.addRegData #aRDName {
+    width: 220px;
+    right: 0px;
+}
+
+.addRegData .closeWindowButton {
+    margin-top: 17px;
+}
+
+.addRegData #closeWB_Yes {
+    margin-left: 145px;
+}
+
+.confirm_deleteEditRD,
+.confirm_addEditRD {
+    height: 200px;
+    width: 320px;
+    left: 560px;
+    top: 280px;
+}
+
+.confirm_deleteEditRD p,
+.confirm_addEditRD p {
+    margin: 40px 35px 0px;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: center;
+}
+
+.confirm_deleteEditRD label,
+.confirm_addEditRD label {
+    display: block;
+    margin: 0px 35px;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: center;
+    word-break: break-all;
+}
+
+.confirm_deleteEditRD .closeWindowButton,
+.confirm_addEditRD .closeWindowButton {
+    margin-top: 25px;
+}
+
+.alert_rDNameIsUsed,
+.alert_WrongDataSet {
+    height: 200px;
+    width: 320px;
+    left: 560px;
+    top: 280px;
+}
+
+.alert_rDNameIsUsed p,
+.alert_WrongDataSet p {
+    margin: 40px 35px 0px;
+    font-size: 20px;
+    color: #FF0000;
+    line-height: 25px;
+    text-align: center;
+}
+
+.alert_rDNameIsUsed .closeWindowButton,
+.alert_WrongDataSet .closeWindowButton {
+    margin: 25px 0px 0px 130px;
+}
+
+.block_temp {
+    /* display: none; */
+    background-color: #fa0;
+    width: 960px;
+    height: 260px;
+    position: absolute;
+    left: 20px;
+    top: -150px;
+}
+
+/* //////////////////////////////////////////////// */
+.block_temp .btn_test {
+    border: 1px solid #000000;
+    margin: 2px 10px 0px 0px;
+    font-size: 18px;
+}
+
+.block_temp .inText_test {
+    width: 100px;
     border: 1px solid #000000;
     margin-top: 2px;
     font-size: 18px;
+}
+
+.block_temp .data_val {
+    display: inline-block;
+    min-width: 40px;
+    margin-right: 10px;
+    font-size: 20px;
+    background-color: #FDB;
+}
+
+/* //////////////////////////////////////////////// */
+.block_temp table {
+    background-color: #FFFFFF;
+    margin: 5px;
+    border-collapse: collapse;
+}
+
+.block_temp tr td {
+    padding: 2px;
+    border: 1px solid #000000;
+    font-size: 14px;
+}
+
+.block_temp table span,
+.block_temp table input,
+.block_temp table select,
+.block_temp table option {
+    font-size: 14px;
+}
+
+.block_temp table .rDAddress {
+    width: 350px;
+}
+
+.block_temp table .rDMax,
+.block_temp table .rDMin,
+.block_temp table .rDUnit,
+.block_temp table .rDColor {
+    width: 90px;
 }
 
 /* //////////////////////////////////////////////// */

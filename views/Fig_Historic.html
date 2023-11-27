@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
+    <title>歷史圖</title>
+
+    <link rel="stylesheet" href="styles/bootstrap.min.css"> <!--bootstrap-->
+    <link rel="stylesheet" href="styles/jquery-ui.css"> <!--For datepicker / timepicker-->
+    <link rel="stylesheet" href="styles/jquery.timepicker.min.css">
+    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="styles/Fig_Historic.css" rel="stylesheet" type="text/css" />
+    <link href="styles/reset.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- jQuery library -->
+    <script src="scripts/3.6.4-jquery.slim.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="scripts/bootstrap.bundle.min.js"></script>
+
+    <!--datepicker / timepicker-->
+    <script src="scripts/jquery-3.6.0.js"></script>
+    <script src="scripts/jquery-ui.js"></script>
+    <script src="scripts/jquery.timepicker.min.js"></script>
+
+    <script src="scripts/chart.js"></script><!--繪圖-->
+
+
+
+</head>
+
+<body style="font-family: 'Lato', sans-serif;">
+    <div class="T_Main" style="position:fixed; z-index: 10;">
+        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
+        <div class="dateTime_Username">
+            <label id="dateTime_Now">2000/01/01 23:59:59</label>
+            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label for="qaz" id="userAccount">Administrator</label>
+            <div class="accountNavBar">
+                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
+                <a href="AccountManage.html" id="accNB_02">人員管理</a>
+                <a href="Login.html" id="accNB_03">登出</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="L_Main" style="position: fixed; top: 100px; z-index: 10;">
+        <div class="systemStatus" style="font-size:0">
+            <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
+            <div class="sumAWNum sumAlarmNum">
+                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalAlarmNum">999</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <div class="sumAW_EachArea sumAlarm_EachArea">
+                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
+                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
+                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env">11</label></div>
+                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF">54</label></div>
+                </div>
+            </div>
+            <div class="sumAWNum sumWarningNum">
+                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalWarningNum">52</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <div class="sumAW_EachArea sumWarning_EachArea">
+                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
+                    </div>
+                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS">3</label></div>
+                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env">99</label></div>
+                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF">87</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="Op_Meter_SLD.html"><button class="button_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="Fig_Real_Time.html"><button class="button_nB  default_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+        </div>
+        <div class="systemInfo">
+            <p class="subTitle">|| 系統資訊 ||</p>
+
+            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq">60.123</label>
+                <p class="dataUnit">Hz</p>
+            </div>
+            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP">12345.6</label>
+                <p class="dataUnit">kW</p>
+            </div>
+            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
+                <p class="dataUnit">kVar</p>
+            </div>
+            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage">23.456</label>
+                <p class="dataUnit">kV</p>
+            </div>
+            <div class="DV_Line">電流<label class="dataValue" id="L_M_current">78.87</label>
+                <p class="dataUnit">A</p>
+            </div>
+            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
+                <p class="dataUnit"></p>
+            </div>
+            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
+                <p class="dataUnit">%</p>
+            </div>
+
+            <div class="DV_Line spareLine">當日充放電量</div>
+
+            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+        </div>
+        <div class="eStop">
+            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <p class="epo_word">緊急停止鈕</p>
+        </div>
+
+        <div class="popUpWindow epo">
+            <h2 class="titlePUW">緊急停止設定</h2>
+
+            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <p class="epoInfo">確認停機</p>
+
+            <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+            <button class="closeWindowButton" id="closeWB_No">取消</button>
+        </div>
+    </div>
+    <div class="subNavBar" id="sub_NavBar" style="position: fixed; top: 100px; z-index: 5; width: 100%;">
+        <!-- <h2>模式控制</h2> -->
+        <div class="button_sNB" id="sNB_02">
+            <a href="Fig_Real_Time.html" class="name_button_sNB">即時圖</a>
+        </div>
+        <div class="button_sNB default_sNB" id="sNB_03">
+            <a href="Fig_Historic.html" class="name_button_sNB">歷史圖</a>
+        </div>
+    </div>
+
+    <div class="R_Main" style="margin-top: 160px; margin-left: 240px;">
+
+
+        <div class="M_Page" style="position: relative;">
+            <div class="title">
+                <h2>【歷史圖】</h2>
+            </div>
+            <div class="fig-container">
+                <p>請輸入時間區間</p>
+                <canvas id="RealTimeFig" class="real_time" width="800" height="400"
+                    style="display: inline-block; width: 800; height:400;"></canvas>
+            </div>
+            <div class="board">
+                <button class="top-btn" title="螢幕擷取" style="margin-left:25px"><img src="images/screenshot.svg"
+                        style="width:20px" onclick=""></button>
+                <button class="top-btn" title="放大"><img src="images/plus.svg" style="width:20px" onclick=""></button>
+                <button class="top-btn" title="縮小"><img src="images/dash.svg" style="width:20px" onclick=""></button>
+
+                <!--篩選欄位-->
+
+                <form class="datefilter" method="post" action="">
+
+
+                    <p>起始時間</p>
+                    <div class="inputblock">
+                        <span class="filtericon"><img src="images/calendar.svg"></span>
+                        <input type="text" id="fromDate" placeholder="yyyy-mm-dd" autocomplete="off" required>
+                    </div>
+                    <div class="inputblock">
+                        <span class="filtericon"><img src="images/clock.svg"></span>
+                        <input type="text" id="fromTime" placeholder="00:00:00" autocomplete="off" required>
+                    </div>
+
+
+
+                    <p style="margin-top:10px">結束時間</p>
+                    <div class="inputblock">
+                        <span class="filtericon"><img src="images/calendar.svg"></span>
+                        <input type="text" id="toDate" placeholder="yyyy-mm-dd" autocomplete="off" required>
+                    </div>
+
+
+                    <div class="inputblock">
+                        <span class="filtericon"><img src="images/clock.svg"></span>
+                        <input type="text" id="toTime" placeholder="00:00:00" autocomplete="off" required>
+                    </div>
+
+
+                    <div>
+                        <input type="reset" class="filter-btn" style="margin-left: 38px;">
+                        <input type="submit" value="查詢" onclick="searchData()" class="filter-btn">
+                    </div>
+
+                </form>
+
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+    <script src="scripts/script_template.js"></script>
+    <script src="scripts/Fig_Historic.js"></script>
+
+
+</body>
+
+</html>

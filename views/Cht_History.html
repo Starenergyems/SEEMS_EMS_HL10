@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
+    <title>歷史圖</title>
+    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="styles/Cht_History.css" rel="stylesheet" type="text/css" />
+    <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
+</head>
+
+<body>
+    <div class="T_Main">
+        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
+        <div class="dateTime_Username">
+            <label id="dateTime_Now">2000/01/01 23:59:59</label>
+            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label for="qaz" id="userAccount">Administrator</label>
+            <div class="accountNavBar">
+                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
+                <a href="AccountManage.html" id="accNB_02">人員管理</a>
+                <a href="Login.html" id="accNB_03">登出</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="L_Main">
+        <div class="systemStatus">
+            <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
+            <div class="sumAWNum sumAlarmNum">
+                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalAlarmNum">999</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <div class="sumAW_EachArea sumAlarm_EachArea">
+                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
+                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
+                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env">11</label></div>
+                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF">54</label></div>
+                </div>
+            </div>
+            <div class="sumAWNum sumWarningNum">
+                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalWarningNum">52</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <div class="sumAW_EachArea sumWarning_EachArea">
+                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
+                    </div>
+                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS">3</label></div>
+                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env">99</label></div>
+                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF">87</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="Op_Meter_SLD.html"><button class="button_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="Cht_RealTime.html"><button class="button_nB default_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+        </div>
+        <div class="systemInfo">
+            <p class="subTitle">|| 系統資訊 ||</p>
+
+            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq">60.123</label>
+                <p class="dataUnit">Hz</p>
+            </div>
+            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP">12345.6</label>
+                <p class="dataUnit">kW</p>
+            </div>
+            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
+                <p class="dataUnit">kVar</p>
+            </div>
+            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage">23.456</label>
+                <p class="dataUnit">kV</p>
+            </div>
+            <div class="DV_Line">電流<label class="dataValue" id="L_M_current">78.87</label>
+                <p class="dataUnit">A</p>
+            </div>
+            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
+                <p class="dataUnit"></p>
+            </div>
+            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
+                <p class="dataUnit">%</p>
+            </div>
+
+            <div class="DV_Line spareLine">當日充放電量</div>
+
+            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+        </div>
+        <div class="eStop">
+            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <p class="epo_word">緊急停止鈕</p>
+        </div>
+
+        <div class="popUpWindow epo">
+            <h2 class="titlePUW">緊急停止設定</h2>
+
+            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <p class="epoInfo">確認停機</p>
+
+            <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+            <button class="closeWindowButton" id="closeWB_No">取消</button>
+        </div>
+    </div>
+
+    <div class="R_Main">
+        <div class="subNavBar" id="sub_NavBar">
+            <!-- <h2>模式控制</h2> -->
+            <div class="button_sNB" id="sNB_01">
+                <a href="Cht_RealTime.html" class="name_button_sNB">即時圖</a>
+            </div>
+            <div class="button_sNB default_sNB" id="sNB_02">
+                <a href="Cht_History.html" class="name_button_sNB">歷史圖</a>
+            </div>
+        </div>
+
+        <div class="M_Page">
+            <div class="title">
+                <h2>【歷史圖】</h2>
+            </div>
+
+            <div class="chartHistory">
+                <canvas id="chartHist_Canvas" width="1100" height="600"></canvas>
+            </div>
+
+            <div class="chartSettings">
+                <button class="btn_chtSet" title="螢幕擷取"><img src="images/screenshot.svg" class="chtSet_Logo"
+                        id="screenShot"></button>
+                <button class="btn_chtSet" title="放大"><img src="images/plus.svg" class="chtSet_Logo"
+                        id="zoomIn"></button>
+                <button class="btn_chtSet" title="縮小"><img src="images/dash.svg" class="chtSet_Logo"
+                        id="zoomOut"></button>
+
+                <div class="timeRangeQuery">
+                    <p>時間區間查詢</p>
+                    <div class="startTimeSet">啟始時間：<br>
+                        <img src="images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious"><input type="date"
+                            id="dateStart" required pattern="\d{4}-\d{2}-\d{2}"><img src="images/GoToNext.png" alt="移至下一個時間段" id="goToNext">
+                        <input type="time" step="1" id="timeStart" required>
+                    </div>
+
+                    <div class="durationSet">
+                        時間長度 <input type="text" class="inText_Set" id="duration"><select name="unitDuration"
+                            class="select_Set" id="unitDura_Select">
+                            <option value="1000">sec</option>
+                            <option value="60000">min</option>
+                            <option value="3600000">hour</option>
+                            <option value="86400000">day</option>
+                        </select>
+                    </div>
+
+                    <div class="intervalSet">
+                        時間間隔 <input type="text" class="inText_Set" id="interval" min="1" max="999" step="1"><select name="unitInterval"
+                            class="select_Set" id="unitInte_Select">
+                            <option value="1">ms</option>
+                            <option value="1000">sec</option>
+                            <option value="60000">min</option>
+                            <option value="3600000">hour</option>
+                        </select>
+                    </div>
+
+                    <button id="btn_Query">查詢</button>
+                </div>
+
+                <div class="registerData">
+                    <p>已登錄點位</p>
+                    <img src="images/Configure_Gear_v4.png" alt="設定" id="config_rD">
+                    <div class="regData_List">
+                        <label class="regData selected" id="rD_Freq">Freq</label>
+                        <label class="regData selected" id="rD_ActivePower">ActivePower</label>
+                        <label class="regData selected" id="rD_ExecuteRate">ExecuteRate</label>
+                        <label class="regData selected" id="rD_SOC">SOC</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popUpWindow editRegData">
+                <div class="chooseEditRD">
+                    <span>已登錄點位</span>
+                    <button class="btnCommon" id="btn_addRegData">新增點位</button>
+
+                    <div class="regData_List">
+                        <label class="regData" id="editRD_Freq">Freq</label>
+                        <label class="regData" id="editRD_ActivePower">ActivePower</label>
+                        <label class="regData" id="editRD_ExecuteRate">ExecuteRate</label>
+                        <label class="regData" id="editRD_SOC">SOC</label>
+                    </div>
+
+                    <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                    <!-- <button class="closeWindowButton" id="closeWB_No">取消</button> -->
+                </div>
+
+                <div class="editRegDataSetting" spellcheck="false">
+                    <h2 class="titlePUW">編輯點位</h2>
+
+                    <div class="infoPUW firstInfo">點位名稱<label class="infoEditRD" id="eRDName">qweop</label></div>
+                    <div class="infoPUW addressInfo">點位位址<textarea name="textareaEditRD" id="eRDAddress"></textarea>
+                    </div>
+                    <div class="infoPUW">點位最大值<input type="text" class="inputEditRD" id="eRDMax"></div>
+                    <div class="infoPUW">點位最小值<input type="text" class="inputEditRD" id="eRDMin"></div>
+                    <div class="infoPUW">點位單位<input type="text" class="inputEditRD" id="eRDUnit"></div>
+                    <div class="infoPUW">點位顏色<input type="color" name="inColorEditRD" id="eRDColor" value="#FF0000">
+                    </div>
+                    <div class="infoPUW">顯示縱軸
+                        <select name="yDisplay" class="selectEditRD" id="eRDyDisplay">
+                            <option value="1">true</option>
+                            <option value="0">false</option>
+                        </select>
+                    </div>
+                    <div class="infoPUW">縱軸位置
+                        <select name="yPosition" class="selectEditRD" id="eRDyPosition">
+                            <option value="left">left</option>
+                            <option value="right">right</option>
+                        </select>
+                    </div>
+
+                    <button class="btnCommon" id="btn_updateEditRD">更新點位</button>
+                    <button class="btnCommon" id="btn_deleteEditRD">刪除點位</button>
+                </div>
+            </div>
+
+            <div class="popUpWindow addRegData" spellcheck="false">
+                <h2 class="titlePUW">新增點位</h2>
+
+                <div class="infoPUW firstInfo">點位名稱<input type="text" class="inputAddRD" id="aRDName"></div>
+                <div class="infoPUW addressInfo">點位位址<textarea name="textareaAddRD" id="aRDAddress"></textarea></div>
+                <div class="infoPUW">點位最大值<input type="text" class="inputAddRD" id="aRDMax"></div>
+                <div class="infoPUW">點位最小值<input type="text" class="inputAddRD" id="aRDMin"></div>
+                <div class="infoPUW">點位單位<input type="text" class="inputAddRD" id="aRDUnit"></div>
+                <div class="infoPUW">點位顏色<input type="color" name="inColorAddRD" id="aRDColor" value="#FF0000">
+                </div>
+                <div class="infoPUW">顯示縱軸
+                    <select name="yDisplay" class="selectAddRD" id="aRDyDisplay">
+                        <option value="1">true</option>
+                        <option value="0">false</option>
+                    </select>
+                </div>
+                <div class="infoPUW">縱軸位置
+                    <select name="yPosition" class="selectAddRD" id="aRDyPosition">
+                        <option value="left">left</option>
+                        <option value="right">right</option>
+                    </select>
+                </div>
+
+                <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+
+            <div class="popUpWindow confirm_deleteEditRD">
+                <p>確認刪除點位：</p>
+                <label id="deleteRDName">「PowerActive」</label>
+                <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+
+            <div class="popUpWindow confirm_addEditRD">
+                <p>確認新增點位：</p>
+                <label id="addRDName">「RateExecute」</label>
+                <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+
+            <div class="popUpWindow alert_rDNameIsUsed">
+                <p>點位名稱已被使用<br>請更改點位名稱</p>
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+
+            <div class="popUpWindow alert_WrongDataSet">
+                <p>最大最小值輸入有誤！<br>最大值必須大於最小值。</p>
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+
+            <!-- <div class="chartTest">
+                <canvas id="chartTest_Canvas" width="600" height="300"></canvas>
+            </div> -->
+
+            <div class="block_temp">
+                <table class="table_regData">
+                    <tr>
+                        <td class="regDataName">Name</td>
+                        <td class="regDataAddress">Address</td>
+                        <td class="regDataMax">Max</td>
+                        <td class="regDataMin">Min</td>
+                        <td class="regDataUnit">Unit</td>
+                        <td class="regDataColor">Color</td>
+                        <td class="regDataDisplay">Display</td>
+                        <td class="regDataPosition">Position</td>
+                        <td class="regDatayAxisID">yAxisID</td>
+                    </tr>
+                    <tr class="selected">
+                        <td class="regDataName"><span class="rDName" id="rDName_Freq">Freq</span></td>
+                        <td class="regDataAddress"><input type="text" class="rDAddress" id="rDAddress_Freq"
+                                value="hl_4-1_10MW.GC_RF01.IEC61850.400121"></td>
+                        <td class="regDataMax"><input type="text" class="rDMax" id="rDMax_Freq" value="60.50"></td>
+                        <td class="regDataMin"><input type="text" class="rDMin" id="rDMin_Freq" value="59.50"></td>
+                        <td class="regDataUnit"><input type="text" class="rDUnit" id="rDUnit_Freq" value="Hz"></td>
+                        <td class="regDataColor"><input type="text" class="rDColor" id="rDColor_Freq" value="#5AA2ED">
+                        </td>
+                        <td class="regDataDisplay">
+                            <select name="yDisplay" class="yDisplay" id="yDisplay_Freq">
+                                <option value="1">true</option>
+                                <option value="0">false</option>
+                            </select>
+                        </td>
+                        <td class="regDataPosition">
+                            <select name="yPosition" class="yPosition" id="yPosition_Freq">
+                                <option value="left">left</option>
+                                <option value="right">right</option>
+                            </select>
+                        </td>
+                        <td class="regDatayAxisID"><span class="yAxisID" id="yAxisID_Freq">y_Freq</span></td>
+                    </tr>
+                    <tr class="selected">
+                        <td class="regDataName"><span class="rDName" id="rDName_ActivePower">ActivePower</span></td>
+                        <td class="regDataAddress"><input type="text" class="rDAddress" id="rDAddress_ActivePower"
+                                value="hl_4-1_10MW.GC_RF01.IEC61850.400123"></td>
+                        <td class="regDataMax"><input type="text" class="rDMax" id="rDMax_ActivePower" value="10000.0">
+                        </td>
+                        <td class="regDataMin"><input type="text" class="rDMin" id="rDMin_ActivePower" value="-10000.0">
+                        </td>
+                        <td class="regDataUnit"><input type="text" class="rDUnit" id="rDUnit_ActivePower" value="kW">
+                        </td>
+                        <td class="regDataColor"><input type="text" class="rDColor" id="rDColor_ActivePower"
+                                value="#F26085"></td>
+                        <td class="regDataDisplay">
+                            <select name="yDisplay" class="yDisplay" id="yDisplay_ActivePower">
+                                <option value="1">true</option>
+                                <option value="0">false</option>
+                            </select>
+                        </td>
+                        <td class="regDataPosition">
+                            <select name="yPosition" class="yPosition" id="yPosition_ActivePower">
+                                <option value="left">left</option>
+                                <option value="right">right</option>
+                            </select>
+                        </td>
+                        <td class="regDatayAxisID"><span class="yAxisID" id="yAxisID_ActivePower">y_ActivePower</span>
+                        </td>
+                    </tr>
+                    <tr class="selected">
+                        <td class="regDataName"><span class="rDName" id="rDName_ExecuteRate">ExecuteRate</span></td>
+                        <td class="regDataAddress"><input type="text" class="rDAddress" id="rDAddress_ExecuteRate"
+                                value="hl_4-1_10MW.GC_RF01.IEC61850.400133"></td>
+                        <td class="regDataMax"><input type="text" class="rDMax" id="rDMax_ExecuteRate" value="100.0">
+                        </td>
+                        <td class="regDataMin"><input type="text" class="rDMin" id="rDMin_ExecuteRate" value="0.0">
+                        </td>
+                        <td class="regDataUnit"><input type="text" class="rDUnit" id="rDUnit_ExecuteRate" value="%">
+                        </td>
+                        <td class="regDataColor"><input type="text" class="rDColor" id="rDColor_ExecuteRate"
+                                value="#F39F3B"></td>
+                        <td class="regDataDisplay">
+                            <select name="yDisplay" class="yDisplay" id="yDisplay_ExecuteRate">
+                                <option value="1">true</option>
+                                <option value="0">false</option>
+                            </select>
+                        </td>
+                        <td class="regDataPosition">
+                            <select name="yPosition" class="yPosition" id="yPosition_ExecuteRate">
+                                <option value="left">left</option>
+                                <option value="right">right</option>
+                            </select>
+                        </td>
+                        <td class="regDatayAxisID"><span class="yAxisID" id="yAxisID_ExecuteRate">y_ExecuteRate</span>
+                        </td>
+                    </tr>
+                    <tr class="selected">
+                        <td class="regDataName"><span class="rDName" id="rDName_SOC">SOC</span></td>
+                        <td class="regDataAddress"><input type="text" class="rDAddress" id="rDAddress_SOC"
+                                value="hl_4-1_10MW.GC_RF01.IEC61850.400129"></td>
+                        <td class="regDataMax"><input type="text" class="rDMax" id="rDMax_SOC" value="100.0"></td>
+                        <td class="regDataMin"><input type="text" class="rDMin" id="rDMin_SOC" value="0.0"></td>
+                        <td class="regDataUnit"><input type="text" class="rDUnit" id="rDUnit_SOC" value="%"></td>
+                        <td class="regDataColor"><input type="text" class="rDColor" id="rDColor_SOC" value="#F6CD4F">
+                        </td>
+                        <td class="regDataDisplay">
+                            <select name="yDisplay" class="yDisplay" id="yDisplay_SOC">
+                                <option value="1">true</option>
+                                <option value="0">false</option>
+                            </select>
+                        </td>
+                        <td class="regDataPosition">
+                            <select name="yPosition" class="yPosition" id="yPosition_SOC">
+                                <option value="left">left</option>
+                                <option value="right">right</option>
+                            </select>
+                        </td>
+                        <td class="regDatayAxisID"><span class="yAxisID" id="yAxisID_SOC">y_SOC</span></td>
+                    </tr>
+                </table>
+
+                <table class="table_temp">
+                    <tr>
+                        <td class="regDataName"><span class="rDName">poiuyt</span></td>
+                        <td class="regDataAddress"><input type="text" class="rDAddress"></td>
+                        <td class="regDataMax"><input type="text" class="rDMax"></td>
+                        <td class="regDataMin"><input type="text" class="rDMin"></td>
+                        <td class="regDataUnit"><input type="text" class="rDUnit"></td>
+                        <td class="regDataColor"><input type="text" class="rDColor"></td>
+                        <td class="regDataDisplay">
+                            <select name="yDisplay" class="yDisplay">
+                                <option value="1">true</option>
+                                <option value="0">false</option>
+                            </select>
+                        </td>
+                        <td class="regDataPosition">
+                            <select name="yPosition" class="yPosition">
+                                <option value="left">left</option>
+                                <option value="right">right</option>
+                            </select>
+                        </td>
+                        <td class="regDatayAxisID"><span class="yAxisID">y_poiuyt</span></td>
+                    </tr>
+                </table>
+
+                <button class="btn_test" id="btn_test_02">測試02_更新</button>
+                <button class="btn_test" id="btn_test_01">測試01</button>
+                <button class="btn_test" id="btn_test_03">測試03</button>
+                <button class="btn_test" id="btn_test_04">測試04</button><br>
+
+                <input type="text" class="inText_test" id="inText_test_01">
+                <input type="text" class="inText_test" id="inText_test_02"><br>
+
+                <label class="data_val" id="searchStartT">0</label>
+                <label class="data_val" id="searchDuration">60000</label>
+                <!-- <label class="data_val" id="searchDuration">60000</label> -->
+                <label class="data_val" id="searchInterval">1000</label><br>
+                <label class="data_val" id="searchEndT">0</label>
+                <label class="data_val" id="label_test_01">10</label>
+                <label class="data_val" id="label_test_02">20</label>
+
+            </div>
+            <!-- #5AA2ED', '#F26085', '#F39F3B', '#F6CD4F', '#66C1C0', '#9D62FF', '#C9CBCF', '#0000FF', '#008000', '#804040 -->
+        </div>
+    </div>
+
+    <script src="scripts/chart.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="scripts/script_template.js"></script>
+    <script src="scripts/Cht_History.js"></script>
+</body>
+
+</html>

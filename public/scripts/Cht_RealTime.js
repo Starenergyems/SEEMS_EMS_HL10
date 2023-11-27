@@ -31,19 +31,34 @@
     );
 })(); */
 
+const duration = document.querySelector(".timeRangeSet #duration");
+const unitDura_Select = document.querySelector(".timeRangeSet #unitDura_Select");
 
+let raw_DT_now = new Date();
+let DT_now_Millisec = raw_DT_now.getTime();
 
+let yy_now = raw_DT_now.getFullYear();
+let mm_now = String(raw_DT_now.getMonth() + 1).padStart(2, "0");
+let dd_now = String(raw_DT_now.getDate()).padStart(2, "0");
+let hh_now = String(raw_DT_now.getHours()).padStart(2, "0");
+let m_now = String(raw_DT_now.getMinutes()).padStart(2, "0");
+let ss_now = String(raw_DT_now.getSeconds()).padStart(2, '0');
 
+duration.value = 1;
+unitDura_Select.value = "60000";
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 let No_of_xValues = 61;
 let refreshRate = 1;
 let xValues = Array(No_of_xValues);
 
 Chart.defaults.datasets.line.stepped = true;
-Chart.defaults.datasets.line.pointStyle = true;
 Chart.defaults.datasets.line.pointRadius = 1.5;
+// Chart.defaults.datasets.line.borderWidth = 1.5;
+// Chart.defaults.font.size = 16;
+
+const bgColor = ["#5AA2ED", "#F26085", "#F39F3B", "#F6CD4F", "#66C1C0", "#9D62FF", "#C9CBCF", "#0000FF", "#008000", "#804040",];
 
 const chtRT_Canvus = document.querySelector("#chartRT_Canvas");
 const cht_RealTime = new Chart(chtRT_Canvus, {
@@ -53,27 +68,14 @@ const cht_RealTime = new Chart(chtRT_Canvus, {
     // labels: ['2023-10-24 13:02:00', '2023-10-24 13:07:00', '2023-10-24 13:12:00', '2023-10-24 13:17:00', '2023-10-24 13:22:00'
     // , '2023-10-24 13:27:00', '2023-10-24 13:32:00', '2023-10-24 13:37:00', '2023-10-24 13:42:00', '2023-10-24 13:47:00'],
     datasets: [{
-      label: '頻率',
+      label: 'Freq',
       data: Array(No_of_xValues),
-      // data: [60.02, 60.05, 60.03, 60.04, 60.01, 59.97, 59.95, 59.92, 59.96, 59.99],
-      // data: [{ x: '2023-10-24 13:02:00', y: 60.02 }, { x: '2023-10-24 13:03:00', y: 60.051246 }, { x: '2023-10-24 13:12:00', y: 60.03 }],
-      // data: [{ x: '2023-10-24 13:02:00', y: 60.02 }, { x: '2023-10-24 13:03:00', y: 60.051246 }, { x: '2023-10-24 13:12:00', y: 60.03 },
-      // { x: '2023-10-24 13:17:00', y: 60.04 }, { x: '2023-10-24 13:22:00', y: 60.01 }, { x: '2023-10-24 13:27:00', y: 59.97 },
-      // { x: '2023-10-24 13:32:00', y: 59.95 }, { x: '2023-10-24 13:37:00', y: 59.92 }, { x: '2023-10-24 13:42:00', y: 59.96 },
-      // { x: '2023-10-24 13:47:00', y: 59.99 }],
-      // data: [{ x: '2023-10-24 13:02:00', y: null }, { x: '2023-10-24 13:03:00', y: null }, { x: '2023-10-24 13:12:00', y: null },
-      // { x: '2023-10-24 13:17:00', y: null }, { x: '2023-10-24 13:22:00', y: null }, { x: '2023-10-24 13:27:00', y: null },
-      // { x: '2023-10-24 13:32:00', y: null }, { x: '2023-10-24 13:37:00', y: null }, { x: '2023-10-24 13:42:00', y: null },
-      // { x: '2023-10-24 13:47:00', y: 59.99 }],
-      yAxisID: 'y1',
-      // fill: true,
-      // backgroundColor: '#ffaaaa',
-      // borderColor: '#aaffaa',
-      // borderWidth: 5,
-      // pointRadius: 9,
-      // pointHoverRadius: 12
-    }, {
-      label: '實功',
+      yAxisID: 'y_Freq',
+      borderColor: "#5AA2ED",
+      backgroundColor: "#5AA2ED90",
+    },
+    {
+      label: 'ActivePower',
       data: Array(No_of_xValues),
       // data: [-600, -2500, -3000],
       // data: [-600, -2500, -3000, -5200, -1800, 2100, 4900, 8300, 6700, 1400],
@@ -82,14 +84,23 @@ const cht_RealTime = new Chart(chtRT_Canvus, {
       // { x: '2023-10-24 13:17:00', y: -5200 }, { x: '2023-10-24 13:22:00', y: -1800 }, { x: '2023-10-24 13:27:00', y: 2100 },
       // { x: '2023-10-24 13:32:00', y: 4900 }, { x: '2023-10-24 13:37:00', y: 8300 }, { x: '2023-10-24 13:42:00', y: 6700 },
       // { x: '2023-10-24 13:47:00', y: 1400 }],
-      yAxisID: 'y2'
-    }, {
-      label: '執行率',
+      yAxisID: 'y_ActivePower',
+      borderColor: "#F26085",
+      backgroundColor: "#F2608590",
+    },
+    {
+      label: 'ExecuteRate',
       data: Array(No_of_xValues),
-      // data: [100.00, 98.00, 97.00],
-      // data: [100.00, 98.00, 97.00, 92.00, 95.00, 91.00, 93.00, 99.00, 94.00, 96.00],
-      // data: [, , , , , , , , , 96.00],
-      yAxisID: 'y3'
+      yAxisID: 'y_ExecuteRate',
+      borderColor: "#F39F3B",
+      backgroundColor: "#F39F3B90",
+    },
+    {
+      label: "SOC",
+      data: Array(No_of_xValues),
+      yAxisID: "y_SOC",
+      borderColor: "#F6CD4F",
+      backgroundColor: "#F6CD4F90",
     }]
   },
   options: {
@@ -176,8 +187,19 @@ const cht_RealTime = new Chart(chtRT_Canvus, {
 
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 let i;
 
@@ -268,35 +290,7 @@ function doSomething() {
     // console.log(chart.data.datasets[2].data);
   }
 
-
-
-
-
-
 }
-
-
-
-
-
-
-/* const btn_test_01 = document.querySelector(".chartSettings #btn_test_01");
-btn_test_01.addEventListener("click", test_01);
-function test_01() {
-  if (cht_RealTime.options.scales.y2.min < -11000) {
-    cht_RealTime.options.scales.y2.min = -10000;
-    console.log(cht_RealTime.options.scales.y2.min);
-    cht_RealTime.update();
-  } else {
-    cht_RealTime.options.scales.y2.min = -12000;
-    console.log(cht_RealTime.options.scales.y2.min);
-    cht_RealTime.update();
-  }
-
-} */
-
-
-
 
 const chtTest_Canvus = document.querySelector("#chartTest_Canvas");
 const cht_Test = new Chart(chtTest_Canvus, {
@@ -420,9 +414,5 @@ const cht_Test = new Chart(chtTest_Canvus, {
     },
   },
 });
-
-
-
-
 
 

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
+    <title>輔電表</title>
+    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="styles/Op_Meter_AuxMeter.css" rel="stylesheet" type="text/css" />
+    <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
+</head>
+
+<body>
+    <div class="T_Main">
+        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
+        <div class="dateTime_Username">
+            <label id="dateTime_Now">2000/01/01 23:59:59</label>
+            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label for="qaz" id="userAccount">Administrator</label>
+            <div class="accountNavBar">
+                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
+                <a href="AccountManage.html" id="accNB_02">人員管理</a>
+                <a href="Login.html" id="accNB_03">登出</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="L_Main">
+        <div class="systemStatus">
+            <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
+            <div class="sumAWNum sumAlarmNum">
+                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalAlarmNum">999</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <div class="sumAW_EachArea sumAlarm_EachArea">
+                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
+                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
+                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env">11</label></div>
+                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF">54</label></div>
+                </div>
+            </div>
+            <div class="sumAWNum sumWarningNum">
+                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <label class="totalAWNum" id="totalWarningNum">52</label>
+                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <div class="sumAW_EachArea sumWarning_EachArea">
+                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
+                    </div>
+                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS">3</label></div>
+                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat">99+</label></div>
+                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env">99</label></div>
+                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF">87</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="Op_Meter_SLD.html"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+        </div>
+        <div class="systemInfo">
+            <p class="subTitle">|| 系統資訊 ||</p>
+
+            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq">60.123</label>
+                <p class="dataUnit">Hz</p>
+            </div>
+            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP">12345.6</label>
+                <p class="dataUnit">kW</p>
+            </div>
+            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
+                <p class="dataUnit">kVar</p>
+            </div>
+            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage">23.456</label>
+                <p class="dataUnit">kV</p>
+            </div>
+            <div class="DV_Line">電流<label class="dataValue" id="L_M_current">78.87</label>
+                <p class="dataUnit">A</p>
+            </div>
+            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
+                <p class="dataUnit"></p>
+            </div>
+            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
+                <p class="dataUnit">%</p>
+            </div>
+            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
+                <p class="dataUnit">%</p>
+            </div>
+
+            <div class="DV_Line spareLine">當日充放電量</div>
+
+            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
+                <p class="dataUnit">kWh</p>
+            </div>
+        </div>
+        <div class="eStop">
+            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <p class="epo_word">緊急停止鈕</p>
+        </div>
+
+        <div class="popUpWindow epo">
+            <h2 class="titlePUW">緊急停止設定</h2>
+
+            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <p class="epoInfo">確認停機</p>
+
+            <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+            <button class="closeWindowButton" id="closeWB_No">取消</button>
+        </div>
+    </div>
+
+    <div class="R_Main">
+        <div class="subNavBar" id="sub_NavBar">
+            <!-- <h2>模式控制</h2> -->
+            <div class="button_sNB default_sNB" id="sNB_01">
+                <a href="Op_Meter_SLD.html" class="name_button_sNB">單線圖</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
+                <div class="ssNavBar">
+                    <a href="Op_Meter_SLD.html" id="ssNB_01">電力單線圖</a>
+                    <a href="Op_Meter_MainMeter.html" id="ssNB_02">主電表</a>
+                    <a href="Op_Meter_AuxMeter.html" class="default_ssNB" id="ssNB_03">輔電表</a>
+                </div>
+            </div>
+            <div class="button_sNB" id="sNB_02">
+                <a href="Op_PCS_InfoSummary.html" class="name_button_sNB">PCS</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
+                <div class="ssNavBar">
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_01">PCS 1-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_02">PCS 1-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_03">PCS 2-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_04">PCS 2-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_05">PCS 3-1</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_06">PCS 3-2</a>
+                    <a href="Op_PCS_InfoDetail.html" id="ssNB_07">PCS 4</a>
+                </div>
+            </div>
+            <div class="button_sNB button_sNB_last" id="sNB_03">
+                <a href="Op_Bat_InfoSummary.html" class="name_button_sNB">電池</a>
+                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
+                <div class="ssNavBar">
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_01">BMS 1-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_02">BMS 1-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_03">BMS 2-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_04">BMS 2-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_05">BMS 3-1</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_06">BMS 3-2</a>
+                    <a href="Op_Bat_InfoDetail.html" id="ssNB_07">BMS 4</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="M_Page">
+            <div class="singleLineD">
+                <img src="images/SingleLineDiagram_Aux.png" alt="輔電單線圖">
+            </div>
+
+            <div class="Meter">
+                <table>
+                    <tr class="row_01">
+                        <td class="col_01"></td>
+                        <td class="col_other">高壓盤輔電</td>
+                        <td class="col_other">ESS1-1輔電</td>
+                        <td class="col_other">ESS2-1輔電</td>
+                        <td class="col_other">ESS3-1輔電</td>
+                        <td class="col_other">ESS4輔電</td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電壓&nbsp(V)</td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_HV">220.1</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_ESS1_1">381.2</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_ESS2_1">382.3</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_ESS3_1">383.4</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_ESS4">384.5</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電流&nbsp(A)</td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_HV">13.97</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_ESS1_1">23.80</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_ESS2_1">23.79</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_ESS3_1">23.81</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_ESS4">14.41</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">功率&nbsp(kW)</td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_HV">4.5</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_ESS1_1">27.8</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_ESS2_1">27.9</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_ESS3_1">27.7</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_ESS4">14.9</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">耗能&nbsp(kWh)</td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_HV">160.2</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_ESS1_1">6543.2</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_ESS2_1">6543.1</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_ESS3_1">6543.0</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_ESS4">6543.3</label></td>
+                    </tr>
+                    <tr class="row_06">
+                        <td class="col_01"></td>
+                        <td class="col_other">案場總輔電</td>
+                        <td class="col_other">ESS1-2輔電</td>
+                        <td class="col_other">ESS2-2輔電</td>
+                        <td class="col_other">ESS3-2輔電</td>
+                        <td class="col_other">控制室輔電</td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電壓&nbsp(V)</td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_total">381.0</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_ESS1_2">382.1</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_ESS2_2">383.2</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_ESS3_2">384.3</label></td>
+                        <td class="col_other"><label for="qaz" id="V_Aux_CtrlRoom">225.4</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電流&nbsp(A)</td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_total">246.97</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_ESS1_2">23.90</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_ESS2_2">23.89</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_ESS3_2">23.91</label></td>
+                        <td class="col_other"><label for="qaz" id="I_Aux_CtrlRoom">15.67</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">功率&nbsp(kW)</td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_total">234.5</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_ESS1_2">28.8</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_ESS2_2">28.9</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_ESS3_2">28.7</label></td>
+                        <td class="col_other"><label for="qaz" id="P_Aux_CtrlRoom">15.9</label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">耗能&nbsp(kWh)</td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_total">987654321.2</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_ESS1_2">6544.2</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_ESS2_2">6544.1</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_ESS3_2">6544.0</label></td>
+                        <td class="col_other"><label for="qaz" id="E_Aux_CtrlRoom">567.3</label></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/script_template.js"></script>
+    <script src="scripts/Op_Meter_AuxMeter.js"></script>
+</body>
+
+</html>
