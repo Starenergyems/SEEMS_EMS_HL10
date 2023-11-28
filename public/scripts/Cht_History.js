@@ -182,6 +182,9 @@ searchEndT.textContent = "" + (Number(searchStartT.textContent) + 60000);
 // console.log(new Date(Number(searchStartT.textContent)));
 let EndOfToday_Millisec = DT_now_Millisec - (DT_now_Millisec % 86400000) + 86400000 - 28800000;
 
+let update_DT_search = false;
+update_xMin_xMax(searchStartT.textContent, searchEndT.textContent, update_DT_search);
+
 let yy_temp = Number(min_dateStart[0] + min_dateStart[1] + min_dateStart[2] + min_dateStart[3]);
 let mm_temp = Number(min_dateStart[5] + min_dateStart[6]) - 1;
 let dd_temp = Number(min_dateStart[8] + min_dateStart[9]);
@@ -207,7 +210,6 @@ function update_DateStartMax() {
 
 // 左, 右箭頭
 let duration_ms;
-let update_DT_search;
 
 const goToPrevious = document.querySelector(".timeRangeQuery #goToPrevious");
 goToPrevious.addEventListener("click", searchTime_GoBackward);
@@ -364,7 +366,7 @@ let qSelectAll_regData;
 
 document.addEventListener("DOMContentLoaded", afterLoadDCM);
 function afterLoadDCM() {
-  asdfg = "DOM加载了! 哈哈\n阿~";
+  asdfg = "DOM加载了! 哈哈\n阿哈哈~";
   console.log(asdfg);
 
   console.log(cht_History.options.scales.y_ActivePower.min);
