@@ -1,0 +1,46 @@
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  time: Date,
+  user_id: String,
+  account: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    default: "first@123",
+    minLength:[8,"密碼少於八個字元!"]
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  company: {
+    type: String,
+    required: true,
+  },
+  level: {
+    type: String,
+    required: true,
+    default: "General",
+  },
+  state: {
+    type: String,
+    required: true,
+    default: "normal",
+  },
+  note: {
+    type: Number,
+    default: 0,
+  },
+  last_time: {
+    type: Date,
+  },
+});
+
+const Student = mongoose.model("Student", studentSchema);
+module.exports = Student;
