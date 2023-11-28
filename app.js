@@ -27,28 +27,23 @@ const DataModel = mongoose.model("Data", Schema, "account");
 //設定路由
 
 app.get("/login", (req, res) => {
-  // 不傳遞任何變數
+  // num與fun
   res.render("Login"); //渲染 Login.ejs
 });
 
-app.get("/logout", (req, res) => {
-  // 不傳遞任何變數
-  res.render("Login");
-});
-
 app.get("/account", (req, res) => {
-  // 不傳遞任何變數
-  res.render("Login");
+  // num與fun
+  res.render("PersonalInfo");
 });
 
-app.get("/account/personal", (req, res) => {
-  // 不傳遞任何變數
-  res.render("Login");
+app.get("/account/personalinfo", (req, res) => {
+  // num與fun
+  res.render("PersonalInfo");
 });
 
 app.get("/account/manage", (req, res) => {
-  // 不傳遞任何變數
-  res.render("Login");
+  // num與fun
+  res.render("AccountManage");
 });
 
 //系統模式控制頁面切換
@@ -57,129 +52,135 @@ app.get("/sysctrl", (req, res) => {
 });
 
 app.get("/schedule", (req, res) => {
-  res.render("Mode_SysCtrl");
+  res.render("Mode_Schedule");
 });
 
 //運轉資訊
 app.get("/operateinfo", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_Meter_SLD");
 });
 //單線圖
 app.get("/operateinfo/linediagram", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_Meter_SLD");
 });
 //主電表
 app.get("/operateinfo/mainmerter", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_Meter_MainMeter");
 });
 //其他電表
-app.get("/operateinfo/merters", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+app.get("/operateinfo/auxmerters", (req, res) => {
+  // num與fun
+  res.render("Op_Meter_AuxMeter");
 });
 //pcs主頁
 app.get("/operateinfo/pcs", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_PCS_InfoSummary");
 });
 //單台pcs狀態
 app.get("/operateinfo/pcs/state", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_PCS_InfoDetail");
 });
 //單台pcs警告
 app.get("/operateinfo/pcs/alarm", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_PCS_Alarm");
 });
 //電池
 app.get("/operateinfo/battery", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_Bat_InfoSummary");
 });
 //單台電池狀態
 app.get("/operateinfo/battery/state", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
 });
 //單台RACK
 app.get("/operateinfo/battery/rack", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Op_Bat_Rack");
 });
 
 //系統資訊
 app.get("/systeminfo", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Sys_Comm");
 });
 
 app.get("/systeminfo/communication", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Sys_Comm");
 });
 
 app.get("/systeminfo/devicestate", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Sys_Device");
 });
 
 app.get("/systeminfo/environment", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Sys_Environment");
 });
 
 //告警紀錄
 app.get("/alarm/realtime", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Alm_RealTime");
 });
 
 app.get("/alarm/history", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Alm_History");
 });
 
 //事件紀錄
 app.get("/event", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Evt_Operation");
 });
 
 app.get("/event/operation", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Evt_Operation");
 });
 Operation;
 
 app.get("/event/door", (req, res) => {
-  // 不傳遞任何變數
-  res.render("");
+  // num與fun
+  res.render("Evt_Door");
 });
 
 //報表
 app.get("/report", (req, res) => {
-  // 不傳遞任何變數
-  res.render(""); // 假設有一個名為 example.ejs 的模板文件
+  // num與fun
+  res.render("Rpt_Report");
 });
 
 //圖表
 app.get("/chrat", (req, res) => {
-  // 不傳遞任何變數
-  res.render(""); // 假設有一個名為 example.ejs 的模板文件
+  // num與fun
+  res.render("Fig_Real_Time");
 });
 
 app.get("/chrat/real", (req, res) => {
-  // 不傳遞任何變數
-  res.render(""); // 假設有一個名為 example.ejs 的模板文件
+  // num與fun
+  res.render("Fig_Real_Time");
 });
 
 app.get("/chrat/history", (req, res) => {
-  // 不傳遞任何變數
-  res.render(""); // 假設有一個名為 example.ejs 的模板文件
+  // num與fun
+  res.render("Fig_Historic");
+});
+
+//錯誤頁面
+app.get("error", (req, res) => {
+  // num與fun
+  res.render("error");
 });
 
 app.listen(port, () => {
