@@ -59,14 +59,15 @@ const cht_RealTime = new Chart(chtRT_Canvus, {
     // , '2023-10-24 13:27:00', '2023-10-24 13:32:00', '2023-10-24 13:37:00', '2023-10-24 13:42:00', '2023-10-24 13:47:00'],
     datasets: [{
       label: 'Freq',
-      data: Array(No_of_xValues),
+      // data: Array(No_of_xValues),
+      data: [],
       yAxisID: 'y_Freq',
       borderColor: "#5AA2ED",
       backgroundColor: "#5AA2ED90",
     },
     {
       label: 'ActivePower',
-      data: Array(No_of_xValues),
+      data: [],
       // data: [-600, -2500, -3000],
       // data: [-600, -2500, -3000, -5200, -1800, 2100, 4900, 8300, 6700, 1400],
       // data: [, , , , , , , , , 1400],
@@ -80,14 +81,14 @@ const cht_RealTime = new Chart(chtRT_Canvus, {
     },
     {
       label: 'ExecuteRate',
-      data: Array(No_of_xValues),
+      data: [],
       yAxisID: 'y_ExecuteRate',
       borderColor: "#F39F3B",
       backgroundColor: "#F39F3B90",
     },
     {
       label: "SOC",
-      data: Array(No_of_xValues),
+      data: [],
       yAxisID: "y_SOC",
       borderColor: "#F6CD4F",
       backgroundColor: "#F6CD4F90",
@@ -244,9 +245,11 @@ function update_xMin_xMax(StartTime, EndTime) {
 
   cht_RealTime.options.scales.x.min = yy_xMin + "-" + mm_xMin + "-" + dd_xMin + " " + hh_xMin + ":" + m_xMin + ":" + ss_xMin + "." + ms_xMin;
   cht_RealTime.options.scales.x.max = yy_xMax + "-" + mm_xMax + "-" + dd_xMax + " " + hh_xMax + ":" + m_xMax + ":" + ss_xMax + "." + ms_xMax;
-  console.log(cht_RealTime.options.scales.x.min + "_!_" + cht_RealTime.options.scales.x.max);
+  // console.log(cht_RealTime.options.scales.x.min + "_!_" + cht_RealTime.options.scales.x.max);
 
   cht_RealTime.update();
+  return cht_RealTime.options.scales.x.max;
+  // { x: '2023-11-29 21:24:57.456', y: 60.35 }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -304,7 +307,23 @@ function afterLoadDCM() {
     searchStartT.textContent = "" + (Number(searchStartT.textContent) + refreshRate * 1000);
     searchEndT.textContent = "" + (Number(searchEndT.textContent) + refreshRate * 1000);
 
-    update_xMin_xMax(searchStartT.textContent, searchEndT.textContent);
+    let x_newData = update_xMin_xMax(searchStartT.textContent, searchEndT.textContent);
+    // console.log(poi);
+
+    let n = cht_RealTime.data.datasets.length;
+    for (i = 0; i < n; i++) {
+      let newElement_data = { x: '', y: null };
+      // { x: '2023-11-29 21:24:57.456', y: 60.35 }
+      newElement_data.x = x_newData;
+
+      let y_newData_min = cht_RealTime.options.scales["y_" + cht_RealTime.data.datasets[i].label].min;
+      let y_newData_max = cht_RealTime.options.scales["y_" + cht_RealTime.data.datasets[i].label].max;
+      // console.log(y_newData_min + "_~_" + y_newData_max + "_!_" + (y_newData_min + y_newData_max));
+
+      newElement_data.y = Math.floor((y_newData_min + Math.random() * (y_newData_max - y_newData_min)) * 1000) / 1000;
+
+      // console.log(newElement_data);
+      cht_RealTime.data.datasets[i].data.push(newElement_data);
 
 
 
@@ -313,6 +332,50 @@ function afterLoadDCM() {
 
 
 
+
+      // y_ActivePower: {
+      //   display: true,
+      //   position: 'left',
+      //   title: {
+      //     display: true,
+      //     text: 'ActivePower (kW)'
+      //   },
+      //   min: -10000,
+      //   max: 10000,
+      // },
+
+      // datasets: [{
+      //   label: 'Freq',
+      //   data: [{ x: '2023-10-24 13:02:47', y: 59.92 }, { x: '2023-10-24 13:02:45', y: 60.35 }, { x: '2023-10-24 13:02:46', y: 60.33 },
+      //   { x: '2023-10-24 13:02:48', y: 59.74 }, { x: '2023-10-24 13:02:50', y: 59.81 }, { x: '2023-10-24 13:02:52', y: 60.08 }],
+      //   yAxisID: 'y_Freq',
+      //   borderColor: '#5AA2ED',
+      //   backgroundColor: '#5AA2ED90',
+      // }, {
+      //   label: 'ActivePower',
+      //   data: [{ x: '2023-10-24 13:02:42', y: -600 }, { x: '2023-10-24 13:02:43', y: -2500 }, { x: '2023-10-24 13:02:46', y: 3000 },
+      //   { x: '2023-10-24 13:02:47', y: 5200 }, { x: '2023-10-24 13:02:49', y: -1800 }, { x: '2023-10-24 13:02:51', y: 900 }],
+      //   yAxisID: 'y_ActivePower',
+      //   borderColor: '#F26085',
+      //   backgroundColor: '#F2608590',
+      // }, {
+      //   label: 'ExecuteRate',
+      //   data: [{ x: '2023-10-24 13:02:43', y: 100 }, { x: '2023-10-24 13:02:44', y: 98 }, { x: '2023-10-24 13:02:46', y: 97 },
+      //   { x: '2023-10-24 13:02:47', y: 92 }, { x: '2023-10-24 13:02:50', y: 95 }, { x: '2023-10-24 13:02:52', y: 96 }],
+      //   yAxisID: 'y_ExecuteRate',
+      //   borderColor: '#F39F3B',
+      //   backgroundColor: '#F39F3B90',
+      // }, {
+      //   label: 'SOC',
+      //   data: [{ x: '2023-10-24 13:02:43', y: 70 }, { x: '2023-10-24 13:02:44', y: 72 }, { x: '2023-10-24 13:02:46', y: 73 },
+      //   { x: '2023-10-24 13:02:47', y: 71 }, { x: '2023-10-24 13:02:50', y: 68 }, { x: '2023-10-24 13:02:52', y: 69 }],
+      //   yAxisID: 'y_SOC',
+      //   borderColor: '#F6CD4F',
+      //   backgroundColor: '#F6CD4F90',
+      // },]
+
+    }
+    cht_RealTime.update();
   }
 }
 
@@ -812,65 +875,57 @@ function regDataSelectDeselect(clickItem) {
         qSelectAll_rDName[i].parentNode.parentNode.classList.add("selected");
 
         // 產生點位的data.datasets, options.scales
-        let newElement_datasets = { label: 'a123', data: [], yAxisID: 'b45', borderColor: 'c67', backgroundColor: 'd89', };
-        console.log(newElement_datasets);
-        newElement_datasets.label = "";
+        qSelectAll_rDMax = document.querySelectorAll(".table_regData .rDMax");
+        qSelectAll_rDMin = document.querySelectorAll(".table_regData .rDMin");
+        qSelectAll_rDUnit = document.querySelectorAll(".table_regData .rDUnit");
+        qSelectAll_rDColor = document.querySelectorAll(".table_regData .rDColor");
+        qSelectAll_yDisplay = document.querySelectorAll(".table_regData .yDisplay");
+        qSelectAll_yPosition = document.querySelectorAll(".table_regData .yPosition");
+        qSelectAll_yAxisID = document.querySelectorAll(".table_regData .yAxisID");
+        let newElement_datasets = {
+          label: '', data: [],
+          yAxisID: '', borderColor: '', backgroundColor: '',
+        };
 
+        // console.log(newElement_datasets);
+        newElement_datasets.label = qSelectAll_rDName[i].textContent;
+        newElement_datasets.yAxisID = "y_" + qSelectAll_rDName[i].textContent;
+        newElement_datasets.borderColor = qSelectAll_rDColor[i].value;
+        newElement_datasets.backgroundColor = qSelectAll_rDColor[i].value + "90";
+        // console.log(newElement_datasets);
 
+        cht_RealTime.data.datasets.push(newElement_datasets);
+        console.log(cht_RealTime.data.datasets[0]);
+        console.log(cht_RealTime.data.datasets[cht_RealTime.data.datasets.length - 1]);
 
+        // console.log(cht_RealTime.options.scales[qSelectAll_yAxisID[i].textContent]);
 
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent] = {};
+        // console.log(cht_RealTime.options.scales[qSelectAll_yAxisID[i].textContent]);
 
-        console.log(newElement_datasets);
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent].display = Boolean(Number(qSelectAll_yDisplay[i].value));
+        // console.log(cht_RealTime.options.scales[qSelectAll_yAxisID[i].textContent]);
 
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent].position = qSelectAll_yPosition[i].value;
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent].title = {};
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent].title.display = true;
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent].title.text = qSelectAll_rDName[i].textContent + ' (' + qSelectAll_rDUnit[i].value + ')';
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent].min = Number(qSelectAll_rDMin[i].value);
+        cht_RealTime.options.scales["y_" + qSelectAll_rDName[i].textContent].max = Number(qSelectAll_rDMax[i].value);
+        console.log(cht_RealTime.options.scales[qSelectAll_yAxisID[i].textContent]);
 
+        cht_RealTime.update();
+        console.log(cht_RealTime.options.scales[qSelectAll_yAxisID[i].textContent]);
 
-
-
+        console.log(cht_RealTime.options.scales["y_Freq"]);
 
         // 產生假資料值
 
         // 把資料值放到點位的data.datasets.data
 
-        // datasets: [{
-        //   label: 'Freq',
-        //   data: [{ x: '2023-10-24 13:02:47', y: 59.92 }, { x: '2023-10-24 13:02:45', y: 60.35 }, { x: '2023-10-24 13:02:46', y: 60.33 },
-        //   { x: '2023-10-24 13:02:48', y: 59.74 }, { x: '2023-10-24 13:02:50', y: 59.81 }, { x: '2023-10-24 13:02:52', y: 60.08 }],
-        //   yAxisID: 'y_Freq',
-        //   borderColor: '#5AA2ED',
-        //   backgroundColor: '#5AA2ED90',
-        // }, {
-        //   label: 'ActivePower',
-        //   data: [{ x: '2023-10-24 13:02:42', y: -600 }, { x: '2023-10-24 13:02:43', y: -2500 }, { x: '2023-10-24 13:02:46', y: 3000 },
-        //   { x: '2023-10-24 13:02:47', y: 5200 }, { x: '2023-10-24 13:02:49', y: -1800 }, { x: '2023-10-24 13:02:51', y: 900 }],
-        //   yAxisID: 'y_ActivePower',
-        //   borderColor: '#F26085',
-        //   backgroundColor: '#F2608590',
-        // }, {
-        //   label: 'ExecuteRate',
-        //   data: [{ x: '2023-10-24 13:02:43', y: 100 }, { x: '2023-10-24 13:02:44', y: 98 }, { x: '2023-10-24 13:02:46', y: 97 },
-        //   { x: '2023-10-24 13:02:47', y: 92 }, { x: '2023-10-24 13:02:50', y: 95 }, { x: '2023-10-24 13:02:52', y: 96 }],
-        //   yAxisID: 'y_ExecuteRate',
-        //   borderColor: '#F39F3B',
-        //   backgroundColor: '#F39F3B90',
-        // }, {
-        //   label: 'SOC',
-        //   data: [{ x: '2023-10-24 13:02:43', y: 70 }, { x: '2023-10-24 13:02:44', y: 72 }, { x: '2023-10-24 13:02:46', y: 73 },
-        //   { x: '2023-10-24 13:02:47', y: 71 }, { x: '2023-10-24 13:02:50', y: 68 }, { x: '2023-10-24 13:02:52', y: 69 }],
-        //   yAxisID: 'y_SOC',
-        //   borderColor: '#F6CD4F',
-        //   backgroundColor: '#F6CD4F90',
-        // },]
 
-        // y_ActivePower: {
-        //   display: true,
-        //   position: 'left',
-        //   title: {
-        //     display: true,
-        //     text: 'ActivePower (kW)'
-        //   },
-        //   min: -10000,
-        //   max: 10000,
-        // },
+
+
 
 
 
@@ -888,11 +943,14 @@ function regDataSelectDeselect(clickItem) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+const abc = document.querySelector(".block_temp #yDisplay_SOC");
+
 const btn_test_03 = document.querySelector(".block_temp #btn_test_03");
 btn_test_03.addEventListener("click", b_test_03);
 function b_test_03() {
-
-
+  console.log(abc.value);
+  console.log(Boolean(abc.value));
+  console.log(Boolean(Number(abc.value)));
 }
 
 const btn_test_04 = document.querySelector(".block_temp #btn_test_04");
