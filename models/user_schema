@@ -12,8 +12,8 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    default: "first@123",
-    minLength:[8,"密碼少於八個字元!"]
+    default: "EMS@1234",
+    minLength: [8, "密碼少於八個字元!"],
   },
   name: {
     type: String,
@@ -25,12 +25,14 @@ const userSchema = new Schema({
   },
   level: {
     type: String,
+    enum: ["general", "sysadmin", "accadmin"],
     required: true,
-    default: "General",
+    default: "general",
   },
   state: {
     type: String,
     required: true,
+    enum: ["normal", "deactivate"],
     default: "normal",
   },
   note: {
@@ -42,5 +44,5 @@ const userSchema = new Schema({
   },
 });
 
-const Student = mongoose.model("Student", studentSchema);
+const User = mongoose.model("User", userSchema);
 module.exports = Student;
