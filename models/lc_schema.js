@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 const { ObjectId } = mongoose.Types;
 // 創建一個Mongoose模式
-const DataSchema = new mongoose.Schema({
+const lcSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   time: Date,
   System: {
@@ -785,3 +785,6 @@ const DataSchema = new mongoose.Schema({
     },
   },
 });
+
+const LC = mongoose.model("LC", lcSchema);
+module.exports = LC;
