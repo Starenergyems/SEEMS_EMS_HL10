@@ -782,12 +782,58 @@ function regDataSelectDeselect(clickItem) {
     for (i = 0; i < qSelectAll_rDName.length; i++) {
       if (qSelectAll_rDName[i].textContent === itemName) {
         qSelectAll_rDName[i].parentNode.parentNode.classList.add("selected");
+
+        // 產生點位的data.datasets, options.scales
+        qSelectAll_rDMax = document.querySelectorAll(".table_regData .rDMax");
+        qSelectAll_rDMin = document.querySelectorAll(".table_regData .rDMin");
+        qSelectAll_rDUnit = document.querySelectorAll(".table_regData .rDUnit");
+        qSelectAll_rDColor = document.querySelectorAll(".table_regData .rDColor");
+        qSelectAll_yDisplay = document.querySelectorAll(".table_regData .yDisplay");
+        qSelectAll_yPosition = document.querySelectorAll(".table_regData .yPosition");
+        qSelectAll_yAxisID = document.querySelectorAll(".table_regData .yAxisID");
+        let newElement_datasets = {
+          label: '', data: [],
+          yAxisID: '', borderColor: '', backgroundColor: '',
+        };
+
+        // console.log(newElement_datasets);
+        newElement_datasets.label = qSelectAll_rDName[i].textContent;
+        newElement_datasets.yAxisID = "y_" + qSelectAll_rDName[i].textContent;
+        newElement_datasets.borderColor = qSelectAll_rDColor[i].value;
+        newElement_datasets.backgroundColor = qSelectAll_rDColor[i].value + "90";
+        // console.log(newElement_datasets);
+
+        cht_History.data.datasets.push(newElement_datasets);
+        console.log(cht_History.data.datasets[0]);
+        console.log(cht_History.data.datasets[cht_History.data.datasets.length - 1]);
+
+        // console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
+
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent] = {};
+        // console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
+
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].display = Boolean(Number(qSelectAll_yDisplay[i].value));
+        // console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
+
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].position = qSelectAll_yPosition[i].value;
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].title = {};
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].title.display = true;
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].title.text = qSelectAll_rDName[i].textContent + ' (' + qSelectAll_rDUnit[i].value + ')';
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].min = Number(qSelectAll_rDMin[i].value);
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].max = Number(qSelectAll_rDMax[i].value);
+        console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
+
+        cht_History.update();
+        console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
+
+        console.log(cht_History.options.scales["y_Freq"]);
+
+        // // 產生假資料值
+
+        // // 把資料值放到點位的data.datasets.data
+
       }
     }
-
-    // 產生假資料值
-
-    // 把資料值放到chart的data.datasets, options.scales
 
     // datasets: [{
     //   label: 'Freq',

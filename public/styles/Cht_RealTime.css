@@ -411,7 +411,7 @@
 }
 
 .block_temp {
-    /* display: none; */
+    display: none;
     background-color: #fa0;
     width: 960px;
     height: 260px;

@@ -208,13 +208,6 @@ const cht_RealTime = new Chart(chtRT_Canvus, {
 let raw_DT_now = new Date();
 let DT_now_Millisec = raw_DT_now.getTime();
 
-// let yy_now = raw_DT_now.getFullYear();
-// let mm_now = String(raw_DT_now.getMonth() + 1).padStart(2, "0");
-// let dd_now = String(raw_DT_now.getDate()).padStart(2, "0");
-// let hh_now = String(raw_DT_now.getHours()).padStart(2, "0");
-// let m_now = String(raw_DT_now.getMinutes()).padStart(2, "0");
-// let ss_now = String(raw_DT_now.getSeconds()).padStart(2, '0');
-
 const searchStartT = document.querySelector(".block_temp #searchStartT");
 const searchEndT = document.querySelector(".block_temp #searchEndT");
 const searchDuration = document.querySelector(".block_temp #searchDuration");
@@ -249,7 +242,6 @@ function update_xMin_xMax(StartTime, EndTime) {
 
   cht_RealTime.update();
   return cht_RealTime.options.scales.x.max;
-  // { x: '2023-11-29 21:24:57.456', y: 60.35 }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,7 +300,6 @@ function afterLoadDCM() {
     searchEndT.textContent = "" + (Number(searchEndT.textContent) + refreshRate * 1000);
 
     let x_newData = update_xMin_xMax(searchStartT.textContent, searchEndT.textContent);
-    // console.log(poi);
 
     let n = cht_RealTime.data.datasets.length;
     for (i = 0; i < n; i++) {
@@ -318,63 +309,12 @@ function afterLoadDCM() {
 
       let y_newData_min = cht_RealTime.options.scales["y_" + cht_RealTime.data.datasets[i].label].min;
       let y_newData_max = cht_RealTime.options.scales["y_" + cht_RealTime.data.datasets[i].label].max;
-      // console.log(y_newData_min + "_~_" + y_newData_max + "_!_" + (y_newData_min + y_newData_max));
 
       newElement_data.y = Math.floor((y_newData_min + Math.random() * (y_newData_max - y_newData_min)) * 1000) / 1000;
 
-      // console.log(newElement_data);
       cht_RealTime.data.datasets[i].data.push(newElement_data);
-
-
-
-
-
-
-
-
-
-      // y_ActivePower: {
-      //   display: true,
-      //   position: 'left',
-      //   title: {
-      //     display: true,
-      //     text: 'ActivePower (kW)'
-      //   },
-      //   min: -10000,
-      //   max: 10000,
-      // },
-
-      // datasets: [{
-      //   label: 'Freq',
-      //   data: [{ x: '2023-10-24 13:02:47', y: 59.92 }, { x: '2023-10-24 13:02:45', y: 60.35 }, { x: '2023-10-24 13:02:46', y: 60.33 },
-      //   { x: '2023-10-24 13:02:48', y: 59.74 }, { x: '2023-10-24 13:02:50', y: 59.81 }, { x: '2023-10-24 13:02:52', y: 60.08 }],
-      //   yAxisID: 'y_Freq',
-      //   borderColor: '#5AA2ED',
-      //   backgroundColor: '#5AA2ED90',
-      // }, {
-      //   label: 'ActivePower',
-      //   data: [{ x: '2023-10-24 13:02:42', y: -600 }, { x: '2023-10-24 13:02:43', y: -2500 }, { x: '2023-10-24 13:02:46', y: 3000 },
-      //   { x: '2023-10-24 13:02:47', y: 5200 }, { x: '2023-10-24 13:02:49', y: -1800 }, { x: '2023-10-24 13:02:51', y: 900 }],
-      //   yAxisID: 'y_ActivePower',
-      //   borderColor: '#F26085',
-      //   backgroundColor: '#F2608590',
-      // }, {
-      //   label: 'ExecuteRate',
-      //   data: [{ x: '2023-10-24 13:02:43', y: 100 }, { x: '2023-10-24 13:02:44', y: 98 }, { x: '2023-10-24 13:02:46', y: 97 },
-      //   { x: '2023-10-24 13:02:47', y: 92 }, { x: '2023-10-24 13:02:50', y: 95 }, { x: '2023-10-24 13:02:52', y: 96 }],
-      //   yAxisID: 'y_ExecuteRate',
-      //   borderColor: '#F39F3B',
-      //   backgroundColor: '#F39F3B90',
-      // }, {
-      //   label: 'SOC',
-      //   data: [{ x: '2023-10-24 13:02:43', y: 70 }, { x: '2023-10-24 13:02:44', y: 72 }, { x: '2023-10-24 13:02:46', y: 73 },
-      //   { x: '2023-10-24 13:02:47', y: 71 }, { x: '2023-10-24 13:02:50', y: 68 }, { x: '2023-10-24 13:02:52', y: 69 }],
-      //   yAxisID: 'y_SOC',
-      //   borderColor: '#F6CD4F',
-      //   backgroundColor: '#F6CD4F90',
-      // },]
-
     }
+
     cht_RealTime.update();
   }
 }
@@ -644,7 +584,6 @@ const closeWB_Yes_confirm_dRD = document.querySelector(".confirm_deleteEditRD #c
 closeWB_Yes_confirm_dRD.addEventListener("click", close_confirm_dRD_Yes);
 function close_confirm_dRD_Yes() {
   let deleteName = deleteRDName.textContent.slice(1, -1);
-  // console.log(deleteName);
 
   qSelectAll_editRegData = document.querySelectorAll(".editRegData .regData");
   qSelectAll_regData = document.querySelectorAll(".registerData .regData");
@@ -919,23 +858,12 @@ function regDataSelectDeselect(clickItem) {
 
         console.log(cht_RealTime.options.scales["y_Freq"]);
 
-        // 產生假資料值
+        // // 產生假資料值
 
-        // 把資料值放到點位的data.datasets.data
-
-
-
-
-
-
-
-
-
-
+        // // 把資料值放到點位的data.datasets.data
 
       }
     }
-
 
     clickItem.target.classList.add("selected");
   }
