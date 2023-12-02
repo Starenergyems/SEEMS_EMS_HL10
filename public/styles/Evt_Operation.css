@@ -118,6 +118,7 @@
 .title .setStartEnd img {
     display: inline-block;
     margin: 2px 0px 0px 1px;
+    cursor: pointer;
 }
 
 .title .setStartEnd input {
@@ -134,7 +135,7 @@
     margin-left: 1px;
 }
 
-.title .timeRangeQuery .btn_Query {
+.title .timeRangeQuery #btn_Query {
     display: inline-block;
     background-color: #FFFFFF;
     box-sizing: border-box;
@@ -145,6 +146,7 @@
     font-size: 20px;
     border-radius: 5px;
     vertical-align: top;
+    cursor: pointer;
 }
 
 .evtOperation {
@@ -179,13 +181,32 @@ table.dataTable tbody td {
     text-align: left;
 }
 
+.alert_WrongDataSet {
+    height: 200px;
+    width: 320px;
+    left: 560px;
+    top: 280px;
+}
+
+.alert_WrongDataSet p {
+    margin: 40px 35px 0px;
+    font-size: 20px;
+    color: #FF0000;
+    line-height: 25px;
+    text-align: center;
+}
+
+.alert_WrongDataSet .closeWindowButton {
+    margin: 25px 0px 0px 130px;
+}
+
 /* ///////////////////////////////////////////////////////////// */
 
 .block_temp {
     display: none;
     background-color: #ffaa00;
     width: 420px;
-    height: 650px;
+    height: 250px;
     position: absolute;
     right: 20px;
     top: 100px;
@@ -205,4 +226,10 @@ table.dataTable tbody td {
 
 .block_temp #printVal_01 {
     margin-top: 280px;
+}
+
+.block_temp .btn_test {
+    border: 1px solid #000000;
+    margin: 2px 5px 2px 0px;
+    font-size: 16px;
 }

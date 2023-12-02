@@ -69,69 +69,80 @@ dateStart.setAttribute("max", yy_now + "-" + mm_now + "-" + dd_now);
 dateEnd.setAttribute("min", yy_now + "-" + mm_now + "-" + dd_now);
 dateEnd.setAttribute("max", yy_now + "-" + mm_now + "-" + dd_now);
 
-function Convert_date_To_rawDT(date) {
-    if (date !== "") {
-        let yy_date = Number(date[0] + date[1] + date[2] + date[3]);
-        let mm_date = Number(date[5] + date[6]) - 1;
-        let dd_date = Number(date[8] + date[9]);
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-        let raw_date = new Date(yy_date, mm_date, dd_date);
-        return raw_date;
-    } else {
-        // date === "" 時，怎麼辦??   ~~~~~~~!!!!!!!!!@@@@@@@#######$$$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&&&*********
-    }
+function Convert_date_To_rawDT(date) {
+    let yy_date = Number(date[0] + date[1] + date[2] + date[3]);
+    let mm_date = Number(date[5] + date[6]) - 1;
+    let dd_date = Number(date[8] + date[9]);
+
+    let raw_date = new Date(yy_date, mm_date, dd_date);
+    return raw_date;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-let m = document.querySelector(".block_temp #printVal_01");
-let n = document.querySelector(".block_temp #printVal_02");
-let o = document.querySelector(".block_temp #printVal_03");
-let p = document.querySelector(".block_temp #printVal_04");
-let q = document.querySelector(".block_temp #printVal_05");
-let r = document.querySelector(".block_temp #printVal_06");
-let s = document.querySelector(".block_temp #printVal_07");
+function Limit_dateStart(raw_dS_set) {
+    raw_DT_now = new Date();
+    let raw_dS = raw_dS_set;
+    let set_timeStart = false;
 
+    if (raw_dS_set > raw_DT_now) {
+        raw_dS = raw_DT_now;
+        set_timeStart = true;
+    } else if (raw_dS_set < Convert_date_To_rawDT(min_dateStart)) {
+        raw_dS = Convert_date_To_rawDT(min_dateStart);
+        set_timeStart = true;
+    }
 
-// sd = document.querySelector(".block_temp #Startdate");
-document.addEventListener("click", Limit_dateStart);
-function Limit_dateStart(clickItem) {
-    if (clickItem.target.id !== "Startdate") {
-        raw_DT_now = new Date();
-
-        let raw_dS;
-        let raw_dS_temp = Convert_date_To_rawDT(dateStart.value);
-        if (raw_dS_temp > raw_DT_now) {
-            raw_dS = raw_DT_now;
-        } else if (raw_dS_temp < Convert_date_To_rawDT(min_dateStart)) {
-            raw_dS = Convert_date_To_rawDT(min_dateStart);
-        } else {
-            raw_dS = raw_dS_temp;
-        }
-
+    if (set_timeStart) {
         let yy_dS = String(raw_dS.getFullYear()).padStart(4, '0');
         let mm_dS = String(raw_dS.getMonth() + 1).padStart(2, '0');
         let dd_dS = String(raw_dS.getDate()).padStart(2, '0');
+        let hh_dS = String(raw_dS.getHours()).padStart(2, '0');
+        let m_dS = String(raw_dS.getMinutes()).padStart(2, '0');
+        let ss_dS = String(raw_dS.getSeconds()).padStart(2, '0');
 
         dateStart.value = yy_dS + "-" + mm_dS + "-" + dd_dS;
+        timeStart.value = hh_dS + ":" + m_dS + ":" + ss_dS;
+    }
 
-        dateStart_change();
+    return raw_dS;
+}
+
+function Limit_dateEnd(raw_dE_set, dateEnd_min, dateEnd_max) {
+    let raw_dateEnd_min = Convert_date_To_rawDT(dateEnd_min);
+    let raw_dateEnd_max = Convert_date_To_rawDT(dateEnd_max);
+    let dateEnd_max_Millisec = raw_dateEnd_max.getTime() + 1000 * 60 * 60 * 24 - 1;
+
+    console.log(raw_dateEnd_min);
+    console.log(dateEnd_max_Millisec);
+
+    let raw_dE;
+    let set_dateEnd = false;
+
+    if (raw_dE_set.getTime() > dateEnd_max_Millisec) {
+        raw_dE = raw_dateEnd_max;
+        timeEnd.value = "23:59:59";
+        set_dateEnd = true;
+    } else if (raw_dE_set < raw_dateEnd_min) {
+        raw_dE = raw_dateEnd_min;
+        set_dateEnd = true;
+    }
+
+    if (set_dateEnd) {
+        let yy_dE = String(raw_dE.getFullYear()).padStart(4, '0');
+        let mm_dE = String(raw_dE.getMonth() + 1).padStart(2, '0');
+        let dd_dE = String(raw_dE.getDate()).padStart(2, '0');
+
+        dateEnd.value = yy_dE + "-" + mm_dE + "-" + dd_dE;
     }
 }
 
-dateStart.addEventListener("change", dateStart_change);
-function dateStart_change() {
-    m.textContent = dateStart.value;
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-    // let yy_dS = Number(dateStart.value[0] + dateStart.value[1] + dateStart.value[2] + dateStart.value[3]);
-    // let mm_dS = Number(dateStart.value[5] + dateStart.value[6]) - 1;
-    // let dd_dS = Number(dateStart.value[8] + dateStart.value[9]);
-
-    // let raw_dS = new Date(yy_dS, mm_dS, dd_dS);
-
-    let raw_dS = Convert_date_To_rawDT(dateStart.value);
-    n.textContent = raw_dS;
-    let raw_dS_plus_90d = new Date(raw_dS.getTime() + 1000 * 60 * 60 * 24 * 90);
-    o.textContent = raw_dS_plus_90d;
+function update_dateEnd_MinMax(raw_dS_set) {
+    let raw_dS_plus_90d = new Date(raw_dS_set.getTime() + 1000 * 60 * 60 * 24 * 90);
 
     raw_DT_now = new Date();
     let raw_dE_max;
@@ -140,45 +151,302 @@ function dateStart_change() {
     } else {
         raw_dE_max = raw_dS_plus_90d;
     }
-    p.textContent = raw_dE_max;
 
-    // let yy_dE_max = raw_dE_max.getFullYear();
-    let yy_dE_max = String(raw_dE_max.getFullYear()).padStart(4, '0');
+    let yy_dE_max = raw_dE_max.getFullYear();
+    // let yy_dE_max = String(raw_dE_max.getFullYear()).padStart(4, '0');
     let mm_dE_max = String(raw_dE_max.getMonth() + 1).padStart(2, '0');
     let dd_dE_max = String(raw_dE_max.getDate()).padStart(2, '0');
 
     let dE_max = yy_dE_max + "-" + mm_dE_max + "-" + dd_dE_max;
-    q.textContent = dE_max;
 
     dateEnd.setAttribute("min", dateStart.value);
     dateEnd.setAttribute("max", dE_max);
-
-    // let yy_dE_old = Number(dateEnd.value[0] + dateEnd.value[1] + dateEnd.value[2] + dateEnd.value[3]);
-    // let mm_dE_old = Number(dateEnd.value[5] + dateEnd.value[6]) - 1;
-    // let dd_dE_old = Number(dateEnd.value[8] + dateEnd.value[9]);
-
-    // let raw_dE_old = new Date(yy_dE_old, mm_dE_old, dd_dE_old);
-    let raw_dE_old = Convert_date_To_rawDT(dateEnd.value);
-    if (raw_dE_old < raw_dS) {
-        dateEnd.value = dateStart.value;
-    } else if (raw_dE_old > raw_dE_max) {
-        dateEnd.value = dE_max;
-    }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+let yy_dS;
+let yy_dE;
+
+dateStart.addEventListener("change", dateStart_change);
+function dateStart_change() {
+    if (dateStart.value === "") {
+        console.log('dateStart.value === ""');
+        return 0;
+    }
+
+    yy_dS = dateStart.value.split("-")[0];
+    let yy_min_dateStart = min_dateStart.split("-")[0];
+    if (Number(yy_dS) < Number(yy_min_dateStart)) {
+        return 0;
+    }
+
+    console.log("abc_123");
+
+    let raw_dS_temp = Convert_date_To_rawDT(dateStart.value);
+    let raw_dS = Limit_dateStart(raw_dS_temp);
+    console.log(raw_dS);
+
+    update_dateEnd_MinMax(raw_dS);
+
+    console.log(dateEnd.getAttribute("min"));
+    console.log(dateEnd.getAttribute("max"));
+
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
+    }
+
+    console.log("qwe123rty")
+    let raw_dE_temp = Convert_date_To_rawDT(dateEnd.value);
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+const goToFirst_dS = document.querySelector(".timeRangeQuery #goToFirst_dS");
+goToFirst_dS.addEventListener("click", goTo_dateStart_min);
+function goTo_dateStart_min() {
+    dateStart.value = min_dateStart;
+    timeStart.value = "00:00:00";
+
+    let raw_dateStart_min = Convert_date_To_rawDT(min_dateStart);
+
+    update_dateEnd_MinMax(raw_dateStart_min);
+
+    console.log(dateEnd.getAttribute("min"));
+    console.log(dateEnd.getAttribute("max"));
+
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
+    }
+
+    let raw_dE_temp = Convert_date_To_rawDT(dateEnd.value);
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+const goToLast_dS = document.querySelector(".timeRangeQuery #goToLast_dS");
+goToLast_dS.addEventListener("click", goTo_dateStart_max);
+function goTo_dateStart_max() {
+    raw_DT_now = new Date();
+
+    yy_now = raw_DT_now.getFullYear();
+    mm_now = String(raw_DT_now.getMonth() + 1).padStart(2, '0');
+    dd_now = String(raw_DT_now.getDate()).padStart(2, '0');
+    hh_now = String(raw_DT_now.getHours()).padStart(2, '0');
+    m_now = String(raw_DT_now.getMinutes()).padStart(2, '0');
+    ss_now = String(raw_DT_now.getSeconds()).padStart(2, '0');
+
+    dateStart.value = yy_now + "-" + mm_now + "-" + dd_now;
+    timeStart.value = hh_now + ":" + m_now + ":" + ss_now;
+
+    dateEnd.setAttribute("min", dateStart.value);
+    dateEnd.setAttribute("max", dateStart.value);
+
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
+    }
+
+    let raw_dE_temp = Convert_date_To_rawDT(dateEnd.value);
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+const goToPrevious_dS = document.querySelector(".timeRangeQuery #goToPrevious_dS");
+goToPrevious_dS.addEventListener("click", move_dateStart_forward1Day);
+function move_dateStart_forward1Day() {
+    if (dateStart.value === "") {
+        console.log('dateStart.value === ""');
+        return 0;
+    }
+
+    yy_dS = dateStart.value.split("-")[0];
+    let yy_min_dateStart = min_dateStart.split("-")[0];
+    if (Number(yy_dS) < Number(yy_min_dateStart)) {
+        return 0;
+    }
+
+    let raw_dS_old = Convert_date_To_rawDT(dateStart.value);
+    let raw_dS_temp = new Date(raw_dS_old.getTime() - 1000 * 60 * 60 * 24);
+
+    let yy_dS_new = String(raw_dS_temp.getFullYear()).padStart(4, '0');
+    let mm_dS_new = String(raw_dS_temp.getMonth() + 1).padStart(2, '0');
+    let dd_dS_new = String(raw_dS_temp.getDate()).padStart(2, '0');
+
+    dateStart.value = yy_dS_new + "-" + mm_dS_new + "-" + dd_dS_new;
+
+    let raw_dS = Limit_dateStart(raw_dS_temp);
+    console.log(raw_dS);
+
+    update_dateEnd_MinMax(raw_dS);
+
+    console.log(dateEnd.getAttribute("min"));
+    console.log(dateEnd.getAttribute("max"));
+
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
+    }
+
+    console.log("qwe456rty")
+    let raw_dE_temp = Convert_date_To_rawDT(dateEnd.value);
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+const goToNext_dS = document.querySelector(".timeRangeQuery #goToNext_dS");
+goToNext_dS.addEventListener("click", move_dateStart_back1Day);
+function move_dateStart_back1Day() {
+    if (dateStart.value === "") {
+        console.log('dateStart.value === ""');
+        return 0;
+    }
+
+    yy_dS = dateStart.value.split("-")[0];
+    let yy_min_dateStart = min_dateStart.split("-")[0];
+    if (Number(yy_dS) < Number(yy_min_dateStart)) {
+        return 0;
+    }
+
+    let raw_dS_old = Convert_date_To_rawDT(dateStart.value);
+    let raw_dS_temp = new Date(raw_dS_old.getTime() + 1000 * 60 * 60 * 24);
+
+    let yy_dS_new = String(raw_dS_temp.getFullYear()).padStart(4, '0');
+    let mm_dS_new = String(raw_dS_temp.getMonth() + 1).padStart(2, '0');
+    let dd_dS_new = String(raw_dS_temp.getDate()).padStart(2, '0');
+
+    dateStart.value = yy_dS_new + "-" + mm_dS_new + "-" + dd_dS_new;
+
+    let raw_dS = Limit_dateStart(raw_dS_temp);
+    console.log(raw_dS);
+
+    update_dateEnd_MinMax(raw_dS);
+
+    console.log(dateEnd.getAttribute("min"));
+    console.log(dateEnd.getAttribute("max"));
+
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
+    }
+
+    console.log("qwe789rty")
+    let raw_dE_temp = Convert_date_To_rawDT(dateEnd.value);
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 dateEnd.addEventListener("change", dateEnd_change);
 function dateEnd_change() {
-    let min_dateEnd = dateEnd.getAttribute("min");
-    let max_dateEnd = dateEnd.getAttribute("max");
-    let raw_dE_min = Convert_date_To_rawDT(min_dateEnd);
-    let raw_dE_max = Convert_date_To_rawDT(max_dateEnd);
-
-    let raw_dE_set = Convert_date_To_rawDT(dateEnd.value);
-    if (raw_dE_set > raw_dE_max) {
-        dateEnd.value = max_dateEnd;
-    } else if (raw_dE_set < raw_dE_min) {
-        dateEnd.value = min_dateEnd;
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
     }
+
+    yy_dE = dateEnd.value.split("-")[0];
+    if (Number(yy_dE) < 1000) {
+        return 0;
+    }
+
+    let raw_dE_temp = Convert_date_To_rawDT(dateEnd.value);
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+const goToFirst_dE = document.querySelector(".timeRangeQuery #goToFirst_dE");
+goToFirst_dE.addEventListener("click", goTo_dateEnd_min);
+function goTo_dateEnd_min() {
+    dateEnd.value = dateEnd.getAttribute("min");
+}
+
+const goToLast_dE = document.querySelector(".timeRangeQuery #goToLast_dE");
+goToLast_dE.addEventListener("click", goTo_dateEnd_max);
+function goTo_dateEnd_max() {
+    dateEnd.value = dateEnd.getAttribute("max");
+    timeEnd.value = "23:59:59";
+}
+
+const goToPrevious_dE = document.querySelector(".timeRangeQuery #goToPrevious_dE");
+goToPrevious_dE.addEventListener("click", move_dateEnd_forward1Day);
+function move_dateEnd_forward1Day() {
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
+    }
+
+    yy_dE = dateEnd.value.split("-")[0];
+    if (Number(yy_dE) < 1000) {
+        return 0;
+    }
+
+    let raw_dE_old = Convert_date_To_rawDT(dateEnd.value);
+    let raw_dE_temp = new Date(raw_dE_old.getTime() - 1000 * 60 * 60 * 24);
+
+    let yy_dE_new = String(raw_dE_temp.getFullYear()).padStart(4, '0');
+    let mm_dE_new = String(raw_dE_temp.getMonth() + 1).padStart(2, '0');
+    let dd_dE_new = String(raw_dE_temp.getDate()).padStart(2, '0');
+
+    dateEnd.value = yy_dE_new + "-" + mm_dE_new + "-" + dd_dE_new;
+
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+const goToNext_dE = document.querySelector(".timeRangeQuery #goToNext_dE");
+goToNext_dE.addEventListener("click", move_dateEnd_back1Day);
+function move_dateEnd_back1Day() {
+    if (dateEnd.value === "") {
+        console.log('dateEnd.value === ""');
+        return 0;
+    }
+
+    yy_dE = dateEnd.value.split("-")[0];
+    if (Number(yy_dE) < 1000) {
+        return 0;
+    }
+
+    let raw_dE_old = Convert_date_To_rawDT(dateEnd.value);
+    let raw_dE_temp = new Date(raw_dE_old.getTime() + 1000 * 60 * 60 * 24);
+
+    let yy_dE_new = String(raw_dE_temp.getFullYear()).padStart(4, '0');
+    let mm_dE_new = String(raw_dE_temp.getMonth() + 1).padStart(2, '0');
+    let dd_dE_new = String(raw_dE_temp.getDate()).padStart(2, '0');
+
+    dateEnd.value = yy_dE_new + "-" + mm_dE_new + "-" + dd_dE_new;
+
+    Limit_dateEnd(raw_dE_temp, dateEnd.getAttribute("min"), dateEnd.getAttribute("max"));
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+const window_WrongDataSet = document.querySelector(".alert_WrongDataSet");
+const alertMessage = document.querySelector(".alert_WrongDataSet p");
+
+const btn_Query = document.querySelector(".timeRangeQuery #btn_Query");
+btn_Query.addEventListener("click", QueryLog);
+function QueryLog() {
+    if (dateStart.value === "") {
+        alertMessage.textContent = "開始日期設定有誤！";
+        window_WrongDataSet.classList.add("appear");
+    } else if (timeStart.value.length !== 8) {
+        alertMessage.textContent = "開始時間設定有誤！";
+        window_WrongDataSet.classList.add("appear");
+    } else if (dateEnd.value === "") {
+        alertMessage.textContent = "結束日期設定有誤！";
+        window_WrongDataSet.classList.add("appear");
+    } else if (timeEnd.value.length !== 8) {
+        alertMessage.textContent = "結束時間設定有誤！";
+        window_WrongDataSet.classList.add("appear");
+    } else {
+        console.log("Query from '" + dateStart.value + " " + timeStart.value + "' to '" + dateEnd.value + " " + timeEnd.value + "'.")
+
+
+
+
+    }
+}
+
+const closeWB_No_WrongDataSet = document.querySelector(".alert_WrongDataSet #closeWB_No");
+closeWB_No_WrongDataSet.addEventListener("click", close_WrongDataSet_No);
+function close_WrongDataSet_No() {
+    window_WrongDataSet.classList.remove("appear");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,111 +671,26 @@ $(document).ready(function () {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-// let raw_DT_now = new Date();
+sd = document.querySelector(".block_temp #Startdate");
+st = document.querySelector(".block_temp #Starttime");
+ed = document.querySelector(".block_temp #Enddate");
+et = document.querySelector(".block_temp #Endtime");
 
-// let yy_now = raw_DT_now.getFullYear();
-// let mm_now = String(raw_DT_now.getMonth() + 1).padStart(2, '0');
-// let dd_now = String(raw_DT_now.getDate()).padStart(2, '0');
-// let hh_now = String(raw_DT_now.getHours()).padStart(2, '0');
-// let m_now = String(raw_DT_now.getMinutes()).padStart(2, '0');
-// let ss_now = String(raw_DT_now.getSeconds()).padStart(2, '0');
-
-// sd = document.querySelector(".block_temp #Startdate");
-// st = document.querySelector(".block_temp #Starttime");
-// ed = document.querySelector(".block_temp #Enddate");
-// et = document.querySelector(".block_temp #Endtime");
-
-// sd.value = yy_now + "-" + mm_now + "-" + dd_now;
-// st.value = "00:00:00";
-// ed.value = yy_now + "-" + mm_now + "-" + dd_now;
-// et.value = hh_now + ":" + m_now + ":" + ss_now;
-
-// sd.setAttribute("min", "2015-03-21");
-// sd.setAttribute("max", yy_now + "-" + mm_now + "-" + dd_now);
-// ed.setAttribute("min", yy_now + "-" + mm_now + "-" + dd_now);
-// ed.setAttribute("max", yy_now + "-" + mm_now + "-" + dd_now);
-
-
-// let mno = document.querySelector(".block_temp #printVal_01");
-// let nop = document.querySelector(".block_temp #printVal_02");
-
-// sd.addEventListener("change", print_abc);
-// function print_abc() {
-    // mno.textContent = sd.value;
-    //     let yy_sd = Number(sd.value[0] + sd.value[1] + sd.value[2] + sd.value[3]);
-    //     let mm_sd = Number(sd.value[5] + sd.value[6]) - 1;
-    //     let dd_sd = Number(sd.value[8] + sd.value[9]);
-
-    //     let raw_sd = new Date(yy_sd, mm_sd, dd_sd);
-    //     let raw_sd_plus_90d = new Date(raw_sd.getTime() + 1000 * 60 * 60 * 24 * 90);
-
-    //     raw_DT_now = new Date();
-    //     let raw_ed_max;
-    //     if (raw_sd_plus_90d > raw_DT_now) {
-    //         raw_ed_max = raw_DT_now;
-    //     } else {
-    //         raw_ed_max = raw_sd_plus_90d;
-    //     }
-
-    //     let yy_ed_max = raw_ed_max.getFullYear();
-    //     let mm_ed_max = String(raw_ed_max.getMonth() + 1).padStart(2, '0');
-    //     let dd_ed_max = String(raw_ed_max.getDate()).padStart(2, '0');
-
-    //     let ed_max = yy_ed_max + "-" + mm_ed_max + "-" + dd_ed_max;
-
-    //     ed.setAttribute("min", sd.value);
-    //     ed.setAttribute("max", ed_max);
-
-    //     yy_ed_old = Number(ed.value[0] + ed.value[1] + ed.value[2] + ed.value[3]);
-    //     mm_ed_old = Number(ed.value[5] + ed.value[6]) - 1;
-    //     dd_ed_old = Number(ed.value[8] + ed.value[9]);
-
-    //     let raw_ed_old = new Date(yy_ed_old, mm_ed_old, dd_ed_old);
-    //     if (raw_ed_old < raw_sd) {
-    //         ed.value = sd.value;
-    //     } else if (raw_ed_old > raw_ed_max) {
-    //         ed.value = ed_max;
-    //     }
-
-    //     // alert(raw_ed_old);
+// let schedule_02 = setInterval(qaz12, 1000);
+// function qaz12() {
+//     console.log(st.value);
 // }
 
-// ed.addEventListener("change", print_def);
-// function print_def() {
-//     nop.textContent = ed.value;
-//     let yy_sd = Number(sd.value[0] + sd.value[1] + sd.value[2] + sd.value[3]);
-//     let mm_sd = Number(sd.value[5] + sd.value[6]) - 1;
-//     let dd_sd = Number(sd.value[8] + sd.value[9]);
+const btn_test_01 = document.querySelector(".block_temp #btn_test_01");
+btn_test_01.addEventListener("click", b_test_01);
+function b_test_01() {
 
-//     let raw_sd = new Date(yy_sd, mm_sd, dd_sd);
-//     let raw_sd_plus_90d = new Date(raw_sd.getTime() + 1000 * 60 * 60 * 24 * 90);
+}
 
-//     raw_DT_now = new Date();
-//     let raw_ed_max;
-//     if (raw_sd_plus_90d > raw_DT_now) {
-//         raw_ed_max = raw_DT_now;
-//     } else {
-//         raw_ed_max = raw_sd_plus_90d;
-//     }
-
-//     let yy_ed_max = raw_ed_max.getFullYear();
-//     let mm_ed_max = String(raw_ed_max.getMonth() + 1).padStart(2, '0');
-//     let dd_ed_max = String(raw_ed_max.getDate()).padStart(2, '0');
-
-//     let ed_max = yy_ed_max + "-" + mm_ed_max + "-" + dd_ed_max;
-
-//     yy_ed_set = Number(ed.value[0] + ed.value[1] + ed.value[2] + ed.value[3]);
-//     mm_ed_set = Number(ed.value[5] + ed.value[6]) - 1;
-//     dd_ed_set = Number(ed.value[8] + ed.value[9]);
-
-//     let raw_ed_set = new Date(yy_ed_set, mm_ed_set, dd_ed_set);
-//     if (raw_ed_set < raw_sd) {
-//         ed.value = sd.value;
-//     } else if (raw_ed_set > raw_ed_max) {
-//         ed.value = ed_max;
-//     }
-// }
-
-
-
-
+const btn_test_02 = document.querySelector(".block_temp #btn_test_02");
+btn_test_02.addEventListener("click", b_test_02);
+function b_test_02() {
+    console.log(st.value);
+    console.log(st.value.length);
+    console.log(typeof st.value.length);
+}
