@@ -38,19 +38,48 @@ app.get("/operateinfo/pcs", async (req, res) => {
   }
 });
 
-// app.get("/operateinfo/pcs", (req, res) => {
-//     // num與fun
-//     res.render("Op_PCS_InfoSummary");
-//   });
+app.get("/operateinfo/pcs", async (req, res) => {
+  try {
+    // 從資料庫中獲取 LC 資料
+    const lcData = await LC.find(); // 假設你要獲取所有 LC 資料
 
-//   //單台pcs狀態
-//   app.get("/operateinfo/pcs/state", (req, res) => {
-//     // num與fun
-//     res.render("Op_PCS_InfoDetail");
-//   });
+    // 將資料傳遞到 EJS 模板或進行其他操作
+    res.render("Op_PCS_InfoSummary", { lcData });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
-//   //單台pcs警告
-//   app.get("/operateinfo/pcs/alarm", (req, res) => {
-//     // num與fun
-//     res.render("Op_PCS_Alarm");
-//   });
+//單台pcs狀態
+app.get("/operateinfo/pcs/state", (req, res) => {
+  // num與fun
+  res.render("Op_PCS_InfoDetail");
+});
+
+//單台pcs警告
+app.get("/operateinfo/pcs/alarm", (req, res) => {
+  // num與fun
+  res.render("Op_PCS_Alarm");
+});
+
+app.get("/operateinfo/pcs1/state", (req, res) => {
+  // num與fun
+  res.render("Op_PCS_InfoDetail");
+});
+
+// //單台pcs警告
+// app.get("/operateinfo/pcs1/alarm", (req, res) => {
+//   // num與fun
+//   res.render("Op_PCS_Alarm");
+// });
+
+// app.get("/operateinfo/pcs2/state", (req, res) => {
+//   // num與fun
+//   res.render("Op_PCS_InfoDetail");
+// });
+
+// //單台pcs警告
+// app.get("/operateinfo/pcs2/alarm", (req, res) => {
+//   // num與fun
+//   res.render("Op_PCS_Alarm");
+// });
