@@ -7,25 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
     <title>歷史圖</title>
 
-    <link rel="stylesheet" href="styles/bootstrap.min.css"> <!--bootstrap-->
-    <link rel="stylesheet" href="styles/jquery-ui.css"> <!--For datepicker / timepicker-->
-    <link rel="stylesheet" href="styles/jquery.timepicker.min.css">
-    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
-    <link href="styles/Fig_Historic.css" rel="stylesheet" type="text/css" />
-    <link href="styles/reset.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../public/styles/bootstrap.min.css"> <!--bootstrap-->
+    <link rel="stylesheet" href="../public/styles/jquery-ui.css"> <!--For datepicker / timepicker-->
+    <link rel="stylesheet" href="../public/styles/jquery.timepicker.min.css">
+    <link href="../public/styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/Fig_Historic.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/reset.css" rel="stylesheet" type="text/css" />
 
 
     <!-- jQuery library -->
-    <script src="scripts/3.6.4-jquery.slim.min.js"></script>
+    <script src="../public/scripts/3.6.4-jquery.slim.min.js"></script>
     <!-- Latest compiled JavaScript -->
-    <script src="scripts/bootstrap.bundle.min.js"></script>
+    <script src="../public/scripts/bootstrap.bundle.min.js"></script>
 
     <!--datepicker / timepicker-->
-    <script src="scripts/jquery-3.6.0.js"></script>
-    <script src="scripts/jquery-ui.js"></script>
-    <script src="scripts/jquery.timepicker.min.js"></script>
+    <script src="../public/scripts/jquery-3.6.0.js"></script>
+    <script src="../public/scripts/jquery-ui.js"></script>
+    <script src="../public/scripts/jquery.timepicker.min.js"></script>
 
-    <script src="scripts/chart.js"></script><!--繪圖-->
+    <script src="../public/scripts/chart.js"></script><!--繪圖-->
 
 
 
@@ -33,11 +33,11 @@
 
 <body style="font-family: 'Lato', sans-serif;">
     <div class="T_Main" style="position:fixed; z-index: 10;">
-        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <img src="../public/images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
         <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
         <div class="dateTime_Username">
             <label id="dateTime_Now">2000/01/01 23:59:59</label>
-            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <img src="../public/images/User_Pic.png" alt="使用者圖示" id="user_Logo">
             <label for="qaz" id="userAccount">Administrator</label>
             <div class="accountNavBar">
                 <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
@@ -51,9 +51,9 @@
         <div class="systemStatus" style="font-size:0">
             <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
             <div class="sumAWNum sumAlarmNum">
-                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <img src="../public/images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalAlarmNum">999</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
                 <div class="sumAW_EachArea sumAlarm_EachArea">
                     <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
                     <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
@@ -63,9 +63,9 @@
                 </div>
             </div>
             <div class="sumAWNum sumWarningNum">
-                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <img src="../public/images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalWarningNum">52</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
                 <div class="sumAW_EachArea sumWarning_EachArea">
                     <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
                     </div>
@@ -126,14 +126,14 @@
             </div>
         </div>
         <div class="eStop">
-            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <img src="../public/images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
             <p class="epo_word">緊急停止鈕</p>
         </div>
 
         <div class="popUpWindow epo">
             <h2 class="titlePUW">緊急停止設定</h2>
 
-            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <img src="../public/images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
             <p class="epoInfo">確認停機</p>
 
             <button class="closeWindowButton" id="closeWB_Yes">確認</button>
@@ -163,10 +163,10 @@
                     style="display: inline-block; width: 800; height:400;"></canvas>
             </div>
             <div class="board">
-                <button class="top-btn" title="螢幕擷取" style="margin-left:25px"><img src="images/screenshot.svg"
+                <button class="top-btn" title="螢幕擷取" style="margin-left:25px"><img src="../public/images/screenshot.svg"
                         style="width:20px" onclick=""></button>
-                <button class="top-btn" title="放大"><img src="images/plus.svg" style="width:20px" onclick=""></button>
-                <button class="top-btn" title="縮小"><img src="images/dash.svg" style="width:20px" onclick=""></button>
+                <button class="top-btn" title="放大"><img src="../public/images/plus.svg" style="width:20px" onclick=""></button>
+                <button class="top-btn" title="縮小"><img src="../public/images/dash.svg" style="width:20px" onclick=""></button>
 
                 <!--篩選欄位-->
 
@@ -175,11 +175,11 @@
 
                     <p>起始時間</p>
                     <div class="inputblock">
-                        <span class="filtericon"><img src="images/calendar.svg"></span>
+                        <span class="filtericon"><img src="../public/images/calendar.svg"></span>
                         <input type="text" id="fromDate" placeholder="yyyy-mm-dd" autocomplete="off" required>
                     </div>
                     <div class="inputblock">
-                        <span class="filtericon"><img src="images/clock.svg"></span>
+                        <span class="filtericon"><img src="../public/images/clock.svg"></span>
                         <input type="text" id="fromTime" placeholder="00:00:00" autocomplete="off" required>
                     </div>
 
@@ -187,13 +187,13 @@
 
                     <p style="margin-top:10px">結束時間</p>
                     <div class="inputblock">
-                        <span class="filtericon"><img src="images/calendar.svg"></span>
+                        <span class="filtericon"><img src="../public/images/calendar.svg"></span>
                         <input type="text" id="toDate" placeholder="yyyy-mm-dd" autocomplete="off" required>
                     </div>
 
 
                     <div class="inputblock">
-                        <span class="filtericon"><img src="images/clock.svg"></span>
+                        <span class="filtericon"><img src="../public/images/clock.svg"></span>
                         <input type="text" id="toTime" placeholder="00:00:00" autocomplete="off" required>
                     </div>
 
@@ -216,8 +216,8 @@
     </div>
 
 
-    <script src="scripts/script_template.js"></script>
-    <script src="scripts/Fig_Historic.js"></script>
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/Fig_Historic.js"></script>
 
 
 </body>

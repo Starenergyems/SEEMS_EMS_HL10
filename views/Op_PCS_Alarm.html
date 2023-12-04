@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
     <title>PCS故障告警</title>
-    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
-    <link href="styles/Op_PCS_Alarm.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/Op_PCS_Alarm.css" rel="stylesheet" type="text/css" />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
 </head>
 
 <body>
     <div class="T_Main">
-        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <img src="../public/images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
         <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
         <div class="dateTime_Username">
             <label id="dateTime_Now">2000/01/01 23:59:59</label>
-            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <img src="../public/images/User_Pic.png" alt="使用者圖示" id="user_Logo">
             <label for="qaz" id="userAccount">Administrator</label>
             <div class="accountNavBar">
                 <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
@@ -31,9 +31,9 @@
         <div class="systemStatus">
             <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
             <div class="sumAWNum sumAlarmNum">
-                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <img src="../public/images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalAlarmNum">999</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
                 <div class="sumAW_EachArea sumAlarm_EachArea">
                     <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
                     <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
@@ -43,9 +43,9 @@
                 </div>
             </div>
             <div class="sumAWNum sumWarningNum">
-                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <img src="../public/images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalWarningNum">52</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
                 <div class="sumAW_EachArea sumWarning_EachArea">
                     <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
                     </div>
@@ -106,14 +106,14 @@
             </div>
         </div>
         <div class="eStop">
-            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <img src="../public/images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
             <p class="epo_word">緊急停止鈕</p>
         </div>
 
         <div class="popUpWindow epo">
             <h2 class="titlePUW">緊急停止設定</h2>
 
-            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <img src="../public/images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
             <p class="epoInfo">確認停機</p>
 
             <button class="closeWindowButton" id="closeWB_Yes">確認</button>
@@ -126,7 +126,7 @@
             <!-- <h2>模式控制</h2> -->
             <div class="button_sNB" id="sNB_01">
                 <a href="Op_Meter_SLD.html" class="name_button_sNB">單線圖</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
                 <div class="ssNavBar">
                     <a href="Op_Meter_SLD.html" id="ssNB_01">電力單線圖</a>
                     <a href="Op_Meter_MainMeter.html" id="ssNB_02">主電表</a>
@@ -135,7 +135,7 @@
             </div>
             <div class="button_sNB default_sNB" id="sNB_02">
                 <a href="Op_PCS_InfoSummary.html" class="name_button_sNB">PCS</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
                 <div class="ssNavBar">
                     <a href="Op_PCS_InfoDetail.html" id="ssNB_01">PCS 1-1</a>
                     <a href="Op_PCS_InfoDetail.html" id="ssNB_02">PCS 1-2</a>
@@ -148,7 +148,7 @@
             </div>
             <div class="button_sNB button_sNB_last" id="sNB_03">
                 <a href="Op_Bat_InfoSummary.html" class="name_button_sNB">電池</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
                 <div class="ssNavBar">
                     <a href="Op_Bat_InfoDetail.html" id="ssNB_01">BMS 1-1</a>
                     <a href="Op_Bat_InfoDetail.html" id="ssNB_02">BMS 1-2</a>
@@ -343,8 +343,8 @@
         </div>
     </div>
 
-    <script src="scripts/script_template.js"></script>
-    <script src="scripts/Op_PCS_Alarm.js"></script>
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/Op_PCS_Alarm.js"></script>
 </body>
 
 </html>

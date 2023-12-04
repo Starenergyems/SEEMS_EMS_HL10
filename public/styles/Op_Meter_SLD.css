@@ -252,21 +252,21 @@
 }
 
 /* /////////////////////////////////////////////////// */
-.oilTemp #bar_TR2 {
+.oilTemp #thermoBar_TR2 {
     background-color: #236E37;
     height: 2px;
 }
 
-.oilTemp #bottom_TR2 {
+.oilTemp #thermoBot_TR2 {
     background-color: #236E37;
 }
 
-.oilTemp #bar_TR3 {
+.oilTemp #thermoBar_TR3 {
     background-color: #E53935;
     height: 32px;
 }
 
-.oilTemp #bottom_TR3 {
+.oilTemp #thermoBot_TR3 {
     background-color: #E53935;
 }
 
@@ -468,13 +468,3 @@
 .info_RelayVCB .closeWindowButton {
     margin: 20px 0px 0px 255px;
 }
-
-/* //////////////////////////////////////////////////////////////////////////// */
-/* .popUpWindow.dataStatus_Set {
-    display: block;
-} */
-
-
-
-
-/* //////////////////////////////////////////////////////////////////////////// */

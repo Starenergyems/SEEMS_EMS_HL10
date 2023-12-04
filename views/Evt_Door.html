@@ -7,18 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
     <title>門禁紀錄</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"><!--dataTable-->
-    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
-    <link href="styles/Evt_Door.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/Evt_Door.css" rel="stylesheet" type="text/css" />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
 </head>
 
 <body>
     <div class="T_Main">
-        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <img src="../public/images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
         <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
         <div class="dateTime_Username">
             <label id="dateTime_Now">2000/01/01 23:59:59</label>
-            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <img src="../public/images/User_Pic.png" alt="使用者圖示" id="user_Logo">
             <label for="qaz" id="userAccount">Administrator</label>
             <div class="accountNavBar">
                 <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
@@ -32,9 +32,9 @@
         <div class="systemStatus">
             <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
             <div class="sumAWNum sumAlarmNum">
-                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <img src="../public/images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalAlarmNum">999</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
                 <div class="sumAW_EachArea sumAlarm_EachArea">
                     <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
                     <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
@@ -44,9 +44,9 @@
                 </div>
             </div>
             <div class="sumAWNum sumWarningNum">
-                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <img src="../public/images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalWarningNum">52</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
                 <div class="sumAW_EachArea sumWarning_EachArea">
                     <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
                     </div>
@@ -107,14 +107,14 @@
             </div>
         </div>
         <div class="eStop">
-            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <img src="../public/images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
             <p class="epo_word">緊急停止鈕</p>
         </div>
 
         <div class="popUpWindow epo">
             <h2 class="titlePUW">緊急停止設定</h2>
 
-            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <img src="../public/images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
             <p class="epoInfo">確認停機</p>
 
             <button class="closeWindowButton" id="closeWB_Yes">確認</button>
@@ -139,7 +139,7 @@
                 <button class="clickBut" id="filtNone">總覽</button>
                 <div class="filter filtDevice">
                     <p>設備</p>
-                    <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtDevice">
+                    <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtDevice">
                     <div class="filtOptions">
                         <button class="filtOpt" id="deviceFO_01">控制室</button>
                         <button class="filtOpt" id="deviceFO_02">貨櫃1-1</button>
@@ -153,7 +153,7 @@
                 </div>
                 <div class="filter filtLocation">
                     <p>地點</p>
-                    <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtLocation">
+                    <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtLocation">
                     <div class="filtOptions">
                         <button class="filtOpt" id="locationFO_01">控制室</button>
                         <button class="filtOpt" id="locationFO_02">貨櫃</button>
@@ -166,17 +166,17 @@
                     <p>時間區間查詢</p>
                     <div class="setStartEnd">
                         <div class="setStartTime">開始時間
-                            <img src="images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst"><img
-                                src="images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious">
+                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst"><img
+                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious">
                             <input type="date" id="dateStart"><input type="time" id="timeStart">
-                            <img src="images/GoToNext.png" alt="移至下一個時間段" id="goToNext"><img src="images/GoToLast.png"
+                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext"><img src="../public/images/GoToLast.png"
                                 alt="移至最後一個時間段" id="goToLast">
                         </div>
                         <div class="setEndTime">結束時間
-                            <img src="images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst"><img
-                                src="images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious">
+                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst"><img
+                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious">
                             <input type="date" id="dateEnd"><input type="time" id="timeEnd">
-                            <img src="images/GoToNext.png" alt="移至下一個時間段" id="goToNext"><img src="images/GoToLast.png"
+                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext"><img src="../public/images/GoToLast.png"
                                 alt="移至最後一個時間段" id="goToLast">
                         </div>
                     </div>
@@ -213,8 +213,8 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script><!--dataTable-->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!--dataTable-->
-    <script src="scripts/script_template.js"></script>
-    <script src="scripts/Evt_Door.js"></script>
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/Evt_Door.js"></script>
 </body>
 
 </html>

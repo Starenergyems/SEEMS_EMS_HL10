@@ -163,7 +163,7 @@ $(document).ready(function () {
             { data: "description" },
             { data: "value" },
             { data: "index", render: function (data, type, row) { return '<input type="checkbox" class="chb_Ack" id=chb_Ack_' + data + '>' } },
-            { data: "ended", render: function (data, type, row) { if (data === "1") { return '<img src="/images/Recover_Logo_v1.png" alt="復歸圖示">' } else { return '' } } },
+            { data: "ended", render: function (data, type, row) { if (data === "1") { return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">' } else { return '' } } },
             { data: "endTime" },
         ]
 
