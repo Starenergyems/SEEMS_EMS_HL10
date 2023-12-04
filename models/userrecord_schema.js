@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { ObjectId } = mongoose.Types;
 
-const userhisSchema = new Schema({
+const userrecordSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   time: Date,
   record: {
