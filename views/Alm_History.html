@@ -182,21 +182,21 @@
                     <p>時間區間查詢</p>
                     <div class="setStartEnd">
                         <div class="setStartTime">開始時間
-                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst"><img
-                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious">
-                            <input type="date" id="dateStart"><input type="time" id="timeStart">
-                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext"><img src="../public/images/GoToLast.png"
-                                alt="移至最後一個時間段" id="goToLast">
+                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst_dS"><img
+                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious_dS">
+                            <input type="date" id="dateStart"><input type="time" step="1" id="timeStart">
+                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext_dS"><img src="../public/images/GoToLast.png"
+                                alt="移至最後一個時間段" id="goToLast_dS">
                         </div>
                         <div class="setEndTime">結束時間
-                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst"><img
-                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious">
-                            <input type="date" id="dateEnd"><input type="time" id="timeEnd">
-                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext"><img src="../public/images/GoToLast.png"
-                                alt="移至最後一個時間段" id="goToLast">
+                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst_dE"><img
+                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious_dE">
+                            <input type="date" id="dateEnd"><input type="time" step="1" id="timeEnd">
+                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext_dE"><img src="../public/images/GoToLast.png"
+                                alt="移至最後一個時間段" id="goToLast_dE">
                         </div>
                     </div>
-                    <button class="btn_Query">查詢</button>
+                    <button id="btn_Query">查詢</button>
                 </div>
             </div>
 
@@ -220,6 +220,11 @@
 
 
 
+            </div>
+
+            <div class="popUpWindow alert_WrongDataSet">
+                <p>有誤！</p>
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
             </div>
         </div>
     </div>

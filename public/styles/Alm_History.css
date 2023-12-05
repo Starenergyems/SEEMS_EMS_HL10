@@ -84,7 +84,7 @@
 
 .title .space_div {
     display: inline-block;
-    width: calc(100% - 6% - 1395px);
+    width: calc(100% - 6% - 1425px);
     min-width: 10px;
 }
 
@@ -110,6 +110,7 @@
 .title .setStartEnd img {
     display: inline-block;
     margin: 2px 0px 0px 1px;
+    cursor: pointer;
 }
 
 .title .setStartEnd input {
@@ -126,7 +127,7 @@
     margin-left: 1px;
 }
 
-.title .timeRangeQuery .btn_Query {
+.title .timeRangeQuery #btn_Query {
     display: inline-block;
     background-color: #FFFFFF;
     box-sizing: border-box;
@@ -137,6 +138,7 @@
     font-size: 20px;
     border-radius: 5px;
     vertical-align: top;
+    cursor: pointer;
 }
 
 .almHistory {
@@ -149,4 +151,23 @@
 table.dataTable tbody td {
     /* padding-top: 5px; */
     padding-top: 6px;
+}
+
+.alert_WrongDataSet {
+    height: 200px;
+    width: 320px;
+    left: 560px;
+    top: 280px;
+}
+
+.alert_WrongDataSet p {
+    margin: 40px 35px 0px;
+    font-size: 20px;
+    color: #FF0000;
+    line-height: 25px;
+    text-align: center;
+}
+
+.alert_WrongDataSet .closeWindowButton {
+    margin: 25px 0px 0px 130px;
 }

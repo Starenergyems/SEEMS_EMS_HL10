@@ -218,16 +218,6 @@ table.dataTable tbody td {
     font-size: 16px;
 }
 
-.block_temp .printVal {
-    border: 1px solid #000000;
-    margin: 1px;
-    font-size: 16px;
-}
-
-.block_temp #printVal_01 {
-    margin-top: 280px;
-}
-
 .block_temp .btn_test {
     border: 1px solid #000000;
     margin: 2px 5px 2px 0px;
