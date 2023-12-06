@@ -1,0 +1,42 @@
+version: '1.0'
+
+services:
+  ems-db:
+    # restart: always
+    image: mongo:latest
+    container_name: ems-db
+    # command: --replSet rs0 --oplogSize 128
+    volumes:
+      - db:/data/db
+    ports:
+      - "27017:27017"
+    # environment:
+      # - POSTGRES_DB=postgres
+      # - POSTGRES_USER=postgres
+      # - POSTGRES_PASSWORD=postgres
+    networks:
+      - service-network
+
+  ems-service:
+    # restart: always
+    build: .
+    container_name: ems-service
+    # volumes:
+    #   - ./backend/Test:/app
+    ports:
+      - "3000:3000"
+    # environment:
+      # - POSTGRES_NAME=postgres
+      # - POSTGRES_USER=postgres
+      # - POSTGRES_PASSWORD=postgres
+    networks:
+      - service-network
+    depends_on:
+      - ems-db
+
+networks:
+  service-network:
+    attachable: true
+
+volumes:
+  db:
