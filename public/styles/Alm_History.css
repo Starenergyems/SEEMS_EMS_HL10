@@ -171,3 +171,35 @@ table.dataTable tbody td {
 .alert_WrongDataSet .closeWindowButton {
     margin: 25px 0px 0px 130px;
 }
+
+.block_temp {
+    display: none;
+    background-color: #fa0;
+    height: 300px;
+    width: 400px;
+
+    position: absolute;
+    right: 350px;
+    top: -150px;
+}
+
+.block_temp .btn_test {
+    border: 1px solid #000000;
+    margin: 2px;
+    font-size: 18px;
+    line-height: 23px;
+}
+
+.block_temp span {
+    /* background-color: #aaf; */
+    display: inline-block;
+    width: 90px;
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.block_temp .inText_test {
+    border: 1px solid #000000;
+    font-size: 18px;
+    line-height: 23px;
+}

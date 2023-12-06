@@ -566,5 +566,70 @@ $(document).ready(function () {
 
     })
 
+    // block_temp
+    // btn_test_01
+    // inText_test_01
+
+    const inText_test_01 = document.querySelector(".block_temp #inText_test_01");
+    const inText_test_02 = document.querySelector(".block_temp #inText_test_02");
+    const inText_test_03 = document.querySelector(".block_temp #inText_test_03");
+    const inText_test_04 = document.querySelector(".block_temp #inText_test_04");
+    const inText_test_05 = document.querySelector(".block_temp #inText_test_05");
+    const inText_test_06 = document.querySelector(".block_temp #inText_test_06");
+    const inText_test_07 = document.querySelector(".block_temp #inText_test_07");
+    const inText_test_08 = document.querySelector(".block_temp #inText_test_08");
+
+    const btn_test_01 = document.querySelector(".block_temp #btn_test_01");
+    btn_test_01.addEventListener("click", function () { addOneLog(dataset); });
+    function addOneLog(tableDataset) {
+        // inText_test_03.value = inText_test_01.value + inText_test_02.value;
+
+        let newLog = {
+            "index": "12",
+            "startTime": "2023/11/21 01:23:45.123",
+            "place": "控制室qaz",
+            "deviceName": "HVAC-1_wsx",
+            "almLevel": "警告_rfv",
+            "description": "HVAC-1通訊異常_tgb",
+            "value": "Comm error_ujm",
+            "endTime": "2023/11/21 21:32:54.321",
+        };
+
+        let i = 2;
+        console.log(tableDataset[i]["index"] + "_~_" + tableDataset[i]["place"] + "_~_" + tableDataset[i]["deviceName"] + "_~_" + tableDataset[i]["value"]);
+        // console.log(tableDataset);
+        // tableDataset.push(newLog);
+        // console.log(tableDataset);
+
+        // var dataset = [{
+        //     "index": "1",
+        //     "startTime": "2023/09/01 15:23:10.123",
+        //     "place": "控制室",
+        //     "deviceName": "HVAC-1",
+        //     "almLevel": "警告",
+        //     "description": "HVAC-1通訊異常",
+        //     "value": "Comm error",
+        //     "endTime": ""
+        // }],
+    }
+
+    const btn_test_02 = document.querySelector(".block_temp #btn_test_02");
+    btn_test_02.addEventListener("click", b_test_02);
+    function b_test_02() {
+        console.log("qaz123w");
+    }
+
+    const btn_test_03 = document.querySelector(".block_temp #btn_test_03");
+    btn_test_03.addEventListener("click", b_test_03);
+    function b_test_03() {
+        console.log("qaz456");
+    }
+
+    const btn_test_04 = document.querySelector(".block_temp #btn_test_04");
+    btn_test_04.addEventListener("click", b_test_04);
+    function b_test_04() {
+        console.log("qaz789");
+    }
+
 });
 
