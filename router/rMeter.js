@@ -45,7 +45,7 @@ app.get("/operateinfo/mainmerter", async (req, res) => {
       throw new Error("No data found");
     }
 
-    const properties = [
+    const propertiesForFreq = [
       "408001",
       "408003",
       "408005",
@@ -58,6 +58,7 @@ app.get("/operateinfo/mainmerter", async (req, res) => {
       "408019",
       "408021",
       "408023",
+      "408025",
       "408026",
       "408028",
       "408030",
@@ -67,7 +68,7 @@ app.get("/operateinfo/mainmerter", async (req, res) => {
 
     const data = {};
 
-    properties.forEach((property) => {
+    propertiesForFreq.forEach((property) => {
       data[property] = other1Data.Freq[property];
     });
 
@@ -83,7 +84,8 @@ app.get("/operateinfo/mainmerter", async (req, res) => {
       408017: curr_avg,
       408019: activePower,
       408021: reactivePower,
-      408023: powerFactor,
+      408023: apparentPower,
+      408025: powerFactor,
       408026: Freq,
       408028: kwh_imp,
       408030: kwh_exp,
@@ -93,23 +95,24 @@ app.get("/operateinfo/mainmerter", async (req, res) => {
 
     // 將數據傳遞給 EJS 模板，包括所有變數
     res.render("Op_Meter_MainMeter", {
-      volt_ab,
-      volt_bc,
-      volt_ca,
-      volt_avg,
-      curr_a,
-      curr_b,
-      curr_c,
-      curr_n,
-      curr_avg,
-      activePower,
-      reactivePower,
-      powerFactor,
-      Freq,
-      kwh_imp,
-      kwh_exp,
-      kvarh_imp,
-      kvarh_exp,
+      volt_ab: volt_ab.toFixed(1), // 保留兩位小數
+      volt_bc: volt_bc.toFixed(1),
+      volt_ca: volt_ca.toFixed(1),
+      volt_avg: volt_avg.toFixed(1),
+      curr_a: curr_a.toFixed(2),
+      curr_b: curr_b.toFixed(2),
+      curr_c: curr_c.toFixed(2),
+      curr_n: curr_n.toFixed(2),
+      curr_avg: curr_avg.toFixed(2),
+      activePower: activePower.toFixed(1),
+      reactivePower: reactivePower.toFixed(1),
+      apparentPower: apparentPower.toFixed(1),
+      powerFactor: powerFactor.toFixed(3),
+      Freq: Freq.toFixed(2),
+      kwh_imp: kwh_imp.toFixed(1),
+      kwh_exp: kwh_exp.toFixed(1),
+      kvarh_imp: kvarh_imp.toFixed(1),
+      kvarh_exp: kvarh_exp.toFixed(1),
       other1Data, // 確保 other1Data 也被傳遞
     });
     // 將數據傳遞給 EJS 模板，包括所有變數

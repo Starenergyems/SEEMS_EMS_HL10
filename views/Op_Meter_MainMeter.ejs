@@ -490,7 +490,7 @@
             <tr class="row_other">
               <td class="col_01">電流_a</td>
               <td class="col_other">
-                <label id="I_a_Freq"><% curr_a %></label>
+                <label id="I_a_Freq"><%= curr_a %></label>
                 <P>A</P>
               </td>
               <td class="col_other">
@@ -513,7 +513,7 @@
             <tr class="row_other">
               <td class="col_01">電流_b</td>
               <td class="col_other">
-                <label id="I_b_Freq"><% curr_b %></label>
+                <label id="I_b_Freq"><%=curr_b %></label>
                 <P>A</P>
               </td>
               <td class="col_other">
@@ -536,7 +536,7 @@
             <tr class="row_other">
               <td class="col_01">電流_c</td>
               <td class="col_other">
-                <label id="I_c_Freq"><% curr_c %></label>
+                <label id="I_c_Freq"><%=curr_c %></label>
                 <P>A</P>
               </td>
               <td class="col_other">
@@ -559,7 +559,7 @@
             <tr class="row_other">
               <td class="col_01">視在功率</td>
               <td class="col_other">
-                <label id="S_Freq">4730.1</label>
+                <label id="S_Freq"><%=apparentPower %></label>
                 <p>kVA</p>
               </td>
               <td class="col_other">
@@ -582,7 +582,7 @@
             <tr class="row_other">
               <td class="col_01">功率因數</td>
               <td class="col_other">
-                <label id="PF_Freq">0.995</label>
+                <label id="PF_Freq"><%= powerFactor %></label>
                 <p></p>
               </td>
               <td class="col_other">
@@ -605,7 +605,7 @@
             <tr class="row_other">
               <td class="col_01">頻率</td>
               <td class="col_other">
-                <label id="Freq_Freq">59.963</label>
+                <label id="Freq_Freq"><%=Freq%></label>
                 <p>Hz</p>
               </td>
               <td class="col_other">
@@ -628,7 +628,7 @@
             <tr class="row_other">
               <td class="col_01">總輸入有效電能</td>
               <td class="col_other">
-                <label id="AE_imp_Freq">987654321.0</label>
+                <label id="AE_imp_Freq"><%= kwh_imp%></label>
                 <p>kWh</p>
               </td>
               <td class="col_other">
@@ -651,7 +651,7 @@
             <tr class="row_other">
               <td class="col_01">總輸出有效電能</td>
               <td class="col_other">
-                <label id="AE_exp_Freq">987654320.9</label>
+                <label id="AE_exp_Freq"><%= kwh_exp%></label>
                 <p>kWh</p>
               </td>
               <td class="col_other">
@@ -674,7 +674,7 @@
             <tr class="row_other">
               <td class="col_01">總輸入無效電能</td>
               <td class="col_other">
-                <label id="AE_imp_Freq">234567.8</label>
+                <label id="AE_imp_Freq"><%= kvarh_imp%></label>
                 <p>kVarh</p>
               </td>
               <td class="col_other">
@@ -697,7 +697,7 @@
             <tr class="row_other">
               <td class="col_01">總輸出無效電能</td>
               <td class="col_other">
-                <label id="AE_exp_Freq">234567.9</label>
+                <label id="AE_exp_Freq"><%= kvarh_exp%></label>
                 <p>kVarh</p>
               </td>
               <td class="col_other">
