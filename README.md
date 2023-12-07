@@ -4,7 +4,6 @@ SEEMS_EMS 程式管理
 
 檔案架構
 SEEMS_EMS
-├── images
 ├── models
 ├── node_modules
 ├── public
@@ -12,4 +11,8 @@ SEEMS_EMS
 │ ├── Set_SOC_ref
 │ ├── styles
 │ ├── images
-└── views
+├── views(存放 ejs)
+├── router
+│ ├── rAccount
+│ ├── rMeter
+│ ├── rPCS

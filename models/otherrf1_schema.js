@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 const { ObjectId } = mongoose.Types;
 // 創建一個Mongoose模式
-const lcSchema = new mongoose.Schema({
+const other1Schema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   time: Date,
   Freq: {
@@ -29,3 +29,6 @@ const lcSchema = new mongoose.Schema({
     time_log: Date,
   },
 });
+
+const Other1 = mongoose.model("Other1", other1Schema, "otherrf1");
+module.exports = Other1;

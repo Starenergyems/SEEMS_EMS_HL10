@@ -5,7 +5,7 @@ const Schema = require("./models/lc_schema");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
-
+const router = express.Router();
 mongoose
   .connect("mongodb://localhost:27017/ems")
   .then(() => {
@@ -47,7 +47,7 @@ app.get("/account/manage", (req, res) => {
 });
 
 //錯誤頁面
-app.get("error", (req, res) => {
+app.get("/error", (req, res) => {
   // num與fun
   res.render("error");
 });
@@ -55,3 +55,5 @@ app.get("error", (req, res) => {
 app.listen(port, () => {
   console.log("伺服器正在聆聽 port " + port + "...");
 });
+
+module.exports = router;
