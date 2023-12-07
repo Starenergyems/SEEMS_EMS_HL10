@@ -3,11 +3,14 @@
 下載node (版本 20.10.0)
 https://nodejs.org/en
 
-
 npm init
 npm install express express ejs
-npm install mongoose
+npm install mongoose //mongodb資料庫套件
 npm install method-override // use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
+(以上一定要裝)
+npm i express-session //session套件
+npm i dotenv //獲得環境變數
+npm i connect-flash //紀錄簡短訊息 例如登入成功與否
 
 
 設定app.js
@@ -27,8 +30,12 @@ Html 轉 ejs
 html檔案要轉ejs結尾
 連結其他檔案需更改位置　依照router去修改
 連結圖片需更改位置 
-    原本 <img src="/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
-    修改後  <img src="/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
+
+css的路徑
+"../public/styles/檔案名稱.css"
+圖片的路徑
+router的路徑
+ejs路徑:
 
     log要記得定期刪除
     dns層 指到不同網域

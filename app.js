@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Schema = require("./models/lc_schema");
+const Schema = require("./models/user_schema");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
@@ -22,7 +22,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // 創建一個Mongoose模型
-const DataModel = mongoose.model("Data", Schema, "account");
+const UserModel = mongoose.model("User", Schema, "account");
 
 //設定路由
 
@@ -50,7 +50,7 @@ app.get("/account/manage", (req, res) => {
 app.get("/sysctrl", (req, res) => {
   res.render("Mode_SysCtrl");
 });
-
+//  排程
 app.get("/schedule", (req, res) => {
   res.render("Mode_Schedule");
 });
@@ -80,6 +80,7 @@ app.get("/operateinfo/pcs", (req, res) => {
   // num與fun
   res.render("Op_PCS_InfoSummary");
 });
+
 //單台pcs狀態
 app.get("/operateinfo/pcs/state", (req, res) => {
   // num與fun
@@ -90,6 +91,17 @@ app.get("/operateinfo/pcs/alarm", (req, res) => {
   // num與fun
   res.render("Op_PCS_Alarm");
 });
+//多台切換(1-7)
+app.get("/operateinfo/pcs1/state", (req, res) => {
+  // num與fun
+  res.render("Op_PCS_InfoDetail");
+});
+//單台pcs警告
+app.get("/operateinfo/pcs1/alarm", (req, res) => {
+  // num與fun
+  res.render("Op_PCS_Alarm");
+});
+
 //電池
 app.get("/operateinfo/battery", (req, res) => {
   // num與fun
@@ -106,6 +118,16 @@ app.get("/operateinfo/battery/rack", (req, res) => {
   res.render("Op_Bat_Rack");
 });
 
+//多台電池狀態
+app.get("/operateinfo/battery1/state", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+//單台RACK
+app.get("/operateinfo/battery1/rack", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
 //系統資訊
 app.get("/systeminfo", (req, res) => {
   // num與fun

@@ -22,17 +22,22 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // 創建一個Mongoose模型
-const LC = require("/Test/SEEMS_EMS/models/lc_schema");
+const lcSchema = require("../models/lc_schema"); // 修改路徑
+const LC = mongoose.model("LC", lcSchema);
 //const DataModel = mongoose.model("Data", Schema, "account");
 
 //設定路由
 app.get("/operateinfo/pcs", async (req, res) => {
   try {
     // 從資料庫中獲取 LC 資料
-    const lcData = await LC.find(); // 假設你要獲取所有 LC 資料
+    //const lcData = await LC.find(); // 假設你要獲取所有 LC 資料
+    //const transValue = lcSchema.PCS1[403006].toString().split("");
 
     // 將資料傳遞到 EJS 模板或進行其他操作
-    res.render("Op_PCS_InfoSummary", { lcData });
+    res.render("Op_PCS_InfoSummary", {
+      // workStatus: lcSchema.System[403001],
+      // onlineNum: lcSchema.System[403001],
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -57,7 +62,7 @@ app.get("/operateinfo/pcs/state", (req, res) => {
 });
 
 //單台pcs警告
-app.get("/operateinfo/pcs/alarm", (req, res) => {
+app.get("/operateinfo/pcs1/alarm", (req, res) => {
   // num與fun
   res.render("Op_PCS_Alarm");
 });

@@ -5,7 +5,7 @@ const Schema = require("./models/schema");
 const methodOverride = require("method-override");
 const port = 3000;
 mongoose
-  .connect("mongodb://localhost:27017/hl_acbel")
+  .connect("mongodb://localhost:27017/ems")
   .then(() => {
     console.log("成功連結mongoDB....");
   })

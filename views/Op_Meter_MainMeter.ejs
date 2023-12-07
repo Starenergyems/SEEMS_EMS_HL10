@@ -1,561 +1,728 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--  default -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--  default -->
     <title>主電表</title>
-    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
-    <link href="styles/Op_Meter_MainMeter.css" rel="stylesheet" type="text/css" />
+    <link
+      href="../public/styles/style_template.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="../public/styles/Op_Meter_MainMeter.css"
+      rel="stylesheet"
+      type="text/css"
+    />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="T_Main">
-        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
-        <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
-        <div class="dateTime_Username">
-            <label id="dateTime_Now">2000/01/01 23:59:59</label>
-            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
-            <label for="qaz" id="userAccount">Administrator</label>
-            <div class="accountNavBar">
-                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
-                <a href="AccountManage.html" id="accNB_02">人員管理</a>
-                <a href="Login.html" id="accNB_03">登出</a>
-            </div>
+      <img
+        src="../public/images/Star_Energy_Logo.png"
+        alt="星佑能源Logo"
+        id="starEnergy_Logo"
+      />
+      <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
+      <div class="dateTime_Username">
+        <label id="dateTime_Now">2000/01/01 23:59:59</label>
+        <img
+          src="../public/images/User_Pic.png"
+          alt="使用者圖示"
+          id="user_Logo"
+        />
+        <label id="userAccount">Administrator</label>
+        <div class="accountNavBar">
+          <a href="/account/personalinfo" id="accNB_01">個人資料</a>
+          <a href="/account/manage" id="accNB_02">人員管理</a>
+          <a href="/login" id="accNB_03">登出</a>
         </div>
+      </div>
     </div>
 
     <div class="L_Main">
-        <div class="systemStatus">
-            <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
-            <div class="sumAWNum sumAlarmNum">
-                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
-                <label class="totalAWNum" id="totalAlarmNum">999</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
-                <div class="sumAW_EachArea sumAlarm_EachArea">
-                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
-                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
-                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat">99+</label></div>
-                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env">11</label></div>
-                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF">54</label></div>
-                </div>
+      <div class="systemStatus">
+        <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
+        <div class="sumAWNum sumAlarmNum">
+          <img
+            src="../public/images/Alarm_Logo.png"
+            alt="Alarm圖示"
+            class="alert_Logo"
+          />
+          <label class="totalAWNum" id="totalAlarmNum">999</label>
+          <img
+            src="../public/images/DropDown_Logo.png"
+            alt="下拉式按鈕圖示"
+            class="dropDown_Logo"
+            id="dD_Logo_sumAlarmNum"
+          />
+          <div class="sumAW_EachArea sumAlarm_EachArea">
+            <div class="sumAW_Area sumAlarm_Meter">
+              電表<label class="AWNum" id="AlarmNum_Meter">2</label>
             </div>
-            <div class="sumAWNum sumWarningNum">
-                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
-                <label class="totalAWNum" id="totalWarningNum">52</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
-                <div class="sumAW_EachArea sumWarning_EachArea">
-                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
-                    </div>
-                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS">3</label></div>
-                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat">99+</label></div>
-                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env">99</label></div>
-                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF">87</label></div>
-                </div>
+            <div class="sumAW_Area sumAlarm_PCS">
+              PCS<label class="AWNum" id="AlarmNum_PCS">1</label>
             </div>
+            <div class="sumAW_Area sumAlarm_Bat">
+              電池<label class="AWNum" id="AlarmNum_Bat">99+</label>
+            </div>
+            <div class="sumAW_Area sumAlarm_Env">
+              環境<label class="AWNum" id="AlarmNum_Env">11</label>
+            </div>
+            <div class="sumAW_Area sumAlarm_FF">
+              消防<label class="AWNum" id="AlarmNum_FF">54</label>
+            </div>
+          </div>
         </div>
-        <div class="navBar">
-            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
-            <a href="Op_Meter_SLD.html"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
-            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
-            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
-            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
-            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
-            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+        <div class="sumAWNum sumWarningNum">
+          <img
+            src="../public/images/Warning_Logo.png"
+            alt="Warning圖示"
+            class="alert_Logo"
+          />
+          <label class="totalAWNum" id="totalWarningNum">52</label>
+          <img
+            src="../public/images/DropDown_Logo.png"
+            alt="下拉式按鈕圖示"
+            class="dropDown_Logo"
+            id="dD_Logo_sumWarningNum"
+          />
+          <div class="sumAW_EachArea sumWarning_EachArea">
+            <div class="sumAW_Area sumWarning_Meter">
+              電表<label class="AWNum" id="WarningNum_Meter">0</label>
+            </div>
+            <div class="sumAW_Area sumWarning_PCS">
+              PCS<label class="AWNum" id="WarningNum_PCS">3</label>
+            </div>
+            <div class="sumAW_Area sumWarning_Bat">
+              電池<label class="AWNum" id="WarningNum_Bat">99+</label>
+            </div>
+            <div class="sumAW_Area sumWarning_Env">
+              環境<label class="AWNum" id="WarningNum_Env">99</label>
+            </div>
+            <div class="sumAW_Area sumWarning_FF">
+              消防<label class="AWNum" id="WarningNum_FF">87</label>
+            </div>
+          </div>
         </div>
-        <div class="systemInfo">
-            <p class="subTitle">|| 系統資訊 ||</p>
+      </div>
+      <div class="navBar">
+        <a href="/sysctrl"
+          ><button class="button_nB" id="nB_Mode">模式控制</button></a
+        >
+        <a href="/operateinfo"
+          ><button class="button_nB default_nB" id="nB_Operation">
+            運轉資訊
+          </button></a
+        >
+        <a href="/systeminfo"
+          ><button class="button_nB" id="nB_System">系統資訊</button></a
+        >
+        <a href="/alarm/realtime"
+          ><button class="button_nB" id="nB_Alarm">告警紀錄</button></a
+        >
+        <a href="/event"
+          ><button class="button_nB" id="nB_Event">事件紀錄</button></a
+        >
+        <a href="/report"
+          ><button class="button_nB" id="nB_Report">報表</button></a
+        >
+        <a href="/chrat"
+          ><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a
+        >
+      </div>
+      <div class="systemInfo">
+        <p class="subTitle">|| 系統資訊 ||</p>
 
-            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq">60.123</label>
-                <p class="dataUnit">Hz</p>
-            </div>
-            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP">12345.6</label>
-                <p class="dataUnit">kW</p>
-            </div>
-            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
-                <p class="dataUnit">kVar</p>
-            </div>
-            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage">23.456</label>
-                <p class="dataUnit">kV</p>
-            </div>
-            <div class="DV_Line">電流<label class="dataValue" id="L_M_current">78.87</label>
-                <p class="dataUnit">A</p>
-            </div>
-            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
-                <p class="dataUnit"></p>
-            </div>
-            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
-                <p class="dataUnit">%</p>
-            </div>
-            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
-                <p class="dataUnit">%</p>
-            </div>
-            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
-                <p class="dataUnit">%</p>
-            </div>
-
-            <div class="DV_Line spareLine">當日充放電量</div>
-
-            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
-                <p class="dataUnit">kWh</p>
-            </div>
-            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
-                <p class="dataUnit">kWh</p>
-            </div>
+        <div class="DV_Line">
+          頻率<label class="dataValue" id="L_M_freq">60.123</label>
+          <p class="dataUnit">Hz</p>
         </div>
-        <div class="eStop">
-            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
-            <p class="epo_word">緊急停止鈕</p>
+        <div class="DV_Line">
+          實功<label class="dataValue" id="L_M_activeP">12345.6</label>
+          <p class="dataUnit">kW</p>
+        </div>
+        <div class="DV_Line">
+          虛功<label class="dataValue" id="L_M_reactiveP">-9876.5</label>
+          <p class="dataUnit">kVar</p>
+        </div>
+        <div class="DV_Line">
+          電壓<label class="dataValue" id="L_M_voltage">23.456</label>
+          <p class="dataUnit">kV</p>
+        </div>
+        <div class="DV_Line">
+          電流<label class="dataValue" id="L_M_current">78.87</label>
+          <p class="dataUnit">A</p>
+        </div>
+        <div class="DV_Line">
+          功因<label class="dataValue" id="L_M_powerFactor">-0.999</label>
+          <p class="dataUnit"></p>
+        </div>
+        <div class="DV_Line">
+          平均SOC<label class="dataValue" id="L_M_avgSOC">87.6</label>
+          <p class="dataUnit">%</p>
+        </div>
+        <div class="DV_Line">
+          最低SOH<label class="dataValue" id="L_M_minSOH">98.7</label>
+          <p class="dataUnit">%</p>
+        </div>
+        <div class="DV_Line">
+          SBSPM<label class="dataValue" id="L_M_SBSPM">98.00</label>
+          <p class="dataUnit">%</p>
         </div>
 
-        <div class="popUpWindow epo">
-            <h2 class="titlePUW">緊急停止設定</h2>
+        <div class="DV_Line spareLine">當日充放電量</div>
 
-            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
-            <p class="epoInfo">確認停機</p>
-
-            <button class="closeWindowButton" id="closeWB_Yes">確認</button>
-            <button class="closeWindowButton" id="closeWB_No">取消</button>
+        <div class="DV_Line">
+          充電<label class="dataValue" id="L_M_chgEtoday">45678.9</label>
+          <p class="dataUnit">kWh</p>
         </div>
+        <div class="DV_Line lastLine">
+          放電<label class="dataValue" id="L_M_dcgEtoday">56789.0</label>
+          <p class="dataUnit">kWh</p>
+        </div>
+      </div>
+      <div class="eStop">
+        <img
+          src="../public/images/EPO_Logo.png"
+          alt="緊急停止鈕圖示_Logo"
+          id="epo_Logo"
+        />
+        <p class="epo_word">緊急停止鈕</p>
+      </div>
+
+      <div class="popUpWindow epo">
+        <h2 class="titlePUW">緊急停止設定</h2>
+
+        <img
+          src="../public/images/Alarm_Logo_v1.png"
+          alt="Alarm圖示"
+          class="alert_Logo"
+        />
+        <p class="epoInfo">確認停機</p>
+
+        <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+        <button class="closeWindowButton" id="closeWB_No">取消</button>
+      </div>
     </div>
 
     <div class="R_Main">
-        <div class="subNavBar" id="sub_NavBar">
-            <!-- <h2>模式控制</h2> -->
-            <div class="button_sNB default_sNB" id="sNB_01">
-                <a href="Op_Meter_SLD.html" class="name_button_sNB">單線圖</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
-                <div class="ssNavBar">
-                    <a href="Op_Meter_SLD.html" id="ssNB_01">電力單線圖</a>
-                    <a href="Op_Meter_MainMeter.html" class="default_ssNB" id="ssNB_02">主電表</a>
-                    <a href="Op_Meter_AuxMeter.html" id="ssNB_03">輔電表</a>
-                </div>
-            </div>
-            <div class="button_sNB" id="sNB_02">
-                <a href="Op_PCS_InfoSummary.html" class="name_button_sNB">PCS</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
-                <div class="ssNavBar">
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_01">PCS 1-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_02">PCS 1-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_03">PCS 2-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_04">PCS 2-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_05">PCS 3-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_06">PCS 3-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_07">PCS 4</a>
-                </div>
-            </div>
-            <div class="button_sNB button_sNB_last" id="sNB_03">
-                <a href="Op_Bat_InfoSummary.html" class="name_button_sNB">電池</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
-                <div class="ssNavBar">
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_01">BMS 1-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_02">BMS 1-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_03">BMS 2-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_04">BMS 2-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_05">BMS 3-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_06">BMS 3-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_07">BMS 4</a>
-                </div>
-            </div>
+      <div class="subNavBar" id="sub_NavBar">
+        <!-- <h2>模式控制</h2> -->
+        <div class="button_sNB default_sNB" id="sNB_01">
+          <a href="Op_Meter_SLD" class="name_button_sNB">單線圖</a>
+          <img
+            src="../public/images/DropDown_Logo_v1.png"
+            alt="下拉式選單圖示_v1"
+            id="dDL_sNB_01"
+          />
+          <div class="ssNavBar">
+            <a href="/operateinfo/linediagram" id="ssNB_01">電力單線圖</a>
+            <a href="/operateinfo/mainmerter" class="default_ssNB" id="ssNB_02"
+              >主電表</a
+            >
+            <a href="/operateinfo/auxmerters" id="ssNB_03">輔電表</a>
+          </div>
         </div>
+        <div class="button_sNB" id="sNB_02">
+          <a href="/operateinfo/pcs" class="name_button_sNB">PCS</a>
+          <img
+            src="../public/images/DropDown_Logo_v1.png"
+            alt="下拉式選單圖示_v1"
+            id="dDL_sNB_02"
+          />
+          <div class="ssNavBar">
+            <a href="/operateinfo/pcs1/state" id="ssNB_01">PCS 1-1</a>
+            <a href="/operateinfo/pcs2/state" id="ssNB_02">PCS 1-2</a>
+            <a href="/operateinfo/pcs3/state" id="ssNB_03">PCS 2-1</a>
+            <a href="/operateinfo/pcs4/state" id="ssNB_04">PCS 2-2</a>
+            <a href="/operateinfo/pcs5/state" id="ssNB_05">PCS 3-1</a>
+            <a href="/operateinfo/pcs6/state" id="ssNB_06">PCS 3-2</a>
+            <a href="/operateinfo/pcs7/state" id="ssNB_07">PCS 4</a>
+          </div>
+        </div>
+        <div class="button_sNB button_sNB_last" id="sNB_03">
+          <a href="Op_Bat_InfoSummary" class="name_button_sNB">電池</a>
+          <img
+            src="../public/images/DropDown_Logo_v1.png"
+            alt="下拉式選單圖示_v1"
+            id="dDL_sNB_03"
+          />
+          <div class="ssNavBar">
+            <a href="/operateinfo/battery1/state" id="ssNB_01">BMS 1-1</a>
+            <a href="/operateinfo/battery2/state" id="ssNB_02">BMS 1-2</a>
+            <a href="/operateinfo/battery3/state" id="ssNB_03">BMS 2-1</a>
+            <a href="/operateinfo/battery4/state" id="ssNB_04">BMS 2-2</a>
+            <a href="/operateinfo/battery5/state" id="ssNB_05">BMS 3-1</a>
+            <a href="/operateinfo/battery6/state" id="ssNB_06">BMS 3-2</a>
+            <a href="/operateinfo/battery7/state" id="ssNB_07">BMS 4</a>
+          </div>
+        </div>
+      </div>
 
-        <div class="M_Page">
-            <div class="Meter">
-                <table class="table_M">
-                    <tr class="row_01">
-                        <td class="col_01"></td>
-                        <td class="col_other">頻率表</td>
-                        <td class="col_other">ACB表1</td>
-                        <td class="col_other">ACB表2</td>
-                        <td class="col_other">ACB表3</td>
-                        <td class="col_other">ACB表4</td>
-                    </tr>
-                    <tr class="row_02">
-                        <td class="col_01"></td>
-                        <td class="col_other">
-                            <table class="table_sub">
-                                <tr>
-                                    <td>
-                                        <p class="dataName">電壓</p>
-                                        <label for="qaz" id="V_Freq">11.455</label>
-                                        <p class="dataUnit">kV</p>
-                                    </td>
-                                    <td class="BG_2">
-                                        <p class="dataName">電流</p>
-                                        <label for="qaz" id="I_Freq">238.42</label>
-                                        <p class="dataUnit">A</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="BG_2">
-                                        <p class="dataName">實功</p>
-                                        <label for="qaz" id="P_Freq">-10000.1</label>
-                                        <p class="dataUnit">kW</p>
-                                    </td>
-                                    <td>
-                                        <p class="dataName">虛功</p>
-                                        <label for="qaz" id="Q_Freq">200.1</label>
-                                        <p class="dataUnit">kVar</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="col_other">
-                            <table class="table_sub">
-                                <tr>
-                                    <td>
-                                        <p class="dataName">電壓</p>
-                                        <label for="qaz" id="V_ACB1">649.1</label>
-                                        <p class="dataUnit">kV</p>
-                                    </td>
-                                    <td class="BG_2">
-                                        <p class="dataName">電流</p>
-                                        <label for="qaz" id="I_ACB1">1200.39</label>
-                                        <p class="dataUnit">A</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="BG_2">
-                                        <p class="dataName">實功</p>
-                                        <label for="qaz" id="P_ACB1">1150.1</label>
-                                        <p class="dataUnit">kW</p>
-                                    </td>
-                                    <td>
-                                        <p class="dataName">虛功</p>
-                                        <label for="qaz" id="Q_ACB1">50.1</label>
-                                        <p class="dataUnit">kVar</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="col_other">
-                            <table class="table_sub">
-                                <tr>
-                                    <td>
-                                        <p class="dataName">電壓</p>
-                                        <label for="qaz" id="V_ACB2">649.5</label>
-                                        <p class="dataUnit">kV</p>
-                                    </td>
-                                    <td class="BG_2">
-                                        <p class="dataName">電流</p>
-                                        <label for="qaz" id="I_ACB2">1200.46</label>
-                                        <p class="dataUnit">A</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="BG_2">
-                                        <p class="dataName">實功</p>
-                                        <label for="qaz" id="P_ACB2">1150.2</label>
-                                        <p class="dataUnit">kW</p>
-                                    </td>
-                                    <td>
-                                        <p class="dataName">虛功</p>
-                                        <label for="qaz" id="Q_ACB2">50.2</label>
-                                        <p class="dataUnit">kVar</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="col_other">
-                            <table class="table_sub">
-                                <tr>
-                                    <td>
-                                        <p class="dataName">電壓</p>
-                                        <label for="qaz" id="V_ACB3">649.9</label>
-                                        <p class="dataUnit">kV</p>
-                                    </td>
-                                    <td class="BG_2">
-                                        <p class="dataName">電流</p>
-                                        <label for="qaz" id="I_ACB3">1200.50</label>
-                                        <p class="dataUnit">A</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="BG_2">
-                                        <p class="dataName">實功</p>
-                                        <label for="qaz" id="P_ACB3">1150.3</label>
-                                        <p class="dataUnit">kW</p>
-                                    </td>
-                                    <td>
-                                        <p class="dataName">虛功</p>
-                                        <label for="qaz" id="Q_ACB3">50.3</label>
-                                        <p class="dataUnit">kVar</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="col_other">
-                            <table class="table_sub">
-                                <tr>
-                                    <td>
-                                        <p class="dataName">電壓</p>
-                                        <label for="qaz" id="V_ACB4">650.3</label>
-                                        <p class="dataUnit">kV</p>
-                                    </td>
-                                    <td class="BG_2">
-                                        <p class="dataName">電流</p>
-                                        <label for="qaz" id="I_ACB4">1200.51</label>
-                                        <p class="dataUnit">A</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="BG_2">
-                                        <p class="dataName">實功</p>
-                                        <label for="qaz" id="P_ACB4">1150.4</label>
-                                        <p class="dataUnit">kW</p>
-                                    </td>
-                                    <td>
-                                        <p class="dataName">虛功</p>
-                                        <label for="qaz" id="Q_ACB4">50.4</label>
-                                        <p class="dataUnit">kVar</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">電壓_ab</td>
-                        <td class="col_other"><label for="qaz" id="V_ab_Freq">11.411</label>
-                            <P>kV</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ab_ACB1">649.0</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ab_ACB2">649.4</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ab_ACB3">649.8</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ab_ACB4">650.2</label>
-                            <P>V</P>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">電壓_bc</td>
-                        <td class="col_other"><label for="qaz" id="V_bc_Freq">11.489</label>
-                            <P>kV</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_bc_ACB1">649.2</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_bc_ACB2">649.6</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_bc_ACB3">650.0</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_bc_ACB4">650.4</label>
-                            <P>V</P>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">電壓_ca</td>
-                        <td class="col_other"><label for="qaz" id="V_ca_Freq">11.457</label>
-                            <P>kV</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ca_ACB1">649.3</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ca_ACB2">649.7</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ca_ACB3">650.1</label>
-                            <P>V</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="V_ca_ACB4">650.5</label>
-                            <P>V</P>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">電流_a</td>
-                        <td class="col_other"><label for="qaz" id="I_a_Freq">238.40</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_a_ACB1">1200.44</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_a_ACB2">1200.45</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_a_ACB3">1200.43</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_a_ACB4">600.22</label>
-                            <P>A</P>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">電流_b</td>
-                        <td class="col_other"><label for="qaz" id="I_b_Freq">238.41</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_b_ACB1">1200.47</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_b_ACB2">1200.49</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_b_ACB3">1200.42</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_b_ACB4">600.23</label>
-                            <P>A</P>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">電流_c</td>
-                        <td class="col_other"><label for="qaz" id="I_c_Freq">238.39</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_c_ACB1">1200.41</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_c_ACB2">1200.40</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_c_ACB3">1200.48</label>
-                            <P>A</P>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="I_c_ACB4">600.21</label>
-                            <P>A</P>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">視在功率</td>
-                        <td class="col_other"><label for="qaz" id="S_Freq">4730.1</label>
-                            <p>kVA</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="S_ACB1">1351.5</label>
-                            <p>kVA</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="S_ACB2">1351.4</label>
-                            <p>kVA</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="S_ACB3">1351.6</label>
-                            <p>kVA</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="S_ACB4">675.7</label>
-                            <p>kVA</p>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">功率因數</td>
-                        <td class="col_other"><label for="qaz" id="PF_Freq">0.995</label>
-                            <p></p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="PF_ACB1">0.996</label>
-                            <p></p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="PF_ACB2">0.997</label>
-                            <p></p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="PF_ACB3">0.998</label>
-                            <p></p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="PF_ACB4">0.999</label>
-                            <p></p>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">頻率</td>
-                        <td class="col_other"><label for="qaz" id="Freq_Freq">59.963</label>
-                            <p>Hz</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="Freq_ACB1">59.96</label>
-                            <p>Hz</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="Freq_ACB2">59.95</label>
-                            <p>Hz</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="Freq_ACB3">59.97</label>
-                            <p>Hz</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="Freq_ACB4">59.98</label>
-                            <p>Hz</p>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">總輸入有效電能</td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_Freq">987654321.0</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB1">612345.4</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB2">612345.3</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB3">612345.2</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB4">612345.1</label>
-                            <p>kWh</p>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">總輸出有效電能</td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_Freq">987654320.9</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB1">598765.4</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB2">598765.3</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB3">598765.2</label>
-                            <p>kWh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB4">598765.1</label>
-                            <p>kWh</p>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">總輸入無效電能</td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_Freq">234567.8</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB1">67890.1</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB2">67890.2</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB3">67890.3</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_imp_ACB4">67890.4</label>
-                            <p>kVarh</p>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">總輸出無效電能</td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_Freq">234567.9</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB1">67890.5</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB2">67890.6</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB3">67890.7</label>
-                            <p>kVarh</p>
-                        </td>
-                        <td class="col_other"><label for="qaz" id="AE_exp_ACB4">67890.8</label>
-                            <p>kVarh</p>
-                        </td>
-                    </tr>
+      <div class="M_Page">
+        <div class="Meter">
+          <table class="table_M">
+            <tr class="row_01">
+              <td class="col_01"></td>
+              <td class="col_other">頻率表</td>
+              <td class="col_other">ACB表1</td>
+              <td class="col_other">ACB表2</td>
+              <td class="col_other">ACB表3</td>
+              <td class="col_other">ACB表4</td>
+            </tr>
+            <tr class="row_02">
+              <td class="col_01"></td>
+              <td class="col_other">
+                <table class="table_sub">
+                  <tr>
+                    <td>
+                      <p class="dataName">電壓</p>
+                      <label id="V_Freq"><%= volt_avg %></label>
+                      <p class="dataUnit">kV</p>
+                    </td>
+                    <td class="BG_2">
+                      <p class="dataName">電流</p>
+                      <label id="I_Freq"><%= curr_avg %></label>
+                      <p class="dataUnit">A</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="BG_2">
+                      <p class="dataName">實功</p>
+                      <label id="P_Freq"><%=activePower %></label>
+                      <p class="dataUnit">kW</p>
+                    </td>
+                    <td>
+                      <p class="dataName">虛功</p>
+                      <label id="Q_Freq"><%=reactivePower %></label>
+                      <p class="dataUnit">kVar</p>
+                    </td>
+                  </tr>
                 </table>
-            </div>
+              </td>
+              <td class="col_other">
+                <table class="table_sub">
+                  <tr>
+                    <td>
+                      <p class="dataName">電壓</p>
+                      <label id="V_ACB1">649.1</label>
+                      <p class="dataUnit">kV</p>
+                    </td>
+                    <td class="BG_2">
+                      <p class="dataName">電流</p>
+                      <label id="I_ACB1">1200.39</label>
+                      <p class="dataUnit">A</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="BG_2">
+                      <p class="dataName">實功</p>
+                      <label id="P_ACB1">1150.1</label>
+                      <p class="dataUnit">kW</p>
+                    </td>
+                    <td>
+                      <p class="dataName">虛功</p>
+                      <label id="Q_ACB1">50.1</label>
+                      <p class="dataUnit">kVar</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td class="col_other">
+                <table class="table_sub">
+                  <tr>
+                    <td>
+                      <p class="dataName">電壓</p>
+                      <label id="V_ACB2">649.5</label>
+                      <p class="dataUnit">kV</p>
+                    </td>
+                    <td class="BG_2">
+                      <p class="dataName">電流</p>
+                      <label id="I_ACB2">1200.46</label>
+                      <p class="dataUnit">A</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="BG_2">
+                      <p class="dataName">實功</p>
+                      <label id="P_ACB2">1150.2</label>
+                      <p class="dataUnit">kW</p>
+                    </td>
+                    <td>
+                      <p class="dataName">虛功</p>
+                      <label id="Q_ACB2">50.2</label>
+                      <p class="dataUnit">kVar</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td class="col_other">
+                <table class="table_sub">
+                  <tr>
+                    <td>
+                      <p class="dataName">電壓</p>
+                      <label id="V_ACB3">649.9</label>
+                      <p class="dataUnit">kV</p>
+                    </td>
+                    <td class="BG_2">
+                      <p class="dataName">電流</p>
+                      <label id="I_ACB3">1200.50</label>
+                      <p class="dataUnit">A</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="BG_2">
+                      <p class="dataName">實功</p>
+                      <label id="P_ACB3">1150.3</label>
+                      <p class="dataUnit">kW</p>
+                    </td>
+                    <td>
+                      <p class="dataName">虛功</p>
+                      <label id="Q_ACB3">50.3</label>
+                      <p class="dataUnit">kVar</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td class="col_other">
+                <table class="table_sub">
+                  <tr>
+                    <td>
+                      <p class="dataName">電壓</p>
+                      <label id="V_ACB4">650.3</label>
+                      <p class="dataUnit">kV</p>
+                    </td>
+                    <td class="BG_2">
+                      <p class="dataName">電流</p>
+                      <label id="I_ACB4">1200.51</label>
+                      <p class="dataUnit">A</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="BG_2">
+                      <p class="dataName">實功</p>
+                      <label id="P_ACB4">1150.4</label>
+                      <p class="dataUnit">kW</p>
+                    </td>
+                    <td>
+                      <p class="dataName">虛功</p>
+                      <label id="Q_ACB4">50.4</label>
+                      <p class="dataUnit">kVar</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">電壓_ab</td>
+              <td class="col_other">
+                <label id="V_ab_Freq"><%=volt_ab %></label>
+                <P>kV</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ab_ACB1">649.0</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ab_ACB2">649.4</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ab_ACB3">649.8</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ab_ACB4">650.2</label>
+                <P>V</P>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">電壓_bc</td>
+              <td class="col_other">
+                <label id="V_bc_Freq"><%=volt_bc %></label>
+                <P>kV</P>
+              </td>
+              <td class="col_other">
+                <label id="V_bc_ACB1">649.2</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_bc_ACB2">649.6</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_bc_ACB3">650.0</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_bc_ACB4">650.4</label>
+                <P>V</P>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">電壓_ca</td>
+              <td class="col_other">
+                <label id="V_ca_Freq"><%=volt_ca %></label>
+                <P>kV</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ca_ACB1">649.3</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ca_ACB2">649.7</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ca_ACB3">650.1</label>
+                <P>V</P>
+              </td>
+              <td class="col_other">
+                <label id="V_ca_ACB4">650.5</label>
+                <P>V</P>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">電流_a</td>
+              <td class="col_other">
+                <label id="I_a_Freq"><% curr_a %></label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_a_ACB1">1200.44</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_a_ACB2">1200.45</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_a_ACB3">1200.43</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_a_ACB4">600.22</label>
+                <P>A</P>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">電流_b</td>
+              <td class="col_other">
+                <label id="I_b_Freq"><% curr_b %></label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_b_ACB1">1200.47</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_b_ACB2">1200.49</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_b_ACB3">1200.42</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_b_ACB4">600.23</label>
+                <P>A</P>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">電流_c</td>
+              <td class="col_other">
+                <label id="I_c_Freq"><% curr_c %></label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_c_ACB1">1200.41</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_c_ACB2">1200.40</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_c_ACB3">1200.48</label>
+                <P>A</P>
+              </td>
+              <td class="col_other">
+                <label id="I_c_ACB4">600.21</label>
+                <P>A</P>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">視在功率</td>
+              <td class="col_other">
+                <label id="S_Freq">4730.1</label>
+                <p>kVA</p>
+              </td>
+              <td class="col_other">
+                <label id="S_ACB1">1351.5</label>
+                <p>kVA</p>
+              </td>
+              <td class="col_other">
+                <label id="S_ACB2">1351.4</label>
+                <p>kVA</p>
+              </td>
+              <td class="col_other">
+                <label id="S_ACB3">1351.6</label>
+                <p>kVA</p>
+              </td>
+              <td class="col_other">
+                <label id="S_ACB4">675.7</label>
+                <p>kVA</p>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">功率因數</td>
+              <td class="col_other">
+                <label id="PF_Freq">0.995</label>
+                <p></p>
+              </td>
+              <td class="col_other">
+                <label id="PF_ACB1">0.996</label>
+                <p></p>
+              </td>
+              <td class="col_other">
+                <label id="PF_ACB2">0.997</label>
+                <p></p>
+              </td>
+              <td class="col_other">
+                <label id="PF_ACB3">0.998</label>
+                <p></p>
+              </td>
+              <td class="col_other">
+                <label id="PF_ACB4">0.999</label>
+                <p></p>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">頻率</td>
+              <td class="col_other">
+                <label id="Freq_Freq">59.963</label>
+                <p>Hz</p>
+              </td>
+              <td class="col_other">
+                <label id="Freq_ACB1">59.96</label>
+                <p>Hz</p>
+              </td>
+              <td class="col_other">
+                <label id="Freq_ACB2">59.95</label>
+                <p>Hz</p>
+              </td>
+              <td class="col_other">
+                <label id="Freq_ACB3">59.97</label>
+                <p>Hz</p>
+              </td>
+              <td class="col_other">
+                <label id="Freq_ACB4">59.98</label>
+                <p>Hz</p>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">總輸入有效電能</td>
+              <td class="col_other">
+                <label id="AE_imp_Freq">987654321.0</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB1">612345.4</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB2">612345.3</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB3">612345.2</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB4">612345.1</label>
+                <p>kWh</p>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">總輸出有效電能</td>
+              <td class="col_other">
+                <label id="AE_exp_Freq">987654320.9</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB1">598765.4</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB2">598765.3</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB3">598765.2</label>
+                <p>kWh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB4">598765.1</label>
+                <p>kWh</p>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">總輸入無效電能</td>
+              <td class="col_other">
+                <label id="AE_imp_Freq">234567.8</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB1">67890.1</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB2">67890.2</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB3">67890.3</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_imp_ACB4">67890.4</label>
+                <p>kVarh</p>
+              </td>
+            </tr>
+            <tr class="row_other">
+              <td class="col_01">總輸出無效電能</td>
+              <td class="col_other">
+                <label id="AE_exp_Freq">234567.9</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB1">67890.5</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB2">67890.6</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB3">67890.7</label>
+                <p>kVarh</p>
+              </td>
+              <td class="col_other">
+                <label id="AE_exp_ACB4">67890.8</label>
+                <p>kVarh</p>
+              </td>
+            </tr>
+          </table>
         </div>
+      </div>
     </div>
 
-    <script src="scripts/script_template.js"></script>
-    <script src="scripts/Op_Meter_MainMeter.js"></script>
-</body>
-
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/Op_Meter_MainMeter.js"></script>
+  </body>
 </html>
