@@ -29,9 +29,4 @@ router.use(methodOverride("_method"));
 router.use("/public", express.static(path.join(__dirname, "../public")));
 //router.use(myMiddleware);
 
-router.get("/systeminfo", (req, res) => {
-  // num與fun
-  res.render("Sys_Comm");
-});
-
 module.exports = router;

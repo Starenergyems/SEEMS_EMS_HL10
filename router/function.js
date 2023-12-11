@@ -1,6 +1,85 @@
 const { timeLog } = require("console");
 const readline = require("readline");
 
+//-------------------------------------------------------------------------------------------------
+//文字轉換
+
+function mapNumberToStatus(number) {
+  if (number >= 2) {
+    switch (number) {
+      case 0:
+        return "充電";
+      case 1:
+        return "放電";
+      case 2:
+        return "停止";
+      default:
+        return "N/A";
+    }
+  } else {
+    return "N/A";
+  }
+}
+
+module.exports = { mapNumberToStatus };
+
+//引用方法
+// const express = require('express');
+// const router = express.Router();
+
+// // 引用你的 translateStatus 函數
+// const { translateStatus } = require('./path-to-your-translateStatus-file');
+
+// // 假設你有一個路由處理程序
+// router.get('/your/route', (req, res) => {
+//   // 假設你從數據庫中讀取到了一個數字狀態
+//   const statusFromDatabase = 1;
+
+//   // 使用 translateStatus 將數字狀態轉換為文字描述
+//   const translatedStatus = translateStatus(statusFromDatabase);
+
+//   // 將結果傳遞給 EJS 模板
+//   res.render('your_template', { translatedStatus });
+// });
+
+// module.exports = router;
+
+//計算
+// fun.js
+
+const sumNumbers = (num1, num2) => {
+  // 在這裡執行你的判斷和計算邏輯
+  let sum = num1 + num2;
+
+  // 四捨五入到小數點第二位
+  sum = Math.round(sum * 100) / 100;
+  return sum.toFixed(2);
+};
+
+// 將 sumNumbers 函式導出，以便其他檔案可以使用
+module.exports = {
+  sumNumbers,
+};
+//引用方法
+// app.js
+
+const express = require("express");
+const app = express();
+const fun = require("./fun"); // 引入 fun.js
+
+// 使用 sumNumbers 函式
+app.get("/calculate", (req, res) => {
+  // 假設你有數字 num1 和 num2
+  const num1 = 10;
+  const num2 = 20;
+
+  // 使用 sumNumbers 函式進行計算
+  const result = fun.sumNumbers(num1, num2);
+
+  // 將結果返回或者使用它進一步的處理
+  res.send(`Result: ${result}`);
+});
+
 // 十進制轉二進制
 const decToBin32 = (decimal) => {
   if (isNaN(decimal)) {

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
-const Dc = require("../models/dc_schema");
+const Lc = require("../models/lc_schema");
 const router = express.Router();
 
 mongoose
@@ -29,9 +29,21 @@ router.use(methodOverride("_method"));
 router.use("/public", express.static(path.join(__dirname, "../public")));
 //router.use(myMiddleware);
 
-router.get("/systeminfo", (req, res) => {
+router.get("/operateinfo/battery", (req, res) => {
   // num與fun
-  res.render("Sys_Comm");
+  res.render("Op_Bat_InfoSummary");
+});
+
+//多台電池狀態
+router.get("/operateinfo/battery/infodetail/1", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+//多台RACK
+router.get("/operateinfo/battery/rack/1", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
 });
 
 module.exports = router;

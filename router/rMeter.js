@@ -1,5 +1,4 @@
 const express = require("express");
-//const app = express();
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -27,6 +26,28 @@ router.set("views", path.join(__dirname, "../views"));
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
 router.use("/public", express.static(path.join(__dirname, "../public")));
+
+//如果我有兩個路徑都需要做一樣的內容時
+// 定義渲染頁面的函式
+// const renderOperateInfoPage = (req, res) => {
+//   // num與fun
+//   res.render("Op_Meter_SLD");
+// };
+
+// // 路徑為 /operateinfo 的路由
+// router.get("/operateinfo", (req, res) => {
+//   renderOperateInfoPage(req, res);
+// });
+
+// // 路徑為 /operateinfo/mainmeter 的路由
+// router.get("/operateinfo/mainmeter", (req, res) => {
+//   renderOperateInfoPage(req, res);
+// });
+
+router.get("/operateinfo", (req, res) => {
+  // num與fun
+  res.render("Op_Meter_SLD");
+});
 
 router.get("/operateinfo/mainmerter", async (req, res) => {
   try {
@@ -135,6 +156,4 @@ router.get("/operateinfo/auxmerters", (req, res) => {
   res.render("Op_Meter_AuxMeter");
 });
 
-router.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+module.exports = router;
