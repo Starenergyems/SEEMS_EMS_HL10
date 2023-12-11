@@ -1,11 +1,11 @@
 const express = require("express");
-const app = express();
+//const app = express();
 const mongoose = require("mongoose");
 const Schema = require("./models/user_schema");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
-
+const router = express.Router();
 mongoose
   .connect("mongodb://localhost:27017/ems")
   .then(() => {
@@ -15,173 +15,190 @@ mongoose
     console.log(e);
   });
 
-app.set("view engine", "ejs");
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public")));
+router.set("view engine", "ejs");
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+router.use(methodOverride("_method"));
+router.use(express.static(path.join(__dirname, "public")));
 
 // 創建一個Mongoose模型
 const UserModel = mongoose.model("User", Schema, "account");
 
 //設定路由
 
-app.get("/login", (req, res) => {
+router.get("/login", (req, res) => {
   // num與fun
   res.render("Login"); //渲染 Login.ejs
 });
 
-app.get("/personalinfo", (req, res) => {
+router.get("/personalinfo", (req, res) => {
   // num與fun
   res.render("PersonalInfo");
 });
 
-app.get("/accountmanage", (req, res) => {
+router.get("/accountmanage", (req, res) => {
   // num與fun
   res.render("AccountManage");
 });
 
+//系統模式控制頁面切換，少一層會導致後續葉面無法讀取
+//路由的匹配是按照它們在代碼中出現的順序進行的。
+//如果缺少 "/Mode" 路由，Express 將無法找到精確匹配的
+//"/Mode/sysctrl" 和 "/Mode/schedule"，因為缺少 "/Mode" 的處理程序。
+router.get("/Mode", (req, res) => {
+  res.render("Mode_Schedule");
+});
 //系統模式控制頁面切換
-app.get("Mode/sysctrl", (req, res) => {
+router.get("/Mode/sysctrl", (req, res) => {
   res.render("Mode_SysCtrl");
 });
 //  排程
-app.get("Mode/schedule", (req, res) => {
+router.get("/Mode/schedule", (req, res) => {
   res.render("Mode_Schedule");
 });
 
 //運轉資訊+單線圖
-app.get("/operateinfo", (req, res) => {
+router.get("/operateinfo", (req, res) => {
   // num與fun
   res.render("Op_Meter_SLD");
 });
 
 //主電表
-app.get("/operateinfo/mainmerter", (req, res) => {
+router.get("/operateinfo/mainmerter", (req, res) => {
   // num與fun
   res.render("Op_Meter_MainMeter");
 });
 //其他電表
-app.get("/operateinfo/auxmerters", (req, res) => {
+router.get("/operateinfo/auxmerters", (req, res) => {
   // num與fun
   res.render("Op_Meter_AuxMeter");
 });
 //pcs主頁
-app.get("/operateinfo/pcs", (req, res) => {
+router.get("/operateinfo/pcs", (req, res) => {
   // num與fun
   res.render("Op_PCS_InfoSummary");
 });
 
 //單台pcs狀態
-app.get("/operateinfo/pcs/InfoDetail", (req, res) => {
+router.get("/operateinfo/pcs/InfoDetail", (req, res) => {
   // num與fun
   res.render("Op_PCS_InfoDetail");
 });
 //單台pcs警告
-app.get("/operateinfo/pcs/alarm", (req, res) => {
+router.get("/operateinfo/pcs/alarm", (req, res) => {
   // num與fun
   res.render("Op_PCS_Alarm");
 });
 //多台pcs狀態 更改數字即可
-app.get("/operateinfo/pcs/InfoDetail/1", (req, res) => {
+router.get("/operateinfo/pcs/InfoDetail/1", (req, res) => {
   // num與fun
   res.render("Op_PCS_InfoDetail");
 });
 //多台pcs警告
-app.get("/operateinfo/pcs/alarm/1", (req, res) => {
+router.get("/operateinfo/pcs/alarm/1", (req, res) => {
   // num與fun
   res.render("Op_PCS_Alarm");
 });
 
 //只有單台電池櫃
-app.get("/operateinfo/battery", (req, res) => {
+router.get("/operateinfo/battery", (req, res) => {
   // num與fun
   res.render("Op_Bat_InfoSummary");
 });
 //單台電池狀態
-app.get("/operateinfo/battery/infodetail", (req, res) => {
+router.get("/operateinfo/battery/infodetail", (req, res) => {
   // num與fun
   res.render("Op_Bat_InfoDetail");
 });
 
 //多台電池狀態
-app.get("/operateinfo/battery/infodetail/1", (req, res) => {
+router.get("/operateinfo/battery/infodetail/1", (req, res) => {
   // num與fun
   res.render("Op_Bat_InfoDetail");
 });
 //單台RACK
-app.get("/operateinfo/battery/rack", (req, res) => {
+router.get("/operateinfo/battery/rack", (req, res) => {
   // num與fun
   res.render("Op_Bat_Rack");
 });
 
 //多台RACK
-app.get("/operateinfo/battery/rack/1", (req, res) => {
+router.get("/operateinfo/battery/rack/1", (req, res) => {
   // num與fun
   res.render("Op_Bat_Rack");
 });
 
 //系統資訊
-app.get("/systeminfo", (req, res) => {
+router.get("/systeminfo", (req, res) => {
   // num與fun
   res.render("Sys_Comm");
 });
 
-app.get("/systeminfo/device", (req, res) => {
+router.get("/systeminfo/device", (req, res) => {
   // num與fun
   res.render("Sys_Device");
 });
 
-app.get("/systeminfo/environment", (req, res) => {
+router.get("/systeminfo/environment", (req, res) => {
   // num與fun
   res.render("Sys_Environment");
 });
 
 //告警紀錄
-app.get("/alarm/realtime", (req, res) => {
+router.get("/alarm", (req, res) => {
   // num與fun
   res.render("Alm_RealTime");
 });
 
-app.get("/alarm/history", (req, res) => {
+router.get("/alarm/realtime", (req, res) => {
+  // num與fun
+  res.render("Alm_RealTime");
+});
+
+router.get("/alarm/history", (req, res) => {
   // num與fun
   res.render("Alm_History");
 });
 
 //事件紀錄
-app.get("/event", (req, res) => {
+router.get("/event", (req, res) => {
   // num與fun
   res.render("Evt_Operation");
 });
 
-app.get("/event/door", (req, res) => {
+router.get("/event/door", (req, res) => {
   // num與fun
   res.render("Evt_Door");
 });
 
 //報表
-app.get("/report", (req, res) => {
+router.get("/report", (req, res) => {
   // num與fun
   res.render("Rpt_Report");
 });
 
 //圖表
-app.get("/chrat/real", (req, res) => {
+router.get("/chrat", (req, res) => {
   // num與fun
   res.render("Fig_Real_Time");
 });
 
-app.get("/chrat/history", (req, res) => {
+router.get("/chrat/real", (req, res) => {
+  // num與fun
+  res.render("Fig_Real_Time");
+});
+
+router.get("/chrat/history", (req, res) => {
   // num與fun
   res.render("Fig_Historic");
 });
 
 //錯誤頁面
-app.get("error", (req, res) => {
+router.get("error", (req, res) => {
   // num與fun
   res.render("error");
 });
 
-app.listen(port, () => {
+router.listen(port, () => {
   console.log("伺服器正在聆聽 port " + port + "...");
 });

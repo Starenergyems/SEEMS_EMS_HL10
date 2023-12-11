@@ -1,10 +1,11 @@
 const express = require("express");
-const app = express();
+//const app = express();
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
 const Other1 = require("../models/otherrf1_schema");
+const router = express.Router();
 
 mongoose
   .connect("mongodb://localhost:27017/ems")
@@ -19,15 +20,15 @@ mongoose
     console.log(e);
   });
 
-app.set("view engine", "ejs");
+router.set("view engine", "ejs");
 // 設定視圖目錄為 C:\Test\SEEMS_EMS\views
-app.set("views", path.join(__dirname, "../views"));
+router.set("views", path.join(__dirname, "../views"));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.use("/public", express.static(path.join(__dirname, "../public")));
+router.use(express.urlencoded({ extended: true }));
+router.use(methodOverride("_method"));
+router.use("/public", express.static(path.join(__dirname, "../public")));
 
-app.get("/operateinfo/mainmerter", async (req, res) => {
+router.get("/operateinfo/mainmerter", async (req, res) => {
   try {
     // 獲取當前連接的所有 collection 名稱
     const collections = mongoose.connection.collections;
@@ -93,6 +94,7 @@ app.get("/operateinfo/mainmerter", async (req, res) => {
       408034: kvarh_exp,
     } = data;
 
+    //volt_ab: FUN(volt_ab), // 保留兩位小數
     // 將數據傳遞給 EJS 模板，包括所有變數
     res.render("Op_Meter_MainMeter", {
       volt_ab: volt_ab.toFixed(1), // 保留兩位小數
@@ -128,11 +130,11 @@ app.get("/operateinfo/mainmerter", async (req, res) => {
 // 將這段程式碼放在 try-catch 區塊中
 
 //其他電表
-app.get("/operateinfo/auxmerters", (req, res) => {
+router.get("/operateinfo/auxmerters", (req, res) => {
   // num與fun
   res.render("Op_Meter_AuxMeter");
 });
 
-app.listen(port, () => {
+router.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
