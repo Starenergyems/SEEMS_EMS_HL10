@@ -135,22 +135,24 @@ router.get("/operateinfo/battery/rack/1", (req, res) => {
 });
 
 //
-//系統資訊
+//系統資訊-通訊架構圖
+//C:\Test\SEEMS_EMS\router\rComm.JS
 router.get("/systeminfo", (req, res) => {
   // num與fun
   res.render("Sys_Comm");
 });
-
+//C:\Test\SEEMS_EMS\router\rDevice.js
 router.get("/systeminfo/device", (req, res) => {
   // num與fun
   res.render("Sys_Device");
 });
-
+//C:\Test\SEEMS_EMS\router\rEnvironment.js
 router.get("/systeminfo/environment", (req, res) => {
   // num與fun
   res.render("Sys_Environment");
 });
 
+//C:\Test\SEEMS_EMS\router\rAlarm.js
 //告警紀錄
 router.get("/alarm", (req, res) => {
   // num與fun
@@ -167,6 +169,7 @@ router.get("/alarm/history", (req, res) => {
   res.render("Alm_History");
 });
 
+//C:\Test\SEEMS_EMS\router\rEvent.js
 //事件紀錄
 router.get("/event", (req, res) => {
   // num與fun
@@ -178,12 +181,14 @@ router.get("/event/door", (req, res) => {
   res.render("Evt_Door");
 });
 
+//C:\Test\SEEMS_EMS\router\rReport.js
 //報表
 router.get("/report", (req, res) => {
   // num與fun
   res.render("Rpt_Report");
 });
 
+//C:\Test\SEEMS_EMS\router\rChart.js
 //圖表
 router.get("/chrat", (req, res) => {
   // num與fun
@@ -200,6 +205,7 @@ router.get("/chrat/history", (req, res) => {
   res.render("Fig_Historic");
 });
 
+//
 //錯誤頁面
 router.get("error", (req, res) => {
   // num與fun

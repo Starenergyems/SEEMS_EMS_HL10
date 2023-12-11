@@ -29,7 +29,20 @@ router.use(methodOverride("_method"));
 router.use("/public", express.static(path.join(__dirname, "../public")));
 //router.use(myMiddleware);
 
-// 創建一個Mongoose模型
-//const DataModel = mongoose.model("Data", Schema, "account");
+//告警紀錄
+router.get("/alarm", (req, res) => {
+  // num與fun
+  res.render("Alm_RealTime");
+});
+
+router.get("/alarm/realtime", (req, res) => {
+  // num與fun
+  res.render("Alm_RealTime");
+});
+
+router.get("/alarm/history", (req, res) => {
+  // num與fun
+  res.render("Alm_History");
+});
 
 module.exports = router;

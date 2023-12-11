@@ -1,9 +1,8 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const methodOverride = require("method-override");
-const path = require("path");
-const port = 3000;
-const Dc = require("../models/dc_schema");
+// appRouter.ts
+import express, { Router } from "express";
+import mongoose from "mongoose";
+import methodOverride from "method-override";
+import path from "path";
 const router = express.Router();
 
 mongoose
@@ -29,4 +28,9 @@ router.use(methodOverride("_method"));
 router.use("/public", express.static(path.join(__dirname, "../public")));
 //router.use(myMiddleware);
 
-module.exports = router;
+router.get("/systeminfo/environment", (req, res) => {
+  // num與fun
+  res.render("Sys_Environment");
+});
+
+export default router;
