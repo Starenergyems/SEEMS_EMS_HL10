@@ -31,40 +31,31 @@ app.get("/login", (req, res) => {
   res.render("Login"); //渲染 Login.ejs
 });
 
-app.get("/account", (req, res) => {
+app.get("/personalinfo", (req, res) => {
   // num與fun
   res.render("PersonalInfo");
 });
 
-app.get("/account/personalinfo", (req, res) => {
-  // num與fun
-  res.render("PersonalInfo");
-});
-
-app.get("/account/manage", (req, res) => {
+app.get("/accountmanage", (req, res) => {
   // num與fun
   res.render("AccountManage");
 });
 
 //系統模式控制頁面切換
-app.get("/sysctrl", (req, res) => {
+app.get("Mode/sysctrl", (req, res) => {
   res.render("Mode_SysCtrl");
 });
 //  排程
-app.get("/schedule", (req, res) => {
+app.get("Mode/schedule", (req, res) => {
   res.render("Mode_Schedule");
 });
 
-//運轉資訊
+//運轉資訊+單線圖
 app.get("/operateinfo", (req, res) => {
   // num與fun
   res.render("Op_Meter_SLD");
 });
-//單線圖
-app.get("/operateinfo/linediagram", (req, res) => {
-  // num與fun
-  res.render("Op_Meter_SLD");
-});
+
 //主電表
 app.get("/operateinfo/mainmerter", (req, res) => {
   // num與fun
@@ -82,7 +73,7 @@ app.get("/operateinfo/pcs", (req, res) => {
 });
 
 //單台pcs狀態
-app.get("/operateinfo/pcs/state", (req, res) => {
+app.get("/operateinfo/pcs/InfoDetail", (req, res) => {
   // num與fun
   res.render("Op_PCS_InfoDetail");
 });
@@ -91,24 +82,30 @@ app.get("/operateinfo/pcs/alarm", (req, res) => {
   // num與fun
   res.render("Op_PCS_Alarm");
 });
-//多台切換(1-7)
-app.get("/operateinfo/pcs1/state", (req, res) => {
+//多台pcs狀態 更改數字即可
+app.get("/operateinfo/pcs/InfoDetail/1", (req, res) => {
   // num與fun
   res.render("Op_PCS_InfoDetail");
 });
-//單台pcs警告
-app.get("/operateinfo/pcs1/alarm", (req, res) => {
+//多台pcs警告
+app.get("/operateinfo/pcs/alarm/1", (req, res) => {
   // num與fun
   res.render("Op_PCS_Alarm");
 });
 
-//電池
+//只有單台電池櫃
 app.get("/operateinfo/battery", (req, res) => {
   // num與fun
   res.render("Op_Bat_InfoSummary");
 });
 //單台電池狀態
-app.get("/operateinfo/battery/state", (req, res) => {
+app.get("/operateinfo/battery/infodetail", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+//多台電池狀態
+app.get("/operateinfo/battery/infodetail/1", (req, res) => {
   // num與fun
   res.render("Op_Bat_InfoDetail");
 });
@@ -118,28 +115,19 @@ app.get("/operateinfo/battery/rack", (req, res) => {
   res.render("Op_Bat_Rack");
 });
 
-//多台電池狀態
-app.get("/operateinfo/battery1/state", (req, res) => {
-  // num與fun
-  res.render("Op_Bat_InfoDetail");
-});
-//單台RACK
-app.get("/operateinfo/battery1/rack", (req, res) => {
+//多台RACK
+app.get("/operateinfo/battery/rack/1", (req, res) => {
   // num與fun
   res.render("Op_Bat_Rack");
 });
+
 //系統資訊
 app.get("/systeminfo", (req, res) => {
   // num與fun
   res.render("Sys_Comm");
 });
 
-app.get("/systeminfo/communication", (req, res) => {
-  // num與fun
-  res.render("Sys_Comm");
-});
-
-app.get("/systeminfo/devicestate", (req, res) => {
+app.get("/systeminfo/device", (req, res) => {
   // num與fun
   res.render("Sys_Device");
 });
@@ -166,12 +154,6 @@ app.get("/event", (req, res) => {
   res.render("Evt_Operation");
 });
 
-app.get("/event/operation", (req, res) => {
-  // num與fun
-  res.render("Evt_Operation");
-});
-Operation;
-
 app.get("/event/door", (req, res) => {
   // num與fun
   res.render("Evt_Door");
@@ -184,11 +166,6 @@ app.get("/report", (req, res) => {
 });
 
 //圖表
-app.get("/chrat", (req, res) => {
-  // num與fun
-  res.render("Fig_Real_Time");
-});
-
 app.get("/chrat/real", (req, res) => {
   // num與fun
   res.render("Fig_Real_Time");
