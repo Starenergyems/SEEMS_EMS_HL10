@@ -25,7 +25,7 @@ router.use(express.static(path.join(__dirname, "public")));
 const UserModel = mongoose.model("User", Schema, "account");
 
 //設定路由
-
+//C:\Test\SEEMS_EMS\router\rAccount.js
 router.get("/login", (req, res) => {
   // num與fun
   res.render("Login"); //渲染 Login.ejs
@@ -45,6 +45,7 @@ router.get("/accountmanage", (req, res) => {
 //路由的匹配是按照它們在代碼中出現的順序進行的。
 //如果缺少 "/Mode" 路由，Express 將無法找到精確匹配的
 //"/Mode/sysctrl" 和 "/Mode/schedule"，因為缺少 "/Mode" 的處理程序。
+//C:\Test\SEEMS_EMS\router\rMode.js
 router.get("/Mode", (req, res) => {
   res.render("Mode_Schedule");
 });
@@ -57,6 +58,7 @@ router.get("/Mode/schedule", (req, res) => {
   res.render("Mode_Schedule");
 });
 
+//C:\Test\SEEMS_EMS\router\rMeter.js
 //運轉資訊+單線圖
 router.get("/operateinfo", (req, res) => {
   // num與fun
@@ -73,6 +75,8 @@ router.get("/operateinfo/auxmerters", (req, res) => {
   // num與fun
   res.render("Op_Meter_AuxMeter");
 });
+
+//C:\Test\SEEMS_EMS\router\rPCS.js
 //pcs主頁
 router.get("/operateinfo/pcs", (req, res) => {
   // num與fun
@@ -89,6 +93,7 @@ router.get("/operateinfo/pcs/alarm", (req, res) => {
   // num與fun
   res.render("Op_PCS_Alarm");
 });
+
 //多台pcs狀態 更改數字即可
 router.get("/operateinfo/pcs/InfoDetail/1", (req, res) => {
   // num與fun
@@ -100,7 +105,8 @@ router.get("/operateinfo/pcs/alarm/1", (req, res) => {
   res.render("Op_PCS_Alarm");
 });
 
-//只有單台電池櫃
+//C:\Test\SEEMS_EMS\router\rBattery.js
+//電池
 router.get("/operateinfo/battery", (req, res) => {
   // num與fun
   res.render("Op_Bat_InfoSummary");
@@ -128,6 +134,7 @@ router.get("/operateinfo/battery/rack/1", (req, res) => {
   res.render("Op_Bat_Rack");
 });
 
+//
 //系統資訊
 router.get("/systeminfo", (req, res) => {
   // num與fun
