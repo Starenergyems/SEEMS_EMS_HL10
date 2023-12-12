@@ -18,7 +18,7 @@
         <div class="dateTime_Username">
             <label id="dateTime_Now">2000/01/01 23:59:59</label>
             <img src="../public/images/User_Pic.png" alt="使用者圖示" id="user_Logo">
-            <label for="qaz" id="userAccount">Administrator</label>
+            <label id="userAccount">Administrator</label>
             <div class="accountNavBar">
                 <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
                 <a href="AccountManage.html" id="accNB_02">人員管理</a>
@@ -138,24 +138,24 @@
                     <h2>【系統資訊】</h2>
                 </div>
 
-                <div class="bigInfo sysAvailability">
+                <div class="bigInfo">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label for="qaz" class="data_val">正常</label>
+                        <label class="data_val" id="sysAvailability">正常</label>
                     </div>
                     <P>系統可用性</P>
                 </div>
-                <div class="bigInfo SOC">
+                <div class="bigInfo">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">%</div>
-                        <label for="qaz" class="data_val">65.4</label>
+                        <label class="data_val" id="SOC">65.4</label>
                     </div>
                     <P>SOC</P>
                 </div>
-                <div class="bigInfo SBSPM">
+                <div class="bigInfo">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">%</div>
-                        <label for="qaz" class="data_val">98.7</label>
+                        <label class="data_val" id="SBSPM">98.7</label>
                     </div>
                     <P>執行率</P>
                 </div>
@@ -163,38 +163,37 @@
                 <table>
                     <tr>
                         <td class="col_01"><span>運作模式</span></td>
-                        <td class="col_02"><label for="qaz" class="data_status" id="sysMode">E-dReg</label>
+                        <td class="col_02"><label class="data_status" id="sysMode">E-dReg</label>
                             <div class="BG_button"></div><button id="sysMode_set">Set</button>
                         </td>
                     </tr>
                     <tr>
                         <td class="col_01"><span>額定功率</span></td>
-                        <td class="col_02 data_R_align"><label for="qaz" class="data_val" id="P_Project">10000</label>kW
+                        <td class="col_02 data_R_align"><label class="data_val" id="P_Project">10000</label>kW
                             <div class="BG_button"></div><button id="P_Project_set">Set</button>
                         </td>
                     </tr>
                     <tr>
                         <td class="col_01"><span>負載移轉功率</span></td>
-                        <td class="col_02 data_R_align"><label for="qaz" class="data_val"
-                                id="P_LoadShift">-10000</label>kW
+                        <td class="col_02 data_R_align"><label class="data_val" id="P_LoadShift">-10000</label>kW
                             <div class="BG_button"></div><button id="P_LoadShift_set">Set</button>
                         </td>
                     </tr>
                     <tr>
                         <td class="col_01"><span>PCS狀態設定</span></td>
-                        <td class="col_02"><label for="qaz" class="data_status" id="statusAllPCS">全部投入</label>
+                        <td class="col_02"><label class="data_status" id="statusAllPCS">全部投入</label>
                             <div class="BG_button"></div><button id="statusAllPCS_set">Set</button>
                         </td>
                     </tr>
                     <tr>
                         <td class="col_01"><span>電池狀態設定</span></td>
-                        <td class="col_02"><label for="qaz" class="data_status" id="statusAllBMS">全部切離</label>
+                        <td class="col_02"><label class="data_status" id="statusAllBMS">全部切離</label>
                             <div class="BG_button"></div><button id="statusAllBMS_set">Set</button>
                         </td>
                     </tr>
                     <tr>
                         <td class="col_01"><span>充電排程</span></td>
-                        <td class="col_02"><label for="qaz" class="data_status" id="stopCHGsched">停止排程</label>
+                        <td class="col_02"><label class="data_status" id="stopCHGsched">停止排程</label>
                             <div class="BG_button"></div><button class="data_Light" id="stopCHGsched_Light"></button>
                         </td>
                     </tr>
@@ -211,50 +210,50 @@
                         <td colspan="2">頻率(Freq)&nbsp&&nbsp功率(Power)規格</td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_A:<label for="qaz" class="Freq_val" id="Freq_A">59.50</label>
+                        <td class="col_01">Freq_A:<label class="Freq_val" id="Freq_A">59.50</label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_t:<label for="qaz" class="P_val" id="P_t">100.0</label>
+                        <td class="col_02">P_t:<label class="P_val" id="P_t">100.0</label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_B:<label for="qaz" class="Freq_val" id="Freq_B">59.75</label>
+                        <td class="col_01">Freq_B:<label class="Freq_val" id="Freq_B">59.75</label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_u:<label for="qaz" class="P_val" id="P_u">48.0</label>
+                        <td class="col_02">P_u:<label class="P_val" id="P_u">48.0</label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_C:<label for="qaz" class="Freq_val" id="Freq_C">59.98</label>
+                        <td class="col_01">Freq_C:<label class="Freq_val" id="Freq_C">59.98</label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_v:<label for="qaz" class="P_val" id="P_v">9.0</label>
+                        <td class="col_02">P_v:<label class="P_val" id="P_v">9.0</label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_D:<label for="qaz" class="Freq_val" id="Freq_D">60.02</label>
+                        <td class="col_01">Freq_D:<label class="Freq_val" id="Freq_D">60.02</label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_w:<label for="qaz" class="P_val" id="P_w">-9.0</label>
+                        <td class="col_02">P_w:<label class="P_val" id="P_w">-9.0</label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_E:<label for="qaz" class="Freq_val" id="Freq_E">60.25</label>
+                        <td class="col_01">Freq_E:<label class="Freq_val" id="Freq_E">60.25</label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_x:<label for="qaz" class="P_val" id="P_x">-48.0</label>
+                        <td class="col_02">P_x:<label class="P_val" id="P_x">-48.0</label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_F:<label for="qaz" class="Freq_val" id="Freq_F">60.50</label>
+                        <td class="col_01">Freq_F:<label class="Freq_val" id="Freq_F">60.50</label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_y:<label for="qaz" class="P_val" id="P_y">-100.0</label>
+                        <td class="col_02">P_y:<label class="P_val" id="P_y">-100.0</label>
                             <p>%</p>
                         </td>
                     </tr>
@@ -288,96 +287,96 @@
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">實功基準值&nbsp(kW)</td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="P_base_SS1">2857</label></td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="P_base_SS2">2857</label></td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="P_base_SS3">2857</label></td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="P_base_SS4">1429</label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS1">2857</label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS2">2857</label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS3">2857</label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS4">1429</label></td>
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">虛功基準值&nbsp(kVar)</td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="Q_base_SS1">2857</label></td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="Q_base_SS2">2857</label></td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="Q_base_SS3">2857</label></td>
-                        <td class="col_other"><label for="qaz" class="data_val" id="Q_base_SS4">1429</label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS1">2857</label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS2">2857</label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS3">2857</label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS4">1429</label></td>
                     </tr>
                     <tr class="row_other row_relative">
                         <td class="col_01">子系統運作模式</td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="AutoMan_SS1_Light"></label>
-                            <label for="qaz" class="data_status" id="AutoMan_SS1">投入</label>
+                            <label class="data_light" id="AutoMan_SS1_Light"></label>
+                            <label class="data_status" id="AutoMan_SS1">投入</label>
                             <button id="AutoMan_SS1_set">Set</button>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="AutoMan_SS2_Light"></label>
-                            <label for="qaz" class="data_status" id="AutoMan_SS2">切離</label>
+                            <label class="data_light" id="AutoMan_SS2_Light"></label>
+                            <label class="data_status" id="AutoMan_SS2">切離</label>
                             <button id="AutoMan_SS2_set">Set</button>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="AutoMan_SS3_Light"></label>
-                            <label for="qaz" class="data_status" id="AutoMan_SS3">投入</label>
+                            <label class="data_light" id="AutoMan_SS3_Light"></label>
+                            <label class="data_status" id="AutoMan_SS3">投入</label>
                             <button id="AutoMan_SS3_set">Set</button>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="AutoMan_SS4_Light"></label>
-                            <label for="qaz" class="data_status" id="AutoMan_SS4">切離</label>
+                            <label class="data_light" id="AutoMan_SS4_Light"></label>
+                            <label class="data_status" id="AutoMan_SS4">切離</label>
                             <button id="AutoMan_SS4_set">Set</button>
                         </td>
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">電池與PCS狀態</td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="BMSPCSstatus_SS1_Light"></label>
-                            <label for="qaz" class="data_status" id="BMSPCSstatus_SS1">正常</label>
+                            <label class="data_light" id="BMSPCSstatus_SS1_Light"></label>
+                            <label class="data_status" id="BMSPCSstatus_SS1">正常</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="BMSPCSstatus_SS2_Light"></label>
-                            <label for="qaz" class="data_status" id="BMSPCSstatus_SS2">異常</label>
+                            <label class="data_light" id="BMSPCSstatus_SS2_Light"></label>
+                            <label class="data_status" id="BMSPCSstatus_SS2">異常</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="BMSPCSstatus_SS3_Light"></label>
-                            <label for="qaz" class="data_status" id="BMSPCSstatus_SS3">正常</label>
+                            <label class="data_light" id="BMSPCSstatus_SS3_Light"></label>
+                            <label class="data_status" id="BMSPCSstatus_SS3">正常</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="BMSPCSstatus_SS4_Light"></label>
-                            <label for="qaz" class="data_status" id="BMSPCSstatus_SS4">異常</label>
+                            <label class="data_light" id="BMSPCSstatus_SS4_Light"></label>
+                            <label class="data_status" id="BMSPCSstatus_SS4">異常</label>
                         </td>
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">子系統可用性</td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="Avail_SS1_Light"></label>
-                            <label for="qaz" class="data_status" id="Avail_SS1">正常</label>
+                            <label class="data_light" id="Avail_SS1_Light"></label>
+                            <label class="data_status" id="Avail_SS1">正常</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="Avail_SS2_Light"></label>
-                            <label for="qaz" class="data_status" id="Avail_SS2">異常</label>
+                            <label class="data_light" id="Avail_SS2_Light"></label>
+                            <label class="data_status" id="Avail_SS2">異常</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="Avail_SS3_Light"></label>
-                            <label for="qaz" class="data_status" id="Avail_SS3">正常</label>
+                            <label class="data_light" id="Avail_SS3_Light"></label>
+                            <label class="data_status" id="Avail_SS3">正常</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="Avail_SS4_Light"></label>
-                            <label for="qaz" class="data_status" id="Avail_SS4">異常</label>
+                            <label class="data_light" id="Avail_SS4_Light"></label>
+                            <label class="data_status" id="Avail_SS4">異常</label>
                         </td>
                     </tr>
                     <tr class="row_other row_last">
                         <td class="col_01">E-dReg服務狀態</td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="EdReg_SS1_Light"></label>
-                            <label for="qaz" class="data_status" id="EdReg_SS1">服務</label>
+                            <label class="data_light" id="EdReg_SS1_Light"></label>
+                            <label class="data_status" id="EdReg_SS1">服務</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="EdReg_SS2_Light"></label>
-                            <label for="qaz" class="data_status" id="EdReg_SS2">停止</label>
+                            <label class="data_light" id="EdReg_SS2_Light"></label>
+                            <label class="data_status" id="EdReg_SS2">停止</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="EdReg_SS3_Light"></label>
-                            <label for="qaz" class="data_status" id="EdReg_SS3">服務</label>
+                            <label class="data_light" id="EdReg_SS3_Light"></label>
+                            <label class="data_status" id="EdReg_SS3">服務</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="data_light" id="EdReg_SS4_Light"></label>
-                            <label for="qaz" class="data_status" id="EdReg_SS4">停止</label>
+                            <label class="data_light" id="EdReg_SS4_Light"></label>
+                            <label class="data_status" id="EdReg_SS4">停止</label>
                         </td>
                     </tr>
                 </table>
@@ -386,7 +385,7 @@
             <div class="popUpWindow dataValue_Set">
                 <h2 class="titlePUW">負載轉移功率設定</h2>
 
-                <div class="valOrigin">原數值:<label for="qaz" class="data_val" id="valueOrigin">2357</label>
+                <div class="valOrigin">原數值:<label class="data_val" id="valueOrigin">2357</label>
                     <p class="data_unit">g/ml</p>
                 </div>
                 <div class="valNew">新數值:<input type="text" class="data_input" id="valueNew">
@@ -515,27 +514,27 @@
                 <input type="text">
 
                 <div class="demo_1">
-                    <label for="XYZ_1">實功設定值：</label>
+                    <label>實功設定值：</label>
                     <input type="number" min="-1000.0" max="1000.0" required id="ABC" class="DEF">
-                    <label for="LMN_1" class="Unit">kW</label>
+                    <label class="Unit">kW</label>
                     <input type="submit" value="設定">
                 </div>
 
                 <div class="demo_1">
-                    <label for="XYZ_2">虛功設定值：</label>
+                    <label>虛功設定值：</label>
                     <input type="number" min="-1000.0" max="1000.0" required id="ABC" class="DEF">
-                    <label for="LMN_2" class="Unit">kVar</label>
+                    <label class="Unit">kVar</label>
                     <input type="submit" value="設定">
                 </div>
 
                 <div class="demo_2">
-                    <label for="edc" class="Green_Light" id="GL_00"></label>
+                    <label class="Green_Light" id="GL_00"></label>
                     <input type="submit" value="Enable" id="button_8">
                     <input type="submit" value="Disable" id="button_9">
                 </div>
 
                 <div class="demo_2">
-                    <label for="edc" class="Red_Light" id="RL_00"></label>
+                    <label class="Red_Light" id="RL_00"></label>
                     <input type="submit" value="CMD" id="button_10">
                 </div>
 
@@ -543,19 +542,19 @@
                     <button id="button_11">Set SOC Ref. value</button>
                 </div>
 
-                <label for="qaz" class="data_status" id="spare_Status">哈哈</label>
-                <label for="qaz" class="data_light" id="spare_Light"></label><br>
-                <label for="qaz" class="data_val" id="spareVal_01">90.1</label>
-                <label for="qaz" class="data_val" id="spareVal_02">1234.5</label><br>
-                <label for="qaz" class="data_val" id="spareVal_03">76.5</label>
-                <label for="qaz" class="data_val" id="spareVal_04">1098.7</label><br>
-                <label for="qaz" class="data_val" id="spareVal_05">65.4</label>
-                <label for="qaz" class="data_val" id="spareVal_06">987.6</label><br>
-                <label for="qaz" class="data_val" id="spareVal_07">9.8</label>
-                <label for="qaz" class="data_val" id="spareVal_08">765.4</label><br><br>
+                <label class="data_status" id="spare_Status">哈哈</label>
+                <label class="data_light" id="spare_Light"></label><br>
+                <label class="data_val" id="spareVal_01">90.1</label>
+                <label class="data_val" id="spareVal_02">1234.5</label><br>
+                <label class="data_val" id="spareVal_03">76.5</label>
+                <label class="data_val" id="spareVal_04">1098.7</label><br>
+                <label class="data_val" id="spareVal_05">65.4</label>
+                <label class="data_val" id="spareVal_06">987.6</label><br>
+                <label class="data_val" id="spareVal_07">9.8</label>
+                <label class="data_val" id="spareVal_08">765.4</label><br><br>
 
-                <label for="qaz" class="data_val" id="spareVal_Freq">60000</label>
-                <label for="qaz" class="data_val" id="spareVal_P">0</label>
+                <label class="data_val" id="spareVal_Freq">60000</label>
+                <label class="data_val" id="spareVal_P">0</label>
             </div>
         </div>
     </div>
