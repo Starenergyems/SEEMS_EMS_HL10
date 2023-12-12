@@ -4,7 +4,11 @@ require('dotenv').config();
 app.post('/webhook', line.middleware({channelAccessToken:process.env.channelAccessToken, channelSecret:process.env.channelSecret}), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
-    .then((result) => res.json(result));
+    .then((result) => res.json(result))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
 });
 
 
