@@ -120,3 +120,12 @@ table.dataTable tbody td {
     height: 18px;
     width: 18px;
 }
+
+.check_tip{
+    font-size: 20px;
+    margin: 20px 45px;
+}
+
+.popUpWindow.dataStatus_Set{
+    height: 200px;
+}
