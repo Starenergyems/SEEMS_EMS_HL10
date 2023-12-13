@@ -5,29 +5,30 @@ const path = require("path");
 const port = 3000;
 //const Dc = require("../models/dc_schema");  再建立一個所有使用者的/且定義門禁的
 const router = express.Router();
+const app = express();
 
-mongoose
-  .connect("mongodb://localhost:27017/ems")
-  .then(() => {
-    console.log("成功連結mongoDB....");
+// mongoose
+//   .connect("mongodb://localhost:27017/ems")
+//   .then(() => {
+//     console.log("成功連結mongoDB....");
 
-    // 檢查當前數據庫名稱
-    const currentDBName = mongoose.connection.name;
-    console.log("當前數據庫名稱：", currentDBName);
-  })
-  .catch((e) => {
-    console.log(e);
-  });
+//     // 檢查當前數據庫名稱
+//     const currentDBName = mongoose.connection.name;
+//     console.log("我是報表，當前數據庫名稱：", currentDBName);
+//   })
+//   .catch((e) => {
+//     console.log(e);
+//   });
 
 //set
-router.set("view engine", "ejs");
+app.set("view engine", "ejs");
 // 設定視圖目錄為 C:\Test\SEEMS_EMS\views
-router.set("views", path.join(__dirname, "../views"));
+app.set("views", path.join(__dirname, "../views"));
 //use
-router.use(express.urlencoded({ extended: true }));
-router.use(methodOverride("_method"));
-router.use("/public", express.static(path.join(__dirname, "../public")));
-//router.use(myMiddleware);
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.use("/public", express.static(path.join(__dirname, "../public")));
+//app.use(myMiddleware);
 
 //報表
 router.get("/report", (req, res) => {

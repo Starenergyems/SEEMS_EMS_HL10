@@ -32,5 +32,5 @@ const alarmSchema = new Schema({
   },
 });
 
-const Alarm = mongoose.model("Alarm", alarmSchema);
+const Alarm = mongoose.model("Alarm", alarmSchema, "hisalarm");
 module.exports = Alarm;

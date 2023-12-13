@@ -20,6 +20,7 @@ C:\Test\DB_test\package.json(可以確認已下載套件及版本)
 schema type 查詢(https://mongoosejs.com/docs/schematypes.html)
 
 如果有遇到Cors的問題再下載
+const cors = require("cors");
 npm i cors
 
 如果有需要紀錄cookie要裝的套件 (https://www.npmjs.com/package/cookie-parser)
