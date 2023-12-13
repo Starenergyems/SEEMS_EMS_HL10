@@ -27,9 +27,13 @@ function scaleProcess(decimalValue, scale, point) {
 // console.log(processedValue); // 輸出：31.14
 
 //-------------------------------------------------------------------------------------------------
-//chargeStatus
+//chargeStatus pcs充放電狀態
 function mapchargeStatus(decimalValue) {
-  const binaryString = decimalValue.toString(2);
+  const binaryString =
+    decimalValue < 10
+      ? `0${decimalValue.toString(2)}`
+      : decimalValue.toString(2);
+  //const binaryString = decimalValue.toString(2);
   console.log(decimalValue);
   // 檢查位元為1的數量，如果超過兩個以上，返回 "Error"
   if (decimalValue >= 2) {
@@ -44,71 +48,76 @@ function mapchargeStatus(decimalValue) {
   }
 }
 
-// const testDecimalValue = 1; // 這是一個十進制數值，可以根據你的實際情況更改
+// const testDecimalValue = 2; // 這是一個十進制數值，可以根據你的實際情況更改
 // const result = mapchargeStatus(testDecimalValue);
 // console.log(result);
 
 //***************************************************************************** */
 //PCSWorkingStatus
 function mapPCSWorkingStatus(decimalValue) {
-  // 將十進制數值轉換為二進制字符串
-  // const binaryString = decimalValue.toString(2);
+  if (decimalValue === 0) {
+    return "N/A";
+  }
 
-  // // 對照表
-  // const statusMapping = {
-  //   0: "Running",
-  //   3: "Key stop",
-  //   4: "Standby",
-  //   6: "Start in process",
-  //   9: "Fault stop",
-  //   10: "Alarm running",
-  //   11: "Derating running",
-  //   15: "Communication exception",
-  // };
+  const binaryString =
+    decimalValue < 10
+      ? `0${decimalValue.toString(2)}`
+      : decimalValue.toString(2);
 
-  // // 計算位元為1的數量
-  // const onesCount = binaryString.split("1").length - 1;
-  // // 檢查位元為1的數量，如果超過兩個以上，返回 "Error"
-  // if (onesCount >= 2) {
-  //   return "Error";
-  // }
+  const statusMapping = {
+    0: "Running",
+    3: "Key stop",
+    4: "Standby",
+    6: "Start in process",
+    9: "Fault stop",
+    10: "Alarm running",
+    11: "Derating running",
+    15: "Communication exception",
+  };
 
-  // // 創建結果字符串
-  // let result = "";
+  const onesCount = binaryString.split("1").length - 1;
 
-  // // 掃描二進制字符串的每個位元
-  // for (let i = 0; i < binaryString.length; i++) {
-  //   const bit = binaryString[i];
-  //   const position = binaryString.length - 1 - i; // 從右到左的位置
+  if (onesCount >= 2) {
+    return "Error for too many bits";
+  }
 
-  //   // 如果位元為1且在對照表中，將其添加到結果字符串中
-  //   if (bit === "1" && statusMapping[position]) {
-  //     result += statusMapping[position] + ", ";
-  //   }
-  // }
+  let result = "";
 
-  // // 刪除最後的逗號和空格
-  // result = result.slice(0, -2);
-  result = 12311;
+  for (let i = 0; i < binaryString.length; i++) {
+    const bit = binaryString[i];
+    const position = binaryString.length - 1 - i;
+
+    if (bit === "1" && statusMapping[position]) {
+      // 使用 += 來串聯結果
+      result += statusMapping[position] + ", ";
+    } else if (bit === "1") {
+      return "Error , not in list";
+    }
+  }
+
+  // 移除結果字串末尾的逗號和空格
+  result = result.slice(0, -2);
+
   return result;
 }
 
-// 例如
-// const workingStatusString = mapPCSWorkingStatus(decimalValue);
-// console.log(workingStatusString);
-
 // 使用例子
-// const testdecimalValue = 38; // 試試不同的數值
-// const resul2t = mapWorkingStatus(decimalValue);
+// const testdecimalValue = 8;
+// const result = mapPCSWorkingStatus(testdecimalValue);
 // console.log(result);
 
 //***************************************************************************** */
 //PCSWorkingMode
 function mapPCSWorkingMode(decimalValue) {
-  // 將十進制數值轉換為二進制字符串
-  const binaryString = decimalValue.toString(2);
+  if (decimalValue == 0) {
+    return "N/A";
+  }
 
-  // 對照表
+  const binaryString =
+    decimalValue < 10
+      ? `0${decimalValue.toString(2)}`
+      : decimalValue.toString(2);
+
   const modeMapping = {
     0: "On-grid constant current",
     1: "On-grid constant voltage",
@@ -119,33 +128,28 @@ function mapPCSWorkingMode(decimalValue) {
     11: "VSG mode",
   };
 
-  // 計算位元為1的數量
   const onesCount = binaryString.split("1").length - 1;
 
-  // 檢查位元為1的數量，如果超過兩個以上，返回 "Error"
   if (onesCount >= 2) {
     return "Error";
   }
 
-  // 創建結果對象
-  const result = {};
+  let result = "";
 
-  // 遍歷二進制字符串的每個位元
   for (let i = 0; i < binaryString.length; i++) {
     const bit = binaryString[i];
-    const position = binaryString.length - 1 - i; // 從右到左的位置
+    const position = binaryString.length - 1 - i;
 
-    // 如果位元為1且在對照表中，將其添加到結果對象中
     if (bit === "1" && modeMapping[position]) {
-      result[position] = modeMapping[position];
+      result = modeMapping[position];
     }
   }
 
   return result;
 }
 
-// 使用例子
-// const decimalValue = 14; // 試試不同的數值
+// 使用例子;
+// const decimalValue = 2048; // 試試不同的數值
 // const result = mapPCSWorkingMode(decimalValue);
 // console.log(result);
 
@@ -169,12 +173,18 @@ function mapgridStatus(decimalValue) {
     return "On - grid";
   }
 }
+
+// 使用例子;
+const decimalValue = 0; // 試試不同的數值
+const result = mapgridStatus(decimalValue);
+console.log(result);
+
 module.exports = {
   mapchargeStatus,
   scaleProcess,
   mapPCSWorkingStatus,
-  mapPCSWorkingStatus,
-  mapPCSWorkingStatus,
+  mapPCSWorkingMode,
+  mapgridStatus,
   // 其他導出的函數
 };
 // //***************************************************************************** */
