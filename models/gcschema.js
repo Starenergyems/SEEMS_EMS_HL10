@@ -746,5 +746,5 @@ const gcSchema = new Schema({
   },
 });
 
-const GC = mongoose.model("GC", gcSchema);
-module.exports = Student;
+const GC = mongoose.model("GC", gcSchema, "gc");
+module.exports = GC;

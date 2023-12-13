@@ -1,90 +1,101 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
-const Schema = require("./models/lc_schema");
 const methodOverride = require("method-override");
 const path = require("path");
-const port = 3000;
+const Lc01 = require("../models/lcschema");
+const app = express(); // Create an Express application instance
+const router = express.Router();
+const {
+  scaleProcess,
+  mapchargeStatus,
+  mapPCSWorkingStatus,
+} = require("./function");
 
-mongoose
-  .connect("mongodb://localhost:27017/ems")
-  .then(() => {
-    console.log("成功連結mongoDB....");
-  })
-  .catch((e) => {
-    console.log(e);
-  });
-
+//set
 app.set("view engine", "ejs");
-app.use(express.json());
+app.set("views", path.join(__dirname, "../views"));
+//use
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.join(__dirname, "../public")));
+//app.use(myMiddleware);
 
 // 創建一個Mongoose模型
-const lcSchema = require("../models/lc_schema"); // 修改路徑
-const LC = mongoose.model("LC", lcSchema);
 //const DataModel = mongoose.model("Data", Schema, "account");
 
-//設定路由
-app.get("/operateinfo/pcs", async (req, res) => {
-  try {
-    // 從資料庫中獲取 LC 資料
-    //const lcData = await LC.find(); // 假設你要獲取所有 LC 資料
-    //const transValue = lcSchema.PCS1[403006].toString().split("");
-
-    // 將資料傳遞到 EJS 模板或進行其他操作
-    res.render("Op_PCS_InfoSummary", {
-      // workStatus: lcSchema.System[403001],
-      // onlineNum: lcSchema.System[403001],
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-app.get("/operateinfo/pcs", async (req, res) => {
-  try {
-    // 從資料庫中獲取 LC 資料
-    const lcData = await LC.find(); // 假設你要獲取所有 LC 資料
-
-    // 將資料傳遞到 EJS 模板或進行其他操作
-    res.render("Op_PCS_InfoSummary", { lcData });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-//單台pcs狀態
-app.get("/operateinfo/pcs/state", (req, res) => {
-  // num與fun
-  res.render("Op_PCS_InfoDetail");
-});
-
-//單台pcs警告
-app.get("/operateinfo/pcs1/alarm", (req, res) => {
-  // num與fun
+//pcs主頁
+router.get("/operateinfo/pcs", async (req, res) => {
   res.render("Op_PCS_Alarm");
 });
 
-app.get("/operateinfo/pcs1/state", (req, res) => {
-  // num與fun
-  res.render("Op_PCS_InfoDetail");
+//多台pcs狀態 更改數字即可
+router.get("/operateinfo/pcs/InfoDetail/1", async (req, res) => {
+  try {
+    // 獲取當前連接的所有 collection 名稱
+    const collections = mongoose.connection.collections;
+
+    // 轉換為 collection 名稱的數組
+    const collectionNames = Object.keys(collections);
+
+    console.log("當前連接中的 collection 名稱：", collectionNames);
+
+    // 從數據庫中查詢 Other1 資料
+    const lcData = await Lc01.findOne().sort({ time_log: -1 });
+
+    // 檢查是否有找到數據
+    if (!lcData) {
+      throw new Error("No data found");
+    }
+
+    // 定義屬性和相應的比例和小數點位數
+    const scaleAndPointMapping = {
+      403001: { scale: 0.1, point: 1 },
+      403002: { scale: 0.1, point: 1 },
+      403004: { scale: 0.1, point: 2 },
+      403006: { scale: 0.1, point: 2 },
+      403007: { scale: 0, point: 0 },
+      403009: { scale: 0, point: 0 },
+    };
+
+    // 定義處理函數映射表
+    const processFunctions = {
+      403007: mapchargeStatus,
+      403009: mapPCSWorkingStatus,
+    };
+    const data = {};
+    //scaleProcess 是一個通用的轉換函數，可以應用在所有的屬性上，而 processFunctions 主要用於那些需要特殊處理的屬性。
+
+    Object.entries(scaleAndPointMapping).forEach(
+      ([property, { scale, point }]) => {
+        const originalValue = lcData.PCS1[property];
+        const scaledValue = scaleProcess(originalValue, scale, point);
+
+        // 如果有定義對應的處理函數，則應用
+        const processFunction = processFunctions[property];
+        const processedValue = processFunction
+          ? processFunction(scaledValue)
+          : scaledValue;
+
+        data[property] = processedValue;
+      }
+    );
+
+    // 將數據傳遞給 EJS 模板，包括所有變數
+    res.render("../views/test_meter", {
+      overallFault: data["403001"],
+      overallAlarm: data["403002"],
+      Transformernodestatus: data["403004"], //暫無出現 先用描述暫代
+      Transformeroiltemperature: data["403006"], //暫無出現 先用描述暫代
+      HB_Counts: data["403007"],
+      leakage: data["403009"],
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
-
-// //單台pcs警告
-// app.get("/operateinfo/pcs1/alarm", (req, res) => {
-//   // num與fun
-//   res.render("Op_PCS_Alarm");
+//多台pcs警告
+// router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
 // });
 
-// app.get("/operateinfo/pcs2/state", (req, res) => {
-//   // num與fun
-//   res.render("Op_PCS_InfoDetail");
-// });
-
-// //單台pcs警告
-// app.get("/operateinfo/pcs2/alarm", (req, res) => {
-//   // num與fun
-//   res.render("Op_PCS_Alarm");
-// });
+module.exports = router;

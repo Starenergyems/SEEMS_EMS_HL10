@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
-const User = require("../models/userschema");
+const Alarm = require("../models/alarmschema");
 const router = express.Router();
 const app = express();
 
@@ -14,18 +14,11 @@ const app = express();
 
 //     // 檢查當前數據庫名稱
 //     const currentDBName = mongoose.connection.name;
-//     console.log("我是account，當前數據庫名稱：", currentDBName);
+//     console.log("我是alarm，當前數據庫名稱：", currentDBName);
 //   })
 //   .catch((e) => {
 //     console.log(e);
 //   });
-
-const collections = mongoose.connection.collections;
-
-// 轉換為 collection 名稱的數組
-const collectionNames = Object.keys(collections);
-
-console.log("當前連接中的 collection 名稱：", collectionNames);
 
 //set
 app.set("view engine", "ejs");
@@ -37,14 +30,20 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 
-router.get("/personalinfo", (req, res) => {
+//告警紀錄
+router.get("/alarm", (req, res) => {
   // num與fun
-  res.render("PersonalInfo");
+  res.render("Alm_RealTime");
 });
 
-router.get("/accountmanage", (req, res) => {
+router.get("/alarm/realtime", (req, res) => {
   // num與fun
-  res.render("AccountManage");
+  res.render("Alm_RealTime");
+});
+
+router.get("/alarm/history", (req, res) => {
+  // num與fun
+  res.render("Alm_History");
 });
 
 module.exports = router;

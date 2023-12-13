@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
-const User = require("../models/userschema");
+const Lc = require("../models/lcschema");
+//const Other1 = require("../models/lc_schema"); 還會引用?
 const router = express.Router();
 const app = express();
 
@@ -14,18 +15,11 @@ const app = express();
 
 //     // 檢查當前數據庫名稱
 //     const currentDBName = mongoose.connection.name;
-//     console.log("我是account，當前數據庫名稱：", currentDBName);
+//     console.log("我是圖表，當前數據庫名稱：", currentDBName);
 //   })
 //   .catch((e) => {
 //     console.log(e);
 //   });
-
-const collections = mongoose.connection.collections;
-
-// 轉換為 collection 名稱的數組
-const collectionNames = Object.keys(collections);
-
-console.log("當前連接中的 collection 名稱：", collectionNames);
 
 //set
 app.set("view engine", "ejs");
@@ -37,14 +31,21 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 
-router.get("/personalinfo", (req, res) => {
+// 創建一個Mongoose模型
+//const DataModel = mongoose.model("Data", Schema, "account");
+router.get("/chrat", (req, res) => {
   // num與fun
-  res.render("PersonalInfo");
+  res.render("Fig_Real_Time");
 });
 
-router.get("/accountmanage", (req, res) => {
+router.get("/chrat/real", (req, res) => {
   // num與fun
-  res.render("AccountManage");
+  res.render("Fig_Real_Time");
+});
+
+router.get("/chrat/history", (req, res) => {
+  // num與fun
+  res.render("Fig_Historic");
 });
 
 module.exports = router;
