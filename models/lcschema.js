@@ -924,5 +924,5 @@ const lcSchema = new mongoose.Schema({
   },
 });
 
-const LC = mongoose.model("LC", lcSchema);
+const LC = mongoose.model("LC", lcSchema, "lc");
 module.exports = LC;

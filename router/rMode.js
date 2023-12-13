@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
-const User = require("../models/userschema");
+const Gc = require("../models/gcschema");
 const router = express.Router();
 const app = express();
 
@@ -14,18 +14,11 @@ const app = express();
 
 //     // 檢查當前數據庫名稱
 //     const currentDBName = mongoose.connection.name;
-//     console.log("我是account，當前數據庫名稱：", currentDBName);
+//     console.log("我是模式控制，當前數據庫名稱：", currentDBName);
 //   })
 //   .catch((e) => {
 //     console.log(e);
 //   });
-
-const collections = mongoose.connection.collections;
-
-// 轉換為 collection 名稱的數組
-const collectionNames = Object.keys(collections);
-
-console.log("當前連接中的 collection 名稱：", collectionNames);
 
 //set
 app.set("view engine", "ejs");
@@ -37,14 +30,23 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 
-router.get("/personalinfo", (req, res) => {
-  // num與fun
-  res.render("PersonalInfo");
+//導向童話面作法同於METER
+router.get("/Mode", (req, res) => {
+  res.render("Mode_Schedule");
+});
+//系統模式控制頁面切換
+router.get("/Mode/sysctrl", (req, res) => {
+  res.render("Mode_SysCtrl");
+});
+//  排程
+router.get("/Mode/schedule", (req, res) => {
+  res.render("Mode_Schedule");
 });
 
-router.get("/accountmanage", (req, res) => {
+//運轉資訊+單線圖
+router.get("/operateinfo", (req, res) => {
   // num與fun
-  res.render("AccountManage");
+  res.render("Op_Meter_SLD");
 });
 
 module.exports = router;

@@ -207,5 +207,5 @@ const other10Schema = new mongoose.Schema({
   },
 });
 // 將模型導出
-const Other10 = mongoose.model("Other10", other10Schema);
+const Other10 = mongoose.model("Other10", other10Schema, "otherrf10");
 module.exports = Other10;

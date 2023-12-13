@@ -2,6 +2,8 @@
 // myHeading.textContent = "Hello world!";
 
 
+
+
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
 const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
 const filtLevelOpts = document.querySelector(".filtLevel .filtOptions");
@@ -169,5 +171,28 @@ $(document).ready(function () {
 
     })
 
+        // Handle the "Select All" checkbox change event using event delegation
+    $('#chb_AckAll').on('change', function () {
+        $('#message').addClass('appear');   
+    });
+
+
+
 });
+
+
+function appear(){
+    $('#message').addClass('appear');   
+}
+function remove(){
+    $('#message').removeClass('appear');
+}
+function allCheck(){
+    remove();
+    const isChecked = $('#chb_AckAll').prop('checked');
+    $('.chb_Ack').prop('checked', isChecked); //所有告警皆已讀
+    //post然後獲得return的資料
+    //更新表格
+    $('#chb_AckAll').prop('checked', false); // Unchecks it
+}
 
