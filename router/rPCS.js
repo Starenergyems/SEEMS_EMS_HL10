@@ -6,10 +6,9 @@ const Lc01 = require("../models/lcschema");
 const app = express(); // Create an Express application instance
 const router = express.Router();
 const {
-  mapPCSWorkingStatus,
-  mapPCSWorkingMode,
+  scaleProcess,
   mapchargeStatus,
-  mapgridStatus,
+  mapPCSWorkingStatus,
 } = require("./function");
 
 //set
@@ -32,14 +31,15 @@ router.get("/operateinfo/pcs", async (req, res) => {
 //多台pcs狀態 更改數字即可
 router.get("/operateinfo/pcs/InfoDetail/1", async (req, res) => {
   try {
-    //console.log("成功連結mongoDB....");
     // 獲取當前連接的所有 collection 名稱
     const collections = mongoose.connection.collections;
 
     // 轉換為 collection 名稱的數組
     const collectionNames = Object.keys(collections);
-    console.log("pcs當前連接中的 collection 名稱：", collectionNames);
 
+    console.log("當前連接中的 collection 名稱：", collectionNames);
+
+    // 從數據庫中查詢 Other1 資料
     const lcData = await Lc01.findOne().sort({ time_log: -1 });
 
     // 檢查是否有找到數據
@@ -47,343 +47,55 @@ router.get("/operateinfo/pcs/InfoDetail/1", async (req, res) => {
       throw new Error("No data found");
     }
 
-    // 定義處理函數映射表
-    const processFunctions = {
-      // 403049: mapPCSWorkingStatus,
-      // 403051: mapPCSWorkingMode,
-      // 403040: mapchargeStatus,
-      // 其他變數映射到相應的處理函數
+    // 定義屬性和相應的比例和小數點位數
+    const scaleAndPointMapping = {
+      403001: { scale: 0.1, point: 1 },
+      403002: { scale: 0.1, point: 1 },
+      403004: { scale: 0.1, point: 2 },
+      403006: { scale: 0.1, point: 2 },
+      403007: { scale: 0, point: 0 },
+      403009: { scale: 0, point: 0 },
     };
 
-    //定義屬性列表：
-    const propertiesForPCS = [
-      "403001",
-      "403002",
-      "403004",
-      "403006",
-      "403007",
-      "403008",
-      "403009",
-      "403011",
-      "403013",
-      "403014",
-      "403015",
-      "403016",
-      "403017",
-      "403018",
-      "403019",
-      "403020",
-      "403021",
-      "403022",
-      "403023",
-      "403024",
-      "403025",
-      "403026",
-      "403028",
-      "403030",
-      "403032",
-      "403034",
-      "403035",
-      "403036",
-      "403038",
-      "403040",
-      "403045",
-      "403047",
-      "403049",
-      "403051",
-      "403054",
-      "403055",
-      "403056",
-      "403057",
-      "403058",
-      "403066",
-      "403067",
-      "403068",
-      "403069",
-      "time_log",
-    ];
-
+    // 定義處理函數映射表
+    const processFunctions = {
+      403007: mapchargeStatus,
+      403009: mapPCSWorkingStatus,
+    };
     const data = {};
-    //遍歷屬性並映射到物件中
-    // propertiesForPCS.forEach((property) => {
-    //   data[property] = lcData.PCS1[property];
-    // });
-    // 遍歷屬性並映射到物件中
-    propertiesForPCS.forEach((property) => {
-      // 獲取原始值
-      const rawValue = lcData.PCS1[property];
-      // 獲取處理函數
-      const processFunction = processFunctions[property];
-      // 使用處理函數處理數據，或直接使用原始值
-      data[property] = processFunction ? processFunction(rawValue) : rawValue;
-    });
+    //scaleProcess 是一個通用的轉換函數，可以應用在所有的屬性上，而 processFunctions 主要用於那些需要特殊處理的屬性。
 
-    //使用解構賦值映射到變數：
-    const {
-      403001: overallFault,
-      403002: overallAlarm,
-      403004: Transformernodestatus, //暫無出現 先用描述暫代
-      403006: Transformeroiltemperature, //暫無出現 先用描述暫代
-      403007: HB_Counts,
-      403008: leakage,
-      403009: Transformernodestatus1, //暫無出現 先用描述暫代
-      403011: Transformernodestatus2, //暫無出現 先用描述暫代
-      403013: Windingtemperature, //暫無出現 先用描述暫代
-      403014: moduleTemp1,
-      403015: moduleTemp2,
-      403016: moduleTemp3,
-      403017: DCvoltage,
-      403018: DCcurrent,
-      403019: DCpower,
-      403020: voltageRS,
-      403021: voltageST,
-      403022: voltageTR,
-      403023: currentR,
-      403024: currentS,
-      403025: currentT,
-      403026: activePower,
-      403028: reactivePower,
-      403030: pElectrodeR,
-      403032: nElectrodeR,
-      403034: alarmStatus1,
-      403035: alarmStatus2,
-      403036: faultStatus1,
-      403038: faultStatus2,
-      403040: chargeStatus,
-      403045: tot_E_chg,
-      403047: tot_E_dcg,
-      403049: workStatus,
-      403051: workMode,
-      403054: gridStatus,
-      403055: gridFreq,
-      403056: powerFactor,
-      403057: innerTemp,
-      403058: NS_bit,
-      403066: max_P_chg,
-      403067: max_P_dcg,
-      403068: max_Q_l,
-      403069: max_Q_c,
-      time_log: timeLog,
-    } = data;
+    Object.entries(scaleAndPointMapping).forEach(
+      ([property, { scale, point }]) => {
+        const originalValue = lcData.PCS1[property];
+        const scaledValue = scaleProcess(originalValue, scale, point);
 
-    //將數據傳遞給 EJS 模板
-    res.render("../views/Op_PCS_InfoDetail", {
-      overallFault,
-      overallAlarm,
-      Transformernodestatus,
-      Transformeroiltemperature,
-      HB_Counts,
-      leakage,
-      Transformernodestatus1, //暫無出現 先用描述暫代
-      Transformernodestatus2, //暫無出現 先用描述暫代
-      Windingtemperature, //暫無出現 先用描述暫代
-      moduleTemp1,
-      moduleTemp2,
-      moduleTemp3,
-      DCvoltage,
-      DCcurrent,
-      DCpower,
-      voltageRS,
-      voltageST,
-      voltageTR,
-      currentR,
-      currentS,
-      currentT,
-      activePower,
-      reactivePower,
-      pElectrodeR,
-      nElectrodeR,
-      alarmStatus1,
-      alarmStatus2,
-      faultStatus1,
-      faultStatus2,
-      chargeStatus,
-      tot_E_chg,
-      tot_E_dcg,
-      workStatus,
-      workMode,
-      gridStatus,
-      gridFreq,
-      powerFactor,
-      innerTemp,
-      NS_bit,
-      max_P_chg,
-      max_P_dcg,
-      max_Q_l,
-      max_Q_c,
-      timeLog,
-      lcData, // 確保 other1Data 也被傳遞
+        // 如果有定義對應的處理函數，則應用
+        const processFunction = processFunctions[property];
+        const processedValue = processFunction
+          ? processFunction(scaledValue)
+          : scaledValue;
+
+        data[property] = processedValue;
+      }
+    );
+
+    // 將數據傳遞給 EJS 模板，包括所有變數
+    res.render("../views/test_meter", {
+      overallFault: data["403001"],
+      overallAlarm: data["403002"],
+      Transformernodestatus: data["403004"], //暫無出現 先用描述暫代
+      Transformeroiltemperature: data["403006"], //暫無出現 先用描述暫代
+      HB_Counts: data["403007"],
+      leakage: data["403009"],
     });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
-// console.log("workStatus:", workStatus);
-// console.log("workMode:", workMode);
-
 //多台pcs警告
 // router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
-//   try {
-//     // 獲取當前連接的所有 collection 名稱
-//     // const collections = mongoose.connection.collections;
-//     // // 轉換為 collection 名稱的數組
-//     // const collectionNames = Object.keys(collections);
-//     // console.log("當前連接中的 collection 名稱：", collectionNames);
-//     // // 從數據庫中查詢 Lc 資料
-//     // const lcData = await Lc01.findOne().sort({ time_log: -1 });
-//     // // 檢查是否有找到數據
-//     // if (!lcData) {
-//     //   throw new Error("No data found");
-//     // }
-//     // const propertiesForPCS = [
-//     //   "403001",
-//     //   "403002",
-//     //   "403004",
-//     //   "403006",
-//     //   "403007",
-//     //   "403008",
-//     //   "403009",
-//     //   "403011",
-//     //   "403013",
-//     //   "403014",
-//     //   "403015",
-//     //   "403016",
-//     //   "403017",
-//     //   "403018",
-//     //   "403019",
-//     //   "403020",
-//     //   "403021",
-//     //   "403022",
-//     //   "403023",
-//     //   "403024",
-//     //   "403025",
-//     //   "403026",
-//     //   "403028",
-//     //   "403030",
-//     //   "403032",
-//     //   "403034",
-//     //   "403035",
-//     //   "403036",
-//     //   "403038",
-//     //   "403040",
-//     //   "403045",
-//     //   "403047",
-//     //   "403049",
-//     //   "403051",
-//     //   "403054",
-//     //   "403055",
-//     //   "403056",
-//     //   "403057",
-//     //   "403058",
-//     //   "403066",
-//     //   "403067",
-//     //   "403068",
-//     //   "403069",
-//     //   "time_log",
-//     // ];
-//     // const data = {};
-//     // propertiesForPCS.forEach((property) => {
-//     //   data[property] = lcData.PCS1[property];
-//     // });
-//     // const {
-//     //   403001: overallFault,
-//     //   403002: overallAlarm,
-//     //   403004: Transformernodestatus, //暫無出現 先用描述暫代
-//     //   403006: Transformeroiltemperature, //暫無出現 先用描述暫代
-//     //   403007: HB_Counts,
-//     //   403008: leakage,
-//     //   403009: Transformernodestatus1, //暫無出現 先用描述暫代
-//     //   403011: Transformernodestatus2, //暫無出現 先用描述暫代
-//     //   403013: Windingtemperature, //暫無出現 先用描述暫代
-//     //   403014: moduleTemp1,
-//     //   403015: moduleTemp2,
-//     //   403016: moduleTemp3,
-//     //   403017: DCvoltage,
-//     //   403018: DCcurrent,
-//     //   403019: DCpower,
-//     //   403020: voltageRS,
-//     //   403021: voltageST,
-//     //   403022: voltageTR,
-//     //   403023: currentR,
-//     //   403024: currentS,
-//     //   403025: currentT,
-//     //   403026: activePower,
-//     //   403028: reactivePower,
-//     //   403030: pElectrodeR,
-//     //   403032: nElectrodeR,
-//     //   403034: alarmStatus1,
-//     //   403035: alarmStatus2,
-//     //   403036: faultStatus1,
-//     //   403038: faultStatus2,
-//     //   403040: chargeStatus,
-//     //   403045: tot_E_chg,
-//     //   403047: tot_E_dcg,
-//     //   403049: workStatus,
-//     //   403051: workMode,
-//     //   403054: gridStatus,
-//     //   403055: gridFreq,
-//     //   403056: powerFactor,
-//     //   403057: innerTemp,
-//     //   403058: NS_bit,
-//     //   403066: max_P_chg,
-//     //   403067: max_P_dcg,
-//     //   403068: max_Q_l,
-//     //   403069: max_Q_c,
-//     //   time_log: timeLog,
-//     // } = data;
-//     // res.render("Op_PCS_Alarm", {
-//     //   overallFault,
-//     //   overallAlarm,
-//     //   Transformernodestatus,
-//     //   Transformeroiltemperature,
-//     //   HB_Counts,
-//     //   leakage,
-//     //   Transformernodestatus1, //暫無出現 先用描述暫代
-//     //   Transformernodestatus2, //暫無出現 先用描述暫代
-//     //   Windingtemperature, //暫無出現 先用描述暫代
-//     //   moduleTemp1,
-//     //   moduleTemp2,
-//     //   moduleTemp3,
-//     //   DCvoltage,
-//     //   DCcurrent,
-//     //   DCpower,
-//     //   voltageRS,
-//     //   voltageST,
-//     //   voltageTR,
-//     //   currentR,
-//     //   currentS,
-//     //   currentT,
-//     //   activePower,
-//     //   reactivePower,
-//     //   pElectrodeR,
-//     //   nElectrodeR,
-//     //   alarmStatus1,
-//     //   alarmStatus2,
-//     //   faultStatus1,
-//     //   faultStatus2,
-//     //   chargeStatus: mapchargeStatus(chargeStatus),
-//     //   tot_E_chg: scaleProcess(tot_E_chg),
-//     //   tot_E_dcg: scaleProcess(tot_E_dcg),
-//     //   workStatus: mapPCSWorkingStatus(workStatus),
-//     //   workMode: mapPCSWorkingMode(workMode),
-//     //   gridStatus: mapgridStatus(gridStatus),
-//     //   gridFreq,
-//     //   powerFactor,
-//     //   innerTemp,
-//     //   NS_bit,
-//     //   max_P_chg,
-//     //   max_P_dcg,
-//     //   max_Q_l,
-//     //   max_Q_c,
-//     //   timeLog,
-//     //   lcData, // 確保 other1Data 也被傳遞
-//     // });
-//     // // 將數據傳遞給 EJS 模板，包括所有變數
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Internal Server Error");
-//   } // num與fun
 // });
 
 module.exports = router;
