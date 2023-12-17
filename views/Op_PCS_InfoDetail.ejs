@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
     <title>PCS詳細資訊</title>
     <link href="../public/styles/style_template.css" rel="stylesheet" type="text/css" />
-    <link href="../public/styles/Op_PCS_InfoDetail.css" 
-    rel="stylesheet" 
-    type="text/css" 
-    />
+    <link href="../public/styles/Op_PCS_InfoDetail.css" rel="stylesheet" type="text/css" />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
 </head>
 
@@ -26,14 +20,12 @@
             <img src="../public/images/User_Pic.png" alt="使用者圖示" id="user_Logo">
             <label id="userAccount">Administrator</label>
             <div class="accountNavBar">
-                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
-                <a href="AccountManage.html" id="accNB_02">人員管理</a>
-                <a href="Login.html" id="accNB_03">登出</a>
+                <a href="/account/personalinfo" id="accNB_01">個人資料</a>
+                <a href="/account/manage" id="accNB_02">人員管理</a>
+                <a href="/login" id="accNB_03">登出</a>
             </div>
         </div>
     </div>
-
-</html>
 
     <div class="L_Main">
         <div class="systemStatus">
@@ -65,13 +57,13 @@
             </div>
         </div>
         <div class="navBar">
-            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
-            <a href="Op_Meter_SLD.html"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
-            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
-            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
-            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
-            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
-            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+            <a href="/mode"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="/operateinfo"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="/systeminfo"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="/alarm"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="/event"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="/report"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="/chart"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
         </div>
         <div class="systemInfo">
             <p class="subTitle">|| 系統資訊 ||</p>
@@ -133,38 +125,38 @@
         <div class="subNavBar" id="sub_NavBar">
             <!-- <h2>模式控制</h2> -->
             <div class="button_sNB" id="sNB_01">
-                <a href="Op_Meter_SLD.html" class="name_button_sNB">單線圖</a>
+                <a href="/operateinfo/singlelinediagram" class="name_button_sNB">單線圖</a>
                 <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
                 <div class="ssNavBar">
-                    <a href="Op_Meter_SLD.html" id="ssNB_01">電力單線圖</a>
-                    <a href="Op_Meter_MainMeter.html" id="ssNB_02">主電表</a>
-                    <a href="Op_Meter_AuxMeter.html" id="ssNB_03">輔電表</a>
+                    <a href="/operateinfo/singlelinediagram" id="ssNB_01">電力單線圖</a>
+                    <a href="/operateinfo/mainmeter" id="ssNB_02">主電表</a>
+                    <a href="/operateinfo/auxmeter" id="ssNB_03">輔電表</a>
                 </div>
             </div>
             <div class="button_sNB default_sNB" id="sNB_02">
-                <a href="Op_PCS_InfoSummary.html" class="name_button_sNB">PCS</a>
+                <a href="/operateinfo/pcs" class="name_button_sNB">PCS</a>
                 <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
                 <div class="ssNavBar">
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_01">PCS 1-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_02">PCS 1-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_03">PCS 2-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_04">PCS 2-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_05">PCS 3-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_06">PCS 3-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_07">PCS 4</a>
+                    <a href="/operateinfo/pcs/infodetail/1" id="ssNB_01">PCS 1-1</a>
+                    <a href="/operateinfo/pcs/infodetail/2" id="ssNB_02">PCS 1-2</a>
+                    <a href="/operateinfo/pcs/infodetail/3" id="ssNB_03">PCS 2-1</a>
+                    <a href="/operateinfo/pcs/infodetail/4" id="ssNB_04">PCS 2-2</a>
+                    <a href="/operateinfo/pcs/infodetail/5" id="ssNB_05">PCS 3-1</a>
+                    <a href="/operateinfo/pcs/infodetail/6" id="ssNB_06">PCS 3-2</a>
+                    <a href="/operateinfo/pcs/infodetail/7" id="ssNB_07">PCS 4</a>
                 </div>
             </div>
             <div class="button_sNB button_sNB_last" id="sNB_03">
-                <a href="Op_Bat_InfoSummary.html" class="name_button_sNB">電池</a>
+                <a href="/operateinfo/battery" class="name_button_sNB">電池</a>
                 <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
                 <div class="ssNavBar">
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_01">BMS 1-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_02">BMS 1-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_03">BMS 2-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_04">BMS 2-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_05">BMS 3-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_06">BMS 3-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_07">BMS 4</a>
+                    <a href="/operateinfo/battery/infodetail/1" id="ssNB_01">BMS 1-1</a>
+                    <a href="/operateinfo/battery/infodetail/2" id="ssNB_02">BMS 1-2</a>
+                    <a href="/operateinfo/battery/infodetail/3" id="ssNB_03">BMS 2-1</a>
+                    <a href="/operateinfo/battery/infodetail/4" id="ssNB_04">BMS 2-2</a>
+                    <a href="/operateinfo/battery/infodetail/5" id="ssNB_05">BMS 3-1</a>
+                    <a href="/operateinfo/battery/infodetail/6" id="ssNB_06">BMS 3-2</a>
+                    <a href="/operateinfo/battery/infodetail/7" id="ssNB_07">BMS 4</a>
                 </div>
             </div>
         </div>
@@ -174,7 +166,7 @@
                 <h2>【PCS</h2><label id="No_of_PCS">1-1</label>
                 <h2>】</h2>
                 <a href="#" class="infoStatus" id="infoPCS">狀態與數值</a>
-                <a href="Op_PCS_Alarm.html" class="infoStatus" id="statusPCS">故障與告警</a>
+                <a href="/operateinfo/pcs/alarm" class="infoStatus" id="statusPCS">故障與告警</a>
                 <a href="#" class="preNext" id="previousPCS">上一頁</a>
                 <a href="#" class="preNext" id="nextPCS">下一頁</a>
             </div>
@@ -184,28 +176,28 @@
                     <p>工作狀態</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workStatus"><%= workStatus %></label>
+                        <label class="data_val" id="workStatus">運行</label>
                     </div>
                 </div>
                 <div class="bigInfo bI_workMode">
                     <p>工作模式</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workMode"><%= workMode %></label>
+                        <label class="data_val" id="workMode">併網恆功率(AC)</label>
                     </div>
                 </div>
                 <div class="bigInfo bI_chargeStatus">
                     <p>充放電狀態</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="chargeStatus"><%= chargeStatus %></label>
+                        <label class="data_val" id="chargeStatus">非工作狀態</label>
                     </div>
                 </div>
                 <div class="bigInfo bI_tot_E_chg">
                     <p>總充電量</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">MWh</div>
-                        <label class="data_val" id="tot_E_chg"><%= tot_E_chg %></label>
+                        <label class="data_val" id="tot_E_chg">1234567.8</label>
                     </div>
                 </div>
                 <div class="bigInfo bI_tot_E_dcg">
@@ -296,15 +288,14 @@
                     <p class="dataUnit">kΩ</p>
                 </div>
                 <div class="DVR_Line">
-                    <p class="dataRange">00</p>
+                    <p class="dataRange">(&nbsp正常範圍&nbsp&#62&nbsp1001.00</p>
                     <p class="dataUnit">kΩ&nbsp)</p>
                 </div>
                 <div class="DV_Line">負極對地阻抗<label class="dataValue" id="nElectrodeR">12345.67</label>
                     <p class="dataUnit">kΩ</p>
                 </div>
                 <div class="DVR_Line lastLine">
-                    <p class="dataRange">0000</p>
-                    <!-- (&nbsp正常範圍&nbsp&#62&nbsp1001.00 -->
+                    <p class="dataRange">(&nbsp正常範圍&nbsp&#62&nbsp1001.00</p>
                     <p class="dataUnit">kΩ&nbsp)</p>
                 </div>
             </div>

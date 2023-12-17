@@ -33,19 +33,19 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 
 // 創建一個Mongoose模型
 //const DataModel = mongoose.model("Data", Schema, "account");
-router.get("/chrat", (req, res) => {
+router.get("/chart", (req, res) => {
   // num與fun
-  res.render("Fig_Real_Time");
+  res.render("Cht_RealTime");
 });
 
-router.get("/chrat/real", (req, res) => {
+router.get("/chart/realtime", (req, res) => {
   // num與fun
-  res.render("Fig_Real_Time");
+  res.render("Cht_RealTime");
 });
 
-router.get("/chrat/history", (req, res) => {
+router.get("/chart/history", (req, res) => {
   // num與fun
-  res.render("Fig_Historic");
+  res.render("Cht_History");
 });
 
 module.exports = router;

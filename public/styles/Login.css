@@ -105,19 +105,22 @@ body {
 }
 
 .loginWindow #btn_Login {
+    display: block;
     background-color: #FFFFFF;
     box-sizing: border-box;
     width: 380px;
     border: 3px solid #B6B6B6;
     margin: 70px auto 0px;
     font-size: 36px;
+    color: #000000;
+    text-decoration: none;
     line-height: 64px;
     font-weight: bold;
     border-radius: 35px;
 }
 
-.loginWindow a {
+/* .loginWindow a {
     display: block;
     height: 40px;
     width: 40px;
-}
+} */

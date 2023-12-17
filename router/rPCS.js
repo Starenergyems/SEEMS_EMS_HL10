@@ -25,8 +25,16 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {
-  res.render("Op_PCS_Alarm");
+  res.render("Op_PCS_InfoSummary");
 });
+
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+router.get("/operateinfo/pcs/infodetail", async (req, res) => {
+  res.render("Op_PCS_InfoDetail");
+});
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 //多台pcs狀態 更改數字即可
 router.get("/operateinfo/pcs/InfoDetail/1", async (req, res) => {
@@ -53,8 +61,8 @@ router.get("/operateinfo/pcs/InfoDetail/1", async (req, res) => {
       403002: { scale: 0.1, point: 1 },
       403004: { scale: 0.1, point: 2 },
       403006: { scale: 0.1, point: 2 },
-      403007: { scale: 0, point: 0 },
-      403009: { scale: 0, point: 0 },
+      403007: { scale: 1, point: 0 },
+      403009: { scale: 1, point: 0 },
     };
 
     // 定義處理函數映射表
@@ -97,5 +105,65 @@ router.get("/operateinfo/pcs/InfoDetail/1", async (req, res) => {
 //多台pcs警告
 // router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
 // });
+
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+router.get("/operateinfo/pcs/infodetail/2", async (req, res) => {
+  res.render("Op_PCS_InfoDetail");
+});
+
+router.get("/operateinfo/pcs/infodetail/3", async (req, res) => {
+  res.render("Op_PCS_InfoDetail");
+});
+
+router.get("/operateinfo/pcs/infodetail/4", async (req, res) => {
+  res.render("Op_PCS_InfoDetail");
+});
+
+router.get("/operateinfo/pcs/infodetail/5", async (req, res) => {
+  res.render("Op_PCS_InfoDetail");
+});
+
+router.get("/operateinfo/pcs/infodetail/6", async (req, res) => {
+  res.render("Op_PCS_InfoDetail");
+});
+
+router.get("/operateinfo/pcs/infodetail/7", async (req, res) => {
+  res.render("Op_PCS_InfoDetail");
+});
+
+router.get("/operateinfo/pcs/alarm", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+router.get("/operateinfo/pcs/alarm/2", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+router.get("/operateinfo/pcs/alarm/3", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+router.get("/operateinfo/pcs/alarm/4", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+router.get("/operateinfo/pcs/alarm/5", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+router.get("/operateinfo/pcs/alarm/6", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+router.get("/operateinfo/pcs/alarm/7", async (req, res) => {
+  res.render("Op_PCS_Alarm");
+});
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 module.exports = router;

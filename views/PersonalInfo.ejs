@@ -7,23 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
     <title>個人資料</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"><!--dataTable-->
-    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
-    <link href="styles/PersonalInfo.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/PersonalInfo.css" rel="stylesheet" type="text/css" />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
 </head>
 
 <body>
     <div class="T_Main">
-        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <img src="../public/images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
         <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
         <div class="dateTime_Username">
             <label id="dateTime_Now">2000/01/01 23:59:59</label>
-            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
-            <label for="qaz" id="userAccount">Administrator</label>
+            <img src="../public/images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label id="userAccount">Administrator</label>
             <div class="accountNavBar">
-                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
-                <a href="AccountManage.html" id="accNB_02">人員管理</a>
-                <a href="Login.html" id="accNB_03">登出</a>
+                <a href="/account/personalinfo" id="accNB_01">個人資料</a>
+                <a href="/account/manage" id="accNB_02">人員管理</a>
+                <a href="/login" id="accNB_03">登出</a>
             </div>
         </div>
     </div>
@@ -32,9 +32,9 @@
         <div class="systemStatus">
             <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
             <div class="sumAWNum sumAlarmNum">
-                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <img src="../public/images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalAlarmNum">999</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
                 <div class="sumAW_EachArea sumAlarm_EachArea">
                     <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
                     <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
@@ -44,9 +44,9 @@
                 </div>
             </div>
             <div class="sumAWNum sumWarningNum">
-                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <img src="../public/images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalWarningNum">52</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
                 <div class="sumAW_EachArea sumWarning_EachArea">
                     <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
                     </div>
@@ -58,13 +58,13 @@
             </div>
         </div>
         <div class="navBar">
-            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
-            <a href="Op_Meter_SLD.html"><button class="button_nB" id="nB_Operation">運轉資訊</button></a>
-            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
-            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
-            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
-            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
-            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+            <a href="/mode"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="/operateinfo"><button class="button_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="/systeminfo"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="/alarm"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="/event"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="/report"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="/chart"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
         </div>
         <div class="systemInfo">
             <p class="subTitle">|| 系統資訊 ||</p>
@@ -107,14 +107,14 @@
             </div>
         </div>
         <div class="eStop">
-            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <img src="../public/images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
             <p class="epo_word">緊急停止鈕</p>
         </div>
 
         <div class="popUpWindow epo">
             <h2 class="titlePUW">緊急停止設定</h2>
 
-            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <img src="../public/images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
             <p class="epoInfo">確認停機</p>
 
             <button class="closeWindowButton" id="closeWB_Yes">確認</button>
@@ -129,7 +129,7 @@
         <div class="M_Page">
             <div class="title">
                 <h2>【個人資料】</h2>
-                <a href="AccountManage.html" id="goToAccountManage">人員管理</a>
+                <a href="/account/manage" id="goToAccountManage">人員管理</a>
             </div>
 
             <div class="BG_personalInfo">
@@ -216,8 +216,8 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script><!--dataTable-->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!--dataTable-->
-    <script src="scripts/script_template.js"></script>
-    <script src="scripts/PersonalInfo.js"></script>
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/PersonalInfo.js"></script>
 </body>
 
 </html>

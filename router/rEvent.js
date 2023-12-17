@@ -36,6 +36,15 @@ router.get("/event", (req, res) => {
   res.render("Evt_Operation");
 });
 
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+router.get("/event/operation", (req, res) => {
+  // num與fun
+  res.render("Evt_Operation");
+});
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
+
 router.get("/event/door", (req, res) => {
   // num與fun
   res.render("Evt_Door");

@@ -6,23 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!--  default -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--  default -->
     <title>Rack資訊</title>
-    <link href="styles/style_template.css" rel="stylesheet" type="text/css" />
-    <link href="styles/Op_Bat_Rack.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/style_template.css" rel="stylesheet" type="text/css" />
+    <link href="../public/styles/Op_Bat_Rack.css" rel="stylesheet" type="text/css" />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />-->
 </head>
 
 <body>
     <div class="T_Main">
-        <img src="images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
+        <img src="../public/images/Star_Energy_Logo.png" alt="星佑能源Logo" id="starEnergy_Logo">
         <h1>花蓮康舒E-dReg10M(地號4-1)</h1>
         <div class="dateTime_Username">
             <label id="dateTime_Now">2000/01/01 23:59:59</label>
-            <img src="images/User_Pic.png" alt="使用者圖示" id="user_Logo">
-            <label for="qaz" id="userAccount">Administrator</label>
+            <img src="../public/images/User_Pic.png" alt="使用者圖示" id="user_Logo">
+            <label id="userAccount">Administrator</label>
             <div class="accountNavBar">
-                <a href="PersonalInfo.html" id="accNB_01">個人資料</a>
-                <a href="AccountManage.html" id="accNB_02">人員管理</a>
-                <a href="Login.html" id="accNB_03">登出</a>
+                <a href="/account/personalinfo" id="accNB_01">個人資料</a>
+                <a href="/account/manage" id="accNB_02">人員管理</a>
+                <a href="/login" id="accNB_03">登出</a>
             </div>
         </div>
     </div>
@@ -31,9 +31,9 @@
         <div class="systemStatus">
             <label class="systemMode" id="L_M_systemMode">調頻服務中</label>
             <div class="sumAWNum sumAlarmNum">
-                <img src="images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
+                <img src="../public/images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalAlarmNum">999</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
                 <div class="sumAW_EachArea sumAlarm_EachArea">
                     <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter">2</label></div>
                     <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS">1</label></div>
@@ -43,9 +43,9 @@
                 </div>
             </div>
             <div class="sumAWNum sumWarningNum">
-                <img src="images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
+                <img src="../public/images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
                 <label class="totalAWNum" id="totalWarningNum">52</label>
-                <img src="images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
+                <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
                 <div class="sumAW_EachArea sumWarning_EachArea">
                     <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter">0</label>
                     </div>
@@ -57,13 +57,13 @@
             </div>
         </div>
         <div class="navBar">
-            <a href="Mode_SysCtrl.html"><button class="button_nB" id="nB_Mode">模式控制</button></a>
-            <a href="Op_Meter_SLD.html"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
-            <a href="Sys_Comm.html"><button class="button_nB" id="nB_System">系統資訊</button></a>
-            <a href="Alm_RealTime.html"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
-            <a href="Evt_Operation.html"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
-            <a href="Rpt_Report.html"><button class="button_nB" id="nB_Report">報表</button></a>
-            <a href="Cht_RealTime.html"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
+            <a href="/mode"><button class="button_nB" id="nB_Mode">模式控制</button></a>
+            <a href="/operateinfo"><button class="button_nB default_nB" id="nB_Operation">運轉資訊</button></a>
+            <a href="/systeminfo"><button class="button_nB" id="nB_System">系統資訊</button></a>
+            <a href="/alarm"><button class="button_nB" id="nB_Alarm">告警紀錄</button></a>
+            <a href="/event"><button class="button_nB" id="nB_Event">事件紀錄</button></a>
+            <a href="/report"><button class="button_nB" id="nB_Report">報表</button></a>
+            <a href="/chart"><button class="button_nB" id="nB_Chart">即時圖/歷史圖</button></a>
         </div>
         <div class="systemInfo">
             <p class="subTitle">|| 系統資訊 ||</p>
@@ -106,14 +106,14 @@
             </div>
         </div>
         <div class="eStop">
-            <img src="images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
+            <img src="../public/images/EPO_Logo.png" alt="緊急停止鈕圖示_Logo" id="epo_Logo">
             <p class="epo_word">緊急停止鈕</p>
         </div>
 
         <div class="popUpWindow epo">
             <h2 class="titlePUW">緊急停止設定</h2>
 
-            <img src="images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
+            <img src="../public/images/Alarm_Logo_v1.png" alt="Alarm圖示" class="alert_Logo">
             <p class="epoInfo">確認停機</p>
 
             <button class="closeWindowButton" id="closeWB_Yes">確認</button>
@@ -125,47 +125,47 @@
         <div class="subNavBar" id="sub_NavBar">
             <!-- <h2>模式控制</h2> -->
             <div class="button_sNB" id="sNB_01">
-                <a href="Op_Meter_SLD.html" class="name_button_sNB">單線圖</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
+                <a href="/operateinfo/singlelinediagram" class="name_button_sNB">單線圖</a>
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
                 <div class="ssNavBar">
-                    <a href="Op_Meter_SLD.html" id="ssNB_01">電力單線圖</a>
-                    <a href="Op_Meter_MainMeter.html" id="ssNB_02">主電表</a>
-                    <a href="Op_Meter_AuxMeter.html" id="ssNB_03">輔電表</a>
+                    <a href="/operateinfo/singlelinediagram" id="ssNB_01">電力單線圖</a>
+                    <a href="/operateinfo/mainmeter" id="ssNB_02">主電表</a>
+                    <a href="/operateinfo/auxmeter" id="ssNB_03">輔電表</a>
                 </div>
             </div>
             <div class="button_sNB" id="sNB_02">
-                <a href="Op_PCS_InfoSummary.html" class="name_button_sNB">PCS</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
+                <a href="/operateinfo/pcs" class="name_button_sNB">PCS</a>
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
                 <div class="ssNavBar">
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_01">PCS 1-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_02">PCS 1-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_03">PCS 2-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_04">PCS 2-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_05">PCS 3-1</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_06">PCS 3-2</a>
-                    <a href="Op_PCS_InfoDetail.html" id="ssNB_07">PCS 4</a>
+                    <a href="/operateinfo/pcs/infodetail/1" id="ssNB_01">PCS 1-1</a>
+                    <a href="/operateinfo/pcs/infodetail/2" id="ssNB_02">PCS 1-2</a>
+                    <a href="/operateinfo/pcs/infodetail/3" id="ssNB_03">PCS 2-1</a>
+                    <a href="/operateinfo/pcs/infodetail/4" id="ssNB_04">PCS 2-2</a>
+                    <a href="/operateinfo/pcs/infodetail/5" id="ssNB_05">PCS 3-1</a>
+                    <a href="/operateinfo/pcs/infodetail/6" id="ssNB_06">PCS 3-2</a>
+                    <a href="/operateinfo/pcs/infodetail/7" id="ssNB_07">PCS 4</a>
                 </div>
             </div>
             <div class="button_sNB button_sNB_last default_sNB" id="sNB_03">
-                <a href="Op_Bat_InfoSummary.html" class="name_button_sNB">電池</a>
-                <img src="images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
+                <a href="/operateinfo/battery" class="name_button_sNB">電池</a>
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
                 <div class="ssNavBar">
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_01">BMS 1-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_02">BMS 1-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_03">BMS 2-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_04">BMS 2-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_05">BMS 3-1</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_06">BMS 3-2</a>
-                    <a href="Op_Bat_InfoDetail.html" id="ssNB_07">BMS 4</a>
+                    <a href="/operateinfo/battery/infodetail/1" id="ssNB_01">BMS 1-1</a>
+                    <a href="/operateinfo/battery/infodetail/2" id="ssNB_02">BMS 1-2</a>
+                    <a href="/operateinfo/battery/infodetail/3" id="ssNB_03">BMS 2-1</a>
+                    <a href="/operateinfo/battery/infodetail/4" id="ssNB_04">BMS 2-2</a>
+                    <a href="/operateinfo/battery/infodetail/5" id="ssNB_05">BMS 3-1</a>
+                    <a href="/operateinfo/battery/infodetail/6" id="ssNB_06">BMS 3-2</a>
+                    <a href="/operateinfo/battery/infodetail/7" id="ssNB_07">BMS 4</a>
                 </div>
             </div>
         </div>
 
         <div class="M_Page">
             <div class="Title">
-                <h2>【BMS</h2><label for="qaz" id="No_of_BMS">1-1</label>
+                <h2>【BMS</h2><label id="No_of_BMS">1-1</label>
                 <h2>】</h2>
-                <a href="Op_Bat_InfoDetail.html" class="infoStatus" id="infoBMS">狀態與數值</a>
+                <a href="/operateinfo/battery/infodetail" class="infoStatus" id="infoBMS">狀態與數值</a>
                 <a href="#" class="infoStatus" id="infoRack">Rack資訊</a>
                 <a href="#" class="preNext" id="previousBMS">上一頁</a>
                 <a href="#" class="preNext" id="nextBMS">下一頁</a>
@@ -330,52 +330,52 @@
                     <tr class="row_other row_position">
                         <td class="col_01">位置&nbsp(BMU/Cell)</td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R01">24</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R01">01</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R01">24</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R01">01</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R02">23</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R02">02</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R02">23</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R02">02</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R03">22</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R03">03</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R03">22</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R03">03</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R04">21</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R04">04</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R04">21</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R04">04</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R05">20</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R05">05</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R05">20</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R05">05</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R06">19</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R06">06</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R06">19</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R06">06</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R07">18</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R07">07</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R07">18</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R07">07</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R08">17</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R08">08</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R08">17</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R08">08</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R09">16</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R09">09</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R09">16</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R09">09</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R10">15</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R10">10</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R10">15</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R10">10</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R11">14</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R11">02</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R11">14</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R11">02</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMax_R12">13</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMax_R12">12</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMax_R12">13</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMax_R12">12</label>
                         </td>
                     </tr>
                     <tr class="row_other">
@@ -396,52 +396,52 @@
                     <tr class="row_other row_position">
                         <td class="col_01">位置&nbsp(BMU/Cell)</td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R01">13</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R01">01</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R01">13</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R01">01</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R02">14</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R02">02</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R02">14</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R02">02</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R03">15</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R03">03</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R03">15</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R03">03</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R04">16</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R04">04</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R04">16</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R04">04</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R05">17</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R05">05</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R05">17</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R05">05</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R06">18</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R06">06</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R06">18</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R06">06</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R07">19</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R07">07</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R07">19</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R07">07</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R08">20</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R08">08</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R08">20</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R08">08</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R09">21</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R09">09</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R09">21</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R09">09</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R10">22</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R10">10</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R10">22</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R10">10</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R11">23</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R11">11</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R11">23</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R11">11</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_VcMin_R12">24</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_VcMin_R12">12</label>
+                            <label class="dataValue No_BMU" id="No_BMU_VcMin_R12">24</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_VcMin_R12">12</label>
                         </td>
                     </tr>
                     <tr class="row_other">
@@ -477,52 +477,52 @@
                     <tr class="row_other row_position">
                         <td class="col_01">位置&nbsp(BMU/Cell)</td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R01">24</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R01">12</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R01">24</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R01">12</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R02">23</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R02">11</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R02">23</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R02">11</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R03">22</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R03">10</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R03">22</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R03">10</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R04">21</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R04">09</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R04">21</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R04">09</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R05">20</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R05">08</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R05">20</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R05">08</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R06">19</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R06">07</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R06">19</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R06">07</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R07">18</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R07">06</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R07">18</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R07">06</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R08">17</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R08">05</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R08">17</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R08">05</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R09">16</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R09">04</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R09">16</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R09">04</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R10">15</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R10">03</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R10">15</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R10">03</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R11">14</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R11">02</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R11">14</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R11">02</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMax_R12">13</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMax_R12">01</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMax_R12">13</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMax_R12">01</label>
                         </td>
                     </tr>
                     <tr class="row_other">
@@ -543,52 +543,52 @@
                     <tr class="row_other row_position">
                         <td class="col_01">位置&nbsp(BMU/Cell)</td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R01">13</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R01">12</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R01">13</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R01">12</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R02">14</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R02">11</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R02">14</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R02">11</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R03">15</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R03">10</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R03">15</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R03">10</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R04">16</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R04">09</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R04">16</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R04">09</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R05">17</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R05">08</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R05">17</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R05">08</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R06">18</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R06">07</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R06">18</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R06">07</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R07">19</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R07">06</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R07">19</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R07">06</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R08">20</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R08">05</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R08">20</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R08">05</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R09">21</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R09">04</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R09">21</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R09">04</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R10">22</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R10">03</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R10">22</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R10">03</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R11">23</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R11">02</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R11">23</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R11">02</label>
                         </td>
                         <td class="col_other">
-                            <label for="qaz" class="dataValue No_BMU" id="No_BMU_TcMin_R12">24</label>/
-                            <label for="qaz" class="dataValue No_Cell" id="No_Cell_TcMin_R12">01</label>
+                            <label class="dataValue No_BMU" id="No_BMU_TcMin_R12">24</label>/
+                            <label class="dataValue No_Cell" id="No_Cell_TcMin_R12">01</label>
                         </td>
                     </tr>
                     <tr class="row_other">
@@ -760,104 +760,104 @@
                     <h2 class="titlePUW titleStatusHW">RackXX&nbsp硬體狀態</h2>
 
                     <div class="columnDLL">
-                        <div class="DL_Line">電芯過壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_0"></label>
+                        <div class="DL_Line">電芯過壓告警<label class="dataLight OB_L" id="alarmCMU_bit_0"></label>
                         </div>
-                        <div class="DL_Line">電芯欠壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_1"></label>
+                        <div class="DL_Line">電芯欠壓告警<label class="dataLight OB_L" id="alarmCMU_bit_1"></label>
                         </div>
-                        <div class="DL_Line">總壓過壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_2"></label>
+                        <div class="DL_Line">總壓過壓告警<label class="dataLight OB_L" id="alarmCMU_bit_2"></label>
                         </div>
-                        <div class="DL_Line">總壓欠壓告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_3"></label>
+                        <div class="DL_Line">總壓欠壓告警<label class="dataLight OB_L" id="alarmCMU_bit_3"></label>
                         </div>
-                        <div class="DL_Line">Pack過壓告警<label for="qaz" class="dataLight OB_L"
+                        <div class="DL_Line">Pack過壓告警<label class="dataLight OB_L"
                                 id="alarmCMU_bit_4"></label>
                         </div>
-                        <div class="DL_Line">Pack欠壓告警<label for="qaz" class="dataLight OB_L"
+                        <div class="DL_Line">Pack欠壓告警<label class="dataLight OB_L"
                                 id="alarmCMU_bit_5"></label>
                         </div>
-                        <div class="DL_Line">電芯壓差告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_6"></label>
+                        <div class="DL_Line">電芯壓差告警<label class="dataLight OB_L" id="alarmCMU_bit_6"></label>
                         </div>
-                        <div class="DL_Line">Pack壓差告警<label for="qaz" class="dataLight OB_L"
+                        <div class="DL_Line">Pack壓差告警<label class="dataLight OB_L"
                                 id="alarmCMU_bit_8"></label>
                         </div>
-                        <div class="DL_Line">電芯過溫告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_9"></label>
+                        <div class="DL_Line">電芯過溫告警<label class="dataLight OB_L" id="alarmCMU_bit_9"></label>
                         </div>
-                        <div class="DL_Line">電芯低溫告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_10"></label>
+                        <div class="DL_Line">電芯低溫告警<label class="dataLight OB_L" id="alarmCMU_bit_10"></label>
                         </div>
-                        <div class="DL_Line">電芯溫差告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_11"></label>
+                        <div class="DL_Line">電芯溫差告警<label class="dataLight OB_L" id="alarmCMU_bit_11"></label>
                         </div>
-                        <div class="DL_Line">絕緣漏電告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_12"></label>
+                        <div class="DL_Line">絕緣漏電告警<label class="dataLight OB_L" id="alarmCMU_bit_12"></label>
                         </div>
-                        <div class="DL_Line">過流告警<label for="qaz" class="dataLight OB_L" id="alarmCMU_bit_20"></label>
+                        <div class="DL_Line">過流告警<label class="dataLight OB_L" id="alarmCMU_bit_20"></label>
                         </div>
                     </div>
                     <div class="columnDLL">
-                        <div class="DL_Line">電芯過壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_0"></label>
+                        <div class="DL_Line">電芯過壓故障<label class="dataLight RB_L" id="faultCMU_bit_0"></label>
                         </div>
-                        <div class="DL_Line">電芯欠壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_1"></label>
+                        <div class="DL_Line">電芯欠壓故障<label class="dataLight RB_L" id="faultCMU_bit_1"></label>
                         </div>
-                        <div class="DL_Line">總壓過壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_2"></label>
+                        <div class="DL_Line">總壓過壓故障<label class="dataLight RB_L" id="faultCMU_bit_2"></label>
                         </div>
-                        <div class="DL_Line">總壓欠壓故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_3"></label>
+                        <div class="DL_Line">總壓欠壓故障<label class="dataLight RB_L" id="faultCMU_bit_3"></label>
                         </div>
-                        <div class="DL_Line">Pack過壓故障<label for="qaz" class="dataLight RB_L"
+                        <div class="DL_Line">Pack過壓故障<label class="dataLight RB_L"
                                 id="faultCMU_bit_4"></label>
                         </div>
-                        <div class="DL_Line">Pack欠壓故障<label for="qaz" class="dataLight RB_L"
+                        <div class="DL_Line">Pack欠壓故障<label class="dataLight RB_L"
                                 id="faultCMU_bit_5"></label>
                         </div>
-                        <div class="DL_Line">總壓壓差故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_7"></label>
+                        <div class="DL_Line">總壓壓差故障<label class="dataLight RB_L" id="faultCMU_bit_7"></label>
                         </div>
-                        <div class="DL_Line">電芯過溫故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_9"></label>
+                        <div class="DL_Line">電芯過溫故障<label class="dataLight RB_L" id="faultCMU_bit_9"></label>
                         </div>
-                        <div class="DL_Line">電芯低溫故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_10"></label>
+                        <div class="DL_Line">電芯低溫故障<label class="dataLight RB_L" id="faultCMU_bit_10"></label>
                         </div>
-                        <div class="DL_Line">絕緣漏電故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_12"></label>
+                        <div class="DL_Line">絕緣漏電故障<label class="dataLight RB_L" id="faultCMU_bit_12"></label>
                         </div>
-                        <div class="DL_Line">CMU-BMU通訊故障<label for="qaz" class="dataLight RB_L"
+                        <div class="DL_Line">CMU-BMU通訊故障<label class="dataLight RB_L"
                                 id="faultCMU_bit_13"></label>
                         </div>
-                        <div class="DL_Line">電壓採樣故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_14"></label>
+                        <div class="DL_Line">電壓採樣故障<label class="dataLight RB_L" id="faultCMU_bit_14"></label>
                         </div>
-                        <div class="DL_Line">溫度採樣故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_15"></label>
+                        <div class="DL_Line">溫度採樣故障<label class="dataLight RB_L" id="faultCMU_bit_15"></label>
                         </div>
-                        <div class="DL_Line">電流採樣故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_17"></label>
+                        <div class="DL_Line">電流採樣故障<label class="dataLight RB_L" id="faultCMU_bit_17"></label>
                         </div>
-                        <div class="DL_Line">CMU-SMU通訊故障<label for="qaz" class="dataLight RB_L"
+                        <div class="DL_Line">CMU-SMU通訊故障<label class="dataLight RB_L"
                                 id="faultCMU_bit_18"></label>
                         </div>
-                        <div class="DL_Line">過流故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_20"></label>
+                        <div class="DL_Line">過流故障<label class="dataLight RB_L" id="faultCMU_bit_20"></label>
                         </div>
-                        <div class="DL_Line">極性反接故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_21"></label>
+                        <div class="DL_Line">極性反接故障<label class="dataLight RB_L" id="faultCMU_bit_21"></label>
                         </div>
-                        <div class="DL_Line">熔絲故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_22"></label>
+                        <div class="DL_Line">熔絲故障<label class="dataLight RB_L" id="faultCMU_bit_22"></label>
                         </div>
-                        <div class="DL_Line">接觸器故障<label for="qaz" class="dataLight RB_L" id="faultCMU_bit_23"></label>
+                        <div class="DL_Line">接觸器故障<label class="dataLight RB_L" id="faultCMU_bit_23"></label>
                         </div>
                     </div>
                     <div class="columnDLL">
-                        <div class="DL_Line">主正繼電器投入<label for="qaz" class="dataLight GB_L" id="statusHW_bit_0"></label>
+                        <div class="DL_Line">主正繼電器投入<label class="dataLight GB_L" id="statusHW_bit_0"></label>
                         </div>
-                        <div class="DL_Line">主正繼電器切離<label for="qaz" class="dataLight GB_L" id="statusHW_bit_1"></label>
+                        <div class="DL_Line">主正繼電器切離<label class="dataLight GB_L" id="statusHW_bit_1"></label>
                         </div>
-                        <div class="DL_Line">主正繼電器故障<label for="qaz" class="dataLight RB_L" id="statusHW_bit_2"></label>
+                        <div class="DL_Line">主正繼電器故障<label class="dataLight RB_L" id="statusHW_bit_2"></label>
                         </div>
-                        <div class="DL_Line">主正繼電器投入失敗<label for="qaz" class="dataLight RB_L"
+                        <div class="DL_Line">主正繼電器投入失敗<label class="dataLight RB_L"
                                 id="statusHW_bit_3"></label>
                         </div>
-                        <div class="DL_Line">主負繼電器投入<label for="qaz" class="dataLight GB_L" id="statusHW_bit_4"></label>
+                        <div class="DL_Line">主負繼電器投入<label class="dataLight GB_L" id="statusHW_bit_4"></label>
                         </div>
-                        <div class="DL_Line">主負繼電器切離<label for="qaz" class="dataLight GB_L" id="statusHW_bit_5"></label>
+                        <div class="DL_Line">主負繼電器切離<label class="dataLight GB_L" id="statusHW_bit_5"></label>
                         </div>
-                        <div class="DL_Line">主負繼電器故障<label for="qaz" class="dataLight RB_L" id="statusHW_bit_6"></label>
+                        <div class="DL_Line">主負繼電器故障<label class="dataLight RB_L" id="statusHW_bit_6"></label>
                         </div>
-                        <div class="DL_Line">主負繼電器投入失敗<label for="qaz" class="dataLight RB_L"
+                        <div class="DL_Line">主負繼電器投入失敗<label class="dataLight RB_L"
                                 id="statusHW_bit_7"></label>
                         </div>
-                        <div class="DL_Line">熔絲投入<label for="qaz" class="dataLight GB_L" id="statusHW_bit_8"></label>
+                        <div class="DL_Line">熔絲投入<label class="dataLight GB_L" id="statusHW_bit_8"></label>
                         </div>
-                        <div class="DL_Line">熔絲切離<label for="qaz" class="dataLight GB_L" id="statusHW_bit_9"></label>
+                        <div class="DL_Line">熔絲切離<label class="dataLight GB_L" id="statusHW_bit_9"></label>
                         </div>
-                        <div class="DL_Line">BMU反向菊花鏈啟用<label for="qaz" class="dataLight GB_L"
+                        <div class="DL_Line">BMU反向菊花鏈啟用<label class="dataLight GB_L"
                                 id="statusHW_bit_12"></label>
                         </div>
                     </div>
@@ -868,8 +868,8 @@
         </div>
     </div>
 
-    <script src="scripts/script_template.js"></script>
-    <script src="scripts/Op_Bat_Rack.js"></script>
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/Op_Bat_Rack.js"></script>
 </body>
 
 </html>

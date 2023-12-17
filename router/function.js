@@ -36,14 +36,14 @@ function mapchargeStatus(decimalValue) {
   //const binaryString = decimalValue.toString(2);
   console.log(decimalValue);
   // 檢查位元為1的數量，如果超過兩個以上，返回 "Error"
-  if (decimalValue >= 2) {
+  if (decimalValue >= 3) {
     console.log(decimalValue);
     return "Error";
-  } else if ((decimalValue = 0)) {
+  } else if ((decimalValue === 0)) {
     return "Charging";
-  } else if ((decimalValue = 1)) {
+  } else if ((decimalValue === 1)) {
     return "Discharging";
-  } else if ((decimalValue = 2)) {
+  } else if ((decimalValue === 2)) {
     return "Non-working state";
   }
 }

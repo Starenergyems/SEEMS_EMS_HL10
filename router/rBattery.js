@@ -35,16 +35,98 @@ router.get("/operateinfo/battery", (req, res) => {
   res.render("Op_Bat_InfoSummary");
 });
 
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+router.get("/operateinfo/battery/infodetail", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
+
 //多台電池狀態
 router.get("/operateinfo/battery/infodetail/1", (req, res) => {
   // num與fun
   res.render("Op_Bat_InfoDetail");
 });
 
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+router.get("/operateinfo/battery/infodetail/2", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+router.get("/operateinfo/battery/infodetail/3", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+router.get("/operateinfo/battery/infodetail/4", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+router.get("/operateinfo/battery/infodetail/5", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+router.get("/operateinfo/battery/infodetail/6", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+router.get("/operateinfo/battery/infodetail/7", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_InfoDetail");
+});
+
+router.get("/operateinfo/battery/rack", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
+
 //多台RACK
 router.get("/operateinfo/battery/rack/1", (req, res) => {
   // num與fun
   res.render("Op_Bat_Rack");
 });
+
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+router.get("/operateinfo/battery/rack/2", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
+
+router.get("/operateinfo/battery/rack/3", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
+
+router.get("/operateinfo/battery/rack/4", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
+
+router.get("/operateinfo/battery/rack/5", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
+
+router.get("/operateinfo/battery/rack/6", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
+
+router.get("/operateinfo/battery/rack/7", (req, res) => {
+  // num與fun
+  res.render("Op_Bat_Rack");
+});
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 module.exports = router;

@@ -31,22 +31,22 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 
 //導向童話面作法同於METER
-router.get("/Mode", (req, res) => {
-  res.render("Mode_Schedule");
+router.get("/mode", (req, res) => {
+  res.render("Mode_SysCtrl");
 });
 //系統模式控制頁面切換
-router.get("/Mode/sysctrl", (req, res) => {
+router.get("/mode/sysctrl", (req, res) => {
   res.render("Mode_SysCtrl");
 });
 //  排程
-router.get("/Mode/schedule", (req, res) => {
+router.get("/mode/schedule", (req, res) => {
   res.render("Mode_Schedule");
 });
 
 //運轉資訊+單線圖
-router.get("/operateinfo", (req, res) => {
-  // num與fun
-  res.render("Op_Meter_SLD");
-});
+// router.get("/operateinfo", (req, res) => {
+//   // num與fun
+//   res.render("Op_Meter_SLD");
+// });
 
 module.exports = router;

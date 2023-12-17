@@ -37,14 +37,33 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 
-router.get("/personalinfo", (req, res) => {
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+router.get("/account", (req, res) => {
   // num與fun
   res.render("PersonalInfo");
 });
 
-router.get("/accountmanage", (req, res) => {
+router.get("/account/personalinfo", (req, res) => {
+  // num與fun
+  res.render("PersonalInfo");
+});
+
+router.get("/account/manage", (req, res) => {
   // num與fun
   res.render("AccountManage");
 });
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
+
+// router.get("/personalinfo", (req, res) => {
+//   // num與fun
+//   res.render("PersonalInfo");
+// });
+
+// router.get("/accountmanage", (req, res) => {
+//   // num與fun
+//   res.render("AccountManage");
+// });
 
 module.exports = router;

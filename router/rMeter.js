@@ -19,7 +19,12 @@ router.get("/operateinfo", (req, res) => {
   res.render("Op_Meter_SLD");
 });
 
-router.get("/operateinfo/mainmerter", async (req, res) => {
+router.get("/operateinfo/singlelinediagram", (req, res) => {
+  // num與fun
+  res.render("Op_Meter_SLD");
+});
+
+router.get("/operateinfo/mainmeter", async (req, res) => {
   try {
     // 獲取當前連接的所有 collection 名稱
     const collections = mongoose.connection.collections;
@@ -104,9 +109,9 @@ router.get("/operateinfo/mainmerter", async (req, res) => {
 // 將這段程式碼放在 try-catch 區塊中
 
 //其他電表
-// router.get("/operateinfo/auxmerters", (req, res) => {
-//   // num與fun
-//   res.render("Op_Meter_AuxMeter");
-// });
+router.get("/operateinfo/auxmeter", (req, res) => {
+  // num與fun
+  res.render("Op_Meter_AuxMeter");
+});
 
 module.exports = router;

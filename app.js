@@ -47,7 +47,7 @@ router.get("/accountmanage", (req, res) => {
 //"/Mode/sysctrl" 和 "/Mode/schedule"，因為缺少 "/Mode" 的處理程序。
 //C:\Test\SEEMS_EMS\router\rMode.js
 router.get("/Mode", (req, res) => {
-  res.render("Mode_Schedule");
+  res.render("Mode_SysCtrl");
 });
 //系統模式控制頁面切換
 router.get("/Mode/sysctrl", (req, res) => {
@@ -66,12 +66,12 @@ router.get("/operateinfo", (req, res) => {
 });
 
 //主電表
-router.get("/operateinfo/mainmerter", (req, res) => {
+router.get("/operateinfo/mainmeter", (req, res) => {
   // num與fun
   res.render("Op_Meter_MainMeter");
 });
 //其他電表
-router.get("/operateinfo/auxmerters", (req, res) => {
+router.get("/operateinfo/auxmeter", (req, res) => {
   // num與fun
   res.render("Op_Meter_AuxMeter");
 });
@@ -190,19 +190,19 @@ router.get("/report", (req, res) => {
 
 //C:\Test\SEEMS_EMS\router\rChart.js
 //圖表
-router.get("/chrat", (req, res) => {
+router.get("/chart", (req, res) => {
   // num與fun
-  res.render("Fig_Real_Time");
+  res.render("Cht_RealTime");
 });
 
-router.get("/chrat/real", (req, res) => {
+router.get("/chart/realtime", (req, res) => {
   // num與fun
-  res.render("Fig_Real_Time");
+  res.render("Cht_RealTime");
 });
 
-router.get("/chrat/history", (req, res) => {
+router.get("/chart/history", (req, res) => {
   // num與fun
-  res.render("Fig_Historic");
+  res.render("Cht_History");
 });
 
 //
