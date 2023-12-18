@@ -27,7 +27,7 @@ router.use(
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
 router.use(
-  "/operateinfo/pcs/infodetail/:id",
+  "/operateinfo/pcs/alarm/:id",
   express.static(path.join(__dirname, "../public"))
 );
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件

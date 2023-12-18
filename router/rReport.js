@@ -6,7 +6,7 @@ const port = 3000;
 //const Dc = require("../models/dc_schema");  再建立一個所有使用者的/且定義門禁的
 const router = express.Router();
 const app = express();
-
+const cors = require("cors");
 // mongoose
 //   .connect("mongodb://localhost:27017/ems")
 //   .then(() => {
@@ -28,6 +28,7 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use(cors());
 //app.use(myMiddleware);
 
 //報表

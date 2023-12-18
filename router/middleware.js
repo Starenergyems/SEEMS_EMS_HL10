@@ -1,5 +1,7 @@
 // middleware.js
-
+const cors = require("cors");
+const app = express();
+app.use(cors());
 // 定義一個全區可用的中間件函數
 const myMiddleware = (req, res, next) => {
   console.log("這是全區可用的中間件！");
