@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const Other1 = require("../models/otherrf1schema");
+const cors = require("cors");
 const router = express.Router();
 const app = express();
 const { scaleProcess } = require("./function");
@@ -12,6 +13,7 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use(cors());
 //app.use(myMiddleware);
 
 router.get("/operateinfo", (req, res) => {

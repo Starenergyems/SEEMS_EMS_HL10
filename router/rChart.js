@@ -7,7 +7,7 @@ const Lc = require("../models/lcschema");
 //const Other1 = require("../models/lc_schema"); 還會引用?
 const router = express.Router();
 const app = express();
-
+const cors = require("cors");
 // mongoose
 //   .connect("mongodb://localhost:27017/ems")
 //   .then(() => {

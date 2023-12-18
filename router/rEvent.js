@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
+const cors = require("cors");
 //const Dc = require("../models/dc_schema");  再建立一個所有使用者的/且定義門禁的
 const router = express.Router();
 const app = express();

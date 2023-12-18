@@ -4,6 +4,7 @@ const methodOverride = require("method-override");
 const path = require("path");
 const Lc01 = require("../models/lcschema");
 const app = express(); // Create an Express application instance
+const cors = require("cors");
 const router = express.Router();
 const {
   scaleProcess,
@@ -11,17 +12,31 @@ const {
   mapPCSWorkingStatus,
 } = require("./function");
 
-//set
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
-//use
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.use("/public", express.static(path.join(__dirname, "../public")));
-//app.use(myMiddleware);
 
-// 創建一個Mongoose模型
-//const DataModel = mongoose.model("Data", Schema, "account");
+router.use("/public", express.static(path.join(__dirname, "../public")));
+router.use(
+  "/operateinfo",
+  express.static(path.join(__dirname, "../public/operateinfo"))
+);
+router.use(
+  "/operateinfo/pcs",
+  express.static(path.join(__dirname, "../public/operateinfo/pcs"))
+);
+router.use(
+  "/operateinfo/pcs/infodetail/:id",
+  express.static(path.join(__dirname, "../public"))
+);
+// 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
+router.use(
+  "/operateinfo/pcs/infodetail/:id",
+  express.static(path.join(__dirname, "../public"))
+);
+
+router.use(cors());
 
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {

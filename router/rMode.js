@@ -6,7 +6,7 @@ const port = 3000;
 const Gc = require("../models/gcschema");
 const router = express.Router();
 const app = express();
-
+const cors = require("cors");
 // mongoose
 //   .connect("mongodb://localhost:27017/ems")
 //   .then(() => {
@@ -28,6 +28,7 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use(cors());
 //app.use(myMiddleware);
 
 //導向童話面作法同於METER

@@ -6,7 +6,7 @@ const port = 3000;
 const Lc = require("../models/lcschema");
 const router = express.Router();
 const app = express();
-
+const cors = require("cors");
 // mongoose
 //   .connect("mongodb://localhost:27017/ems")
 //   .then(() => {
@@ -19,7 +19,6 @@ const app = express();
 //   .catch((e) => {
 //     console.log(e);
 //   });
-
 //set
 app.set("view engine", "ejs");
 // 設定視圖目錄為 C:\Test\SEEMS_EMS\views
@@ -27,8 +26,26 @@ app.set("views", path.join(__dirname, "../views"));
 //use
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.use("/public", express.static(path.join(__dirname, "../public")));
-//app.use(myMiddleware);
+router.use("/public", express.static(path.join(__dirname, "../public")));
+router.use(
+  "/operateinfo",
+  express.static(path.join(__dirname, "../public/operateinfo"))
+);
+router.use(
+  "/operateinfo/battery",
+  express.static(path.join(__dirname, "../public/operateinfo/pcs"))
+);
+router.use(
+  "/operateinfo/battery/infodetail/:id",
+  express.static(path.join(__dirname, "../public"))
+);
+// 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
+router.use(
+  "/operateinfo/battery/infodetail/:id",
+  express.static(path.join(__dirname, "../public"))
+);
+
+router.use(cors());
 
 router.get("/operateinfo/battery", (req, res) => {
   // num與fun

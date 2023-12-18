@@ -28,12 +28,28 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
-//app.use(myMiddleware);
 
 //告警紀錄
 router.get("/alarm", (req, res) => {
   // num與fun
+
   res.render("Alm_RealTime");
+});
+
+router.get("/alarm/re", async (req, res) => {
+  try {
+    // 從資料庫中獲取資料
+    const sourceData = await SourceData.find();
+    // 處理資料，這裡假設有一個處理函式 processData
+    const processedData = processData(sourceData);
+    // 將處理完的資料儲存到新的collection中
+    await ProcessedData.create(processedData);
+    // 回傳處理完的資料給前端
+    res.json(processedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/alarm/realtime", (req, res) => {

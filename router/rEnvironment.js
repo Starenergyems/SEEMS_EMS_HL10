@@ -6,7 +6,7 @@ const port = 3000;
 const Dc = require("../models/dcschema");
 const router = express.Router();
 const app = express();
-
+const cors = require("cors");
 // mongoose
 //   .connect("mongodb://localhost:27017/ems")
 //   .then(() => {

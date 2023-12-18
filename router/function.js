@@ -175,9 +175,9 @@ function mapgridStatus(decimalValue) {
 }
 
 // 使用例子;
-const decimalValue = 0; // 試試不同的數值
-const result = mapgridStatus(decimalValue);
-console.log(result);
+// const decimalValue = 0; // 試試不同的數值
+// const result = mapgridStatus(decimalValue);
+// console.log(result);
 
 module.exports = {
   mapchargeStatus,
