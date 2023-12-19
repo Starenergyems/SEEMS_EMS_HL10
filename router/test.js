@@ -1,84 +1,84 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
-const path = require("path");
-const Other1 = require("../models/otherrf1schema");
+const cors = require("cors");
 const router = express.Router();
 const app = express();
-const { scaleProcess, add, count } = require("./function");
+const path = require("path");
+const socket = require("socket.io");
+const http = require("http");
+
+// 創建 HTTP 伺服器
+const server = http.createServer(app);
+
+// 定義資料庫模型
+const C1 = mongoose.model("C1", {
+  _id: mongoose.Schema.Types.ObjectId,
+  value: Number,
+  timestamp: { type: Date, default: Date.now },
+});
+const C2 = mongoose.model("C2", {
+  _id: mongoose.Schema.Types.ObjectId,
+  value: Number,
+  timestamp: { type: Date, default: Date.now },
+});
+const C3 = mongoose.model("C3", {
+  _id: mongoose.Schema.Types.ObjectId,
+  value: Number,
+  timestamp: { type: Date, default: Date.now },
+});
+const C4 = mongoose.model("C4", {
+  _id: mongoose.Schema.Types.ObjectId,
+  value: Number,
+  timestamp: { type: Date, default: Date.now },
+});
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use(cors());
 
-router.get("/operateinfo/mainmerter", async (req, res) => {
+// 創建 socket.io 實例
+const io = socket(server);
+
+// 處理路由和資料庫查詢等相關邏輯
+router.get("/testforajax", async (req, res) => {
   try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
+    // 從資料庫中獲取數據
+    const c1Data = await C1.find();
+    const c2Data = await C2.find();
+    const c3Data = await C3.find();
 
-    const other1Data = await Other1.findOne().sort({ time_log: -1 });
+    // 獲取最新的C4資料
+    const latestC4Data = await C4.find().sort({ timestamp: -1 });
 
-    if (!other1Data) {
-      throw new Error("No data found");
+    // 遍歷 C4，刪除數值低於 50000 的文檔
+    for (const c4Item of latestC4Data) {
+      if (c4Item.value < 50000) {
+        await C4.findByIdAndDelete(c4Item._id);
+      }
     }
 
-    const scaleAndPointMapping = {
-      408001: { scale: 0.1, point: 1 },
-      408003: { scale: 0.1, point: 1 },
-      408005: { scale: 0.1, point: 1 },
-      408007: { scale: 0.1, point: 2 },
-      408009: { scale: 0.1, point: 2 },
-      408011: { scale: 0.1, point: 2 },
-      408013: { scale: 0.1, point: 2 },
-      408015: { scale: 0.1, point: 2 },
-      408017: { scale: 0.1, point: 2 },
-      408019: { scale: 0.1, point: 2 },
-      408021: { scale: 0.1, point: 2 },
-      408023: { scale: 0.1, point: 2 },
-      408025: { scale: 0.1, point: 2 },
-      408026: { scale: 0.1, point: 2 },
-      408028: { scale: 0.1, point: 2 },
-      408030: { scale: 0.1, point: 2 },
-      408032: { scale: 0.1, point: 2 },
-      408034: { scale: 0.1, point: 2 },
-    };
+    // 遍歷 c1Data，將不在 C4 中的文檔加入 C4，或更新已存在的文檔
+    await processData(c1Data, latestC4Data);
 
-    // 定義處理函數映射表
-    const processFunctions = {
-      408003: add,
-      408005: count,
-      408007: (value) => count(add(value)), // 兩個函數組合
-      408009: (value) => merge(count(add(value))), // 三個函數組合
-    };
+    // 遍歷 c2Data，將不在 C4 中的文檔加入 C4，或更新已存在的文檔
+    await processData(c2Data, latestC4Data);
 
-    const data = {};
-    //scaleProcess 是一個通用的轉換函數，可以應用在所有的屬性上，而 processFunctions 主要用於那些需要特殊處理的屬性。
-    Object.entries(scaleAndPointMapping).forEach(
-      ([property, { scale, point }]) => {
-        const originalValue = other1Data.Freq[property];
-        const scaledValue = scaleProcess(originalValue, scale, point);
+    // 遍歷 c3Data，將不在 C4 中的文檔加入 C4，或更新已存在的文檔
+    await processData(c3Data, latestC4Data);
 
-        // 如果有定義對應的處理函數，則應用
-        const processFunction = processFunctions[property];
-        const processedValue = processFunction
-          ? processFunction(scaledValue)
-          : scaledValue;
+    // 重新獲取最新的 C4 資料，以確保排序正確
+    const updatedC4Data = await C4.find().sort({ timestamp: -1 });
 
-        data[property] = processedValue;
-      }
-    );
-
-    // 將數據傳遞給 EJS 模板，包括所有變數
-    res.render("../views/Op_Meter_MainMeter", {
-      volt_ab: data["408001"],
-      volt_bc: data["408003"],
-      volt_ca: data["408005"],
-      volt_avg: data["408007"],
-      // ... (其他變數)
-      other1Data, // 確保 other1Data 也被傳遞
+    // 將數據傳遞到前端
+    res.render("test", {
+      c1Data,
+      c2Data,
+      c3Data,
+      c4Data: updatedC4Data,
     });
   } catch (error) {
     console.error(error);
@@ -86,4 +86,59 @@ router.get("/operateinfo/mainmerter", async (req, res) => {
   }
 });
 
-module.exports = router;
+// Socket.io 事件監聽
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  // 監聽來自前端的更新事件
+  socket.on("updateData", () => {
+    // 發送最新的數據到前端
+    io.emit("refreshData");
+  });
+
+  // 斷開連接
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+});
+
+async function processData(data, latestC4Data) {
+  // 創建一個 Set 來存儲已經存在於 C4 中的文檔的 _id
+  const existingIds = new Set(latestC4Data.map((item) => item._id.toString()));
+
+  // 遍歷 data，將不在 C4 中的文檔加入 C4，或更新已存在的文檔
+  for (const item of data) {
+    const idString = item._id.toString();
+    const existingDoc = latestC4Data.find(
+      (doc) => doc._id.toString() === idString
+    );
+
+    if (!existingDoc) {
+      // 如果 C4 中沒有該文檔，則新增
+      if (item.value > 50000) {
+        await C4.create({
+          _id: item._id,
+          value: item.value,
+          timestamp: item.timestamp,
+        });
+      }
+    } else {
+      // 如果 C4 中已經存在該文檔，則更新數值或刪除
+      if (item.value > 50000) {
+        // 更新數值
+        if (existingDoc.value !== item.value) {
+          await C4.findByIdAndUpdate(existingDoc._id, {
+            value: item.value,
+            timestamp: item.timestamp,
+          });
+        }
+      } else {
+        // 小於等於 50000 則刪除
+        await C4.findByIdAndDelete(existingDoc._id);
+      }
+    }
+    existingIds.add(idString);
+  }
+}
+
+module.exports = { router, server }; // 導出路由和伺服器

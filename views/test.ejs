@@ -1,42 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TEST</title>
-  </head>
-  <body>
-    <h1>all data</h1>
-    <ul>
-      <% data.forEach(dataItem => { %>
-      <li>
-        <strong>_id:</strong> <%= dataItem._id %>
-        <br />
-        <strong>time:</strong> <%= dataItem.time %>
-        <ul>
-          <% Object.keys(dataItem).forEach(key => { %> <% if (key !== '_id' &&
-          key !== 'time') { %>
-          <li>
-            <strong><%= key %>:</strong>
-            <% renderData(dataItem[key]); %>
-          </li>
-          <% } %> <% }) %>
-        </ul>
-      </li>
-      <% }) %>
-    </ul>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>資料顯示</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- 在 head 中引入 Socket.io 客戶端庫 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+  <!-- 引入 jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+  <h2>C4 判斷後的數值 Data</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Value</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% c4Data.forEach(item => { %>
+        <tr>
+          <td><%= item.value %></td>
+          <td><%= item.timestamp %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <br>
+  <br>
+  <br>
+  <h2>C1 Data</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Value</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% c1Data.forEach(item => { %>
+        <tr>
+          <td><%= item.value %></td>
+          <td><%= item.timestamp %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+    <br>
+  </table>
+  <h2>C2 Data</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Value</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% c2Data.forEach(item => { %>
+        <tr>
+          <td><%= item.value %></td>
+          <td><%= item.timestamp %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <br>
+  <h2>C3 Data</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Value</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% c3Data.forEach(item => { %>
+        <tr>
+          <td><%= item.value %></td>
+          <td><%= item.timestamp %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <!-- 在 body 底部添加 Socket.io 事件處理程序 -->
+  <script>
+    // 建立 Socket.io 連接
+    const socket = io.connect();
 
-    <% function renderData(obj) { %>
-    <ul>
-      <% Object.keys(obj).forEach(subKey => { %>
-      <li>
-        <strong><%= subKey %>:</strong>
-        <% if (typeof obj[subKey] === 'object') { %> <% renderData(obj[subKey]);
-        %> <% } else { %> <%= obj[subKey] %> <% } %>
-      </li>
-      <% }) %>
-    </ul>
-    <% } %>
-  </body>
+    // 監聽 "refreshData" 事件
+    socket.on("refreshData", () => {
+      // 更新 C4 數據的相應操作
+      console.log("Received refreshData event. Updating C4 data...");
+
+      // 使用 jQuery 更新 C4 數據
+      $.get("/testforajax", (data) => {
+        // 在這裡更新 C4 數據，假設返回的數據包含更新後的 C4 數據
+        // 您可以根據實際情況進行修改
+        $("tbody").html(data);
+      });
+
+      // 更新 C1 數據
+      $.get("/c1", (data) => {
+        // 在這裡更新 C1 數據，假設返回的數據包含更新後的 C1 數據
+        // 您可以根據實際情況進行修改
+        $("#c1Table tbody").html(data);
+      });
+
+      // 更新 C2 數據
+      $.get("/c2", (data) => {
+        // 在這裡更新 C2 數據，假設返回的數據包含更新後的 C2 數據
+        // 您可以根據實際情況進行修改
+        $("#c2Table tbody").html(data);
+      });
+
+      // 更新 C3 數據
+      $.get("/c3", (data) => {
+        // 在這裡更新 C3 數據，假設返回的數據包含更新後的 C3 數據
+        // 您可以根據實際情況進行修改
+        $("#c3Table tbody").html(data);
+      });
+    });
+  </script>
+</body>
 </html>

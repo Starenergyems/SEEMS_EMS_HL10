@@ -13,6 +13,7 @@ npm i express-session //session套件
 npm i dotenv //獲得環境變數
 npm i connect-flash //紀錄簡短訊息 例如登入成功與否
 npm install readline //terminal可以讀取數值用(檢查數值用)
+npm install socket.io//即時更新數值使用
 
 設定app.js
 node app.js 執行並確認有出現(伺服器正在聆聽 port 3000...)
