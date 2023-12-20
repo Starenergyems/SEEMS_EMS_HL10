@@ -1,4 +1,3 @@
-// linebotMiddleware.js
 const express = require("express");
 const line = require("@line/bot-sdk");
 require("dotenv").config();
@@ -13,22 +12,27 @@ const lineClient = new line.Client(lineConfig);
 
 // 將 lineRouter 的部分轉換為中間件
 const lineMiddleware = (req, res, next) => {
-  // 使用 line.middleware 中間件處理 LINE Webhook
-  line.middleware(lineConfig)(req, res, () => {
-    // 在這裡進行對 req.body 的處理
-    if (req.body && req.body.events) {
-      Promise.all(req.body.events.map(handleEvent))
-        .then((result) => res.json(result))
-        .catch((err) => {
-          console.error(err);
-          res.status(500).end();
-        });
-    } else {
-      next(); // 如果沒有 events，就繼續下一個中間件或路由處理
-    }
-  });
+  // 如果是 GET 請求，表示 LINE 的驗證請求
+  if (req.method === "GET" && req.query["hub.mode"] === "subscribe") {
+    res.status(200).send(req.query["hub.challenge"]);
+  } else {
+    // 使用 line.middleware 中間件處理 LINE Webhook
+    line.middleware(lineConfig)(req, res, () => {
+      // 在這裡進行對 req.body 的處理
+      if (req.body && req.body.events) {
+        Promise.all(req.body.events.map(handleEvent))
+          .then((result) => res.json(result))
+          .catch((err) => {
+            console.error(err);
+            res.status(500).end();
+          });
+      } else {
+        next(); // 如果沒有 events，就繼續下一個中間件或路由處理
+      }
+    });
+  }
 };
-//app.post("/webhook",);
+
 function handleEvent(event) {
   if (event.type === "message" && event.message.type === "text") {
     const inputText = event.message.text;
