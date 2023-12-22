@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>ejs測試頁面</title>
   </head>
   <body>
     <h1>all data</h1>
@@ -14,7 +14,111 @@
       <br />Transformernodestatus: <%= Transformernodestatus %>
       <br />Transformeroiltemperature: <%= Transformeroiltemperature %>
       <br />HB_Counts: <%= HB_Counts %>
-      <br />leakage:<%= leakage %>
+      <br />leakage:<%= leakage %><br>
     </tr>
+    <div class="divBlock">
+      <h4>數值資料</h4>
+      <!-- Light Word: <%=Rack2_11_405002%><br>
+      Error Code: <%=Rack2_11_405002%><br> -->
+      <!-- <%=Sys_402002%><br><%=PCS1_403011%><br><%=PCS1_403013%> -->
+      原數值: <%=Rack2_11_405002%><br>
+      Scaled數值: <%=Rack2_11_405002_AS%><br>
+
+      <h4>Word狀態資料</h4>
+      PCS CHG status: <%=Rack2_11_405004%><br>
+      HVAC status: <%=Rack2_11_405005%><br>
+      UPS mode: <%=Rack2_11_405006%><br>
+      Reactive regulation: <%=Rack2_11_405009%><br>
+
+      <h4>High/Low Byte資料</h4>
+      <!-- 原資料: <%=Rack2_11_405010_rawD%>,&nbsp&nbsp&nbspHigh/Low Byte: <%=Rack2_11_405010_H%>/<%=Rack2_11_405010_L%><br> -->
+      原資料: <%=Rack2_11_405010_rawD%>,&nbsp&nbsp&nbspHigh/Low Byte: <%=Rack2_11_405010["hiByte"]+"/"+Rack2_11_405010.loByte%><br>
+
+      <h4>數值資料(特殊轉換)</h4>
+      指令開始時間: <%=Rack2_11_405011%><br>
+      BMS總充電量: <%=BMS_CHG_E%><br>
+      負載表耗能: <%=AuxMeter_E%><br>
+      頻率表功因: <%=Rack2_11_405020%><br>
+      變壓器油溫: <%=Rack2_11_405028%><br>
+
+    </div>
+
+    <div class="divBlock">
+      <h4>燈號顯示</h4>
+      原數值: <%=Rack2_11_405001_rawD%><br>
+      二進制(b0~b15): <%=Rack2_11_405001%><br>
+      bit 0 (紅黑燈): <span class="dataLight RB_L <%=Rack2_11_405001[0]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b0_status%><br>
+      bit 1 (紅黑燈): <span class="dataLight RB_L <%=Rack2_11_405001[1]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b1_status%><br>
+      bit 2 (紅黑燈): <span class="dataLight RB_L <%=Rack2_11_405001[2]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b2_status%><br>
+      bit 3 (紅黑燈): <span class="dataLight RB_L <%=Rack2_11_405001[3]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b3_status%><br>
+      bit 4 (橘黑燈): <span class="dataLight OB_L <%=Rack2_11_405001[4]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b4_status%><br>
+      bit 5 (橘黑燈): <span class="dataLight OB_L <%=Rack2_11_405001[5]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b5_status%><br>
+      bit 6 (橘黑燈): <span class="dataLight OB_L <%=Rack2_11_405001[6]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b6_status%><br>
+      bit 7 (綠黑燈): <span class="dataLight GB_L <%=Rack2_11_405001[7]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b7_status%><br>
+      bit 8 (綠黑燈): <span class="dataLight GB_L <%=Rack2_11_405001[8]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b8_status%><br>
+      bit 9 (綠黑燈): <span class="dataLight GB_L <%=Rack2_11_405001[9]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b9_status%><br>
+      bit 10(紅綠燈): <span class="dataLight RG_L <%=Rack2_11_405001[10]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b10_status%><br>
+      bit 11(紅綠燈): <span class="dataLight RG_L <%=Rack2_11_405001[11]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b11_status%><br>
+      bit 12(紅綠燈): <span class="dataLight RG_L <%=Rack2_11_405001[12]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b12_status%><br>
+      bit 13(橘綠燈): <span class="dataLight OG_L <%=Rack2_11_405001[13]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b13_status%><br>
+      bit 14(橘綠燈): <span class="dataLight OG_L <%=Rack2_11_405001[14]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b14_status%><br>
+      bit 15(橘綠燈): <span class="dataLight OG_L <%=Rack2_11_405001[15]==='1'?'setToClose':''%>"></span>&nbsp&nbsp<%=Rack2_11_405001_b15_status%><br>
+    </div>
+
+    <div class="divBlock">
+      <h4>計算有幾個bit的值為1</h4>
+      原數值: <%=Rack2_11_405030_rawD%><br>
+      二進制(b15~b0): <%=Rack2_11_405030["bitString"]%>，值為1的bit有 <%=Rack2_11_405030["num_ClosedBit"]%> 個<br>
+
+      <h4>計算<%=Alm_SBL%>這些特定的bit中，有幾個bit的值為1</h4>
+      原數值: <%=Rack2_11_405032_rawD%><br>
+      二進制(b0~b15): <%=Rack2_11_405032_BitStr%>，值為1的bit有 <%=Rack2_11_405032%> 個<br>
+
+    </div>
+
+
+
+    <style>
+      .divBlock {
+        display: inline-block;
+        width: 420px;
+        border: 2px solid #000000;
+        vertical-align: top;
+      }
+
+      .dataLight {
+        display: inline-block;
+        box-sizing: border-box;
+        height: 16px;
+        width: 16px;
+        border: 2px solid #999999;
+        border-radius: 50%;
+      }
+
+      .dataLight.RB_L,
+      .dataLight.OB_L,
+      .dataLight.GB_L {
+        background-color: #000000;
+      }
+
+      .dataLight.RG_L,
+      .dataLight.OG_L {
+        background-color: #236E37;
+      }
+
+      .dataLight.RB_L.setToClose,
+      .dataLight.RG_L.setToClose {
+        background-color: #FF0000;
+      }
+
+      .dataLight.OB_L.setToClose,
+      .dataLight.OG_L.setToClose {
+        background-color: #FFAA00;
+      }
+
+      .dataLight.GB_L.setToClose {
+        background-color: #00FF75;
+      }
+    </style>
   </body>
 </html>
