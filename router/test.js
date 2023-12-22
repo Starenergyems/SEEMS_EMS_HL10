@@ -1,15 +1,11 @@
+// test.js
 const express = require("express");
+const router = express.Router();
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const cors = require("cors");
-const router = express.Router();
-const app = express();
-const path = require("path");
 const socket = require("socket.io");
 const http = require("http");
-
-// 創建 HTTP 伺服器
-const server = http.createServer(app);
 
 // 定義資料庫模型
 const C1 = mongoose.model("C1", {
@@ -33,18 +29,36 @@ const C4 = mongoose.model("C4", {
   timestamp: { type: Date, default: Date.now },
 });
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../views"));
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.use("/public", express.static(path.join(__dirname, "../public")));
-app.use(cors());
+router.use(express.urlencoded({ extended: true }));
+router.use(methodOverride("_method"));
+router.use(cors());
 
 // 創建 socket.io 實例
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("okay");
+});
+
 const io = socket(server);
 
-// 處理路由和資料庫查詢等相關邏輯
-router.get("/testforajax", async (req, res) => {
+// Socket.io 事件監聽
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  // 監聽來自前端的更新事件
+  socket.on("updateData", () => {
+    // 發送最新的數據到前端
+    io.emit("refreshData");
+  });
+
+  // 斷開連接
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+});
+
+// 將資料處理的邏輯提取成中間件
+router.use(async (req, res, next) => {
   try {
     // 從資料庫中獲取數據
     const c1Data = await C1.find();
@@ -74,32 +88,17 @@ router.get("/testforajax", async (req, res) => {
     const updatedC4Data = await C4.find().sort({ timestamp: -1 });
 
     // 將數據傳遞到前端
-    res.render("test", {
+    res.locals = {
       c1Data,
       c2Data,
       c3Data,
       c4Data: updatedC4Data,
-    });
+    };
+    next();
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
-});
-
-// Socket.io 事件監聽
-io.on("connection", (socket) => {
-  console.log("A user connected");
-
-  // 監聽來自前端的更新事件
-  socket.on("updateData", () => {
-    // 發送最新的數據到前端
-    io.emit("refreshData");
-  });
-
-  // 斷開連接
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
 });
 
 async function processData(data, latestC4Data) {
@@ -141,4 +140,9 @@ async function processData(data, latestC4Data) {
   }
 }
 
-module.exports = { router, server }; // 導出路由和伺服器
+router.get("/test", (req, res) => {
+  // 在這裡定義渲染 middleware 頁面的邏輯
+  res.render("test");
+});
+
+module.exports = router;
