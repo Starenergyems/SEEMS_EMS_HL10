@@ -178,8 +178,6 @@ function mapgridStatus(decimalValue) {
 // const decimalValue = 0; // 試試不同的數值
 // const result = mapgridStatus(decimalValue);
 // console.log(result);
-<<<<<<< HEAD
-=======
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
@@ -357,7 +355,6 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 // console.log(wx);
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
->>>>>>> branch_05
 
 module.exports = {
   mapchargeStatus,
