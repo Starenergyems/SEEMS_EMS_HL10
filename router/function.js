@@ -178,6 +178,186 @@ function mapgridStatus(decimalValue) {
 // const decimalValue = 0; // 試試不同的數值
 // const result = mapgridStatus(decimalValue);
 // console.log(result);
+<<<<<<< HEAD
+=======
+
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+
+// const ab = 13579.02468;
+// console.log(ab.toFixed(2));
+
+let i;
+let j;
+
+function Convert_UInt_to_revBitString(rawData, NumberOfDigit) {
+  let rawBitString = rawData.toString(2);
+  let BitString = rawBitString.padStart(NumberOfDigit, '0').slice(-NumberOfDigit);
+
+  let revBitString = "";
+  for (i = 0; i < BitString.length; i++) {
+    revBitString += BitString[NumberOfDigit - 1 - i];
+  }
+
+  return revBitString;
+}
+
+function Convert_UInt_to_BitString(rawData, NumberOfDigit) {
+  let rawBitString = rawData.toString(2);
+  let BitString = rawBitString.padStart(NumberOfDigit, '0').slice(-NumberOfDigit);
+
+  let NumberOfClosedBit = BitString.split("1").length - 1;
+
+  return { bitString: BitString, num_ClosedBit: NumberOfClosedBit };
+}
+
+function mapWordStatus(rawData, mapTable) {
+  let keysArray_MT = Object.keys(mapTable);
+
+  for (i = 0; i < keysArray_MT.length; i++) {
+    if (rawData == keysArray_MT[i]) {
+      return mapTable[rawData];
+    }
+  }
+
+  return "Not found(" + rawData + ")";
+}
+
+function mapBitStatus(bitString, mapTable, NumberOfBit) {
+  if (NumberOfBit > bitString.length - 1) {
+    return "bitNumber out of range";
+  }
+
+  let keysArray_MT = Object.keys(mapTable);
+
+  for (i = 0; i < keysArray_MT.length; i++) {
+    if (NumberOfBit == keysArray_MT[i]) {
+      return mapTable[NumberOfBit][bitString[NumberOfBit]];
+    }
+  }
+
+  return "Not found(bit" + NumberOfBit + " = " + bitString[NumberOfBit] + ")";
+}
+
+function getHighLowByte(rawData) {
+  let LowByte = rawData % 256;
+  let HighByte = (rawData - LowByte) / 256;
+
+  return { hiByte: HighByte, loByte: LowByte };
+}
+
+function Convert_unixTime_to_dateTime(rawData) {
+  let raw_DT = new Date(rawData * 1000);
+  let yy = String(raw_DT.getFullYear()).padStart(4, '0');
+  let mm = String(raw_DT.getMonth() + 1).padStart(2, '0');
+  let dd = String(raw_DT.getDate()).padStart(2, '0');
+  let hh = String(raw_DT.getHours()).padStart(2, '0');
+  let m = String(raw_DT.getMinutes()).padStart(2, '0');
+  let ss = String(raw_DT.getSeconds()).padStart(2, '0');
+
+  return yy + "/" + mm + "/" + dd + " " + hh + ":" + m + ":" + ss;
+}
+
+function Calculate_BMS_energy(E_GWh, E_MWh, E_kWh) {
+  let Energy = (E_GWh * 1000000 + E_MWh * 1000 + E_kWh) / 100;
+
+  return Energy.toFixed(1);
+}
+
+function Calculate_CPM10_energy(E_GWh, E_MWh, E_kWh) {
+  let Energy = E_GWh * 1000000 + E_MWh * 1000 + E_kWh * 0.1;
+
+  return Energy.toFixed(1);
+}
+
+function Calculate_N1450_PF(rawData) {
+  if (rawData <= 1000) {
+    return (rawData / 1000).toFixed(3);
+  } else if (rawData <= 3000) {
+    return ((2000 - rawData) / 1000).toFixed(3);
+  } else {
+    return ((rawData - 4000) / 1000).toFixed(3);
+  }
+}
+
+function Calculate_Tr_oilTemp(rawData) {
+  return ((rawData - 19999) / 10).toFixed(1);
+}
+
+function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {
+  let revBitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
+
+  let NumberOfSpClosedBit = 0;
+  for (i = 0; i < specificBitList.length; i++) {
+    if (revBitString[specificBitList[i]] === "1") {
+      NumberOfSpClosedBit++;
+    }
+  }
+
+  return NumberOfSpClosedBit;
+}
+
+
+
+const rawData = 18763;
+const NumberOfDigit = 16;
+const pcsCHGStatus_MT = { 17: "Charging", 55: "Discharging", 98: "Non-working state" };
+const sysCtrl_2_MT = {
+  0: { 0: "否", 1: "是" },
+  3: { 0: "禁用", 1: "啟用" },
+  5: { 0: "頻率表", 1: "測試頻率" },
+  6: { 0: "手動", 1: "自動" },
+  9: { 0: "正常", 1: "異常" },
+  10: { 0: "正常", 1: "通訊異常" },
+  13: { 0: "SOC", 1: "Volt" },
+};
+const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
+
+// let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
+// for (i = 0; i < cd_BitString.length; i++) {
+//   console.log(cd_BitString[i]);
+// }
+
+// let ef = Convert_UInt_to_BitString(rawData, NumberOfDigit);
+// console.log(ef);
+// console.log(ef.bitString);
+// console.log(typeof ef.bitString);
+// console.log(ef.num_ClosedBit);
+// console.log(typeof ef.num_ClosedBit);
+
+// let gh = mapWordStatus(rawData, pcsCHGStatus_MT);
+// console.log(gh);
+
+// const ij = mapBitStatus(cd_BitString, sysCtrl_2_MT, 1);
+// console.log(ij);
+
+// const kl = getHighLowByte(rawData);
+// console.log(kl);
+// console.log(kl["hiByte"]);
+// console.log(kl.loByte);
+
+// const mn = Convert_unixTime_to_dateTime(rawData);
+// console.log(mn);
+
+// const E_G = 123;
+// const E_M = 987;
+// const E_k = 1357;
+// const op = Calculate_BMS_energy(E_G, E_M, E_k);
+// console.log(op);
+
+// const qr = Calculate_CPM10_energy(E_G, E_M, E_k);
+// console.log(qr);
+
+// const st = Calculate_N1450_PF(rawData);
+// console.log(st);
+
+// const uv = Calculate_Tr_oilTemp(rawData);
+// console.log(uv);
+
+// const wx = Count_SpecificClosedBit(rawData, NumberOfDigit, pcsWorkStatus_spBitList);
+// console.log(wx);
+
+// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
+>>>>>>> branch_05
 
 module.exports = {
   mapchargeStatus,
@@ -186,6 +366,17 @@ module.exports = {
   mapPCSWorkingMode,
   mapgridStatus,
   // 其他導出的函數
+  Convert_UInt_to_revBitString,
+  Convert_UInt_to_BitString,
+  mapWordStatus,
+  mapBitStatus,
+  getHighLowByte,
+  Convert_unixTime_to_dateTime,
+  Calculate_BMS_energy,
+  Calculate_CPM10_energy,
+  Calculate_N1450_PF,
+  Calculate_Tr_oilTemp,
+  Count_SpecificClosedBit,
 };
 // //***************************************************************************** */
 // //轉換存陣列
