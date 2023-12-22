@@ -1,4 +1,4 @@
-// middleware.js
+// test.js
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -139,5 +139,10 @@ async function processData(data, latestC4Data) {
     existingIds.add(idString);
   }
 }
+
+router.get("/test", (req, res) => {
+  // 在這裡定義渲染 middleware 頁面的邏輯
+  res.render("test");
+});
 
 module.exports = router;

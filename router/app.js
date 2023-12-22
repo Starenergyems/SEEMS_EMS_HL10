@@ -19,10 +19,7 @@ app.use(cors());
 
 // MongoDB 連線
 mongoose
-  .connect("mongodb://localhost:27017/ems", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect("mongodb://localhost:27017/ems")
   .then(() => {
     console.log("成功連結 MongoDB....");
     const currentDBName = mongoose.connection.name;
@@ -46,8 +43,8 @@ const router11 = require("./rAlarm");
 const router12 = require("./rEvent");
 const router13 = require("./rReport");
 const router14 = require("./rChart");
-
-const linebot = require("./rlinebot");
+const router = require("./test");
+//const linebot = require("./rlinebot");
 
 // 使用這些路由和 middleware
 app.use(router3);
@@ -62,7 +59,8 @@ app.use(router11);
 app.use(router12);
 app.use(router13);
 app.use(router14);
-app.use(linebot);
+app.use(router);
+//app.use(linebot);
 
 // 額外的路由或中間件可以在這裡添加
 
