@@ -1,0 +1,50 @@
+<!-- views/testForWeb.ejs -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Webpage</title>
+  </head>
+  <body>
+    <h1>Real-time Data Table</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach(item => { %>
+          <tr>
+            <td><%= item.name %></td>
+            <td><%= item.value %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      socket.on("updateValue", (values) => {
+        // Clear the table
+        const tableBody = document.querySelector('tbody');
+        tableBody.innerHTML = '';
+
+        // Iterate through all data and add rows to the table
+        values.forEach(value => {
+          const newRow = document.createElement("tr");
+          newRow.innerHTML = `
+            <td>New Item</td>
+            <td>${value}</td>
+          `;
+          tableBody.appendChild(newRow);
+        });
+      });
+    </script>
+  </body>
+</html>

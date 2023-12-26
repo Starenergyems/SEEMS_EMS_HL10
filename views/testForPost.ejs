@@ -1,0 +1,95 @@
+<!-- testForPost.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- 其他標頭內容 -->
+  <!-- 引入 Bootstrap 的 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <h1>Items</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items.forEach(item => { %>
+        <tr>
+          <td><%= item.name %></td>
+          <td id="value<%= item._id %>"><%= item.value %></td>
+          <!-- 在這裡加入按鈕 -->
+          <td>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#editModal<%= item._id %>">
+              Edit
+            </button>
+          </td>
+        </tr>
+
+        <!-- 模態框 -->
+        <div class="modal fade" id="editModal<%= item._id %>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- 這裡可以加入表單，讓使用者修改數值 -->
+                <form onsubmit="updateValue('<%= item._id %>'); return false;">
+                  <div class="form-group">
+                    <label for="newValue">New Value:</label>
+                    <input type="number" class="form-control" id="newValue<%= item._id %>" value="<%= item.value %>" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <% }); %>
+    </tbody>
+  </table>
+
+  <!-- 引入 Bootstrap 的 JavaScript 和 Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    function updateValue(itemId) {
+      const newValue = document.getElementById(`newValue${itemId}`).value;
+  
+      // 使用 AJAX 發送 POST 請求
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", `/edit/${itemId}`, true);
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            // 更新畫面上對應的數值
+            document.getElementById(`value${itemId}`).innerText = newValue;
+            // 關閉模態框
+            $(`#editModal${itemId}`).modal('hide');
+          } else {
+            // 處理其他狀態碼，例如錯誤處理
+            console.error(`Failed to update value. Status code: ${xhr.status}`);
+            // 可以在這裡加入顯示錯誤訊息的邏輯
+          }
+        }
+      };
+      xhr.send(JSON.stringify({ newValue }));
+    }
+  </script>
+  
+</body>
+</html>

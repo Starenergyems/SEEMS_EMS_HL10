@@ -19,7 +19,7 @@
         <th>Timestamp</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="c4TableBody">
       <% c4Data.forEach(item => { %>
         <tr>
           <td><%= item.value %></td>
@@ -32,14 +32,14 @@
   <br>
   <br>
   <h2>C1 Data</h2>
-  <table>
+  <table id="c1Table">
     <thead>
       <tr>
         <th>Value</th>
         <th>Timestamp</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="c1TableBody">
       <% c1Data.forEach(item => { %>
         <tr>
           <td><%= item.value %></td>
@@ -47,17 +47,16 @@
         </tr>
       <% }); %>
     </tbody>
-    <br>
   </table>
   <h2>C2 Data</h2>
-  <table>
+  <table id="c2Table">
     <thead>
       <tr>
         <th>Value</th>
         <th>Timestamp</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="c2TableBody">
       <% c2Data.forEach(item => { %>
         <tr>
           <td><%= item.value %></td>
@@ -68,14 +67,14 @@
   </table>
   <br>
   <h2>C3 Data</h2>
-  <table>
+  <table id="c3Table">
     <thead>
       <tr>
         <th>Value</th>
         <th>Timestamp</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="c3TableBody">
       <% c3Data.forEach(item => { %>
         <tr>
           <td><%= item.value %></td>
@@ -84,44 +83,46 @@
       <% }); %>
     </tbody>
   </table>
-  <!-- 在 body 底部添加 Socket.io 事件處理程序 -->
-  <script>
-    // 建立 Socket.io 連接
-    const socket = io.connect();
+<!-- 在 body 底部添加 Socket.io 事件處理程序 -->
+<script>
+  // 建立 Socket.io 連接
+  const socket = io.connect();
 
-    // 監聽 "refreshData" 事件
-    socket.on("refreshData", () => {
-      // 更新 C4 數據的相應操作
-      console.log("Received refreshData event. Updating C4 data...");
+  // 定義函數用於更新數據
+  function updateData(updatedData, tableId) {
+    console.log("Updating data for table:", tableId);
 
-      // 使用 jQuery 更新 C4 數據
-      $.get("/testforajax", (data) => {
-        // 在這裡更新 C4 數據，假設返回的數據包含更新後的 C4 數據
-        // 您可以根據實際情況進行修改
-        $("tbody").html(data);
-      });
-
-      // 更新 C1 數據
-      $.get("/c1", (data) => {
-        // 在這裡更新 C1 數據，假設返回的數據包含更新後的 C1 數據
-        // 您可以根據實際情況進行修改
-        $("#c1Table tbody").html(data);
-      });
-
-      // 更新 C2 數據
-      $.get("/c2", (data) => {
-        // 在這裡更新 C2 數據，假設返回的數據包含更新後的 C2 數據
-        // 您可以根據實際情況進行修改
-        $("#c2Table tbody").html(data);
-      });
-
-      // 更新 C3 數據
-      $.get("/c3", (data) => {
-        // 在這裡更新 C3 數據，假設返回的數據包含更新後的 C3 數據
-        // 您可以根據實際情況進行修改
-        $("#c3Table tbody").html(data);
-      });
+    // 使用 jQuery 更新數據
+    $(`#${tableId} tbody`).empty();
+    updatedData.forEach(item => {
+      $(`#${tableId} tbody`).append(`
+        <tr>
+          <td>${item.value}</td>
+          <td>${item.timestamp}</td>
+        </tr>
+      `);
     });
-  </script>
+  }
+
+  // 監聽 "refreshData" 事件
+  socket.on("refreshData", (data) => {
+    if (data.tableId === "c1Table") {
+      updateData(data.updatedData, "c1TableBody");
+    } else if (data.tableId === "c2Table") {
+      updateData(data.updatedData, "c2TableBody");
+    } else if (data.tableId === "c3Table") {
+      updateData(data.updatedData, "c3TableBody");
+    } else {
+      // Assuming "c4Table" by default
+      updateData(data.updatedData, "c4TableBody");
+    }
+  });
+
+  // 設定每 5 秒更新一次
+  setInterval(() => {
+    socket.emit("refreshData"); // 向伺服器端發送事件
+  }, 5000);
+</script>
+
 </body>
 </html>
