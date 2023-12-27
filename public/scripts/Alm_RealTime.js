@@ -196,3 +196,17 @@ function allCheck(){
     $('#chb_AckAll').prop('checked', false); // Unchecks it
 }
 
+function readCheck(){
+       // Get a reference to the checkbox element
+       var checkbox = document.getElementById('myCheckbox');
+
+       // Add an event listener to the checkbox
+       checkbox.addEventListener('change', function() {
+         // This function will be executed when the checkbox is checked or unchecked
+         if (checkbox.checked) {
+           console.log('Checkbox is checked!');
+         } else {
+           console.log('Checkbox is unchecked!');
+         }
+       });
+}
