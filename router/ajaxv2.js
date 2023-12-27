@@ -1,5 +1,6 @@
 // app.js
-//畫面更新測試 定期更新測試
+//畫面更新測試 v2 包含同一頁需要更新數值的功能
+
 const express = require("express");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");

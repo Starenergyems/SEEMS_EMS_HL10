@@ -6,6 +6,8 @@
   <!-- 其他標頭內容 -->
   <!-- 引入 Bootstrap 的 CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+
 </head>
 <body>
 
@@ -66,20 +68,20 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <script>
-    function updateValue(itemId) {
+    function updateValue(itemId, socketId) {
       const newValue = document.getElementById(`newValue${itemId}`).value;
   
       // 使用 AJAX 發送 POST 請求
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", `/edit/${itemId}`, true);
+      xhr.open("POST", `/edit/${itemId}?socketId=${socketId}`, true);
       xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             // 更新畫面上對應的數值
             document.getElementById(`value${itemId}`).innerText = newValue;
             // 關閉模態框
-            $(`#editModal${itemId}`).modal('hide');
+            $(`#editModal${itemId}`).modal("hide");
           } else {
             // 處理其他狀態碼，例如錯誤處理
             console.error(`Failed to update value. Status code: ${xhr.status}`);
@@ -90,6 +92,33 @@
       xhr.send(JSON.stringify({ newValue }));
     }
   </script>
+<!-- <script>
+  // 在文件頂部連接到 Socket.io
+const socket = io();
+
+// 關閉定期更新的標誌，以確保編輯框彈出時不受更新的影響
+let shouldUpdatePeriodically = true;
+
+// 監聽從伺服器端發送的更新事件
+socket.on("dataUpdated", (items) => {
+  if (shouldUpdatePeriodically) {
+    // 在這裡處理更新數據的邏輯，例如更新頁面上的元素
+  }
+});
+
+// 以下是編輯框的彈出邏輯，你可以根據你的前端框架進行修改
+// 這裡僅提供一個簡單的示例
+const editButton = document.getElementById("editButton");
+const editModal = document.getElementById("editModal");
+
+editButton.addEventListener("click", () => {
+  // 在這裡處理編輯框的彈出邏輯
+  // 同時發送信號給伺服器，暫停定期更新
+  socket.emit("stopPeriodicUpdate");
+});
+
+</script> -->
   
+
 </body>
 </html>
