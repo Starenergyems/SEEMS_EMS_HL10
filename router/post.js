@@ -22,16 +22,16 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 app.use(methodOverride("_method"));
 
-mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/ems")
-  .then(() => {
-    console.log("成功連結 MongoDB....");
-    const currentDBName = mongoose.connection.name;
-    console.log("目前連線資料庫名稱：", currentDBName);
-  })
-  .catch((e) => {
-    console.error("連線 MongoDB 時發生錯誤：", e.message);
-  });
+// mongoose
+//   .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/ems")
+//   .then(() => {
+//     console.log("成功連結 MongoDB....");
+//     const currentDBName = mongoose.connection.name;
+//     console.log("目前連線資料庫名稱：", currentDBName);
+//   })
+//   .catch((e) => {
+//     console.error("連線 MongoDB 時發生錯誤：", e.message);
+//   });
 
 const Item = mongoose.model("Item", {
   name: String,
@@ -169,6 +169,8 @@ app.post("/edit/:id", async (req, res) => {
   }
 });
 
-http.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// http.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
+
+module.exports = app;

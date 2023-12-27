@@ -71,6 +71,7 @@ const eventRouter = require("./rEvent");
 const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 const testRouter = require("./test");
+//const ajaxRouter = require("./ajax");
 //const postRouter = require("./post");
 // const linebotRouter = require("./rlinebot");
 
@@ -90,6 +91,7 @@ app.use(eventRouter);
 app.use(reportRouter);
 app.use(chartRouter);
 app.use(testRouter);
+
 //app.use(postRouter);
 // 額外的路由或中間件可以在這裡添加
 // app.use(linebotRouter);

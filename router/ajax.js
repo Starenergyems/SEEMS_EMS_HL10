@@ -1,4 +1,4 @@
-// app.js
+// // ajax.js
 //畫面更新測試 定期更新測試
 const express = require("express");
 const mongoose = require("mongoose");
@@ -87,3 +87,77 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 });
+
+//module.export = app;
+
+// middleware.js
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const methodOverride = require("method-override");
+// const path = require("path");
+// const cors = require("cors");
+// const io = require("socket.io")(server);
+// //const http = require("http");
+// //const socketIO = require("socket.io");
+// //const port = 3000;
+
+// const app = express();
+
+// app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "../views"));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(methodOverride("_method"));
+// app.use("/public", express.static(path.join(__dirname, "../public")));
+// app.use(cors());
+
+// const Item = mongoose.model("Item", {
+//   name: String,
+//   value: Number,
+// });
+
+// app.set("view engine", "ejs");
+// app.use(express.static("public"));
+
+// app.get("/web", async (req, res) => {
+//   try {
+//     const data = await Item.find();
+//     res.render("testForWeb", { data });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+
+// setInterval(async () => {
+//   try {
+//     const data = await Item.find();
+//     io.emit(
+//       "updateValue",
+//       data.map((item) => item.value)
+//     );
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }, 1000);
+
+// // const server = app.listen(port, () => {
+// //   console.log(`Server is running at http://localhost:${port}`);
+// // });
+
+// io.on("connection", (socket) => {
+//   console.log("A user connected");
+
+//   Item.find().then((data) => {
+//     socket.emit(
+//       "updateValue",
+//       data.map((item) => item.value)
+//     );
+//   });
+
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected");
+//   });
+// });
+
+// module.exports = app;

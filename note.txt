@@ -17,6 +17,10 @@ npm install socket.io//即時更新數值使用
 npm install @line/bot-sdk //linebot
 npm install dotenv //常用於載入環境變數，並在開發中常被用來管理敏感資訊，如 API 金鑰等。
 npm install passport passport-local express-session //身分驗證 cookie session
+npm install jsonwebtoken
+npm install cookie-parser
+npm install bcrypt
+
 
 
 設定app.js
