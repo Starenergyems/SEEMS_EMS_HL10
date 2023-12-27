@@ -163,7 +163,7 @@
 
         <div class="M_Page">
             <div class="Title">
-                <h2>【BMS</h2><label id="No_of_BMS">1-1</label>
+                <h2>【BMS</h2><label id="No_of_BMS"><%=No_of_BMS%></label>
                 <h2>】</h2>
                 <a href="#" class="infoStatus" id="infoBMS">狀態與數值</a>
                 <a href="/operateinfo/battery/rack" class="infoStatus" id="infoRack">Rack資訊</a>
@@ -191,42 +191,42 @@
                         <p>在線電壓</p>
                         <div class="BG_bigInfo">
                             <div class="subBG_bigInfo">V</div>
-                            <label class="data_val" id="onlineV">1234.0</label>
+                            <label class="data_val" id="onlineV"><%=onlineV%></label>
                         </div>
                     </div>
                     <div class="bigInfo bI_BMSsystemV">
                         <p>系統電壓</p>
                         <div class="BG_bigInfo">
                             <div class="subBG_bigInfo">V</div>
-                            <label class="data_val" id="BMSsystemV">1500.0</label>
+                            <label class="data_val" id="BMSsystemV"><%=BMSsystemV%></label>
                         </div>
                     </div>
                     <div class="bigInfo bI_BMSsystemI">
                         <p>系統電流</p>
                         <div class="BG_bigInfo">
                             <div class="subBG_bigInfo">A</div>
-                            <label class="data_val" id="BMSsystemI">-3570.0</label>
+                            <label class="data_val" id="BMSsystemI"><%=BMSsystemI%></label>
                         </div>
                     </div>
                     <div class="bigInfo bI_BMSsystemSOC">
                         <p>SOC</p>
                         <div class="BG_bigInfo">
                             <div class="subBG_bigInfo">%</div>
-                            <label class="data_val" id="BMSsystemSOC">78.9</label>
+                            <label class="data_val" id="BMSsystemSOC"><%=BMSsystemSOC%></label>
                         </div>
                     </div>
                     <div class="bigInfo bI_BMSsystemSOH">
                         <p>SOH</p>
                         <div class="BG_bigInfo">
                             <div class="subBG_bigInfo">%</div>
-                            <label class="data_val" id="BMSsystemSOH">100.0</label>
+                            <label class="data_val" id="BMSsystemSOH"><%=BMSsystemSOH%></label>
                         </div>
                     </div>
                     <div class="bigInfo bI_heartBeat">
                         <p>心跳</p>
                         <div class="BG_bigInfo">
                             <div class="subBG_bigInfo"></div>
-                            <label class="data_val" id="heartBeat">123456</label>
+                            <label class="data_val" id="heartBeat"><%=heartBeat%></label>
                         </div>
                     </div>
                 </div>
@@ -234,82 +234,82 @@
                 <div class="info">
                     <div class="infoBlock rackInfo">
                         <h3>電池機櫃(Rack)</h3>
-                        <div class="DV_Line">Rack電壓差<label class="dataValue" id="rackVoltDiff">700.0</label>
+                        <div class="DV_Line">Rack電壓差<label class="dataValue" id="rackVoltDiff"><%=rackVoltDiff%></label>
                             <p class="dataUnit">V</p>
                         </div>
-                        <div class="DP_Line">最高/最低Rack電壓位置<label class="dataP DP_1st" id="rackNoVmax">10</label>
+                        <div class="DP_Line">最高/最低Rack電壓位置<label class="dataP DP_1st" id="rackNoVmax"><%=rackNoVmaxmin.hiByte%></label>
                             <p>/</p>
-                            <label class="dataP DP_2nd" id="rackNoVmin">9</label>
+                            <label class="dataP DP_2nd" id="rackNoVmin"><%=rackNoVmaxmin.loByte%></label>
                         </div>
-                        <div class="DV_Line">Rack電流差<label class="dataValue" id="rackCurrDiff">450.0</label>
+                        <div class="DV_Line">Rack電流差<label class="dataValue" id="rackCurrDiff"><%=rackCurrDiff%></label>
                             <p class="dataUnit">A</p>
                         </div>
-                        <div class="DP_Line">最高/最低Rack電流位置<label class="dataP DP_1st" id="rackNoImax">8</label>
+                        <div class="DP_Line">最高/最低Rack電流位置<label class="dataP DP_1st" id="rackNoImax"><%=rackNoImaxmin.hiByte%></label>
                             <p>/</p>
-                            <label class="dataP DP_2nd" id="rackNoImin">10</label>
+                            <label class="dataP DP_2nd" id="rackNoImin"><%=rackNoImaxmin.loByte%></label>
                         </div>
-                        <div class="DV_Line">在線SOC差<label class="dataValue" id="rackSOCDiff">100.0</label>
+                        <div class="DV_Line">在線SOC差<label class="dataValue" id="rackSOCDiff"><%=rackSOCDiff%></label>
                             <p class="dataUnit">%</p>
                         </div>
                     </div>
 
                     <div class="infoBlock cellInfo">
                         <h3>電池電芯(Cell)</h3>
-                        <div class="DV_Line">最高電芯電壓<label class="dataValue" id="V_cell_Max">4.0001</label>
+                        <div class="DV_Line">最高電芯電壓<label class="dataValue" id="V_cell_Max"><%=V_cell_Max%></label>
                             <p class="dataUnit">V</p>
                         </div>
-                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoVcMax">10</label>
-                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoVcMax">26</label>
-                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoVcMax">20</label>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoVcMax"><%=rackNoVcMax%></label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoVcMax"><%=bmucellNoVcMax.hiByte%></label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoVcMax"><%=bmucellNoVcMax.loByte%></label>
                         </div>
-                        <div class="DV_Line">最低電芯電壓<label class="dataValue" id="V_cell_Min">2.5001</label>
+                        <div class="DV_Line">最低電芯電壓<label class="dataValue" id="V_cell_Min"><%=V_cell_Min%></label>
                             <p class="dataUnit">V</p>
                         </div>
-                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoVcMin">9</label>
-                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoVcMin">25</label>
-                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoVcMin">21</label>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoVcMin"><%=rackNoVcMin%></label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoVcMin"><%=bmucellNoVcMin.hiByte%></label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoVcMin"><%=bmucellNoVcMin.loByte%></label>
                         </div>
-                        <div class="DV_Line">最大電芯壓差<label class="dataValue" id="V_cell_MaxDiff">98.7</label>
+                        <div class="DV_Line">最大電芯壓差<label class="dataValue" id="V_cell_MaxDiff"><%=V_cell_MaxDiff%></label>
                             <p class="dataUnit">mV</p>
                         </div>
 
-                        <div class="DV_Line">最高電芯溫度<label class="dataValue" id="T_cell_Max">123.4</label>
+                        <div class="DV_Line">最高電芯溫度<label class="dataValue" id="T_cell_Max"><%=T_cell_Max%></label>
                             <p class="dataUnit">&#176C</p>
                         </div>
-                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoTcMax">8</label>
-                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoTcMax">1</label>
-                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoTcMax">2</label>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoTcMax"><%=rackNoTcMax%></label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoTcMax"><%=bmucellNoTcMax.hiByte%></label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoTcMax"><%=bmucellNoTcMax.loByte%></label>
                         </div>
-                        <div class="DV_Line">最低電芯溫度<label class="dataValue" id="T_cell_Min">-123.4</label>
+                        <div class="DV_Line">最低電芯溫度<label class="dataValue" id="T_cell_Min"><%=T_cell_Min%></label>
                             <p class="dataUnit">&#176C</p>
                         </div>
-                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoTcMin">7</label>
-                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoTcMin">24</label>
-                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoTcMin">22</label>
+                        <div class="DP_Line">位置(R/M/C)<label class="dataP DP_1st" id="rackNoTcMin"><%=rackNoTcMin%></label>
+                            <p class="p_1st">/</p><label class="dataP DP_2nd" id="bmuNoTcMin"><%=bmucellNoTcMin.hiByte%></label>
+                            <p class="p_2nd">/</p><label class="dataP DP_3rd" id="cellNoTcMin"><%=bmucellNoTcMin.loByte%></label>
                         </div>
-                        <div class="DV_Line">最大電芯溫差<label class="dataValue" id="T_cell_MaxDiff">65.4</label>
+                        <div class="DV_Line">最大電芯溫差<label class="dataValue" id="T_cell_MaxDiff"><%=T_cell_MaxDiff%></label>
                             <p class="dataUnit">&#176C</p>
                         </div>
                     </div>
 
                     <div class="infoBlock totalE">
                         <h3>總充放電量</h3>
-                        <div class="DV_Line">總充電量<label class="dataValue" id="totalChgE">1234567.8</label>
+                        <div class="DV_Line">總充電量<label class="dataValue" id="totalChgE"><%=totalChgE%></label>
                             <p class="dataUnit">MWh</p>
                         </div>
                         <div class="DV_Line lastLine">總放電量<label class="dataValue"
-                                id="totalDcgE">2345678.9</label>
+                                id="totalDcgE"><%=totalDcgE%></label>
                             <p class="dataUnit">MWh</p>
                         </div>
                     </div>
 
                     <div class="infoBlock tempAmbient">
                         <h3>環境溫度</h3>
-                        <div class="DV_Line">環境溫度_1<label class="dataValue" id="tempAmb_1">23.4</label>
+                        <div class="DV_Line">環境溫度_1<label class="dataValue" id="tempAmb_1"><%=tempAmb_1%></label>
                             <p class="dataUnit">&#176C</p>
                         </div>
                         <div class="DV_Line lastLine">環境溫度_2<label class="dataValue"
-                                id="tempAmb_2">34.5</label>
+                                id="tempAmb_2"><%=tempAmb_2%></label>
                             <p class="dataUnit">&#176C</p>
                         </div>
                     </div>
@@ -318,40 +318,40 @@
                 <div class="FApositionDI">
                     <div class="infoBlock FAposition">
                         <h3>故障告警位置</h3>
-                        <div class="DV_Line">CMU告警<label class="dataValue" id="rackNo_alarmCMU">20</label>
+                        <div class="DV_Line">CMU告警<label class="dataValue" id="rackNo_alarmCMU"><%=rackNo_alarmCMU%></label>
                             <p class="dataUnit">Rack</p>
                         </div>
-                        <div class="DV_Line">CMU故障<label class="dataValue" id="rackNo_faultCMU">1</label>
+                        <div class="DV_Line">CMU故障<label class="dataValue" id="rackNo_faultCMU"><%=rackNo_faultCMU%></label>
                             <p class="dataUnit">Rack</p>
                         </div>
-                        <div class="DV_Line">正繼電器故障<label class="dataValue" id="rackNo_faultPRelay">2</label>
+                        <div class="DV_Line">正繼電器故障<label class="dataValue" id="rackNo_faultPRelay"><%=rackNo_faultPRelay%></label>
                             <p class="dataUnit">Rack</p>
                         </div>
-                        <div class="DV_Line">負繼電器故障<label class="dataValue" id="rackNo_faultNRelay">5</label>
+                        <div class="DV_Line">負繼電器故障<label class="dataValue" id="rackNo_faultNRelay"><%=rackNo_faultNRelay%></label>
                             <p class="dataUnit">Rack</p>
                         </div>
-                        <div class="DV_Line">熔絲故障<label class="dataValue" id="rackNo_faultFuse">6</label>
+                        <div class="DV_Line">熔絲故障<label class="dataValue" id="rackNo_faultFuse"><%=rackNo_faultFuse%></label>
                             <p class="dataUnit">Rack</p>
                         </div>
                         <div class="DV_Line">SMU-CMU通訊<label class="dataValue"
-                                id="rackNo_commSMUCMU">10</label>
+                                id="rackNo_commSMUCMU"><%=rackNo_commSMUCMU%></label>
                             <p class="dataUnit">Rack</p>
                         </div>
                     </div>
 
                     <div class="infoBlock statusDI">
                         <h3>DI狀態</h3>
-                        <div class="DL_Line">DI#01狀態<label class="dataLight OG_L" id="statusDI01"></label>
+                        <div class="DL_Line">DI#01狀態<label class="dataLight OG_L <%=statusDI[0]==='1'?'setToClose':''%>" id="statusDI01"></label>
                         </div>
-                        <div class="DL_Line">DI#02狀態<label class="dataLight OG_L" id="statusDI02"></label>
+                        <div class="DL_Line">DI#02狀態<label class="dataLight OG_L <%=statusDI[1]==='1'?'setToClose':''%>" id="statusDI02"></label>
                         </div>
-                        <div class="DL_Line">DI#03狀態<label class="dataLight OG_L" id="statusDI03"></label>
+                        <div class="DL_Line">DI#03狀態<label class="dataLight OG_L <%=statusDI[2]==='1'?'setToClose':''%>" id="statusDI03"></label>
                         </div>
-                        <div class="DL_Line">DI#04狀態<label class="dataLight OG_L" id="statusDI04"></label>
+                        <div class="DL_Line">DI#04狀態<label class="dataLight OG_L <%=statusDI[3]==='1'?'setToClose':''%>" id="statusDI04"></label>
                         </div>
-                        <div class="DL_Line">DI#05狀態<label class="dataLight OG_L" id="statusDI05"></label>
+                        <div class="DL_Line">DI#05狀態<label class="dataLight OG_L <%=statusDI[4]==='1'?'setToClose':''%>" id="statusDI05"></label>
                         </div>
-                        <div class="DL_Line lastLine">DI#06狀態<label class="dataLight OG_L"
+                        <div class="DL_Line lastLine">DI#06狀態<label class="dataLight OG_L <%=statusDI[5]==='1'?'setToClose':''%>"
                                 id="statusDI06"></label>
                         </div>
                     </div>
@@ -360,35 +360,35 @@
                 <div class="faultHWSMUSOC">
                     <div class="infoBlock faultHW">
                         <h3>硬體故障</h3>
-                        <div class="DL_Line">主正繼電器故障<label class="dataLight RG_L" id="faultPRelay"></label>
+                        <div class="DL_Line">主正繼電器故障<label class="dataLight RG_L <%=faultHW[0]==='1'?'setToClose':''%>" id="faultPRelay"></label>
                         </div>
-                        <div class="DL_Line">主負繼電器故障<label class="dataLight RG_L" id="faultNRelay"></label>
+                        <div class="DL_Line">主負繼電器故障<label class="dataLight RG_L <%=faultHW[1]==='1'?'setToClose':''%>" id="faultNRelay"></label>
                         </div>
-                        <div class="DL_Line">主正繼電器閉合失敗<label class="dataLight RG_L"
+                        <div class="DL_Line">主正繼電器閉合失敗<label class="dataLight RG_L <%=faultHW[2]==='1'?'setToClose':''%>"
                                 id="closeFailPRelay"></label>
                         </div>
-                        <div class="DL_Line">主負繼電器閉合失敗<label class="dataLight RG_L"
+                        <div class="DL_Line">主負繼電器閉合失敗<label class="dataLight RG_L <%=faultHW[3]==='1'?'setToClose':''%>"
                                 id="closeFailNRelay"></label>
                         </div>
-                        <div class="DL_Line">熔絲斷開<label class="dataLight RG_L" id="blownFuse"></label>
+                        <div class="DL_Line">熔絲斷開<label class="dataLight RG_L <%=faultHW[4]==='1'?'setToClose':''%>" id="blownFuse"></label>
                         </div>
                     </div>
 
                     <div class="infoBlock faultSMU">
                         <h3>SMU故障</h3>
-                        <div class="DL_Line">SMU-CMU通訊<label class="dataLight RG_L" id="commSMUCMU"></label>
+                        <div class="DL_Line">SMU-CMU通訊<label class="dataLight RG_L <%=faultSMU[0]==='1'?'setToClose':''%>" id="commSMUCMU"></label>
                         </div>
-                        <div class="DL_Line">Rack數量保護<label class="dataLight RG_L" id="rackNoProtect"></label>
+                        <div class="DL_Line">Rack數量保護<label class="dataLight RG_L <%=faultSMU[11]==='1'?'setToClose':''%>" id="rackNoProtect"></label>
                         </div>
-                        <div class="DL_Line">系統停止<label class="dataLight RG_L" id="systemStop"></label>
+                        <div class="DL_Line">系統停止<label class="dataLight RG_L <%=faultSMU[15]==='1'?'setToClose':''%>" id="systemStop"></label>
                         </div>
                     </div>
 
                     <div class="infoBlock SOCcalibration">
                         <h3>SOC校準</h3>
-                        <div class="DL_Line">一級SOC校準提示<label class="dataLight OG_L" id="1stSOCcal"></label>
+                        <div class="DL_Line">一級SOC校準提示<label class="dataLight OG_L <%=SOCcali[0]==='1'?'setToClose':''%>" id="1stSOCcal"></label>
                         </div>
-                        <div class="DL_Line lastLine">二級SOC校準提示<label class="dataLight OG_L"
+                        <div class="DL_Line lastLine">二級SOC校準提示<label class="dataLight OG_L <%=SOCcali[1]==='1'?'setToClose':''%>"
                                 id="2ndSOCcal"></label>
                         </div>
                     </div>
@@ -399,75 +399,75 @@
                 <h3>CMU故障告警</h3>
                 <p class="titleAlarm">告警</p>
                 <p class="titleFault">故障</p>
-                <div class="DL_Line">電芯過壓<label class="dataLight OG_L" id="cellOV_Alarm"></label>
-                    <label class="dataLight RG_L" id="cellOV_Fault"></label>
+                <div class="DL_Line">電芯過壓<label class="dataLight OG_L <%=alarm[0]==='1'?'setToClose':''%>" id="cellOV_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[0]==='1'?'setToClose':''%>" id="cellOV_Fault"></label>
                 </div>
-                <div class="DL_Line">電芯欠壓<label class="dataLight OG_L" id="cellUV_Alarm"></label>
-                    <label class="dataLight RG_L" id="cellUV_Fault"></label>
+                <div class="DL_Line">電芯欠壓<label class="dataLight OG_L <%=alarm[1]==='1'?'setToClose':''%>" id="cellUV_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[1]==='1'?'setToClose':''%>" id="cellUV_Fault"></label>
                 </div>
-                <div class="DL_Line">總壓過壓<label class="dataLight OG_L" id="rackOV_Alarm"></label>
-                    <label class="dataLight RG_L" id="rackOV_Fault"></label>
+                <div class="DL_Line">總壓過壓<label class="dataLight OG_L <%=alarm[2]==='1'?'setToClose':''%>" id="rackOV_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[2]==='1'?'setToClose':''%>" id="rackOV_Fault"></label>
                 </div>
-                <div class="DL_Line">總壓欠壓<label class="dataLight OG_L" id="rackUV_Alarm"></label>
-                    <label class="dataLight RG_L" id="rackUV_Fault"></label>
+                <div class="DL_Line">總壓欠壓<label class="dataLight OG_L <%=alarm[3]==='1'?'setToClose':''%>" id="rackUV_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[3]==='1'?'setToClose':''%>" id="rackUV_Fault"></label>
                 </div>
-                <div class="DL_Line">Pack過壓<label class="dataLight OG_L" id="packOV_Alarm"></label>
-                    <label class="dataLight RG_L" id="packOV_Fault"></label>
+                <div class="DL_Line">Pack過壓<label class="dataLight OG_L <%=alarm[4]==='1'?'setToClose':''%>" id="packOV_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[4]==='1'?'setToClose':''%>" id="packOV_Fault"></label>
                 </div>
-                <div class="DL_Line">Pack欠壓<label class="dataLight OG_L" id="packUV_Alarm"></label>
-                    <label class="dataLight RG_L" id="packUV_Fault"></label>
+                <div class="DL_Line">Pack欠壓<label class="dataLight OG_L <%=alarm[5]==='1'?'setToClose':''%>" id="packUV_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[5]==='1'?'setToClose':''%>" id="packUV_Fault"></label>
                 </div>
-                <div class="DL_Line">電芯壓差<label class="dataLight OG_L" id="cellVDiff_Alarm"></label>
+                <div class="DL_Line">電芯壓差<label class="dataLight OG_L <%=alarm[6]==='1'?'setToClose':''%>" id="cellVDiff_Alarm"></label>
                     <label class="dataLight RG_L spareL" id="cellVDiff_Fault"></label>
                 </div>
                 <div class="DL_Line">總壓壓差<label class="dataLight OG_L spareL" id="rackVDiff_Alarm"></label>
-                    <label class="dataLight RG_L" id="rackVDiff_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[7]==='1'?'setToClose':''%>" id="rackVDiff_Fault"></label>
                 </div>
-                <div class="DL_Line">Pack壓差<label class="dataLight OG_L" id="packVDiff_Alarm"></label>
+                <div class="DL_Line">Pack壓差<label class="dataLight OG_L <%=alarm[8]==='1'?'setToClose':''%>" id="packVDiff_Alarm"></label>
                     <label class="dataLight RG_L spareL" id="packVDiff_Fault"></label>
                 </div>
-                <div class="DL_Line">電芯過溫<label class="dataLight OG_L" id="cellOT_Alarm"></label>
-                    <label class="dataLight RG_L" id="cellOT_Fault"></label>
+                <div class="DL_Line">電芯過溫<label class="dataLight OG_L <%=alarm[9]==='1'?'setToClose':''%>" id="cellOT_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[9]==='1'?'setToClose':''%>" id="cellOT_Fault"></label>
                 </div>
-                <div class="DL_Line">電芯低溫<label class="dataLight OG_L" id="cellUT_Alarm"></label>
-                    <label class="dataLight RG_L" id="cellUT_Fault"></label>
+                <div class="DL_Line">電芯低溫<label class="dataLight OG_L <%=alarm[10]==='1'?'setToClose':''%>" id="cellUT_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[10]==='1'?'setToClose':''%>" id="cellUT_Fault"></label>
                 </div>
-                <div class="DL_Line">電芯溫差<label class="dataLight OG_L" id="cellTDiff_Alarm"></label>
+                <div class="DL_Line">電芯溫差<label class="dataLight OG_L <%=alarm[11]==='1'?'setToClose':''%>" id="cellTDiff_Alarm"></label>
                     <label class="dataLight RG_L spareL" id="cellTDiff_Fault"></label>
                 </div>
-                <div class="DL_Line">絕緣漏電<label class="dataLight OG_L" id="leakageI_Alarm"></label>
-                    <label class="dataLight RG_L" id="leakageI_Fault"></label>
+                <div class="DL_Line">絕緣漏電<label class="dataLight OG_L <%=alarm[12]==='1'?'setToClose':''%>" id="leakageI_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[12]==='1'?'setToClose':''%>" id="leakageI_Fault"></label>
                 </div>
                 <div class="DL_Line">CMU-BMU通訊<label class="dataLight OG_L spareL"
                         id="commCMUBMU_Alarm"></label>
-                    <label class="dataLight RG_L" id="commCMUBMU_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[13]==='1'?'setToClose':''%>" id="commCMUBMU_Fault"></label>
                 </div>
                 <div class="DL_Line">電壓採樣<label class="dataLight OG_L spareL" id="voltSample_Alarm"></label>
-                    <label class="dataLight RG_L" id="voltSample_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[14]==='1'?'setToClose':''%>" id="voltSample_Fault"></label>
                 </div>
                 <div class="DL_Line">溫度採樣<label class="dataLight OG_L spareL" id="tempSample_Alarm"></label>
-                    <label class="dataLight RG_L" id="tempSample_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[15]==='1'?'setToClose':''%>" id="tempSample_Fault"></label>
                 </div>
                 <div class="DL_Line">電流採樣<label class="dataLight OG_L spareL"
                         id="currentSample_Alarm"></label>
-                    <label class="dataLight RG_L" id="currentSample_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[17]==='1'?'setToClose':''%>" id="currentSample_Fault"></label>
                 </div>
                 <div class="DL_Line">CMU-SMU通訊<label class="dataLight OG_L spareL"
                         id="commCMUSMU_Alarm"></label>
-                    <label class="dataLight RG_L" id="commCMUSMU_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[18]==='1'?'setToClose':''%>" id="commCMUSMU_Fault"></label>
                 </div>
-                <div class="DL_Line">過流<label class="dataLight OG_L" id="overCurrent_Alarm"></label>
-                    <label class="dataLight RG_L" id="overCurrent_Fault"></label>
+                <div class="DL_Line">過流<label class="dataLight OG_L <%=alarm[20]==='1'?'setToClose':''%>" id="overCurrent_Alarm"></label>
+                    <label class="dataLight RG_L <%=fault[20]==='1'?'setToClose':''%>" id="overCurrent_Fault"></label>
                 </div>
                 <div class="DL_Line">極性反接<label class="dataLight OG_L spareL"
                         id="polarityReverse_Alarm"></label>
-                    <label class="dataLight RG_L" id="polarityReverse_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[21]==='1'?'setToClose':''%>" id="polarityReverse_Fault"></label>
                 </div>
                 <div class="DL_Line">熔絲故障<label class="dataLight OG_L spareL" id="fuse_Alarm"></label>
-                    <label class="dataLight RG_L" id="fuse_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[22]==='1'?'setToClose':''%>" id="fuse_Fault"></label>
                 </div>
                 <div class="DL_Line">接觸器故障<label class="dataLight OG_L spareL" id="contactor_Alarm"></label>
-                    <label class="dataLight RG_L" id="contactor_Fault"></label>
+                    <label class="dataLight RG_L <%=fault[23]==='1'?'setToClose':''%>" id="contactor_Fault"></label>
                 </div>
             </div>
         </div>

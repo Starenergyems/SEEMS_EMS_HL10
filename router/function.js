@@ -256,7 +256,7 @@ function Convert_unixTime_to_dateTime(rawData) {
 }
 
 function Calculate_BMS_energy(E_GWh, E_MWh, E_kWh) {
-  let Energy = (E_GWh * 1000000 + E_MWh * 1000 + E_kWh) / 100;
+  let Energy = (E_GWh * 1000000 + E_MWh * 1000 + E_kWh) / 1000;
 
   return Energy.toFixed(1);
 }
@@ -294,9 +294,41 @@ function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {
   return NumberOfSpClosedBit;
 }
 
+function Determine_BGC_of_VcMaxDiff(rawData) {
+  if (rawData >= 500) {
+    return 'bgc_Red';
+  } else if (rawData >= 400) {
+    return 'bgc_Orange';
+  } else if (rawData >= 300) {
+    return 'bgc_Yellow';
+  } else {
+    return '';
+  }
+}
 
+function Determine_BGC_of_TcMaxDiff(rawData) {
+  if (rawData >= 60) {
+    return 'bgc_Red';
+  } else if (rawData >= 40) {
+    return 'bgc_Orange';
+  } else if (rawData >= 20) {
+    return 'bgc_Yellow';
+  } else {
+    return '';
+  }
+}
 
-const rawData = 18763;
+function Determine_DL_of_statusHW(rawData) {
+  let NumOfErr = Count_SpecificClosedBit(rawData, 16, [2, 3, 6, 7]);
+
+  if (NumOfErr > 0) {
+    return 'setToClose';
+  } else {
+    return '';
+  }
+}
+
+const rawData = 65331;
 const NumberOfDigit = 16;
 const pcsCHGStatus_MT = { 17: "Charging", 55: "Discharging", 98: "Non-working state" };
 const sysCtrl_2_MT = {
@@ -354,6 +386,12 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 // const wx = Count_SpecificClosedBit(rawData, NumberOfDigit, pcsWorkStatus_spBitList);
 // console.log(wx);
 
+// const yz = Determine_BGC_of_VcMaxDiff(rawData);
+// console.log(yz);
+
+const ab_2 = Determine_DL_of_statusHW(rawData);
+console.log(ab_2);
+
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 module.exports = {
@@ -374,6 +412,9 @@ module.exports = {
   Calculate_N1450_PF,
   Calculate_Tr_oilTemp,
   Count_SpecificClosedBit,
+  Determine_BGC_of_VcMaxDiff,
+  Determine_BGC_of_TcMaxDiff,
+  Determine_DL_of_statusHW,
 };
 // //***************************************************************************** */
 // //轉換存陣列
