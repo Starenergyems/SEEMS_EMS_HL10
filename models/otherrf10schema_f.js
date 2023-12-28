@@ -15,6 +15,12 @@ const other10Schema = new mongoose.Schema({
     time_log: Date,
   },
   AuxM1: {
+    408077: Number,
+    408078: Number,
+    408079: Number,
+    408080: Number,
+    408081: Number,
+    408082: Number,
     408083: Number,
     408084: Number,
     408085: Number,
@@ -144,7 +150,8 @@ const other10Schema = new mongoose.Schema({
     time_log: Date,
   },
   THMVCB: {
-    408181: Number,
+    408186: Number,
+    408187: Number,
     time_log: Date,
   },
   RelayMVCB: {

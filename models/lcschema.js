@@ -924,5 +924,9 @@ const lcSchema = new mongoose.Schema({
   },
 });
 
-const LC = mongoose.model("LC", lcSchema, "lc");
-module.exports = LC;
+const LC01 = mongoose.model("LC01", lcSchema, "lc01");
+const LC02 = mongoose.model("LC02", lcSchema, "lc02");
+const LC03 = mongoose.model("LC03", lcSchema, "lc03");
+const LC04 = mongoose.model("LC04", lcSchema, "lc04");
+module.exports = { Lc01: LC01, Lc02: LC02, Lc03: LC03, Lc04: LC04 };
+// module.exports = LC;

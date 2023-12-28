@@ -167,7 +167,7 @@
 
         <div class="M_Page">
             <div class="Title">
-                <h2>【PCS</h2><label id="No_of_PCS">1-1</label>
+                <h2>【PCS</h2><label id="No_of_PCS"><%=No_of_PCS%></label>
                 <h2>】</h2>
                 <a href="#" class="infoStatus" id="infoPCS">狀態與數值</a>
                 <a href="/operateinfo/pcs/alarm" class="infoStatus" id="statusPCS">故障與告警</a>
@@ -194,37 +194,37 @@
                     <p>充放電狀態</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="chargeStatus">非工作狀態</label>
+                        <label class="data_val" id="chargeStatus"><%=chargeStatus%></label>
                     </div>
                 </div>
                 <div class="bigInfo bI_tot_E_chg">
                     <p>總充電量</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">MWh</div>
-                        <label class="data_val" id="tot_E_chg">1234567.8</label>
+                        <label class="data_val" id="tot_E_chg"><%=tot_E_chg%></label>
                     </div>
                 </div>
                 <div class="bigInfo bI_tot_E_dcg">
                     <p>總放電量</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">MWh</div>
-                        <label class="data_val" id="tot_E_dcg">2345678.9</label>
+                        <label class="data_val" id="tot_E_dcg"><%=tot_E_dcg%></label>
                     </div>
                 </div>
             </div>
 
             <div class="infoBlock outputLimit">
                 <h3>輸出限制</h3>
-                <div class="DV_Line">最大充電功率<label class="dataValue" id="max_P_chg">3210.0</label>
+                <div class="DV_Line">最大充電功率<label class="dataValue" id="max_P_chg"><%=max_P_chg%></label>
                     <p class="dataUnit">kW</p>
                 </div>
-                <div class="DV_Line">最大放電功率<label class="dataValue" id="max_P_dcg">3210.9</label>
+                <div class="DV_Line">最大放電功率<label class="dataValue" id="max_P_dcg"><%=max_P_dcg%></label>
                     <p class="dataUnit">kW</p>
                 </div>
-                <div class="DV_Line">最大感性無功<label class="dataValue" id="max_Q_l">2345.0</label>
+                <div class="DV_Line">最大感性無功<label class="dataValue" id="max_Q_l"><%=max_Q_l%></label>
                     <p class="dataUnit">kVar</p>
                 </div>
-                <div class="DV_Line lastLine">最大容性無功<label class="dataValue" id="max_Q_c">2345.6</label>
+                <div class="DV_Line lastLine">最大容性無功<label class="dataValue" id="max_Q_c"><%=max_Q_c%></label>
                     <p class="dataUnit">kVar</p>
                 </div>
             </div>
@@ -233,12 +233,12 @@
                 <div class="infoBlock heartBeat">
                     <h3>心跳計數</h3>
                     <img src="../public/images/heartbeat_Logo.png" alt="心電圖圖示">
-                    <label class="dataValue" id="HB_Counts">123456</label>
+                    <label class="dataValue" id="HB_Counts"><%=HB_Counts%></label>
                 </div>
 
                 <div class="infoBlock leakageCurrent">
                     <h3>漏電流</h3>
-                    <div class="DV_Line lastLine"><label class="dataValue" id="leakage_I">1234.56</label>
+                    <div class="DV_Line lastLine"><label class="dataValue" id="leakage_I"><%=leakage_I%></label>
                         <p class="dataUnit">A</p>
                     </div>
                 </div>
@@ -247,40 +247,40 @@
             <div class="infoBlock ACside">
                 <h3>交流側</h3>
                 <div class="columnDVL">
-                    <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus">併網</label></div>
-                    <div class="DV_Line">實功<label class="dataValue" id="activePower">2000.1</label>
+                    <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus"><%=gridStatus%></label></div>
+                    <div class="DV_Line">實功<label class="dataValue" id="activePower"><%=activePower%></label>
                         <p class="dataUnit">kW</p>
                     </div>
-                    <div class="DV_Line">虛功<label class="dataValue" id="reactivePower">-1987.6</label>
+                    <div class="DV_Line">虛功<label class="dataValue" id="reactivePower"><%=reactivePower%></label>
                         <p class="dataUnit">kVar</p>
                     </div>
-                    <div class="DV_Line">功率因數<label class="dataValue" id="powerFactor">0.987</label>
+                    <div class="DV_Line">功率因數<label class="dataValue" id="powerFactor"><%=powerFactor%></label>
                     </div>
                 </div>
 
                 <div class="columnDVL">
-                    <div class="DV_Line">RS線電壓<label class="dataValue" id="voltageRS">678.0</label>
+                    <div class="DV_Line">RS線電壓<label class="dataValue" id="voltageRS"><%=voltageRS%></label>
                         <p class="dataUnit">V</p>
                     </div>
-                    <div class="DV_Line">ST線電壓<label class="dataValue" id="voltageST">654.3</label>
+                    <div class="DV_Line">ST線電壓<label class="dataValue" id="voltageST"><%=voltageST%></label>
                         <p class="dataUnit">V</p>
                     </div>
-                    <div class="DV_Line">TR線電壓<label class="dataValue" id="voltageTR">678.9</label>
+                    <div class="DV_Line">TR線電壓<label class="dataValue" id="voltageTR"><%=voltageTR%></label>
                         <p class="dataUnit">V</p>
                     </div>
                 </div>
 
                 <div class="columnDVL">
-                    <div class="DV_Line">R相電流<label class="dataValue" id="currentR">2100.0</label>
+                    <div class="DV_Line">R相電流<label class="dataValue" id="currentR"><%=currentR%></label>
                         <p class="dataUnit">A</p>
                     </div>
-                    <div class="DV_Line">S相電流<label class="dataValue" id="currentS">2123.4</label>
+                    <div class="DV_Line">S相電流<label class="dataValue" id="currentS"><%=currentS%></label>
                         <p class="dataUnit">A</p>
                     </div>
-                    <div class="DV_Line">T相電流<label class="dataValue" id="currentT">2100.9</label>
+                    <div class="DV_Line">T相電流<label class="dataValue" id="currentT"><%=currentT%></label>
                         <p class="dataUnit">A</p>
                     </div>
-                    <div class="DV_Line lastLine">電網頻率<label class="dataValue" id="gridFreq">60.07</label>
+                    <div class="DV_Line lastLine">電網頻率<label class="dataValue" id="gridFreq"><%=gridFreq%></label>
                         <p class="dataUnit">Hz</p>
                     </div>
                 </div>
@@ -288,14 +288,14 @@
 
             <div class="infoBlock resistanceToGnd">
                 <h3>阻抗值</h3>
-                <div class="DV_Line">正極對地阻抗<label class="dataValue" id="pElectrodeR">12345.00</label>
+                <div class="DV_Line">正極對地阻抗<label class="dataValue" id="pElectrodeR"><%=pElectrodeR%></label>
                     <p class="dataUnit">kΩ</p>
                 </div>
                 <div class="DVR_Line">
                     <p class="dataRange">(&nbsp正常範圍&nbsp&#62&nbsp1001.00</p>
                     <p class="dataUnit">kΩ&nbsp)</p>
                 </div>
-                <div class="DV_Line">負極對地阻抗<label class="dataValue" id="nElectrodeR">12345.67</label>
+                <div class="DV_Line">負極對地阻抗<label class="dataValue" id="nElectrodeR"><%=nElectrodeR%></label>
                     <p class="dataUnit">kΩ</p>
                 </div>
                 <div class="DVR_Line lastLine">
@@ -306,49 +306,49 @@
 
             <div class="infoBlock DCside">
                 <h3>直流側</h3>
-                <div class="DV_Line">直流電壓<label class="dataValue" id="DCvoltage">1543.2</label>
+                <div class="DV_Line">直流電壓<label class="dataValue" id="DCvoltage"><%=DCvoltage%></label>
                     <p class="dataUnit">V</p>
                 </div>
-                <div class="DV_Line">直流電流<label class="dataValue" id="DCcurrent">2501.2</label>
+                <div class="DV_Line">直流電流<label class="dataValue" id="DCcurrent"><%=DCcurrent%></label>
                     <p class="dataUnit">A</p>
                 </div>
-                <div class="DV_Line lastLine">直流功率<label class="dataValue" id="DCpower">2001.2</label>
+                <div class="DV_Line lastLine">直流功率<label class="dataValue" id="DCpower"><%=DCpower%></label>
                     <p class="dataUnit">kW</p>
                 </div>
             </div>
 
             <div class="infoBlock faultAlarm">
                 <h3>故障與告警</h3>
-                <div class="DL_Line">整機故障<label class="dataLight RG_L" id="overallFault"></label></div>
-                <div class="DL_Line">整機告警<label class="dataLight OG_L" id="overallAlarm"></label></div>
-                <div class="DL_Line">故障狀態<label class="dataLight RG_L" id="faultStatus"></label></div>
+                <div class="DL_Line">整機故障<label class="dataLight RG_L <%=overallFault>0?'setToClose':''%>" id="overallFault"></label></div>
+                <div class="DL_Line">整機告警<label class="dataLight OG_L <%=overallAlarm>0?'setToClose':''%>" id="overallAlarm"></label></div>
+                <div class="DL_Line">故障狀態<label class="dataLight RG_L <%=faultStatus>0?'setToClose':''%>" id="faultStatus"></label></div>
                 <div class="DL_Line lastLine">告警狀態
-                    <label class="dataLight OG_L" id="alarmStatus"></label>
+                    <label class="dataLight OG_L <%=alarmStatus>0?'setToClose':''%>" id="alarmStatus"></label>
                 </div>
             </div>
 
             <div class="infoBlock nodeStatus">
                 <h3>節點狀態</h3>
-                <div class="DL_Line">交流開關<label class="dataLight RG_L" id="NS_bit_1"></label></div>
-                <div class="DL_Line">直流開關<label class="dataLight RG_L" id="NS_bit_2"></label></div>
-                <div class="DL_Line">直流熔絲<label class="dataLight RG_L" id="NS_bit_3"></label></div>
-                <div class="DL_Line">直流輔助開關1<label class="dataLight RG_L" id="NS_bit_4"></label></div>
-                <div class="DL_Line lastLine">直流輔助開關2<label class="dataLight RG_L" id="NS_bit_5"></label>
+                <div class="DL_Line">交流開關<label class="dataLight RG_L <%=nodeStatus[1]==='1'?'setToClose':''%>" id="NS_bit_1"></label></div>
+                <div class="DL_Line">直流開關<label class="dataLight RG_L <%=nodeStatus[2]==='1'?'setToClose':''%>" id="NS_bit_2"></label></div>
+                <div class="DL_Line">直流熔絲<label class="dataLight RG_L <%=nodeStatus[3]==='1'?'setToClose':''%>" id="NS_bit_3"></label></div>
+                <div class="DL_Line">直流輔助開關1<label class="dataLight RG_L <%=nodeStatus[4]==='1'?'setToClose':''%>" id="NS_bit_4"></label></div>
+                <div class="DL_Line lastLine">直流輔助開關2<label class="dataLight RG_L <%=nodeStatus[5]==='1'?'setToClose':''%>" id="NS_bit_5"></label>
                 </div>
             </div>
 
             <div class="infoBlock tempPCS">
                 <h3>溫度值</h3>
-                <div class="DV_Line">機內溫度<label class="dataValue" id="innerTemp">-123.4</label>
+                <div class="DV_Line">機內溫度<label class="dataValue" id="innerTemp"><%=innerTemp%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">模組溫度1<label class="dataValue" id="moduleTemp1">234.5</label>
+                <div class="DV_Line">模組溫度1<label class="dataValue" id="moduleTemp1"><%=moduleTemp1%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">模組溫度2<label class="dataValue" id="moduleTemp2">45.6</label>
+                <div class="DV_Line">模組溫度2<label class="dataValue" id="moduleTemp2"><%=moduleTemp2%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">模組溫度3<label class="dataValue" id="moduleTemp3">56.7</label>
+                <div class="DV_Line">模組溫度3<label class="dataValue" id="moduleTemp3"><%=moduleTemp3%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
                 <div class="DVR_Line lastLine">

@@ -25,17 +25,40 @@ body {
     /* background-color: #8080FF; */
 }
 
-.DL_Line .dataLight {
-    display: block;
+.dataLight {
+    display: inline-block;
     background-color: #000000;
     box-sizing: border-box;
     height: 28px;
     width: 28px;
     border: 2px solid #B6B6B6;
     border-radius: 50%;
+}
+
+
+.DL_Line .dataLight {
     position: absolute;
     right: 0px;
     top: 3px;
+}
+
+.dataLight.RG_L,
+.dataLight.OG_L {
+  background-color: #236E37;
+}
+
+.dataLight.RB_L.setToClose,
+.dataLight.RG_L.setToClose {
+  background-color: #FF0000;
+}
+
+.dataLight.OB_L.setToClose,
+.dataLight.OG_L.setToClose {
+  background-color: #FFAA00;
+}
+
+.dataLight.GB_L.setToClose {
+  background-color: #00FF75;
 }
 
 .DV_Line {
