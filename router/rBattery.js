@@ -21,7 +21,7 @@ const {
   Count_SpecificClosedBit,
   Determine_BGC_of_VcMaxDiff,
   Determine_BGC_of_TcMaxDiff,
-  Determine_DL_of_statusHW,
+  Determine_DL_of_RackHWStatus,
 } = require("./function");
 
 app.set("view engine", "ejs");
@@ -560,7 +560,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]),
       alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
       faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-      DL_of_statusHW_R01: Determine_DL_of_statusHW(Lc_RackGroup.Rack01[405032]),
+      DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
       Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
       V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
@@ -582,7 +582,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]),
       alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
       faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-      DL_of_statusHW_R02: Determine_DL_of_statusHW(Lc_RackGroup.Rack02[405032]),
+      DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
       Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
       V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
@@ -604,7 +604,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]),
       alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
       faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-      DL_of_statusHW_R03: Determine_DL_of_statusHW(Lc_RackGroup.Rack03[405032]),
+      DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
       Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
       V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
@@ -626,7 +626,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]),
       alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
       faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-      DL_of_statusHW_R04: Determine_DL_of_statusHW(Lc_RackGroup.Rack04[405032]),
+      DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
       Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
       V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
@@ -648,7 +648,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]),
       alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
       faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-      DL_of_statusHW_R05: Determine_DL_of_statusHW(Lc_RackGroup.Rack05[405032]),
+      DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
       Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
       V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
@@ -670,7 +670,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]),
       alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
       faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-      DL_of_statusHW_R06: Determine_DL_of_statusHW(Lc_RackGroup.Rack06[405032]),
+      DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
       Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
       V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
@@ -692,7 +692,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]),
       alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
       faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-      DL_of_statusHW_R07: Determine_DL_of_statusHW(Lc_RackGroup.Rack07[405032]),
+      DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
       Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
       V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
@@ -714,7 +714,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]),
       alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
       faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-      DL_of_statusHW_R08: Determine_DL_of_statusHW(Lc_RackGroup.Rack08[405032]),
+      DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
       Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
       V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
@@ -736,7 +736,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]),
       alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
       faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-      DL_of_statusHW_R09: Determine_DL_of_statusHW(Lc_RackGroup.Rack09[405032]),
+      DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
       Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
       V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
@@ -758,7 +758,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]),
       alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
       faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-      DL_of_statusHW_R10: Determine_DL_of_statusHW(Lc_RackGroup.Rack10[405032]),
+      DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
       Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
       V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
@@ -780,7 +780,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]),
       alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
       faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-      DL_of_statusHW_R11: Determine_DL_of_statusHW(Lc_RackGroup.Rack11[405032]),
+      DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
       Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
       V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
@@ -802,7 +802,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
       bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]),
       alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
       faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-      DL_of_statusHW_R12: Determine_DL_of_statusHW(Lc_RackGroup.Rack12[405032]),
+      DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
     });
   } catch (error) {
     console.error(error);
@@ -847,7 +847,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]),
       alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
       faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-      DL_of_statusHW_R01: Determine_DL_of_statusHW(Lc_RackGroup.Rack01[405032]),
+      DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
       Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
       V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
@@ -869,7 +869,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]),
       alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
       faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-      DL_of_statusHW_R02: Determine_DL_of_statusHW(Lc_RackGroup.Rack02[405032]),
+      DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
       Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
       V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
@@ -891,7 +891,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]),
       alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
       faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-      DL_of_statusHW_R03: Determine_DL_of_statusHW(Lc_RackGroup.Rack03[405032]),
+      DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
       Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
       V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
@@ -913,7 +913,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]),
       alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
       faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-      DL_of_statusHW_R04: Determine_DL_of_statusHW(Lc_RackGroup.Rack04[405032]),
+      DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
       Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
       V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
@@ -935,7 +935,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]),
       alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
       faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-      DL_of_statusHW_R05: Determine_DL_of_statusHW(Lc_RackGroup.Rack05[405032]),
+      DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
       Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
       V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
@@ -957,7 +957,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]),
       alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
       faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-      DL_of_statusHW_R06: Determine_DL_of_statusHW(Lc_RackGroup.Rack06[405032]),
+      DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
       Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
       V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
@@ -979,7 +979,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]),
       alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
       faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-      DL_of_statusHW_R07: Determine_DL_of_statusHW(Lc_RackGroup.Rack07[405032]),
+      DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
       Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
       V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
@@ -1001,7 +1001,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]),
       alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
       faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-      DL_of_statusHW_R08: Determine_DL_of_statusHW(Lc_RackGroup.Rack08[405032]),
+      DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
       Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
       V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
@@ -1023,7 +1023,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]),
       alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
       faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-      DL_of_statusHW_R09: Determine_DL_of_statusHW(Lc_RackGroup.Rack09[405032]),
+      DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
       Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
       V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
@@ -1045,7 +1045,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]),
       alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
       faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-      DL_of_statusHW_R10: Determine_DL_of_statusHW(Lc_RackGroup.Rack10[405032]),
+      DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
       Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
       V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
@@ -1067,7 +1067,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]),
       alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
       faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-      DL_of_statusHW_R11: Determine_DL_of_statusHW(Lc_RackGroup.Rack11[405032]),
+      DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
       Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
       V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
@@ -1089,7 +1089,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
       bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]),
       alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
       faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-      DL_of_statusHW_R12: Determine_DL_of_statusHW(Lc_RackGroup.Rack12[405032]),
+      DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
     });
   } catch (error) {
     console.error(error);
@@ -1132,7 +1132,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]),
       alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
       faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-      DL_of_statusHW_R01: Determine_DL_of_statusHW(Lc_RackGroup.Rack01[405032]),
+      DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
       Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
       V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
@@ -1154,7 +1154,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]),
       alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
       faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-      DL_of_statusHW_R02: Determine_DL_of_statusHW(Lc_RackGroup.Rack02[405032]),
+      DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
       Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
       V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
@@ -1176,7 +1176,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]),
       alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
       faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-      DL_of_statusHW_R03: Determine_DL_of_statusHW(Lc_RackGroup.Rack03[405032]),
+      DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
       Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
       V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
@@ -1198,7 +1198,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]),
       alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
       faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-      DL_of_statusHW_R04: Determine_DL_of_statusHW(Lc_RackGroup.Rack04[405032]),
+      DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
       Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
       V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
@@ -1220,7 +1220,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]),
       alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
       faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-      DL_of_statusHW_R05: Determine_DL_of_statusHW(Lc_RackGroup.Rack05[405032]),
+      DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
       Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
       V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
@@ -1242,7 +1242,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]),
       alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
       faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-      DL_of_statusHW_R06: Determine_DL_of_statusHW(Lc_RackGroup.Rack06[405032]),
+      DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
       Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
       V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
@@ -1264,7 +1264,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]),
       alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
       faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-      DL_of_statusHW_R07: Determine_DL_of_statusHW(Lc_RackGroup.Rack07[405032]),
+      DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
       Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
       V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
@@ -1286,7 +1286,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]),
       alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
       faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-      DL_of_statusHW_R08: Determine_DL_of_statusHW(Lc_RackGroup.Rack08[405032]),
+      DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
       Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
       V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
@@ -1308,7 +1308,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]),
       alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
       faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-      DL_of_statusHW_R09: Determine_DL_of_statusHW(Lc_RackGroup.Rack09[405032]),
+      DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
       Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
       V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
@@ -1330,7 +1330,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]),
       alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
       faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-      DL_of_statusHW_R10: Determine_DL_of_statusHW(Lc_RackGroup.Rack10[405032]),
+      DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
       Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
       V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
@@ -1352,7 +1352,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]),
       alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
       faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-      DL_of_statusHW_R11: Determine_DL_of_statusHW(Lc_RackGroup.Rack11[405032]),
+      DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
       Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
       V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
@@ -1374,7 +1374,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
       bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]),
       alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
       faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-      DL_of_statusHW_R12: Determine_DL_of_statusHW(Lc_RackGroup.Rack12[405032]),
+      DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
     });
   } catch (error) {
     console.error(error);
@@ -1417,7 +1417,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]),
       alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
       faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-      DL_of_statusHW_R01: Determine_DL_of_statusHW(Lc_RackGroup.Rack01[405032]),
+      DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
       Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
       V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
@@ -1439,7 +1439,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]),
       alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
       faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-      DL_of_statusHW_R02: Determine_DL_of_statusHW(Lc_RackGroup.Rack02[405032]),
+      DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
       Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
       V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
@@ -1461,7 +1461,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]),
       alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
       faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-      DL_of_statusHW_R03: Determine_DL_of_statusHW(Lc_RackGroup.Rack03[405032]),
+      DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
       Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
       V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
@@ -1483,7 +1483,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]),
       alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
       faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-      DL_of_statusHW_R04: Determine_DL_of_statusHW(Lc_RackGroup.Rack04[405032]),
+      DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
       Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
       V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
@@ -1505,7 +1505,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]),
       alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
       faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-      DL_of_statusHW_R05: Determine_DL_of_statusHW(Lc_RackGroup.Rack05[405032]),
+      DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
       Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
       V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
@@ -1527,7 +1527,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]),
       alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
       faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-      DL_of_statusHW_R06: Determine_DL_of_statusHW(Lc_RackGroup.Rack06[405032]),
+      DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
       Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
       V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
@@ -1549,7 +1549,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]),
       alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
       faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-      DL_of_statusHW_R07: Determine_DL_of_statusHW(Lc_RackGroup.Rack07[405032]),
+      DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
       Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
       V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
@@ -1571,7 +1571,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]),
       alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
       faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-      DL_of_statusHW_R08: Determine_DL_of_statusHW(Lc_RackGroup.Rack08[405032]),
+      DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
       Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
       V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
@@ -1593,7 +1593,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]),
       alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
       faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-      DL_of_statusHW_R09: Determine_DL_of_statusHW(Lc_RackGroup.Rack09[405032]),
+      DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
       Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
       V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
@@ -1615,7 +1615,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]),
       alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
       faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-      DL_of_statusHW_R10: Determine_DL_of_statusHW(Lc_RackGroup.Rack10[405032]),
+      DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
       Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
       V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
@@ -1637,7 +1637,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]),
       alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
       faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-      DL_of_statusHW_R11: Determine_DL_of_statusHW(Lc_RackGroup.Rack11[405032]),
+      DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
       Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
       V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
@@ -1659,7 +1659,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
       bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]),
       alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
       faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-      DL_of_statusHW_R12: Determine_DL_of_statusHW(Lc_RackGroup.Rack12[405032]),
+      DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
     });
   } catch (error) {
     console.error(error);
@@ -1702,7 +1702,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]),
       alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
       faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-      DL_of_statusHW_R01: Determine_DL_of_statusHW(Lc_RackGroup.Rack01[405032]),
+      DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
       Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
       V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
@@ -1724,7 +1724,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]),
       alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
       faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-      DL_of_statusHW_R02: Determine_DL_of_statusHW(Lc_RackGroup.Rack02[405032]),
+      DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
       Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
       V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
@@ -1746,7 +1746,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]),
       alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
       faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-      DL_of_statusHW_R03: Determine_DL_of_statusHW(Lc_RackGroup.Rack03[405032]),
+      DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
       Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
       V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
@@ -1768,7 +1768,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]),
       alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
       faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-      DL_of_statusHW_R04: Determine_DL_of_statusHW(Lc_RackGroup.Rack04[405032]),
+      DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
       Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
       V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
@@ -1790,7 +1790,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]),
       alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
       faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-      DL_of_statusHW_R05: Determine_DL_of_statusHW(Lc_RackGroup.Rack05[405032]),
+      DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
       Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
       V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
@@ -1812,7 +1812,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]),
       alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
       faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-      DL_of_statusHW_R06: Determine_DL_of_statusHW(Lc_RackGroup.Rack06[405032]),
+      DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
       Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
       V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
@@ -1834,7 +1834,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]),
       alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
       faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-      DL_of_statusHW_R07: Determine_DL_of_statusHW(Lc_RackGroup.Rack07[405032]),
+      DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
       Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
       V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
@@ -1856,7 +1856,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]),
       alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
       faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-      DL_of_statusHW_R08: Determine_DL_of_statusHW(Lc_RackGroup.Rack08[405032]),
+      DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
       Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
       V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
@@ -1878,7 +1878,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]),
       alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
       faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-      DL_of_statusHW_R09: Determine_DL_of_statusHW(Lc_RackGroup.Rack09[405032]),
+      DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
       Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
       V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
@@ -1900,7 +1900,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]),
       alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
       faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-      DL_of_statusHW_R10: Determine_DL_of_statusHW(Lc_RackGroup.Rack10[405032]),
+      DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
       Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
       V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
@@ -1922,7 +1922,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]),
       alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
       faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-      DL_of_statusHW_R11: Determine_DL_of_statusHW(Lc_RackGroup.Rack11[405032]),
+      DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
       Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
       V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
@@ -1944,7 +1944,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
       bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]),
       alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
       faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-      DL_of_statusHW_R12: Determine_DL_of_statusHW(Lc_RackGroup.Rack12[405032]),
+      DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
     });
   } catch (error) {
     console.error(error);
@@ -1987,7 +1987,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]),
       alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
       faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-      DL_of_statusHW_R01: Determine_DL_of_statusHW(Lc_RackGroup.Rack01[405032]),
+      DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
       Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
       V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
@@ -2009,7 +2009,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]),
       alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
       faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-      DL_of_statusHW_R02: Determine_DL_of_statusHW(Lc_RackGroup.Rack02[405032]),
+      DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
       Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
       V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
@@ -2031,7 +2031,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]),
       alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
       faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-      DL_of_statusHW_R03: Determine_DL_of_statusHW(Lc_RackGroup.Rack03[405032]),
+      DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
       Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
       V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
@@ -2053,7 +2053,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]),
       alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
       faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-      DL_of_statusHW_R04: Determine_DL_of_statusHW(Lc_RackGroup.Rack04[405032]),
+      DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
       Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
       V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
@@ -2075,7 +2075,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]),
       alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
       faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-      DL_of_statusHW_R05: Determine_DL_of_statusHW(Lc_RackGroup.Rack05[405032]),
+      DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
       Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
       V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
@@ -2097,7 +2097,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]),
       alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
       faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-      DL_of_statusHW_R06: Determine_DL_of_statusHW(Lc_RackGroup.Rack06[405032]),
+      DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
       Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
       V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
@@ -2119,7 +2119,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]),
       alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
       faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-      DL_of_statusHW_R07: Determine_DL_of_statusHW(Lc_RackGroup.Rack07[405032]),
+      DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
       Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
       V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
@@ -2141,7 +2141,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]),
       alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
       faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-      DL_of_statusHW_R08: Determine_DL_of_statusHW(Lc_RackGroup.Rack08[405032]),
+      DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
       Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
       V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
@@ -2163,7 +2163,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]),
       alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
       faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-      DL_of_statusHW_R09: Determine_DL_of_statusHW(Lc_RackGroup.Rack09[405032]),
+      DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
       Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
       V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
@@ -2185,7 +2185,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]),
       alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
       faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-      DL_of_statusHW_R10: Determine_DL_of_statusHW(Lc_RackGroup.Rack10[405032]),
+      DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
       Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
       V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
@@ -2207,7 +2207,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]),
       alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
       faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-      DL_of_statusHW_R11: Determine_DL_of_statusHW(Lc_RackGroup.Rack11[405032]),
+      DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
       Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
       V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
@@ -2229,7 +2229,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
       bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]),
       alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
       faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-      DL_of_statusHW_R12: Determine_DL_of_statusHW(Lc_RackGroup.Rack12[405032]),
+      DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
     });
   } catch (error) {
     console.error(error);
@@ -2272,7 +2272,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]),
       alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
       faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-      DL_of_statusHW_R01: Determine_DL_of_statusHW(Lc_RackGroup.Rack01[405032]),
+      DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
       Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
       V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
@@ -2294,7 +2294,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]),
       alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
       faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-      DL_of_statusHW_R02: Determine_DL_of_statusHW(Lc_RackGroup.Rack02[405032]),
+      DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
       Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
       V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
@@ -2316,7 +2316,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]),
       alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
       faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-      DL_of_statusHW_R03: Determine_DL_of_statusHW(Lc_RackGroup.Rack03[405032]),
+      DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
       Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
       V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
@@ -2338,7 +2338,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]),
       alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
       faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-      DL_of_statusHW_R04: Determine_DL_of_statusHW(Lc_RackGroup.Rack04[405032]),
+      DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
       Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
       V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
@@ -2360,7 +2360,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]),
       alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
       faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-      DL_of_statusHW_R05: Determine_DL_of_statusHW(Lc_RackGroup.Rack05[405032]),
+      DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
       Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
       V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
@@ -2382,7 +2382,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]),
       alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
       faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-      DL_of_statusHW_R06: Determine_DL_of_statusHW(Lc_RackGroup.Rack06[405032]),
+      DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
       Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
       V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
@@ -2404,7 +2404,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]),
       alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
       faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-      DL_of_statusHW_R07: Determine_DL_of_statusHW(Lc_RackGroup.Rack07[405032]),
+      DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
       Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
       V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
@@ -2426,7 +2426,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]),
       alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
       faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-      DL_of_statusHW_R08: Determine_DL_of_statusHW(Lc_RackGroup.Rack08[405032]),
+      DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
       Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
       V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
@@ -2448,7 +2448,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]),
       alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
       faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-      DL_of_statusHW_R09: Determine_DL_of_statusHW(Lc_RackGroup.Rack09[405032]),
+      DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
       Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
       V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
@@ -2470,7 +2470,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]),
       alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
       faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-      DL_of_statusHW_R10: Determine_DL_of_statusHW(Lc_RackGroup.Rack10[405032]),
+      DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
       Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
       V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
@@ -2492,7 +2492,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]),
       alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
       faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-      DL_of_statusHW_R11: Determine_DL_of_statusHW(Lc_RackGroup.Rack11[405032]),
+      DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
       Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
       V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
@@ -2514,7 +2514,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
       bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]),
       alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
       faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-      DL_of_statusHW_R12: Determine_DL_of_statusHW(Lc_RackGroup.Rack12[405032]),
+      DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
     });
   } catch (error) {
     console.error(error);

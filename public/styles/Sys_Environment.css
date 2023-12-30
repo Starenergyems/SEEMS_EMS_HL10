@@ -46,7 +46,6 @@
     font-size: 20px;
     /* line-height: 34px; */
     text-align: center;
-    position: relative;
 }
 
 .environSC .col_01 {
@@ -83,6 +82,11 @@
     font-size: 20px;
     line-height: 1;
     /* background-color: #ffaa00; */
+}
+
+.environSC .row_set td,
+.environSC .row_DL_1st td {
+    position: relative;
 }
 
 .environSC .setButton {
@@ -135,23 +139,67 @@
 }
 
 .environSC .dataLight {
-    display: inline-block;
-    background-color: #236E37;
-    box-sizing: border-box;
-    height: 28px;
-    width: 28px;
-    border: 2px solid #B6B6B6;
     margin: 3px 0px;
-    border-radius: 50%;
     vertical-align: top;
 }
 
+.dataLight.RGB_L.setToRed {
+    background-color: #FF0000;
+}
+  
+.dataLight.RGB_L.setToGreen {
+    background-color: #00FF75;
+}
 
+.environSC .openEnvironAlm {
+    background-color: transparent;
+    height: 182px;
+    width: 50px;
+    position: absolute;
+    left: calc(50% - 25px);
+    top: 0px;
+}
 
+.info_EnvironAlm {
+    /* display: block; */
+    height: calc(140px + 30px*20);
+    width: 850px;
+    left: 295px;
+    top: 10px;
+}
 
+.info_EnvironAlm .titlePUW {
+    display: inline-block;
+    width: 260px;
+    margin: 20px 10px 0px;
+}
 
+.info_EnvironAlm .titlePUW.middleTitle {
+    margin: 100px 10px 10px;
+}
 
+.info_EnvironAlm .columnDLL {
+    display: inline-block;
+    width: 280px;
+    margin-top: 10px;
+    vertical-align: top;
+}
 
+.info_EnvironAlm .DL_Line {
+    padding-left: 5px;
+    margin: 0px 10px;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.info_EnvironAlm .dataLight {
+    height: 24px;
+    width: 24px;
+}
+
+.info_EnvironAlm .closeWindowButton {
+    margin: 15px 0px 0px 395px;
+}
 
 
 /* /////////////////////////////// */

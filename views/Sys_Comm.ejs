@@ -138,65 +138,70 @@
         <div class="M_Page">
             <div class="commArchiD">
                 <img src="../public/images/CommArchiDiagram.png" alt="通訊架構圖">
-                <label class="statusComm" id="EMS_1"></label>
-                <label class="statusComm" id="EMS_2"></label>
-                <label class="statusComm" id="DC"></label>
-                <label class="statusComm" id="HMI"></label>
-                <label class="statusComm" id="GC_1"></label>
-                <label class="statusComm" id="GC_2"></label>
-                <label class="statusComm" id="HVAC_1"></label>
-                <label class="statusComm" id="HVAC_2"></label>
-                <label class="statusComm" id="UPS_EMS"></label>
-                <label class="statusComm" id="UPS_CCTV"></label>
-                <label class="statusComm" id="RIO_CtrlRoom"></label>
-                <label class="statusComm" id="FreqMeter"></label>
-                <label class="statusComm" id="AuxM_MVCB"></label>
-                <label class="statusComm" id="Relay_MVCB"></label>
-                <label class="statusComm" id="UPS_MVCB"></label>
-                <label class="statusComm" id="Recloser"></label>
-                <label class="statusComm" id="RIO_MVCB_1"></label>
-                <label class="statusComm" id="RIO_MVCB_2"></label>
-                <label class="statusComm" id="Relay_VCB1"></label>
-                <label class="statusComm" id="Relay_VCB2"></label>
-                <label class="statusComm" id="Relay_VCB3"></label>
-                <label class="statusComm" id="Relay_VCB4"></label>
-                <label class="statusComm" id="Relay_VCB_Aux"></label>
-                <label class="statusComm" id="TR_Aux"></label>
-                <label class="statusComm" id="AuxM_total"></label>
-                <label class="statusComm" id="AuxM_ESS1_1"></label>
-                <label class="statusComm" id="AuxM_ESS1_2"></label>
-                <label class="statusComm" id="AuxM_ESS2_1"></label>
-                <label class="statusComm" id="AuxM_ESS2_2"></label>
-                <label class="statusComm" id="AuxM_ESS3_1"></label>
-                <label class="statusComm" id="AuxM_ESS3_2"></label>
-                <label class="statusComm" id="AuxM_ESS4"></label>
-                <label class="statusComm" id="AuxM_CtrlRoom"></label>
-                <label class="statusComm" id="TR_1"></label>
-                <label class="statusComm" id="TR_2"></label>
-                <label class="statusComm" id="TR_3"></label>
-                <label class="statusComm" id="TR_4"></label>
-                <label class="statusComm" id="ACMeter1"></label>
-                <label class="statusComm" id="ACMeter2"></label>
-                <label class="statusComm" id="ACMeter3"></label>
-                <label class="statusComm" id="ACMeter4"></label>
-                <label class="statusComm" id="LC_1"></label>
-                <label class="statusComm" id="LC_2"></label>
-                <label class="statusComm" id="LC_3"></label>
-                <label class="statusComm" id="LC_4"></label>
-                <label class="statusComm" id="PCS1_1"></label>
-                <label class="statusComm" id="PCS1_2"></label>
-                <label class="statusComm" id="BMS1_1"></label>
-                <label class="statusComm" id="BMS1_2"></label>
-                <label class="statusComm" id="PCS2_1"></label>
-                <label class="statusComm" id="PCS2_2"></label>
-                <label class="statusComm" id="BMS2_1"></label>
-                <label class="statusComm" id="BMS2_2"></label>
-                <label class="statusComm" id="PCS3_1"></label>
-                <label class="statusComm" id="PCS3_2"></label>
-                <label class="statusComm" id="BMS3_1"></label>
-                <label class="statusComm" id="BMS3_2"></label>
-                <label class="statusComm" id="PCS4"></label>
-                <label class="statusComm" id="BMS4"></label>
+                <!-- <label class="dataLight GB_L" id="EMS_1"></label>
+                <label class="dataLight GB_L" id="EMS_2"></label>
+                <label class="dataLight GB_L" id="DC"></label>
+                <label class="dataLight GB_L" id="HMI"></label> -->
+                <label class="dataLight GB_L <%=Comm_GC_1===0?'setToClose':''%>" id="GC_1"></label>
+                <label class="dataLight GB_L <%=Comm_GC_2===0?'setToClose':''%>" id="GC_2"></label>
+                <label class="dataLight GB_L <%=Comm_HVAC_1===0?'setToClose':''%>" id="HVAC_1"></label>
+                <label class="dataLight GB_L <%=Comm_HVAC_2===0?'setToClose':''%>" id="HVAC_2"></label>
+                <label class="dataLight GB_L <%=Comm_UPS_EMS===0?'setToClose':''%>" id="UPS_EMS"></label>
+                <label class="dataLight GB_L <%=Comm_UPS_CCTV===0?'setToClose':''%>" id="UPS_CCTV"></label>
+                <label class="dataLight GB_L <%=Comm_RIO_CtrlRoom===0?'setToClose':''%>" id="RIO_CtrlRoom"></label>
+                <label class="dataLight GB_L <%=Comm_FreqMeter===0?'setToClose':''%>" id="FreqMeter"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_MVCB===0?'setToClose':''%>" id="AuxM_MVCB"></label>
+                <label class="dataLight GB_L <%=Comm_Relay_MVCB===0?'setToClose':''%>" id="Relay_MVCB"></label>
+                <label class="dataLight GB_L <%=Comm_UPS_MVCB===0?'setToClose':''%>" id="UPS_MVCB"></label>
+                <label class="dataLight GB_L <%=Comm_Recloser===0?'setToClose':''%>" id="Recloser"></label>
+                <label class="dataLight GB_L <%=Comm_RIO_MVCB_1===0?'setToClose':''%>" id="RIO_MVCB_1"></label>
+                <label class="dataLight GB_L <%=Comm_RIO_MVCB_2===0?'setToClose':''%>" id="RIO_MVCB_2"></label>
+                <label class="dataLight GB_L <%=Comm_TH_MVCB===0?'setToClose':''%>" id="TH_MVCB"></label>
+                <label class="dataLight GB_L <%=Comm_Relay_VCB1===0?'setToClose':''%>" id="Relay_VCB1"></label>
+                <label class="dataLight GB_L <%=Comm_Relay_VCB2===0?'setToClose':''%>" id="Relay_VCB2"></label>
+                <label class="dataLight GB_L <%=Comm_Relay_VCB3===0?'setToClose':''%>" id="Relay_VCB3"></label>
+                <label class="dataLight GB_L <%=Comm_Relay_VCB4===0?'setToClose':''%>" id="Relay_VCB4"></label>
+                <label class="dataLight GB_L <%=Comm_Relay_VCB_Aux===0?'setToClose':''%>" id="Relay_VCB_Aux"></label>
+                <label class="dataLight GB_L <%=Comm_TR_Aux===0?'setToClose':''%>" id="TR_Aux"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_total===0?'setToClose':''%>" id="AuxM_total"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_ESS1_1===0?'setToClose':''%>" id="AuxM_ESS1_1"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_ESS1_2===0?'setToClose':''%>" id="AuxM_ESS1_2"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_ESS2_1===0?'setToClose':''%>" id="AuxM_ESS2_1"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_ESS2_2===0?'setToClose':''%>" id="AuxM_ESS2_2"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_ESS3_1===0?'setToClose':''%>" id="AuxM_ESS3_1"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_ESS3_2===0?'setToClose':''%>" id="AuxM_ESS3_2"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_ESS4===0?'setToClose':''%>" id="AuxM_ESS4"></label>
+                <label class="dataLight GB_L <%=Comm_AuxM_CtrlRoom===0?'setToClose':''%>" id="AuxM_CtrlRoom"></label>
+                <label class="dataLight GB_L <%=Comm_TR_1===0?'setToClose':''%>" id="TR_1"></label>
+                <label class="dataLight GB_L <%=Comm_TR_2===0?'setToClose':''%>" id="TR_2"></label>
+                <label class="dataLight GB_L <%=Comm_TR_3===0?'setToClose':''%>" id="TR_3"></label>
+                <label class="dataLight GB_L <%=Comm_TR_4===0?'setToClose':''%>" id="TR_4"></label>
+                <label class="dataLight GB_L <%=Comm_RIO_ACP_1===0?'setToClose':''%>" id="RIO_ACP_1"></label>
+                <label class="dataLight GB_L <%=Comm_RIO_ACP_2===0?'setToClose':''%>" id="RIO_ACP_2"></label>
+                <label class="dataLight GB_L <%=Comm_RIO_ACP_3===0?'setToClose':''%>" id="RIO_ACP_3"></label>
+                <label class="dataLight GB_L <%=Comm_RIO_ACP_4===0?'setToClose':''%>" id="RIO_ACP_4"></label>
+                <label class="dataLight GB_L <%=Comm_UPS_ACP===0?'setToClose':''%>" id="UPS_ACP"></label>
+                <label class="dataLight GB_L <%=Comm_LC_1===0?'setToClose':''%>" id="LC_1"></label>
+                <label class="dataLight GB_L <%=Comm_LC_2===0?'setToClose':''%>" id="LC_2"></label>
+                <label class="dataLight GB_L <%=Comm_LC_3===0?'setToClose':''%>" id="LC_3"></label>
+                <label class="dataLight GB_L <%=Comm_LC_4===0?'setToClose':''%>" id="LC_4"></label>
+                <label class="dataLight GB_L <%=Comm_PCS1_1===0?'setToClose':''%>" id="PCS1_1"></label>
+                <label class="dataLight GB_L <%=Comm_PCS1_2===0?'setToClose':''%>" id="PCS1_2"></label>
+                <label class="dataLight GB_L <%=Comm_BMS1_1===0?'setToClose':''%>" id="BMS1_1"></label>
+                <label class="dataLight GB_L <%=Comm_BMS1_2===0?'setToClose':''%>" id="BMS1_2"></label>
+                <label class="dataLight GB_L <%=Comm_PCS2_1===0?'setToClose':''%>" id="PCS2_1"></label>
+                <label class="dataLight GB_L <%=Comm_PCS2_2===0?'setToClose':''%>" id="PCS2_2"></label>
+                <label class="dataLight GB_L <%=Comm_BMS2_1===0?'setToClose':''%>" id="BMS2_1"></label>
+                <label class="dataLight GB_L <%=Comm_BMS2_2===0?'setToClose':''%>" id="BMS2_2"></label>
+                <label class="dataLight GB_L <%=Comm_PCS3_1===0?'setToClose':''%>" id="PCS3_1"></label>
+                <label class="dataLight GB_L <%=Comm_PCS3_2===0?'setToClose':''%>" id="PCS3_2"></label>
+                <label class="dataLight GB_L <%=Comm_BMS3_1===0?'setToClose':''%>" id="BMS3_1"></label>
+                <label class="dataLight GB_L <%=Comm_BMS3_2===0?'setToClose':''%>" id="BMS3_2"></label>
+                <label class="dataLight GB_L <%=Comm_PCS4===0?'setToClose':''%>" id="PCS4"></label>
+                <label class="dataLight GB_L <%=Comm_BMS4===0?'setToClose':''%>" id="BMS4"></label>
+
+                <div class="device" id="device_TH_MVCB">TH_MVCB<br><%=Comm_GC_1%></div>
+                <div class="device" id="device_UPS_ACP">UPS_ACP<br><%=Comm_BMS1_1%></div>
             </div>
         </div>
     </div>
