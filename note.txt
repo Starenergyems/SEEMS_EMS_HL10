@@ -21,6 +21,8 @@ npm install jsonwebtoken
 npm install cookie-parser
 npm install bcrypt
 
+//簡潔設定
+npm install express ejs mongoose method-override cors express-session dotenv connect-flash readline socket.io @line/bot-sdk passport passport-local jsonwebtoken cookie-parser bcrypt
 
 
 設定app.js
