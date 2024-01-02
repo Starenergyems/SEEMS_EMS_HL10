@@ -45,7 +45,7 @@ mongoose
 
 // Socket.IO 連線事件
 io.on("connection", (socket) => {
-  console.log("A user connected");
+  console.log("app.js : A user connected");
 
   // 訂閱 "dataUpdated" 事件
   dataUpdateEmitter.on("dataUpdated", (items) => {
@@ -76,7 +76,7 @@ const eventRouter = require("./rEvent");
 const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 const testRouter = require("./test");
-
+const alarmFunctions = require("./alarmFunctions");
 // 使用驗證
 //app.use(authMiddleware);
 
@@ -94,7 +94,7 @@ app.use(eventRouter);
 app.use(reportRouter);
 app.use(chartRouter);
 app.use(testRouter);
-
+app.use(alarmFunctions);
 // 查看目前連線路徑
 app.use((req, res, next) => {
   console.log(
@@ -148,5 +148,5 @@ server.listen(port, () => {
 // 新增定期更新函數，你需要根據實際需求實現這個函數
 function updateDataPeriodically() {
   // 實現你的定期更新邏輯
-  console.log("Data updated periodically...");
+  console.log("app.js : Data updated periodically...");
 }

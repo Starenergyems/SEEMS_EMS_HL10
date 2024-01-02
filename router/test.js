@@ -6,7 +6,7 @@ const methodOverride = require("method-override");
 const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http"); // 引入 http 模塊
-
+//************************************************************* */
 const C1 = mongoose.model("C1", {
   _id: mongoose.Schema.Types.ObjectId,
   value: Number,
@@ -30,7 +30,7 @@ const C4 = mongoose.model("C4", {
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
 router.use(cors());
-
+//************************************************************* */
 // 創建 http 伺服器
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
