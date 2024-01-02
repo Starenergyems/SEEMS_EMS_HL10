@@ -13,5 +13,8 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+# Set the working directory in the container
+WORKDIR /usr/src/app/router
+
 # Define the command to run your app
 CMD ["node", "app.js"]
