@@ -27,8 +27,14 @@ const alarmSchema = new Schema({
     type: String,
     required: true,
   },
-  recover_time: {
+  ack: {
+    type: String,
+  },
+  recovertime: {
     type: Date,
+  },
+  recover: {
+    type: String,
   },
 });
 
