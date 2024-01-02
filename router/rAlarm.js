@@ -32,25 +32,40 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //告警紀錄
 router.get("/alarm", (req, res) => {
   // num與fun
-
-  res.render("Alm_RealTime");
+  // async function updateDataPeriodically() {
+  //   try {
+  //     // 從數據庫中查詢 Other1 資料
+  //     const lcData = await Lc01.findOne().sort({ time_log: -1 });
+  //     //const lcData = await Lc01.findOne().sort({ time_log: -1 });
+  //     // 檢查是否有找到數據
+  //     if (!lcData) {
+  //       console.log("No data found");
+  //       return;
+  //     }
+  //     // 將 lcData 資料發布到所有連接的客戶端
+  //     dataUpdateEmitter.emit("dataUpdated", lcData);
+  //   } catch (error) {
+  //     console.error("Error fetching data from database:", error.message);
+  //   }
+  // }
+  // res.render("Alm_RealTime");
 });
 
-router.get("/alarm/re", async (req, res) => {
-  try {
-    // 從資料庫中獲取資料
-    const sourceData = await SourceData.find();
-    // 處理資料，這裡假設有一個處理函式 processData
-    const processedData = processData(sourceData);
-    // 將處理完的資料儲存到新的collection中
-    await ProcessedData.create(processedData);
-    // 回傳處理完的資料給前端
-    res.json(processedData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+// router.get("/alarm/re", async (req, res) => {
+//   try {
+//     // 從資料庫中獲取資料
+//     const sourceData = await SourceData.find();
+//     // 處理資料，這裡假設有一個處理函式 processData
+//     const processedData = processData(sourceData);
+//     // 將處理完的資料儲存到新的collection中
+//     await ProcessedData.create(processedData);
+//     // 回傳處理完的資料給前端
+//     res.json(processedData);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 
 router.get("/alarm/realtime", (req, res) => {
   // num與fun
