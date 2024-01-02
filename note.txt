@@ -20,6 +20,7 @@ npm install passport passport-local express-session //身分驗證 cookie sessio
 npm install jsonwebtoken
 npm install cookie-parser
 npm install bcrypt
+npm install xlsx-populate//報表下載
 
 
 
