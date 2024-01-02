@@ -32,8 +32,6 @@
   <br>
   <br>
   <br>
-
-
   <h2>Lc01 Data</h2>
   <table id="lc01Table">
     <thead>
@@ -42,25 +40,15 @@
         <th>Timestamp</th>
       </tr>
     </thead>
-    <!-- <tbody id="lc01TableBody">
+    <tbody id="lc01TableBody">
       <% lc01Data.forEach(item => { %>
         <tr>
-          <td><%= lc01Data.System[key]%></td>
+          <td><%= item.value %></td>
           <td><%= item.timestamp %></td>
         </tr>
       <% }); %>
-    </tbody> -->
-    <tbody>
-      <% for (const key in lc01Data.System) { %>
-          <tr>
-              <td><%= key %></td>
-              <td><%= lc01Data.System[key] %></td>
-          </tr>
-      <% } %>
-  </tbody>
+    </tbody>
   </table>
-
-
   <h2>Lc02 Data</h2>
   <table id="lc02Table">
     <thead>
@@ -95,9 +83,7 @@
         </tr>
       <% }); %>
     </tbody>
-  </table>
-  <!-- 新增 lc04、dc 和 gc 的表格 -->
-  <h2>Lc04 Data</h2>
+    <h2>Lc04 Data</h2>
   <table id="lc04Table">
     <thead>
       <tr>
@@ -106,8 +92,7 @@
       </tr>
     </thead>
     <tbody id="lc04TableBody">
-      <!-- 使用 EJS 語法顯示 lc04Data -->
-      <% lc04Data.forEach(item => { %>
+      <% lc03Data.forEach(item => { %>
         <tr>
           <td><%= item.value %></td>
           <td><%= item.timestamp %></td>
@@ -115,88 +100,46 @@
       <% }); %>
     </tbody>
   </table>
-  <h2>Dc Data</h2>
-  <table id="dcTable">
-    <thead>
-      <tr>
-        <th>Value</th>
-        <th>Timestamp</th>
-      </tr>
-    </thead>
-    <tbody id="dcTableBody">
-      <!-- 使用 EJS 語法顯示 dcData -->
-      <% dcData.forEach(item => { %>
+<!-- 在 body 底部添加 Socket.io 事件處理程序 -->
+<script>
+  // 建立 Socket.io 連接
+  const socket = io.connect();
+
+  // 定義函數用於更新數據
+  function updateData(updatedData, tableId) {
+    console.log("Updating data for table:", tableId);
+
+    // 使用 jQuery 更新數據
+    $(`#${tableId} tbody`).empty();
+    updatedData.forEach(item => {
+      $(`#${tableId} tbody`).append(`
         <tr>
-          <td><%= item.value %></td>
-          <td><%= item.timestamp %></td>
+          <td>${item.value}</td>
+          <td>${item.timestamp}</td>
         </tr>
-      <% }); %>
-    </tbody>
-  </table>
-  <h2>Gc Data</h2>
-  <table id="gcTable">
-    <thead>
-      <tr>
-        <th>Value</th>
-        <th>Timestamp</th>
-      </tr>
-    </thead>
-    <tbody id="gcTableBody">
-      <!-- 使用 EJS 語法顯示 gcData -->
-      <% gcData.forEach(item => { %>
-        <tr>
-          <td><%= item.value %></td>
-          <td><%= item.timestamp %></td>
-        </tr>
-      <% }); %>
-    </tbody>
-  </table>
-  <!-- 在 body 底部添加 Socket.io 事件處理程序 -->
-  <script>
-    // 建立 Socket.io 連接
-    const socket = io.connect();
-
-    // 定義函數用於更新數據
-    function updateData(updatedData, tableId) {
-      console.log("Updating data for table:", tableId);
-
-      // 使用 jQuery 更新數據
-      $(`#${tableId} tbody`).empty();
-      updatedData.forEach(item => {
-        $(`#${tableId} tbody`).append(`
-          <tr>
-            <td>${item.value}</td>
-            <td>${item.timestamp}</td>
-          </tr>
-        `);
-      });
-    }
-
-    // 監聽 "refreshData" 事件
-    socket.on("refreshData", (data) => {
-      if (data.tableId === "lc01Table") {
-        updateData(data.updatedData, "lc01TableBody");
-      } else if (data.tableId === "lc02Table") {
-        updateData(data.updatedData, "lc02TableBody");
-      } else if (data.tableId === "lc03Table") {
-        updateData(data.updatedData, "lc03TableBody");
-      } else if (data.tableId === "lc04Table") {
-        updateData(data.updatedData, "lc04TableBody");
-      } else if (data.tableId === "dcTable") {
-        updateData(data.updatedData, "dcTableBody");
-      } else if (data.tableId === "gcTable") {
-        updateData(data.updatedData, "gcTableBody");
-      } else {
-        // Assuming "alarmTable" by default
-        updateData(data.updatedData, "alarmTableBody");
-      }
+      `);
     });
+  }
 
-    // 設定每 5 秒更新一次
-    setInterval(() => {
-      socket.emit("refreshData"); // 向伺服器端發送事件
-    }, 5000);
-  </script>
+  // 監聽 "refreshData" 事件
+  socket.on("refreshData", (data) => {
+    if (data.tableId === "lc01Table") {
+      updateData(data.updatedData, "lc01TableBody");
+    } else if (data.tableId === "lc02Table") {
+      updateData(data.updatedData, "lc02TableBody");
+    } else if (data.tableId === "lc03Table") {
+      updateData(data.updatedData, "lc03TableBody");
+    } else {
+      // Assuming "alarmTable" by default
+      updateData(data.updatedData, "alarmTableBody");
+    }
+  });
+
+  // 設定每 5 秒更新一次
+  setInterval(() => {
+    socket.emit("refreshData"); // 向伺服器端發送事件
+  }, 5000);
+</script>
 
 </body>
 </html>
