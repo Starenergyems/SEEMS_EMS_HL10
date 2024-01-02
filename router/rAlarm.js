@@ -32,23 +32,7 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //告警紀錄
 router.get("/alarm", (req, res) => {
   // num與fun
-  // async function updateDataPeriodically() {
-  //   try {
-  //     // 從數據庫中查詢 Other1 資料
-  //     const lcData = await Lc01.findOne().sort({ time_log: -1 });
-  //     //const lcData = await Lc01.findOne().sort({ time_log: -1 });
-  //     // 檢查是否有找到數據
-  //     if (!lcData) {
-  //       console.log("No data found");
-  //       return;
-  //     }
-  //     // 將 lcData 資料發布到所有連接的客戶端
-  //     dataUpdateEmitter.emit("dataUpdated", lcData);
-  //   } catch (error) {
-  //     console.error("Error fetching data from database:", error.message);
-  //   }
-  // }
-  // res.render("Alm_RealTime");
+  res.render("Alm_RealTime");
 });
 
 // router.get("/alarm/re", async (req, res) => {

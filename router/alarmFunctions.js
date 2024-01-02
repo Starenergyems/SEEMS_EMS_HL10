@@ -17,7 +17,7 @@ const app = express(); // Create an Express application instance
 const cors = require("cors");
 const router = express.Router();
 
-//引入在function.js的函式
+//複值示範 : const num = Lc01.RackSub2.Rack11[405030];
 const {
   scaleProcess,
   mapchargeStatus,
