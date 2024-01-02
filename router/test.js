@@ -5,9 +5,8 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const cors = require("cors");
 const socket = require("socket.io");
-const http = require("http");
+const http = require("http"); // 引入 http 模塊
 
-// 定義資料庫模型
 const C1 = mongoose.model("C1", {
   _id: mongoose.Schema.Types.ObjectId,
   value: Number,
@@ -28,28 +27,47 @@ const C4 = mongoose.model("C4", {
   value: Number,
   timestamp: { type: Date, default: Date.now },
 });
-
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
 router.use(cors());
 
-// 創建 socket.io 實例
+// 創建 http 伺服器
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
   res.end("okay");
 });
 
+// 使用 WebSocket 連接伺服器
 const io = socket(server);
+
+// 在資料庫連線時建立 changeStream
+mongoose.connection.once("open", () => {
+  const c1ChangeStream = C1.watch();
+  const c2ChangeStream = C2.watch();
+  const c3ChangeStream = C3.watch();
+  const c4ChangeStream = C4.watch();
+
+  // 監聽 change event
+  c1ChangeStream.on("change", (change) => {
+    io.emit("refreshData", { tableId: "c1Table" });
+  });
+
+  c2ChangeStream.on("change", (change) => {
+    io.emit("refreshData", { tableId: "c2Table" });
+  });
+
+  c3ChangeStream.on("change", (change) => {
+    io.emit("refreshData", { tableId: "c3Table" });
+  });
+
+  c4ChangeStream.on("change", (change) => {
+    io.emit("refreshData", { tableId: "c4Table" });
+  });
+});
 
 // Socket.io 事件監聽
 io.on("connection", (socket) => {
   console.log("A user connected");
-
-  // 監聽來自前端的更新事件
-  socket.on("updateData", () => {
-    // 發送最新的數據到前端
-    io.emit("refreshData");
-  });
 
   // 斷開連接
   socket.on("disconnect", () => {
@@ -57,10 +75,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// 將資料處理的邏輯提取成中間件
 router.use(async (req, res, next) => {
   try {
-    // 從資料庫中獲取數據
+    // 從資料庫中獲取數據0
     const c1Data = await C1.find();
     const c2Data = await C2.find();
     const c3Data = await C3.find();
@@ -145,4 +162,16 @@ router.get("/test", (req, res) => {
   res.render("test");
 });
 
+router.get("/test2", (req, res) => {
+  // 在這裡定義渲染 middleware 頁面的邏輯
+  res.render("test");
+});
+
+// 加入其他路由
+router.get("/someOtherRoute", (req, res) => {
+  // Your logic here
+  res.send("Hello from someOtherRoute");
+});
+
+// 修改為：
 module.exports = router;

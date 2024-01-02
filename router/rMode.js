@@ -20,11 +20,8 @@ const cors = require("cors");
 //     console.log(e);
 //   });
 
-//set
 app.set("view engine", "ejs");
-// 設定視圖目錄為 C:\Test\SEEMS_EMS\views
 app.set("views", path.join(__dirname, "../views"));
-//use
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));

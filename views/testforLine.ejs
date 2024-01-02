@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Line Notify EJS Example</title>
+  </head>
+  <body>
+    <h1>Line Notify EJS Example</h1>
+
+    <!-- Add a button to trigger Line Notify -->
+    <button id="notifyButton">Send Line Notify</button>
+
+    <script>
+      document
+        .getElementById("notifyButton")
+        .addEventListener("click", async () => {
+          try {
+            const response = await fetch("/sendLineNotify", {
+              method: "GET",
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              alert("Line Notify sent successfully!");
+            } else {
+              alert("Error sending Line Notify. Please try again.");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("An unexpected error occurred. Please try again.");
+          }
+        });
+    </script>
+  </body>
+</html>

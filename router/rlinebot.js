@@ -1,60 +1,36 @@
 const express = require("express");
-const line = require("@line/bot-sdk");
-require("dotenv").config();
-const { handleInput } = require("../router/linebotFunctions");
+const axios = require("axios");
+const router = express.Router();
 
-const lineConfig = {
-  channelAccessToken: process.env.channelAccessToken,
-  channelSecret: process.env.channelSecret,
-};
+// Your Line Notify Token
+const lineNotifyToken = "YOUR_LINE_NOTIFY_TOKEN";
 
-const lineClient = new line.Client(lineConfig);
+// Route to trigger Line Notify
+router.get("/sendLineNotify", async (req, res) => {
+  try {
+    // Line Notify API endpoint
+    const lineNotifyEndpoint = "https://notify-api.line.me/api/notify";
 
-// 將 lineRouter 的部分轉換為中間件
-const lineMiddleware = (req, res, next) => {
-  // 如果是 GET 請求，表示 LINE 的驗證請求
-  if (req.method === "GET" && req.query["hub.mode"] === "subscribe") {
-    res.status(200).send(req.query["hub.challenge"]);
-  } else {
-    // 使用 line.middleware 中間件處理 LINE Webhook
-    line.middleware(lineConfig)(req, res, () => {
-      // 在這裡進行對 req.body 的處理
-      if (req.body && req.body.events) {
-        Promise.all(req.body.events.map(handleEvent))
-          .then((result) => res.json(result))
-          .catch((err) => {
-            console.error(err);
-            res.status(500).end();
-          });
-      } else {
-        next(); // 如果沒有 events，就繼續下一個中間件或路由處理
-      }
+    // Message to be sent
+    const message = "Hello from your website!";
+
+    // Send the notification
+    await axios.post(lineNotifyEndpoint, `message=${message}`, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${lineNotifyToken}`,
+      },
     });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Line Notify sent successfully" });
+  } catch (error) {
+    console.error("Error sending Line Notify:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error sending Line Notify" });
   }
-};
+});
 
-function handleEvent(event) {
-  if (event.type === "message" && event.message.type === "text") {
-    const inputText = event.message.text;
-    // 使用外部的 function 進行判斷
-    const response = handleInput(inputText);
-
-    // 回覆 LINE 用戶
-    return lineClient.replyMessage(event.replyToken, {
-      type: "text",
-      text: response,
-    });
-  }
-
-  // 其他事件處理，例如處理追蹤事件等
-  if (event.type === "follow") {
-    const userId = event.source.userId;
-    console.log(`User with ID ${userId} followed the bot`);
-    return lineClient.replyMessage(event.replyToken, {
-      type: "text",
-      text: "Thank you for following! Welcome to our bot!",
-    });
-  }
-}
-
-module.exports = lineMiddleware;
+module.exports = router;

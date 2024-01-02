@@ -171,12 +171,12 @@ $(document).ready(function () {
 
     })
 
-        // Handle the "Select All" checkbox change event using event delegation
+        // 彈出視窗確定全選
     $('#chb_AckAll').on('change', function () {
-        $('#message').addClass('appear');   
+        appear();  
     });
 
-
+    readCheck();
 
 });
 
@@ -196,3 +196,24 @@ function allCheck(){
     $('#chb_AckAll').prop('checked', false); // Unchecks it
 }
 
+function readCheck(){ //監測是否勾選已讀，勾選後刪除
+    // Event listener for checkbox change
+    $('#almTable tbody').off('change').on('change', '.chb_Ack', function () {
+        var rowData = table.row($(this).closest('tr')).data();
+        var rowTime = rowData.startTime; // 用時間和設備名稱辨認
+        var rowDevice = rowData.deviceName;
+
+        // Send an AJAX request to remove the row from the database
+        $.ajax({
+            url: 'your_backend_endpoint_for_deletion/' + rowTime + rowDevice,
+            method: 'DELETE',
+            success: function(response) {
+                // Handle success, e.g., update the DataTable
+                table.ajax.reload();
+            },
+            error: function(error) {
+                console.error('Error deleting row:', error);
+            }
+        });
+    });
+}

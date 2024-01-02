@@ -3,18 +3,20 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const Lc = require("../models/lcschema");
-const Lc01 = Lc['Lc01'];
-const Lc02 = Lc['Lc02'];
-const Lc03 = Lc['Lc03'];
-const Lc04 = Lc['Lc04'];
+const Lc01 = Lc["Lc01"];
+const Lc02 = Lc["Lc02"];
+const Lc03 = Lc["Lc03"];
+const Lc04 = Lc["Lc04"];
 // const Lc01 = require("../models/lcschema");
 const app = express(); // Create an Express application instance
 const cors = require("cors");
 const router = express.Router();
+//const io = require("socket.io")(httpServer); // 'httpServer' 是你的 Express 應用實例，確保有正確引入
+
 const {
   scaleProcess,
-  mapchargeStatus,                 //
-  mapPCSWorkingStatus,             //
+  mapchargeStatus,
+  mapPCSWorkingStatus,
   Convert_UInt_to_revBitString,
   Convert_UInt_to_BitString,
   mapWordStatus,
@@ -53,6 +55,57 @@ router.use(
 );
 
 router.use(cors());
+
+// Socket.IO 連線，新增定時器
+// io.on("connection", (socket) => {
+//   console.log("A user connected");
+
+//   // 訂閱 "dataUpdated" 事件
+//   dataUpdateEmitter.on("dataUpdated", (items) => {
+//     // 向連接的客戶端發送更新事件
+//     socket.emit("updateItems", items);
+//     console.log("Update items event sent to connected client");
+//   });
+
+//   // 發送一次更新以初始化客戶端的資料
+//   updateDataPeriodically();
+
+// 設定每隔三秒重新讀取資料庫數值
+//   const updateInterval = 3000; // 三秒
+//   const updateTimer = setInterval(() => {
+//     updateDataPeriodically();
+//   }, updateInterval);
+
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected");
+//     // 清除定時器以避免內存洩漏
+//     clearInterval(updateTimer);
+//   });
+// });
+
+// 新增一個函式，用於定期更新資料庫數值
+async function updateDataPeriodically() {
+  try {
+    // 從數據庫中查詢 Other1 資料
+    const lcData = await Lc01.findOne().sort({ time_log: -1 });
+    //const lcData = await Lc01.findOne().sort({ time_log: -1 });
+    // 檢查是否有找到數據
+    if (!lcData) {
+      console.log("No data found");
+      return;
+    }
+
+    // 將 lcData 資料發布到所有連接的客戶端
+    dataUpdateEmitter.emit("dataUpdated", lcData);
+  } catch (error) {
+    console.error("Error fetching data from database:", error.message);
+  }
+}
+// const port = 3000;
+// // 修改伺服器的監聽端口部分
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });
 
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {
@@ -122,14 +175,14 @@ router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
     const pcsCHGStatus_MT = {
       0: "Charging",
       1: "Discharging",
-      2: "Non-working state"
+      2: "Non-working state",
     };
     const hvacStatus_MT = {
       0: "Comm error",
       1: "Stop",
       2: "Running",
       3: "Fault",
-      85: "Not configured"
+      85: "Not configured",
     };
     const upsMode_MT = {
       66: "Battery mode",
@@ -141,12 +194,12 @@ router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
       80: "Power on mode",
       83: "Standby mode",
       84: "Battery test mode",
-      89: "Bypass mode"
+      89: "Bypass mode",
     };
     const reactiveReg_MT = {
       85: "Off",
       161: "Power factor mode",
-      162: "Reactive power mode"
+      162: "Reactive power mode",
     };
     const SS_status_MT = {
       0: { 0: "不可用", 1: "可用" },
@@ -163,8 +216,14 @@ router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
     const Alm_spBitList = [1, 3, 4, 7, 8, 9, 11, 12, 15];
 
     let Rack2_11_405010_HLB = getHighLowByte(lcData.RackSub2.Rack11[405010]);
-    let Rack2_11_405001_BitStr = Convert_UInt_to_revBitString(lcData.RackSub2.Rack11[405001], 16);
-    let Rack2_11_405030 = Convert_UInt_to_BitString(lcData.RackSub2.Rack11[405030], 16);
+    let Rack2_11_405001_BitStr = Convert_UInt_to_revBitString(
+      lcData.RackSub2.Rack11[405001],
+      16
+    );
+    let Rack2_11_405030 = Convert_UInt_to_BitString(
+      lcData.RackSub2.Rack11[405030],
+      16
+    );
 
     // 將數據傳遞給 EJS 模板，包括所有變數
     res.render("../views/test_meter", {
@@ -180,46 +239,138 @@ router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
 
       Rack2_11_405002: lcData.RackSub2.Rack11[405002],
       Rack2_11_405002_AS: scaleProcess(lcData.RackSub2.Rack11[405002], 0.01, 1),
-      Rack2_11_405004: mapWordStatus(lcData.RackSub2.Rack11[405004], pcsCHGStatus_MT),
-      Rack2_11_405005: mapWordStatus(lcData.RackSub2.Rack11[405005], hvacStatus_MT),
-      Rack2_11_405006: mapWordStatus(lcData.RackSub2.Rack11[405006], upsMode_MT),
-      Rack2_11_405009: mapWordStatus(lcData.RackSub2.Rack11[405009], reactiveReg_MT),
+      Rack2_11_405004: mapWordStatus(
+        lcData.RackSub2.Rack11[405004],
+        pcsCHGStatus_MT
+      ),
+      Rack2_11_405005: mapWordStatus(
+        lcData.RackSub2.Rack11[405005],
+        hvacStatus_MT
+      ),
+      Rack2_11_405006: mapWordStatus(
+        lcData.RackSub2.Rack11[405006],
+        upsMode_MT
+      ),
+      Rack2_11_405009: mapWordStatus(
+        lcData.RackSub2.Rack11[405009],
+        reactiveReg_MT
+      ),
       Rack2_11_405010_rawD: lcData.RackSub2.Rack11[405010],
       Rack2_11_405010: Rack2_11_405010_HLB,
       Rack2_11_405010_H: Rack2_11_405010_HLB["hiByte"],
       Rack2_11_405010_L: Rack2_11_405010_HLB.loByte,
-      Rack2_11_405011: Convert_unixTime_to_dateTime(lcData.RackSub2.Rack11[405011]),
-      BMS_CHG_E: Calculate_BMS_energy(lcData.RackSub2.Rack11[405012], lcData.RackSub2.Rack11[405013], lcData.RackSub2.Rack11[405014]),
-      AuxMeter_E: Calculate_CPM10_energy(lcData.RackSub2.Rack11[405015], lcData.RackSub2.Rack11[405016], lcData.RackSub2.Rack11[405017]),
+      Rack2_11_405011: Convert_unixTime_to_dateTime(
+        lcData.RackSub2.Rack11[405011]
+      ),
+      BMS_CHG_E: Calculate_BMS_energy(
+        lcData.RackSub2.Rack11[405012],
+        lcData.RackSub2.Rack11[405013],
+        lcData.RackSub2.Rack11[405014]
+      ),
+      AuxMeter_E: Calculate_CPM10_energy(
+        lcData.RackSub2.Rack11[405015],
+        lcData.RackSub2.Rack11[405016],
+        lcData.RackSub2.Rack11[405017]
+      ),
       Rack2_11_405020: Calculate_N1450_PF(lcData.RackSub2.Rack11[405020]),
       Rack2_11_405028: Calculate_Tr_oilTemp(lcData.RackSub2.Rack11[405028]),
       Rack2_11_405001_rawD: lcData.RackSub2.Rack11[405001],
       Rack2_11_405001: Rack2_11_405001_BitStr,
-      Rack2_11_405001_b0_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 0),
-      Rack2_11_405001_b1_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 1),
-      Rack2_11_405001_b2_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 2),
-      Rack2_11_405001_b3_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 3),
-      Rack2_11_405001_b4_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 4),
-      Rack2_11_405001_b5_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 5),
-      Rack2_11_405001_b6_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 6),
-      Rack2_11_405001_b7_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 7),
-      Rack2_11_405001_b8_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 8),
-      Rack2_11_405001_b9_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 9),
-      Rack2_11_405001_b10_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 10),
-      Rack2_11_405001_b11_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 11),
-      Rack2_11_405001_b12_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 12),
-      Rack2_11_405001_b13_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 13),
-      Rack2_11_405001_b14_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 14),
-      Rack2_11_405001_b15_status: mapBitStatus(Rack2_11_405001_BitStr, SS_status_MT, 15),
+      Rack2_11_405001_b0_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        0
+      ),
+      Rack2_11_405001_b1_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        1
+      ),
+      Rack2_11_405001_b2_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        2
+      ),
+      Rack2_11_405001_b3_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        3
+      ),
+      Rack2_11_405001_b4_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        4
+      ),
+      Rack2_11_405001_b5_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        5
+      ),
+      Rack2_11_405001_b6_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        6
+      ),
+      Rack2_11_405001_b7_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        7
+      ),
+      Rack2_11_405001_b8_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        8
+      ),
+      Rack2_11_405001_b9_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        9
+      ),
+      Rack2_11_405001_b10_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        10
+      ),
+      Rack2_11_405001_b11_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        11
+      ),
+      Rack2_11_405001_b12_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        12
+      ),
+      Rack2_11_405001_b13_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        13
+      ),
+      Rack2_11_405001_b14_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        14
+      ),
+      Rack2_11_405001_b15_status: mapBitStatus(
+        Rack2_11_405001_BitStr,
+        SS_status_MT,
+        15
+      ),
 
       Rack2_11_405030_rawD: lcData.RackSub2.Rack11[405030],
       Rack2_11_405030: Rack2_11_405030,
 
       Alm_SBL: Alm_spBitList,
       Rack2_11_405032_rawD: lcData.RackSub2.Rack11[405032],
-      Rack2_11_405032_BitStr: Convert_UInt_to_revBitString(lcData.RackSub2.Rack11[405032], 16),
-      Rack2_11_405032: Count_SpecificClosedBit(lcData.RackSub2.Rack11[405032], 16, Alm_spBitList),
-
+      Rack2_11_405032_BitStr: Convert_UInt_to_revBitString(
+        lcData.RackSub2.Rack11[405032],
+        16
+      ),
+      Rack2_11_405032: Count_SpecificClosedBit(
+        lcData.RackSub2.Rack11[405032],
+        16,
+        Alm_spBitList
+      ),
     });
   } catch (error) {
     console.error(error);
@@ -645,10 +796,16 @@ router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
 
     res.render("Op_PCS_Alarm", {
       No_of_PCS: "1-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16).num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16).num_ClosedBit,
-      noFault: Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm: Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
       OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
       OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
@@ -676,10 +833,16 @@ router.get("/operateinfo/pcs/alarm/2", async (req, res) => {
 
     res.render("Op_PCS_Alarm", {
       No_of_PCS: "1-2",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16).num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16).num_ClosedBit,
-      noFault: Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
-      noAlarm: Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
       OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
       OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
@@ -707,10 +870,16 @@ router.get("/operateinfo/pcs/alarm/3", async (req, res) => {
 
     res.render("Op_PCS_Alarm", {
       No_of_PCS: "2-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16).num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16).num_ClosedBit,
-      noFault: Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm: Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
       OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
       OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
@@ -738,10 +907,16 @@ router.get("/operateinfo/pcs/alarm/4", async (req, res) => {
 
     res.render("Op_PCS_Alarm", {
       No_of_PCS: "2-2",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16).num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16).num_ClosedBit,
-      noFault: Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
-      noAlarm: Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
       OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
       OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
@@ -769,10 +944,16 @@ router.get("/operateinfo/pcs/alarm/5", async (req, res) => {
 
     res.render("Op_PCS_Alarm", {
       No_of_PCS: "3-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16).num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16).num_ClosedBit,
-      noFault: Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm: Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
       OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
       OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
@@ -800,10 +981,16 @@ router.get("/operateinfo/pcs/alarm/6", async (req, res) => {
 
     res.render("Op_PCS_Alarm", {
       No_of_PCS: "3-2",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16).num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16).num_ClosedBit,
-      noFault: Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
-      noAlarm: Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
       OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
       OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
@@ -831,10 +1018,16 @@ router.get("/operateinfo/pcs/alarm/7", async (req, res) => {
 
     res.render("Op_PCS_Alarm", {
       No_of_PCS: "4-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16).num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16).num_ClosedBit,
-      noFault: Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm: Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit + Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
       OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
       OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
