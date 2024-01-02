@@ -1,0 +1,20 @@
+[
+  {
+    "_id": {
+      "$oid": "sd3f3dc87bf5716302a186e0"
+    },
+    "time": {
+      "$date": "2023-10-15T13:15:20.824Z"
+    },
+    "location": "室外",
+    "device": "變壓器",
+    "level": 2,
+    "content": "變壓器溫度異常",
+    "value": 65,
+    "ack": 0,
+    "recover": 1,
+    "recover_time": {
+      "$date": "2023-10-29T13:15:20.824Z"
+    }
+  }
+]

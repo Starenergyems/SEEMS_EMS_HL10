@@ -1,0 +1,23 @@
+[
+  {
+    "_id": {
+      "$oid": "653f3be87bf5716302a186e0"
+    },
+    "time": {
+      "$date": "2023-10-07T13:15:20.824Z"
+    },
+    "user": {
+      "num": "SE0001",
+      "mail": "hugo.huang@hdrenewables.com",
+      "name": "Hugo",
+      "company": "SE",
+      "department": "EMS",
+      "level": "accadmin",
+      "state": "normal",
+      "errcount": 0,
+      "note": "最高權限無法移除，可新增人員",
+      "last_time": "2023-10-07T13:15:20",
+      "password": "0000000"
+    }
+  }
+]

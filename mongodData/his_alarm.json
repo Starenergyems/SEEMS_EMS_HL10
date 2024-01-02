@@ -1,0 +1,18 @@
+[
+  {
+    "_id": {
+      "$oid": "653f3be87bf5716302a186e0"
+    },
+    "time": {
+      "$date": "2023-10-30T13:15:20.824Z"
+    },
+    "location": "LC01",
+    "device": "PCS1",
+    "level": 1,
+    "content": "pcs錯誤",
+    "value": 0,
+    "recover_time": {
+      "$date": "2023-10-30T13:15:20.824Z"
+    }
+  }
+]

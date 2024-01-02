@@ -1,0 +1,14 @@
+[
+  {
+    "_id": {
+      "$oid": "653f3be87bf5716302a186e0"
+    },
+    "time": {
+      "$date": "2023-10-30T13:15:20.824Z"
+    },
+    "record": {
+      "mail": "hugo.huang@hdrenewables.com",
+      "event": "登入帳號"
+    }
+  }
+]
