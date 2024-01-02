@@ -20,6 +20,7 @@ npm install passport passport-local express-session //身分驗證 cookie sessio
 npm install jsonwebtoken
 npm install cookie-parser
 npm install bcrypt
+npm install xlsx-populate//報表下載
 
 //簡潔設定
 npm install express ejs mongoose method-override cors express-session dotenv connect-flash readline socket.io @line/bot-sdk passport passport-local jsonwebtoken cookie-parser bcrypt
