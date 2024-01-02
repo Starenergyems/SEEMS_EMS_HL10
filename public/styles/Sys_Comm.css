@@ -22,14 +22,9 @@
     display: block;
 }
 
-.commArchiD label {
-    display: inline-block;
-    background-color: #00FF75;
-    box-sizing: border-box;
+.commArchiD .dataLight {
     height: 20px;
     width: 20px;
-    border: 1px solid #000000;
-    border-radius: 50%;
     position: absolute;
 }
 
@@ -120,6 +115,11 @@
 
 .commArchiD #RIO_MVCB_2 {
     left: 378px;
+    top: 85px;
+}
+
+.commArchiD #TH_MVCB {
+    left: 614px;
     top: 85px;
 }
 
@@ -218,24 +218,29 @@
     top: 435px;
 }
 
-.commArchiD #ACMeter1 {
+.commArchiD #RIO_ACP_1 {
     left: 745px;
     top: 435px;
 }
 
-.commArchiD #ACMeter2 {
+.commArchiD #RIO_ACP_2 {
     left: 863px;
     top: 435px;
 }
 
-.commArchiD #ACMeter3 {
+.commArchiD #RIO_ACP_3 {
     left: 981px;
     top: 435px;
 }
 
-.commArchiD #ACMeter4 {
+.commArchiD #RIO_ACP_4 {
     left: 1101px;
     top: 435px;
+}
+
+.commArchiD #UPS_ACP {
+    left: 1301px;
+    top: 365px;
 }
 
 .commArchiD #LC_1 {
@@ -326,4 +331,22 @@
 .commArchiD #BMS4 {
     left: 1461px;
     top: 770px;
+}
+
+.device {
+    background-color: #aaa;
+    height: 70px;
+    width: 70px;
+    font-size: 14px;
+    position: absolute;
+}
+
+#device_TH_MVCB {
+    left: 530px;
+    top: 60px;
+}
+
+#device_UPS_ACP {
+    left: 1221px;
+    top: 345px;
 }

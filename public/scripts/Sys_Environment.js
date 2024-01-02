@@ -207,6 +207,47 @@ function closePopup_dVS_No() {
     window_dataValue_Set.classList.remove("appear");
 }
 
+/////////////////////////////////////////////////////////////////////////
 
+const window_info_EnvironAlm = document.querySelector(".info_EnvironAlm");
+const title_UPSstatus1 = document.querySelector(".info_EnvironAlm .titleUPSstatus1");
+const title_UPSstatus2 = document.querySelector(".info_EnvironAlm .titleUPSstatus2");
+const title_FFSstatus = document.querySelector(".info_EnvironAlm .titleFFSstatus");
+const title_AlarmBSC = document.querySelector(".info_EnvironAlm .titleAlarmBSC");
+const title_FaultBSC = document.querySelector(".info_EnvironAlm .titleFaultBSC");
 
+const closeWB_info_EnvironAlm = document.querySelector(".info_EnvironAlm #closeWB_No");
+closeWB_info_EnvironAlm.addEventListener("click", closePopup_info_EnvironAlm);
+function closePopup_info_EnvironAlm() {
+    window_info_EnvironAlm.classList.remove("appear");
+}
 
+function show_info_EnvironAlm(abc) {
+    title_UPSstatus1.textContent = "ESS " + abc + " UPS狀態1";
+    title_UPSstatus2.textContent = "ESS " + abc + " UPS狀態2";
+    title_FFSstatus.textContent = "ESS " + abc + " 消防狀態";
+    title_AlarmBSC.textContent = "ESS " + abc + " BSC告警";
+    title_FaultBSC.textContent = "ESS " + abc + " BSC故障";
+    window_info_EnvironAlm.classList.add("appear");
+}
+
+const OpenEnvironAlm_1_1 = document.querySelector("#openEnvironAlm_1-1");
+OpenEnvironAlm_1_1.addEventListener("click", function () { show_info_EnvironAlm("1-1"); });
+
+const OpenEnvironAlm_1_2 = document.querySelector("#openEnvironAlm_1-2");
+OpenEnvironAlm_1_2.addEventListener("click", function () { show_info_EnvironAlm("1-2"); });
+
+const OpenEnvironAlm_2_1 = document.querySelector("#openEnvironAlm_2-1");
+OpenEnvironAlm_2_1.addEventListener("click", function () { show_info_EnvironAlm("2-1"); });
+
+const OpenEnvironAlm_2_2 = document.querySelector("#openEnvironAlm_2-2");
+OpenEnvironAlm_2_2.addEventListener("click", function () { show_info_EnvironAlm("2-2"); });
+
+const OpenEnvironAlm_3_1 = document.querySelector("#openEnvironAlm_3-1");
+OpenEnvironAlm_3_1.addEventListener("click", function () { show_info_EnvironAlm("3-1"); });
+
+const OpenEnvironAlm_3_2 = document.querySelector("#openEnvironAlm_3-2");
+OpenEnvironAlm_3_2.addEventListener("click", function () { show_info_EnvironAlm("3-2"); });
+
+const OpenEnvironAlm_4_1 = document.querySelector("#openEnvironAlm_4-1");
+OpenEnvironAlm_4_1.addEventListener("click", function () { show_info_EnvironAlm("4-1"); });

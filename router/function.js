@@ -318,7 +318,7 @@ function Determine_BGC_of_TcMaxDiff(rawData) {
   }
 }
 
-function Determine_DL_of_statusHW(rawData) {
+function Determine_DL_of_RackHWStatus(rawData) {
   let NumOfErr = Count_SpecificClosedBit(rawData, 16, [2, 3, 6, 7]);
 
   if (NumOfErr > 0) {
@@ -328,7 +328,28 @@ function Determine_DL_of_statusHW(rawData) {
   }
 }
 
-const rawData = 65331;
+function Determine_DL_of_upsStatus2(rawData) {
+  let revBitString = Convert_UInt_to_revBitString(rawData, 16);
+
+  if (revBitString[15] === '1') {
+    return 'setToRed';
+  } else if (revBitString[14] === '1') {
+    return 'setToGreen';
+  } else {
+    return '';
+  }
+}
+
+function Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS) {
+  if ((CommLC === 0) && (CommPCSBMS === '1')) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+
+const rawData = 49152;
 const NumberOfDigit = 16;
 const pcsCHGStatus_MT = { 17: "Charging", 55: "Discharging", 98: "Non-working state" };
 const sysCtrl_2_MT = {
@@ -389,8 +410,16 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 // const yz = Determine_BGC_of_VcMaxDiff(rawData);
 // console.log(yz);
 
-const ab_2 = Determine_DL_of_statusHW(rawData);
-console.log(ab_2);
+// const ab_2 = Determine_DL_of_RackHWStatus(rawData);
+// console.log(ab_2);
+
+// const cd_2 = Determine_DL_of_upsStatus2(rawData);
+// console.log(cd_2);
+
+// let CommLC = 0;
+// let CommPCSBMS = "1";
+// const ef_2 = Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS);
+// console.log(ef_2);
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
@@ -414,7 +443,9 @@ module.exports = {
   Count_SpecificClosedBit,
   Determine_BGC_of_VcMaxDiff,
   Determine_BGC_of_TcMaxDiff,
-  Determine_DL_of_statusHW,
+  Determine_DL_of_RackHWStatus,
+  Determine_DL_of_upsStatus2,
+  Determine_DL_of_CommPCSBMS,
 };
 // //***************************************************************************** */
 // //轉換存陣列
