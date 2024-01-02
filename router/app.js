@@ -38,7 +38,7 @@ mongoose
     console.error("連線 MongoDB 時發生錯誤：", e.message);
   });
 
-// Socket.IO 連線事件
+// 修改原本的 Socket.IO 連線事件，新增定時器
 io.on("connection", (socket) => {
   console.log("A user connected");
 
@@ -52,9 +52,35 @@ io.on("connection", (socket) => {
   // 發送一次更新以初始化客戶端的資料
   updateDataPeriodically();
 
+  // 設定每隔三秒重新讀取資料庫數值
+  const updateInterval = 3000; // 三秒
+  const updateTimer = setInterval(() => {
+    updateDataPeriodically();
+  }, updateInterval);
+
   socket.on("disconnect", () => {
     console.log("User disconnected");
+    // 清除定時器以避免內存洩漏
+    clearInterval(updateTimer);
   });
+});
+
+// 新增一個函式，用於定期更新資料庫數值
+function updateDataPeriodically() {
+  // 在這裡實現從資料庫讀取數值的邏輯
+  // 並發布 "dataUpdated" 事件，通知所有連線的客戶端
+  // 這部分的邏輯取決於您從資料庫中獲取數值的方式
+  // 以下是一個示例：
+  // fetchDataFromDatabase().then((items) => {
+  //   dataUpdateEmitter.emit("dataUpdated", items);
+  // });
+
+  const num = 1;
+}
+
+// 修改伺服器的監聽端口部分
+server.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
 });
 
 // 引入多個路由檔案
@@ -116,9 +142,9 @@ app.get("/error", (req, res) => {
   res.render("error");
 });
 
-server.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// server.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });
 
 // // app.js
 

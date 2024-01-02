@@ -3,11 +3,7 @@ const readline = require("readline");
 
 function Dataconversion(n) {
   // 檢查輸入是否合法
-  if (
-    typeof name !== "number" ||
-    typeof scale !== "number" ||
-    typeof point !== "number"
-  ) {
+  if (typeof scale !== "number" || typeof point !== "number") {
     throw new Error("All parameters must be numbers");
   }
 
