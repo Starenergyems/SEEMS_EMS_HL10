@@ -11,10 +11,12 @@ const Lc04 = Lc["Lc04"];
 const app = express(); // Create an Express application instance
 const cors = require("cors");
 const router = express.Router();
+//const io = require("socket.io")(httpServer); // 'httpServer' 是你的 Express 應用實例，確保有正確引入
+
 const {
   scaleProcess,
-  mapchargeStatus, //
-  mapPCSWorkingStatus, //
+  mapchargeStatus,
+  mapPCSWorkingStatus,
   Convert_UInt_to_revBitString,
   Convert_UInt_to_BitString,
   mapWordStatus,
@@ -55,33 +57,32 @@ router.use(
 router.use(cors());
 
 // Socket.IO 連線，新增定時器
-io.on("connection", (socket) => {
-  console.log("A user connected");
+// io.on("connection", (socket) => {
+//   console.log("A user connected");
 
-  // 訂閱 "dataUpdated" 事件
-  dataUpdateEmitter.on("dataUpdated", (items) => {
-    // 向連接的客戶端發送更新事件
-    socket.emit("updateItems", items);
-    console.log("Update items event sent to connected client");
-  });
+//   // 訂閱 "dataUpdated" 事件
+//   dataUpdateEmitter.on("dataUpdated", (items) => {
+//     // 向連接的客戶端發送更新事件
+//     socket.emit("updateItems", items);
+//     console.log("Update items event sent to connected client");
+//   });
 
-  // 發送一次更新以初始化客戶端的資料
-  updateDataPeriodically();
+//   // 發送一次更新以初始化客戶端的資料
+//   updateDataPeriodically();
 
-  // 設定每隔三秒重新讀取資料庫數值
-  const updateInterval = 3000; // 三秒
-  const updateTimer = setInterval(() => {
-    updateDataPeriodically();
-  }, updateInterval);
+// 設定每隔三秒重新讀取資料庫數值
+//   const updateInterval = 3000; // 三秒
+//   const updateTimer = setInterval(() => {
+//     updateDataPeriodically();
+//   }, updateInterval);
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-    // 清除定時器以避免內存洩漏
-    clearInterval(updateTimer);
-  });
-});
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected");
+//     // 清除定時器以避免內存洩漏
+//     clearInterval(updateTimer);
+//   });
+// });
 
-// 新增一個函式，用於定期更新資料庫數值
 // 新增一個函式，用於定期更新資料庫數值
 async function updateDataPeriodically() {
   try {
@@ -100,11 +101,11 @@ async function updateDataPeriodically() {
     console.error("Error fetching data from database:", error.message);
   }
 }
-
-// 修改伺服器的監聽端口部分
-server.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// const port = 3000;
+// // 修改伺服器的監聽端口部分
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });
 
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {

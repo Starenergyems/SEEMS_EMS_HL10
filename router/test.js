@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
 
 router.use(async (req, res, next) => {
   try {
-    // 從資料庫中獲取數據
+    // 從資料庫中獲取數據0
     const c1Data = await C1.find();
     const c2Data = await C2.find();
     const c3Data = await C3.find();
