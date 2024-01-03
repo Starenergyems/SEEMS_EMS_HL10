@@ -1,6 +1,8 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
+//const { check } = require("prettier");
+
 
 
 
@@ -101,7 +103,8 @@ $(document).ready(function () {
         "value": "Comm error",
         "acked": "",
         "ended": "0",
-        "endTime": ""
+        "endTime": "",
+        "checked": "1"
     }, {
         "index": "2",
         "startTime": "2023/09/01 15:22:10.123",
@@ -112,7 +115,8 @@ $(document).ready(function () {
         "value": "Normal",
         "acked": "",
         "ended": "1",
-        "endTime": "2023/09/01 15:22:50.123"
+        "endTime": "2023/09/01 15:22:50.123",
+        "checked": "0"
     }, {
         "index": "3",
         "startTime": "2023/09/01 15:13:10.123",
@@ -123,7 +127,8 @@ $(document).ready(function () {
         "value": "67",
         "acked": "",
         "ended": "0",
-        "endTime": ""
+        "endTime": "",
+        "checked": "1"
     }, {
         "index": "4",
         "startTime": "2023/09/01 13:23:10.123",
@@ -134,7 +139,8 @@ $(document).ready(function () {
         "value": "Normal",
         "acked": "",
         "ended": "1",
-        "endTime": "2023/09/01 14:43:10.123"
+        "endTime": "2023/09/01 14:43:10.123",
+        "checked": "0"
     }];
 
     $('#almTable').DataTable({
@@ -164,7 +170,16 @@ $(document).ready(function () {
             { data: "almLevel" },
             { data: "description" },
             { data: "value" },
-            { data: "index", render: function (data, type, row) { return '<input type="checkbox" class="chb_Ack" id=chb_Ack_' + data + '>' } },
+            { data: "checked", render: function (data, type, row) { 
+                var rowIndex = row.index; // Get the index from the row object
+                var checkboxId = 'chb_Ack_' + rowIndex;
+                
+                if (data === "1") {
+                    return '<input type="checkbox" checked class="chb_Ack" id="' + checkboxId + '">';
+                } else {
+                    return '<input type="checkbox" class="chb_Ack" id="' + checkboxId + '">';
+                }
+            } },
             { data: "ended", render: function (data, type, row) { if (data === "1") { return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">' } else { return '' } } },
             { data: "endTime" },
         ]
