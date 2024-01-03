@@ -50,11 +50,15 @@
         <div class="M_Page">
             <div class="Title">
                 <h2>【PCS</h2><label id="No_of_PCS"><%=No_of_PCS%></label>
+                <!-- <h2>【****PAGE</h2><label id="pageNumber"><%=pageNumber%></label> -->
                 <h2>】</h2>
-                <a href="#" class="infoStatus" id="infoPCS">狀態與數值</a>
-                <a href="/operateinfo/pcs/alarm" class="infoStatus" id="statusPCS">故障與告警</a>
-                <a href="#" class="preNext" id="previousPCS">上一頁</a>
-                <a href="#" class="preNext" id="nextPCS">下一頁</a>
+                <!-- <a href="#" class="infoStatus" id="infoPCS">狀態與數值</a> -->
+                <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>">狀態與數值</a>
+                <a href="/operateinfo/pcs/alarm/<%= pageNumber %>">故障與告警</a>
+                <% if (pageNumber > 1) { %>
+                <a href="/operateinfo/pcs/infodetail/<%= pageNumber - 1 %>" class="preNext" id="previousPCS">上一頁</a><% } %>
+                <% if (pageNumber < 7) { %>
+                <a href="/operateinfo/pcs/infodetail/<%= pageNumber + 1 %>" class="preNext" id="nextPCS">下一頁</a><% } %>
             </div>
 
             <div class="overview">

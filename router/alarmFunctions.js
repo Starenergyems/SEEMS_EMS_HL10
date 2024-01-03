@@ -195,8 +195,8 @@ router.use(async (req, res, next) => {
 //************************************************************* */
 async function processData(data, latestAlarmData, Alarm) {
   // 創建一個 Set 來存儲已經存在於 Alarm 中的文檔的 _id
-  console.log("A New data in Data:", data);
-  console.log("B New data in Data:", latestAlarmData);
+  //console.log("A New data in Data:", data);
+  //console.log("B New data in Data:", latestAlarmData);
   const existingIds = new Set(
     latestAlarmData.map((item) => item._id.toString())
   );
@@ -218,7 +218,7 @@ async function processData(data, latestAlarmData, Alarm) {
         });
 
         // 添加 console.log 语句以输出 lc01Data 中的数值
-        console.log("New data in Data:", item.value);
+        //console.log("New data in Data:", item.value);
       }
     } else {
       // 如果 Alarm 中已經存在該文檔，則更新數值或刪除
@@ -231,14 +231,14 @@ async function processData(data, latestAlarmData, Alarm) {
           });
 
           // 添加 console.log 语句以输出 lc01Data 中的数值
-          console.log("Updated data in lc01Data:", item.value);
+          //console.log("Updated data in lc01Data:", item.value);
         }
       } else {
         // 小於等於 50000 則刪除
         await Alarm.findByIdAndDelete(existingDoc._id);
 
         // 添加 console.log 语句以输出 lc01Data 中的数值
-        console.log("Deleted data in lc01Data:", item.value);
+        //console.log("Deleted data in lc01Data:", item.value);
       }
     }
     existingIds.add(idString);

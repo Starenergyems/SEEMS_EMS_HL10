@@ -45,7 +45,7 @@ mongoose
 
 // Socket.IO 連線事件
 io.on("connection", (socket) => {
-  console.log("app.js : A user connected");
+  //console.log("app.js : A user connected");
 
   // 訂閱 "dataUpdated" 事件
   dataUpdateEmitter.on("dataUpdated", (items) => {
@@ -97,9 +97,9 @@ app.use(testRouter);
 app.use(alarmFunctions);
 // 查看目前連線路徑
 app.use((req, res, next) => {
-  console.log(
-    `Current API URL: ${req.protocol}://${req.get("host")}${req.originalUrl}`
-  );
+  // console.log(
+  //   `Current API URL: ${req.protocol}://${req.get("host")}${req.originalUrl}`
+  // );
   next();
 });
 

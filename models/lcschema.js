@@ -3,7 +3,9 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const { ObjectId } = mongoose.Types;
-// 創建一個Mongoose模式
+
+//創建一個Mongoose模式
+
 const lcSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   time: Date,
@@ -924,9 +926,9 @@ const lcSchema = new mongoose.Schema({
   },
 });
 
-const LC01 = mongoose.model("LC01", lcSchema, "lc01");
-const LC02 = mongoose.model("LC02", lcSchema, "lc02");
-const LC03 = mongoose.model("LC03", lcSchema, "lc03");
-const LC04 = mongoose.model("LC04", lcSchema, "lc04");
-module.exports = { Lc01: LC01, Lc02: LC02, Lc03: LC03, Lc04: LC04 };
+const Lc01 = mongoose.model("Lc01", lcSchema, "lc01");
+const Lc02 = mongoose.model("Lc02", lcSchema, "lc02");
+const Lc03 = mongoose.model("Lc03", lcSchema, "lc03");
+const Lc04 = mongoose.model("Lc04", lcSchema, "lc04");
+module.exports = { Lc01: Lc01, Lc02: Lc02, Lc03: Lc03, Lc04: Lc04 };
 // module.exports = LC;
