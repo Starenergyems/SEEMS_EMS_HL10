@@ -50,10 +50,17 @@
             <div class="Title">
                 <h2>【BMS</h2><label id="No_of_BMS"><%=No_of_BMS%></label>
                 <h2>】</h2>
-                <a href="/operateinfo/battery/infodetail" class="infoStatus" id="infoBMS">狀態與數值</a>
+                <!-- <a href="/operateinfo/battery/infodetail" class="infoStatus" id="infoBMS">狀態與數值</a>
                 <a href="#" class="infoStatus" id="infoRack">Rack資訊</a>
                 <a href="#" class="preNext" id="previousBMS">上一頁</a>
-                <a href="#" class="preNext" id="nextBMS">下一頁</a>
+                <a href="#" class="preNext" id="nextBMS">下一頁</a> -->
+
+                <a href="/operateinfo/battery/infodetail/<%= pageNumber %>">狀態與數值</a>
+                <a href="/operateinfo/battery/rack/<%= pageNumber %>">Rack資訊</a>
+                <% if ( pageNumber > 1) { %>
+                <a href="/operateinfo/battery/rack/<%= pageNumber - 1 %>" class="preNext" id="previousBMS">上一頁</a><% } %>
+                <% if (pageNumber < 7) { %>
+                <a href="/operateinfo/battery/rack/<%= pageNumber + 1 %>" class="preNext" id="nextBMS">下一頁</a><% } %>
             </div>
 
             <div class="Rack">
