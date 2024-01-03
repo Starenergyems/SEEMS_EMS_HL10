@@ -1,9 +1,17 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 專案初始設定
 
 下載node (版本 20.10.0)
 https://nodejs.org/en
 
 npm init
+npm install //輸入此行即可一次下載package.json中的所有套件
+切換路徑到 cd C:\Test\SEEMS_EMS\router
+
+執行 node app.js 並確認有出現:伺服器正在聆聽 port 3000...
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 npm install express express ejs
 npm install mongoose //mongodb資料庫套件
 npm install method-override // use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
@@ -21,10 +29,7 @@ npm install jsonwebtoken
 npm install cookie-parser
 npm install bcrypt
 npm install xlsx-populate//報表下載
-
-//簡潔設定
-npm install express ejs mongoose method-override cors express-session dotenv connect-flash readline socket.io @line/bot-sdk passport passport-local jsonwebtoken cookie-parser bcrypt
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 設定app.js
 node app.js 執行並確認有出現(伺服器正在聆聽 port 3000...)
@@ -39,12 +44,14 @@ npm i cors
 如果有需要紀錄cookie要裝的套件 (https://www.npmjs.com/package/cookie-parser)
 npm i cookie-parser
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<Note>
+
 Html 轉 ejs
 檔案名稱與位置要修改
 html檔案要轉ejs結尾
 連結其他檔案需更改位置　依照router去修改
 連結圖片需更改位置 
-
 css的路徑
 "../public/styles/檔案名稱.css"
 圖片的路徑
@@ -54,3 +61,17 @@ ejs路徑:
     log要記得定期刪除
     dns層 指到不同網域
     反向代理 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+指定刪除整串相關內容
+C:\\Test\\SEEMS_EMS\\node_modules\\.*\n
+1.打開你的檔案。
+2.使用快捷鍵 Ctrl + H 或者點擊菜單上的 "查詢" > "取代"。
+3.在取代面板中，勾選正規表達式（Regular Expression）選項（一般在取代面板左邊）。
+4.在 "查詢" 欄位中輸入 C:\\Test\\SEEMS_EMS\\node_modules\\.*\n（這是一個匹配多行的正規表達式）。
+5.在 "取代為" 欄位中保持空白。
+6.點擊 "全部替換" 按鈕。
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
