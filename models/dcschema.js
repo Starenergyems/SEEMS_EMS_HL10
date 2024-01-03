@@ -244,5 +244,5 @@ const dcSchema = new mongoose.Schema({
     time_log: Date,
   },
 });
-const DC = mongoose.model("DC", dcSchema, "dc");
-module.exports = DC;
+const Dc = mongoose.model("Dc", dcSchema, "dc");
+module.exports = Dc;

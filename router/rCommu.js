@@ -5,10 +5,10 @@ const path = require("path");
 const port = 3000;
 const Dc = require("../models/dcschema");
 const Lc = require("../models/lcschema");
-const Lc01 = Lc['Lc01'];
-const Lc02 = Lc['Lc02'];
-const Lc03 = Lc['Lc03'];
-const Lc04 = Lc['Lc04'];
+const Lc01 = Lc["Lc01"];
+const Lc02 = Lc["Lc02"];
+const Lc03 = Lc["Lc03"];
+const Lc04 = Lc["Lc04"];
 const router = express.Router();
 const app = express();
 const cors = require("cors");
@@ -41,14 +41,14 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 //app.use(myMiddleware);
 
-router.get("/systeminfo", (req, res) => {
-  // num與fun
-  res.render("Sys_Comm");
-});
+// router.get("/systeminfo", (req, res) => {
+//   // num與fun
+//   res.render("Sys_Comm");
+// });
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
-router.get("/systeminfo/comm", async (req, res) => {
+router.get("/systeminfo", async (req, res) => {
   try {
     const collections = mongoose.connection.collections;
     const collectionNames = Object.keys(collections);
@@ -129,18 +129,54 @@ router.get("/systeminfo/comm", async (req, res) => {
       Comm_LC_2: dcData.LC2[409101],
       Comm_LC_3: dcData.LC3[409101],
       Comm_LC_4: dcData.LC4[409101],
-      Comm_PCS1_1: Determine_DL_of_CommPCSBMS(dcData.LC1[409101], PCScomm_LC1[0]),
-      Comm_PCS1_2: Determine_DL_of_CommPCSBMS(dcData.LC1[409101], PCScomm_LC1[1]),
-      Comm_BMS1_1: Determine_DL_of_CommPCSBMS(dcData.LC1[409101], BMScomm_LC1[0]),
-      Comm_BMS1_2: Determine_DL_of_CommPCSBMS(dcData.LC1[409101], BMScomm_LC1[1]),
-      Comm_PCS2_1: Determine_DL_of_CommPCSBMS(dcData.LC2[409101], PCScomm_LC2[0]),
-      Comm_PCS2_2: Determine_DL_of_CommPCSBMS(dcData.LC2[409101], PCScomm_LC2[1]),
-      Comm_BMS2_1: Determine_DL_of_CommPCSBMS(dcData.LC2[409101], BMScomm_LC2[0]),
-      Comm_BMS2_2: Determine_DL_of_CommPCSBMS(dcData.LC2[409101], BMScomm_LC2[1]),
-      Comm_PCS3_1: Determine_DL_of_CommPCSBMS(dcData.LC3[409101], PCScomm_LC3[0]),
-      Comm_PCS3_2: Determine_DL_of_CommPCSBMS(dcData.LC3[409101], PCScomm_LC3[1]),
-      Comm_BMS3_1: Determine_DL_of_CommPCSBMS(dcData.LC3[409101], BMScomm_LC3[0]),
-      Comm_BMS3_2: Determine_DL_of_CommPCSBMS(dcData.LC3[409101], BMScomm_LC3[1]),
+      Comm_PCS1_1: Determine_DL_of_CommPCSBMS(
+        dcData.LC1[409101],
+        PCScomm_LC1[0]
+      ),
+      Comm_PCS1_2: Determine_DL_of_CommPCSBMS(
+        dcData.LC1[409101],
+        PCScomm_LC1[1]
+      ),
+      Comm_BMS1_1: Determine_DL_of_CommPCSBMS(
+        dcData.LC1[409101],
+        BMScomm_LC1[0]
+      ),
+      Comm_BMS1_2: Determine_DL_of_CommPCSBMS(
+        dcData.LC1[409101],
+        BMScomm_LC1[1]
+      ),
+      Comm_PCS2_1: Determine_DL_of_CommPCSBMS(
+        dcData.LC2[409101],
+        PCScomm_LC2[0]
+      ),
+      Comm_PCS2_2: Determine_DL_of_CommPCSBMS(
+        dcData.LC2[409101],
+        PCScomm_LC2[1]
+      ),
+      Comm_BMS2_1: Determine_DL_of_CommPCSBMS(
+        dcData.LC2[409101],
+        BMScomm_LC2[0]
+      ),
+      Comm_BMS2_2: Determine_DL_of_CommPCSBMS(
+        dcData.LC2[409101],
+        BMScomm_LC2[1]
+      ),
+      Comm_PCS3_1: Determine_DL_of_CommPCSBMS(
+        dcData.LC3[409101],
+        PCScomm_LC3[0]
+      ),
+      Comm_PCS3_2: Determine_DL_of_CommPCSBMS(
+        dcData.LC3[409101],
+        PCScomm_LC3[1]
+      ),
+      Comm_BMS3_1: Determine_DL_of_CommPCSBMS(
+        dcData.LC3[409101],
+        BMScomm_LC3[0]
+      ),
+      Comm_BMS3_2: Determine_DL_of_CommPCSBMS(
+        dcData.LC3[409101],
+        BMScomm_LC3[1]
+      ),
       Comm_PCS4: Determine_DL_of_CommPCSBMS(dcData.LC4[409101], PCScomm_LC4[0]),
       Comm_BMS4: Determine_DL_of_CommPCSBMS(dcData.LC4[409101], BMScomm_LC4[0]),
     });
