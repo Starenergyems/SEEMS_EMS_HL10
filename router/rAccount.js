@@ -26,7 +26,7 @@ const collections = mongoose.connection.collections;
 // 轉換為 collection 名稱的數組
 const collectionNames = Object.keys(collections);
 
-console.log("當前連接中的 collection 名稱：", collectionNames);
+//console.log("當前連接中的 collection 名稱：", collectionNames);
 
 //set
 app.set("view engine", "ejs");

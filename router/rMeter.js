@@ -7,10 +7,7 @@ const Other10 = require("../models/otherrf10schema_f");
 const cors = require("cors");
 const router = express.Router();
 const app = express();
-const {
-  scaleProcess,
-  Calculate_CPM10_energy,
-} = require("./function");
+const { scaleProcess, Calculate_CPM10_energy } = require("./function");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -22,12 +19,12 @@ app.use(cors());
 
 router.get("/operateinfo", (req, res) => {
   // num與fun
-  res.render("Op_Meter_SLD",{permission: "manager"});
+  res.render("Op_Meter_SLD", { permission: "manager" });
 });
 
 router.get("/operateinfo/singlelinediagram", (req, res) => {
   // num與fun
-  res.render("Op_Meter_SLD",{permission: "manager"});
+  res.render("Op_Meter_SLD", { permission: "manager" });
 });
 
 router.get("/operateinfo/mainmeter", async (req, res) => {
@@ -38,7 +35,7 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
     // 轉換為 collection 名稱的數組
     const collectionNames = Object.keys(collections);
 
-    console.log("當前連接中的 collection 名稱：", collectionNames);
+    //console.log("當前連接中的 collection 名稱：", collectionNames);
 
     // 從數據庫中查詢 Other1 資料
     const other1Data = await Other1.findOne().sort({ time_log: -1 });
@@ -120,7 +117,7 @@ router.get("/operateinfo/auxmeter", async (req, res) => {
   try {
     const collections = mongoose.connection.collections;
     const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
+    //console.log("當前連接中的 collection 名稱：", collectionNames);
 
     const other10Data = await Other10.findOne().sort({ time_log: -1 });
 
@@ -130,30 +127,52 @@ router.get("/operateinfo/auxmeter", async (req, res) => {
 
     res.render("Op_Meter_AuxMeter", {
       permission: "manager",
-      V_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408077], 0.1, 1),
-      I_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408078], 0.01, 2),
-      P_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408079], 0.1, 1),
-      E_Aux_HV: Calculate_CPM10_energy(other10Data.AuxMMVCB[408080], other10Data.AuxMMVCB[408081], other10Data.AuxMMVCB[408082]),
+      V_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408077], 0.1, 1) || 0,
+      I_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408078], 0.01, 2) || 0,
+      P_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408079], 0.1, 1) || 0,
+      E_Aux_HV:
+        Calculate_CPM10_energy(
+          other10Data.AuxMMVCB[408080],
+          other10Data.AuxMMVCB[408081],
+          other10Data.AuxMMVCB[408082]
+        ) || 0,
 
-      V_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408077], 0.1, 1),
-      I_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408078], 0.01, 2),
-      P_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408079], 0.1, 1),
-      E_Aux_ESS1_1: Calculate_CPM10_energy(other10Data.AuxM1[408080], other10Data.AuxM1[408081], other10Data.AuxM1[408082]),
+      V_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408077], 0.1, 1) || 0,
+      I_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408078], 0.01, 2) || 0,
+      P_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408079], 0.1, 1) || 0,
+      E_Aux_ESS1_1:
+        Calculate_CPM10_energy(
+          other10Data.AuxM1[408080],
+          other10Data.AuxM1[408081],
+          other10Data.AuxM1[408082]
+        ) || 0,
 
       V_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408077], 0.1, 1),
       I_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408078], 0.01, 2),
       P_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408079], 0.1, 1),
-      E_Aux_ESS2_1: Calculate_CPM10_energy(other10Data.AuxM3[408080], other10Data.AuxM3[408081], other10Data.AuxM3[408082]),
+      E_Aux_ESS2_1: Calculate_CPM10_energy(
+        other10Data.AuxM3[408080],
+        other10Data.AuxM3[408081],
+        other10Data.AuxM3[408082]
+      ),
 
       V_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408077], 0.1, 1),
       I_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408078], 0.01, 2),
       P_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408079], 0.1, 1),
-      E_Aux_ESS3_1: Calculate_CPM10_energy(other10Data.AuxM5[408080], other10Data.AuxM5[408081], other10Data.AuxM5[408082]),
+      E_Aux_ESS3_1: Calculate_CPM10_energy(
+        other10Data.AuxM5[408080],
+        other10Data.AuxM5[408081],
+        other10Data.AuxM5[408082]
+      ),
 
       V_Aux_ESS4: scaleProcess(other10Data.AuxM7[408077], 0.1, 1),
       I_Aux_ESS4: scaleProcess(other10Data.AuxM7[408078], 0.01, 2),
       P_Aux_ESS4: scaleProcess(other10Data.AuxM7[408079], 0.1, 1),
-      E_Aux_ESS4: Calculate_CPM10_energy(other10Data.AuxM7[408080], other10Data.AuxM7[408081], other10Data.AuxM7[408082]),
+      E_Aux_ESS4: Calculate_CPM10_energy(
+        other10Data.AuxM7[408080],
+        other10Data.AuxM7[408081],
+        other10Data.AuxM7[408082]
+      ),
 
       V_Aux_total: scaleProcess(other10Data.AuxMtot[408069], 0.1, 1),
       I_Aux_total: scaleProcess(other10Data.AuxMtot[408071], 0.001, 2),
@@ -163,22 +182,38 @@ router.get("/operateinfo/auxmeter", async (req, res) => {
       V_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408077], 0.1, 1),
       I_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408078], 0.01, 2),
       P_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408079], 0.1, 1),
-      E_Aux_ESS1_2: Calculate_CPM10_energy(other10Data.AuxM2[408080], other10Data.AuxM2[408081], other10Data.AuxM2[408082]),
+      E_Aux_ESS1_2: Calculate_CPM10_energy(
+        other10Data.AuxM2[408080],
+        other10Data.AuxM2[408081],
+        other10Data.AuxM2[408082]
+      ),
 
       V_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408077], 0.1, 1),
       I_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408078], 0.01, 2),
       P_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408079], 0.1, 1),
-      E_Aux_ESS2_2: Calculate_CPM10_energy(other10Data.AuxM4[408080], other10Data.AuxM4[408081], other10Data.AuxM4[408082]),
+      E_Aux_ESS2_2: Calculate_CPM10_energy(
+        other10Data.AuxM4[408080],
+        other10Data.AuxM4[408081],
+        other10Data.AuxM4[408082]
+      ),
 
       V_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408077], 0.1, 1),
       I_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408078], 0.01, 2),
       P_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408079], 0.1, 1),
-      E_Aux_ESS3_2: Calculate_CPM10_energy(other10Data.AuxM6[408080], other10Data.AuxM6[408081], other10Data.AuxM6[408082]),
+      E_Aux_ESS3_2: Calculate_CPM10_energy(
+        other10Data.AuxM6[408080],
+        other10Data.AuxM6[408081],
+        other10Data.AuxM6[408082]
+      ),
 
       V_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408077], 0.1, 1),
       I_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408078], 0.01, 2),
       P_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408079], 0.1, 1),
-      E_Aux_CtrlRoom: Calculate_CPM10_energy(other10Data.AuxM8[408080], other10Data.AuxM8[408081], other10Data.AuxM8[408082]),
+      E_Aux_CtrlRoom: Calculate_CPM10_energy(
+        other10Data.AuxM8[408080],
+        other10Data.AuxM8[408081],
+        other10Data.AuxM8[408082]
+      ),
     });
   } catch (error) {
     console.error(error);
