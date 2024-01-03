@@ -22,12 +22,12 @@ app.use(cors());
 
 router.get("/operateinfo", (req, res) => {
   // num與fun
-  res.render("Op_Meter_SLD");
+  res.render("Op_Meter_SLD",{permission: "manager"});
 });
 
 router.get("/operateinfo/singlelinediagram", (req, res) => {
   // num與fun
-  res.render("Op_Meter_SLD");
+  res.render("Op_Meter_SLD",{permission: "manager"});
 });
 
 router.get("/operateinfo/mainmeter", async (req, res) => {
@@ -102,6 +102,7 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
       kvarh_imp: data["408032"],
       kvarh_exp: data["408034"],
       other1Data, // 確保 other1Data 也被傳遞
+      permission: "manager",
     });
   } catch (error) {
     console.error(error);
@@ -128,6 +129,7 @@ router.get("/operateinfo/auxmeter", async (req, res) => {
     }
 
     res.render("Op_Meter_AuxMeter", {
+      permission: "manager",
       V_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408077], 0.1, 1),
       I_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408078], 0.01, 2),
       P_Aux_HV: scaleProcess(other10Data.AuxMMVCB[408079], 0.1, 1),

@@ -56,16 +56,29 @@
                 <label class="status_CB" id="VCB_2"></label>
                 <label class="status_CB" id="VCB_3"></label>
                 <label class="status_CB" id="VCB_4"></label>
-                <label class="status_CB" id="ACB_1_1"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_1_2"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_1_3"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_2_1"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_2_2"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_2_3"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_3_1"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_3_2"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_3_3"><span class="ctrlable"></span></label>
-                <label class="status_CB" id="ACB_4_1"><span class="ctrlable"></span></label>
+                <% if (permission === "manager"){ %>
+                    <label class="status_CB" id="ACB_1_1"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_1_2"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_1_3"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_2_1"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_2_2"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_2_3"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_3_1"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_3_2"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_3_3"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_4_1"><span class="ctrlable"></span></label>
+                <% }else{ %>
+                    <label class="status_CB" id="ACB_1_1v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_1_2v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_1_3v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_2_1v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_2_2v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_2_3v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_3_1v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_3_2v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_3_3v"><span class="ctrlable"></span></label>
+                    <label class="status_CB" id="ACB_4_1v"><span class="ctrlable"></span></label>
+                <% } %>
                 <label class="status_CB" id="VCB_aux"></label>
                 <label class="status_Rly" id="Rly_MVCB"></label>
                 <label class="status_Recloser" id="Recloser_MVCB"></label>

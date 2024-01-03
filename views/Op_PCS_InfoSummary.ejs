@@ -134,8 +134,10 @@
 
         <div class="infoLC infoLC_1">
           <div class="titleLC">
-            <h3>LC1&nbsp(一組兩台)</h3>
-            <button class="setButton" id="setBut_P_LC1">Set</button>
+            <h3>LC1&nbsp(一組兩台)</h3>           
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_P_LC1">Set</button>
+            <% } %>  
           </div>
 
           <div class="DV_Line DV_onlineNum">
@@ -199,33 +201,43 @@
             主/被動模式<label class="dataStatus" id="modeActPas_LC1"
               >被動</label
             >
-            <button class="setButton" id="setBut_modeAP_LC1">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeAP_LC1">Set</button>
+            <% } %>
           </div>
           <div class="DS_Line">
             虛功模式<label class="dataStatus" id="modeQctrl_LC1"
               >功率(kVar)模式</label
             >
-            <button class="setButton" id="setBut_modeQctrl_LC1">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeQctrl_LC1">Set</button>
+            <% } %>
           </div>
           <div class="DS_Line">
             PCS待機指令<label class="dataStatus" id="standbyCmd_LC1"
               >停止待機</label
             >
-            <button class="setButton" id="setBut_standbyCmd_LC1">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_standbyCmd_LC1">Set</button>
+            <% } %>
           </div>
           <div class="DS_Line lastLine">
             本地/遠端模式
             <label class="dataStatus" id="modeLR_LC1"
               >本地&nbsp&&nbsp遠端</label
             >
-            <button class="setButton" id="setBut_modeLR_LC1">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeLR_LC1">Set</button>
+            <% } %>
           </div>
         </div>
 
         <div class="infoLC infoLC_2">
           <div class="titleLC">
             <h3>LC2&nbsp(一組兩台)</h3>
-            <button class="setButton" id="setBut_P_LC2">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_P_LC2">Set</button>
+             <% } %> 
           </div>
 
           <div class="DV_Line DV_onlineNum">
@@ -289,31 +301,41 @@
             主/被動模式<label class="dataStatus" id="modeActPas_LC2"
               >主動</label
             >
-            <button class="setButton" id="setBut_modeAP_LC2">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeAP_LC2">Set</button>
+             <% } %> 
           </div>
           <div class="DS_Line">
             虛功模式<label class="dataStatus" id="modeQctrl_LC2"
               >功因模式</label
             >
-            <button class="setButton" id="setBut_modeQctrl_LC2">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeQctrl_LC2">Set</button>
+            <% } %>  
           </div>
           <div class="DS_Line">
             PCS待機指令<label class="dataStatus" id="standbyCmd_LC2"
               >待機</label
             >
-            <button class="setButton" id="setBut_standbyCmd_LC2">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_standbyCmd_LC2">Set</button>
+            <% } %>  
           </div>
           <div class="DS_Line lastLine">
             本地/遠端模式
             <label class="dataStatus" id="modeLR_LC2">本地</label>
-            <button class="setButton" id="setBut_modeLR_LC2">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeLR_LC2">Set</button>
+            <% } %>  
           </div>
         </div>
 
         <div class="infoLC infoLC_3">
           <div class="titleLC">
             <h3>LC3&nbsp(一組兩台)</h3>
-            <button class="setButton" id="setBut_P_LC3">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_P_LC3">Set</button>
+            <% } %>  
           </div>
 
           <div class="DV_Line DV_onlineNum">
@@ -377,29 +399,39 @@
             主/被動模式<label class="dataStatus" id="modeActPas_LC3"
               >被動</label
             >
-            <button class="setButton" id="setBut_modeAP_LC3">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeAP_LC3">Set</button>
+            <% } %>  
           </div>
           <div class="DS_Line">
             虛功模式<label class="dataStatus" id="modeQctrl_LC3">關閉</label>
-            <button class="setButton" id="setBut_modeQctrl_LC3">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeQctrl_LC3">Set</button>
+            <% } %>  
           </div>
           <div class="DS_Line">
             PCS待機指令<label class="dataStatus" id="standbyCmd_LC3"
               >停止待機</label
             >
-            <button class="setButton" id="setBut_standbyCmd_LC3">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_standbyCmd_LC3">Set</button>
+            <% } %>  
           </div>
           <div class="DS_Line lastLine">
             本地/遠端模式
             <label class="dataStatus" id="modeLR_LC3">遠端</label>
-            <button class="setButton" id="setBut_modeLR_LC3">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeLR_LC3">Set</button>
+            <% } %>  
           </div>
         </div>
 
         <div class="infoLC infoLC_4">
           <div class="titleLC">
             <h3>LC4&nbsp(一組一台)</h3>
-            <button class="setButton" id="setBut_P_LC4">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_P_LC4">Set</button>
+            <% } %>  
           </div>
 
           <div class="DV_Line DV_onlineNum">
@@ -461,26 +493,34 @@
             主/被動模式<label class="dataStatus" id="modeActPas_LC4"
               >主動</label
             >
-            <button class="setButton" id="setBut_modeAP_LC4">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeAP_LC4">Set</button>
+            <% } %>
           </div>
           <div class="DS_Line">
             虛功模式<label class="dataStatus" id="modeQctrl_LC4"
               >功率(kVar)模式</label
             >
-            <button class="setButton" id="setBut_modeQctrl_LC4">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeQctrl_LC4">Set</button>
+            <% } %>  
           </div>
           <div class="DS_Line">
             PCS待機指令<label class="dataStatus" id="standbyCmd_LC4"
               >待機</label
             >
-            <button class="setButton" id="setBut_standbyCmd_LC4">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_standbyCmd_LC4">Set</button>
+            <% } %>  
           </div>
           <div class="DS_Line lastLine">
             本地/遠端模式
             <label class="dataStatus" id="modeLR_LC4"
               >本地&nbsp&&nbsp遠端</label
             >
-            <button class="setButton" id="setBut_modeLR_LC4">Set</button>
+            <% if(permission === "manager"){ %>
+              <button class="setButton" id="setBut_modeLR_LC4">Set</button>
+            <% } %>  
           </div>
         </div>
 

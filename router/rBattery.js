@@ -59,14 +59,14 @@ router.use(cors());
 
 router.get("/operateinfo/battery", async (req, res) => {
   // num與fun
-  res.render("Op_Bat_InfoSummary");
+  res.render("Op_Bat_InfoSummary",{permission: "viewer"});
 });
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
 router.get("/operateinfo/battery/infodetail", async (req, res) => {
   // num與fun
-  res.render("Op_Bat_InfoDetail");
+  res.render("Op_Bat_InfoDetail",{permission: "manager"});
 });
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
@@ -85,6 +85,7 @@ router.get("/operateinfo/battery/infodetail/1", async (req, res) => {
     }
 
     res.render("Op_Bat_InfoDetail", {
+      permission: "manager",
       No_of_BMS: "1-1",
 
       onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
@@ -150,6 +151,7 @@ router.get("/operateinfo/battery/infodetail/2", async (req, res) => {
     }
 
     res.render("Op_Bat_InfoDetail", {
+      permission: "manager",
       No_of_BMS: "1-2",
 
       onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
@@ -213,6 +215,7 @@ router.get("/operateinfo/battery/infodetail/3", async (req, res) => {
     }
 
     res.render("Op_Bat_InfoDetail", {
+      permission: "manager",
       No_of_BMS: "2-1",
 
       onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
@@ -276,6 +279,7 @@ router.get("/operateinfo/battery/infodetail/4", async (req, res) => {
     }
 
     res.render("Op_Bat_InfoDetail", {
+      permission: "manager",
       No_of_BMS: "2-2",
 
       onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
@@ -339,6 +343,7 @@ router.get("/operateinfo/battery/infodetail/5", async (req, res) => {
     }
 
     res.render("Op_Bat_InfoDetail", {
+      permission: "manager",
       No_of_BMS: "3-1",
 
       onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
@@ -402,6 +407,7 @@ router.get("/operateinfo/battery/infodetail/6", async (req, res) => {
     }
 
     res.render("Op_Bat_InfoDetail", {
+      permission: "manager",
       No_of_BMS: "3-2",
 
       onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
@@ -465,6 +471,7 @@ router.get("/operateinfo/battery/infodetail/7", async (req, res) => {
     }
 
     res.render("Op_Bat_InfoDetail", {
+      permission: "manager",
       No_of_BMS: "4-1",
 
       onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
@@ -517,7 +524,7 @@ router.get("/operateinfo/battery/infodetail/7", async (req, res) => {
 
 router.get("/operateinfo/battery/rack", async (req, res) => {
   // num與fun
-  res.render("Op_Bat_Rack");
+  res.render("Op_Bat_Rack",{permission: "manager"});
 });
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
@@ -539,6 +546,7 @@ router.get("/operateinfo/battery/rack/1", async (req, res) => {
 
     const Lc_RackGroup = lcData.RackSub1;
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       No_of_BMS: "1-1",
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
       V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
@@ -826,6 +834,7 @@ router.get("/operateinfo/battery/rack/2", async (req, res) => {
 
     const Lc_RackGroup = lcData.RackSub2;
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       No_of_BMS: "1-2",
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
       V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
@@ -1111,6 +1120,7 @@ router.get("/operateinfo/battery/rack/3", async (req, res) => {
 
     const Lc_RackGroup = lcData.RackSub1;
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       No_of_BMS: "2-1",
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
       V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
@@ -1396,6 +1406,7 @@ router.get("/operateinfo/battery/rack/4", async (req, res) => {
 
     const Lc_RackGroup = lcData.RackSub2;
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       No_of_BMS: "2-2",
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
       V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
@@ -1681,6 +1692,7 @@ router.get("/operateinfo/battery/rack/5", async (req, res) => {
 
     const Lc_RackGroup = lcData.RackSub1;
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       No_of_BMS: "3-1",
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
       V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
@@ -1966,6 +1978,7 @@ router.get("/operateinfo/battery/rack/6", async (req, res) => {
 
     const Lc_RackGroup = lcData.RackSub2;
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       No_of_BMS: "3-2",
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
       V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
@@ -2251,6 +2264,7 @@ router.get("/operateinfo/battery/rack/7", async (req, res) => {
 
     const Lc_RackGroup = lcData.RackSub1;
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       No_of_BMS: "4-1",
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
       V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
