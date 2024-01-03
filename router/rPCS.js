@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const session = require("express-session");
 const methodOverride = require("method-override");
 const path = require("path");
 const Lc = require("../models/lcschema");
@@ -7,11 +8,9 @@ const Lc01 = Lc["Lc01"];
 const Lc02 = Lc["Lc02"];
 const Lc03 = Lc["Lc03"];
 const Lc04 = Lc["Lc04"];
-// const Lc01 = require("../models/lcschema");
 const app = express(); // Create an Express application instance
 const cors = require("cors");
 const router = express.Router();
-//const io = require("socket.io")(httpServer); // 'httpServer' 是你的 Express 應用實例，確保有正確引入
 
 const {
   scaleProcess,
@@ -35,6 +34,7 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+router.use(cors());
 router.use("/public", express.static(path.join(__dirname, "../public")));
 router.use(
   "/operateinfo",
@@ -54,73 +54,251 @@ router.use(
   express.static(path.join(__dirname, "../public"))
 );
 
-router.use(cors());
-
-// Socket.IO 連線，新增定時器
-// io.on("connection", (socket) => {
-//   console.log("A user connected");
-
-//   // 訂閱 "dataUpdated" 事件
-//   dataUpdateEmitter.on("dataUpdated", (items) => {
-//     // 向連接的客戶端發送更新事件
-//     socket.emit("updateItems", items);
-//     console.log("Update items event sent to connected client");
-//   });
-
-//   // 發送一次更新以初始化客戶端的資料
-//   updateDataPeriodically();
-
-// 設定每隔三秒重新讀取資料庫數值
-//   const updateInterval = 3000; // 三秒
-//   const updateTimer = setInterval(() => {
-//     updateDataPeriodically();
-//   }, updateInterval);
-
-//   socket.on("disconnect", () => {
-//     console.log("User disconnected");
-//     // 清除定時器以避免內存洩漏
-//     clearInterval(updateTimer);
-//   });
-// });
-
-// 新增一個函式，用於定期更新資料庫數值
-async function updateDataPeriodically() {
-  try {
-    // 從數據庫中查詢 Other1 資料
-    const lcData = await Lc01.findOne().sort({ time_log: -1 });
-    //const lcData = await Lc01.findOne().sort({ time_log: -1 });
-    // 檢查是否有找到數據
-    if (!lcData) {
-      console.log("No data found");
-      return;
-    }
-
-    // 將 lcData 資料發布到所有連接的客戶端
-    dataUpdateEmitter.emit("dataUpdated", lcData);
-  } catch (error) {
-    console.error("Error fetching data from database:", error.message);
-  }
-}
-// const port = 3000;
-// // 修改伺服器的監聽端口部分
-// app.listen(port, () => {
-//   console.log(`應用程式正在監聽端口 ${port}`);
-// });
-
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {
   res.render("Op_PCS_InfoSummary");
 });
 
-//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+//************************************************************************************************************************************************ */
+//整合換頁功能
+//infodetail換頁及路由設定
+const pcsCHGStatus_MT = { 0: "充電", 1: "放電", 2: "非工作狀態" };
+const pcsGridStatus_MT = { 0: "離網", 1: "併網" };
 
-router.get("/operateinfo/pcs/infodetail", async (req, res) => {
-  res.render("Op_PCS_InfoDetail");
+router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
+  try {
+    const pageNumber = parseInt(req.params.pageNumber);
+    //req.session.pageNumber = pageNumber;
+    const collections = mongoose.connection.collections;
+    const collectionNames = Object.keys(collections);
+    //console.log("當前連接中的 collection 名稱：", collectionNames);
+
+    let selectedCollection;
+
+    // 根據 pageNumber 選擇不同的集合名稱
+    const collectionMap = {
+      1: "Lc01",
+      2: "Lc01",
+      3: "Lc02",
+      4: "Lc02",
+      5: "Lc03",
+      6: "Lc03",
+      7: "Lc04",
+      // 8: "Lc04", // 如果需要處理 8，可以取消註解
+    };
+
+    selectedCollection = collectionMap[pageNumber];
+
+    //console.log(pageNumber);
+    //console.log(selectedCollection);
+
+    if (!selectedCollection) {
+      throw new Error("Invalid pageNumber");
+    }
+
+    const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
+    const subNumber = pageNumber % 2 === 0 ? 2 : 1;
+    const No_of_PCS = `${baseNumber}-${subNumber}`;
+
+    // 根據選擇的集合名稱查詢資料
+    const lcData = await mongoose
+      .model(selectedCollection)
+      .findOne()
+      .sort({ time_log: -1 });
+
+    if (!lcData) {
+      throw new Error("No data found");
+    }
+
+    //let processedPageNumber;
+    if (pageNumber % 2 === 0) {
+      // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
+      res.render("Op_PCS_InfoDetail", {
+        pageNumber,
+        No_of_PCS,
+        chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
+        tot_E_chg: scaleProcess(lcData.PCS2[403045], 0.01, 1),
+        tot_E_dcg: scaleProcess(lcData.PCS2[403047], 0.01, 1),
+        max_P_chg: scaleProcess(lcData.PCS2[403066], 0.1, 1),
+        max_P_dcg: scaleProcess(lcData.PCS2[403067], 0.1, 1),
+        max_Q_l: scaleProcess(lcData.PCS2[403068], 0.1, 1),
+        max_Q_c: scaleProcess(lcData.PCS2[403069], 0.1, 1),
+        HB_Counts: lcData.PCS2[403007],
+        leakage_I: scaleProcess(lcData.PCS2[403008], 0.01, 2),
+        gridStatus: mapWordStatus(lcData.PCS2[403054], pcsGridStatus_MT),
+        activePower: scaleProcess(lcData.PCS2[403026], 0.1, 1),
+        reactivePower: scaleProcess(lcData.PCS2[403028], 0.1, 1),
+        powerFactor: scaleProcess(lcData.PCS2[403056], 0.001, 3),
+        voltageRS: scaleProcess(lcData.PCS2[403020], 0.1, 1),
+        voltageST: scaleProcess(lcData.PCS2[403021], 0.1, 1),
+        voltageTR: scaleProcess(lcData.PCS2[403022], 0.1, 1),
+        currentR: scaleProcess(lcData.PCS2[403023], 0.1, 1),
+        currentS: scaleProcess(lcData.PCS2[403024], 0.1, 1),
+        currentT: scaleProcess(lcData.PCS2[403025], 0.1, 1),
+        gridFreq: scaleProcess(lcData.PCS2[403055], 0.01, 2),
+        pElectrodeR: scaleProcess(lcData.PCS2[403030], 0.01, 2),
+        nElectrodeR: scaleProcess(lcData.PCS2[403032], 0.01, 2),
+        DCvoltage: scaleProcess(lcData.PCS2[403017], 0.1, 1),
+        DCcurrent: scaleProcess(lcData.PCS2[403018], 0.1, 1),
+        DCpower: scaleProcess(lcData.PCS2[403019], 0.1, 1),
+        overallFault: lcData.PCS2[403001],
+        overallAlarm: lcData.PCS2[403002],
+        faultStatus: lcData.PCS2[403036] + lcData.PCS2[403038],
+        alarmStatus: lcData.PCS2[403034] + lcData.PCS2[403035],
+        nodeStatus: Convert_UInt_to_revBitString(lcData.PCS2[403058], 16),
+        innerTemp: scaleProcess(lcData.PCS2[403057], 0.1, 1),
+        moduleTemp1: scaleProcess(lcData.PCS2[403014], 0.1, 1),
+        moduleTemp2: scaleProcess(lcData.PCS2[403015], 0.1, 1),
+        moduleTemp3: scaleProcess(lcData.PCS2[403016], 0.1, 1),
+      });
+    } else {
+      // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
+      res.render("Op_PCS_InfoDetail", {
+        pageNumber,
+        No_of_PCS,
+        chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
+        tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
+        tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
+        max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
+        max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
+        max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
+        max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
+        HB_Counts: lcData.PCS1[403007],
+        leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
+        gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
+        activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
+        reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
+        powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
+        voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
+        voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
+        voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
+        currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
+        currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
+        currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
+        gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
+        pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
+        nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
+        DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
+        DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
+        DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
+        overallFault: lcData.PCS1[403001],
+        overallAlarm: lcData.PCS1[403002],
+        faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
+        alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
+        nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
+        innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
+        moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
+        moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
+        moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
+//************************************************************************************************************************************************ */
+//alarm換頁
+router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
+  try {
+    //const pageNumber = req.session.pageNumber;
+    const pageNumber = parseInt(req.params.pageNumber);
+    const collections = mongoose.connection.collections;
+    const collectionNames = Object.keys(collections);
+    //console.log("當前連接中的 collection 名稱：", collectionNames);
 
-//多台pcs狀態 更改數字即可
+    let selectedCollection;
+
+    // 根據 pageNumber 選擇不同的集合名稱
+    const collectionMap = {
+      1: "Lc01",
+      2: "Lc01",
+      3: "Lc02",
+      4: "Lc02",
+      5: "Lc03",
+      6: "Lc03",
+      7: "Lc04",
+      // 8: "Lc04", // 如果需要處理 8，可以取消註解
+    };
+
+    selectedCollection = collectionMap[pageNumber];
+
+    //console.log(pageNumber);
+    //console.log(selectedCollection);
+
+    if (!selectedCollection) {
+      throw new Error("Alarm: Invalid pageNumber");
+    }
+
+    const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
+    const subNumber = pageNumber % 2 === 0 ? 2 : 1;
+    const No_of_PCS = `${baseNumber}-${subNumber}`;
+
+    // 根據選擇的集合名稱查詢資料
+    const lcData = await mongoose
+      .model(selectedCollection)
+      .findOne()
+      .sort({ time_log: -1 });
+
+    if (!lcData) {
+      throw new Error("No data found");
+    }
+
+    //let processedPageNumber;
+    if (pageNumber % 2 === 0) {
+      // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
+      res.render("Op_PCS_Alarm", {
+        pageNumber,
+        No_of_PCS,
+        noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
+          .num_ClosedBit,
+        noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
+          .num_ClosedBit,
+        noFault:
+          Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
+          Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
+        noAlarm:
+          Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
+          Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
+        OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
+        OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
+        Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
+        Alarm2: Convert_UInt_to_revBitString(lcData.PCS2[403035], 16),
+        Fault1: Convert_UInt_to_revBitString(lcData.PCS2[403036], 32),
+        Fault2: Convert_UInt_to_revBitString(lcData.PCS2[403038], 32),
+      });
+    } else {
+      // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
+      res.render("Op_PCS_Alarm", {
+        pageNumber,
+        No_of_PCS,
+        noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
+          .num_ClosedBit,
+        noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
+          .num_ClosedBit,
+        noFault:
+          Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
+          Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
+        noAlarm:
+          Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
+          Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
+        OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
+        OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
+        Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
+        Alarm2: Convert_UInt_to_revBitString(lcData.PCS1[403035], 16),
+        Fault1: Convert_UInt_to_revBitString(lcData.PCS1[403036], 32),
+        Fault2: Convert_UInt_to_revBitString(lcData.PCS1[403038], 32),
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//************************************************************************************************************** */
+//點位顏色範例
 router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
   try {
     // 獲取當前連接的所有 collection 名稱
@@ -377,670 +555,5 @@ router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-//多台pcs警告
-// router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
-// });
-
-//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
-
-const pcsCHGStatus_MT = { 0: "充電", 1: "放電", 2: "非工作狀態" };
-const pcsGridStatus_MT = { 0: "離網", 1: "併網" };
-
-router.get("/operateinfo/pcs/infodetail/1", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc01.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_InfoDetail", {
-      No_of_PCS: "1-1",
-
-      chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
-      HB_Counts: lcData.PCS1[403007],
-      leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
-      overallFault: lcData.PCS1[403001],
-      overallAlarm: lcData.PCS1[403002],
-      faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
-      alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/infodetail/2", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc01.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_InfoDetail", {
-      No_of_PCS: "1-2",
-
-      chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS2[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS2[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS2[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS2[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS2[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS2[403069], 0.1, 1),
-      HB_Counts: lcData.PCS2[403007],
-      leakage_I: scaleProcess(lcData.PCS2[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS2[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS2[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS2[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS2[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS2[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS2[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS2[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS2[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS2[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS2[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS2[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS2[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS2[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS2[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS2[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS2[403019], 0.1, 1),
-      overallFault: lcData.PCS2[403001],
-      overallAlarm: lcData.PCS2[403002],
-      faultStatus: lcData.PCS2[403036] + lcData.PCS2[403038],
-      alarmStatus: lcData.PCS2[403034] + lcData.PCS2[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS2[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS2[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS2[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS2[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS2[403016], 0.1, 1),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/infodetail/3", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc02.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_InfoDetail", {
-      No_of_PCS: "2-1",
-
-      chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
-      HB_Counts: lcData.PCS1[403007],
-      leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
-      overallFault: lcData.PCS1[403001],
-      overallAlarm: lcData.PCS1[403002],
-      faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
-      alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/infodetail/4", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc02.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_InfoDetail", {
-      No_of_PCS: "2-2",
-
-      chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS2[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS2[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS2[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS2[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS2[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS2[403069], 0.1, 1),
-      HB_Counts: lcData.PCS2[403007],
-      leakage_I: scaleProcess(lcData.PCS2[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS2[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS2[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS2[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS2[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS2[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS2[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS2[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS2[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS2[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS2[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS2[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS2[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS2[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS2[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS2[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS2[403019], 0.1, 1),
-      overallFault: lcData.PCS2[403001],
-      overallAlarm: lcData.PCS2[403002],
-      faultStatus: lcData.PCS2[403036] + lcData.PCS2[403038],
-      alarmStatus: lcData.PCS2[403034] + lcData.PCS2[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS2[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS2[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS2[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS2[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS2[403016], 0.1, 1),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/infodetail/5", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc03.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_InfoDetail", {
-      No_of_PCS: "3-1",
-
-      chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
-      HB_Counts: lcData.PCS1[403007],
-      leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
-      overallFault: lcData.PCS1[403001],
-      overallAlarm: lcData.PCS1[403002],
-      faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
-      alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/infodetail/6", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc03.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_InfoDetail", {
-      No_of_PCS: "3-2",
-
-      chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS2[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS2[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS2[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS2[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS2[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS2[403069], 0.1, 1),
-      HB_Counts: lcData.PCS2[403007],
-      leakage_I: scaleProcess(lcData.PCS2[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS2[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS2[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS2[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS2[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS2[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS2[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS2[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS2[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS2[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS2[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS2[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS2[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS2[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS2[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS2[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS2[403019], 0.1, 1),
-      overallFault: lcData.PCS2[403001],
-      overallAlarm: lcData.PCS2[403002],
-      faultStatus: lcData.PCS2[403036] + lcData.PCS2[403038],
-      alarmStatus: lcData.PCS2[403034] + lcData.PCS2[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS2[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS2[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS2[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS2[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS2[403016], 0.1, 1),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/infodetail/7", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc04.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_InfoDetail", {
-      No_of_PCS: "4-1",
-
-      chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
-      HB_Counts: lcData.PCS1[403007],
-      leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
-      overallFault: lcData.PCS1[403001],
-      overallAlarm: lcData.PCS1[403002],
-      faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
-      alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm", async (req, res) => {
-  res.render("Op_PCS_Alarm");
-});
-
-router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc01.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_Alarm", {
-      No_of_PCS: "1-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
-        .num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
-        .num_ClosedBit,
-      noFault:
-        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm:
-        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
-      OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
-      OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
-      Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
-      Alarm2: Convert_UInt_to_revBitString(lcData.PCS1[403035], 16),
-      Fault1: Convert_UInt_to_revBitString(lcData.PCS1[403036], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS1[403038], 32),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm/2", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc01.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_Alarm", {
-      No_of_PCS: "1-2",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
-        .num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
-        .num_ClosedBit,
-      noFault:
-        Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
-      noAlarm:
-        Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
-      OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
-      OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
-      Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
-      Alarm2: Convert_UInt_to_revBitString(lcData.PCS2[403035], 16),
-      Fault1: Convert_UInt_to_revBitString(lcData.PCS2[403036], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS2[403038], 32),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm/3", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc02.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_Alarm", {
-      No_of_PCS: "2-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
-        .num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
-        .num_ClosedBit,
-      noFault:
-        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm:
-        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
-      OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
-      OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
-      Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
-      Alarm2: Convert_UInt_to_revBitString(lcData.PCS1[403035], 16),
-      Fault1: Convert_UInt_to_revBitString(lcData.PCS1[403036], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS1[403038], 32),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm/4", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc02.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_Alarm", {
-      No_of_PCS: "2-2",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
-        .num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
-        .num_ClosedBit,
-      noFault:
-        Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
-      noAlarm:
-        Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
-      OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
-      OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
-      Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
-      Alarm2: Convert_UInt_to_revBitString(lcData.PCS2[403035], 16),
-      Fault1: Convert_UInt_to_revBitString(lcData.PCS2[403036], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS2[403038], 32),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm/5", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc03.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_Alarm", {
-      No_of_PCS: "3-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
-        .num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
-        .num_ClosedBit,
-      noFault:
-        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm:
-        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
-      OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
-      OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
-      Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
-      Alarm2: Convert_UInt_to_revBitString(lcData.PCS1[403035], 16),
-      Fault1: Convert_UInt_to_revBitString(lcData.PCS1[403036], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS1[403038], 32),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm/6", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc03.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_Alarm", {
-      No_of_PCS: "3-2",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
-        .num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
-        .num_ClosedBit,
-      noFault:
-        Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
-      noAlarm:
-        Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
-      OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
-      OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
-      Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
-      Alarm2: Convert_UInt_to_revBitString(lcData.PCS2[403035], 16),
-      Fault1: Convert_UInt_to_revBitString(lcData.PCS2[403036], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS2[403038], 32),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm/7", async (req, res) => {
-  try {
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    const lcData = await Lc04.findOne().sort({ time_log: -1 });
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
-
-    res.render("Op_PCS_Alarm", {
-      No_of_PCS: "4-1",
-      noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
-        .num_ClosedBit,
-      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
-        .num_ClosedBit,
-      noFault:
-        Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-      noAlarm:
-        Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
-        Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
-      OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
-      OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
-      Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
-      Alarm2: Convert_UInt_to_revBitString(lcData.PCS1[403035], 16),
-      Fault1: Convert_UInt_to_revBitString(lcData.PCS1[403036], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS1[403038], 32),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 module.exports = router;
