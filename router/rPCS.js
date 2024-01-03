@@ -56,7 +56,7 @@ router.use(
 
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {
-  res.render("Op_PCS_InfoSummary");
+  res.render("Op_PCS_InfoSummary", {permission: "manager"});
 });
 
 //************************************************************************************************************************************************ */
@@ -114,6 +114,7 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
     if (pageNumber % 2 === 0) {
       // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
       res.render("Op_PCS_InfoDetail", {
+        permission: "manager",
         pageNumber,
         No_of_PCS,
         chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
@@ -154,6 +155,7 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
     } else {
       // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
       res.render("Op_PCS_InfoDetail", {
+        permission: "manager",
         pageNumber,
         No_of_PCS,
         chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
@@ -249,6 +251,7 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
     if (pageNumber % 2 === 0) {
       // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
       res.render("Op_PCS_Alarm", {
+        permission: "manager",
         pageNumber,
         No_of_PCS,
         noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
@@ -271,6 +274,7 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
     } else {
       // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
       res.render("Op_PCS_Alarm", {
+        permission: "manager",
         pageNumber,
         No_of_PCS,
         noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
@@ -405,6 +409,7 @@ router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
 
     // 將數據傳遞給 EJS 模板，包括所有變數
     res.render("../views/test_meter", {
+      permission: "manager",
       overallFault: data["403001"],
       overallAlarm: data["403002"],
       Transformernodestatus: data["403004"], //暫無出現 先用描述暫代

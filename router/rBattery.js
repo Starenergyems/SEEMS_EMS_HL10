@@ -59,7 +59,7 @@ router.use(cors());
 
 router.get("/operateinfo/battery", async (req, res) => {
   // num與fun
-  res.render("Op_Bat_InfoSummary", { permission: "viewer" });
+  res.render("Op_Bat_InfoSummary", { permission: "manager" });
 });
 //***************************************************************************************** */
 //
@@ -112,6 +112,7 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     if (pageNumber % 2 === 0) {
       // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
       res.render("Op_Bat_InfoDetail", {
+        permission: "manager",
         pageNumber,
         No_of_BMS,
         onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
@@ -167,6 +168,7 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     } else {
       // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
       res.render("Op_Bat_InfoDetail", {
+        permission: "manager",
         pageNumber,
         No_of_BMS,
         onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
@@ -790,6 +792,7 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
     const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
 
     res.render("Op_Bat_Rack", {
+      permission: "manager",
       pageNumber,
       No_of_BMS,
       Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
