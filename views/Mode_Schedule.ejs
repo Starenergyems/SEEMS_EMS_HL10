@@ -3,9 +3,19 @@
      stylesheets: [
         '../public/styles/style_template.css',
         '../public/styles/Mode_Schedule.css'
-    ]
+    ],
+    permission: 'admin'
 }) %>
-
+<div class="R_Main">
+    <div class="subNavBar" id="sub_NavBar">
+        <!-- <h2>模式控制</h2> -->
+        <div class="button_sNB" id="sNB_01">
+            <a href="/mode/sysctrl" class="name_button_sNB">系統控制</a>
+        </div>
+        <div class="button_sNB default_sNB" id="sNB_02">
+            <a href="/mode/schedule" class="name_button_sNB">排程設置</a>
+        </div>
+    </div>
         <div class="M_Page">
             <div class="emergencyCmd">
                 <div class="title">
@@ -66,10 +76,12 @@
                             <td colspan="12">
                                 <!-- <button class="setAllTP">全日得標</button><button class="resetAllTP">全日未得標</button> -->
                                 得標狀態設定
-                                <button class="setButton" id="setBut_SchdToday">Set</button>
+                                <% if (permission === 'manager') { %>
+                                    <button class="setButton" id="setBut_SchdToday">Set</button>
+                                <% } %>
                                 <!-- <button class="refSOC">SOC參考值</button> -->
                                 <div class="refSOC">SOC參考值
-                                    <button class="setButton" id="setBut_refSOCToday">Get</button>
+                                    <button class="setButton" id="setBut_refSOCToday">Get</button>                                    
                                 </div>
                             </td>
                         </tr>
@@ -510,7 +522,9 @@
                             <td colspan="12">
                                 <!-- <button class="setAllTP">全日得標</button><button class="resetAllTP">全日未得標</button> -->
                                 得標狀態設定
-                                <button class="setButton" id="setBut_SchdTomorrow">Set</button>
+                                <% if (permission === 'manager') { %>
+                                    <button class="setButton" id="setBut_SchdTomorrow">Set</button>
+                                <% } %>
                                 <!-- <button class="refSOC">SOC參考值</button> -->
                                 <div class="refSOC">SOC參考值
                                     <button class="setButton" id="setBut_refSOCTomorrow">Get</button>
@@ -1730,6 +1744,7 @@
             </div>
         </div>
     </div>
+
 
     <script src="../public/scripts/script_template.js"></script>
     <script src="../public/scripts/Mode_Schedule.js"></script>

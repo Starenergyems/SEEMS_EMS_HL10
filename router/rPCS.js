@@ -109,13 +109,13 @@ async function updateDataPeriodically() {
 
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {
-  res.render("Op_PCS_InfoSummary");
+  res.render("Op_PCS_InfoSummary",{permission: "manager"});
 });
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
 router.get("/operateinfo/pcs/infodetail", async (req, res) => {
-  res.render("Op_PCS_InfoDetail");
+  res.render("Op_PCS_InfoDetail",{permission: "manager"});
 });
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
@@ -399,6 +399,7 @@ router.get("/operateinfo/pcs/infodetail/1", async (req, res) => {
     }
 
     res.render("Op_PCS_InfoDetail", {
+      permission: "manager",
       No_of_PCS: "1-1",
 
       chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
@@ -455,6 +456,7 @@ router.get("/operateinfo/pcs/infodetail/2", async (req, res) => {
     }
 
     res.render("Op_PCS_InfoDetail", {
+      permission: "manager",
       No_of_PCS: "1-2",
 
       chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
@@ -511,6 +513,7 @@ router.get("/operateinfo/pcs/infodetail/3", async (req, res) => {
     }
 
     res.render("Op_PCS_InfoDetail", {
+      permission: "manager",
       No_of_PCS: "2-1",
 
       chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
@@ -567,6 +570,7 @@ router.get("/operateinfo/pcs/infodetail/4", async (req, res) => {
     }
 
     res.render("Op_PCS_InfoDetail", {
+      permission: "manager",
       No_of_PCS: "2-2",
 
       chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
@@ -623,6 +627,7 @@ router.get("/operateinfo/pcs/infodetail/5", async (req, res) => {
     }
 
     res.render("Op_PCS_InfoDetail", {
+      permission: "manager",
       No_of_PCS: "3-1",
 
       chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
@@ -679,6 +684,7 @@ router.get("/operateinfo/pcs/infodetail/6", async (req, res) => {
     }
 
     res.render("Op_PCS_InfoDetail", {
+      permission: "manager",
       No_of_PCS: "3-2",
 
       chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
@@ -735,6 +741,7 @@ router.get("/operateinfo/pcs/infodetail/7", async (req, res) => {
     }
 
     res.render("Op_PCS_InfoDetail", {
+      permission: "manager",
       No_of_PCS: "4-1",
 
       chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
@@ -779,7 +786,7 @@ router.get("/operateinfo/pcs/infodetail/7", async (req, res) => {
 });
 
 router.get("/operateinfo/pcs/alarm", async (req, res) => {
-  res.render("Op_PCS_Alarm");
+  res.render("Op_PCS_Alarm",{permission: "manager"});
 });
 
 router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
@@ -795,6 +802,7 @@ router.get("/operateinfo/pcs/alarm/1", async (req, res) => {
     }
 
     res.render("Op_PCS_Alarm", {
+      permission: "manager",
       No_of_PCS: "1-1",
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
         .num_ClosedBit,
@@ -832,6 +840,7 @@ router.get("/operateinfo/pcs/alarm/2", async (req, res) => {
     }
 
     res.render("Op_PCS_Alarm", {
+      permission: "manager",
       No_of_PCS: "1-2",
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
         .num_ClosedBit,
@@ -869,6 +878,7 @@ router.get("/operateinfo/pcs/alarm/3", async (req, res) => {
     }
 
     res.render("Op_PCS_Alarm", {
+      permission: "manager",
       No_of_PCS: "2-1",
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
         .num_ClosedBit,
@@ -906,6 +916,7 @@ router.get("/operateinfo/pcs/alarm/4", async (req, res) => {
     }
 
     res.render("Op_PCS_Alarm", {
+      permission: "manager",
       No_of_PCS: "2-2",
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
         .num_ClosedBit,
@@ -943,6 +954,7 @@ router.get("/operateinfo/pcs/alarm/5", async (req, res) => {
     }
 
     res.render("Op_PCS_Alarm", {
+      permission: "manager",
       No_of_PCS: "3-1",
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
         .num_ClosedBit,
@@ -980,6 +992,7 @@ router.get("/operateinfo/pcs/alarm/6", async (req, res) => {
     }
 
     res.render("Op_PCS_Alarm", {
+      permission: "manager",
       No_of_PCS: "3-2",
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
         .num_ClosedBit,
@@ -1017,6 +1030,7 @@ router.get("/operateinfo/pcs/alarm/7", async (req, res) => {
     }
 
     res.render("Op_PCS_Alarm", {
+      permission: "manager",
       No_of_PCS: "4-1",
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
         .num_ClosedBit,

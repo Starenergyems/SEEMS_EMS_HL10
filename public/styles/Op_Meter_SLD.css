@@ -130,6 +130,56 @@
     top: 394px;
 }
 
+.singleLineD #ACB_1_1v {
+    left: 140px;
+    top: 394px;
+}
+
+.singleLineD #ACB_1_2v {
+    left: 73px;
+    top: 484px;
+}
+
+.singleLineD #ACB_1_3v {
+    left: 207px;
+    top: 484px;
+}
+
+.singleLineD #ACB_2_1v {
+    left: 424px;
+    top: 394px;
+}
+
+.singleLineD #ACB_2_2v {
+    left: 357px;
+    top: 484px;
+}
+
+.singleLineD #ACB_2_3v {
+    left: 491px;
+    top: 484px;
+}
+
+.singleLineD #ACB_3_1v {
+    left: 708px;
+    top: 394px;
+}
+
+.singleLineD #ACB_3_2v {
+    left: 641px;
+    top: 484px;
+}
+
+.singleLineD #ACB_3_3v {
+    left: 775px;
+    top: 484px;
+}
+
+.singleLineD #ACB_4_1v {
+    left: 994px;
+    top: 394px;
+}
+
 .singleLineD .status_Rly,
 .singleLineD .status_Recloser {
     display: inline-block;

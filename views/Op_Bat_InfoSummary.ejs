@@ -3,7 +3,8 @@
      stylesheets: [
         '../public/styles/style_template.css',
         '../public/styles/Op_Bat_InfoSummary.css'
-    ]
+    ],
+    permission: 'admin'
 }) %>
 
     <div class="R_Main">
@@ -129,7 +130,9 @@
 
                 <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC1">併網運轉中</label></div>
                 <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC1">全部投入</label>
-                    <button class="setButton" id="setBut_onGridStatus_LC1">Set</button>
+                    <% if(permission === "manager"){ %>
+                        <button class="setButton" id="setBut_onGridStatus_LC1">Set</button>
+                    <% } %>    
                 </div>
 
                 <div class="DV_Line">電壓<label class="dataValue" id="voltage_LC1">1500.0</label>
@@ -193,7 +196,9 @@
 
                 <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC2">併網運轉中</label></div>
                 <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC2">全部切離</label>
-                    <button class="setButton" id="setBut_onGridStatus_LC2">Set</button>
+                    <% if(permission === "manager"){ %>
+                        <button class="setButton" id="setBut_onGridStatus_LC2">Set</button>
+                    <% } %>    
                 </div>
 
                 <div class="DV_Line">電壓<label class="dataValue" id="voltage_LC2">800.0</label>
@@ -257,7 +262,9 @@
 
                 <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC3">併網運轉中</label></div>
                 <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC3">全部投入</label>
-                    <button class="setButton" id="setBut_onGridStatus_LC3">Set</button>
+                    <% if(permission === "manager"){ %>
+                        <button class="setButton" id="setBut_onGridStatus_LC3">Set</button>
+                    <% } %>    
                 </div>
 
                 <div class="DV_Line">電壓<label class="dataValue" id="voltage_LC3">1500.1</label>
@@ -321,7 +328,9 @@
 
                 <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC4">併網運轉中</label></div>
                 <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC4">全部切離</label>
-                    <button class="setButton" id="setBut_onGridStatus_LC4">Set</button>
+                    <% if(permission === "manager"){ %>
+                        <button class="setButton" id="setBut_onGridStatus_LC4">Set</button>
+                    <% } %>    
                 </div>
 
                 <div class="DV_Line">電壓<label class="dataValue" id="voltage_LC4">800.1</label>
