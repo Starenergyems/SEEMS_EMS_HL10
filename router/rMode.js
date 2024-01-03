@@ -30,15 +30,15 @@ app.use(cors());
 
 //導向童話面作法同於METER
 router.get("/mode", (req, res) => {
-  res.render("Mode_SysCtrl");
+  res.render("Mode_SysCtrl",{permission: 'manager'});
 });
 //系統模式控制頁面切換
 router.get("/mode/sysctrl", (req, res) => {
-  res.render("Mode_SysCtrl");
+  res.render("Mode_SysCtrl",{permission: 'manager'});
 });
 //  排程
 router.get("/mode/schedule", (req, res) => {
-  res.render("Mode_Schedule");
+  res.render("Mode_Schedule",{permission: 'manager'});
 });
 
 //運轉資訊+單線圖

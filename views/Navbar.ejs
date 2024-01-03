@@ -21,7 +21,9 @@
             <label id="userAccount">Administrator</label>
             <div class="accountNavBar">
               <a href="/account/personalinfo" id="accNB_01">個人資料</a>
-              <a href="/account/manage" id="accNB_02">人員管理</a>
+              <% if (permission === 'admin') { %>
+                <a href="/account/manage" id="accNB_02">人員管理</a>
+                <% } %> 
               <a href="/login" id="accNB_03">登出</a>
             </div>
         </div>
