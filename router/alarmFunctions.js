@@ -6,6 +6,10 @@ const methodOverride = require("method-override");
 const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http");
+const {
+  mapBitToStatus,
+  whole_error_table
+} = require("./function");
 
 // 引入資料庫模型
 const Lc = require("../models/lcschema");
@@ -103,19 +107,19 @@ router.use(async (req, res, next) => {
     await processData(lc01Data, latestAlarmData, Alarm);
 
     // 遍歷 lc02Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    await processData(lc02Data, latestAlarmData, Alarm);
+    //await processData(lc02Data, latestAlarmData, Alarm);
 
     // 遍歷 lc03Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    await processData(lc03Data, latestAlarmData, Alarm);
+    //await processData(lc03Data, latestAlarmData, Alarm);
 
     // 遍歷 lc03Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    await processData(lc04Data, latestAlarmData, Alarm);
+    //await processData(lc04Data, latestAlarmData, Alarm);
 
     // 遍歷 dcData，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    await processData(dcData, latestAlarmData, Alarm);
+    //await processData(dcData, latestAlarmData, Alarm);
 
     // 遍歷 gcData，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    await processData(gcData, latestAlarmData, Alarm);
+    //await processData(gcData, latestAlarmData, Alarm);
 
     // 重新獲取最新的 Alarm 資料，以確保排序正確
     const updatedAlarmData = await Alarm.find().sort({ timestamp: -1 });
@@ -195,18 +199,30 @@ router.use(async (req, res, next) => {
 //************************************************************* */
 async function processData(data, latestAlarmData, Alarm) {
   // 創建一個 Set 來存儲已經存在於 Alarm 中的文檔的 _id
-  console.log("A New data in Data:", data);
+  //console.log("A New data in Data:", data);
   console.log("B New data in Data:", latestAlarmData);
   const existingIds = new Set(
     latestAlarmData.map((item) => item._id.toString())
   );
-  //console.log("New data in Data:", item.value);
+
   // 遍歷 data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
   for (const item of data) {
+    //console.log('here')
+    //console.log(item)
+
     const idString = item._id.toString();
     const existingDoc = latestAlarmData.find(
       (doc) => doc._id.toString() === idString
     );
+    
+
+    console.dir(item)
+    console.log(Object.keys(item._doc))
+    console.log(mapBitToStatus(11, whole_error_table['System']['402021']))
+    
+    
+
+
 
     if (!existingDoc) {
       // 如果 Alarm 中沒有該文檔，則新增

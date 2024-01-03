@@ -422,6 +422,74 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 // console.log(ef_2);
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
+// Alarm //--------------------------------------------------------------------------------
+const LC_System_402021 = [
+  'Self-checking', 
+  'Microgrid power supply starting', 
+  'Grid power supply starting', 
+  'Microgrid power supply running', 
+  'Grid power supply running', 
+  'Fault', 
+  'Stopping', 
+  'Stopped', 
+  'Emergency stop', 
+  'Standby'
+];
+const LC_System_402099 = [
+  'PCS fault', 
+  'LC-PCS communication fault', 
+  'System start fault', 
+  'Host computer communication fault', 
+  'PCS not ready fault', 
+  'LC-SMU communication fault', 
+  'SMU fault', 
+  'LC-BSC communication fault', 
+  'BSC fault', 
+  'Ctrlbox Node fault'
+];
+const LC_System_402100 = [
+  'PCS unit alarm',
+  'PCS unit fault',
+  'LC-PCS communication alarm',
+  'Low battery unit alarm',
+  'High battery unit alarm',
+  'LC-SMU communication alarm',
+  'SMU unit alarm',
+  'SMU unit fault',
+  'Ammeter communication alarm',
+  'PCS not ready alarm',
+  'LC-BSC communication alarm',
+  'BSC unit alarm',
+  'BSC unit fault',
+  'Measurement and Control comm fault alarm',
+  'Ctrlbox Node Alarm'
+]
+const LC_System_error_table = {
+  402021:LC_System_402021,
+  402099:LC_System_402099,
+  402100:LC_System_402100,
+}
+
+
+
+function mapBitToStatus(rawData, statusList) {
+  let rawBitString = rawData.toString(2);
+  let BitString = rawBitString.padStart(statusList.length, '0').slice(-statusList.length);
+  const mappedElements = [];
+  // Iterate through each bit in the bit string
+  for (let i = 0; i < BitString.length; i++) {
+    // Check if the current bit is set (1)
+    if (BitString[i] === '1') {
+      // Add the corresponding element to the result array
+      mappedElements.push(statusList[i]);
+    }
+  }
+  return mappedElements;
+};
+
+const whole_error_table = {
+  System:LC_System_error_table,
+};
 
 module.exports = {
   mapchargeStatus,
@@ -446,6 +514,8 @@ module.exports = {
   Determine_DL_of_RackHWStatus,
   Determine_DL_of_upsStatus2,
   Determine_DL_of_CommPCSBMS,
+  mapBitToStatus,
+  whole_error_table,
 };
 // //***************************************************************************** */
 // //轉換存陣列
@@ -622,3 +692,5 @@ module.exports = {
 //     rl.close();
 //   }
 // });
+
+
