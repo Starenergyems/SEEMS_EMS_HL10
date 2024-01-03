@@ -137,6 +137,56 @@ router.use(async (req, res, next) => {
 });
 
 //************************************************************* */
+async function getAllData() {
+  try {
+    // 使用 find 方法來取得整個 Lc01 Collection 的數據
+    const allData = await LC01.find({});
+    console.log("All Lc01 Collection Data:", allData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+// 呼叫函數以取得整個 Collection 的數據
+getAllData();
+
+//************************************************************* */
+async function getSpecificDocumentById(documentId) {
+  try {
+    // 使用 findById 方法來取得"指定"文檔的數據
+    const specificDocument = await LC01.findById(documentId);
+    console.log("Specific Lc01 Document Data:", specificDocument);
+  } catch (error) {
+    console.error("Error fetching specific document:", error);
+  }
+}
+
+// 呼叫函數以取得指定文檔的數據，替換 'yourDocumentId' 為實際的文檔 ID
+getSpecificDocumentById("yourDocumentId");
+
+//************************************************************* */
+//取得最新的一筆數據，並且只擷取 PCS1 中的 403001 欄位
+async function getLatestData() {
+  try {
+    // 使用 findOne 方法來取得"最新的" Lc01 文檔
+    const latestData = await LC01.findOne({}, {}, { sort: { time_log: -1 } });
+
+    // 檢查是否有找到文檔
+    if (latestData) {
+      // 取出指定的欄位，可選的鏈接運算符 ? 在取得值之前檢查 PCS1 是否存在
+      const pcs1Value = latestData.PCS1?.["403001"];
+
+      // 輸出結果
+      console.log("Latest Data - PCS1 403001:", pcs1Value);
+    } else {
+      console.log("No data found");
+    }
+  } catch (error) {
+    console.error("Error fetching latest data:", error);
+  }
+}
+
+// 呼叫函數以取得最新的文檔中的指定欄位
+getLatestData();
 
 //************************************************************* */
 async function processData(data, latestAlarmData, Alarm) {
