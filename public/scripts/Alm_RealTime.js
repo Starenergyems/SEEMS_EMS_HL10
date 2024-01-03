@@ -66,6 +66,7 @@ function hideFiltOptions(clickItem) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+var permission="viewer"; //需讀權限
 $(document).ready(function () {
 
     let lang = {
@@ -174,10 +175,18 @@ $(document).ready(function () {
                 var rowIndex = row.index; // Get the index from the row object
                 var checkboxId = 'chb_Ack_' + rowIndex;
                 
-                if (data === "1") {
-                    return '<input type="checkbox" checked class="chb_Ack" id="' + checkboxId + '">';
-                } else {
-                    return '<input type="checkbox" class="chb_Ack" id="' + checkboxId + '">';
+                if (permission ==="manager"){
+                    if (data === "1") {
+                        return '<input type="checkbox" checked class="chb_Ack" id="' + checkboxId + '">';
+                    } else {
+                        return '<input type="checkbox" class="chb_Ack" id="' + checkboxId + '">';
+                    }
+                } else{
+                    if (data === "1") {
+                        return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                    } else {
+                        return '';
+                    }
                 }
             } },
             { data: "ended", render: function (data, type, row) { if (data === "1") { return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">' } else { return '' } } },
