@@ -211,10 +211,55 @@ $(document).ready(function () {
             { data: "index" },
             { data: "reportType" },
             { data: "reportName" },
-            { data: "index", render: function (data, type, row) { return '<button class="btn_Download" id="btn_DL_' + data + '">下載</button>' } },
+            { data: "index", render: function (data, type, row) { return '<button class="btn_Download" id="btn_DL_' + data + '" onclick="downloadExcel()">下載</button>' } },
         ]
 
     })
 
 });
+
+function downloadExcel() {
+    //看報表是否已存在
+    const fileName = 'alreadyPrepared.xlsx';//要找的檔案
+    console.log("目標檔案:"+fileName);
+  
+  fetch(`/report/getFile?fileName=${fileName}`)
+    .then(response => {
+      if (!response.ok) {
+        console.log(response);
+        return response.json();
+      }
+      return response.blob();
+    })
+    .then(data => {
+      if (data.status === 'error'){
+        console.error(data.message);                   
+        console.log('報表不存在地端') // 若不存在就自行撈自料再下載
+        fetch('/report/download-excel?templatePath=../public/report/Report.xlsx')
+          .then(response => response.blob())
+          .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'test2.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          })
+          .catch(error => console.error('Error downloading Excel file:', error));
+      } else {//有找到的話下載
+            const url = window.URL.createObjectURL(data);         
+            const a = document.createElement('a');// Create a temporary link element
+            a.href = url;
+            a.download = fileName;                
+            document.body.appendChild(a); // Append the link to the document 
+            a.click(); // Trigger a click on the link to start the download 
+            document.body.removeChild(a); // Remove the link from the document 
+            window.URL.revokeObjectURL(url);// Release the object URL
+        }
+    })
+    .catch(error => console.error(error));
+
+
+  }
 
