@@ -7,8 +7,8 @@ const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http");
 const {
-  mapBitToStatus,
-  whole_error_table
+  error_result_gen,
+  LC_error_table,
 } = require("./function");
 
 // 引入資料庫模型
@@ -104,7 +104,7 @@ router.use(async (req, res, next) => {
     }
 
     // 遍歷 lc01Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    await processData(lc01Data, latestAlarmData, Alarm);
+    await processData(lc01Data, latestAlarmData, Alarm, LC_error_table);
 
     // 遍歷 lc02Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
     //await processData(lc02Data, latestAlarmData, Alarm);
@@ -197,7 +197,7 @@ router.use(async (req, res, next) => {
 //getLatestData();
 
 //************************************************************* */
-async function processData(data, latestAlarmData, Alarm) {
+async function processData(data, latestAlarmData, Alarm, error_table) {
   // 創建一個 Set 來存儲已經存在於 Alarm 中的文檔的 _id
   //console.log("A New data in Data:", data);
   console.log("B New data in Data:", latestAlarmData);
@@ -214,15 +214,8 @@ async function processData(data, latestAlarmData, Alarm) {
     const existingDoc = latestAlarmData.find(
       (doc) => doc._id.toString() === idString
     );
-    
-
-    console.dir(item)
-    console.log(Object.keys(item._doc))
-    console.log(mapBitToStatus(11, whole_error_table['System']['402021']))
-    
-    
-
-
+        
+    console.log(error_result_gen(item, error_table))
 
     if (!existingDoc) {
       // 如果 Alarm 中沒有該文檔，則新增
