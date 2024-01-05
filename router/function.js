@@ -635,6 +635,191 @@ const LC_PCS_error_table = {
   403058:{name: 'LC_PCS_Node status', status:LC_PCS_403058},
 };
 
+const LC_BMS_404011 = {
+  0: 'First SOC calibrate tip clear[CMD]',
+  1: 'Second SOC calibrate tip clear[CMD]',
+  2: 'First SOC calibrate tip clear cancel[CMD]',
+  3: 'Second SOC calibrate tip clear cancel[CMD]',
+  8: 'Ready',
+  9: 'Idle',
+  10: 'Off-line',
+  12: 'Main switch off[CMD]',
+  13: 'Main switch on[CMD]',
+  14: 'Discharge mode',
+  15: 'Charge mode',  
+}
+
+const LC_BMS_404044 = {
+  0: 'Cell over voltage alarm',
+  1: 'Cell under voltage alarm',
+  2: 'Total over voltage alarm',
+  3: 'Total under voltage alarm',
+  4: 'Pack over voltage alarm',
+  5: 'Pack under voltage alarm',
+  6: 'Cell voltage difference alarm',
+  8: 'Pack voltage difference alarm',
+  9: 'Cell over temperature alarm',
+  10: 'Cell low temperature alarm',
+  11: 'Cell temperature difference alarm',
+  12: 'Insulation leakage current alarm',
+  20: 'Over current alarm',
+}
+
+const LC_BMS_404046 = {
+  0: 'Cell over voltage fault',
+  1: 'Cell under voltage fault',
+  2: 'Total over voltage fault',
+  3: 'Total under voltage fault',
+  4: 'Pack over voltage fault',
+  5: 'Pack under voltage fault',
+  7: 'Total voltage difference fault',
+  9: 'Cell over temperature fault',
+  10: 'Cell low temperature fault',
+  12: 'Insulation leakage current fault',
+  13: 'CMU-BMU communication fault',
+  14: 'Voltage sample fault',
+  15: 'Temperature sample fault',
+  17: 'Current sample fault',
+  18: 'CMU-SMU communication fault',
+  20: 'Over current fault',
+  21: 'Polarity reversed fault',
+  22: 'Fuse fault',
+  23: 'Contactor fault',  
+}
+
+const LC_BMS_404048 = {
+  0: 'Positive relay fault',
+  1: 'Negative relay fault',
+  2: 'Positive relay close fail',
+  3: 'Negative relay close fail',
+  4: 'Fuse open',
+}
+
+const LC_BMS_404061 = {
+  0: 'SMU-CMU communication fault',
+  11: 'Rack number protection',
+  15: 'System stop',  
+}
+
+const LC_BMS_error_table = {
+  404011:{name: 'LC_BMS_System mode', status:LC_BMS_404011},
+  404044:{name: 'LC_BMS_CMU alarm word', status:LC_BMS_404044},
+  404046:{name: 'LC_BMS_CMU fault word', status:LC_BMS_404046},
+  404048:{name: 'LC_BMS_Hardware fault word', status:LC_BMS_404048},
+  404061:{name: 'LC_BMS_SMU fault status', status:LC_BMS_404061},
+};
+
+const LC_Rack_405028 = {
+  0: 'Cell over voltage alarm',
+  1: 'Cell under voltage alarm',
+  2: 'Total over voltage alarm',
+  3: 'Total under voltage alarm',
+  4: 'Pack over voltage alarm',
+  5: 'Pack under voltage alarm',
+  6: 'Cell voltage difference alarm',
+  8: 'Pack voltage difference alarm',
+  9: 'Cell over temperature alarm',
+  10: 'Cell low temperature alarm',
+  11: 'Cell temperature difference alarm',
+  12: 'Insulation leakage current alarm',
+  20: 'Over current alarm',
+}
+
+const LC_Rack_405030 = {
+  0: 'Cell over voltage fault',
+  1: 'Cell under voltage fault',
+  2: 'Total over voltage fault',
+  3: 'Total under voltage fault',
+  4: 'Pack over voltage fault',
+  5: 'Pack under voltage fault',
+  7: 'Total voltage difference fault',
+  9: 'Cell over temperature fault',
+  10: 'Cell low temperature fault',
+  12: 'Insulation leakage current fault',
+  13: 'CMU-BMU communication fault',
+  14: 'Voltage sample fault',
+  15: 'Temperature sample fault',
+  17: 'Current sample fault',
+  18: 'CMU-BMU communication fault',
+  20: 'Over current fault',
+  21: 'Polarity reversed fault',
+  22: 'Fuse fault',
+  23: 'Contactor fault',
+}
+
+const LC_Rack_error_table = {
+  405028:{name: 'LC_Rack_CMU alarm word', status:LC_Rack_405028},
+  405030:{name: 'LC_Rack_CMU fault word', status:LC_Rack_405030},
+};
+
+const LC_BSC_406001 = {
+  0: 'Node 1 fault',
+  1: 'Node 2 fault',
+  2: 'Node 3 fault',
+  3: 'Node 4 fault',
+  4: 'Node 5 fault',
+  5: 'Node 6 fault',
+  6: 'Node 7 fault',
+  7: 'Node 8 fault',
+  8: 'Node 9 fault',
+  9: 'Node 10 fault',
+  10: 'Node 11 fault',
+  11: 'Node 12 fault',
+  12: 'Node 13 fault',
+  13: 'Node 14 fault',
+  14: 'Node 15 fault',
+  15: 'Node 16 fault',
+  24: 'UPS fault',
+  25: 'BSC-UPS communication fault',
+  26: 'Low combustible gas concentration alarm',
+  27: 'High combustible gas concentration alarm',
+}
+
+const LC_BSC_406003 = {
+  0: 'Node 1 alarm',
+  1: 'Node 2 alarm',
+  2: 'Node 3 alarm',
+  3: 'Node 4 alarm',
+  4: 'Node 5 alarm',
+  5: 'Node 6 alarm',
+  6: 'Node 7 alarm',
+  7: 'Node 8 alarm',
+  8: 'Node 9 alarm',
+  9: 'Node 10 alarm',
+  10: 'Node 11 alarm',
+  11: 'Node 12 alarm',
+  12: 'Node 13 alarm',
+  13: 'Node 14 alarm',
+  14: 'Node 15 alarm',
+  15: 'Node 16 alarm',
+  23: 'Humiture sensor communication alarm',
+  25: 'Ammeter communication alarm',
+  26: 'HVAC alarm',
+  27: 'HVAC communication alarm',  
+}
+
+// const LC_BSC_406007 = {
+//   0: 'Comm error',
+//   1: 'Stop',
+//   2: 'Running',
+//   3: 'Fault',
+//   85: 'Not configured',
+// }
+
+const LC_BSC_error_table = {
+  406001:{name: 'LC_BSC_Fault status', status:LC_Rack_406001},
+  406003:{name: 'LC_BSC_Alarm status', status:LC_Rack_406003},
+  //406007:{name: 'LC_BSC_HVAC_1 running status', status:LC_Rack_406007},
+};
+
+const LC_error_table = {
+  System:LC_System_error_table,
+  PCS:LC_PCS_error_table,
+  BMS:LC_BMS_error_table,
+  Rack:LC_Rack_error_table,
+  BSC:LC_BSC_error_table,
+};
+
 function getLargestKey(obj) {
   // Get all keys of the object
   const keys = Object.keys(obj);
@@ -717,11 +902,6 @@ function error_result_gen(item, error_table){
   }
   return error_result
 }
-
-const LC_error_table = {
-  System:LC_System_error_table,
-  PCS:LC_PCS_error_table,
-};
 
 module.exports = {
   mapchargeStatus,
