@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984"); // 替換成你的CouchDB連線URL
+const account = "account"; // 替換成你的CouchDB數據庫名稱
+const DBaccount = nano.use(account);
 
-const userSchema = new Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+// 定義CouchDB文檔模型
+const userDocModel = {
+  _id: String,
   time: Date,
   user: {
     num: String,
@@ -53,7 +55,44 @@ const userSchema = new Schema({
       minLength: [8, "密碼少於八個字元!"],
     },
   },
-});
+};
 
-const User = mongoose.model("User", userSchema, "account");
-module.exports = User;
+// 將Mongoose模型轉換為CouchDB文檔模型
+const createOrUpdateUserDoc = async (user) => {
+  try {
+    const response = await DBaccount.insert(user, user._id); // 使用用户ID作为文档ID
+    console.log(`User document created/updated successfully. ID: ${response.id}`);
+  } catch (error) {
+    console.error("Error creating/updating user document:", error.message);
+  }
+};
+
+// // 要插入的用戶數據
+// const userDocument = {
+//   _id: "SE0008", // 替換成唯一的用戶ID
+//   time: new Date(),
+//   user: {
+//     num: "SE0008",
+//     mail: "user@example.com",
+//     name:"SE",
+//     department:"EMS",
+//     level:"accadmin",
+//     state:"normal",
+//     errcount:"0",
+//     note:"",
+//     last_time:new Date(),
+//     password:"EMS@1234",
+//     // ... 其他字段 ...
+//   },
+// };
+
+// // 插入用戶數據到 CouchDB
+// DBaccount.insert(userDocument, userDocument._id, (err, body) => {
+//   if (err) {
+//     console.error("Error inserting user document:", err.message);
+//   } else {
+//     console.log("User document inserted successfully. ID:", body.id);
+//   }
+// });
+
+module.exports = { createOrUpdateUserDoc };
