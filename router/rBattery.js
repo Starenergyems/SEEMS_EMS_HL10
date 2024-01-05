@@ -740,8 +740,10 @@ const database = {
   block3: "資料庫內容3",
 };
 
-app.post("/getData", (req, res) => {
+router.post("/getData", (req, res) => {
+  console.log('接收到前端請求');
   const blockId = req.body.blockId;
+  console.log(blockId);
   const data = database[blockId];
   res.json(data);
 });

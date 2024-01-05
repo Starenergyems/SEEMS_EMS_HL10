@@ -219,8 +219,9 @@ function show_info_RackAlm_R12() {
 
 async function getData(blockId) {
   try {
+    console.log('嘗試向後端發出請求')
     const response = await fetch("/getData", {
-      method: "POST",
+      method: "post",
       headers: {
         "Content-Type": "application/json",
       },
@@ -228,6 +229,7 @@ async function getData(blockId) {
     });
 
     const data = await response.json();
+    console.log(data);
     displayData(data);
   } catch (error) {
     console.error("Error fetching data:", error);
