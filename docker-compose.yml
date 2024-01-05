@@ -1,21 +1,6 @@
-version: '1.0'
+version: '3.8'
 
 services:
-  ems-db:
-    # restart: always
-    image: mongo:latest
-    container_name: ems-db
-    # command: --replSet rs0 --oplogSize 128
-    volumes:
-      - db:/data/db
-    ports:
-      - "27017:27017"
-    # environment:
-      # - POSTGRES_DB=postgres
-      # - POSTGRES_USER=postgres
-      # - POSTGRES_PASSWORD=postgres
-    networks:
-      - service-network
 
   ems-service:
     # restart: always
@@ -31,12 +16,7 @@ services:
       # - POSTGRES_PASSWORD=postgres
     networks:
       - service-network
-    depends_on:
-      - ems-db
 
 networks:
   service-network:
     attachable: true
-
-volumes:
-  db:

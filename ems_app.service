@@ -12,7 +12,7 @@ User=your_username
 
 # Additional options for more graceful restarts
 RestartSec=3s  # Set a restart delay
-StartLimitInterval=60s  # Set the interval in which StartLimitBurst is valid
+StartLimitInterval=60s  # Set the interval in which StartLimitBurst is valid            -
 StartLimitBurst=18  # Allow restarts within the specified interval
 
 KillSignal=SIGTERM
