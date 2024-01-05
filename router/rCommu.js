@@ -52,7 +52,7 @@ router.get("/systeminfo", async (req, res) => {
   try {
     const collections = mongoose.connection.collections;
     const collectionNames = Object.keys(collections);
-    console.log("當前連接中的 collection 名稱：", collectionNames);
+    //console.log("當前連接中的 collection 名稱：", collectionNames);
 
     const dcData = await Dc.findOne().sort({ time_log: -1 });
     const lc1Data = await Lc01.findOne().sort({ time_log: -1 });

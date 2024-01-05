@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 const session = require("express-session");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -56,7 +56,7 @@ router.use(
 
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {
-  res.render("Op_PCS_InfoSummary", {permission: "manager"});
+  res.render("Op_PCS_InfoSummary", { permission: "manager" });
 });
 
 //************************************************************************************************************************************************ */
@@ -311,7 +311,7 @@ router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
     // 轉換為 collection 名稱的數組
     const collectionNames = Object.keys(collections);
 
-    console.log("當前連接中的 collection 名稱：", collectionNames);
+    //console.log("當前連接中的 collection 名稱：", collectionNames);
 
     // 從數據庫中查詢 Other1 資料
     const lcData = await Lc01.findOne().sort({ time_log: -1 });
