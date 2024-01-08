@@ -129,11 +129,13 @@ function updateExcelWithMongoData(workbook, mongoData) {
 }
 
 router.get('/report/getFile', (req, res) => { //點擊尋找已存好的檔案
-  const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
+  //const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
   const fileName = req.query.fileName;//要找哪個檔案
+  const folderPath = req.query.folderPath;//要去哪找檔案
 
   const filePath = path.join(folderPath, fileName);
   console.log('後端收到get');
+  console.log('目標位置:'+ filePath);
   // Check if the file exists
   fs.access(filePath, fs.constants.F_OK, (err) => {
     console.log('後端開始尋找檔案');
