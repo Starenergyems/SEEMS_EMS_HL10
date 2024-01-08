@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-const { ObjectId } = mongoose.Types;
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const hisalarmDBName = "hisalarm"; // 替換成你的 CouchDB 數據庫名稱
+const DBhisalarm = nano.use(hisalarmDBName);
 
-const alarmSchema = new Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+const alarmDocModel = {
+  _id: String,
   time: Date,
   location: {
     type: String,
@@ -36,7 +36,37 @@ const alarmSchema = new Schema({
   recover: {
     type: String,
   },
+};
+
+const Alarm = (data) => {
+  return new Promise((resolve, reject) => {
+    DBhisalarm.insert(data, (err, body) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+};
+
+nano.db.list((err, body) => {
+  if (err) {
+    console.error("Error listing databases:", err);
+  } else {
+    if (Array.isArray(body) && body.includes(hisalarmDBName)) {
+      console.log("Alarmdb: Connection to CouchDB successful!");
+    } else {
+      // 如果數據庫不存在，可以在這裡創建
+      nano.db.create(hisalarmDBName, (createErr) => {
+        if (createErr && createErr.statusCode !== 412) {
+          console.error("Error creating database:", createErr);
+        } else {
+          console.log("Alarmdb: Database created or already exists");
+        }
+      });
+    }
+  }
 });
 
-const Alarm = mongoose.model("Alarm", alarmSchema, "hisalarm");
-module.exports = Alarm;
+module.exports = { Alarm, alarmDocModel };

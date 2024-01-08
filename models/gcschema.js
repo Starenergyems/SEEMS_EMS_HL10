@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-const { ObjectId } = mongoose.Types;
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const gcDBName = "gc"; // 替換成你的 CouchDB 數據庫名稱
+const DBgc = nano.use(gcDBName);
 
-const gcSchema = new Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+const gcDocModel = {
+  _id: String,
   time: Date,
   system: {
     400001: Number,
@@ -744,7 +744,37 @@ const gcSchema = new Schema({
     400798: Number,
     time_log: Date,
   },
+};
+
+const GC = (data) => {
+  return new Promise((resolve, reject) => {
+    DBgc.insert(data, (err, body) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+};
+
+nano.db.list((err, body) => {
+  if (err) {
+    console.error("Error listing databases:", err);
+  } else {
+    if (Array.isArray(body) && body.includes(gcDBName)) {
+      console.log("GCdb: Connection to CouchDB successful!");
+    } else {
+      // 如果數據庫不存在，可以在這裡創建
+      nano.db.create(gcDBName, (createErr) => {
+        if (createErr && createErr.statusCode !== 412) {
+          console.error("Error creating database:", createErr);
+        } else {
+          console.log("GCdb: Database created or already exists");
+        }
+      });
+    }
+  }
 });
 
-const GC = mongoose.model("GC", gcSchema, "gc");
-module.exports = GC;
+module.exports = { GC, gcDocModel };

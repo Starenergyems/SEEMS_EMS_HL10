@@ -61,12 +61,15 @@ const userDocModel = {
 const createOrUpdateUserDoc = async (user) => {
   try {
     const response = await DBaccount.insert(user, user._id); // 使用用户ID作为文档ID
-    console.log(`User document created/updated successfully. ID: ${response.id}`);
+    console.log(
+      `User document created/updated successfully. ID: ${response.id}`
+    );
   } catch (error) {
     console.error("Error creating/updating user document:", error.message);
   }
 };
 
+module.exports = { createOrUpdateUserDoc, userDocModel };
 // // 要插入的用戶數據
 // const userDocument = {
 //   _id: "SE0008", // 替換成唯一的用戶ID
@@ -94,5 +97,3 @@ const createOrUpdateUserDoc = async (user) => {
 //     console.log("User document inserted successfully. ID:", body.id);
 //   }
 // });
-
-module.exports = { createOrUpdateUserDoc };

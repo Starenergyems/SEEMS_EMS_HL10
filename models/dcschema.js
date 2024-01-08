@@ -1,12 +1,9 @@
-const mongoose = require("mongoose");
-const express = require("express");
-const app = express();
-const port = 3000;
-const ObjectId = mongoose.Types;
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const dcDBName = "dc"; // 替換成你的 CouchDB 數據庫名稱
+const DBdc = nano.use(dcDBName);
 
-// 創建一個Mongoose模式
-const dcSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+const dcDocModel = {
+  _id: String,
   time: Date,
   LC1: {
     409101: Number,
@@ -243,6 +240,37 @@ const dcSchema = new mongoose.Schema({
     409132: Number,
     time_log: Date,
   },
+};
+
+const DC = (data) => {
+  return new Promise((resolve, reject) => {
+    DBgc.insert(data, (err, body) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+};
+
+nano.db.list((err, body) => {
+  if (err) {
+    console.error("Error listing databases:", err);
+  } else {
+    if (Array.isArray(body) && body.includes(dcDBName)) {
+      console.log("DCdb: Connection to CouchDB successful!");
+    } else {
+      // 如果數據庫不存在，可以在這裡創建
+      nano.db.create(dcDBName, (createErr) => {
+        if (createErr && createErr.statusCode !== 412) {
+          console.error("Error creating database:", createErr);
+        } else {
+          console.log("DCdb: Database created or already exists");
+        }
+      });
+    }
+  }
 });
-const Dc = mongoose.model("Dc", dcSchema, "dc");
-module.exports = Dc;
+
+module.exports = { DC, dcDocModel };

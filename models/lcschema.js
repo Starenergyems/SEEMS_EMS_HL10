@@ -1,13 +1,44 @@
-const mongoose = require("mongoose");
-const express = require("express");
-const app = express();
-const port = 3000;
-const { ObjectId } = mongoose.Types;
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 
-//創建一個Mongoose模式
+// 定義數據庫名稱
+const lc1DBName = "lc1_rf10";
+const lc2DBName = "lc2_rf10";
+const lc3DBName = "lc3_rf10";
+const lc4DBName = "lc4_rf10";
 
-const lcSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+// 函式，用於檢查並建立數據庫
+const checkAndCreateDB = (dbName) => {
+  const db = nano.use(dbName);
+
+  nano.db.list((err, body) => {
+    if (err) {
+      console.error(`Error listing databases: ${err}`);
+    } else {
+      if (Array.isArray(body) && body.includes(dbName)) {
+        console.log(`${dbName}: Connection to CouchDB successful!`);
+      } else {
+        nano.db.create(dbName, (createErr) => {
+          if (createErr && createErr.statusCode !== 412) {
+            console.error(`Error creating database ${dbName}: ${createErr}`);
+          } else {
+            console.log(`${dbName}: Database created or already exists`);
+          }
+        });
+      }
+    }
+  });
+
+  return db;
+};
+
+// 建立並檢查數據庫
+const DBlc1 = checkAndCreateDB(lc1DBName);
+const DBlc2 = checkAndCreateDB(lc2DBName);
+const DBlc3 = checkAndCreateDB(lc3DBName);
+const DBlc4 = checkAndCreateDB(lc4DBName);
+
+const lcDocModel = {
+  _id: String,
   time: Date,
   System: {
     402001: Number,
@@ -924,11 +955,19 @@ const lcSchema = new mongoose.Schema({
     406076: Number,
     time_log: Date,
   },
-});
+};
 
-const Lc01 = mongoose.model("Lc01", lcSchema, "lc01");
-const Lc02 = mongoose.model("Lc02", lcSchema, "lc02");
-const Lc03 = mongoose.model("Lc03", lcSchema, "lc03");
-const Lc04 = mongoose.model("Lc04", lcSchema, "lc04");
-module.exports = { Lc01: Lc01, Lc02: Lc02, Lc03: Lc03, Lc04: Lc04 };
+const GC = (data) => {
+  return new Promise((resolve, reject) => {
+    DBgc.insert(data, (err, body) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+};
+
+module.exports = { DBlc1, DBlc2, DBlc3, DBlc4, lcDocModel };
 // module.exports = LC;

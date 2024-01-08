@@ -31,17 +31,17 @@ app.use(cors());
 app.use(cookieParser());
 
 // MongoDB 連線
-mongoose
-  .connect("mongodb://localhost:27017/ems")
-  .then(() => {
-    console.log("成功連結 MongoDB....");
-    const currentDBName = mongoose.connection.name;
-    console.log("目前連線資料庫名稱：", currentDBName);
-    // 在這裡進行其他與資料庫相關的初始化操作
-  })
-  .catch((e) => {
-    console.error("連線 MongoDB 時發生錯誤：", e.message);
-  });
+// mongoose
+//   .connect("mongodb://localhost:27017/ems")
+//   .then(() => {
+//     console.log("成功連結 MongoDB....");
+//     const currentDBName = mongoose.connection.name;
+//     console.log("目前連線資料庫名稱：", currentDBName);
+//     // 在這裡進行其他與資料庫相關的初始化操作
+//   })
+//   .catch((e) => {
+//     console.error("連線 MongoDB 時發生錯誤：", e.message);
+//   });
 
 // Socket.IO 連線事件
 io.on("connection", (socket) => {
