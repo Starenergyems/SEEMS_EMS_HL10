@@ -813,18 +813,18 @@ const LC_BSC_406003 = {
 //   85: 'Not configured',
 // }
 
-// const LC_BSC_error_table = {
-//   406001: { name: "LC_BSC_Fault status", status: LC_Rack_406001 },
-//   406003: { name: "LC_BSC_Alarm status", status: LC_Rack_406003 },
-//   //406007:{name: 'LC_BSC_HVAC_1 running status', status:LC_Rack_406007},
-// };
+const LC_BSC_error_table = {
+  406001: { name: "LC_BSC_Fault status", status: LC_Rack_406001 },
+  406003: { name: "LC_BSC_Alarm status", status: LC_Rack_406003 },
+  //406007:{name: 'LC_BSC_HVAC_1 running status', status:LC_Rack_406007},
+};
 
-// const LC_error_table = {
-//   System:LC_System_error_table,
-//   PCS:LC_PCS_error_table,
-//   BMS:LC_BMS_error_table,
-//   BSC:LC_BSC_error_table,
-// };
+const LC_error_table = {
+  System:LC_System_error_table,
+  PCS:LC_PCS_error_table,
+  BMS:LC_BMS_error_table,
+  BSC:LC_BSC_error_table,
+};
 
 const Other_408154 = {
   0: "Enable alarm buzzer",
@@ -835,6 +835,157 @@ const Other_408154 = {
   5: "Bypass mode",
   6: "Battery SOC low",
   7: "Utility abnormal",
+};
+
+const Other_408186 = {
+  min: -3000,
+  max: 4000,
+  scale: 0.1
+};
+
+const Other_408187 = {
+  min: 0,
+  max: 100,
+  scale: 0.1
+};
+
+const Other_408201 = {
+  0: "51-1",
+  1: "50-1",
+  2: "51N-1",
+  3: "50N-1",
+  4: "51-2",
+  5: "50-2",
+  6: "51N-2",
+  7: "50N-2",
+  8: "51-3",
+  9: "50-3",
+  10: "51N-3",
+  11: "50N-3",
+  12: "51-4",
+  13: "50-4",
+  14: "51N-4",
+  15: "50N-4",
+};
+
+const Other_408202 = {
+  0: "27/59-1",
+  1: "27/59-2",
+  2: "27/59-3",
+  3: "27/59-4",
+  4: "59NIT",
+  5: "59NDT",
+  6: "81-1",
+  7: "81-2",
+  8: "81-3",
+  9: "81-4",  
+};
+
+const Other_408203 = {
+  0: "51-1",
+  1: "50-1",
+  2: "51N-1",
+  3: "50N-1",
+  4: "51-2",
+  5: "50-2",
+  6: "51N-2",
+  7: "50N-2",
+  8: "51-3",
+  9: "50-3",
+  10: "51N-3",
+  11: "50N-3",
+  12: "51-4",
+  13: "50-4",
+  14: "51N-4",
+  15: "50N-4",  
+};
+
+const Other_408204 = {
+  0: "FFS_01",
+  1: "FFS_02",
+  2: "FFS_03",
+  3: "FFS_04",
+  4: "FFS_05",
+  5: "FFS_06",
+  6: "FFS_07",
+  7: "FFS_08",
+  8: "FFS_09",
+  9: "FFS_010",
+  10: "FFS_011",
+  11: "FFS_012",
+  12: "FFS_013",
+  13: "FFS_014",
+  14: "FFS_015",
+  15: "FFS_016",   
+};
+
+const Other_408205 = {
+  0: "VCB_Close",
+  1: "VCB_Open",
+  2: "VCB_Trip",  
+};
+
+const Other_408206 = {
+  0: "ACB_#-1_Close",
+  1: "ACB_#-1_Open",
+  2: "ACB_#-2_Close",
+  3: "ACB_#-2_Open",
+  4: "ACB_#-3_Close",
+  5: "ACB_#-3_Open",  
+};
+
+const Other_408207 = {
+  0: "ACB_#-1_Close Ctrl",
+  1: "ACB_#-1_Open Ctrl",
+  2: "ACB_#-2_Close Ctrl",
+  3: "ACB_#-2_Open Ctrl",
+  4: "ACB_#-3_Close Ctrl",
+  5: "ACB_#-3_Open Ctrl",  
+};
+
+const Other_error_table = {
+  408154: { name: "UPS status", status: Other_408154 },
+  408186: { name: "Temperature", status: Other_408186 },
+  408187: { name: "Humidity", status: Other_408187 },
+  408201: { name: "Relay_MVCB-1", status: Other_408201 },
+  408202: { name: "Relay_MVCB-2", status: Other_408202 },
+  408203: { name: "Relay_VCB", status: Other_408203 },
+  408204: { name: "FFS Status", status: Other_408204 },
+  408205: { name: "VCB Status", status: Other_408205 },
+  408206: { name: "ACB Status", status: Other_408206 },
+  408207: { name: "ACB Control", status: Other_408207 },
+};
+
+const DC_error_table = {
+  409101 : { name: "LC_Comm_Error", status: 1 },
+  409103 : { name: "Freq-M_Comm_Error", status: 1 },
+  409105 : { name: "ACPM_Comm_Error", status: 1 },
+  409107 : { name: "AuxMtot_Comm_Error", status: 1 },
+  409109 : { name: "AuxM_Comm_Error", status: 1 },
+  409111 : { name: "UPS_Comm_Error", status: 1 },
+  409113 : { name: "TR_Comm_Error", status: 1 },
+  409115 : { name: "TH_Comm_Error", status: 1 },
+  409117 : { name: "RelayMVCB_Comm_Error", status: 1 },
+  409119 : { name: "RelayVCB_Comm_Error", status: 1 },
+  409121 : { name: "I/O_FFS_Comm_Error", status: 1 },
+  409123 : { name: "I/O_VCB_Comm_Error", status: 1 },
+  409125 : { name: "I/O_ACBStatus_Comm_Error", status: 1 },
+};
+
+const GC_400033 = {
+  threshold: 9500,
+  count: 4,
+}
+
+const GC_400129 = {
+  min: "Min_SOC_Limit",
+  max: "Max_SOC_Limit",
+  capacity: 3500000, //kWh
+}
+
+const GC_error_table = {
+  400033 : { name: "SBSPM", status: GC_400033},
+  400129 : { name: "SOC", status: GC_400129},
 };
 
 function getLargestKey(obj) {
@@ -952,7 +1103,10 @@ module.exports = {
   Determine_DL_of_upsStatus2,
   Determine_DL_of_CommPCSBMS,
   error_result_gen,
-  //LC_error_table,
+  LC_error_table,
+  Other_error_table,
+  DC_error_table,
+  GC_error_table,
 };
 // //***************************************************************************** */
 // //轉換存陣列
