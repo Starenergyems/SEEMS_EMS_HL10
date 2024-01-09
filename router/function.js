@@ -814,8 +814,8 @@ const LC_BSC_406003 = {
 // }
 
 const LC_BSC_error_table = {
-  406001: { name: "LC_BSC_Fault status", status: LC_Rack_406001 },
-  406003: { name: "LC_BSC_Alarm status", status: LC_Rack_406003 },
+  406001: { name: "LC_BSC_Fault status", status: LC_BSC_406001 },
+  406003: { name: "LC_BSC_Alarm status", status: LC_BSC_406003 },
   //406007:{name: 'LC_BSC_HVAC_1 running status', status:LC_Rack_406007},
 };
 
