@@ -122,3 +122,8 @@ table.dataTable tbody td {
     color: #FFFFFF;
     border-radius: 10px;
 }
+
+.dataTables_wrapper .btn_Download:hover{
+    background: linear-gradient(170deg, #888686, #CCCCCC, #888686);
+    cursor: pointer;
+}

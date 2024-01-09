@@ -15,7 +15,6 @@ $(document).ready(function () {
     document.getElementById("month").addEventListener("change", function () {
         var year = document.getElementById("yearDropdown");
         var selectedYear = parseInt(year.value);
-        console.log(selectedYear);
         var selectedMonth = parseInt(this.value);
         var currentMonth = new Date().getMonth() + 1; // Months are zero-based, so we add 1
         console.log("點選年份:"+selectedYear+" 點選月份:"+ selectedMonth +" 現在月份:"+currentMonth);
@@ -177,9 +176,11 @@ function updateTable(){
             { data: "reportName" },
             { 
                 render: function (data, type, row) { 
-                    if (row.reportType === "年報"){
+                    if (row.reportType === "年報" || row.reportType === "月報"){
                         //return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\'alreadyPrepared.xlsx\', \'C:/EMS/Report\')">下載</button>';  
                         return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'C:/EMS/Report/'+ selectedYear +'\')">下載</button>';  
+                    } else if (row.reportType === "日報"){
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'C:/EMS/Report/'+ selectedYear +'/'+ selectedMonth + '月\')">下載</button>';  
                     }
                     return ''; // Ensure a default value is returned for other cases
                 } 
