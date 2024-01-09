@@ -60,4 +60,42 @@ nano.db.list((err, body) => {
   }
 });
 
-module.exports = { Other01 };
+//要插入的用戶數據
+
+const userDocument = {
+  _id: "hudfewu", // 替換成唯一的用戶ID
+  time: new Date(),
+  timestamp: new Date().getTime(),
+  Freq: {
+    408001: 1,
+    408003: 2,
+    408005: 3,
+    408007: 7,
+    408009: 9,
+    408011: 11,
+    408013: 13,
+    408015: 15,
+    408017: 17,
+    408019: 19,
+    408021: 21,
+    408023: 23,
+    408025: 25,
+    408026: 27,
+    408028: 28,
+    408030: 30,
+    408032: 32,
+    408034: 34,
+  },
+};
+
+// 插入用戶數據到 CouchDB
+// 插入用戶數據到 CouchDB
+Other01(userDocument)
+  .then((body) => {
+    console.log("User document inserted successfully. ID:", body.id);
+  })
+  .catch((err) => {
+    console.error("Error inserting user document:", err.message);
+  });
+
+module.exports = { Other01, other01DocModel };

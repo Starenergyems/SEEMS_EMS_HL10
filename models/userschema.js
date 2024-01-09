@@ -70,21 +70,22 @@ const createOrUpdateUserDoc = async (user) => {
 };
 
 module.exports = { createOrUpdateUserDoc, userDocModel };
-// // 要插入的用戶數據
+// 要插入的用戶數據
 // const userDocument = {
-//   _id: "SE0008", // 替換成唯一的用戶ID
+//   _id: "SE0010", // 替換成唯一的用戶ID
 //   time: new Date(),
+//   timestamp: new Date().getTime(),
 //   user: {
-//     num: "SE0008",
-//     mail: "user@example.com",
-//     name:"SE",
-//     department:"EMS",
-//     level:"accadmin",
-//     state:"normal",
-//     errcount:"0",
-//     note:"",
-//     last_time:new Date(),
-//     password:"EMS@1234",
+//     num: "SE0010",
+//     mail: "user02@example.com",
+//     name: "SE0010",
+//     department: "EMS2",
+//     level: "accadmin",
+//     state: "normal",
+//     errcount: "0",
+//     note: "",
+//     last_time: new Date(),
+//     password: "EMS@1234567",
 //     // ... 其他字段 ...
 //   },
 // };

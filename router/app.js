@@ -1,5 +1,5 @@
 // app.js
-
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const express = require("express");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
@@ -63,38 +63,38 @@ io.on("connection", (socket) => {
 });
 
 // 引入多個路由檔案
-const accountRouter = require("./rAccount");
-const modeRouter = require("./rMode");
+// const accountRouter = require("./rAccount");
+// const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
-const pcsRouter = require("./rPCS");
-const batteryRouter = require("./rBattery");
-const commuRouter = require("./rCommu");
-const deviceRouter = require("./rDevice");
-const environmentRouter = require("./rEnvironment");
-const alarmRouter = require("./rAlarm");
-const eventRouter = require("./rEvent");
-const reportRouter = require("./rReport");
-const chartRouter = require("./rChart");
-const testRouter = require("./test");
-const alarmFunctions = require("./alarmFunctions");
+// const pcsRouter = require("./rPCS");
+// const batteryRouter = require("./rBattery");
+// const commuRouter = require("./rCommu");
+// const deviceRouter = require("./rDevice");
+// const environmentRouter = require("./rEnvironment");
+// const alarmRouter = require("./rAlarm");
+// const eventRouter = require("./rEvent");
+// const reportRouter = require("./rReport");
+// const chartRouter = require("./rChart");
+// const testRouter = require("./test");
+// const alarmFunctions = require("./alarmFunctions");
 // 使用驗證
 //app.use(authMiddleware);
 
 // 使用這些路由
-app.use(accountRouter);
-app.use(modeRouter);
+// app.use(accountRouter);
+// app.use(modeRouter);
 app.use(meterRouter);
-app.use(pcsRouter);
-app.use(batteryRouter);
-app.use(commuRouter);
-app.use(deviceRouter);
-app.use(environmentRouter);
-app.use(alarmRouter);
-app.use(eventRouter);
-app.use(reportRouter);
-app.use(chartRouter);
-app.use(testRouter);
-app.use(alarmFunctions);
+// app.use(pcsRouter);
+// app.use(batteryRouter);
+// app.use(commuRouter);
+// app.use(deviceRouter);
+// app.use(environmentRouter);
+// app.use(alarmRouter);
+// app.use(eventRouter);
+// app.use(reportRouter);
+// app.use(chartRouter);
+// app.use(testRouter);
+// app.use(alarmFunctions);
 // 查看目前連線路徑
 app.use((req, res, next) => {
   // console.log(
