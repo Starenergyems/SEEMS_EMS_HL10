@@ -25,6 +25,7 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 app.use(cookieParser());
 
+//************************************************************* */
 // 匯入路由檔案並傳遞資料庫實例
 // const route1 = require("./routes/route1")(nano.use("database1"));
 // const route2 = require("./routes/route2")(nano.use("database2"));
@@ -34,25 +35,26 @@ app.use(cookieParser());
 // app.use("/route1", route1);
 // app.use("/route2", route2);
 // 可以繼續使用其他路由
+//************************************************************* */
 
 // Socket.IO 連線事件
-io.on("connection", (socket) => {
-  //console.log("app.js : A user connected");
+// io.on("connection", (socket) => {
+//   //console.log("app.js : A user connected");
 
-  // 訂閱 "dataUpdated" 事件
-  dataUpdateEmitter.on("dataUpdated", (items) => {
-    // 向連接的客戶端發送更新事件
-    socket.emit("updateItems", items);
-    console.log("Update items event sent to connected client");
-  });
+//   // 訂閱 "dataUpdated" 事件
+//   dataUpdateEmitter.on("dataUpdated", (items) => {
+//     // 向連接的客戶端發送更新事件
+//     socket.emit("updateItems", items);
+//     console.log("Update items event sent to connected client");
+//   });
 
-  // 發送一次更新以初始化客戶端的資料
-  updateDataPeriodically();
+//   // 發送一次更新以初始化客戶端的資料
+//   updateDataPeriodically();
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
-});
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected");
+//   });
+// });
 
 // 引入多個路由檔案
 // const accountRouter = require("./rAccount");
@@ -63,9 +65,9 @@ const meterRouter = require("./rMeter");
 // const commuRouter = require("./rCommu");
 // const deviceRouter = require("./rDevice");
 // const environmentRouter = require("./rEnvironment");
-// const alarmRouter = require("./rAlarm");
+const alarmRouter = require("./rAlarm");
 // const eventRouter = require("./rEvent");
-// const reportRouter = require("./rReport");
+const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
 // const alarmFunctions = require("./alarmFunctions");
@@ -81,9 +83,9 @@ app.use(meterRouter);
 // app.use(commuRouter);
 // app.use(deviceRouter);
 // app.use(environmentRouter);
-// app.use(alarmRouter);
+app.use(alarmRouter);
 // app.use(eventRouter);
-// app.use(reportRouter);
+app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
 // app.use(alarmFunctions);
@@ -94,6 +96,8 @@ app.use((req, res, next) => {
   // );
   next();
 });
+
+//************************************************************* */
 
 app.get("/", (req, res) => {
   res.render("Login");

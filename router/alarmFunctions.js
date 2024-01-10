@@ -1,141 +1,143 @@
 // testforalarm.js
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http");
 const { error_result_gen, LC_error_table } = require("./function");
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 
-// 引入資料庫模型
-// const Lc = require("../models/lcschema");
-// const Dc = require("../models/dcschema");
-// const Gc = require("../models/gcschema");
-// const Alarm = require("../models/alarmschema");
-
+const lc1_rf01 = "lc1_rf01";
+const lc1nanoDb = nano.use(lc1_rf01);
+const lc2_rf01 = "lc2_rf01";
+const lc2nanoDb = nano.use(lc2_rf01);
+const lc3_rf01 = "lc3_rf01";
+const lc3nanoDb = nano.use(lc3_rf01);
+const lc4_rf01 = "lc4_rf01";
+const lc4nanoDb = nano.use(lc4_rf01);
 //************************************************************* */
-// 修改資料庫模型名稱
-const Lc01 = Lc["Lc01"];
-const Lc02 = Lc["Lc02"];
-const Lc03 = Lc["Lc03"];
-const Lc04 = Lc["Lc04"];
-
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
 router.use(cors());
 //************************************************************* */
 // 創建 http 伺服器
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("okay");
-});
+// const server = http.createServer((req, res) => {
+//   res.writeHead(200, { "Content-Type": "text/plain" });
+//   res.end("okay");
+// });
 
 // 使用 WebSocket 連接伺服器
 //const io = socket(server);
 
 // 在資料庫連線時建立 changeStream
-mongoose.connection.once("open", () => {
-  const lc01ChangeStream = Lc01.watch();
-  const lc02ChangeStream = Lc02.watch();
-  const lc03ChangeStream = Lc03.watch();
-  const lc04ChangeStream = Lc04.watch();
-  const dcChangeStream = Dc.watch();
-  const gcChangeStream = Gc.watch();
+// mongoose.connection.once("open", () => {
+//   const lc01ChangeStream = Lc01.watch();
+//   const lc02ChangeStream = Lc02.watch();
+//   const lc03ChangeStream = Lc03.watch();
+//   const lc04ChangeStream = Lc04.watch();
+//   const dcChangeStream = Dc.watch();
+//   const gcChangeStream = Gc.watch();
 
-  // 監聽 change event
-  lc01ChangeStream.on("change", (change) => {
-    io.emit("refreshData", { tableId: "lc01Table" });
-  });
+//   // 監聽 change event
+//   lc01ChangeStream.on("change", (change) => {
+//     io.emit("refreshData", { tableId: "lc01Table" });
+//   });
 
-  lc02ChangeStream.on("change", (change) => {
-    io.emit("refreshData", { tableId: "lc02Table" });
-  });
+//   lc02ChangeStream.on("change", (change) => {
+//     io.emit("refreshData", { tableId: "lc02Table" });
+//   });
 
-  lc03ChangeStream.on("change", (change) => {
-    io.emit("refreshData", { tableId: "lc03Table" });
-  });
+//   lc03ChangeStream.on("change", (change) => {
+//     io.emit("refreshData", { tableId: "lc03Table" });
+//   });
 
-  lc04ChangeStream.on("change", (change) => {
-    io.emit("refreshData", { tableId: "lc04Table" });
-  });
+//   lc04ChangeStream.on("change", (change) => {
+//     io.emit("refreshData", { tableId: "lc04Table" });
+//   });
 
-  dcChangeStream.on("change", (change) => {
-    io.emit("refreshData", { tableId: "dcTable" });
-  });
+//   dcChangeStream.on("change", (change) => {
+//     io.emit("refreshData", { tableId: "dcTable" });
+//   });
 
-  gcChangeStream.on("change", (change) => {
-    io.emit("refreshData", { tableId: "gcTable" });
-  });
-});
+//   gcChangeStream.on("change", (change) => {
+//     io.emit("refreshData", { tableId: "gcTable" });
+//   });
+// });
 
 // Socket.io 事件監聽
-io.on("connection", (socket) => {
-  console.log("alarmFun : A user connected");
+// io.on("connection", (socket) => {
+//   console.log("alarmFun : A user connected");
 
-  // 斷開連接
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
-});
+//   // 斷開連接
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected");
+//   });
+// });
 //************************************************************* */
 router.use(async (req, res, next) => {
   try {
-    // 從資料庫中獲取數據
-    const lc01Data = await Lc01.find();
-    const lc02Data = await Lc02.find();
-    const lc03Data = await Lc03.find();
-    const lc04Data = await Lc04.find();
-    const dcData = await Dc.find();
-    const gcData = await Gc.find();
-
-    // 獲取最新的Alarm資料
-    const latestAlarmData = await Alarm.find().sort({ timestamp: -1 });
-
-    // 遍歷 Alarm，刪除數值低於 50000 的文檔
-    //應該要改成 如果ACK+賦歸 要存到歷史告警裡面
-    for (const alarmItem of latestAlarmData) {
-      if (alarmItem.value < 50000) {
-        await Alarm.findByIdAndDelete(alarmItem._id);
-      }
-    }
-
-    // 遍歷 lc01Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    await processData(lc01Data, latestAlarmData, Alarm, LC_error_table);
-
-    // 遍歷 lc02Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    //await processData(lc02Data, latestAlarmData, Alarm);
-
-    // 遍歷 lc03Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    //await processData(lc03Data, latestAlarmData, Alarm);
-
-    // 遍歷 lc03Data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    //await processData(lc04Data, latestAlarmData, Alarm);
-
-    // 遍歷 dcData，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    //await processData(dcData, latestAlarmData, Alarm);
-
-    // 遍歷 gcData，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-    //await processData(gcData, latestAlarmData, Alarm);
-
-    // 重新獲取最新的 Alarm 資料，以確保排序正確
-    const updatedAlarmData = await Alarm.find().sort({ timestamp: -1 });
-    // 將數據傳遞到前端
-    res.locals = {
-      lc01Data,
-      lc02Data,
-      lc03Data,
-      lc04Data,
-      dcData,
-      gcData,
-      alarmData: updatedAlarmData,
+    const indexDef = {
+      index: { fields: ["time"] },
+      name: "time_index",
     };
-    next();
+
+    await lc1nanoDb.createIndex(indexDef);
+    await lc2nanoDb.createIndex(indexDef);
+    await lc3nanoDb.createIndex(indexDef);
+    await lc4nanoDb.createIndex(indexDef);
+
+    const mangoQuery = {
+      selector: {
+        time: { $exists: true },
+      },
+      sort: [{ time: "desc" }],
+      limit: 1,
+    };
+
+    lc1nanoDb.find(mangoQuery, async (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const Data = body.docs[0]; // 取得數據的第一個元素
+      console.log("AA----------------------------------------------AA");
+      console.log(Data);
+
+      const data = {};
+
+      Object.entries(scaleAndPointMapping).forEach(
+        ([property, { scale, point }]) => {
+          const originalValue = Data.Freq[property];
+          const scaledValue = scaleProcess(originalValue, scale, point);
+          data[property] = scaledValue;
+          console.log("屬性", property);
+          console.log("原始數值", originalValue);
+          console.log("轉換後數值", scaledValue);
+        }
+      );
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
+  next(); // 繼續執行後續的中間件或路由處理
 });
+
+// router.use(async (req, res, next) => {
+//   try {
+//     // 中間件的內容
+
+//     // 假設你已經處理了數據並將結果存儲在 data 中
+//     res.json({ success: true, data }); // 將數據以 JSON 格式發送到客戶端
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, error: "Internal Server Error" });
+//   }
+// });
 
 //************************************************************* */
 // async function getAllData() {
@@ -194,62 +196,62 @@ router.use(async (req, res, next) => {
 //getLatestData();
 
 //************************************************************* */
-async function processData(data, latestAlarmData, Alarm, error_table) {
-  // 創建一個 Set 來存儲已經存在於 Alarm 中的文檔的 _id
-  //console.log("A New data in Data:", data);
-  //console.log("B New data in Data:", latestAlarmData);
-  const existingIds = new Set(
-    latestAlarmData.map((item) => item._id.toString())
-  );
+// async function processData(data, latestAlarmData, Alarm, error_table) {
+//   // 創建一個 Set 來存儲已經存在於 Alarm 中的文檔的 _id
+//   //console.log("A New data in Data:", data);
+//   //console.log("B New data in Data:", latestAlarmData);
+//   const existingIds = new Set(
+//     latestAlarmData.map((item) => item._id.toString())
+//   );
 
-  // 遍歷 data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-  for (const item of data) {
-    //console.log('here')
-    //console.log(item)
+//   // 遍歷 data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
+//   for (const item of data) {
+//     //console.log('here')
+//     //console.log(item)
 
-    const idString = item._id.toString();
-    const existingDoc = latestAlarmData.find(
-      (doc) => doc._id.toString() === idString
-    );
+//     const idString = item._id.toString();
+//     const existingDoc = latestAlarmData.find(
+//       (doc) => doc._id.toString() === idString
+//     );
 
-    console.log(error_result_gen(item, error_table));
+//     console.log(error_result_gen(item, error_table));
 
-    if (!existingDoc) {
-      // 如果 Alarm 中沒有該文檔，則新增
-      if (item.value > 50000) {
-        await Alarm.create({
-          _id: item._id,
-          value: item.value,
-          timestamp: item.timestamp,
-        });
+//     if (!existingDoc) {
+//       // 如果 Alarm 中沒有該文檔，則新增
+//       if (item.value > 50000) {
+//         await Alarm.create({
+//           _id: item._id,
+//           value: item.value,
+//           timestamp: item.timestamp,
+//         });
 
-        // 添加 console.log 语句以输出 lc01Data 中的数值
-        //console.log("New data in Data:", item.value);
-      }
-    } else {
-      // 如果 Alarm 中已經存在該文檔，則更新數值或刪除
-      if (item.value > 50000) {
-        // 更新數值
-        if (existingDoc.value !== item.value) {
-          await Alarm.findByIdAndUpdate(existingDoc._id, {
-            value: item.value,
-            timestamp: item.timestamp,
-          });
+//         // 添加 console.log 语句以输出 lc01Data 中的数值
+//         //console.log("New data in Data:", item.value);
+//       }
+//     } else {
+//       // 如果 Alarm 中已經存在該文檔，則更新數值或刪除
+//       if (item.value > 50000) {
+//         // 更新數值
+//         if (existingDoc.value !== item.value) {
+//           await Alarm.findByIdAndUpdate(existingDoc._id, {
+//             value: item.value,
+//             timestamp: item.timestamp,
+//           });
 
-          // 添加 console.log 语句以输出 lc01Data 中的数值
-          //console.log("Updated data in lc01Data:", item.value);
-        }
-      } else {
-        // 小於等於 50000 則刪除
-        await Alarm.findByIdAndDelete(existingDoc._id);
+//           // 添加 console.log 语句以输出 lc01Data 中的数值
+//           //console.log("Updated data in lc01Data:", item.value);
+//         }
+//       } else {
+//         // 小於等於 50000 則刪除
+//         await Alarm.findByIdAndDelete(existingDoc._id);
 
-        // 添加 console.log 语句以输出 lc01Data 中的数值
-        //console.log("Deleted data in lc01Data:", item.value);
-      }
-    }
-    existingIds.add(idString);
-  }
-}
+//         // 添加 console.log 语句以输出 lc01Data 中的数值
+//         //console.log("Deleted data in lc01Data:", item.value);
+//       }
+//     }
+//     existingIds.add(idString);
+//   }
+// }
 
 router.get("/testforalarm", (req, res) => {
   // 在這裡定義渲染 middleware 頁面的邏輯
