@@ -129,11 +129,17 @@ function updateExcelWithMongoData(workbook, mongoData) {
 }
 
 router.get('/report/getFile', (req, res) => { //點擊尋找已存好的檔案
-  const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
+  //const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
   const fileName = req.query.fileName;//要找哪個檔案
+  const folderPath = req.query.folderPath;//要去哪找檔案
+
+  if (!fileName || !folderPath) {
+    return res.status(400).send('Missing parameter');
+  }
 
   const filePath = path.join(folderPath, fileName);
   console.log('後端收到get');
+  console.log('目標位置:'+ filePath);
   // Check if the file exists
   fs.access(filePath, fs.constants.F_OK, (err) => {
     console.log('後端開始尋找檔案');
@@ -154,14 +160,46 @@ router.get('/report/getFile', (req, res) => { //點擊尋找已存好的檔案
 
 
 
-async function downloadExcelServer() { //每日每月每年自動儲存報表
+
+function yesterday(){
+    // Get the current date and time
+    let currentDate = new Date();
+
+    // Calculate yesterday's date
+    let yesterdayDate = new Date(currentDate);
+    yesterdayDate.setDate(currentDate.getDate() - 1);
+
+    // Separate year, month, and day
+    yesterdayY = yesterdayDate.getFullYear();
+    yesterdayM = yesterdayDate.getMonth() + 1; // Months are zero-based in JavaScript
+    yesterdayD = yesterdayDate.getDate();
+
+    // Log the result
+    console.log(`Yesterday's date was: ${yesterdayY}-${yesterdayM}-${yesterdayD}`);
+}
+
+var yesterdayY, yesterdayM, yesterdayD
+
+async function autoDownload(template) { //自動儲存年報
   try {
+    let directoryPath, filePath; 
+    yesterday();//昨天幾年幾月幾日
     console.log('開始自動下載');
-    const response = await axios.get('http://localhost:3000/report/download-excel?templatePath=../public/report/Report.xlsx', { responseType: 'arraybuffer' });//選擇template撈資料更新excel
+    const response = await axios.get('http://localhost:3000/report/download-excel?templatePath=../public/report/'+template+'.xlsx', { responseType: 'arraybuffer' });//選擇template撈資料更新excel
 
     // Specify the full absolute path for saving the file
-    const directoryPath = path.join('C:', 'EMS', 'Report');//下載後存在哪，要跟getReport同步
-    const filePath = path.join(directoryPath, '2023年08月執行率統計表.xlsx');//檔名叫什麼
+    if (template === "YearReport"){
+      directoryPath = path.join('C:', 'EMS', 'Report', `${yesterdayY}`);//下載後存在哪，要跟getReport api同步
+      filePath = path.join(directoryPath, yesterdayY +'年年報.xlsx');//檔名叫什麼
+    } else if(template === "MonthReport"){
+      directoryPath = path.join('C:', 'EMS', 'Report', `${yesterdayY}`);//下載後存在哪，要跟getReport api同步
+      filePath = path.join(directoryPath, `${yesterdayY}` +'年'+ `${yesterdayM}` +'月月報.xlsx');//檔名叫什麼
+    } else if(template === "DayReport"){
+      directoryPath = path.join('C:', 'EMS', 'Report', `${yesterdayY}`, `${yesterdayM}`+'月');//下載後存在哪，要跟getReport api同步
+      filePath = path.join(directoryPath, `${yesterdayY}` +'年'+ `${yesterdayM}` +'月'+ `${yesterdayD}` +'日日報.xlsx');//檔名叫什麼
+    } else {
+      console.log("參數設置錯誤");
+    }
 
     // Check if the directory exists, create it if not
     if (!fs.existsSync(directoryPath)) {
@@ -179,10 +217,30 @@ async function downloadExcelServer() { //每日每月每年自動儲存報表
 
 
 
-cron.schedule('45 17 4 * *', async () => { // 秒 分 時 日 月 星期幾 由右到左對照，每個月1號1:00執行
+cron.schedule('0 2 1 1 *', async () => { // 秒 分 時 日 月 星期幾 由右到左對照，每年1月1日2:00執行產出前一年年報
   try {
-    console.log("Cron job: download start");
-    downloadExcelServer();
+    console.log("Cron job: year report download start");
+    autoDownload('YearReport');
+    console.log("Cron job: done");
+  } catch (error) {
+    console.error('Cron job: Error generating Excel file:', error);
+  }
+});
+
+cron.schedule('30 1 1 * *', async () => { // 秒 分 時 日 月 星期幾 由右到左對照，每月1日1:30執行產出前一月月報
+  try {
+    console.log("Cron job: month report download start");
+    autoDownload('MonthReport');
+    console.log("Cron job: done");
+  } catch (error) {
+    console.error('Cron job: Error generating Excel file:', error);
+  }
+});
+
+cron.schedule('0 1 * * *', async () => { // 秒 分 時 日 月 星期幾 由右到左對照，每日1:00執行產出前一天日報
+  try {
+    console.log("Cron job: day report download start");
+    autoDownload('DayReport');
     console.log("Cron job: done");
   } catch (error) {
     console.error('Cron job: Error generating Excel file:', error);

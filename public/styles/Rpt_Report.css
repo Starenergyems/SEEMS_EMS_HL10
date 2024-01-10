@@ -33,6 +33,7 @@
     background-color: #FFFFFF;
     box-sizing: border-box;
     width: 6%;
+    height:40px;
     border: 2px solid #808080;
     margin: 5px 0px 0px 5px;
     font-size: 24px;
@@ -120,4 +121,9 @@ table.dataTable tbody td {
     font-size: 18px;
     color: #FFFFFF;
     border-radius: 10px;
+}
+
+.dataTables_wrapper .btn_Download:hover{
+    background: linear-gradient(170deg, #888686, #CCCCCC, #888686);
+    cursor: pointer;
 }
