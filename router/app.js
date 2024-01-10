@@ -1,7 +1,6 @@
 // app.js
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const express = require("express");
-const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const cors = require("cors");
@@ -9,10 +8,6 @@ const http = require("http");
 const socketIO = require("socket.io");
 const EventEmitter = require("events");
 const cookieParser = require("cookie-parser");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const authMiddleware = require("./authMiddleware");
-const User = require("../models/userschema");
 const port = 3000;
 const app = express();
 const server = http.createServer(app);
@@ -30,18 +25,15 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 app.use(cookieParser());
 
-// MongoDB 連線
-// mongoose
-//   .connect("mongodb://localhost:27017/ems")
-//   .then(() => {
-//     console.log("成功連結 MongoDB....");
-//     const currentDBName = mongoose.connection.name;
-//     console.log("目前連線資料庫名稱：", currentDBName);
-//     // 在這裡進行其他與資料庫相關的初始化操作
-//   })
-//   .catch((e) => {
-//     console.error("連線 MongoDB 時發生錯誤：", e.message);
-//   });
+// 匯入路由檔案並傳遞資料庫實例
+// const route1 = require("./routes/route1")(nano.use("database1"));
+// const route2 = require("./routes/route2")(nano.use("database2"));
+// // 你可以繼續匯入其他路由
+
+// // 使用路由
+// app.use("/route1", route1);
+// app.use("/route2", route2);
+// 可以繼續使用其他路由
 
 // Socket.IO 連線事件
 io.on("connection", (socket) => {
@@ -107,31 +99,7 @@ app.get("/", (req, res) => {
   res.render("Login");
 });
 
-app.post("/login", async (req, res) => {
-  // try {
-  //   const { mail, password } = req.body;
-  //   // 查找使用者
-  //   const user = await User.findOne({ "user.mail": mail });
-  //   if (!user) {
-  //     return res.status(401).json({ message: "帳號不存在" });
-  //   }
-  //   // 驗證密碼
-  //   const isValidPassword = await bcrypt.compare(password, user.user.password);
-  //   if (!isValidPassword) {
-  //     return res.status(401).json({ message: "密碼錯誤" });
-  //   }
-  //   // 生成 JWT，使用 .env 中的密鑰
-  //   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-  //     expiresIn: "1h",
-  //   });
-  //   // 存儲在 cookie 中
-  //   res.cookie("token", token, { httpOnly: true });
-  //   res.status(200).json({ message: "登入成功" });
-  // } catch (error) {
-  //   console.error("登入時發生錯誤:", error);
-  //   res.status(500).json({ message: "伺服器錯誤" });
-  // }
-});
+app.post("/login", async (req, res) => {});
 
 app.get("/login", (req, res) => {
   res.render("Login");
@@ -150,3 +118,5 @@ function updateDataPeriodically() {
   // 實現你的定期更新邏輯
   console.log("app.js : Data updated periodically...");
 }
+
+//module.exports = { nano };

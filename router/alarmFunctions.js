@@ -6,16 +6,13 @@ const methodOverride = require("method-override");
 const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http");
-const {
-  error_result_gen,
-  LC_error_table,
-} = require("./function");
+const { error_result_gen, LC_error_table } = require("./function");
 
 // 引入資料庫模型
-const Lc = require("../models/lcschema");
-const Dc = require("../models/dcschema");
-const Gc = require("../models/gcschema");
-const Alarm = require("../models/alarmschema");
+// const Lc = require("../models/lcschema");
+// const Dc = require("../models/dcschema");
+// const Gc = require("../models/gcschema");
+// const Alarm = require("../models/alarmschema");
 
 //************************************************************* */
 // 修改資料庫模型名稱
@@ -35,7 +32,7 @@ const server = http.createServer((req, res) => {
 });
 
 // 使用 WebSocket 連接伺服器
-const io = socket(server);
+//const io = socket(server);
 
 // 在資料庫連線時建立 changeStream
 mongoose.connection.once("open", () => {
@@ -214,8 +211,8 @@ async function processData(data, latestAlarmData, Alarm, error_table) {
     const existingDoc = latestAlarmData.find(
       (doc) => doc._id.toString() === idString
     );
-        
-    console.log(error_result_gen(item, error_table))
+
+    console.log(error_result_gen(item, error_table));
 
     if (!existingDoc) {
       // 如果 Alarm 中沒有該文檔，則新增

@@ -1,8 +1,9 @@
 const express = require("express");
 const path = require("path");
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+//const { nano } = require("./app");
 const other_rf01 = "other_rf01";
-const db = nano.use(other_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
+const nanoDb = nano.use(other_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
 const { scaleProcess } = require("./function");
 const methodOverride = require("method-override");
 const router = express.Router();
@@ -18,25 +19,29 @@ app.use(cors());
 
 router.get("/operateinfo/mainmeter", async (req, res) => {
   try {
+    const indexDef = {
+      index: { fields: ["time"] },
+      name: "time_index",
+    };
+    await nanoDb.createIndex(indexDef);
+
     const mangoQuery = {
       selector: {
-        time: {
-          $gte: "2022-01-01T00:00:00Z",
-          //$lt: "2022-02-01T00:00:00Z",
-        },
+        time: { $exists: true },
       },
-      limit: 10,
+      sort: [{ time: "desc" }],
+      limit: 1,
     };
 
-    db.find(mangoQuery, async (err, body) => {
+    nanoDb.find(mangoQuery, async (err, body) => {
       if (err) {
         console.error("Error:", err);
         res.status(500).send("Internal Server Error");
         return;
       }
 
-      // Handle the result
-      const other1Data = body.docs; // 根據實際返回的數據結構進行調整
+      const other1Data = body.docs[0]; // 取得數據的第一個元素
+      console.log("AA----------------------------------------------AA");
       console.log(other1Data);
 
       const scaleAndPointMapping = {
@@ -62,40 +67,41 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
 
       const data = {};
 
-      // Object.entries(scaleAndPointMapping).forEach(
-      //   ([property, { scale, point }]) => {
-      //     const originalValue = other1Data.Freq; // 這裡需要根據實際返回的數據結構進行調整
-      //     //const originalValue = other1Data.Freq[property];
-      //     // const scaledValue = scaleProcess(originalValue, scale, point);
-      //     // data[property] = scaledValue;
-      //   }
-      // );
+      Object.entries(scaleAndPointMapping).forEach(
+        ([property, { scale, point }]) => {
+          const originalValue = other1Data.Freq[property];
+          const scaledValue = scaleProcess(originalValue, scale, point);
+          data[property] = scaledValue;
+          console.log("屬性", property);
+          console.log("原始數值", originalValue);
+          console.log("轉換後數值", scaledValue);
+        }
+      );
 
-      // res.render("Op_Meter_MainMeter", {
-      //   volt_ab: data["408001"],
-      //   volt_bc: data["408003"],
-      //   volt_ca: data["408005"],
-      //   volt_avg: data["408007"],
-      //   curr_a: data["408009"],
-      //   curr_b: data["408011"],
-      //   curr_c: data["408013"],
-      //   curr_n: data["408015"],
-      //   curr_avg: data["408017"],
-      //   activePower: data["408019"],
-      //   reactivePower: data["408021"],
-      //   apparentPower: data["408023"],
-      //   powerFactor: data["408025"],
-      //   Freq: data["408026"],
-      //   kwh_imp: data["408028"],
-      //   kwh_exp: data["408030"],
-      //   kvarh_imp: data["408032"],
-      //   kvarh_exp: data["408034"],
-      //   other1Data, // 確保 other1Data 也被傳遞
-      //   permission: "manager",
-      //   // ... 其他屬性的渲染可以類似地添加
-      //   other1Data, // 確保 other1Data 也被傳遞
-      //   permission: "manager",
-      // });
+      res.render("Op_Meter_MainMeter", {
+        volt_ab: data["408001"],
+        volt_bc: data["408003"],
+        volt_ca: data["408005"],
+        volt_avg: data["408007"],
+        curr_a: data["408009"],
+        curr_b: data["408011"],
+        curr_c: data["408013"],
+        curr_n: data["408015"],
+        curr_avg: data["408017"],
+        activePower: data["408019"],
+        reactivePower: data["408021"],
+        apparentPower: data["408023"],
+        powerFactor: data["408025"],
+        Freq: data["408026"],
+        kwh_imp: data["408028"],
+        kwh_exp: data["408030"],
+        kvarh_imp: data["408032"],
+        kvarh_exp: data["408034"],
+        other1Data, // 確保 other1Data 也被傳遞
+        permission: "manager",
+        // ... 其他屬性的渲染可以類似地添加
+        permission: "manager",
+      });
     });
   } catch (error) {
     console.error(error);
@@ -104,6 +110,94 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
 });
 
 module.exports = router;
+
+// router.get("/operateinfo/mainmeter", async (req, res) => {
+//   try {
+//     // 定義 Mango 查詢對象
+//     const mangoQuery = {
+//       selector: {
+//         time: { $exists: true },
+//       },
+//       sort: [{ time: "desc" }],
+//       limit: 1,
+//     };
+
+//     db.find(mangoQuery, async (err, body) => {
+//       if (err) {
+//         console.error("Error:", err);
+//         res.status(500).send("Internal Server Error");
+//         return;
+//       }
+
+//       // Handle the result
+//       const other1Data = body.docs; // 根據實際返回的數據結構進行調整
+//       console.log(other1Data);
+
+//       const scaleAndPointMapping = {
+//         408001: { scale: 0.1, point: 1 },
+//         408003: { scale: 0.1, point: 1 },
+//         408005: { scale: 0.1, point: 1 },
+//         408007: { scale: 0.1, point: 2 },
+//         408009: { scale: 0.1, point: 2 },
+//         408011: { scale: 0.1, point: 2 },
+//         408013: { scale: 0.1, point: 2 },
+//         408015: { scale: 0.1, point: 2 },
+//         408017: { scale: 0.1, point: 2 },
+//         408019: { scale: 0.1, point: 2 },
+//         408021: { scale: 0.1, point: 2 },
+//         408023: { scale: 0.1, point: 2 },
+//         408025: { scale: 0.1, point: 2 },
+//         408026: { scale: 0.1, point: 2 },
+//         408028: { scale: 0.1, point: 2 },
+//         408030: { scale: 0.1, point: 2 },
+//         408032: { scale: 0.1, point: 2 },
+//         408034: { scale: 0.1, point: 2 },
+//       };
+
+//       const data = {};
+
+//       Object.entries(scaleAndPointMapping).forEach(
+//         ([property, { scale, point }]) => {
+//           const originalValue = other1Data.Freq; // 這裡需要根據實際返回的數據結構進行調整
+//           //const originalValue = other1Data.Freq[property];
+//           const scaledValue = scaleProcess(originalValue, scale, point);
+//           data[property] = scaledValue;
+//         }
+//       );
+
+//       // res.render("Op_Meter_MainMeter", {
+//       //   volt_ab: data["408001"],
+//       //   volt_bc: data["408003"],
+//       //   volt_ca: data["408005"],
+//       //   volt_avg: data["408007"],
+//       //   curr_a: data["408009"],
+//       //   curr_b: data["408011"],
+//       //   curr_c: data["408013"],
+//       //   curr_n: data["408015"],
+//       //   curr_avg: data["408017"],
+//       //   activePower: data["408019"],
+//       //   reactivePower: data["408021"],
+//       //   apparentPower: data["408023"],
+//       //   powerFactor: data["408025"],
+//       //   Freq: data["408026"],
+//       //   kwh_imp: data["408028"],
+//       //   kwh_exp: data["408030"],
+//       //   kvarh_imp: data["408032"],
+//       //   kvarh_exp: data["408034"],
+//       //   other1Data, // 確保 other1Data 也被傳遞
+//       //   permission: "manager",
+//       //   // ... 其他屬性的渲染可以類似地添加
+//       //   other1Data, // 確保 other1Data 也被傳遞
+//       //   permission: "manager",
+//       // });
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+
+// module.exports = router;
 
 // const express = require("express");
 // const mongoose = require("mongoose");
