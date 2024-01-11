@@ -768,6 +768,38 @@ function LC_error_result_gen(item, error_table, db_name) {
   return error_result;
 }
 
+function DC_error_result_gen(item, error_table, db_name) {
+  const time = new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' });
+  const occurrence_time = item.time
+  const error_result = [];
+  // console.log(Object.keys(error_table))
+  for (const [key, value] of Object.entries(item)) {
+    if (typeof value === 'object' && value !== null) {
+      //console.log(Object.keys(value))
+      for (const [tag, status] of Object.entries(value)) {
+        if (Object.keys(error_table).includes(tag)) {
+          // console.log(key, tag, status)
+          if (status === error_table[tag]["status"]) {
+            _key_name = `${db_name}_${key}`
+            error_result.push({
+              time: time,
+              location: db_name,
+              device: _key_name,
+              level: `${tag}:${error_table[tag]["name"]}`,
+              content: error_table[tag]["name"],
+              value: status,
+              read: false,
+              recover: false,
+              recover_time: '',
+              occurrence_time: occurrence_time,
+            });
+          }
+        }
+      }
+    }
+  }
+  return error_result;
+}
 //************************************************************* */
 router.use(async (req, res, next) => {
   try {
@@ -956,4 +988,6 @@ module.exports = {
   router,
   LC_error_result_gen,
   LC_error_table,
+  DC_error_result_gen,
+  DC_error_table,
 };
