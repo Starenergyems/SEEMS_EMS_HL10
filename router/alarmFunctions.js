@@ -690,18 +690,20 @@ function checkPartialMatch(k, array) {
   return null; // Return null if no match is found
 }
 
-function LC_error_result_gen(item, error_table) {
+function LC_error_result_gen(item, error_table, db_name) {
   //console.dir(item)
   //console.log(Object.keys(item._doc)) //mongodb obj, data is under the _doc key
   //console.log(Object.keys(error_table))
-  const error_result = {};
+  const time = new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' });
+  const occurrence_time = item.time
+  const error_result = [];
   for (let key in item) {
     if (item.hasOwnProperty(key)) {
       key_error = checkPartialMatch(key, Object.keys(error_table))
       if (key_error) {
         // console.log(key_error)
         if (key_error !== 'Rack') {
-          error_result[key] = [];
+          _key_name = `${db_name}_${key}`
           for (const tag in error_table[key_error]) {
             // console.log(key)
             // console.log(tag)
@@ -715,36 +717,49 @@ function LC_error_result_gen(item, error_table) {
             );
             if (error_arr.length > 0) {
               // console.log(error_arr);
-              error_result[key].push({
-                tag: tag,
-                name: error_table[key_error][tag]["name"],
-                warning: error_arr,
+              error_result.push({
+                time: time,
+                location: db_name,
+                device: _key_name,
+                level: `${tag}:${error_table[key_error][tag]["name"]}`,
+                content: error_arr,
+                value: '',
+                read: false,
+                recover: false,
+                recover_time: '',
+                occurrence_time: occurrence_time,
               });
             }
           }
         } else {
-          console.log(item[key])
-          for (let inner_key in item[key]) {
-          error_result[`${key}_${inner_key}`] = [];
-          // for (const tag in error_table[key_error]) {
-          //   // console.log(key)
-          //   // console.log(tag)
-          //   //console.log(item[key][tag])
-          //   //console.log(error_table[key_error][tag]['name'])
-          //   //console.log(item[key])
-          //   //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
-          //   error_arr = mapBitToStatus(
-          //     item[key][tag],
-          //     error_table[key_error][tag]["status"]
-          //   );
-          //   if (error_arr.length > 0) {
-          //     // console.log(error_arr);
-          //     error_result[key].push({
-          //       tag: tag,
-          //       name: error_table[key_error][tag]["name"],
-          //       warning: error_arr,
-          //     });
-          //   }
+          inner_item = item[key]
+          for (let inner_key in inner_item) {
+            _key_name = `${db_name}_${key}_${inner_key}`
+            for (const tag in error_table[key_error]) {
+              // console.log(inner_item[inner_key][tag])
+              //console.log(error_table[key_error][tag]['name'])
+              //console.log(item[key])
+              //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
+              error_arr = mapBitToStatus(
+                inner_item[inner_key][tag],
+                error_table[key_error][tag]["status"]
+              );
+              if (error_arr.length > 0) {
+                // console.log(error_arr);
+                error_result.push({
+                  time: time,
+                  location: db_name,
+                  device: _key_name,
+                  level: `${tag}:${error_table[key_error][tag]["name"]}`,
+                  content: error_arr,
+                  value: '',
+                  read: false,
+                  recover: false,
+                  recover_time: '',
+                  occurrence_time: occurrence_time,
+                });
+              }
+            }
           }
         };
       }

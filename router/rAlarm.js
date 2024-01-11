@@ -80,7 +80,7 @@ app.get("/alarm", (req, res) => {
       // const doc = body.docs[0]; // 取得數據的第一個元素
       for (const item of body.docs) {
         // console.log(item);
-        console.log(LC_error_result_gen(item, LC_error_table));
+        console.log(LC_error_result_gen(item, LC_error_table, "lc1_rf10"));
       
       };
 
