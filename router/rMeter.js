@@ -100,7 +100,7 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
         other1Data, // 確保 other1Data 也被傳遞
         permission: "manager",
         // ... 其他屬性的渲染可以類似地添加
-        permission: "manager",
+        //permission: "manager",
       });
     });
   } catch (error) {
