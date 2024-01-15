@@ -76,33 +76,33 @@ app.get("/alarm", (req, res) => {
   // num與fun
   try {
     //目前查詢且輸出的是lc1nanoD內的資料
-    lc1nanoDb.find(mangoQuery, async (err, body) => {
-      if (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-      // console.dir(body)
-      // const doc = body.docs[0]; // 取得數據的第一個元素
-      for (const item of body.docs) {
-        // console.log(item);
-        console.log(LC_error_result_gen(item, LC_error_table, "lc1_rf10"));
-      }
-    });
+    // lc1nanoDb.find(mangoQuery, async (err, body) => {
+    //   if (err) {
+    //     console.error("Error:", err);
+    //     res.status(500).send("Internal Server Error");
+    //     return;
+    //   }
+    //   // console.dir(body)
+    //   // const doc = body.docs[0]; // 取得數據的第一個元素
+    //   for (const item of body.docs) {
+    //     // console.log(item);
+    //     console.log(LC_error_result_gen(item, LC_error_table, "lc1_rf10"));
+    //   }
+    // });
 
-    dcnanoDb.find(mangoQuery, async (err, body) => {
-      if (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-      // console.dir(body)
-      // const doc = body.docs[0]; // 取得數據的第一個元素
-      for (const item of body.docs) {
-        // console.log(item);
-        console.log(DC_error_result_gen(item, DC_error_table, "dc_rf10"));
-      }
-    });
+    // dcnanoDb.find(mangoQuery, async (err, body) => {
+    //   if (err) {
+    //     console.error("Error:", err);
+    //     res.status(500).send("Internal Server Error");
+    //     return;
+    //   }
+    //   // console.dir(body)
+    //   // const doc = body.docs[0]; // 取得數據的第一個元素
+    //   for (const item of body.docs) {
+    //     // console.log(item);
+    //     console.log(DC_error_result_gen(item, DC_error_table, "dc_rf10"));
+    //   }
+    // });
 
     otherrf10nanoDb.find(mangoQuery, async (err, body) => {
       if (err) {

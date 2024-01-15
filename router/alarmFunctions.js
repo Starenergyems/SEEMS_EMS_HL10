@@ -8,6 +8,7 @@ const socket = require("socket.io");
 const http = require("http");
 const e = require("connect-flash");
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const axios = require('axios');
 
 const lc1_rf01 = "lc1_rf01";
 const lc1nanoDb = nano.use(lc1_rf01);
@@ -720,11 +721,10 @@ function LC_error_result_gen(item, error_table, db_name) {
             );
             if (error_arr.length > 0) {
               // console.log(error_arr);
-              let _key_name = `${db_name}_${key}`
-              error_result.push({
+              error_msg = {
                 time: time,
                 location: db_name,
-                device: _key_name,
+                device: `${db_name}_${key}`,
                 level: `${tag}:${error_table[key_error][tag]["name"]}`,
                 content: error_arr,
                 value: bit_status,
@@ -732,7 +732,9 @@ function LC_error_result_gen(item, error_table, db_name) {
                 recover: false,
                 recover_time: '',
                 occurrence_time: occurrence_time,
-              });
+              };
+              error_result.push(error_msg);
+              sendLineNotify(error_msg);
             }
           }
         } else {
@@ -750,11 +752,10 @@ function LC_error_result_gen(item, error_table, db_name) {
               );
               if (error_arr.length > 0) {
                 // console.log(error_arr);
-                let _key_name = `${db_name}_${key}_${inner_key}`
-                error_result.push({
+                error_msg = {
                   time: time,
                   location: db_name,
-                  device: _key_name,
+                  device: `${db_name}_${key}_${inner_key}`,
                   level: `${tag}:${error_table[key_error][tag]["name"]}`,
                   content: error_arr,
                   value: bit_status,
@@ -762,7 +763,9 @@ function LC_error_result_gen(item, error_table, db_name) {
                   recover: false,
                   recover_time: '',
                   occurrence_time: occurrence_time,
-                });
+                };
+                error_result.push(error_msg);
+                sendLineNotify(error_msg);
               }
             }
           }
@@ -785,11 +788,10 @@ function DC_error_result_gen(item, error_table, db_name) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, status)
           if (status === error_table[tag]["status"]) {
-            let _key_name = `${db_name}_${key}`
-            error_result.push({
+            error_msg = {
               time: time,
               location: db_name,
-              device: _key_name,
+              device: `${db_name}_${key}`,
               level: `${tag}:${error_table[tag]["name"]}`,
               content: error_table[tag]["name"],
               value: status,
@@ -797,7 +799,9 @@ function DC_error_result_gen(item, error_table, db_name) {
               recover: false,
               recover_time: '',
               occurrence_time: occurrence_time,
-            });
+            };
+            error_result.push(error_msg);
+            sendLineNotify(error_msg);
           }
         }
       }
@@ -824,11 +828,10 @@ function Other_error_result_gen(item, error_table, db_name) {
             );
             if (error_arr.length > 0) {
               // console.log(error_arr);
-              let _key_name = `${db_name}_${key}`
-              error_result.push({
+              error_msg = {
                 time: time,
                 location: db_name,
-                device: _key_name,
+                device: `${db_name}_${key}`,
                 level: `${tag}:${error_table[tag]["name"]}`,
                 content: error_arr,
                 value: bit_status,
@@ -836,7 +839,9 @@ function Other_error_result_gen(item, error_table, db_name) {
                 recover: false,
                 recover_time: '',
                 occurrence_time: occurrence_time,
-              });
+              };
+              error_result.push(error_msg);
+              sendLineNotify(`device: ${db_name}_${key}, content: ${error_arr}`);
             }
           } else {
             // console.log(tag)
@@ -851,11 +856,10 @@ function Other_error_result_gen(item, error_table, db_name) {
               error_arr = `Value is greater than ${max}`;
             }
             if (error_arr !== undefined) {
-              let _key_name = `${db_name}_${key}`
-              error_result.push({
+              error_msg = {
                 time: time,
                 location: db_name,
-                device: _key_name,
+                device: `${db_name}_${key}`,
                 level: `${tag}:${error_table[tag]["name"]}`,
                 content: error_arr,
                 value: v,
@@ -863,7 +867,9 @@ function Other_error_result_gen(item, error_table, db_name) {
                 recover: false,
                 recover_time: '',
                 occurrence_time: occurrence_time,
-              });
+              };
+              error_result.push(error_msg);
+              sendLineNotify(`device: ${db_name}_${key}, content: ${error_arr}`);
             }
           }
         }
@@ -873,6 +879,27 @@ function Other_error_result_gen(item, error_table, db_name) {
   return error_result;
 } 
 
+function sendLineNotify(message) {
+  const accessToken = 'HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz';
+  const request = {
+    method: 'post',
+    //url: 'http://192.168.8.112/line-notify',
+    url: 'https://notify-api.line.me/api/notify',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/x-www-form-urlencoded' 
+    },
+    params: {
+      message: message,
+    }
+  };
+
+  axios(request).then((resp) => {
+    console.log(resp.data);
+  }).catch((err) => {
+    console.error(err);
+  });
+}
 //************************************************************* */
 router.use(async (req, res, next) => {
   try {
