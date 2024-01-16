@@ -78,25 +78,31 @@ app.get("/alarm", (req, res) => {
   // num與fun
   try {
     //目前查詢且輸出的是lc1nanoD內的資料
-    lc1nanoDb.find(mangoQuery, async (err, body) => {
-      if (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-      // console.dir(body)
-      // const doc = body.docs[0]; // 取得數據的第一個元素
-      const db_name = lc1nanoDb["config"]["db"]
-      for (let item of body.docs) {
-        // console.log(item);
-        const error_result = LC_error_result_gen(item, db_name);
-        for (let i of error_result) {
-          sendLineNotify(i);
-        }
-
-      }
-    });
-
+    // lc1nanoDb.find(mangoQuery, async (err, body) => {
+    //   if (err) {
+    //     console.error("Error:", err);
+    //     res.status(500).send("Internal Server Error");
+    //     return;
+    //   }
+    //   // console.dir(body)
+    //   // const doc = body.docs[0]; // 取得數據的第一個元素
+    //   const db_name = lc1nanoDb["config"]["db"]
+    //   for (let item of body.docs) {
+    //     // console.log(item);
+    //     const error_result = LC_error_result_gen(item, db_name);
+    //     for (let i of error_result) {
+    //       sendLineNotify(i);
+    //       alarmnanoDb.insert(i)
+    //       .then((body) => {
+    //         console.log("User document inserted successfully. ID:", body.id);
+    //       })
+    //       .catch((err) => {
+    //         console.error("Error inserting user document:", err.message);
+    //       });
+    //     }
+    //   }
+    // });
+      
     // dcnanoDb.find(mangoQuery, async (err, body) => {
     //   if (err) {
     //     console.error("Error:", err);
@@ -105,31 +111,47 @@ app.get("/alarm", (req, res) => {
     //   }
     //   // console.dir(body)
     //   // const doc = body.docs[0]; // 取得數據的第一個元素
+    //   const db_name = dcnanoDb["config"]["db"]
     //   for (const item of body.docs) {
     //     // console.log(item);
-    //     console.log(DC_error_result_gen(item, DC_error_table, "dc_rf10"));
-    //   }
-    // });
-
-    // otherrf10nanoDb.find(mangoQuery, async (err, body) => {
-    //   if (err) {
-    //     console.error("Error:", err);
-    //     res.status(500).send("Internal Server Error");
-    //     return;
-    //   }
-    //   // console.dir(body)
-    //   // const doc = body.docs[0]; // 取得數據的第一個元素
-    //   for (const item of body.docs) {
-    //     // console.log(item);
-    //       otherrf10nanoDb.insert(Other_error_result_gen(item, Other_error_table, "other_rf10"))
+    //     const error_result = DC_error_result_gen(item, db_name);
+    //     for (let i of error_result) {
+    //       sendLineNotify(i);
+    //       alarmnanoDb.insert(i)
     //       .then((body) => {
     //         console.log("User document inserted successfully. ID:", body.id);
     //       })
     //       .catch((err) => {
     //         console.error("Error inserting user document:", err.message);
     //       });
+    //     }
     //   }
     // });
+
+    otherrf10nanoDb.find(mangoQuery, async (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+      // console.dir(body)
+      // const doc = body.docs[0]; // 取得數據的第一個元素
+      const db_name = otherrf10nanoDb["config"]["db"]
+      for (const item of body.docs) {
+        // console.log(item);
+        const error_result = Other_error_result_gen(item, db_name);
+        for (let i of error_result) {
+          sendLineNotify(i);
+          alarmnanoDb.insert(i)
+          .then((body) => {
+            console.log("User document inserted successfully. ID:", body.id);
+          })
+          .catch((err) => {
+            console.error("Error inserting user document:", err.message);
+          });
+        }
+      }
+    });
   
   } catch (error) {
     console.error(error);
