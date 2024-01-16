@@ -734,7 +734,13 @@ function LC_error_result_gen(item, error_table, db_name) {
                 occurrence_time: occurrence_time,
               };
               error_result.push(error_msg);
-              sendLineNotify(error_msg);
+
+              sendLineNotify(`
+                \nDevice: \n  ${db_name}_${key}
+                \nLevel: \n  ${tag}:${error_table[key_error][tag]["name"]}
+                \nValue: \n  ${bit_status}
+                \nWarning: \n  ${error_arr.join('\n  ').replace(/\[CMD\]/g, "_CMD")}
+                `);
             }
           }
         } else {
@@ -765,7 +771,12 @@ function LC_error_result_gen(item, error_table, db_name) {
                   occurrence_time: occurrence_time,
                 };
                 error_result.push(error_msg);
-                sendLineNotify(error_msg);
+                sendLineNotify(`
+                \nDevice: \n  ${db_name}_${key}_${inner_key}
+                \nLevel: \n  ${tag}:${error_table[key_error][tag]["name"]}
+                \nValue: \n  ${bit_status}
+                \nWarning: \n  ${error_arr.join('\n  ')}
+                `);
               }
             }
           }
@@ -801,7 +812,12 @@ function DC_error_result_gen(item, error_table, db_name) {
               occurrence_time: occurrence_time,
             };
             error_result.push(error_msg);
-            sendLineNotify(error_msg);
+            sendLineNotify(`
+                \nDevice: \n  ${db_name}_${key}
+                \nLevel: \n  ${tag}:${error_table[tag]["name"]}
+                \nValue: \n  ${status}
+                \nWarning: \n  ${error_table[tag]["name"]}
+                `);
           }
         }
       }
@@ -841,7 +857,12 @@ function Other_error_result_gen(item, error_table, db_name) {
                 occurrence_time: occurrence_time,
               };
               error_result.push(error_msg);
-              sendLineNotify(`device: ${db_name}_${key}, content: ${error_arr}`);
+              sendLineNotify(`
+                \nDevice: \n  ${db_name}_${key}
+                \nLevel: \n  ${tag}:${error_table[tag]["name"]} 
+                \nValue: \n  ${bit_status}
+                \nWarning: \n  ${error_arr.join('\n  ')}
+                `);
             }
           } else {
             // console.log(tag)
@@ -869,7 +890,12 @@ function Other_error_result_gen(item, error_table, db_name) {
                 occurrence_time: occurrence_time,
               };
               error_result.push(error_msg);
-              sendLineNotify(`device: ${db_name}_${key}, content: ${error_arr}`);
+              sendLineNotify(`
+                \nDevice: \n  ${db_name}_${key}
+                \nLevel: \n  ${tag}:${error_table[tag]["name"]} 
+                \nValue: \n  ${v}
+                \nWarning: \n  ${error_arr}
+                `);
             }
           }
         }
@@ -897,7 +923,7 @@ function sendLineNotify(message) {
   axios(request).then((resp) => {
     console.log(resp.data);
   }).catch((err) => {
-    console.error(err);
+    console.log(err.response);
   });
 }
 //************************************************************* */

@@ -90,21 +90,7 @@ app.get("/alarm", (req, res) => {
     //   }
     // });
 
-    // dcnanoDb.find(mangoQuery, async (err, body) => {
-    //   if (err) {
-    //     console.error("Error:", err);
-    //     res.status(500).send("Internal Server Error");
-    //     return;
-    //   }
-    //   // console.dir(body)
-    //   // const doc = body.docs[0]; // 取得數據的第一個元素
-    //   for (const item of body.docs) {
-    //     // console.log(item);
-    //     console.log(DC_error_result_gen(item, DC_error_table, "dc_rf10"));
-    //   }
-    // });
-
-    otherrf10nanoDb.find(mangoQuery, async (err, body) => {
+    dcnanoDb.find(mangoQuery, async (err, body) => {
       if (err) {
         console.error("Error:", err);
         res.status(500).send("Internal Server Error");
@@ -114,11 +100,25 @@ app.get("/alarm", (req, res) => {
       // const doc = body.docs[0]; // 取得數據的第一個元素
       for (const item of body.docs) {
         // console.log(item);
-        console.log(
-          Other_error_result_gen(item, Other_error_table, "other_rf10")
-        );
+        console.log(DC_error_result_gen(item, DC_error_table, "dc_rf10"));
       }
     });
+
+    // otherrf10nanoDb.find(mangoQuery, async (err, body) => {
+    //   if (err) {
+    //     console.error("Error:", err);
+    //     res.status(500).send("Internal Server Error");
+    //     return;
+    //   }
+    //   // console.dir(body)
+    //   // const doc = body.docs[0]; // 取得數據的第一個元素
+    //   for (const item of body.docs) {
+    //     // console.log(item);
+    //     console.log(
+    //       Other_error_result_gen(item, Other_error_table, "other_rf10")
+    //     );
+    //   }
+    // });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
