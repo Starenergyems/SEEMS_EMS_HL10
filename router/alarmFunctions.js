@@ -725,8 +725,8 @@ function LC_error_result_gen(item, error_table, db_name) {
                 time: time,
                 location: db_name,
                 device: `${db_name}_${key}`,
-                level: `${tag}:${error_table[key_error][tag]["name"]}`,
-                content: error_arr,
+                level: `${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
+                content: [`${tag}:${error_table[key_error][tag]["name"]}`, error_arr],
                 value: bit_status,
                 read: false,
                 recover: false,
@@ -736,10 +736,11 @@ function LC_error_result_gen(item, error_table, db_name) {
               error_result.push(error_msg);
 
               sendLineNotify(`
+                \nLevel: \n  ${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
+                \nLocation: \n  ${db_name}
                 \nDevice: \n  ${db_name}_${key}
-                \nLevel: \n  ${tag}:${error_table[key_error][tag]["name"]}
                 \nValue: \n  ${bit_status}
-                \nWarning: \n  ${error_arr.join('\n  ').replace(/\[CMD\]/g, "_CMD")}
+                \nWarning: \n  ${tag}:${error_table[key_error][tag]["name"]}\n    ${error_arr.join('\n    ').replace(/\[CMD\]/g, "_CMD")}
                 `);
             }
           }
@@ -762,8 +763,8 @@ function LC_error_result_gen(item, error_table, db_name) {
                   time: time,
                   location: db_name,
                   device: `${db_name}_${key}_${inner_key}`,
-                  level: `${tag}:${error_table[key_error][tag]["name"]}`,
-                  content: error_arr,
+                  level: `${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
+                  content: [`${tag}:${error_table[key_error][tag]["name"]}`, error_arr],
                   value: bit_status,
                   read: false,
                   recover: false,
@@ -772,10 +773,11 @@ function LC_error_result_gen(item, error_table, db_name) {
                 };
                 error_result.push(error_msg);
                 sendLineNotify(`
+                \nLevel: \n  ${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
+                \nLocation: \n  ${db_name}
                 \nDevice: \n  ${db_name}_${key}_${inner_key}
-                \nLevel: \n  ${tag}:${error_table[key_error][tag]["name"]}
                 \nValue: \n  ${bit_status}
-                \nWarning: \n  ${error_arr.join('\n  ')}
+                \nWarning: \n  ${tag}:${error_table[key_error][tag]["name"]}\n    ${error_arr.join('\n    ')}
                 `);
               }
             }
@@ -803,8 +805,8 @@ function DC_error_result_gen(item, error_table, db_name) {
               time: time,
               location: db_name,
               device: `${db_name}_${key}`,
-              level: `${tag}:${error_table[tag]["name"]}`,
-              content: error_table[tag]["name"],
+              level: `${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
+              content: [`${tag}:${error_table[tag]["name"]}`, error_table[tag]["name"]],
               value: status,
               read: false,
               recover: false,
@@ -813,10 +815,11 @@ function DC_error_result_gen(item, error_table, db_name) {
             };
             error_result.push(error_msg);
             sendLineNotify(`
+                \nLevel: \n  ${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
+                \nLocation: \n  ${db_name}
                 \nDevice: \n  ${db_name}_${key}
-                \nLevel: \n  ${tag}:${error_table[tag]["name"]}
                 \nValue: \n  ${status}
-                \nWarning: \n  ${error_table[tag]["name"]}
+                \nWarning: \n  ${tag}:${error_table[tag]["name"]}\n    ${error_table[tag]["name"]}
                 `);
           }
         }
@@ -848,8 +851,8 @@ function Other_error_result_gen(item, error_table, db_name) {
                 time: time,
                 location: db_name,
                 device: `${db_name}_${key}`,
-                level: `${tag}:${error_table[tag]["name"]}`,
-                content: error_arr,
+                level: `${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
+                content: [`${tag}:${error_table[tag]["name"]}`, error_arr],
                 value: bit_status,
                 read: false,
                 recover: false,
@@ -858,10 +861,11 @@ function Other_error_result_gen(item, error_table, db_name) {
               };
               error_result.push(error_msg);
               sendLineNotify(`
+                \nLevel: \n  ${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
+                \nLocation: \n  ${db_name} 
                 \nDevice: \n  ${db_name}_${key}
-                \nLevel: \n  ${tag}:${error_table[tag]["name"]} 
                 \nValue: \n  ${bit_status}
-                \nWarning: \n  ${error_arr.join('\n  ')}
+                \nWarning: \n  ${tag}:${error_table[tag]["name"]}\n    ${error_arr.join('\n    ')}
                 `);
             }
           } else {
@@ -881,8 +885,8 @@ function Other_error_result_gen(item, error_table, db_name) {
                 time: time,
                 location: db_name,
                 device: `${db_name}_${key}`,
-                level: `${tag}:${error_table[tag]["name"]}`,
-                content: error_arr,
+                level: `${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
+                content: [`${tag}:${error_table[tag]["name"]}`, error_arr],
                 value: v,
                 read: false,
                 recover: false,
@@ -891,10 +895,11 @@ function Other_error_result_gen(item, error_table, db_name) {
               };
               error_result.push(error_msg);
               sendLineNotify(`
+                \nLevel: \n  ${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"} 
+                \nLocation: \n  ${db_name}
                 \nDevice: \n  ${db_name}_${key}
-                \nLevel: \n  ${tag}:${error_table[tag]["name"]} 
                 \nValue: \n  ${v}
-                \nWarning: \n  ${error_arr}
+                \nWarning: \n  ${tag}:${error_table[tag]["name"]} \n    ${error_arr}
                 `);
             }
           }
