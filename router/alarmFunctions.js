@@ -8,7 +8,7 @@ const socket = require("socket.io");
 const http = require("http");
 const e = require("connect-flash");
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
-const axios = require('axios');
+const axios = require("axios");
 
 const lc1_rf01 = "lc1_rf01";
 const lc1nanoDb = nano.use(lc1_rf01);
@@ -18,6 +18,8 @@ const lc3_rf01 = "lc3_rf01";
 const lc3nanoDb = nano.use(lc3_rf01);
 const lc4_rf01 = "lc4_rf01";
 const lc4nanoDb = nano.use(lc4_rf01);
+const alarm = "alarm";
+const alarmnanoDb = nano.use(alarm);
 //************************************************************* */
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
@@ -468,11 +470,11 @@ const LC_BSC_error_table = {
 };
 
 const LC_error_table = {
-  System:LC_System_error_table,
-  PCS:LC_PCS_error_table,
-  BMS:LC_BMS_error_table,
-  BSC:LC_BSC_error_table,
-  Rack:LC_Rack_error_table,
+  System: LC_System_error_table,
+  PCS: LC_PCS_error_table,
+  BMS: LC_BMS_error_table,
+  BSC: LC_BSC_error_table,
+  Rack: LC_Rack_error_table,
 };
 
 const Other_408154 = {
@@ -489,13 +491,13 @@ const Other_408154 = {
 const Other_408186 = {
   min: -3000,
   max: 4000,
-  scale: 0.1
+  scale: 0.1,
 };
 
 const Other_408187 = {
   min: 0,
   max: 100,
-  scale: 0.1
+  scale: 0.1,
 };
 
 const Other_408201 = {
@@ -527,7 +529,7 @@ const Other_408202 = {
   6: "81-1",
   7: "81-2",
   8: "81-3",
-  9: "81-4",  
+  9: "81-4",
 };
 
 const Other_408203 = {
@@ -546,7 +548,7 @@ const Other_408203 = {
   12: "51-4",
   13: "50-4",
   14: "51N-4",
-  15: "50N-4",  
+  15: "50N-4",
 };
 
 const Other_408204 = {
@@ -565,13 +567,13 @@ const Other_408204 = {
   12: "FFS_013",
   13: "FFS_014",
   14: "FFS_015",
-  15: "FFS_016",   
+  15: "FFS_016",
 };
 
 const Other_408205 = {
   0: "VCB_Close",
   1: "VCB_Open",
-  2: "VCB_Trip",  
+  2: "VCB_Trip",
 };
 
 const Other_408206 = {
@@ -580,7 +582,7 @@ const Other_408206 = {
   2: "ACB_#-2_Close",
   3: "ACB_#-2_Open",
   4: "ACB_#-3_Close",
-  5: "ACB_#-3_Open",  
+  5: "ACB_#-3_Open",
 };
 
 const Other_408207 = {
@@ -589,7 +591,7 @@ const Other_408207 = {
   2: "ACB_#-2_Close Ctrl",
   3: "ACB_#-2_Open Ctrl",
   4: "ACB_#-3_Close Ctrl",
-  5: "ACB_#-3_Open Ctrl",  
+  5: "ACB_#-3_Open Ctrl",
 };
 
 const Other_error_table = {
@@ -606,35 +608,35 @@ const Other_error_table = {
 };
 
 const DC_error_table = {
-  409101 : { name: "LC_Comm_Error", status: 1 },
-  409103 : { name: "Freq-M_Comm_Error", status: 1 },
-  409105 : { name: "ACPM_Comm_Error", status: 1 },
-  409107 : { name: "AuxMtot_Comm_Error", status: 1 },
-  409109 : { name: "AuxM_Comm_Error", status: 1 },
-  409111 : { name: "UPS_Comm_Error", status: 1 },
-  409113 : { name: "TR_Comm_Error", status: 1 },
-  409115 : { name: "TH_Comm_Error", status: 1 },
-  409117 : { name: "RelayMVCB_Comm_Error", status: 1 },
-  409119 : { name: "RelayVCB_Comm_Error", status: 1 },
-  409121 : { name: "I/O_FFS_Comm_Error", status: 1 },
-  409123 : { name: "I/O_VCB_Comm_Error", status: 1 },
-  409125 : { name: "I/O_ACBStatus_Comm_Error", status: 1 },
+  409101: { name: "LC_Comm_Error", status: 1 },
+  409103: { name: "Freq-M_Comm_Error", status: 1 },
+  409105: { name: "ACPM_Comm_Error", status: 1 },
+  409107: { name: "AuxMtot_Comm_Error", status: 1 },
+  409109: { name: "AuxM_Comm_Error", status: 1 },
+  409111: { name: "UPS_Comm_Error", status: 1 },
+  409113: { name: "TR_Comm_Error", status: 1 },
+  409115: { name: "TH_Comm_Error", status: 1 },
+  409117: { name: "RelayMVCB_Comm_Error", status: 1 },
+  409119: { name: "RelayVCB_Comm_Error", status: 1 },
+  409121: { name: "I/O_FFS_Comm_Error", status: 1 },
+  409123: { name: "I/O_VCB_Comm_Error", status: 1 },
+  409125: { name: "I/O_ACBStatus_Comm_Error", status: 1 },
 };
 
 const GC_400033 = {
   threshold: 9500,
   count: 4,
-}
+};
 
 const GC_400129 = {
   min: "Min_SOC_Limit",
   max: "Max_SOC_Limit",
   capacity: 3500000, //kWh
-}
+};
 
 const GC_error_table = {
-  400033 : { name: "SBSPM", status: GC_400033},
-  400129 : { name: "SOC", status: GC_400129},
+  400033: { name: "SBSPM", status: GC_400033 },
+  400129: { name: "SOC", status: GC_400129 },
 };
 
 function getLargestKey(obj) {
@@ -694,19 +696,19 @@ function checkPartialMatch(k, array) {
   return null; // Return null if no match is found
 }
 
-function LC_error_result_gen(item, error_table, db_name) {
+function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
   //console.dir(item)
   //console.log(Object.keys(item._doc)) //mongodb obj, data is under the _doc key
   //console.log(Object.keys(error_table))
-  const time = new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' });
-  const occurrence_time = item.time
+  const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+  const occurrence_time = item.time;
   const error_result = [];
   for (let key in item) {
     if (item.hasOwnProperty(key)) {
-      key_error = checkPartialMatch(key, Object.keys(error_table))
+      key_error = checkPartialMatch(key, Object.keys(error_table));
       if (key_error) {
         // console.log(key_error)
-        if (key_error !== 'Rack') {
+        if (key_error !== "Rack") {
           for (let tag in error_table[key_error]) {
             // console.log(key)
             // console.log(tag)
@@ -714,7 +716,7 @@ function LC_error_result_gen(item, error_table, db_name) {
             //console.log(error_table[key_error][tag]['name'])
             //console.log(item[key])
             //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
-            let status = item[key][tag]
+            let status = item[key][tag];
             let [error_arr, bit_status] = mapBitToStatus(
               status,
               error_table[key_error][tag]["status"]
@@ -725,34 +727,51 @@ function LC_error_result_gen(item, error_table, db_name) {
                 time: time,
                 location: db_name,
                 device: `${db_name}_${key}`,
-                level: `${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
-                content: [`${tag}:${error_table[key_error][tag]["name"]}`, error_arr],
+                level: `${
+                  error_table[key_error][tag]["name"]
+                    .toLowerCase()
+                    .includes("fault")
+                    ? "Fault"
+                    : "Alarm"
+                }`,
+                content: [
+                  `${tag}:${error_table[key_error][tag]["name"]}`,
+                  error_arr,
+                ],
                 value: bit_status,
                 read: false,
                 recover: false,
-                recover_time: '',
+                recover_time: "",
                 occurrence_time: occurrence_time,
               };
               error_result.push(error_msg);
 
-              sendLineNotify(`
-                \nLevel: \n  ${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
-                \nLocation: \n  ${db_name}
-                \nDevice: \n  ${db_name}_${key}
-                \nValue: \n  ${bit_status}
-                \nWarning: \n  ${tag}:${error_table[key_error][tag]["name"]}\n    ${error_arr.join('\n    ').replace(/\[CMD\]/g, "_CMD")}
-                `);
+              // sendLineNotify(`
+              //   \nLevel: \n  ${
+              //     error_table[key_error][tag]["name"]
+              //       .toLowerCase()
+              //       .includes("fault")
+              //       ? "Fault"
+              //       : "Alarm"
+              //   }
+              //   \nLocation: \n  ${db_name}
+              //   \nDevice: \n  ${db_name}_${key}
+              //   \nValue: \n  ${bit_status}
+              //   \nWarning: \n  ${tag}:${
+              //     error_table[key_error][tag]["name"]
+              //   }\n    ${error_arr.join("\n    ").replace(/\[|\]/g, "_")}
+              //   `);
             }
           }
         } else {
-          inner_item = item[key]
+          inner_item = item[key];
           for (let inner_key in inner_item) {
             for (let tag in error_table[key_error]) {
               // console.log(inner_item[inner_key][tag])
               //console.log(error_table[key_error][tag]['name'])
               //console.log(item[key])
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
-              let status = inner_item[inner_key][tag]
+              let status = inner_item[inner_key][tag];
               let [error_arr, bit_status] = mapBitToStatus(
                 status,
                 error_table[key_error][tag]["status"]
@@ -763,39 +782,56 @@ function LC_error_result_gen(item, error_table, db_name) {
                   time: time,
                   location: db_name,
                   device: `${db_name}_${key}_${inner_key}`,
-                  level: `${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
-                  content: [`${tag}:${error_table[key_error][tag]["name"]}`, error_arr],
+                  level: `${
+                    error_table[key_error][tag]["name"]
+                      .toLowerCase()
+                      .includes("fault")
+                      ? "Fault"
+                      : "Alarm"
+                  }`,
+                  content: [
+                    `${tag}:${error_table[key_error][tag]["name"]}`,
+                    error_arr,
+                  ],
                   value: bit_status,
                   read: false,
                   recover: false,
-                  recover_time: '',
+                  recover_time: "",
                   occurrence_time: occurrence_time,
                 };
                 error_result.push(error_msg);
-                sendLineNotify(`
-                \nLevel: \n  ${error_table[key_error][tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
-                \nLocation: \n  ${db_name}
-                \nDevice: \n  ${db_name}_${key}_${inner_key}
-                \nValue: \n  ${bit_status}
-                \nWarning: \n  ${tag}:${error_table[key_error][tag]["name"]}\n    ${error_arr.join('\n    ')}
-                `);
+                // sendLineNotify(`
+                // \nLevel: \n  ${
+                //   error_table[key_error][tag]["name"]
+                //     .toLowerCase()
+                //     .includes("fault")
+                //     ? "Fault"
+                //     : "Alarm"
+                // }
+                // \nLocation: \n  ${db_name}
+                // \nDevice: \n  ${db_name}_${key}_${inner_key}
+                // \nValue: \n  ${bit_status}
+                // \nWarning: \n  ${tag}:${
+                //   error_table[key_error][tag]["name"]
+                // }\n    ${error_arr.join("\n    ")}
+                // `);
               }
             }
           }
-        };
+        }
       }
     }
   }
   return error_result;
 }
 
-function DC_error_result_gen(item, error_table, db_name) {
-  const time = new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' });
-  const occurrence_time = item.time
+function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
+  const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+  const occurrence_time = item.time;
   const error_result = [];
   // console.log(Object.keys(error_table))
   for (let [key, value] of Object.entries(item)) {
-    if (typeof value === 'object' && value !== null) {
+    if (typeof value === "object" && value !== null) {
       //console.log(Object.keys(value))
       for (let [tag, status] of Object.entries(value)) {
         if (Object.keys(error_table).includes(tag)) {
@@ -805,22 +841,35 @@ function DC_error_result_gen(item, error_table, db_name) {
               time: time,
               location: db_name,
               device: `${db_name}_${key}`,
-              level: `${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
-              content: [`${tag}:${error_table[tag]["name"]}`, error_table[tag]["name"]],
+              level: `${
+                error_table[tag]["name"].toLowerCase().includes("fault")
+                  ? "Fault"
+                  : "Alarm"
+              }`,
+              content: [
+                `${tag}:${error_table[tag]["name"]}`,
+                error_table[tag]["name"],
+              ],
               value: status,
               read: false,
               recover: false,
-              recover_time: '',
+              recover_time: "",
               occurrence_time: occurrence_time,
             };
             error_result.push(error_msg);
-            sendLineNotify(`
-                \nLevel: \n  ${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
-                \nLocation: \n  ${db_name}
-                \nDevice: \n  ${db_name}_${key}
-                \nValue: \n  ${status}
-                \nWarning: \n  ${tag}:${error_table[tag]["name"]}\n    ${error_table[tag]["name"]}
-                `);
+            // sendLineNotify(`
+            //     \nLevel: \n  ${
+            //       error_table[tag]["name"].toLowerCase().includes("fault")
+            //         ? "Fault"
+            //         : "Alarm"
+            //     }
+            //     \nLocation: \n  ${db_name}
+            //     \nDevice: \n  ${db_name}_${key}
+            //     \nValue: \n  ${status}
+            //     \nWarning: \n  ${tag}:${error_table[tag]["name"]}\n    ${
+            //       error_table[tag]["name"]
+            //     }
+            //     `);
           }
         }
       }
@@ -829,13 +878,13 @@ function DC_error_result_gen(item, error_table, db_name) {
   return error_result;
 }
 
-function Other_error_result_gen(item, error_table, db_name) {
-  const time = new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' });
-  const occurrence_time = item.time
+function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
+  const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+  const occurrence_time = item.time;
   const error_result = [];
   // console.log(Object.keys(error_table))
   for (let [key, value] of Object.entries(item)) {
-    if (typeof value === 'object' && value !== null) {
+    if (typeof value === "object" && value !== null) {
       //console.log(Object.keys(value))
       for (let [tag, status] of Object.entries(value)) {
         if (Object.keys(error_table).includes(tag)) {
@@ -851,30 +900,40 @@ function Other_error_result_gen(item, error_table, db_name) {
                 time: time,
                 location: db_name,
                 device: `${db_name}_${key}`,
-                level: `${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
+                level: `${
+                  error_table[tag]["name"].toLowerCase().includes("fault")
+                    ? "Fault"
+                    : "Alarm"
+                }`,
                 content: [`${tag}:${error_table[tag]["name"]}`, error_arr],
                 value: bit_status,
                 read: false,
                 recover: false,
-                recover_time: '',
+                recover_time: "",
                 occurrence_time: occurrence_time,
               };
               error_result.push(error_msg);
-              sendLineNotify(`
-                \nLevel: \n  ${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}
-                \nLocation: \n  ${db_name} 
-                \nDevice: \n  ${db_name}_${key}
-                \nValue: \n  ${bit_status}
-                \nWarning: \n  ${tag}:${error_table[tag]["name"]}\n    ${error_arr.join('\n    ')}
-                `);
+              // sendLineNotify(`
+              //   \nLevel: \n  ${
+              //     error_table[tag]["name"].toLowerCase().includes("fault")
+              //       ? "Fault"
+              //       : "Alarm"
+              //   }
+              //   \nLocation: \n  ${db_name} 
+              //   \nDevice: \n  ${db_name}_${key}
+              //   \nValue: \n  ${bit_status}
+              //   \nWarning: \n  ${tag}:${
+              //     error_table[tag]["name"]
+              //   }\n    ${error_arr.join("\n    ")}
+              //   `);
             }
           } else {
             // console.log(tag)
-            let v = status * error_table[tag]["status"]["scale"]
-            let min = error_table[tag]["status"]["min"]
-            let max = error_table[tag]["status"]["max"]
+            let v = status * error_table[tag]["status"]["scale"];
+            let min = error_table[tag]["status"]["min"];
+            let max = error_table[tag]["status"]["max"];
             // console.log(v)
-            let error_arr
+            let error_arr;
             if (v < min) {
               error_arr = `Value is less than ${min}`;
             } else if (v > max) {
@@ -885,22 +944,32 @@ function Other_error_result_gen(item, error_table, db_name) {
                 time: time,
                 location: db_name,
                 device: `${db_name}_${key}`,
-                level: `${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"}`,
+                level: `${
+                  error_table[tag]["name"].toLowerCase().includes("fault")
+                    ? "Fault"
+                    : "Alarm"
+                }`,
                 content: [`${tag}:${error_table[tag]["name"]}`, error_arr],
                 value: v,
                 read: false,
                 recover: false,
-                recover_time: '',
+                recover_time: "",
                 occurrence_time: occurrence_time,
               };
               error_result.push(error_msg);
-              sendLineNotify(`
-                \nLevel: \n  ${error_table[tag]["name"].toLowerCase().includes('fault') ? "Fault" : "Alarm"} 
-                \nLocation: \n  ${db_name}
-                \nDevice: \n  ${db_name}_${key}
-                \nValue: \n  ${v}
-                \nWarning: \n  ${tag}:${error_table[tag]["name"]} \n    ${error_arr}
-                `);
+              // sendLineNotify(`
+              //   \nLevel: \n  ${
+              //     error_table[tag]["name"].toLowerCase().includes("fault")
+              //       ? "Fault"
+              //       : "Alarm"
+              //   } 
+              //   \nLocation: \n  ${db_name}
+              //   \nDevice: \n  ${db_name}_${key}
+              //   \nValue: \n  ${v}
+              //   \nWarning: \n  ${tag}:${
+              //     error_table[tag]["name"]
+              //   } \n    ${error_arr}
+              //   `);
             }
           }
         }
@@ -908,28 +977,37 @@ function Other_error_result_gen(item, error_table, db_name) {
     }
   }
   return error_result;
-} 
+}
 
-function sendLineNotify(message) {
-  const accessToken = 'HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz';
+function sendLineNotify(error_result_item) {
+  const message = `
+    \nLevel: \n  ${error_result_item["level"]} 
+    \nLocation: \n  ${error_result_item["location"]}
+    \nDevice: \n  ${error_result_item["device"]}
+    \nValue: \n  ${error_result_item["value"]}
+    \nWarning: \n  ${error_result_item["content"][0]}\n    ${Array.isArray(error_result_item["content"][1]) ? error_result_item["content"][1].join("\n    ").replace(/\[|\]/g, "_") : error_result_item["content"][1]}
+  `
+  const accessToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
   const request = {
-    method: 'post',
+    method: "post",
     //url: 'http://192.168.8.112/line-notify',
-    url: 'https://notify-api.line.me/api/notify',
+    url: "https://notify-api.line.me/api/notify",
     headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/x-www-form-urlencoded' 
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     params: {
       message: message,
-    }
+    },
   };
 
-  axios(request).then((resp) => {
-    console.log(resp.data);
-  }).catch((err) => {
-    console.log(err.response);
-  });
+  axios(request)
+    .then((resp) => {
+      console.log(resp.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
 }
 //************************************************************* */
 router.use(async (req, res, next) => {
@@ -1118,9 +1196,7 @@ router.get("/testforalarm", (req, res) => {
 module.exports = {
   router,
   LC_error_result_gen,
-  LC_error_table,
   DC_error_result_gen,
-  DC_error_table,
   Other_error_result_gen,
-  Other_error_table,
+  sendLineNotify,
 };

@@ -13,11 +13,9 @@ const app = express();
 const cors = require("cors");
 const {
   LC_error_result_gen,
-  LC_error_table,
   DC_error_result_gen,
-  DC_error_table,
   Other_error_result_gen,
-  Other_error_table,
+  sendLineNotify,
 } = require("./alarmFunctions");
 
 app.set("view engine", "ejs");
@@ -31,6 +29,7 @@ app.use(cors());
 
 //************************************************************* */
 const lc1nanoDb = nano.use("lc1_rf10");
+// console.log(lc1nanoDb["config"]["db"])
 const lc2nanoDb = nano.use("lc2_rf10");
 const lc3nanoDb = nano.use("lc3_rf10");
 const lc4nanoDb = nano.use("lc4_rf10");
@@ -38,7 +37,8 @@ const dcnanoDb = nano.use("dc_rf10");
 const gcnanoDb = nano.use("gc_rf10"); //新增
 const otherrf01nanoDb = nano.use("other_rf01");
 const otherrf10nanoDb = nano.use("other_rf10");
-
+const alarmnanoDb = nano.use("alarm");
+const hisalarmnanoDb = nano.use("hisalarm");
 const indexDef = {
   index: { fields: ["time"] },
   name: "time_index",
@@ -52,6 +52,8 @@ dcnanoDb.createIndex(indexDef);
 gcnanoDb.createIndex(indexDef); //新增
 //otherrf01nanoDb.createIndex(indexDef);
 otherrf10nanoDb.createIndex(indexDef);
+alarmnanoDb.createIndex(indexDef);
+hisalarmnanoDb.createIndex(indexDef);
 
 const mangoQuery = {
   selector: {
@@ -84,9 +86,14 @@ app.get("/alarm", (req, res) => {
       }
       // console.dir(body)
       // const doc = body.docs[0]; // 取得數據的第一個元素
-      for (const item of body.docs) {
+      const db_name = lc1nanoDb["config"]["db"]
+      for (let item of body.docs) {
         // console.log(item);
-        console.log(LC_error_result_gen(item, LC_error_table, "lc1_rf10"));
+        const error_result = LC_error_result_gen(item, db_name);
+        for (let i of error_result) {
+          sendLineNotify(i);
+        }
+
       }
     });
 
@@ -104,21 +111,26 @@ app.get("/alarm", (req, res) => {
     //   }
     // });
 
-    otherrf10nanoDb.find(mangoQuery, async (err, body) => {
-      if (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-      // console.dir(body)
-      // const doc = body.docs[0]; // 取得數據的第一個元素
-      for (const item of body.docs) {
-        // console.log(item);
-        console.log(
-          Other_error_result_gen(item, Other_error_table, "other_rf10")
-        );
-      }
-    });
+    // otherrf10nanoDb.find(mangoQuery, async (err, body) => {
+    //   if (err) {
+    //     console.error("Error:", err);
+    //     res.status(500).send("Internal Server Error");
+    //     return;
+    //   }
+    //   // console.dir(body)
+    //   // const doc = body.docs[0]; // 取得數據的第一個元素
+    //   for (const item of body.docs) {
+    //     // console.log(item);
+    //       otherrf10nanoDb.insert(Other_error_result_gen(item, Other_error_table, "other_rf10"))
+    //       .then((body) => {
+    //         console.log("User document inserted successfully. ID:", body.id);
+    //       })
+    //       .catch((err) => {
+    //         console.error("Error inserting user document:", err.message);
+    //       });
+    //   }
+    // });
+  
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -157,3 +169,5 @@ module.exports = router;
 app.listen(port, () => {
   console.log(`應用程式正在監聽端口 ${port}`);
 });
+
+//************************************* */
