@@ -225,7 +225,7 @@ app.get("/alarm", (req, res) => {
 //   }
 // });
 
-router.get("/alarm/realtime", (req, res) => {
+app.get("/alarm/realtime", (req, res) => {
   // num與fun
   res.render("Alm_RealTime");
 });
@@ -274,7 +274,7 @@ app.get("/alarm/realtime/edit", (req, res) => {
   });
 });
 
-router.get("/alarm/history", (req, res) => {
+app.get("/alarm/history", (req, res) => {
   // num與fun
   res.render("Alm_History");
 });

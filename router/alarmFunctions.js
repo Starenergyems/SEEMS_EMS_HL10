@@ -9,6 +9,7 @@ const http = require("http");
 const e = require("connect-flash");
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const axios = require("axios");
+const moment = require('moment');
 
 const lc1_rf01 = "lc1_rf01";
 const lc1nanoDb = nano.use(lc1_rf01);
@@ -700,7 +701,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
   //console.dir(item)
   //console.log(Object.keys(item._doc)) //mongodb obj, data is under the _doc key
   //console.log(Object.keys(error_table))
-  const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+  const time = current_locale_time();
   const occurrence_time = item.time;
   const error_result = [];
   for (let key in item) {
@@ -826,7 +827,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
 }
 
 function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
-  const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+  const time = current_locale_time();
   const occurrence_time = item.time;
   const error_result = [];
   // console.log(Object.keys(error_table))
@@ -879,7 +880,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
 }
 
 function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
-  const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei" });
+  const time = current_locale_time();
   const occurrence_time = item.time;
   const error_result = [];
   // console.log(Object.keys(error_table))
@@ -1008,6 +1009,14 @@ function sendLineNotify(error_result_item) {
     .catch((err) => {
       console.log(err.response);
     });
+}
+
+function current_locale_time() {
+  const date = new Date();
+
+  const formattedString = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSSSSZ');
+
+  return formattedString;
 }
 //************************************************************* */
 router.use(async (req, res, next) => {
