@@ -173,7 +173,7 @@ app.get("/alarm", (req, res) => {
         // console.log(item);
         const error_result = Other_error_result_gen(item, db_name);
         for (let i of error_result) {
-          console.log(i)
+          // console.log(i)
           sendLineNotify(i);
 
           alarmnanoDb

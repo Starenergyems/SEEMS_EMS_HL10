@@ -61,13 +61,13 @@ app.use(cookieParser());
 // const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
 // const pcsRouter = require("./rPCS");
-// const batteryRouter = require("./rBattery");
+const batteryRouter = require("./rBattery");
 // const commuRouter = require("./rCommu");
 // const deviceRouter = require("./rDevice");
 // const environmentRouter = require("./rEnvironment");
-const alarmRouter = require("./rAlarm");
+//const alarmRouter = require("./rAlarm");
 // const eventRouter = require("./rEvent");
-const reportRouter = require("./rReport");
+//const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
 // const alarmFunctions = require("./alarmFunctions");
@@ -79,13 +79,13 @@ const reportRouter = require("./rReport");
 // app.use(modeRouter);
 app.use(meterRouter);
 // app.use(pcsRouter);
-// app.use(batteryRouter);
+app.use(batteryRouter);
 // app.use(commuRouter);
 // app.use(deviceRouter);
 // app.use(environmentRouter);
-app.use(alarmRouter);
+//app.use(alarmRouter);
 // app.use(eventRouter);
-app.use(reportRouter);
+//app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
 // app.use(alarmFunctions);
@@ -111,6 +111,15 @@ app.get("/login", (req, res) => {
 
 app.get("/error", (req, res) => {
   res.render("error");
+});
+
+app.get("/health", (req, res) => {
+  const isHealthy = true;
+  if (isHealthy) {
+    res.status(200).json({status:'OK'});
+  } else {
+    res.status(500).json({status:'Error'});
+  };
 });
 
 server.listen(port, () => {
