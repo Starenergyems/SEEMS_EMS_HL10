@@ -17,10 +17,10 @@ docker-compose up -d --build
 
 
 
-# Swarm initialized: current node (p9w4dgbt72b1swf4upznnyjjq) is now a manager.
+# Swarm initialized: current node (zskcu9c47qtty4kph231h5tre) is now a manager.
 
 # To add a worker to this swarm, run the following command:
 
-#     docker swarm join --token SWMTKN-1-04muop75665c41m46mpqcie76os2fuy7c1m1crimuezozdkai7-3lls3jdsbzwjglijmtjdhjcw9 192.168.8.125:2377
+#     docker swarm join --token SWMTKN-1-122webres8bns9uge53um4xk9rj7nxald357v6lobtlu5j1mmv-0btyxhsgufnjgvjslzrctw3iw 192.168.8.125:2377
 
 # To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.

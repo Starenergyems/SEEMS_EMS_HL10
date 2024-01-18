@@ -5,15 +5,17 @@ services:
   ems-service:
     # restart: always
     build: .
-    container_name: ems-service
+    # container_name: ems-service
     # volumes:
     #   - ./backend/Test:/app
     ports:
-      - "3000:3000"
+      - "4000:4000"
     # environment:
       # - POSTGRES_NAME=postgres
       # - POSTGRES_USER=postgres
       # - POSTGRES_PASSWORD=postgres
+    deploy:
+      replicas: 3  # Set the desired number of replicas
     networks:
       - service-network
 
