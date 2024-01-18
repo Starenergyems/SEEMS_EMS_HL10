@@ -177,12 +177,6 @@ const LC_PCS_403002 = {
   10: "Distribution power supply exception",
 };
 
-const LC_PCS_403008 = {
-  min: 0,
-  max: 655,
-  scale: 0.01,  
-};
-
 const LC_PCS_403004 = {
   0: "Gas trip",
   1: "Gas alarm",
@@ -198,6 +192,12 @@ const LC_PCS_403004 = {
   13: "High oil level alarm",
   14: "Winding temperature trip",
   15: "Winding temperature alarm",
+};
+
+const LC_PCS_403008 = {
+  min: 0,
+  max: 655,
+  scale: 0.01,  
 };
 
 const LC_PCS_403009 = {
@@ -943,6 +943,36 @@ function mapBitToStatus(rawData, statusDict) {
   return [mappedValues, bitString_rev];
 }
 
+function mapBitToStatus_abnormal(rawData, statusDict) {
+  const bitlength = getLargestKey(statusDict);
+  //console.log(bitlength);
+  const rawBitString = rawData.toString(2);
+  const bitString_rev = rawBitString
+    .padStart(bitlength, "0")
+    .slice(-bitlength)
+    .split("")
+    .reverse()
+    .join("");
+  //console.log(bitString_rev);
+  let mappedValues = [];
+
+  // Iterate through each bit in the bit string
+  for (let i = 0; i < bitString_rev.length; i++) {
+    // Check if the current bit is set (1)
+    if (bitString_rev[i] === "0") {
+      // Find the corresponding value in the statusDict using the index
+      let matchedValue = statusDict[i];
+
+      // Add the matched value to the result array or use a placeholder for unmatched indices
+      // mappedValues.push(matchedValue !== undefined ? matchedValue : "Unknown");
+      if (matchedValue !== undefined) {
+        mappedValues.push(matchedValue);
+      }
+    }
+  }
+  return [mappedValues, bitString_rev];
+}
+
 function checkPartialMatch(k, array) {
   // Convert a to lowercase for case-insensitive matching
   const lowercase_key = k.toLowerCase();
@@ -956,6 +986,62 @@ function checkPartialMatch(k, array) {
     }
   }
   return null; // Return null if no match is found
+}
+
+function LC_error_result_unit(db_name, time, occurrence_time, error_table, key_error, tag, value, device, error_result,) {
+  let error_arr = [];
+  let error_type = error_table[key_error][tag]["type"];
+
+  if (error_type === "bit") {
+    [error_arr, value] = mapBitToStatus(
+      value,
+      error_table[key_error][tag]["status"]
+    );
+  } else if (error_type === "int") {
+    if (error_table[key_error][tag]["status"][value]) {
+      error_arr.push(error_table[key_error][tag]["status"][value]);
+    };
+  } else if (error_type === "bit_abnormal") {
+    [error_arr, value] = mapBitToStatus_abnormal(
+      value,
+      error_table[key_error][tag]["status"]
+    );
+  } else if (error_type === "valve") {
+    value = value * error_table[key_error][tag]["status"]["scale"];
+    let min = error_table[key_error][tag]["status"]["min"];
+    let max = error_table[key_error][tag]["status"]["max"];
+    // console.log(v)
+    if (value < min) {
+      error_arr.push(`Value is less than ${min}`);
+    } else if (value > max) {
+      error_arr.push(`Value is greater than ${max}`);
+    }
+  }
+  if (error_arr.length > 0) {
+    // console.log(error_arr);
+    error_msg = {
+      time: time,
+      location: db_name,
+      device: device,
+      level: `${
+        error_table[key_error][tag]["name"]
+          .toLowerCase()
+          .includes("fault")
+          ? "Fault"
+          : "Alarm"
+      }`,
+      content: [
+        `${tag}:${error_table[key_error][tag]["name"]}`,
+        error_arr,
+      ],
+      value: value,
+      read: false,
+      recover: false,
+      recover_time: "",
+      occurrence_time: occurrence_time,
+    };
+    error_result.push(error_msg);
+  }
 }
 
 function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
@@ -972,58 +1058,15 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
         // console.log(key_error)
         if (key_error !== "Rack") {
           for (let tag in error_table[key_error]) {
-            console.log(key)
-            console.log(tag)
-            console.log(item[key][tag])
+            // console.log(key)
+            // console.log(tag)
+            // console.log(item[key][tag])
             //console.log(error_table[key_error][tag]['name'])
             // console.log(item[key])
             //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
-            let status = item[key][tag];
-            let [error_arr, bit_status] = mapBitToStatus(
-              status,
-              error_table[key_error][tag]["status"]
-            );
-            if (error_arr.length > 0) {
-              // console.log(error_arr);
-              error_msg = {
-                time: time,
-                location: db_name,
-                device: `${db_name}_${key}`,
-                level: `${
-                  error_table[key_error][tag]["name"]
-                    .toLowerCase()
-                    .includes("fault")
-                    ? "Fault"
-                    : "Alarm"
-                }`,
-                content: [
-                  `${tag}:${error_table[key_error][tag]["name"]}`,
-                  error_arr,
-                ],
-                value: bit_status,
-                read: false,
-                recover: false,
-                recover_time: "",
-                occurrence_time: occurrence_time,
-              };
-              error_result.push(error_msg);
-
-              // sendLineNotify(`
-              //   \nLevel: \n  ${
-              //     error_table[key_error][tag]["name"]
-              //       .toLowerCase()
-              //       .includes("fault")
-              //       ? "Fault"
-              //       : "Alarm"
-              //   }
-              //   \nLocation: \n  ${db_name}
-              //   \nDevice: \n  ${db_name}_${key}
-              //   \nValue: \n  ${bit_status}
-              //   \nWarning: \n  ${tag}:${
-              //     error_table[key_error][tag]["name"]
-              //   }\n    ${error_arr.join("\n    ").replace(/\[|\]/g, "_")}
-              //   `);
-            }
+            let value = item[key][tag];
+            let device = `${db_name}_${key}`;
+            LC_error_result_unit(db_name, time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
           }
         } else {
           inner_item = item[key];
@@ -1033,51 +1076,9 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
               //console.log(error_table[key_error][tag]['name'])
               //console.log(item[key])
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
-              let status = inner_item[inner_key][tag];
-              let [error_arr, bit_status] = mapBitToStatus(
-                status,
-                error_table[key_error][tag]["status"]
-              );
-              if (error_arr.length > 0) {
-                // console.log(error_arr);
-                error_msg = {
-                  time: time,
-                  location: db_name,
-                  device: `${db_name}_${key}_${inner_key}`,
-                  level: `${
-                    error_table[key_error][tag]["name"]
-                      .toLowerCase()
-                      .includes("fault")
-                      ? "Fault"
-                      : "Alarm"
-                  }`,
-                  content: [
-                    `${tag}:${error_table[key_error][tag]["name"]}`,
-                    error_arr,
-                  ],
-                  value: bit_status,
-                  read: false,
-                  recover: false,
-                  recover_time: "",
-                  occurrence_time: occurrence_time,
-                };
-                error_result.push(error_msg);
-                // sendLineNotify(`
-                // \nLevel: \n  ${
-                //   error_table[key_error][tag]["name"]
-                //     .toLowerCase()
-                //     .includes("fault")
-                //     ? "Fault"
-                //     : "Alarm"
-                // }
-                // \nLocation: \n  ${db_name}
-                // \nDevice: \n  ${db_name}_${key}_${inner_key}
-                // \nValue: \n  ${bit_status}
-                // \nWarning: \n  ${tag}:${
-                //   error_table[key_error][tag]["name"]
-                // }\n    ${error_arr.join("\n    ")}
-                // `);
-              }
+              let value = inner_item[inner_key][tag];
+              let device = `${db_name}_${key}_${inner_key}`;
+              LC_error_result_unit(db_name, time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
             }
           }
         }
@@ -1092,17 +1093,18 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
   const occurrence_time = item.time;
   const error_result = [];
   // console.log(Object.keys(error_table))
-  for (let [key, value] of Object.entries(item)) {
-    if (typeof value === "object" && value !== null) {
+  for (let [key, v] of Object.entries(item)) {
+    if (typeof v === "object" && v !== null) {
       //console.log(Object.keys(value))
-      for (let [tag, status] of Object.entries(value)) {
+      for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, status)
-          if (status === error_table[tag]["status"]) {
+          if (value === error_table[tag]["status"]) {
+            let device = `${db_name}_${key}`;
             error_msg = {
               time: time,
               location: db_name,
-              device: `${db_name}_${key}`,
+              device: device,
               level: `${
                 error_table[tag]["name"].toLowerCase().includes("fault")
                   ? "Fault"
@@ -1110,28 +1112,15 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
               }`,
               content: [
                 `${tag}:${error_table[tag]["name"]}`,
-                error_table[tag]["name"],
+                [error_table[tag]["name"]],
               ],
-              value: status,
+              value: value,
               read: false,
               recover: false,
               recover_time: "",
               occurrence_time: occurrence_time,
             };
             error_result.push(error_msg);
-            // sendLineNotify(`
-            //     \nLevel: \n  ${
-            //       error_table[tag]["name"].toLowerCase().includes("fault")
-            //         ? "Fault"
-            //         : "Alarm"
-            //     }
-            //     \nLocation: \n  ${db_name}
-            //     \nDevice: \n  ${db_name}_${key}
-            //     \nValue: \n  ${status}
-            //     \nWarning: \n  ${tag}:${error_table[tag]["name"]}\n    ${
-            //       error_table[tag]["name"]
-            //     }
-            //     `);
           }
         }
       }
@@ -1140,100 +1129,75 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
   return error_result;
 }
 
+function Other_error_result_unit(db_name, time, occurrence_time, error_table, tag, value, device, error_result,) {
+  let error_arr = [];
+  let error_type = error_table[tag]["type"];
+
+  if (error_type === "bit") {
+    [error_arr, value] = mapBitToStatus(
+      value,
+      error_table[tag]["status"]
+    );
+  } else if (error_type === "int") {
+    if (error_table[tag]["status"][value]) {
+      error_arr.push(error_table[tag]["status"][value]);
+    };
+  } else if (error_type === "bit_abnormal") {
+    [error_arr, value] = mapBitToStatus_abnormal(
+      value,
+      error_table[tag]["status"]
+    );
+  } else if (error_type === "valve") {
+    value = value * error_table[tag]["status"]["scale"];
+    let min = error_table[tag]["status"]["min"];
+    let max = error_table[tag]["status"]["max"];
+    // console.log(v)
+    if (value < min) {
+      error_arr.push(`Value is less than ${min}`);
+    } else if (value > max) {
+      error_arr.push(`Value is greater than ${max}`);
+    }
+  }
+  if (error_arr.length > 0) {
+    // console.log(error_arr);
+    error_msg = {
+      time: time,
+      location: db_name,
+      device: device,
+      level: `${
+        error_table[tag]["name"]
+          .toLowerCase()
+          .includes("fault")
+          ? "Fault"
+          : "Alarm"
+      }`,
+      content: [
+        `${tag}:${error_table[tag]["name"]}`,
+        error_arr,
+      ],
+      value: value,
+      read: false,
+      recover: false,
+      recover_time: "",
+      occurrence_time: occurrence_time,
+    };
+    error_result.push(error_msg);
+  }
+}
+
 function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
   const error_result = [];
   // console.log(Object.keys(error_table))
-  for (let [key, value] of Object.entries(item)) {
-    if (typeof value === "object" && value !== null) {
-      //console.log(Object.keys(value))
-      for (let [tag, status] of Object.entries(value)) {
+  for (let [key, v] of Object.entries(item)) {
+    if (typeof v === "object" && v !== null) {
+      //console.log(Object.keys(v))
+      for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
-          // console.log(key, tag, status)
-          if (!["408186", "408187"].includes(tag)) {
-            let [error_arr, bit_status] = mapBitToStatus(
-              status,
-              error_table[tag]["status"]
-            );
-            if (error_arr.length > 0) {
-              // console.log(error_arr);
-              error_msg = {
-                time: time,
-                location: db_name,
-                device: `${db_name}_${key}`,
-                level: `${
-                  error_table[tag]["name"].toLowerCase().includes("fault")
-                    ? "Fault"
-                    : "Alarm"
-                }`,
-                content: [`${tag}:${error_table[tag]["name"]}`, error_arr],
-                value: bit_status,
-                read: false,
-                recover: false,
-                recover_time: "",
-                occurrence_time: occurrence_time,
-              };
-              error_result.push(error_msg);
-              // sendLineNotify(`
-              //   \nLevel: \n  ${
-              //     error_table[tag]["name"].toLowerCase().includes("fault")
-              //       ? "Fault"
-              //       : "Alarm"
-              //   }
-              //   \nLocation: \n  ${db_name} 
-              //   \nDevice: \n  ${db_name}_${key}
-              //   \nValue: \n  ${bit_status}
-              //   \nWarning: \n  ${tag}:${
-              //     error_table[tag]["name"]
-              //   }\n    ${error_arr.join("\n    ")}
-              //   `);
-            }
-          } else {
-            // console.log(tag)
-            let v = status * error_table[tag]["status"]["scale"];
-            let min = error_table[tag]["status"]["min"];
-            let max = error_table[tag]["status"]["max"];
-            // console.log(v)
-            let error_arr;
-            if (v < min) {
-              error_arr = `Value is less than ${min}`;
-            } else if (v > max) {
-              error_arr = `Value is greater than ${max}`;
-            }
-            if (error_arr !== undefined) {
-              error_msg = {
-                time: time,
-                location: db_name,
-                device: `${db_name}_${key}`,
-                level: `${
-                  error_table[tag]["name"].toLowerCase().includes("fault")
-                    ? "Fault"
-                    : "Alarm"
-                }`,
-                content: [`${tag}:${error_table[tag]["name"]}`, error_arr],
-                value: v,
-                read: false,
-                recover: false,
-                recover_time: "",
-                occurrence_time: occurrence_time,
-              };
-              error_result.push(error_msg);
-              // sendLineNotify(`
-              //   \nLevel: \n  ${
-              //     error_table[tag]["name"].toLowerCase().includes("fault")
-              //       ? "Fault"
-              //       : "Alarm"
-              //   } 
-              //   \nLocation: \n  ${db_name}
-              //   \nDevice: \n  ${db_name}_${key}
-              //   \nValue: \n  ${v}
-              //   \nWarning: \n  ${tag}:${
-              //     error_table[tag]["name"]
-              //   } \n    ${error_arr}
-              //   `);
-            }
-          }
+          // console.log(key, tag, value)
+          let device = `${db_name}_${key}`;
+          Other_error_result_unit(db_name, time, occurrence_time, error_table, tag, value, device, error_result,)
         }
       }
     }
