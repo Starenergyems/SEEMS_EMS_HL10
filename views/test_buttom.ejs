@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Express.js 與 CouchDB 互動</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+      }
+
+      #popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="display">
+      <p>目前數值：</p>
+      <p id="currentValue">Loading...</p>
+      <button onclick="showPopup()">修改數值</button>
+    </div>
+
+    <div id="popup">
+      <p>請輸入新的數值：</p>
+      <input type="number" id="newValue" required />
+      <br /><br />
+      <button onclick="updateValue()">確認</button>
+      <button onclick="hidePopup()">取消</button>
+    </div>
+
+    <script>
+      // 使用AJAX從伺服器獲取數值
+      async function fetchData() {
+        try {
+          const response = await fetch("/api/getData");
+          const data = await response.json();
+          document.getElementById("currentValue").textContent = data.value;
+        } catch (error) {
+          console.error("無法獲取數值：", error);
+        }
+      }
+
+      // 使用AJAX更新數值
+      async function updateValue() {
+        const newValue = document.getElementById("newValue").value;
+
+        try {
+          const response = await fetch("/api/updateData", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ newValue }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            hidePopup();
+            fetchData(); // 更新成功後重新獲取數值
+          } else {
+            alert("更新失敗，請重試。");
+          }
+        } catch (error) {
+          console.error("無法更新數值：", error);
+        }
+      }
+
+      function showPopup() {
+        fetchData(); // 在顯示彈出視窗前先獲取數值
+        document.getElementById("popup").style.display = "block";
+      }
+
+      function hidePopup() {
+        document.getElementById("popup").style.display = "none";
+      }
+
+      // 初始載入時獲取數值
+      fetchData();
+    </script>
+  </body>
+</html>

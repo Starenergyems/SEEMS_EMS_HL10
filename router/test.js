@@ -175,3 +175,61 @@
 
 // // 修改為：
 // module.exports = router;
+const express = require("express");
+const path = require("path");
+const nano = require("nano")("http://localhost:5984"); // 修改為您的CouchDB伺服器位置
+
+const app = express();
+const port = 3000;
+
+// 連接到您的CouchDB資料庫
+const db = nano.use("your_database_name"); // 請替換為實際的資料庫名稱
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+  res.render("index");
+});
+
+// 提供數值的API端點
+app.get("/setData", async (req, res) => {
+  try {
+    // 從資料庫讀取數值
+    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+    //const data = await db.get("your_document_id"); // 請替換為實際的文檔ID
+    const allData = await Promise.all(dataPromises);
+    // 回傳數值給前端
+    res.json({ value: allData.value });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "無法讀取數值" });
+  }
+});
+
+// 更新數值的API端點
+app.post("/updateData", express.json(), async (req, res) => {
+  try {
+    const newValue = req.body.newValue;
+
+    // 更新資料庫中的數值
+    const data = await db.get("your_document_id"); // 請替換為實際的文檔ID
+    data.value = newValue;
+    await db.insert(data);
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "無法更新數值" });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`伺服器啟動於 http://localhost:${port}`);
+});

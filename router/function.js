@@ -1,5 +1,19 @@
 const { timeLog } = require("console");
 const readline = require("readline");
+// 定義計算平均值的函數
+function calculateAverage(...numbers) {
+  if (numbers.length === 0) {
+    return 0; // 避免除以零的情況
+  }
+  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  return sum / numbers.length;
+}
+
+// const result1 = calculateAverage(2, 4, 6, 8);
+// const result2 = calculateAverage(10, 20, 30, 40, 50);
+
+// console.log('平均值1:', result1); // 預期輸出: 5
+// console.log('平均值2:', result2); // 預期輸出: 30
 
 //chargeStatus
 function scaleProcess(decimalValue, scale, point) {
@@ -431,6 +445,7 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 module.exports = {
+  calculateAverage,
   mapchargeStatus,
   scaleProcess,
   mapPCSWorkingStatus,

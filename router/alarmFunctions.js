@@ -972,9 +972,9 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
         // console.log(key_error)
         if (key_error !== "Rack") {
           for (let tag in error_table[key_error]) {
-            // console.log(key)
-            // console.log(tag)
-            //console.log(item[key][tag])
+            console.log(key)
+            console.log(tag)
+            console.log(item[key][tag])
             //console.log(error_table[key_error][tag]['name'])
             // console.log(item[key])
             //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))

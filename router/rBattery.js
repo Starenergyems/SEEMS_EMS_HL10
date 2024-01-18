@@ -1,18 +1,13 @@
 const express = require("express");
-const mongoose = require("mongoose");
+//const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
 const path = require("path");
-const port = 3000;
-const Lc = require("../models/lcschema");
-const Lc01 = Lc["Lc01"];
-const Lc02 = Lc["Lc02"];
-const Lc03 = Lc["Lc03"];
-const Lc04 = Lc["Lc04"];
 const router = express.Router();
 const app = express();
 const cors = require("cors");
 const {
+  calculateAverage,
   scaleProcess,
   Convert_UInt_to_revBitString,
   Convert_UInt_to_BitString,
@@ -24,7 +19,11 @@ const {
   Determine_BGC_of_TcMaxDiff,
   Determine_DL_of_RackHWStatus,
 } = require("./function");
-
+//const port = 4000;
+const nano = require("nano");
+//const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const { Console } = require("console");
+const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
@@ -58,23 +57,251 @@ router.use(
 
 router.use(cors());
 
+// 定義 CouchDB 資料庫名稱
+const databases = ["lc1_rf10", "lc2_rf10", "lc3_rf10", "lc4_rf10", "dwctrl"];
+
+// 創建 Nano 實例的函式
+const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+
+// 設定index
+const getLatestDocument = async (nanoDb) => {
+  const indexDef = {
+    index: { fields: ["time"] },
+    name: "time_index",
+  };
+
+  //建立index
+  await nanoDb.createIndex(indexDef);
+
+  //利用mango作為篩選器
+  const mangoQuery = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+
+  return new Promise((resolve, reject) => {
+    nanoDb.find(mangoQuery, (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        reject(err);
+        return;
+      }
+
+      const latestData = body.docs[0]; //把資料存到latestData裡面
+      //console.log(`Latest data from ${nanoDb.config.db}:`, latestData);
+      resolve(latestData);
+    });
+  });
+};
+
+router.get("/operateinfo", (req, res) => {
+  console.log("路徑設置");
+});
+
 router.get("/operateinfo/battery", async (req, res) => {
-  // num與fun
-  res.render("Op_Bat_InfoSummary", { permission: "manager" });
+  try {
+    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    // 使用 Promise.all 等待所有 promise 完成，獲取"所有資料庫"中的最新數據
+    //並利用陣列不同列數儲存不同資料庫
+    // 在這裡處理 allData，它是一個包含所有資料庫最新數據的陣列
+
+    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+    const lc1Data = allData[0];
+    const lc2Data = allData[1];
+    const lc3Data = allData[2];
+    const lc4Data = allData[3];
+    //const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
+    //const lc1Data = allData[num];
+    //console.log("num: " + num);
+    //console.log("baseNumber:" + baseNumber);
+
+    // if (!lcData) {
+    //   throw new Error("No data found~");
+    // }
+
+    res.render("Op_Bat_InfoSummary", {
+      //**************************************** */
+      //BMS資訊總覽
+      workStatus: lc1Data.System["402021"], //檢查四個LC狀態
+      onGridStatus: lc1Data.System["402019"], //並往狀態
+      onlineNum: lc1Data.System["402089"],
+
+      systemV: calculateAverage(
+        lc1Data.BMS1["404002"],
+        lc1Data.BMS2["404002"],
+        lc2Data.BMS1["404002"],
+        lc2Data.BMS2["404002"],
+        lc3Data.BMS1["404002"],
+        lc3Data.BMS2["404002"],
+        lc4Data.BMS1["404002"]
+      ),
+      //所有BMS電壓平均
+      systemI: calculateAverage(
+        lc1Data.BMS1["404003"],
+        lc1Data.BMS2["404003"],
+        lc2Data.BMS1["404003"],
+        lc2Data.BMS2["404003"],
+        lc3Data.BMS1["404003"],
+        lc3Data.BMS2["404003"],
+        lc4Data.BMS1["404003"],
+        lc4Data.BMS2["404003"]
+      ), //所有BMS電流平均
+      systemSOC: calculateAverage(
+        lc1Data.BMS1["404007"],
+        lc1Data.BMS2["404007"]
+      ),
+      systemSOH: calculateAverage(
+        lc1Data.BMS1["404005"],
+        lc1Data.BMS2["404005"]
+      ),
+      avgContainerTemp: lc1Data.System["406067"],
+      heartBeat: lc1Data.System["402018"],
+      //********************************* */
+      //lc01
+      onlineNum_LC1: calculateAverage(
+        lc1Data.BMS1["404008"],
+        lc1Data.BMS2["404008"]
+      ),
+      workStatus_LC1: calculateAverage(
+        lc1Data.System["402019"],
+        lc1Data.System["402019"]
+      ),
+      onGridStatus_LC1: calculateAverage(lc1Data.Ctrl["407008"]), //需要控制 顯示目前控制狀態
+
+      voltage_LC1: calculateAverage(
+        lc1Data.BMS1["404002"],
+        lc1Data.BMS1["404002"]
+      ),
+      current_LC1: calculateAverage(
+        lc1Data.BMS1["404003"],
+        lc1Data.BMS1["404003"]
+      ),
+      SOC_LC1: calculateAverage(lc1Data.BMS1["404007"], lc1Data.BMS1["404007"]),
+      SOH_LC1: calculateAverage(lc1Data.BMS1["404005"], lc1Data.BMS1["404005"]),
+      containerTemp_LC1: calculateAverage(
+        lc1Data.System["406047"],
+        lc1Data.System["406049"]
+      ),
+      V_cell_Max_LC1: calculateAverage(
+        lc1Data.BMS1["404021"],
+        lc1Data.BMS2["404021"]
+      ),
+      V_cell_Min_LC1: calculateAverage(
+        lc1Data.BMS1["404022"],
+        lc1Data.BMS2["404022"]
+      ),
+      V_cell_MaxDiff_LC1: calculateAverage(
+        lc1Data.BMS1["404025"],
+        lc1Data.BMS2["404025"]
+      ),
+      T_cell_Max_LC1: calculateAverage(
+        lc1Data.BMS1["404023"],
+        lc1Data.BMS2["404023"]
+      ),
+      T_cell_Min_LC1: calculateAverage(
+        lc1Data.BMS1["404024"],
+        lc1Data.BMS2["404024"]
+      ),
+      T_cell_MaxDiff_LC1: calculateAverage(
+        lc1Data.BMS1["404026"],
+        lc1Data.BMS2["404026"]
+      ),
+      alarm_BMS1_1: lc1Data.BMS1["404044"],
+      alarm_BMS1_2: lc1Data.BMS2["404044"],
+      fault_BMS1_1: calculateAverage(
+        lc1Data.BMS1["404046"],
+        lc1Data.BMS1["404048"],
+        lc1Data.BMS1["404061"]
+      ),
+      fault_BMS1_2: calculateAverage(
+        lc1Data.BMS2["404046"],
+        lc1Data.BMS2["404048"],
+        lc1Data.BMS2["404061"]
+      ),
+      permission: "manager",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//***************************************************************************************** */
+// 處理設定
+// app.post("/lcnum", (req, res) => {
+//   const selectedValue = req.body.selectedValue;
+
+//   // 處理從前端收到的數據，這裡可以根據需要進行相應的處理
+//   console.log("收到前端發送的數據:", selectedValue, lcnum);
+
+//   // 在這裡執行後續的業務邏輯，例如更新資料庫等
+
+//   // 回傳回應到前端
+//   res.json({ success: true, message: "數據成功處理" });
+// });
+
+router.post("/backendEndpoint", async (req, res) => {
+  try {
+    console.log("接收到前端請求");
+    const selectedValue = req.body.selectedValue;
+    const lcnum = req.body.lcnum;
+    console.log("selectedValue:" + selectedValue);
+    console.log("lcnum:" + lcnum);
+    // 使用正規表達式提取數字部分
+    const matchResult = lcnum.match(/\d+/);
+    // 如果有匹配到數字，取得第一個匹配結果
+    const extractedNumber = matchResult ? parseInt(matchResult[0], 10) : null;
+
+    //console.log("提取到的數字:", extractedNumber);
+
+    // const dataPromises = databases.map(async (dbName) => {
+    //   const nanoDb = createNanoInstance(dbName);
+    //   return getLatestDocument(nanoDb);
+    // });
+
+    // const allData = await Promise.all(dataPromises);
+    const num = extractedNumber - 1;
+    const lcData = allData[num];
+
+    lc1Data.Ctrl["407008"];
+    // console.log("num: " + num);
+    // const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
+    // console.log("判斷isEvenPage??" + isEvenPage);
+    // console.log("Lc_RackGroup: " + Lc_RackGroup);
+
+    let selectedCollection = collectionMap[blockId];
+    const alarmCMU_rawD = Lc_RackGroup[selectedCollection][407008];
+    const faultCMU_rawD = Lc_RackGroup[selectedCollection][405030];
+    const DL_of_statusHW = Lc_RackGroup[selectedCollection][405032];
+
+    console.log("alarmCMU_rawD: " + alarmCMU_rawD);
+    console.log("faultCMU_rawD: " + faultCMU_rawD);
+    console.log("DL_of_statusHW: " + DL_of_statusHW);
+    console.log("selectedCollection: " + selectedCollection);
+
+    const data = {};
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("伺服器錯誤");
+  }
 });
 //***************************************************************************************** */
 //BMS的infodetail
+let globalPageNumber = 0;
 router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   try {
     const pageNumber = parseInt(req.params.pageNumber);
-    //req.session.pageNumber = pageNumber;
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    //console.log("當前連接中的 collection 名稱：", collectionNames);
-
-    let selectedCollection;
-
-    // 根據 pageNumber 選擇不同的集合名稱
+    globalPageNumber = parseInt(req.params.pageNumber);
+    // 定義資料庫集合的映射
     const collectionMap = {
       1: "Lc01",
       2: "Lc01",
@@ -86,27 +313,37 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
       // 8: "Lc04", // 如果需要處理 8，可以取消註解
     };
 
-    selectedCollection = collectionMap[pageNumber];
+    // 根據 pageNumber 選擇不同的集合名稱
+    const selectedCollection = collectionMap[pageNumber];
 
-    console.log(pageNumber);
-    console.log(selectedCollection);
+    console.log("pageNumber: " + pageNumber);
+    console.log("selectedCollection: " + selectedCollection);
 
     if (!selectedCollection) {
-      throw new Error(" infodetail : Invalid pageNumber ");
+      throw new Error("infodetail: Invalid pageNumber");
     }
 
-    const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
-    const subNumber = pageNumber % 2 === 0 ? 2 : 1;
-    const No_of_BMS = `${baseNumber}-${subNumber}`;
+    const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值 得到第幾組也可以得到lc的組數
+    const subNumber = pageNumber % 2 === 0 ? 2 : 1; //第N組的第一台或是第二台
+    const No_of_BMS = `${baseNumber}-${subNumber}`; //a-b 第幾組的第幾台
 
-    // 根據選擇的集合名稱查詢資料
-    const lcData = await mongoose
-      .model(selectedCollection)
-      .findOne()
-      .sort({ time_log: -1 });
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+    // const lc1Data = allData[0];
+    // const lc2Data = allData[1];
+    // const lc3Data = allData[2];
+    // const lc4Data = allData[3];
+    const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
+    const lcData = allData[num];
+    console.log("num: " + num);
+    //console.log("baseNumber:" + baseNumber);
 
     if (!lcData) {
-      throw new Error("No data found");
+      throw new Error("No data found~");
     }
 
     //let processedPageNumber;
@@ -229,8 +466,8 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
-//***************************************************************************************** */
-//BMS的RACK詳細資料
+// //***************************************************************************************** */
+// //BMS的RACK詳細資料
 const rackWorkStatus_MT = {
   1: "開機",
   2: "自檢測",
@@ -245,11 +482,11 @@ const rackWorkStatus_MT = {
 router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
   try {
     const pageNumber = parseInt(req.params.pageNumber);
-    //req.session.pageNumber = pageNumber;
-    const collections = mongoose.connection.collections;
-    //const collectionNames = Object.keys(collections);
-    //console.log("當前連接中的 collection 名稱：", collectionNames);
+    globalPageNumber = parseInt(req.params.pageNumber);
 
+    //req.session.pageNumber = pageNumber;
+    //const collectionNames = Object.keys(collections);
+    //console.log("當前連接中的 globalPageNumber 名稱：", globalPageNumber);
     // 根據 pageNumber 選擇不同的集合名稱
     const collectionMap = {
       1: "Lc01",
@@ -263,9 +500,9 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
     };
 
     let selectedCollection = collectionMap[pageNumber];
-
-    console.log(pageNumber);
-    console.log(selectedCollection);
+    console.log("-------------------------------------------------------");
+    console.log("頁數 pageNumber: " + pageNumber);
+    console.log("selectedCollection: " + selectedCollection);
 
     if (!selectedCollection) {
       throw new Error("rack : Invalid pageNumber");
@@ -276,10 +513,19 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
     const No_of_BMS = `${baseNumber}-${subNumber}`;
 
     // 根據選擇的集合名稱查詢資料
-    const lcData = await mongoose
-      .model(selectedCollection)
-      .findOne()
-      .sort({ time_log: -1 });
+
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    const allData = await Promise.all(dataPromises);
+
+    const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
+    const lcData = allData[num];
+    console.log("num: " + num);
+    console.log("對應資料庫要抓到哪個-baseNumber: " + baseNumber);
+    //console.log("baseNumber:" + baseNumber);
 
     if (!lcData) {
       throw new Error("No data found");
@@ -289,7 +535,8 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
 
     const isEvenPage = pageNumber % 2 === 0;
     const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
-
+    console.log("判斷isEvenPage??" + isEvenPage);
+    console.log("Lc_RackGroup: " + Lc_RackGroup);
     res.render("Op_Bat_Rack", {
       permission: "manager",
       pageNumber,
@@ -731,22 +978,75 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
     res.status(500).send("rack : Internal Server Error");
   }
 });
-//***************************************************************************************** */
+// //***************************************************************************************** */
 app.use(bodyParser.json());
 
-const database = {
-  block1: "資料庫內容1",
-  block2: "資料庫內容2",
-  block3: "資料庫內容3",
-};
+//rack彈出視窗
+router.post("/getData", async (req, res) => {
+  try {
+    console.log("接收到前端請求");
+    const blockId = req.body.blockId;
+    console.log("blockId:" + blockId);
 
-router.post("/getData", (req, res) => {
-  console.log('接收到前端請求');
-  const blockId = req.body.blockId;
-  console.log(blockId);
-  const data = database[blockId];
-  res.json(data);
+    console.log("globalPageNumber:" + globalPageNumber);
+
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    const allData = await Promise.all(dataPromises);
+    const baseNumber = Math.ceil(globalPageNumber / 2);
+    const isEvenPage = globalPageNumber % 2 === 0;
+    const num = baseNumber - 1;
+    const lcData = allData[num];
+    console.log("num: " + num);
+    const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
+    console.log("判斷isEvenPage??" + isEvenPage);
+    console.log("Lc_RackGroup: " + Lc_RackGroup);
+
+    const collectionMap = {
+      1: "Rack01",
+      2: "Rack02",
+      3: "Rack03",
+      4: "Rack04",
+      5: "Rack05",
+      6: "Rack06",
+      7: "Rack07",
+      8: "Rack08",
+      9: "Rack09",
+      10: "Rack10",
+      11: "Rack11",
+      12: "Rack12",
+    };
+
+    let selectedCollection = collectionMap[blockId];
+    const alarmCMU_rawD = Lc_RackGroup[selectedCollection][405028];
+    const faultCMU_rawD = Lc_RackGroup[selectedCollection][405030];
+    const DL_of_statusHW = Lc_RackGroup[selectedCollection][405032];
+
+    console.log("alarmCMU_rawD: " + alarmCMU_rawD);
+    console.log("faultCMU_rawD: " + faultCMU_rawD);
+    console.log("DL_of_statusHW: " + DL_of_statusHW);
+    console.log("selectedCollection: " + selectedCollection);
+
+    const data = {
+      alarmCMU_rawD: alarmCMU_rawD.toString(2),
+      faultCMU_rawD: faultCMU_rawD.toString(2),
+      DL_of_statusHW: DL_of_statusHW.toString(2),
+    };
+
+    res.json(data);
+
+    if (!lcData) {
+      throw new Error("No data found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("伺服器錯誤");
+  }
 });
+
 //***************************************************************************************** */
 module.exports = router;
 //***************************************************************************************** */

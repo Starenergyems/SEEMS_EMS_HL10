@@ -219,7 +219,7 @@ function show_info_RackAlm_R12() {
 
 async function getData(blockId) {
   try {
-    console.log('嘗試向後端發出請求')
+    console.log("嘗試向後端發出請求");
     const response = await fetch("/getData", {
       method: "post",
       headers: {
