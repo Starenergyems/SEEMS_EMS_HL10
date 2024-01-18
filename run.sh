@@ -24,3 +24,7 @@ docker-compose up -d --build
 #     docker swarm join --token SWMTKN-1-122webres8bns9uge53um4xk9rj7nxald357v6lobtlu5j1mmv-0btyxhsgufnjgvjslzrctw3iw 192.168.8.125:2377
 
 # To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+# To add a manager to this swarm, run the following command:
+
+#     docker swarm join --token SWMTKN-1-122webres8bns9uge53um4xk9rj7nxald357v6lobtlu5j1mmv-dv9f5832stomv1ekjywra7qd3 192.168.8.125:2377
