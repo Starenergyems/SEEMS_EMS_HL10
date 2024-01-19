@@ -17,4 +17,4 @@ COPY . .
 WORKDIR /usr/src/app/router
 
 # Define the command to run your app
-CMD ["node", "app.js"]
+CMD ["node", "rAlarm.js"]

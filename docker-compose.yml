@@ -4,21 +4,35 @@ services:
 
   ems-service:
     # restart: always
-    build: .
+    image: 127.0.0.1:5000/ems-service
+    build: 
+      context: .
+      dockerfile: Dockerfile
     # container_name: ems-service
     # volumes:
     #   - ./backend/Test:/app
     ports:
-      - "4000:4000"
+      - "3001:3001"
     # environment:
       # - POSTGRES_NAME=postgres
       # - POSTGRES_USER=postgres
       # - POSTGRES_PASSWORD=postgres
     deploy:
-      replicas: 3  # Set the desired number of replicas
+      replicas: 1  # Set the desired number of replicas
+      restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
+    # healthcheck:
+    #     test: ["CMD", "curl", "-fs", "http://localhost:3001/health"]
+    #     interval: 30s
+    #     timeout: 10s
+    #     retries: 3
+    #     start_period: 5s
     networks:
       - service-network
 
 networks:
   service-network:
-    attachable: true
+    external: false

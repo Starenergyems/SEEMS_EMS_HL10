@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo "Starting EMS docker"
+echo "Starting EMS docker replicas"
 
-docker-compose up -d --build
-# docker stack deploy -c docker-compose.yml ems-service
+# docker-compose up -d --build
+docker stack deploy --compose-file docker-compose.yml ems-service
 
 # sleep 3
 
