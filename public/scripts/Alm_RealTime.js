@@ -83,38 +83,63 @@ function hideFiltOptions(clickItem) {
   }
 }
 
-async function fetchReal() { //跟後端拿告警
-  const response = await fetch('http://localhost:3200/alarm/realtime/edit');
+//////////////////與後端互動/////////////////////////////////////////////
+
+async function dataGet(url) { //跟後端拿資料
+  const response = await fetch(url);
   const values = await response.json();
   return values;}
 
+async function dataPost(url, ID, Checked) {//提交資料給後端
+
+      console.log('開始嘗試POST')
+
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: {ID, Checked},
+        success: function () {
+          console.log('POST完成')          
+        },
+        error: function (error) {
+          reject(error);
+        },
+      });
+
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+let lang = {
+  sProcessing: "處理中...",
+  sLengthMenu: "每頁 _MENU_ 項",
+  sZeroRecords: "沒有匹配結果",
+  sInfo: "當前顯示第 _START_ 至 _END_ 項，共 _TOTAL_ 項。",
+  sInfoEmpty: "當前顯示第 0 至 0 項，共 0 項",
+  sInfoFiltered: "(由 _MAX_ 項結果過濾)",
+  sInfoPostFix: "",
+  sSearch: "搜尋:",
+  sUrl: "",
+  sEmptyTable: "查無資料",
+  sLoadingRecords: "載入中...",
+  sInfoThousands: ",",
+  oPaginate: {
+    sFirst: "首頁",
+    sPrevious: "上頁",
+    sNext: "下頁",
+    sLast: "末頁",
+    sJump: "跳轉",
+  },
+  oAria: {
+    sSortAscending: ": 以升序排列此列",
+    sSortDescending: ": 以降序排列此列",
+  },
+};
+
+var dataset=[];
 
 async function updateTable(){
-  let lang = {
-    sProcessing: "處理中...",
-    sLengthMenu: "每頁 _MENU_ 項",
-    sZeroRecords: "沒有匹配結果",
-    sInfo: "當前顯示第 _START_ 至 _END_ 項，共 _TOTAL_ 項。",
-    sInfoEmpty: "當前顯示第 0 至 0 項，共 0 項",
-    sInfoFiltered: "(由 _MAX_ 項結果過濾)",
-    sInfoPostFix: "",
-    sSearch: "搜尋:",
-    sUrl: "",
-    sEmptyTable: "查無資料",
-    sLoadingRecords: "載入中...",
-    sInfoThousands: ",",
-    oPaginate: {
-      sFirst: "首頁",
-      sPrevious: "上頁",
-      sNext: "下頁",
-      sLast: "末頁",
-      sJump: "跳轉",
-    },
-    oAria: {
-      sSortAscending: ": 以升序排列此列",
-      sSortDescending: ": 以降序排列此列",
-    },
-  };
+
   
   /*var dataset = [
     {
@@ -171,7 +196,7 @@ async function updateTable(){
     },
   ];*/
 
-  dataset = await fetchReal();
+  dataset = await dataGet('http://localhost:3200/alarm/realtime/edit');
   console.log(dataset);	
 
 
@@ -202,7 +227,7 @@ async function updateTable(){
 
     data: dataset,
     columns: [//要再加一欄index
-      { data: "_id" },
+      { data: "index" },
       { data: "occurrence_time" },
       { data: "location" },
       { data: "device" },
@@ -251,6 +276,7 @@ async function updateTable(){
     ],          
     
   });
+  readCheck();//監測所有已讀是否打勾
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,7 +292,7 @@ $(document).ready(function () {
     appear();
   });
 
-  readCheck();
+
 });
 
 function appear() {
@@ -284,27 +310,19 @@ function allCheck() {
   $("#chb_AckAll").prop("checked", false); // Unchecks it
 }
 
-function readCheck() {
-  //監測是否勾選已讀，勾選後刪除
-  // Event listener for checkbox change
-  $("#almTable tbody")
-    .off("change")
-    .on("change", ".chb_Ack", function () {
-      var rowData = table.row($(this).closest("tr")).data();
-      var rowTime = rowData.startTime; // 用時間和設備名稱辨認
-      var rowDevice = rowData.deviceName;
+var rowId, rowChecked;
+function readCheck() {  //監測是否勾選已讀，勾選後刪除
+  let table = new DataTable('#almTable'); 
 
+  $(".chb_Ack")
+    .off("change")
+    .on("change",  function () {
+      var rowData = table.row($(this).closest("tr")).data();
+      var rowId = rowData._id;//這筆資料在資料庫裡的id
+      var rowChecked = $(this).closest("td").find("input[type='checkbox']").prop("checked");
+      console.log(rowId);
+      console.log("已讀框偵測: "+rowChecked);
       // Send an AJAX request to remove the row from the database
-      $.ajax({
-        url: "your_backend_endpoint_for_deletion/" + rowTime + rowDevice,
-        method: "DELETE",
-        success: function (response) {
-          // Handle success, e.g., update the DataTable
-          table.ajax.reload();
-        },
-        error: function (error) {
-          console.error("Error deleting row:", error);
-        },
-      });
+      dataPost('http://localhost:3200/alarm/realtime/edit', rowId, rowChecked);
     });
 }
