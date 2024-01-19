@@ -83,11 +83,13 @@ function hideFiltOptions(clickItem) {
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+async function fetchReal() { //跟後端拿告警
+  const response = await fetch('http://localhost:3200/alarm/realtime/edit');
+  const values = await response.json();
+  return values;}
 
-//var permission="viewer"; //需讀權限
-var permission = "manager";
-$(document).ready(function () {
+
+async function updateTable(){
   let lang = {
     sProcessing: "處理中...",
     sLengthMenu: "每頁 _MENU_ 項",
@@ -113,7 +115,8 @@ $(document).ready(function () {
       sSortDescending: ": 以降序排列此列",
     },
   };
-  var dataset = [
+  
+  /*var dataset = [
     {
       index: "1",
       startTime: "2023/09/01 15:23:10.123",
@@ -166,7 +169,11 @@ $(document).ready(function () {
       endTime: "2023/09/01 14:43:10.123",
       checked: "0",
     },
-  ];
+  ];*/
+
+  dataset = await fetchReal();
+  console.log(dataset);	
+
 
   $("#almTable").DataTable({
     lengthMenu: [10, 20, 25, 50, 100],
@@ -185,23 +192,30 @@ $(document).ready(function () {
     pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
     responsive: true,
 
+    /*"ajax": {
+      "url": "http://localhost:3200/alarm/realtime/edit", // Replace with your server-side script
+      "dataSrc": "data",
+    "success": function(data) {
+      console.log(data[0]); // Print the data to the console
+  }
+     },*/
+
     data: dataset,
-    columns: [
-      { data: "index" },
-      { data: "startTime" },
-      { data: "place" },
-      { data: "deviceName" },
-      { data: "almLevel" },
-      { data: "description" },
-      { data: "value" },
+    columns: [//要再加一欄index
+      { data: "_id" },
+      { data: "occurrence_time" },
+      { data: "location" },
+      { data: "device" },
+      { data: "level" },
+      { data: "content" },
       {
-        data: "checked",
+        data: "read",
         render: function (data, type, row) {
           var rowIndex = row.index; // Get the index from the row object
           var checkboxId = "chb_Ack_" + rowIndex;
 
           if (permission === "manager") {
-            if (data === "1") {
+            if (data === true) {
               return (
                 '<input type="checkbox" checked class="chb_Ack" id="' +
                 checkboxId +
@@ -215,7 +229,7 @@ $(document).ready(function () {
               );
             }
           } else {
-            if (data === "1") {
+            if (data === true) {
               return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">';
             } else {
               return "";
@@ -224,18 +238,28 @@ $(document).ready(function () {
         },
       },
       {
-        data: "ended",
+        data: "recover",
         render: function (data, type, row) {
-          if (data === "1") {
+          if (data === true) {
             return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">';
           } else {
             return "";
           }
         },
       },
-      { data: "endTime" },
-    ],
+      { data: "recover_time" },
+    ],          
+    
   });
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+//var permission="viewer"; //需讀權限
+var permission = "manager";
+$(document).ready(function () {
+
+  updateTable();
 
   // 彈出視窗確定全選
   $("#chb_AckAll").on("change", function () {
