@@ -1019,28 +1019,30 @@ function LC_error_result_unit(db_name, time, occurrence_time, error_table, key_e
   }
   if (error_arr.length > 0) {
     // console.log(error_arr);
-    error_msg = {
-      time: time,
-      location: db_name,
-      device: device,
-      level: `${
-        error_table[key_error][tag]["name"]
-          .toLowerCase()
-          .includes("fault")
-          ? "Fault"
-          : "Alarm"
-      }`,
-      content: [
-        `${tag}:${error_table[key_error][tag]["name"]}`,
-        error_arr,
-      ],
-      value: value,
-      read: false,
-      recover: false,
-      recover_time: "",
-      occurrence_time: occurrence_time,
-    };
-    error_result.push(error_msg);
+    for (const e of error_arr) {
+      error_msg = {
+        time: time,
+        location: db_name,
+        device: device,
+        level: `${
+          error_table[key_error][tag]["name"]
+            .toLowerCase()
+            .includes("fault")
+            ? "Fault"
+            : "Alarm"
+        }`,
+        content: [
+          `${tag}:${error_table[key_error][tag]["name"]}`,
+          e,
+        ],
+        value: value,
+        read: false,
+        recover: false,
+        recover_time: "",
+        occurrence_time: occurrence_time,
+      };
+      error_result.push(error_msg);
+    }
   }
 }
 
@@ -1101,6 +1103,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
           // console.log(key, tag, status)
           if (value === error_table[tag]["status"]) {
             let device = `${db_name}_${key}`;
+            
             error_msg = {
               time: time,
               location: db_name,
@@ -1112,7 +1115,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
               }`,
               content: [
                 `${tag}:${error_table[tag]["name"]}`,
-                [error_table[tag]["name"]],
+                error_table[tag]["name"],
               ],
               value: value,
               read: false,
@@ -1160,28 +1163,31 @@ function Other_error_result_unit(db_name, time, occurrence_time, error_table, ta
   }
   if (error_arr.length > 0) {
     // console.log(error_arr);
-    error_msg = {
-      time: time,
-      location: db_name,
-      device: device,
-      level: `${
-        error_table[tag]["name"]
-          .toLowerCase()
-          .includes("fault")
-          ? "Fault"
-          : "Alarm"
-      }`,
-      content: [
-        `${tag}:${error_table[tag]["name"]}`,
-        error_arr,
-      ],
-      value: value,
-      read: false,
-      recover: false,
-      recover_time: "",
-      occurrence_time: occurrence_time,
-    };
-    error_result.push(error_msg);
+    for (const e of error_arr) {
+      // console.log(e);
+      error_msg = {
+        time: time,
+        location: db_name,
+        device: device,
+        level: `${
+          error_table[tag]["name"]
+            .toLowerCase()
+            .includes("fault")
+            ? "Fault"
+            : "Alarm"
+        }`,
+        content: [
+          `${tag}:${error_table[tag]["name"]}`,
+          e,
+        ],
+        value: value,
+        read: false,
+        recover: false,
+        recover_time: "",
+        occurrence_time: occurrence_time,
+      };
+      error_result.push(error_msg);
+    }
   }
 }
 
