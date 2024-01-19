@@ -56,63 +56,63 @@
                 <div class="bigInfo bI_workStatus">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workStatus">正常</label>
+                        <label class="data_val" id="workStatus"><%=workStatus%></label>
                     </div>
                     <p>運轉狀態</p>
                 </div>
                 <div class="bigInfo bI_onGridStatus">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="onGridStatus">投入</label>
+                        <label class="data_val" id="onGridStatus"><%=onGridStatus%></label>
                     </div>
                     <p>併網狀態</p>
                 </div>
                 <div class="bigInfo bI_onlineNum">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">/&nbsp7</div>
-                        <label class="data_val" id="onlineNum">6</label>
+                        <label class="data_val" id="onlineNum"><%=onlineNum%></label>
                     </div>
                     <p>BMS在線數</p>
                 </div>
                 <div class="bigInfo bI_systemV">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">V</div>
-                        <label class="data_val" id="systemV">1500.0</label>
+                        <label class="data_val" id="systemV"><%=systemV%></label>
                     </div>
                     <p>系統電壓</p>
                 </div>
                 <div class="bigInfo bI_systemI">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">A</div>
-                        <label class="data_val" id="systemI">-12500.0</label>
+                        <label class="data_val" id="systemI"><%=systemI%></label>
                     </div>
                     <p>系統電流</p>
                 </div>
                 <div class="bigInfo bI_systemSOC">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">%</div>
-                        <label class="data_val" id="systemSOC">78.9</label>
+                        <label class="data_val" id="systemSOC"><%=systemSOC%></label>
                     </div>
                     <p>平均SOC</p>
                 </div>
                 <div class="bigInfo bI_systemSOH">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">%</div>
-                        <label class="data_val" id="systemSOH">100.0</label>
+                        <label class="data_val" id="systemSOH"><%=systemSOH%></label>
                     </div>
                     <p>平均SOH</p>
                 </div>
                 <div class="bigInfo bI_avgContainerTemp">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">&#176C</div>
-                        <label class="data_val" id="avgContainerTemp">-100.0</label>
+                        <label class="data_val" id="avgContainerTemp"><%=avgContainerTemp%></label>
                     </div>
                     <p>貨櫃均溫</p>
                 </div>
                 <div class="bigInfo bI_heartBeat">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="heartBeat">123456</label>
+                        <label class="data_val" id="heartBeat"><%=heartBeat%></label>
                     </div>
                     <p>心跳</p>
                 </div>
@@ -124,48 +124,48 @@
                 </div>
 
                 <div class="DV_Line DV_onlineNum">Rack在線數
-                    <label class="dataValue" id="onlineNum_LC1">28</label>
+                    <label class="dataValue" id="onlineNum_LC1"><%=onlineNum_LC1%></label>
                     <p class="dataUnit">/&nbsp32</p>
                 </div>
 
-                <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC1">併網運轉中</label></div>
-                <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC1">全部投入</label>
+                <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC1"><%=workStatus_LC1%></label></div>
+                <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC1"><%=onGridStatus_LC1%></label>
                     <% if(permission === "manager"){ %>
                         <button class="setButton" id="setBut_onGridStatus_LC1">Set</button>
                     <% } %>    
                 </div>
 
-                <div class="DV_Line">電壓<label class="dataValue" id="voltage_LC1">1500.0</label>
+                <div class="DV_Line">電壓<label class="dataValue" id="voltage_LC1"><%=voltage_LC1%></label>
                     <p class="dataUnit">V</p>
                 </div>
-                <div class="DV_Line">電流<label class="dataValue" id="current_LC1">-3570.0</label>
+                <div class="DV_Line">電流<label class="dataValue" id="current_LC1"><%=current_LC1%></label>
                     <p class="dataUnit">A</p>
                 </div>
-                <div class="DV_Line">SOC<label class="dataValue" id="SOC_LC1">78.9</label>
+                <div class="DV_Line">SOC<label class="dataValue" id="SOC_LC1"><%=SOC_LC1%></label>
                     <p class="dataUnit">%</p>
                 </div>
-                <div class="DV_Line">SOH<label class="dataValue" id="SOH_LC1">100.0</label>
+                <div class="DV_Line">SOH<label class="dataValue" id="SOH_LC1"><%=SOH_LC1%></label>
                     <p class="dataUnit">%</p>
                 </div>
-                <div class="DV_Line">貨櫃溫度<label class="dataValue" id="containerTemp_LC1">-100.0</label>
+                <div class="DV_Line">貨櫃溫度<label class="dataValue" id="containerTemp_LC1"><%=containerTemp_LC1%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">最高電芯電壓<label class="dataValue" id="V_cell_Max_LC1">4.0001</label>
+                <div class="DV_Line">最高電芯電壓<label class="dataValue" id="V_cell_Max_LC1"><%=V_cell_Max_LC1%></label>
                     <p class="dataUnit">V</p>
                 </div>
-                <div class="DV_Line">最低電芯電壓<label class="dataValue" id="V_cell_Min_LC1">2.5001</label>
+                <div class="DV_Line">最低電芯電壓<label class="dataValue" id="V_cell_Min_LC1"><%=V_cell_Min_LC1%></label>
                     <p class="dataUnit">V</p>
                 </div>
-                <div class="DV_Line">最大電芯壓差<label class="dataValue" id="V_cell_MaxDiff_LC1">98.7</label>
+                <div class="DV_Line">最大電芯壓差<label class="dataValue" id="V_cell_MaxDiff_LC1"><%=V_cell_MaxDiff_LC1%></label>
                     <p class="dataUnit">mV</p>
                 </div>
-                <div class="DV_Line">最高電芯溫度<label class="dataValue" id="T_cell_Max_LC1">123.1</label>
+                <div class="DV_Line">最高電芯溫度<label class="dataValue" id="T_cell_Max_LC1"><%=T_cell_Max_LC1%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">最低電芯溫度<label class="dataValue" id="T_cell_Min_LC1">-123.1</label>
+                <div class="DV_Line">最低電芯溫度<label class="dataValue" id="T_cell_Min_LC1"><%=T_cell_Min_LC1%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">最大電芯溫差<label class="dataValue" id="T_cell_MaxDiff_LC1">100.0</label>
+                <div class="DV_Line">最大電芯溫差<label class="dataValue" id="T_cell_MaxDiff_LC1"><%=T_cell_MaxDiff_LC1%></label>
                     <p class="dataUnit">&#176C</p>
                 </div>
 

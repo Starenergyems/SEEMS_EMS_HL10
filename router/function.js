@@ -34,12 +34,6 @@ function scaleProcess(decimalValue, scale, point) {
   return result;
 }
 
-// const decimalValue = 150000;
-// const scale = 0.001;
-// const point = 2;
-// const processedValue = scaleProcess(decimalValue, scale, point);
-// console.log(processedValue); // 輸出：31.14
-
 //-------------------------------------------------------------------------------------------------
 //chargeStatus pcs充放電狀態
 function mapchargeStatus(decimalValue) {
@@ -61,10 +55,6 @@ function mapchargeStatus(decimalValue) {
     return "Non-working state";
   }
 }
-
-// const testDecimalValue = 2; // 這是一個十進制數值，可以根據你的實際情況更改
-// const result = mapchargeStatus(testDecimalValue);
-// console.log(result);
 
 //***************************************************************************** */
 //PCSWorkingStatus
@@ -384,6 +374,15 @@ const sysCtrl_2_MT = {
 };
 const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 
+function checkValues(value1, value2, value3) {
+  // 判斷是否有任一數值不為零
+  if (value1 !== 0 || value2 !== 0 || value3 !== 0) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 // let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
 // for (i = 0; i < cd_BitString.length; i++) {
 //   console.log(cd_BitString[i]);
@@ -451,7 +450,6 @@ module.exports = {
   mapPCSWorkingStatus,
   mapPCSWorkingMode,
   mapgridStatus,
-  // 其他導出的函數
   Convert_UInt_to_revBitString,
   Convert_UInt_to_BitString,
   mapWordStatus,
@@ -468,6 +466,7 @@ module.exports = {
   Determine_DL_of_RackHWStatus,
   Determine_DL_of_upsStatus2,
   Determine_DL_of_CommPCSBMS,
+  checkValues,
 };
 // //***************************************************************************** */
 // //轉換存陣列
