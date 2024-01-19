@@ -98,8 +98,9 @@ async function dataPost(url, ID, Checked) {//提交資料給後端
         type: 'POST',
         url: url,
         data: {ID, Checked},
-        success: function () {
-          console.log('POST完成')          
+        success: function(){
+          console.log("POST完成")
+          updateTable()//更新表格
         },
         error: function (error) {
           reject(error);
@@ -237,20 +238,16 @@ async function updateTable(){
         data: "read",
         render: function (data, type, row) {
           var rowIndex = row.index; // Get the index from the row object
-          var checkboxId = "chb_Ack_" + rowIndex;
+          //var checkboxId = "chb_Ack_" + rowIndex;
 
           if (permission === "manager") {
             if (data === true) {
               return (
-                '<input type="checkbox" checked class="chb_Ack" id="' +
-                checkboxId +
-                '">'
+                '<input type="checkbox" checked class="chb_Ack">'
               );
             } else {
               return (
-                '<input type="checkbox" class="chb_Ack" id="' +
-                checkboxId +
-                '">'
+                '<input type="checkbox" class="chb_Ack">'
               );
             }
           } else {
@@ -285,8 +282,8 @@ async function updateTable(){
 var permission = "manager";
 $(document).ready(function () {
 
-  updateTable();
-
+ 
+  waitTable();
   // 彈出視窗確定全選
   $("#chb_AckAll").on("change", function () {
     appear();
@@ -294,21 +291,35 @@ $(document).ready(function () {
 
 
 });
+async function waitTable(){
+    await updateTable();//更新表格
+    checkAllStatus(dataset);//判斷已讀全選是否該勾
+}
 
+
+function checkAllStatus(data){//判斷全選欄是否該勾選
+  
+    // Check if all values are true
+    const allChecked = data.every(item => item.read === true);
+    console.log(allChecked);
+    return allChecked; //還須測試如果全部是true會不會打勾
+
+}
 function appear() {
   $("#message").addClass("appear");
 }
 function remove() {
   $("#message").removeClass("appear");
 }
-function allCheck() {
+function allCheck() {//確定全選後執行
   remove();
   const isChecked = $("#chb_AckAll").prop("checked");
-  $(".chb_Ack").prop("checked", isChecked); //所有告警皆已讀
-  //post然後獲得return的資料
-  //更新表格
-  $("#chb_AckAll").prop("checked", false); // Unchecks it
+  dataPost('http://localhost:3200/alarm/realtime/edit', 'all', isChecked);
+
+  //$(".chb_Ack").prop("checked", isChecked); //所有告警皆已讀
+  $("#chb_AckAll").prop("checked", !isChecked); // 全選欄復歸
 }
+
 
 var rowId, rowChecked;
 function readCheck() {  //監測是否勾選已讀，勾選後刪除

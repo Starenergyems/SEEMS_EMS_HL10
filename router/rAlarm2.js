@@ -234,8 +234,17 @@ app.get("/alarm/realtime", (req, res) => {
 });
 
 app.post("/alarm/realtime/edit", (req, res) => {
-  console.log(id);
-  res.render("Alm_RealTime");
+  try {
+    const { ID, Checked } = req.body;
+    console.log('Received ID:', ID);
+    console.log('Received Checked:', Checked);
+
+    res.status(200).send("資料庫已更新");//資料庫修改刪除完後再執行這行
+  }catch (error) {
+    console.error(error);
+    res.status(500).send("伺服器錯誤");
+  }
+  //res.render("Alm_RealTime");
 });
 
 app.get("/alarm/realtime/edit", (req, res) => {
