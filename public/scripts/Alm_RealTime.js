@@ -293,18 +293,18 @@ $(document).ready(function () {
 });
 async function waitTable(){
     await updateTable();//更新表格
-    checkAllStatus(dataset);//判斷已讀全選是否該勾
+    //checkAllStatus(dataset);//判斷已讀全選是否該勾
 }
 
 
-function checkAllStatus(data){//判斷全選欄是否該勾選
+/*function checkAllStatus(data){//判斷全選欄是否該勾選
   
     // Check if all values are true
     const allChecked = data.every(item => item.read === true);
     console.log(allChecked);
     return allChecked; //還須測試如果全部是true會不會打勾
 
-}
+}*/
 function appear() {
   $("#message").addClass("appear");
 }
