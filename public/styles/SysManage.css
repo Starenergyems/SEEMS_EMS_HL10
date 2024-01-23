@@ -48,7 +48,7 @@ table.dataTable tbody .odd {
 .title {
     background-color: #CBE198;
     height: 40px;
-    margin: 10px 1.5% 5px;
+    margin-bottom: 15px;
     border-radius: 10px;
     position: relative;
     border-radius: 10px; 
