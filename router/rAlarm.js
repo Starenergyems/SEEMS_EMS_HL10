@@ -16,6 +16,7 @@ const {
   DC_error_result_gen,
   Other_error_result_gen,
   sendLineNotify,
+  init_Alarm_DB,
 } = require("./alarmFunctions");
 
 app.set("view engine", "ejs");
@@ -39,6 +40,7 @@ const otherrf01nanoDb = nano.use("other_rf01");
 const otherrf10nanoDb = nano.use("other_rf10");
 const alarmnanoDb = nano.use("alarm");
 const hisalarmnanoDb = nano.use("hisalarm");
+const alarm_test_nanoDb = nano.use("alarm_test");
 const indexDef = {
   index: { fields: ["time"] },
   name: "time_index",
@@ -54,6 +56,7 @@ gcnanoDb.createIndex(indexDef); //新增
 otherrf10nanoDb.createIndex(indexDef);
 alarmnanoDb.createIndex(indexDef);
 hisalarmnanoDb.createIndex(indexDef);
+alarm_test_nanoDb.createIndex(indexDef);
 
 const mangoQuery = {
   selector: {
@@ -62,6 +65,22 @@ const mangoQuery = {
   sort: [{ time: "desc" }],
   limit: 1,
 };
+
+// Check if the initialization flag document exists
+alarm_test_nanoDb.get('init_flag')
+  .then(initFlag => {
+    // Initialization flag document exists, do not reinitialize
+    console.log('Database already initialized. Skipping initialization.');
+  })
+  .catch(err => {
+    if (err.statusCode === 404) {
+      // Initialization flag document does not exist, proceed with initialization
+      init_Alarm_DB(alarm_test_nanoDb);
+    } else {
+      // Handle other errors
+      console.error('Error checking initialization flag:', err);
+    }
+  });
 //************************************************************* */
 
 //set

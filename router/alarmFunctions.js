@@ -1032,17 +1032,18 @@ const Alarm_DB_config = {
   gc_rf10: GC_error_table,
 };
 
-function creat_Alarm_DB(nanoDB, ) {
+function creat_Alarm_DB_docs(nanoDB,) {
+  let alarm_doc_array = []
   for (let [key, value] of Object.entries(Alarm_DB_config)) {
     for (let [k, v] of Object.entries(value)) {
       let alarm_doc = {};
       if (v["type"].includes("bit")) {
         for (let [_k, _v] of Object.entries(v["status"])) {
           alarm_doc = {
+            _id: `${key}:${k}:${_k}`,
             time: "time",
             device: key,
             location: v["location"],
-            tag: `${k}:${_k}`,
             level: `${
               v["name"]
                 .toLowerCase()
@@ -1058,20 +1059,14 @@ function creat_Alarm_DB(nanoDB, ) {
             recover_time: "recover_time",
             occurrence_time: "occurrence_time",
           };
-          nanoDB.insert(i)
-            .then((body) => {
-              console.log("User document inserted successfully. ID:", body.id, nanoDB["config"]["db"]);
-            })
-            .catch((err) => {
-              console.error("Error inserting user document:", err.message, nanoDB["config"]["db"]);
-            });
+          alarm_doc_array.push(alarm_doc);
         }
       } else {
         alarm_doc = {
+          _id: `${key}:${k}`,
           time: "time",
           device: key,
           location: v["location"],
-          tag: k,
           level: `${
             v["name"]
               .toLowerCase()
@@ -1087,18 +1082,32 @@ function creat_Alarm_DB(nanoDB, ) {
           recover_time: "recover_time",
           occurrence_time: "occurrence_time",
         };
-        nanoDB.insert(i)
-          .then((body) => {
-            console.log("User document inserted successfully. ID:", body.id, nanoDB["config"]["db"]);
-          })
-          .catch((err) => {
-            console.error("Error inserting user document:", err.message, nanoDB["config"]["db"]);
-          });
+        alarm_doc_array.push(alarm_doc);
       }
     }
   }
+  return alarm_doc_array
 }
 
+// Function to initialize the database
+function init_Alarm_DB(nanoDB,) {
+  const alarm_doc_array = creat_Alarm_DB_docs(nanoDB,)
+
+  // Bulk insert initial documents
+  nanoDB.bulk({ docs: alarm_doc_array })
+    .then(response => {
+      console.log('Database initialized successfully.');
+
+      // Create the initialization flag document
+      return nanoDB.insert({ _id: 'init_flag', initialized: true });
+    })
+    .then(() => {
+      console.log('Initialization flag created.');
+    })
+    .catch(err => {
+      console.error('Error initializing database:', err);
+    });
+}
 // Functions //--------------------------------------------------------------------------------
 function getLargestKey(obj) {
   // Get all keys of the object
@@ -1640,4 +1649,5 @@ module.exports = {
   DC_error_result_gen,
   Other_error_result_gen,
   sendLineNotify,
+  init_Alarm_DB,
 };
