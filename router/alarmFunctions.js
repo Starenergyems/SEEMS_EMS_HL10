@@ -1402,6 +1402,23 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
   return error_result;
 }
 
+function compare_trigger_alarms(error_result, response) {
+  let triggering_alarm_array = [];
+  Object.keys(error_result).forEach(key => {
+    triggering_alarm_array.push(key);
+  });
+  console.log(triggering_alarm_array);
+
+  let triggered_alarm_array = [];
+  response.docs.forEach(element => triggered_alarm_array.push(element._id));
+  console.log(triggered_alarm_array);
+
+  const set = triggering_alarm_array.filter(element => triggered_alarm_array.includes(element));
+  const nonset_triggering = triggering_alarm_array.filter(element => !triggered_alarm_array.includes(element));
+  const nonset_triggered = triggered_alarm_array.filter(element => !triggering_alarm_array.includes(element));
+
+}
+
 function sendLineNotify(error_result_item) {
   const message = `
     \nLevel: \n  ${error_result_item["level"]} 
