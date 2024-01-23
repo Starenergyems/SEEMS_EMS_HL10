@@ -70,7 +70,9 @@ const mangoQuery = {
 alarm_test_nanoDb.get('init_flag')
   .then(initFlag => {
     // Initialization flag document exists, do not reinitialize
-    console.log('Database already initialized. Skipping initialization.');
+    if (initFlag.initialized) {
+      console.log('Database already initialized. Skipping initialization.');
+    } else {init_Alarm_DB(alarm_test_nanoDb);}
   })
   .catch(err => {
     if (err.statusCode === 404) {
@@ -109,31 +111,31 @@ app.get("/alarm", (req, res) => {
       for (let item of body.docs) {
         // console.log(item);
         const error_result = LC_error_result_gen(item, db_name);
-        for (let i of error_result) {
-          // console.log(i.value, i.content)
+        console.log(error_result)
+        // for (let i of error_result) {
           // sendLineNotify(i);
 
-          alarmnanoDb
-            .insert(i)
-            .then((body) => {
-              console.log(
-                "User document inserted successfully. ID:",
-                body.id,
-                alarmnanoDb["config"]["db"]
-              );
-            })
-            .catch((err) => {
-              console.error(
-                "Error inserting user document:",
-                err.message,
-                alarmnanoDb["config"]["db"]
-              );
-            });
+          // alarmnanoDb
+          //   .insert(i)
+          //   .then((body) => {
+          //     console.log(
+          //       "User document inserted successfully. ID:",
+          //       body.id,
+          //       alarmnanoDb["config"]["db"]
+          //     );
+          //   })
+          //   .catch((err) => {
+          //     console.error(
+          //       "Error inserting user document:",
+          //       err.message,
+          //       alarmnanoDb["config"]["db"]
+          //     );
+          //   });
 
           // Specify the keys you want to remove
-          ["read", "recover", "recover_time"].forEach((key) => {
-            delete i[key];
-          });
+          // ["read", "recover", "recover_time"].forEach((key) => {
+          //   delete i[key];
+          // });
 
           // hisalarmnanoDb
           //   .insert(i)
@@ -143,7 +145,7 @@ app.get("/alarm", (req, res) => {
           //   .catch((err) => {
           //     console.error("Error inserting user document:", err.message, hisalarmnanoDb["config"]["db"]);
           //   });
-        }
+        // }
       }
     });
 
@@ -309,7 +311,7 @@ app.get("/alarm/realtime/edit", (req, res) => {
       }
     }
 
-    console.log(alarm_db_array);
+    // console.log(alarm_db_array);
     res.send(alarm_db_array);
   });
 });

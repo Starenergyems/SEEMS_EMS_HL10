@@ -1037,7 +1037,7 @@ function creat_Alarm_DB_docs(nanoDB,) {
   for (let [key, value] of Object.entries(Alarm_DB_config)) {
     for (let [k, v] of Object.entries(value)) {
       let alarm_doc = {};
-      if (v["type"].includes("bit")) {
+      if (v["type"] !== 'valve') {
         for (let [_k, _v] of Object.entries(v["status"])) {
           alarm_doc = {
             _id: `${key}:${k}:${_k}`,
@@ -1062,27 +1062,33 @@ function creat_Alarm_DB_docs(nanoDB,) {
           alarm_doc_array.push(alarm_doc);
         }
       } else {
-        alarm_doc = {
-          _id: `${key}:${k}`,
-          time: "time",
-          device: key,
-          location: v["location"],
-          level: `${
-            v["name"]
-              .toLowerCase()
-              .includes("fault")
-              ? "Fault"
-              : "Alarm"
-          }`,
-          content: v["name"],
-          value: "value",
-          trigger: false,
-          read: false,
-          recover: false,
-          recover_time: "recover_time",
-          occurrence_time: "occurrence_time",
+        const valve_status = {
+          0: "Lower valve",
+          1: "Greater valve",
         };
-        alarm_doc_array.push(alarm_doc);
+        for (let [_k, _v] of Object.entries(valve_status)) {
+          alarm_doc = {
+            _id: `${key}:${k}:${_k}`,
+            time: "time",
+            device: key,
+            location: v["location"],
+            level: `${
+              v["name"]
+                .toLowerCase()
+                .includes("fault")
+                ? "Fault"
+                : "Alarm"
+            }`,
+            content:`${v["name"]}:${_v}`,
+            value: "value",
+            trigger: false,
+            read: false,
+            recover: false,
+            recover_time: "recover_time",
+            occurrence_time: "occurrence_time",
+          };
+          alarm_doc_array.push(alarm_doc);
+        }
       }
     }
   }
@@ -1121,7 +1127,7 @@ function getLargestKey(obj) {
   return maxKey;
 }
 
-function mapBitToStatus(rawData, statusDict, error_arr) {
+function mapBitToStatus(rawData, statusDict, error_arr, bit_arr, bit_status) {
   const bitlength = getLargestKey(statusDict);
   //console.log(bitlength);
   const rawBitString = rawData.toString(2);
@@ -1136,7 +1142,7 @@ function mapBitToStatus(rawData, statusDict, error_arr) {
   // Iterate through each bit in the bit string
   for (let i = 0; i < bitString_rev.length; i++) {
     // Check if the current bit is set (1)
-    if (bitString_rev[i] === "1") {
+    if (bitString_rev[i] === bit_status) {
       // Find the corresponding value in the statusDict using the index
       let matchedValue = statusDict[i];
 
@@ -1144,39 +1150,11 @@ function mapBitToStatus(rawData, statusDict, error_arr) {
       // error_arr.push(matchedValue !== undefined ? matchedValue : "Unknown");
       if (matchedValue !== undefined) {
         error_arr.push(matchedValue);
+        bit_arr.push(i)
       }
     }
   }
-  return [error_arr, bitString_rev];
-}
-
-function mapBitToStatus_abnormal(rawData, statusDict, error_arr) {
-  const bitlength = getLargestKey(statusDict);
-  //console.log(bitlength);
-  const rawBitString = rawData.toString(2);
-  const bitString_rev = rawBitString
-    .padStart(bitlength, "0")
-    .slice(-bitlength)
-    .split("")
-    .reverse()
-    .join("");
-  //console.log(bitString_rev);
-
-  // Iterate through each bit in the bit string
-  for (let i = 0; i < bitString_rev.length; i++) {
-    // Check if the current bit is set (1)
-    if (bitString_rev[i] === "0") {
-      // Find the corresponding value in the statusDict using the index
-      let matchedValue = statusDict[i];
-
-      // Add the matched value to the result array or use a placeholder for unmatched indices
-      // error_arr.push(matchedValue !== undefined ? matchedValue : "Unknown");
-      if (matchedValue !== undefined) {
-        error_arr.push(matchedValue);
-      }
-    }
-  }
-  return [error_arr, bitString_rev];
+  return [error_arr, bit_arr];
 }
 
 function checkPartialMatch(k, array) {
@@ -1194,62 +1172,65 @@ function checkPartialMatch(k, array) {
   return null; // Return null if no match is found
 }
 
-function LC_error_result_unit(db_name, time, occurrence_time, error_table, key_error, tag, value, device, error_result,) {
-  let error_arr = [];
+function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag, value, device, error_result,) {  
   let error_type = error_table[key_error][tag]["type"];
 
-  if (error_type === "bit") {
-    [error_arr, value] = mapBitToStatus(
-      value,
-      error_table[key_error][tag]["status"],
-      error_arr
-    );
-  } else if (error_type === "int") {
-    if (error_table[key_error][tag]["status"][value]) {
-      error_arr.push(error_table[key_error][tag]["status"][value]);
-    };
-  } else if (error_type === "bit_abnormal") {
-    [error_arr, value] = mapBitToStatus_abnormal(
-      value,
-      error_table[key_error][tag]["status"],
-      error_arr
-    );
-  } else if (error_type === "valve") {
-    value = value * error_table[key_error][tag]["status"]["scale"];
-    let min = error_table[key_error][tag]["status"]["min"];
-    let max = error_table[key_error][tag]["status"]["max"];
-    // console.log(v)
-    if (value < min) {
-      error_arr.push(`Value is less than ${min}`);
-    } else if (value > max) {
-      error_arr.push(`Value is greater than ${max}`);
+  if (error_type.includes("bit")) {
+    let error_arr = [];
+    let bit_arr = [];
+    if (error_type === "bit") {
+      bit_status = "1";
+      [error_arr, bit_arr] = mapBitToStatus(
+        value,
+        error_table[key_error][tag]["status"],
+        error_arr,
+        bit_arr,
+        bit_status,
+      );
+    } else if (error_type === "bit_abnormal") {
+      bit_status = "0";
+      [error_arr, bit_arr] = mapBitToStatus(
+        value,
+        error_table[key_error][tag]["status"],
+        error_arr,
+        bit_arr,
+        bit_status,
+      );
     }
-  }
-  if (error_arr.length > 0) {
-    // console.log(error_arr);
-    for (const e of error_arr) {
-      error_msg = {
+    if (bit_arr.length > 0) {
+      for (let i = 0; i < bit_arr.length; i++) {
+        error_result[`${device}:${tag}:${bit_arr[i]}`] = {
+          time: time,
+          value: bit_status,
+          occurrence_time: occurrence_time,
+        };
+      }
+    };
+  } else {
+    if (error_type === "int") {
+      if (error_table[key_error][tag]["status"][value]) {
+        error_result[`${device}:${tag}:${value}`] = {
+          time: time,
+          value: value,
+          occurrence_time: occurrence_time,
+        };
+      };
+    } else if (error_type === "valve") {
+      value = value * error_table[key_error][tag]["status"]["scale"];
+      let min = error_table[key_error][tag]["status"]["min"];
+      let max = error_table[key_error][tag]["status"]["max"];
+      // console.log(v)
+      let valve_status = "";
+      if (value < min) {
+        valve_status = "0";
+      } else if (value > max) {
+        valve_status = "1";
+      }
+      error_result[`${device}:${tag}:${valve_status}`] = {
         time: time,
-        location: db_name,
-        device: device,
-        level: `${
-          error_table[key_error][tag]["name"]
-            .toLowerCase()
-            .includes("fault")
-            ? "Fault"
-            : "Alarm"
-        }`,
-        content: [
-          `${tag}:${error_table[key_error][tag]["name"]}`,
-          e,
-        ],
         value: value,
-        read: false,
-        recover: false,
-        recover_time: "",
         occurrence_time: occurrence_time,
       };
-      error_result.push(error_msg);
     }
   }
 }
@@ -1260,7 +1241,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
   //console.log(Object.keys(error_table))
   const time = current_locale_time();
   const occurrence_time = item.time;
-  const error_result = [];
+  const error_result = {};
   for (let key in item) {
     if (item.hasOwnProperty(key)) {
       key_error = checkPartialMatch(key, Object.keys(error_table));
@@ -1276,7 +1257,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
             //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
             let value = item[key][tag];
             let device = `${db_name}_${key}`;
-            LC_error_result_unit(db_name, time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
+            LC_error_result_unit(time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
           }
         } else {
           inner_item = item[key];
@@ -1288,7 +1269,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
               let value = inner_item[inner_key][tag];
               let device = `${db_name}_${key}_${inner_key}`;
-              LC_error_result_unit(db_name, time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
+              LC_error_result_unit(time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
             }
           }
         }
