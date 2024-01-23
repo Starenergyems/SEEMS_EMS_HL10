@@ -383,6 +383,50 @@ function checkValues(value1, value2, value3) {
   }
 }
 
+function workStatuschange(var1, var2, var3, var4) {
+  // 將每個變數轉換為固定16位的二進制字串
+  const binaryVar1 = var1.toString(2).padStart(16, "0");
+  const binaryVar2 = var2.toString(2).padStart(16, "0");
+  const binaryVar3 = var3.toString(2).padStart(16, "0");
+  const binaryVar4 = var4.toString(2).padStart(16, "0");
+
+  // 檢查每個位置上的位元是否只有一個1
+  const isValid =
+    countOnes(var1) === 1 &&
+    countOnes(var2) === 1 &&
+    countOnes(var3) === 1 &&
+    countOnes(var4) === 1;
+
+  if (isValid) {
+    // 檢查位置是否一致
+    const arePositionsEqual =
+      binaryVar1 === binaryVar2 &&
+      binaryVar1 === binaryVar3 &&
+      binaryVar1 === binaryVar4;
+
+    // 如果位置一致，返回位置號碼
+    if (arePositionsEqual) {
+      return parseInt(binaryVar1, 2);
+    }
+  }
+
+  // 如果位置不一致或條件不滿足，返回 0
+  return "100";
+}
+
+// Example Usage:
+const result = workStatuschange(1, 1, 1, 1);
+console.log(result);
+
+function countOnes(value) {
+  let count = 0;
+  while (value) {
+    count += value & 1;
+    value >>= 1;
+  }
+  return count;
+}
+
 // let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
 // for (i = 0; i < cd_BitString.length; i++) {
 //   console.log(cd_BitString[i]);
@@ -467,6 +511,7 @@ module.exports = {
   Determine_DL_of_upsStatus2,
   Determine_DL_of_CommPCSBMS,
   checkValues,
+  workStatuschange,
 };
 // //***************************************************************************** */
 // //轉換存陣列

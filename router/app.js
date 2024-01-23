@@ -62,9 +62,9 @@ app.use(cookieParser());
 const meterRouter = require("./rMeter");
 // const pcsRouter = require("./rPCS");
 const batteryRouter = require("./rBattery");
-// const commuRouter = require("./rCommu");
+const commuRouter = require("./rCommu");
 // const deviceRouter = require("./rDevice");
-// const environmentRouter = require("./rEnvironment");
+const environmentRouter = require("./rEnvironment");
 //const alarmRouter = require("./rAlarm");
 // const eventRouter = require("./rEvent");
 //const reportRouter = require("./rReport");
@@ -80,9 +80,9 @@ const batteryRouter = require("./rBattery");
 app.use(meterRouter);
 // app.use(pcsRouter);
 app.use(batteryRouter);
-// app.use(commuRouter);
+app.use(commuRouter);
 // app.use(deviceRouter);
-// app.use(environmentRouter);
+app.use(environmentRouter);
 //app.use(alarmRouter);
 // app.use(eventRouter);
 //app.use(reportRouter);
@@ -116,10 +116,10 @@ app.get("/error", (req, res) => {
 app.get("/health", (req, res) => {
   const isHealthy = true;
   if (isHealthy) {
-    res.status(200).json({status:'OK'});
+    res.status(200).json({ status: "OK" });
   } else {
-    res.status(500).json({status:'Error'});
-  };
+    res.status(500).json({ status: "Error" });
+  }
 });
 
 server.listen(port, () => {

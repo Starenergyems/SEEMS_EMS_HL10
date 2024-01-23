@@ -96,6 +96,7 @@ function Set_LC1_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC1_BMS併網狀態";
   valNow_dataStatus_Set = document.querySelector(".infoLC_1 #onGridStatus_LC1");
+  getDataForSet(1);
   // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
 }
 
@@ -107,6 +108,7 @@ function Set_LC2_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC2_BMS併網狀態";
   valNow_dataStatus_Set = document.querySelector(".infoLC_2 #onGridStatus_LC2");
+  getDataForSet(2);
 }
 
 const setBut_LC3_BMS = document.querySelector(
@@ -117,6 +119,7 @@ function Set_LC3_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC3_BMS併網狀態";
   valNow_dataStatus_Set = document.querySelector(".infoLC_3 #onGridStatus_LC3");
+  getDataForSet(3);
 }
 
 const setBut_LC4_BMS = document.querySelector(
@@ -127,6 +130,7 @@ function Set_LC4_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC4_BMS併網狀態";
   valNow_dataStatus_Set = document.querySelector(".infoLC_4 #onGridStatus_LC4");
+  getDataForSet(4);
 }
 
 const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
@@ -166,31 +170,6 @@ function closePopup_dSS_No() {
   window_dataStatus_Set.classList.remove("appear");
 }
 
-// function sendDataToBackend() {
-//   const selectedValue = $('input[name="dataStatus"]:checked').val();
-
-//   // 檢查是否有選擇任何一個選項
-//   if (selectedValue) {
-//     // 使用 AJAX 將資料送到後端
-//     $.ajax({
-//       type: "POST",
-//       url: "/backendEndpoint", // 請替換為您的後端端點
-//       data: { selectedValue },
-//       success: function (response) {
-//         console.log("資料已成功送到後端");
-//         // 處理後端回應（如果有需要）
-//       },
-//       error: function (error) {
-//         console.error("資料送到後端時發生錯誤", error);
-//         // 處理錯誤（如果有需要）
-//       },
-//     });
-//   } else {
-//     // 如果沒有選擇任何一個選項，顯示提示或處理方式
-//     $(".alertInfo").text("請選擇一個選項");
-//   }
-// }
-//參考//
 async function sendDataToBackend() {
   const selectedValue = $('input[name="dataStatus"]:checked').val();
   const title = document.querySelector(".titlePUW");
@@ -209,6 +188,24 @@ async function sendDataToBackend() {
     const data = await response.json();
     console.log(data);
     //displayData(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+async function getDataForSet(blockId) {
+  try {
+    console.log("嘗試向後端發出請求");
+    const response = await fetch("/getDataForSet", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ blockId }),
+    });
+
+    const data = await response.json();
+    console.log(data);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

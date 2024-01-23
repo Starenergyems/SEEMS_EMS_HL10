@@ -217,6 +217,7 @@ function show_info_RackAlm_R12() {
   show_info_RackAlm();
 }
 
+//獲取該區塊id
 async function getData(blockId) {
   try {
     console.log("嘗試向後端發出請求");
