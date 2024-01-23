@@ -415,8 +415,8 @@ function workStatuschange(var1, var2, var3, var4) {
 }
 
 // Example Usage:
-const result = workStatuschange(1, 1, 1, 1);
-console.log(result);
+//const result = workStatuschange(1, 1, 1, 1);
+//console.log(result);
 
 function countOnes(value) {
   let count = 0;

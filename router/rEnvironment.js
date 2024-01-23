@@ -5,6 +5,7 @@ const port = 3000;
 const router = express.Router();
 const app = express();
 const cors = require("cors");
+
 const {
   scaleProcess,
   mapWordStatus,
@@ -17,15 +18,12 @@ const { ok } = require("assert");
 const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
 const nanoDb = nano(couchDBUrl);
 
-//set
 app.set("view engine", "ejs");
-// 設定視圖目錄為 C:\Test\SEEMS_EMS\views
 app.set("views", path.join(__dirname, "../views"));
-//use
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
-//app.use(myMiddleware);
+app.use(cors());
 
 const acuOnOff_MT = { 0: "停機", 1: "啟動" };
 const acuRunStatus_MT = {
@@ -302,160 +300,195 @@ router.get("/systeminfo/environment", async (req, res) => {
   }
 });
 
-//SET按鈕 控制下行
-// router.post("/backendEndpoint", async (req, res) => {
-//   try {
-//     //const nanoDb = nano.use("dwctrl");
-//     const dataPromises = databases.map(async (dbName) => {
-//       const nanoDb = createNanoInstance(dbName);
-//       return getLatestDocument(nanoDb);
-//     });
+//******************************************************************** */
+//環境控制下方彈出視窗
+router.post("/getDataforenv", async (req, res) => {
+  try {
+    console.log("接收到環境監控的前端請求");
+    const blockId = req.body.blockId;
+    console.log("blockId:" + blockId); //回傳1-7 代表1-1~4-4
 
-//     // 使用 Promise.all 等待所有 promise 完成，獲取"所有資料庫"中的最新數據
-//     //並利用陣列不同列數儲存不同資料庫
-//     // 在這裡處理 allData，它是一個包含所有資料庫最新數據的陣列
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+    const BSCName = blockId % 2 === 1 ? "BSC1" : "BSC2";
+    const allData = await Promise.all(dataPromises); //獲得所有LC01-4的數值
+    const lcnum = Math.ceil(blockId / 2);
+    const lcData = allData[lcnum - 1];
+    console.log("lcnum:" + lcnum);
+    console.log("BSCName:" + BSCName);
 
-//     const allData = await Promise.all(dataPromises); //取得所有資料庫目前最新的一筆的數值 存在陣列裡面 由零開始
-//     const dwctrlData = allData[4];
+    const upsMode = lcData[BSCName]["406063"];
+    const upsLoad = lcData[BSCName]["406057"];
+    const upsVout = lcData[BSCName]["406054"];
+    const upsIout = lcData[BSCName]["406056"];
+    const upsTemp = lcData[BSCName]["406059"];
+    const upsSOC = lcData[BSCName]["406062"];
+    const upsStatus1 = lcData[BSCName]["406060"];
+    const upsStatus2 = lcData[BSCName]["406061"];
+    const bscAlarm = lcData[BSCName]["406003"];
+    const bscFault = lcData[BSCName]["406001"];
+    const ffsStatus = lcData[BSCName]["406005"];
 
-//     console.log("接收到前端請求");
-//     const selectedValue = req.body.selectedValue; //選取方塊的區塊的數字
-//     const lcnum = req.body.lcnum; //LC4_BMS併網狀態
-//     //console.log("selectedValue:" + selectedValue);
-//     //console.log("lcnum:" + lcnum);
-//     // 使用正規表達式提取數字部分
-//     const matchResult = lcnum.match(/\d+/);
-//     // 如果有匹配到數字，取得lc數值
-//     const extractedNumber = matchResult ? parseInt(matchResult[0], 10) : null;
-//     //console.log("extractedNumber:" + extractedNumber); //提取出來的lc數值
-//     // 修改 407008 這個點的數值
-//     const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
-//     //將最新的數值存到新的位置
+    // console.log(
+    //   "upsMode:" + upsMode,
+    //   "upsLoad:" + upsLoad,
+    //   "upsVout:" + upsVout,
+    //   "upsIout:" + upsIout,
+    //   "upsIout:" + upsIout,
+    //   "upsSOC:" + upsSOC,
+    //   "upsStatus1:" + upsStatus1,
+    //   "upsStatus2:" + upsStatus2,
+    //   "bscAlarm:" + bscAlarm,
+    //   "bscFault:" + bscFault,
+    //   "ffsStatus:" + ffsStatus
+    // );
 
-//     if (extractedNumber == 1) {
-//       newdwctrlData.lc1.W407008 = selectedValue;
-//       console.log("newdwctrlData.lc1.W407008:" + newdwctrlData.lc1.W407008);
-//     } else if (extractedNumber == 2) {
-//       newdwctrlData.lc2.W407008 = selectedValue;
-//       console.log("newdwctrlData.lc2.W407008:" + newdwctrlData.lc2.W407008);
-//     } else if (extractedNumber == 3) {
-//       newdwctrlData.lc3.W407008 = selectedValue;
-//       console.log("newdwctrlData.lc3.W407008:" + newdwctrlData.lc3.W407008);
-//     } else if (extractedNumber == 4) {
-//       newdwctrlData.lc4.W407008 = selectedValue;
-//       console.log("newdwctrlData.lc4.W407008:" + newdwctrlData.lc4.W407008);
-//     }
+    //回傳數值到前端(JSON格式)
+    const data = {
+      upsMode,
+      upsLoad,
+      upsVout,
+      upsIout,
+      upsTemp,
+      upsSOC,
+      upsStatus1,
+      upsStatus2,
+      bscAlarm,
+      bscFault,
+      ffsStatus,
+    };
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("伺服器錯誤");
+  }
+});
 
-//     // 刪除 _id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
-//     newdwctrlData.time = new Date().toISOString();
-//     delete newdwctrlData._id;
-//     delete newdwctrlData._rev;
-//     await nanoDb.use("dwctrl").insert(newdwctrlData);
-//     // console.log(
-//     //   "newdwctrlData 1讀取到的資料是:" + JSON.stringify(newdwctrlData, null, 2)
-//     // );
+//******************************************************************** */
+//空調起停 SET按鈕把數值帶入打勾
+router.post("/getDataForacuOnOff", async (req, res) => {
+  try {
+    //console.log("接收到前端請求");
+    const blockId = req.body.blockId; //可以得到是哪台lc
+    const selectedValue = req.body.selectedValue; //選取方塊的區塊的數字
 
-//     //log紀錄
-//     let content;
+    console.log("getDataFor acuOnOff blockId:" + blockId);
 
-//     if (selectedValue == 1) {
-//       content = "切離";
-//     } else if (selectedValue == 2) {
-//       content = "投入";
-//     } else if (selectedValue == 3) {
-//       content = "故障復位";
-//     } else {
-//       content = "未知動作";
-//     }
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
 
-//     const logDb = createNanoInstance("log");
-//     //const accountDb = createNanoInstance("account");
-//     const currentTime = new Date().toISOString();
-//     const doc = {
-//       tag: `LC${extractedNumber}_rf10.Ctrl.407008`,
-//       time: currentTime,
-//       category: "設備控制",
-//       device: `LC${extractedNumber}`,
-//       username: "SE0008",
-//       content: `將LC${extractedNumber}BMS併網狀態設為${content}`,
-//     };
+    const allData = await Promise.all(dataPromises);
+    const num = blockId - 1; //存放位置從零開始所以要減一
+    const lcData = allData[num];
 
-//     const result = await logDb.insert(doc);
-//     console.log("Document added to database. ID: " + result.id);
-//     const data = { ststus: ok };
-//     res.json(data);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Server Error");
-//   }
-// });
+    const data = lcData.Ctrl["407018"]; //回傳目前數
 
-// app.use(bodyParser.json());
+    //console.log("Ruturn: " + lcData.Ctrl["407008"]);
+    //回傳要帶點
+    res.json(data);
+    if (!lcData) {
+      throw new Error("No data found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
 
-// //各rack單獨彈出視窗
-// router.post("/getData", async (req, res) => {
-//   try {
-//     console.log("接收到前端請求");
-//     const blockId = req.body.blockId;
-//     console.log("blockId:" + blockId);
+//空調起停 按下去的SET按鈕
+router.post("/envbackendEndpoint", async (req, res) => {
+  try {
+    console.log("rEnvironment 接收到前端請求");
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
 
-//     console.log("globalPageNumber:" + globalPageNumber);
+    const allData = await Promise.all(dataPromises); //取得所有資料庫目前最新的一筆的數值 存在陣列裡面 由零開始
+    const lc1Data = allData[0];
+    const lc2Data = allData[1];
+    const lc3Data = allData[2];
+    const lc4Data = allData[3];
+    const dwctrlData = allData[4];
+    const selectedValue = req.body.selectedValue; //選取方塊的區塊的數字
+    console.log("後端得到的selectedValue:" + selectedValue);
+    const lcnum = req.body.lcnum; //LC4_BMS併網狀態
+    console.log("後端得到的lcnum:", lcnum);
+    // 使用正規表達式提取數字部分
+    const matchResult = lcnum.match(/\d+/);
+    // 如果有匹配到數字，取得lc數值
+    const extractedNumber = matchResult ? parseInt(matchResult[0], 10) : null;
+    console.log("extractedNumber:" + extractedNumber); //提取出來的lc數值
+    // 修改 407008 這個點的數值
+    const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+    //將最新的數值存到新的位置
 
-//     const dataPromises = databases.map(async (dbName) => {
-//       const nanoDb = createNanoInstance(dbName);
-//       return getLatestDocument(nanoDb);
-//     });
+    if (extractedNumber == 1) {
+      newdwctrlData.lc1.W407018 = selectedValue;
+      console.log("newdwctrlData.lc1.W407008:" + newdwctrlData.lc1.W407018);
+    } else if (extractedNumber == 2) {
+      newdwctrlData.lc2.W407018 = selectedValue;
+      console.log("newdwctrlData.lc2.W407008:" + newdwctrlData.lc2.W407018);
+    } else if (extractedNumber == 3) {
+      newdwctrlData.lc3.W407018 = selectedValue;
+      console.log("newdwctrlData.lc3.W407008:" + newdwctrlData.lc3.W407018);
+    } else if (extractedNumber == 4) {
+      newdwctrlData.lc4.W407018 = selectedValue;
+      console.log("newdwctrlData.lc4.W407008:" + newdwctrlData.lc4.W407018);
+    }
+    const currentDate = new Date();
+    const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
+    const localTime = new Date(currentDate - timezoneOffset);
+    const isoString = localTime.toISOString().replace("Z", "+08:00");
 
-//     const allData = await Promise.all(dataPromises);
-//     const baseNumber = Math.ceil(globalPageNumber / 2);
-//     const isEvenPage = globalPageNumber % 2 === 0;
-//     const num = baseNumber - 1;
-//     const lcData = allData[num];
-//     console.log("num: " + num);
-//     const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
-//     console.log("判斷isEvenPage??" + isEvenPage);
-//     console.log("Lc_RackGroup: " + Lc_RackGroup);
+    // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+    newdwctrlData.time = isoString;
+    delete newdwctrlData._id;
+    delete newdwctrlData._rev;
+    await nanoDb.use("dwctrl").insert(newdwctrlData);
+    // console.log(
+    //   "newdwctrlData 1讀取到的資料是:" + JSON.stringify(newdwctrlData, null, 2)
+    // );
 
-//     const collectionMap = {
-//       1: "Rack01",
-//       2: "Rack02",
-//       3: "Rack03",
-//       4: "Rack04",
-//       5: "Rack05",
-//       6: "Rack06",
-//       7: "Rack07",
-//       8: "Rack08",
-//       9: "Rack09",
-//       10: "Rack10",
-//       11: "Rack11",
-//       12: "Rack12",
-//     };
+    //log紀錄
+    let content;
 
-//     let selectedCollection = collectionMap[blockId];
-//     const alarmCMU_rawD = Lc_RackGroup[selectedCollection][405028];
-//     const faultCMU_rawD = Lc_RackGroup[selectedCollection][405030];
-//     const DL_of_statusHW = Lc_RackGroup[selectedCollection][405032];
+    if (selectedValue == 1) {
+      content = "啟動";
+    } else if (selectedValue == 2) {
+      content = "停止";
+    }
 
-//     console.log("alarmCMU_rawD: " + alarmCMU_rawD);
-//     console.log("faultCMU_rawD: " + faultCMU_rawD);
-//     console.log("DL_of_statusHW: " + DL_of_statusHW);
-//     console.log("selectedCollection: " + selectedCollection);
+    const logDb = createNanoInstance("log");
+    //const accountDb = createNanoInstance("account");
 
-//     const data = {
-//       alarmCMU_rawD: alarmCMU_rawD.toString(2),
-//       faultCMU_rawD: faultCMU_rawD.toString(2),
-//       DL_of_statusHW: DL_of_statusHW.toString(2),
-//     };
+    const doc = {
+      tag: `LC${extractedNumber}_rf10.Ctrl.407018`,
+      time: isoString,
+      category: "設備控制",
+      device: `LC${extractedNumber}`,
+      username: "SE0008",
+      content: `將LC${extractedNumber}空調啟停設為${content}`,
+    };
 
-//     res.json(data);
+    console.log("log內容是:" + doc);
 
-//     if (!lcData) {
-//       throw new Error("No data found");
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("伺服器錯誤");
-//   }
-// });
+    if (selectedValue != 0) {
+      const result = await logDb.insert(doc);
+      console.log(result);
+    }
+
+    //console.log("Document added to database. ID: " + result.id);
+    const data = { ststus: ok };
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;

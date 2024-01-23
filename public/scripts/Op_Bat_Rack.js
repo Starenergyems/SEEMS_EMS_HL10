@@ -217,7 +217,8 @@ function show_info_RackAlm_R12() {
   show_info_RackAlm();
 }
 
-//獲取該區塊id
+//獲取該區塊id rack彈跳視窗
+
 async function getData(blockId) {
   try {
     console.log("嘗試向後端發出請求");
@@ -231,14 +232,7 @@ async function getData(blockId) {
 
     const data = await response.json();
     console.log(data);
-    displayData(data);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
-}
-
-function displayData(data) {
-  console.log("Received data:", data);
-  const dataContainer = document.getElementById("data-container");
-  dataContainer.innerHTML = `<p>${data}</p>`;
 }

@@ -41,8 +41,8 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
       }
 
       const other1Data = body.docs[0]; // 取得數據的第一個元素
-      console.log("AA----------------------------------------------AA");
-      console.log(other1Data);
+      //console.log("AA----------------------------------------------AA");
+      //console.log(other1Data);
 
       const scaleAndPointMapping = {
         408001: { scale: 0.1, point: 1 },
@@ -72,9 +72,9 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
           const originalValue = other1Data.Freq[property];
           const scaledValue = scaleProcess(originalValue, scale, point);
           data[property] = scaledValue;
-          console.log("屬性", property);
-          console.log("原始數值", originalValue);
-          console.log("轉換後數值", scaledValue);
+          // console.log("屬性", property);
+          // console.log("原始數值", originalValue);
+          // console.log("轉換後數值", scaledValue);
         }
       );
 

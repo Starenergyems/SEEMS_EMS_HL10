@@ -169,30 +169,8 @@ function closePopup_dSS_No() {
   radioOption3.checked = false;
   window_dataStatus_Set.classList.remove("appear");
 }
-
-async function sendDataToBackend() {
-  const selectedValue = $('input[name="dataStatus"]:checked').val();
-  const title = document.querySelector(".titlePUW");
-  try {
-    console.log("嘗試向後端發出請求");
-    const lcnum = $(".dataStatus_Set .titlePUW").text();
-    console.log("lcnum:" + lcnum);
-    const response = await fetch("/backendEndpoint", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ selectedValue, lcnum }),
-    });
-
-    const data = await response.json();
-    console.log(data);
-    //displayData(data);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
-
+/////////////////////////////////////////////////////////////////////////
+//rbattery.js operateinfo/battery SET按鈕把數值帶入打勾
 async function getDataForSet(blockId) {
   try {
     console.log("嘗試向後端發出請求");
@@ -206,6 +184,32 @@ async function getDataForSet(blockId) {
 
     const data = await response.json();
     console.log(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+//rbattery.js operateinfo/battery SET按鈕 控制下行
+async function sendDataToBackend() {
+  const selectedValue = $('input[name="dataStatus"]:checked').val();
+  //const title = document.querySelector(".titlePUW");
+  try {
+    console.log("嘗試向後端發出請求");
+    //ejs回傳id
+    const lcnum = $(".dataStatus_Set .titlePUW").text();
+    console.log("lcnum:" + lcnum);
+
+    const response = await fetch("/backendEndpoint", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ selectedValue, lcnum }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    //displayData(data);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

@@ -53,7 +53,7 @@
                     <tr class="row_other row_set">
                         <td class="col_01">空調啟停</td>
                         <td colspan="2" class="col_other col_S2"><label class="dataStatus" id="acuOnOff_1"><%=acuOnOff_1%></label>
-                            <button class="setButton" id="setBut_acuOnOff_1">Set</button>
+                            <button class="setButton" id="setBut_acuOnOff_1" >Set</button>
                         </td>
                         <td colspan="2" class="col_other col_S2"><label class="dataStatus" id="acuOnOff_2"><%=acuOnOff_2%></label>
                             <button class="setButton" id="setBut_acuOnOff_2">Set</button>
@@ -456,7 +456,7 @@
 
                 <p class="alertInfo"></p>
 
-                <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                <button class="closeWindowButton" id="closeWB_Yes" onclick="sendDataToBackend()">確認</button>
                 <button class="closeWindowButton" id="closeWB_No">取消</button>
             </div>
 
@@ -478,7 +478,7 @@
             </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="../public/scripts/script_template.js"></script>
     <script src="../public/scripts/Sys_Environment.js"></script>
 </body>

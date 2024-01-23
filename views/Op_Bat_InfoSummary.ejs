@@ -56,14 +56,14 @@
                 <div class="bigInfo bI_workStatus">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workStatus"><%=workStatus%></label>
+                        <label class="data_val" id="workStatus"><%= workStatus %></label>
                     </div>
                     <p>運轉狀態</p>
                 </div>
                 <div class="bigInfo bI_onGridStatus">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="onGridStatus"><%=onGridStatus%></label>
+                        <label class="data_val" id="onGridStatus"><%= onGridStatus %></label>
                     </div>
                     <p>併網狀態</p>
                 </div>
@@ -326,10 +326,10 @@
                     <p class="dataUnit">/&nbsp16</p>
                 </div>
 
-                <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC4">併網運轉中</label></div>
-                <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC4">全部切離</label>
+                <div class="DS_Line">運轉狀態<label class="dataStatus" id="workStatus_LC4"><%=workStatus_LC4%></label></div>
+                <div class="DS_Line">併網狀態<label class="dataStatus" id="onGridStatus_LC4"><%=onGridStatus_LC4%></label>
                     <% if(permission === "manager"){ %>
-                        <button class="setButton" id="setBut_onGridStatus_LC4" onclick="sendDataToBackend(this.id)">Set</button>
+                        <button class="setButton" id="setBut_onGridStatus_LC4">Set</button>
                     <% } %>    
                 </div>
 

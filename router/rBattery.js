@@ -109,7 +109,7 @@ const getLatestDocument = async (nanoDb) => {
 //***************************************************************************************************************** */
 
 router.get("/operateinfo", (req, res) => {
-  console.log("路徑設置");
+  res.redirect("/operateinfo/battery");
 });
 
 router.get("/operateinfo/battery", async (req, res) => {
@@ -213,7 +213,9 @@ router.get("/operateinfo/battery", async (req, res) => {
 
       containerTemp_LC1: calculateAverage(
         lc1Data.BSC1["406047"],
-        lc1Data.BSC1["406049"]
+        lc1Data.BSC1["406049"],
+        lc1Data.BSC2["406047"],
+        lc1Data.BSC2["406049"]
       ),
 
       V_cell_Max_LC1: calculateAverage(
@@ -278,7 +280,9 @@ router.get("/operateinfo/battery", async (req, res) => {
 
       containerTemp_LC2: calculateAverage(
         lc2Data.BSC1["406047"],
-        lc2Data.BSC1["406049"]
+        lc2Data.BSC1["406049"],
+        lc2Data.BSC2["406047"],
+        lc2Data.BSC2["406049"]
       ),
 
       V_cell_Max_LC2: calculateAverage(
@@ -343,7 +347,9 @@ router.get("/operateinfo/battery", async (req, res) => {
 
       containerTemp_LC3: calculateAverage(
         lc3Data.BSC1["406047"],
-        lc3Data.BSC1["406049"]
+        lc3Data.BSC1["406049"],
+        lc3Data.BSC2["406047"],
+        lc3Data.BSC2["406049"]
       ),
 
       V_cell_Max_LC3: calculateAverage(
@@ -431,18 +437,19 @@ router.get("/operateinfo/battery", async (req, res) => {
       permission: "manager",
     });
   } catch (error) {
-    console.error(error);
+    console.error(errsendDataToBackendor);
     res.status(500).send("Internal Server Error");
   }
 });
 
 //***************************************************************************************** */
-//SET按鈕 帶值
+//Op_Bat_InfoSummary.js
+///operateinfo/battery SET按鈕把數值帶入打勾
 router.post("/getDataForSet", async (req, res) => {
   try {
-    console.log("接收到前端請求");
+    //console.log("接收到前端請求");
     const blockId = req.body.blockId; //可以得到是哪台lc
-    console.log("blockId:" + blockId);
+    console.log("Op_Bat_InfoSummary.js getDataForSet blockId:" + blockId);
 
     const dataPromises = databases.map(async (dbName) => {
       const nanoDb = createNanoInstance(dbName);
@@ -452,13 +459,12 @@ router.post("/getDataForSet", async (req, res) => {
     const allData = await Promise.all(dataPromises);
     const num = blockId - 1; //存放位置從零開始所以要減一
     const lcData = allData[num];
-    console.log("num: " + num);
 
     const data = lcData.Ctrl["407008"]; //回傳目前數
 
-    console.log("Ruturn: " + lcData.Ctrl["407008"]);
+    //console.log("Ruturn: " + lcData.Ctrl["407008"]);
+    //回傳要帶點
     res.json(data);
-    //res.render("Op_Bat_InfoSummary", { data: data });
     if (!lcData) {
       throw new Error("No data found");
     }
@@ -468,28 +474,20 @@ router.post("/getDataForSet", async (req, res) => {
   }
 });
 
-//***************************************************************************************** */
 //SET按鈕 控制下行
 router.post("/backendEndpoint", async (req, res) => {
   try {
-    //const nanoDb = nano.use("dwctrl");
     const dataPromises = databases.map(async (dbName) => {
       const nanoDb = createNanoInstance(dbName);
       return getLatestDocument(nanoDb);
     });
 
-    // 使用 Promise.all 等待所有 promise 完成，獲取"所有資料庫"中的最新數據
-    //並利用陣列不同列數儲存不同資料庫
-    // 在這裡處理 allData，它是一個包含所有資料庫最新數據的陣列
-
     const allData = await Promise.all(dataPromises); //取得所有資料庫目前最新的一筆的數值 存在陣列裡面 由零開始
     const dwctrlData = allData[4];
 
-    console.log("接收到前端請求");
+    //console.log("接收到前端請求");
     const selectedValue = req.body.selectedValue; //選取方塊的區塊的數字
     const lcnum = req.body.lcnum; //LC4_BMS併網狀態
-    //console.log("selectedValue:" + selectedValue);
-    //console.log("lcnum:" + lcnum);
     // 使用正規表達式提取數字部分
     const matchResult = lcnum.match(/\d+/);
     // 如果有匹配到數字，取得lc數值
@@ -501,20 +499,27 @@ router.post("/backendEndpoint", async (req, res) => {
 
     if (extractedNumber == 1) {
       newdwctrlData.lc1.W407008 = selectedValue;
-      console.log("newdwctrlData.lc1.W407008:" + newdwctrlData.lc1.W407008);
+      //console.log("newdwctrlData.lc1.W407008:" + newdwctrlData.lc1.W407008);
     } else if (extractedNumber == 2) {
       newdwctrlData.lc2.W407008 = selectedValue;
-      console.log("newdwctrlData.lc2.W407008:" + newdwctrlData.lc2.W407008);
+      //console.log("newdwctrlData.lc2.W407008:" + newdwctrlData.lc2.W407008);
     } else if (extractedNumber == 3) {
       newdwctrlData.lc3.W407008 = selectedValue;
-      console.log("newdwctrlData.lc3.W407008:" + newdwctrlData.lc3.W407008);
+      //console.log("newdwctrlData.lc3.W407008:" + newdwctrlData.lc3.W407008);
     } else if (extractedNumber == 4) {
       newdwctrlData.lc4.W407008 = selectedValue;
-      console.log("newdwctrlData.lc4.W407008:" + newdwctrlData.lc4.W407008);
+      //console.log("newdwctrlData.lc4.W407008:" + newdwctrlData.lc4.W407008);
     }
+    //const accountDb = createNanoInstance("account");
+    //存入資料庫的時區問題
 
-    // 刪除 _id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
-    newdwctrlData.time = new Date().toISOString();
+    const currentDate = new Date();
+    const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
+    const localTime = new Date(currentDate - timezoneOffset);
+    const isoString = localTime.toISOString().replace("Z", "+08:00");
+
+    // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+    newdwctrlData.time = isoString;
     delete newdwctrlData._id;
     delete newdwctrlData._rev;
     await nanoDb.use("dwctrl").insert(newdwctrlData);
@@ -531,24 +536,26 @@ router.post("/backendEndpoint", async (req, res) => {
       content = "投入";
     } else if (selectedValue == 3) {
       content = "故障復位";
-    } else {
-      content = "未知動作";
     }
 
     const logDb = createNanoInstance("log");
-    //const accountDb = createNanoInstance("account");
-    const currentTime = new Date().toISOString();
+
     const doc = {
       tag: `LC${extractedNumber}_rf10.Ctrl.407008`,
-      time: currentTime,
+      time: isoString,
       category: "設備控制",
       device: `LC${extractedNumber}`,
       username: "SE0008",
       content: `將LC${extractedNumber}BMS併網狀態設為${content}`,
     };
+    //console.log(doc);
 
-    const result = await logDb.insert(doc);
-    console.log("Document added to database. ID: " + result.id);
+    if (selectedValue != 0) {
+      const result = await logDb.insert(doc);
+      //console.log(result);
+    }
+
+    //console.log("Document added to database. ID: " + result.id);
     const data = { ststus: ok };
     res.json(data);
   } catch (error) {
@@ -579,8 +586,8 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     // 根據 pageNumber 選擇不同的集合名稱
     const selectedCollection = collectionMap[pageNumber];
 
-    console.log("pageNumber: " + pageNumber);
-    console.log("selectedCollection: " + selectedCollection);
+    // console.log("pageNumber: " + pageNumber);
+    // console.log("selectedCollection: " + selectedCollection);
 
     if (!selectedCollection) {
       throw new Error("infodetail: Invalid pageNumber");
@@ -602,7 +609,7 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     // const lc4Data = allData[3];
     const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
     const lcData = allData[num];
-    console.log("num: " + num);
+    //console.log("num: " + num);
     //console.log("baseNumber:" + baseNumber);
 
     if (!lcData) {
@@ -763,9 +770,9 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
     };
 
     let selectedCollection = collectionMap[pageNumber];
-    console.log("-------------------------------------------------------");
-    console.log("頁數 pageNumber: " + pageNumber);
-    console.log("selectedCollection: " + selectedCollection);
+    // console.log("-------------------------------------------------------");
+    // console.log("頁數 pageNumber: " + pageNumber);
+    // console.log("selectedCollection: " + selectedCollection);
 
     if (!selectedCollection) {
       throw new Error("rack : Invalid pageNumber");
@@ -786,8 +793,8 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
 
     const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
     const lcData = allData[num];
-    console.log("num: " + num);
-    console.log("對應資料庫要抓到哪個-baseNumber: " + baseNumber);
+    // console.log("num: " + num);
+    // console.log("對應資料庫要抓到哪個-baseNumber: " + baseNumber);
     //console.log("baseNumber:" + baseNumber);
 
     if (!lcData) {
@@ -798,8 +805,8 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
 
     const isEvenPage = pageNumber % 2 === 0;
     const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
-    console.log("判斷isEvenPage??" + isEvenPage);
-    console.log("Lc_RackGroup: " + Lc_RackGroup);
+    // console.log("判斷isEvenPage??" + isEvenPage);
+    // console.log("Lc_RackGroup: " + Lc_RackGroup);
     res.render("Op_Bat_Rack", {
       permission: "manager",
       pageNumber,
@@ -1247,11 +1254,11 @@ app.use(bodyParser.json());
 //各rack單獨彈出視窗
 router.post("/getData", async (req, res) => {
   try {
-    console.log("接收到前端請求");
+    //console.log("接收到前端請求");
     const blockId = req.body.blockId;
-    console.log("blockId:" + blockId);
+    //console.log("blockId:" + blockId);
 
-    console.log("globalPageNumber:" + globalPageNumber);
+    //console.log("globalPageNumber:" + globalPageNumber);
 
     const dataPromises = databases.map(async (dbName) => {
       const nanoDb = createNanoInstance(dbName);
@@ -1263,10 +1270,10 @@ router.post("/getData", async (req, res) => {
     const isEvenPage = globalPageNumber % 2 === 0;
     const num = baseNumber - 1;
     const lcData = allData[num];
-    console.log("num: " + num);
+    //console.log("num: " + num);
     const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
-    console.log("判斷isEvenPage??" + isEvenPage);
-    console.log("Lc_RackGroup: " + Lc_RackGroup);
+    //console.log("判斷isEvenPage??" + isEvenPage);
+    //console.log("Lc_RackGroup: " + Lc_RackGroup);
 
     const collectionMap = {
       1: "Rack01",
@@ -1283,16 +1290,18 @@ router.post("/getData", async (req, res) => {
       12: "Rack12",
     };
 
+    //判斷帶入哪個rack
     let selectedCollection = collectionMap[blockId];
     const alarmCMU_rawD = Lc_RackGroup[selectedCollection][405028];
     const faultCMU_rawD = Lc_RackGroup[selectedCollection][405030];
     const DL_of_statusHW = Lc_RackGroup[selectedCollection][405032];
 
-    console.log("alarmCMU_rawD: " + alarmCMU_rawD);
-    console.log("faultCMU_rawD: " + faultCMU_rawD);
-    console.log("DL_of_statusHW: " + DL_of_statusHW);
-    console.log("selectedCollection: " + selectedCollection);
+    // console.log("alarmCMU_rawD: " + alarmCMU_rawD);
+    // console.log("faultCMU_rawD: " + faultCMU_rawD);
+    // console.log("DL_of_statusHW: " + DL_of_statusHW);
+    // console.log("selectedCollection: " + selectedCollection);
 
+    //回傳數值到前端 尚未帶點
     const data = {
       alarmCMU_rawD: alarmCMU_rawD.toString(2),
       faultCMU_rawD: faultCMU_rawD.toString(2),
