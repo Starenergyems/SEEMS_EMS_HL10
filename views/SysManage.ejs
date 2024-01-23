@@ -1,0 +1,259 @@
+<%- include('Navbar', { 
+    title: '系統設定', 
+     stylesheets: [
+        'https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css',
+        '../public/styles/style_template.css',
+        '../public/styles/SysManage.css'
+    ],
+    permission: 'admin'
+}) %>
+
+<div class="R_Main">
+    <div class="subNavBar" id="sub_NavBar">
+    </div>
+
+    <div class="M_Page">
+        <div id="page">
+              <div class="account">
+                <div class="title">
+                  <h1>帳戶總覽</h1>
+                  <button onclick="addUser()"><img src="../public/images/edit.svg" style="width: 20px"></button>
+                </div>         
+                <table id="myTable" class="table table-striped text-center" style="width: 100%"> <!--目前可登入的帳戶-->
+                  <thead>
+                    <tr>
+                      <th>工號</th>
+                      <th>姓名</th>
+                      <th>公司</th>
+                      <th>部門</th>
+                      <th>信箱</th>
+                      <th>權限</th>
+                      <th>狀態</th>             
+                      <th>附註</th>
+                      <th>編輯</th>
+                    </tr>
+                  </thead>
+                  </table>
+              </div>
+        
+              <div class="setPassword">
+                <div class="setPasswordBlock">
+                  <div class="title">
+                    <h1>密碼強度設置</h1>
+                  </div>
+                  <form id="setPW">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td>密碼長度限制:</td>
+                          <td>
+                            <label>最低</label>
+                            <select name="minTotal" id="minTotal">
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                              <option value="7">7</option>
+                              <option value="8" selected>8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>
+                          </select>
+                              <label> ~ 最高</label>
+                              <select name="maxTotal" id="maxTotal">
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12" selected>12</option>
+                                  <option value="13">13</option>
+                                  <option value="14">14</option>
+                                  <option value="15">15</option>
+                              </select>
+                              <label>位</label>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>數字至少:</td>
+                          <td>
+                              <select name="minNum" id="minNum">
+                                  <option value="0">0</option>
+                                  <option value="1" selected>1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                              </select>    
+                              <label>位</label>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>大寫字母至少:</td>
+                          <td>
+                              <select name="minUpper" id="minUpper">
+                                  <option value="0">0</option>
+                                  <option value="1" selected>1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                              </select>    
+                              <label>位</label>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>小寫字母至少:</td>
+                          <td>
+                              <select name="minLower" id="minLower">
+                                  <option value="0">0</option>
+                                  <option value="1" selected>1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                              </select>    
+                              <label>位</label>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>特殊字元至少:</td>
+                          <td>
+                              <select name="minSpe" id="minSpe">
+                                  <option value="0">0</option>
+                                  <option value="1" selected>1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                              </select>    
+                              <label>位</label>                               
+                          </td>
+                        </tr>
+                        <tfoot>
+                          <tr>
+                            <th colspan="2">含!#\$%&()*+,-./:;<=>?@[\]^_{}|~</th>
+                          </tr>
+                        </tfoot>
+                      </tbody>
+                    </table>
+                  <input class="submit" type="submit" value="儲存" onclick="dataPost('#setPW', 'http://localhost:3005/account/system/passwordsetting/')">
+              </form>
+          
+        
+                <div class="setPasswordBlock">
+                    <div class="title">
+                        <h1>帳戶停用準則</h1>
+                        <button></button>
+                    </div>
+                    <form id="forbid">
+                      <table>
+                          <tbody>
+                            <tr>
+                              <td>登入連續失敗:</td>
+                              <td>
+                                  <select name="wrongNum" id="wrongNum">
+                                      <option value="1">1</option>
+                                      <option value="2">2</option>
+                                      <option value="3" selected>3</option>
+                                      <option value="4">4</option>
+                                      <option value="5">5</option>
+                                      <option value="6">6</option>
+                                  </select>
+                                  <label>次，即停止帳戶權限</label>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>每次停權時間:</td>
+                              <td>
+                                  <select name="forbidTime" id="forbidTime">
+                                      <option value="1">1</option>
+                                      <option value="3" selected>3</option>
+                                      <option value="5">5</option>
+                                      <option value="24">24</option>
+                                      <option value="48">48</option>
+                                      <option value="72">永久</option>
+                                  </select>    
+                                  <label>小時</label>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      <input class="submit" type="submit" value="儲存"  onclick="dataPost('#forbid', 'http://localhost:3005/account/system/banrule/')">
+                  </form>
+        
+                </div>
+        
+                <div class="setPasswordBlock">
+                    <div class="title">
+                        <h1>登入畫面提示字元</h1>
+                        <button></button>
+                    </div>
+                    <form id="text">
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td>輸入提示字元:</td>
+                            <td>
+                              <input type="text" name="loginText" id="logintext">
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <input class="submit" type="submit" value="儲存" onclick="dataPost('#text', 'http://localhost:3005/account/system/logintext/')">
+                    </form>
+                </div>
+        
+            </div>
+            <div id="edit" class="editBlock"><!--編輯框-->
+              <div class="editRegData appear">
+               <form id="accountForm">
+                <div class="editRegDataSetting" spellcheck="false">
+                    <h2 class="titlePUW" id="editTitle">編輯帳戶</h2>
+                    <div class="infoPUW">工號:<input type="text" required class="inputEditRD" id="eRDNum" name="num"></div>
+                    <div class="infoPUW">姓名:<input type="text" required class="inputEditRD" id="eRDName" name="name"></div>
+                    <div class="infoPUW">公司:<input type="text" required class="inputEditRD" id="eRDCom" name="company"></div>
+                    <div class="infoPUW">部門:<input type="text" required class="inputEditRD" id="eRDDep" name="department"></div>
+                    <div class="infoPUW">信箱:<input type="text" required class="inputEditRD" id="eRDMail" name="email"></div>
+                    <div class="infoPUW">權限:
+                        <select required name="permission" class="selectEditRD" id="eRDAuth">
+                            <option value="admin">最高權限</option>
+                            <option value="manager">管理者</option>
+                            <option value="viewer">一般用戶</option>
+                        </select>
+                    </div>
+                    <div required class="infoPUW">狀態:
+                        <select name="status" class="selectEditRD" id="eRDStatus">
+                            <option value="normal">正常</option>
+                            <option value="lock">停用</option>
+                        </select>
+                    </div>
+                    <div class="infoPUW">附註:<input type="text" class="inputEditRD" id="eRDNote" name="note"></div>
+                    <div class="infoPUW">修改密碼:
+                      <input class="inputEditRD" id="eRDPass" onclick="" name="password"></div>
+                    <div class="edit_button">
+                      <button class="btnCommon" id="btn_deleteEditRD" onclick="dataPost('#accountForm','http://localhost:3005/account/system/accounts/')">刪除帳號</button>
+                      <input value="確認修改" type='submit' class="btnCommon" id="btn_updateEditRD" onclick="dataPost('#accountForm', 'http://localhost:3005/account/system/accounts/')">
+                      <button class="btnCommon" id="btn_cancelEditRD" type="button" onclick="hideEdit()">取消</button>
+                    </div>
+                    
+                </div>
+              </form>
+            </div>
+            </div>
+            </div>
+        
+        </div>
+
+
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+crossorigin="anonymous"></script>
+<script src="../public/scripts/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script><!--dataTable-->
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!--dataTable-->
+<script src="../public/scripts/script_template.js"></script>
+<script src="../public/scripts/SysManage.js"></script>
+</body>
+
+</html>
+
+

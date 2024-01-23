@@ -197,7 +197,7 @@ async function updateTable(){
     },
   ];*/
 
-  dataset = await dataGet('http://localhost:3200/alarm/realtime/edit');
+  dataset = await dataGet('http://localhost:3001/alarm/realtime/edit'); //port改端口要改
   console.log(dataset);	
 
 
@@ -282,8 +282,8 @@ async function updateTable(){
 var permission = "manager";
 $(document).ready(function () {
 
- 
-  waitTable();
+  console.log("start reading js");
+  updateTable();
   // 彈出視窗確定全選
   $("#chb_AckAll").on("change", function () {
     appear();
@@ -291,10 +291,10 @@ $(document).ready(function () {
 
 
 });
-async function waitTable(){
+/*async function waitTable(){
     await updateTable();//更新表格
     //checkAllStatus(dataset);//判斷已讀全選是否該勾
-}
+}*/
 
 
 /*function checkAllStatus(data){//判斷全選欄是否該勾選
@@ -334,6 +334,6 @@ function readCheck() {  //監測是否勾選已讀，勾選後刪除
       console.log(rowId);
       console.log("已讀框偵測: "+rowChecked);
       // Send an AJAX request to remove the row from the database
-      dataPost('http://localhost:3200/alarm/realtime/edit', rowId, rowChecked);
+      dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked); //端口要改
     });
 }
