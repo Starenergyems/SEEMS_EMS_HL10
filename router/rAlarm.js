@@ -17,6 +17,7 @@ const {
   Other_error_result_gen,
   sendLineNotify,
   init_Alarm_DB,
+  compare_trigger_alarms,
 } = require("./alarmFunctions");
 
 app.set("view engine", "ejs");
@@ -108,15 +109,10 @@ app.get("/alarm", (req, res) => {
     .then(error_result => {
       alarm_test_nanoDb.find(mangoQuery_alarmDB_triggered)
         .then(response => {
-          let triggering_alarm_array = [];
-          Object.keys(error_result).forEach(key => {
-            triggering_alarm_array.push(key);
-          });
-          console.log(triggering_alarm_array);
-
-          let triggered_alarm_array = [];
-          response.docs.forEach(element => triggered_alarm_array.push(element._id));
-          console.log(triggered_alarm_array);
+          const result = compare_trigger_alarms(error_result, response);
+          console.log('Common Elements:', result.set);
+          console.log('Non-Common Elements in A:', result.nonset_triggering);
+          console.log('Non-Common Elements in B:', result.nonset_triggered);
         })
     })
     .catch(err => {

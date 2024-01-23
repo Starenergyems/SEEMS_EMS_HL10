@@ -1407,16 +1407,21 @@ function compare_trigger_alarms(error_result, response) {
   Object.keys(error_result).forEach(key => {
     triggering_alarm_array.push(key);
   });
-  console.log(triggering_alarm_array);
+  // console.log(triggering_alarm_array);
 
   let triggered_alarm_array = [];
   response.docs.forEach(element => triggered_alarm_array.push(element._id));
-  console.log(triggered_alarm_array);
+  // console.log(triggered_alarm_array);
 
   const set = triggering_alarm_array.filter(element => triggered_alarm_array.includes(element));
   const nonset_triggering = triggering_alarm_array.filter(element => !triggered_alarm_array.includes(element));
   const nonset_triggered = triggered_alarm_array.filter(element => !triggering_alarm_array.includes(element));
 
+  return {
+    set,
+    nonset_triggering,
+    nonset_triggered,
+  }
 }
 
 function sendLineNotify(error_result_item) {
@@ -1648,4 +1653,5 @@ module.exports = {
   Other_error_result_gen,
   sendLineNotify,
   init_Alarm_DB,
+  compare_trigger_alarms,
 };
