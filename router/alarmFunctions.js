@@ -1200,6 +1200,7 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
         error_result[`${device}:${tag}:${bit_arr[i]}`] = {
+          _id: `${device}:${tag}:${bit_arr[i]}`,
           time: time,
           value: bit_status,
           occurrence_time: occurrence_time,
@@ -1210,6 +1211,7 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
     if (error_type === "int") {
       if (error_table[key_error][tag]["status"][value]) {
         error_result[`${device}:${tag}:${value}`] = {
+          _id: `${device}:${tag}:${value}`,
           time: time,
           value: value,
           occurrence_time: occurrence_time,
@@ -1221,16 +1223,15 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
       let max = error_table[key_error][tag]["status"]["max"];
       // console.log(v)
       let valve_status = "";
-      if (value < min) {
-        valve_status = "0";
-      } else if (value > max) {
-        valve_status = "1";
+      if (value < min) {valve_status = "0"} else if (value > max) {valve_status = "1"};
+      if (valve_status) {
+        error_result[`${device}:${tag}:${valve_status}`] = {
+          _id: `${device}:${tag}:${valve_status}`,
+          time: time,
+          value: value,
+          occurrence_time: occurrence_time,
+        };
       }
-      error_result[`${device}:${tag}:${valve_status}`] = {
-        time: time,
-        value: value,
-        occurrence_time: occurrence_time,
-      };
     }
   }
 }
@@ -1403,6 +1404,7 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
 }
 
 function compare_trigger_alarms(error_result, response) {
+  // console.log(error_result)
   let triggering_alarm_array = [];
   Object.keys(error_result).forEach(key => {
     triggering_alarm_array.push(key);
@@ -1413,15 +1415,84 @@ function compare_trigger_alarms(error_result, response) {
   response.docs.forEach(element => triggered_alarm_array.push(element._id));
   // console.log(triggered_alarm_array);
 
-  const set = triggering_alarm_array.filter(element => triggered_alarm_array.includes(element));
-  const nonset_triggering = triggering_alarm_array.filter(element => !triggered_alarm_array.includes(element));
-  const nonset_triggered = triggered_alarm_array.filter(element => !triggering_alarm_array.includes(element));
+  const remain = triggering_alarm_array.filter(element => triggered_alarm_array.includes(element));
+  const income = triggering_alarm_array.filter(element => !triggered_alarm_array.includes(element));
+  const recover = triggered_alarm_array.filter(element => !triggering_alarm_array.includes(element));
 
   return {
-    set,
-    nonset_triggering,
-    nonset_triggered,
+    remain,
+    income,
+    recover,
   }
+}
+
+function update_trigger_alarms(error_result, compare_result, nanoDB) {
+  // update for the remain alarms
+  // console.log("remain_promises");
+  const remain_promises = compare_result.remain.map(_id => {
+    return nanoDB.get(_id)
+        .then(doc => {
+            doc.recover = false;
+            doc.time = error_result[_id]["time"];
+            doc.value = error_result[_id]["value"];
+            console.log(doc);
+        })
+        .catch(err => {
+            if (err.statusCode === 404) {
+                console.error('Data not found in update_trigger_alarms:', err);
+            } else {
+                console.error('Error checking update_trigger_alarms flag:', err);
+            }
+        });
+  });
+  // update for the new income alarms
+  // console.log("income_promises");
+  const income_promises = compare_result.income.map(_id => {
+      return nanoDB.get(_id)
+          .then(doc => {
+              doc.trigger = true;
+              doc.time = error_result[_id]["time"];
+              doc.value = error_result[_id]["value"];
+              doc.occurrence_time = error_result[_id]["occurrence_time"];
+              console.log(doc);
+          })
+          .catch(err => {
+              if (err.statusCode === 404) {
+                  console.error('Data not found in update_trigger_alarms:', err);
+              } else {
+                  console.error('Error checking update_trigger_alarms flag:', err);
+              }
+          });
+  });
+
+  // update for the recover alarms
+  // console.log("recover_promises");
+  const recover_promises = compare_result.recover.map(_id => {
+    return nanoDB.get(_id)
+        .then(doc => {
+            doc.trigger = false;
+            doc.recover = true;
+            doc.recover_time = current_locale_time(); 
+            console.log(doc);
+        })
+        .catch(err => {
+            if (err.statusCode === 404) {
+                console.error('Data not found in update_trigger_alarms:', err);
+            } else {
+                console.error('Error checking update_trigger_alarms flag:', err);
+            }
+        });
+  });
+
+  const promises = [...remain_promises, ...income_promises, ...recover_promises];
+  // Use Promise.all to wait for all promises to resolve
+  Promise.all(promises)
+      .then(() => {
+          // console.log(Object.values(error_result));
+      })
+      .catch(error => {
+          console.error('Error in Promise.all in update_trigger_alarms:', error);
+      });
 }
 
 function sendLineNotify(error_result_item) {
@@ -1654,4 +1725,5 @@ module.exports = {
   sendLineNotify,
   init_Alarm_DB,
   compare_trigger_alarms,
+  update_trigger_alarms,
 };
