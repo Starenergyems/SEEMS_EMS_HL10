@@ -1,8 +1,9 @@
+const port = 3200;
 const express = require("express");
-const mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
-const port = 3000;
+//const port = 3000;
 //const Dc = require("../models/dc_schema");  再建立一個所有使用者的/且定義門禁的
 const router = express.Router();
 const app = express();
@@ -13,19 +14,6 @@ const fs = require("fs");
 const cron = require("node-cron"); //指定幾點做什麼
 const axios = require("axios"); //在server執行get
 
-// mongoose
-//   .connect("mongodb://localhost:27017/ems")
-//   .then(() => {
-//     console.log("成功連結mongoDB....");
-
-//     // 檢查當前數據庫名稱
-//     const currentDBName = mongoose.connection.name;
-//     console.log("我是報表，當前數據庫名稱：", currentDBName);
-//   })
-//   .catch((e) => {
-//     console.log(e);
-//   });
-
 //set
 app.set("view engine", "ejs");
 // 設定視圖目錄為 C:\Test\SEEMS_EMS\views
@@ -35,17 +23,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
-//app.use(myMiddleware);
 
 //報表
-router.get("/report", (req, res) => {
+app.get("/report", (req, res) => {
   // num與fun
   res.render("Rpt_Report");
 });
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
-router.get("/report/report", (req, res) => {
+app.get("/report/report", (req, res) => {
   // num與fun
   res.render("Rpt_Report");
 });
@@ -72,7 +59,7 @@ const YearTemPath = path.join(
 );
 
 //路由定義
-router.get("/report/download-excel", async (req, res) => {
+app.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
     //查詢參數中取得templatePath
@@ -150,7 +137,7 @@ function updateExcelWithMongoData(workbook, mongoData) {
   });
 }
 
-router.get("/report/getFile", (req, res) => {
+app.get("/report/getFile", (req, res) => {
   //點擊尋找已存好的檔案
   //const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
   const fileName = req.query.fileName; //要找哪個檔案
@@ -215,7 +202,7 @@ async function autoDownload(template) {
     yesterday(); //昨天幾年幾月幾日
     console.log("開始自動下載");
     const response = await axios.get(
-      "http://localhost:3000/report/download-excel?templatePath=../public/report/" +
+      "http://localhost:3200/report/download-excel?templatePath=../public/report/" +
         template +
         ".xlsx",
       { responseType: "arraybuffer" }
@@ -223,38 +210,59 @@ async function autoDownload(template) {
 
     // Specify the full absolute path for saving the file
     if (template === "YearReport") {
-      directoryPath = path.join("C:", "EMS", "Report", `${yesterdayY}`); //下載後存在哪，要跟getReport api同步
-      filePath = path.join(directoryPath, yesterdayY + "年年報.xlsx"); //檔名叫什麼
+      directoryPath = path.join(
+        "/",
+        "home",
+        "hl10_4-1",
+        "report",
+        `${yesterdayY}`
+      ); //下載後存在哪，要跟getReport api同步
+      filePath = path.join(directoryPath, yesterdayY + "y.xlsx"); //檔名叫什麼
     } else if (template === "MonthReport") {
-      directoryPath = path.join("C:", "EMS", "Report", `${yesterdayY}`); //下載後存在哪，要跟getReport api同步
+      directoryPath = path.join(
+        "/",
+        "home",
+        "hl10_4-1",
+        "report",
+        `${yesterdayY}`
+      ); //下載後存在哪，要跟getReport api同步
       filePath = path.join(
         directoryPath,
-        `${yesterdayY}` + "年" + `${yesterdayM}` + "月月報.xlsx"
+        `${yesterdayY}` + "y" + `${yesterdayM}` + "m.xlsx"
       ); //檔名叫什麼
     } else if (template === "DayReport") {
       directoryPath = path.join(
-        "C:",
-        "EMS",
-        "Report",
+        //在linux中測試
+        "/",
+        "home",
+        "hl10_4-1",
+        "report",
         `${yesterdayY}`,
-        `${yesterdayM}` + "月"
+        `${yesterdayM}`
       ); //下載後存在哪，要跟getReport api同步
       filePath = path.join(
         directoryPath,
         `${yesterdayY}` +
-          "年" +
+          "y" +
           `${yesterdayM}` +
-          "月" +
+          "m" +
           `${yesterdayD}` +
-          "日日報.xlsx"
+          "d.xlsx"
       ); //檔名叫什麼
     } else {
       console.log("參數設置錯誤");
     }
 
     // Check if the directory exists, create it if not
+    console.log("Resolved absolute path:", path.resolve(directoryPath));
     if (!fs.existsSync(directoryPath)) {
-      fs.mkdirSync(directoryPath, { recursive: true });
+      try {
+        console.log("doesn't exist");
+        fs.mkdirSync(directoryPath, { recursive: true });
+        console.log("Directory created successfully:", directoryPath);
+      } catch (error) {
+        console.error("Error creating directory:", error.message);
+      }
     }
 
     // Save the file to the specified path
@@ -266,7 +274,7 @@ async function autoDownload(template) {
   }
 }
 
-cron.schedule("0 2 1 1 *", async () => {
+cron.schedule("24 11 24 1 *", async () => {
   // 秒 分 時 日 月 星期幾 由右到左對照，每年1月1日2:00執行產出前一年年報
   try {
     console.log("Cron job: year report download start");
@@ -300,3 +308,7 @@ cron.schedule("0 1 * * *", async () => {
 });
 
 module.exports = router;
+
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});

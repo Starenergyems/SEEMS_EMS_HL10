@@ -58,13 +58,13 @@ function monthlyDataset(selectedYear, currentMonth) { //產出年報 月報畫�
         dynamicDataset.push({
             "index": dynamicDataset.length + 1,
             "reportType": "年報",
-            "reportName": selectedYear + "年年報",
+            "reportName": selectedYear + "y",
         });
         for (var month = 1; month <= 12; month++){
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "月報",
-                "reportName": selectedYear + "年" + month + "月月報",
+                "reportName": selectedYear + "y" + month + "m",
             });
         }
     } else {
@@ -72,7 +72,7 @@ function monthlyDataset(selectedYear, currentMonth) { //產出年報 月報畫�
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "月報",
-                "reportName": selectedYear + "年" + month + "月月報",
+                "reportName": selectedYear + "y" + month + "m",
             });
         }
     }
@@ -88,13 +88,13 @@ function dailyDataset(selectedYear, selectedMonth, currentMonth) { //產出日�
         dynamicDataset.push({
             "index": dynamicDataset.length + 1,
             "reportType": "月報",
-            "reportName": selectedYear + "年" + selectedMonth + "月月報",
+            "reportName": selectedYear + "y" + selectedMonth + "m",
         });
         for (var day = 1; day <= days; day++){
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "日報",
-                "reportName": selectedYear + "年" + selectedMonth + "月" + day + "日日報",
+                "reportName": selectedYear + "y" + selectedMonth + "m" + day + "d",
             });
         }
     } else if(selectedYear === currentYear && selectedMonth === currentMonth){
@@ -104,7 +104,7 @@ function dailyDataset(selectedYear, selectedMonth, currentMonth) { //產出日�
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "日報",
-                "reportName": selectedYear + "年" + selectedMonth + "月" + day + "日日報",
+                "reportName": selectedYear + "y" + selectedMonth + "m" + day + "d",
             });
     }
     console.log(dynamicDataset);
@@ -178,9 +178,9 @@ function updateTable(){
                 render: function (data, type, row) { 
                     if (row.reportType === "年報" || row.reportType === "月報"){
                         //return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\'alreadyPrepared.xlsx\', \'C:/EMS/Report\')">下載</button>';  
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'C:/EMS/Report/'+ selectedYear +'\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'\')">下載</button>';  
                     } else if (row.reportType === "日報"){
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'C:/EMS/Report/'+ selectedYear +'/'+ selectedMonth + '月\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'/'+ selectedMonth + '\')">下載</button>';  
                     }
                     return ''; // Ensure a default value is returned for other cases
                 } 
@@ -287,7 +287,7 @@ function downloadExcel(fileName, folderPath) { //尋找對應的檔案
             document.body.removeChild(a);
           })
           .catch(error => console.error('Error downloading Excel file:', error));
-      } else {//有找到的話下載
+      } else {//有找到的話下載 換到linux ok
             const url = window.URL.createObjectURL(data);         
             const a = document.createElement('a');// Create a temporary link element
             a.href = url;
