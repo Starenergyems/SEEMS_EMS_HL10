@@ -1,6 +1,77 @@
 // var myHeading = document.querySelector("h1");
-// myHeading.textContent = "Hello world!";
+// myHeading.textContent = "Hello world!";    
 
+$(document).ready(async function () {
+    classAdd('#nB_Event','default_nB'); //側欄按鈕綠色
+
+    updateTable();
+    createIndex('#evtTable');
+});
+
+let lang = {
+    sProcessing: "處理中...",
+    sLengthMenu: "每頁 _MENU_ 項",
+    sZeroRecords: "沒有匹配結果",
+    sInfo: "當前顯示第 _START_ 至 _END_ 項，共 _TOTAL_ 項。",
+    sInfoEmpty: "當前顯示第 0 至 0 項，共 0 項",
+    sInfoFiltered: "(由 _MAX_ 項結果過濾)",
+    sInfoPostFix: "",
+    sSearch: "搜尋:",
+    sUrl: "",
+    sEmptyTable: "查無資料",
+    sLoadingRecords: "載入中...",
+    sInfoThousands: ",",
+    oPaginate: {
+        sFirst: "首頁",
+        sPrevious: "上頁",
+        sNext: "下頁",
+        sLast: "末頁",
+        sJump: "跳轉",
+    },
+    oAria: {
+        sSortAscending: ": 以升序排列此列",
+        sSortDescending: ": 以降序排列此列",
+    },
+};
+
+async function updateTable(){
+    var dataset = await getData('http://localhost:3005/event/operation/edit');
+
+    $('#evtTable').DataTable({
+
+        lengthMenu: [10, 20, 25, 50, 100],
+        scrollY: "660px",
+
+        destroy: true,
+        language: lang, //提示資訊
+        autoWidth: false, //禁用自動調整列寬
+        // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
+        processing: false, //隱藏載入提示,自行處理
+        //serverSide: true, //啟用伺服器端分頁
+        //searching: false, //禁用原生搜尋
+        orderMulti: false, //啟用多列排序
+        ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
+        //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
+        pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
+        responsive: true,
+
+        "data": dataset,
+        "columns": [
+            { data: "index" },
+            { data: "category" },
+            { data: "device" },
+            { data: "time" },
+            { data: "username" },
+            { data: "content" },
+        ],
+        "columnDefs": [
+            { targets: [5], width: "50%", className: 'text-align-left' }
+        ]
+
+    })
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 const filtOpTypeOpts = document.querySelector(".filtOpType .filtOptions");
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
@@ -436,7 +507,7 @@ function QueryLog() {
         window_WrongDataSet.classList.add("appear");
     } else {
         console.log("Query from '" + dateStart.value + " " + timeStart.value + "' to '" + dateEnd.value + " " + timeEnd.value + "'.")
-
+        dataPost('http://localhost:3005/event/operation/edit', dateStart.value, timeStart.value, dateEnd.value, timeEnd.value);
 
 
 
@@ -451,225 +522,6 @@ function close_WrongDataSet_No() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-$(document).ready(function () {
-
-    let lang = {
-        sProcessing: "處理中...",
-        sLengthMenu: "每頁 _MENU_ 項",
-        sZeroRecords: "沒有匹配結果",
-        sInfo: "當前顯示第 _START_ 至 _END_ 項，共 _TOTAL_ 項。",
-        sInfoEmpty: "當前顯示第 0 至 0 項，共 0 項",
-        sInfoFiltered: "(由 _MAX_ 項結果過濾)",
-        sInfoPostFix: "",
-        sSearch: "搜尋:",
-        sUrl: "",
-        sEmptyTable: "查無資料",
-        sLoadingRecords: "載入中...",
-        sInfoThousands: ",",
-        oPaginate: {
-            sFirst: "首頁",
-            sPrevious: "上頁",
-            sNext: "下頁",
-            sLast: "末頁",
-            sJump: "跳轉",
-        },
-        oAria: {
-            sSortAscending: ": 以升序排列此列",
-            sSortDescending: ": 以降序排列此列",
-        },
-    };
-    var dataset = [{
-        "index": "1",
-        "operationType": "登入登出",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "王小明",
-        "description": "登入EMS系統",
-    }, {
-        "index": "2",
-        "operationType": "設備控制",
-        "deviceName": "LC1",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "王小明",
-        "description": "設定LC1輸出實功為1000 kW",
-    }, {
-        "index": "3",
-        "operationType": "系統模式",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "王小明",
-        "description": "啟動排程模式",
-    }, {
-        "index": "4",
-        "operationType": "保護邏輯",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "王小明",
-        "description": "關閉保護邏輯",
-    }, {
-        "index": "5",
-        "operationType": "其它",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "王小明",
-        "description": "更改使用者密碼",
-    }, {
-        "index": "6",
-        "operationType": "登入登出",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "王小明",
-        "description": "登出EMS系統",
-    }, {
-        "index": "7",
-        "operationType": "登入登出",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "登入EMS系統",
-    }, {
-        "index": "8",
-        "operationType": "設備控制",
-        "deviceName": "LC3",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "切離BMS3-1、BMS3-2電池櫃",
-    }, {
-        "index": "9",
-        "operationType": "系統模式",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "設定今日16:00得標量為8000 kW",
-    }, {
-        "index": "10",
-        "operationType": "系統模式",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "設定今日17:00得標量為6000 kW",
-    }, {
-        "index": "11",
-        "operationType": "系統模式",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "設定今日18:00得標量為5000 kW",
-    }, {
-        "index": "12",
-        "operationType": "保護邏輯",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "開啟保護邏輯",
-    }, {
-        "index": "13",
-        "operationType": "設備控制",
-        "deviceName": "LC2",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "設定LC2輸出虛功為-500 kVar",
-    }, {
-        "index": "14",
-        "operationType": "其它",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "更改使用者密碼",
-    }, {
-        "index": "15",
-        "operationType": "登入登出",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "陳小美",
-        "description": "登出EMS系統",
-    }, {
-        "index": "16",
-        "operationType": "登入登出",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "林小華",
-        "description": "登入EMS系統",
-    }, {
-        "index": "17",
-        "operationType": "保護邏輯",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "林小華",
-        "description": "關閉保護邏輯",
-    }, {
-        "index": "18",
-        "operationType": "設備控制",
-        "deviceName": "ACB1-3",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "林小華",
-        "description": "切離ACB1-3",
-    }, {
-        "index": "19",
-        "operationType": "系統模式",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "林小華",
-        "description": "設定P_v功率規格為8 %",
-    }, {
-        "index": "20",
-        "operationType": "系統模式",
-        "deviceName": "EMS",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "林小華",
-        "description": "設定Freq_C頻率規格為59.96 Hz",
-    }, {
-        "index": "21",
-        "operationType": "設備控制",
-        "deviceName": "LC4",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "林小華",
-        "description": "設定空調停止",
-    }, {
-        "index": "22",
-        "operationType": "設備控制",
-        "deviceName": "LC2",
-        "operationTime": "2023/09/01 15:23:10.123",
-        "operator": "林小華",
-        "description": "設定空調制冷溫度為22 °C",
-    }];
-
-    $('#evtTable').DataTable({
-
-        lengthMenu: [10, 20, 25, 50, 100],
-        scrollY: "660px",
-
-        destroy: true,
-        language: lang, //提示資訊
-        autoWidth: false, //禁用自動調整列寬
-        // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
-        processing: false, //隱藏載入提示,自行處理
-        //serverSide: true, //啟用伺服器端分頁
-        //searching: false, //禁用原生搜尋
-        orderMulti: false, //啟用多列排序
-        ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
-        //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
-        pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
-        responsive: true,
-
-        "data": dataset,
-        "columns": [
-            { data: "index" },
-            { data: "operationType" },
-            { data: "deviceName" },
-            { data: "operationTime" },
-            { data: "operator" },
-            { data: "description" },
-        ],
-        "columnDefs": [
-            { targets: [5], width: "50%", className: 'text-align-left' }
-        ]
-
-    })
-
-});
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 
 sd = document.querySelector(".block_temp #Startdate");
 st = document.querySelector(".block_temp #Starttime");

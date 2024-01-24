@@ -78,6 +78,45 @@ function closePopup_epo_No() {
     window_epo.classList.remove("appear");
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function getData(url) { //跟後端拿資料
+    const response = await fetch(url);
+    const values = await response.json();
+    return values;}
+
+async function dataPost(url, input1, input2, input3, input4) {//提交資料給後端
+
+    console.log('開始嘗試POST')
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: {input1, input2, input3, input4},
+        success: function(){
+        console.log("POST完成")
+        updateTable()//更新表格
+        },
+        error: function (error) {
+        reject(error);
+        },
+    });
+
+
+}
+
+function createIndex(tableID) {//幫TABLE產出新的index
+    var table = $(tableID).DataTable();
+    //var histLength = table.rows().count();
+
+    table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1;
+    });
+}
+//增加CLASS
+function classAdd(element, className){
+	$(element).addClass(className);
+}
 
 
 
