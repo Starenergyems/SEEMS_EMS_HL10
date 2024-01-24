@@ -1405,6 +1405,7 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
 
 function compare_trigger_alarms(error_result, response) {
   // console.log(error_result)
+  // console.log(response)
   let triggering_alarm_array = [];
   Object.keys(error_result).forEach(key => {
     triggering_alarm_array.push(key);
@@ -1435,7 +1436,8 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
             doc.recover = false;
             doc.time = error_result[_id]["time"];
             doc.value = error_result[_id]["value"];
-            console.log(doc);
+            // console.log(doc);
+            return nanoDB.insert(doc);
         })
         .catch(err => {
             if (err.statusCode === 404) {
@@ -1454,7 +1456,9 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
               doc.time = error_result[_id]["time"];
               doc.value = error_result[_id]["value"];
               doc.occurrence_time = error_result[_id]["occurrence_time"];
-              console.log(doc);
+              // sendLineNotify(doc);
+              // console.log(doc);
+              return nanoDB.insert(doc);
           })
           .catch(err => {
               if (err.statusCode === 404) {
@@ -1473,7 +1477,8 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
             doc.trigger = false;
             doc.recover = true;
             doc.recover_time = current_locale_time(); 
-            console.log(doc);
+            // console.log(doc);
+            return nanoDB.insert(doc);
         })
         .catch(err => {
             if (err.statusCode === 404) {
@@ -1501,7 +1506,7 @@ function sendLineNotify(error_result_item) {
     \nLocation: \n  ${error_result_item["location"]}
     \nDevice: \n  ${error_result_item["device"]}
     \nValue: \n  ${error_result_item["value"]}
-    \nWarning: \n  ${error_result_item["content"][0]}\n    ${Array.isArray(error_result_item["content"][1]) ? error_result_item["content"][1].join("\n    ").replace(/\[|\]/g, "_") : error_result_item["content"][1]}
+    \nWarning: \n  ${error_result_item["content"].replace(/\[|\]/g, "_")}
   `
   const accessToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
   const request = {

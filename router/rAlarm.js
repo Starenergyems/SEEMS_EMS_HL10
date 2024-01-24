@@ -108,6 +108,8 @@ app.get("/alarm", (req, res) => {
     selector: {
       trigger: true,
     },
+    limit:6000,
+    skip:0,
   };
 
   lc1nanoDb
@@ -116,17 +118,24 @@ app.get("/alarm", (req, res) => {
       const db_name = lc1nanoDb["config"]["db"];
       const item = response.docs[0];
       // console.log(item);
-      return LC_error_result_gen(item, db_name);
-      console.log(error_result);
-    })
-    .then((error_result) => {
-      alarm_test_nanoDb.find(mangoQuery_alarmDB_triggered).then((response) => {
-        const compare_result = compare_trigger_alarms(error_result, response);
-        // console.log('Common Elements:', compare_result.remain);
-        // console.log('Non-Common Elements in A:', compare_result.income);
-        // console.log('Non-Common Elements in B:', compare_result.recover);
-        update_trigger_alarms(error_result, compare_result, alarm_test_nanoDb);
-      });
+      const error_result = LC_error_result_gen(item, db_name);
+      // console.log(error_result);
+
+      alarm_test_nanoDb.find(mangoQuery_alarmDB_triggered)
+        .then((response) => {
+          const compare_result = compare_trigger_alarms(error_result, response);
+          console.log(compare_result);
+          update_trigger_alarms(error_result, compare_result, alarm_test_nanoDb);
+        })
+        .catch((err) => {
+          if (err.statusCode === 404) {
+            // Initialization flag document does not exist, proceed with initialization
+            console.error("Data not found:", err);
+          } else {
+            // Handle other errors
+            console.error("Error with mangoQuery_latest_rawdata:", err);
+          }
+        });
     })
     .catch((err) => {
       if (err.statusCode === 404) {
