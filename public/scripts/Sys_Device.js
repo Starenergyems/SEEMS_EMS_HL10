@@ -1,6 +1,337 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
+$(document).ready(function () {
+    updateTable()
 
+});
+
+let lang = {
+    sProcessing: "處理中...",
+    sLengthMenu: "每頁 _MENU_ 項",
+    sZeroRecords: "沒有匹配結果",
+    sInfo: "當前顯示第 _START_ 至 _END_ 項，共 _TOTAL_ 項。",
+    sInfoEmpty: "當前顯示第 0 至 0 項，共 0 項",
+    sInfoFiltered: "(由 _MAX_ 項結果過濾)",
+    sInfoPostFix: "",
+    sSearch: "搜尋:",
+    sUrl: "",
+    sEmptyTable: "查無資料",
+    sLoadingRecords: "載入中...",
+    sInfoThousands: ",",
+    oPaginate: {
+        sFirst: "首頁",
+        sPrevious: "上頁",
+        sNext: "下頁",
+        sLast: "末頁",
+        sJump: "跳轉",
+    },
+    oAria: {
+        sSortAscending: ": 以升序排列此列",
+        sSortDescending: ": 以降序排列此列",
+    },
+};
+
+/*var dataset = [{
+    "index": "1",
+    "equip": "EMS-1",
+    "place": "控制室",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:00:08",
+}, {
+    "index": "2",
+    "equip": "EMS-2",
+    "place": "控制室",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:00:07",
+}, {
+    "index": "3",
+    "equip": "DC",
+    "place": "控制室",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:00:06",
+}, {
+    "index": "4",
+    "equip": "HMI",
+    "place": "控制室",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:00:05",
+}, {
+    "index": "5",
+    "equip": "Remote I/O",
+    "place": "控制室",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:00:04",
+}, {
+    "index": "6",
+    "equip": "GC-1",
+    "place": "控制室",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:00:03",
+}, {
+    "index": "7",
+    "equip": "GC-2",
+    "place": "控制室",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:00:02",
+}, {
+    "index": "8",
+    "equip": "HVAC-1",
+    "place": "控制室",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:00:01",
+}, {
+    "index": "9",
+    "equip": "HVAC-2",
+    "place": "控制室",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:00:00",
+}, {
+    "index": "10",
+    "equip": "UPS-EMS",
+    "place": "控制室",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:01:08",
+}, {
+    "index": "11",
+    "equip": "UPS-CCTV",
+    "place": "控制室",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:01:07",
+}, {
+    "index": "12",
+    "equip": "頻率表",
+    "place": "MVCB",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:01:06",
+}, {
+    "index": "13",
+    "equip": "Remote I/O",
+    "place": "MVCB",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:01:05",
+}, {
+    "index": "14",
+    "equip": "Remote I/O",
+    "place": "MVCB",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:01:04",
+}, {
+    "index": "15",
+    "equip": "UPS-MVCB",
+    "place": "MVCB",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:01:03",
+}, {
+    "index": "16",
+    "equip": "保護電驛",
+    "place": "MVCB",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:01:02",
+}, {
+    "index": "17",
+    "equip": "自動復閉器",
+    "place": "MVCB",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:01:01",
+}, {
+    "index": "18",
+    "equip": "MVCB負載表",
+    "place": "MVCB",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:01:00",
+}, {
+    "index": "19",
+    "equip": "保護電驛",
+    "place": "VCB-1",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:00:38",
+}, {
+    "index": "20",
+    "equip": "保護電驛",
+    "place": "VCB-2",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:00:37",
+}, {
+    "index": "21",
+    "equip": "保護電驛",
+    "place": "VCB-3",
+    "status": "異常",
+    "threshold": "10 sec",
+    "time": "00:00:36",
+}, {
+    "index": "22",
+    "equip": "保護電驛",
+    "place": "VCB-4",
+    "status": "正常",
+    "threshold": "10 sec",
+    "time": "00:00:35",
+}];*/
+
+var dataset;
+
+/*async function updateTable(){
+
+    dataset = await getData('http://localhost:3005/systeminfo/device/edit');//port要隨後端更改
+    $('#deviceTable').DataTable({
+
+        lengthMenu: [10, 20, 25, 50, 100],
+        scrollY: "660px",
+
+        destroy: true,
+        language: lang, //提示資訊
+        autoWidth: false, //禁用自動調整列寬
+        // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
+        processing: false, //隱藏載入提示,自行處理
+        //serverSide: true, //啟用伺服器端分頁
+        //searching: false, //禁用原生搜尋
+        orderMulti: false, //啟用多列排序
+        ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
+        //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
+        pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
+        responsive: true,
+
+        "data": dataset,
+        "columns": [
+            { data: "index" },
+            { data: "equip" },
+            { data: "place" },
+            { data: "status" },
+            { data: "threshold" },
+            { data: "time" },
+        ]
+
+    })
+}*/
+var fixedValues = [];
+function extractTable(){
+    fixedValues = [];
+    $('#deviceTable tbody tr').each(function() {
+        const rowValues = [];
+        $(this).find('td').each(function() {
+            rowValues.push($(this).text());
+        });
+        fixedValues.push(rowValues);
+        console.log(fixedValues);
+    });
+}
+const bitList = [["409101", "409102"], //點位對照
+                 ["409103", "409104"], 
+                 ["409107", "409108"],
+                 ["409109", "409110"],
+                 ["409111", "409112"],
+                 ["409113", "409114"],
+                 ["409115", "409116"],
+                 ["409117", "409118"],
+                 ["409119", "409120"],
+                 ["409121", "409122"],
+                 ["409123", "409124"],
+                 ["409125", "409126"]];
+
+function assignBit(index){
+    var indexShift = index +2;
+    if (indexShift >= 2 && indexShift <= 5) {
+        return bitList[0];
+    } else if (indexShift === 6){
+        return bitList[1];
+    } else if (indexShift === 7){
+        return bitList[2];
+    } else if (indexShift >= 8 && indexShift <= 16){
+        return bitList[3];
+    } else if (indexShift >= 17 && indexShift <= 20){
+        return bitList[4];
+    } else if (indexShift >= 21 && indexShift <= 25){
+        return bitList[5];
+    } else if (indexShift === 26){
+        return bitList[6];
+    } else if (indexShift === 27){
+        return bitList[7];
+    } else if (indexShift >= 28 && indexShift <= 32){
+        return bitList[8];
+    } else if (indexShift === 33){
+        return bitList[9];
+    } else if (indexShift >= 34 && indexShift <= 35){
+        return bitList[10];
+    } else if (indexShift >= 36 && indexShift <= 39){
+        return bitList[11];
+    } else {
+        // Handle the case when indexShift is not in the specified range
+        return null;
+    }
+}
+
+async function updateTable() {
+    const dataset = await getData('http://localhost:3005/systeminfo/device/edit');
+    extractTable();
+
+    // Combine fixed values with dynamic data
+    var combinedData = fixedValues.map((fixedRowValues, index) => {
+        const dynamicValues = Object.values(dataset[0]) || []; // Assuming the data structure matches the table structure
+        console.log(1, dynamicValues);
+        console.log("index"+index);
+        var bit=assignBit(index);
+        console.log(bit);
+        if (bit) {
+            fixedRowValues[3] = dynamicValues[index+2][bit[0]]; // Insert the value for "狀態" into position [3]
+            fixedRowValues[5] = dynamicValues[index+2][bit[1]]; // Insert the value for "重新連線次數" into position [5]
+        } else {
+            // Handle the case when bit is null (indexShift not in the specified range)
+            console.error("IndexShift out of range for index " + index);
+        }
+        return fixedRowValues;
+    });
+
+        console.log(2, combinedData);
+
+    // Check if DataTable is already initialized
+    if ($.fn.DataTable.isDataTable('#deviceTable')) {
+        // If DataTable is already initialized, just clear the existing data and redraw
+        $('#deviceTable').DataTable().clear().rows.add(combinedData).draw();
+    } else {
+        // If DataTable is not initialized, initialize it with the combined data
+        $('#deviceTable').DataTable({
+            lengthMenu: [10, 20, 25, 50, 100],
+            scrollY: "660px",
+            language: lang,
+            autoWidth: false,
+            processing: false,
+            orderMulti: false,
+            ordering: false,
+            pagingType: "simple_numbers",
+            responsive: true,
+            data: combinedData,
+            // Specify column headers for both fixed and dynamic columns
+            /*columns: [
+                { title: "Fixed Column 1" },
+                { title: "Fixed Column 2" },
+                { title: "Fixed Column 3" },
+                { title: "Dynamic Column 1" },
+                { title: "Dynamic Column 2" },
+                // Add more dynamic columns as needed
+            ],*/
+        });
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////   
 
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
 const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
@@ -45,219 +376,4 @@ function hideFiltOptions(clickItem) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-
-$(document).ready(function () {
-
-    let lang = {
-        sProcessing: "處理中...",
-        sLengthMenu: "每頁 _MENU_ 項",
-        sZeroRecords: "沒有匹配結果",
-        sInfo: "當前顯示第 _START_ 至 _END_ 項，共 _TOTAL_ 項。",
-        sInfoEmpty: "當前顯示第 0 至 0 項，共 0 項",
-        sInfoFiltered: "(由 _MAX_ 項結果過濾)",
-        sInfoPostFix: "",
-        sSearch: "搜尋:",
-        sUrl: "",
-        sEmptyTable: "查無資料",
-        sLoadingRecords: "載入中...",
-        sInfoThousands: ",",
-        oPaginate: {
-            sFirst: "首頁",
-            sPrevious: "上頁",
-            sNext: "下頁",
-            sLast: "末頁",
-            sJump: "跳轉",
-        },
-        oAria: {
-            sSortAscending: ": 以升序排列此列",
-            sSortDescending: ": 以降序排列此列",
-        },
-    };
-    var dataset = [{
-        "index": "1",
-        "equip": "EMS-1",
-        "place": "控制室",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:00:08",
-    }, {
-        "index": "2",
-        "equip": "EMS-2",
-        "place": "控制室",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:00:07",
-    }, {
-        "index": "3",
-        "equip": "DC",
-        "place": "控制室",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:00:06",
-    }, {
-        "index": "4",
-        "equip": "HMI",
-        "place": "控制室",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:00:05",
-    }, {
-        "index": "5",
-        "equip": "Remote I/O",
-        "place": "控制室",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:00:04",
-    }, {
-        "index": "6",
-        "equip": "GC-1",
-        "place": "控制室",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:00:03",
-    }, {
-        "index": "7",
-        "equip": "GC-2",
-        "place": "控制室",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:00:02",
-    }, {
-        "index": "8",
-        "equip": "HVAC-1",
-        "place": "控制室",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:00:01",
-    }, {
-        "index": "9",
-        "equip": "HVAC-2",
-        "place": "控制室",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:00:00",
-    }, {
-        "index": "10",
-        "equip": "UPS-EMS",
-        "place": "控制室",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:01:08",
-    }, {
-        "index": "11",
-        "equip": "UPS-CCTV",
-        "place": "控制室",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:01:07",
-    }, {
-        "index": "12",
-        "equip": "頻率表",
-        "place": "MVCB",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:01:06",
-    }, {
-        "index": "13",
-        "equip": "Remote I/O",
-        "place": "MVCB",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:01:05",
-    }, {
-        "index": "14",
-        "equip": "Remote I/O",
-        "place": "MVCB",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:01:04",
-    }, {
-        "index": "15",
-        "equip": "UPS-MVCB",
-        "place": "MVCB",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:01:03",
-    }, {
-        "index": "16",
-        "equip": "保護電驛",
-        "place": "MVCB",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:01:02",
-    }, {
-        "index": "17",
-        "equip": "自動復閉器",
-        "place": "MVCB",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:01:01",
-    }, {
-        "index": "18",
-        "equip": "MVCB負載表",
-        "place": "MVCB",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:01:00",
-    }, {
-        "index": "19",
-        "equip": "保護電驛",
-        "place": "VCB-1",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:00:38",
-    }, {
-        "index": "20",
-        "equip": "保護電驛",
-        "place": "VCB-2",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:00:37",
-    }, {
-        "index": "21",
-        "equip": "保護電驛",
-        "place": "VCB-3",
-        "status": "異常",
-        "threshold": "10 sec",
-        "time": "00:00:36",
-    }, {
-        "index": "22",
-        "equip": "保護電驛",
-        "place": "VCB-4",
-        "status": "正常",
-        "threshold": "10 sec",
-        "time": "00:00:35",
-    }];
-
-    $('#deviceTable').DataTable({
-
-        lengthMenu: [10, 20, 25, 50, 100],
-        scrollY: "660px",
-
-        destroy: true,
-        language: lang, //提示資訊
-        autoWidth: false, //禁用自動調整列寬
-        // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
-        processing: false, //隱藏載入提示,自行處理
-        //serverSide: true, //啟用伺服器端分頁
-        //searching: false, //禁用原生搜尋
-        orderMulti: false, //啟用多列排序
-        ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
-        //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
-        pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
-        responsive: true,
-
-        "data": dataset,
-        "columns": [
-            { data: "index" },
-            { data: "equip" },
-            { data: "place" },
-            { data: "status" },
-            { data: "threshold" },
-            { data: "time" },
-        ]
-
-    })
-
-});
 
