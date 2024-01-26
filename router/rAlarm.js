@@ -4,9 +4,6 @@ const port = 3001;
 const express = require("express");
 const path = require("path");
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
-//const { nano } = require("./app");
-// const other_rf01 = "other_rf01";
-// const nanoDb = nano.use(other_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
 const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
@@ -58,32 +55,32 @@ const indexDef_time = {
   otherrf10nanoDb,
 ].forEach((element) => element.createIndex(indexDef_time));
 
-const alarmDB_trigger_index = {
-  index: { fields: ["trigger"] },
-  name: "alarmDB_trigger_index",
-};
-alarm_test_nanoDb.createIndex(alarmDB_trigger_index);
+// const alarmDB_trigger_index = {
+//   index: { fields: ["trigger"] },
+//   name: "alarmDB_trigger_index",
+// };
+// alarm_test_nanoDb.createIndex(alarmDB_trigger_index);
 
-// Check if the initialization flag document exists
-alarm_test_nanoDb
-  .get("init_flag")
-  .then((initFlag) => {
-    // Initialization flag document exists, do not reinitialize
-    if (initFlag.initialized) {
-      console.log("Database already initialized. Skipping initialization.");
-    } else {
-      init_Alarm_DB(alarm_test_nanoDb);
-    }
-  })
-  .catch((err) => {
-    if (err.statusCode === 404) {
-      // Initialization flag document does not exist, proceed with initialization
-      init_Alarm_DB(alarm_test_nanoDb);
-    } else {
-      // Handle other errors
-      console.error("Error checking initialization flag:", err);
-    }
-  });
+// // Check if the initialization flag document exists
+// alarm_test_nanoDb
+//   .get("init_flag")
+//   .then((initFlag) => {
+//     // Initialization flag document exists, do not reinitialize
+//     if (initFlag.initialized) {
+//       console.log("Database already initialized. Skipping initialization.");
+//     } else {
+//       init_Alarm_DB(alarm_test_nanoDb);
+//     }
+//   })
+//   .catch((err) => {
+//     if (err.statusCode === 404) {
+//       // Initialization flag document does not exist, proceed with initialization
+//       init_Alarm_DB(alarm_test_nanoDb);
+//     } else {
+//       // Handle other errors
+//       console.error("Error checking initialization flag:", err);
+//     }
+//   });
 //************************************************************* */
 
 //set
@@ -104,13 +101,6 @@ app.get("/alarm", (req, res) => {
     sort: [{ time: "desc" }],
     limit: 1,
   };
-  const mangoQuery_alarmDB_triggered = {
-    selector: {
-      trigger: true,
-    },
-    limit:6000,
-    skip:0,
-  };
 
   lc1nanoDb
     .find(mangoQuery_latest_rawdata)
@@ -121,30 +111,21 @@ app.get("/alarm", (req, res) => {
       const error_result = LC_error_result_gen(item, db_name);
       // console.log(error_result);
 
-      alarm_test_nanoDb.find(mangoQuery_alarmDB_triggered)
+      alarm_test_nanoDb.list()
+        .then((body) => {
+          return alarm_test_nanoDb.find({ selector: {}, limit: body.total_rows })
+        })
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
-          console.log(compare_result);
+          // console.log(compare_result);
           update_trigger_alarms(error_result, compare_result, alarm_test_nanoDb);
         })
         .catch((err) => {
-          if (err.statusCode === 404) {
-            // Initialization flag document does not exist, proceed with initialization
-            console.error("Data not found:", err);
-          } else {
-            // Handle other errors
-            console.error("Error with mangoQuery_latest_rawdata:", err);
-          }
+            console.error("Error with mangoQuery_latest_rawdata:", err);        
         });
     })
     .catch((err) => {
-      if (err.statusCode === 404) {
-        // Initialization flag document does not exist, proceed with initialization
-        console.error("Data not found:", err);
-      } else {
-        // Handle other errors
         console.error("Error with mangoQuery_latest_rawdata:", err);
-      }
     });
 
   // try {

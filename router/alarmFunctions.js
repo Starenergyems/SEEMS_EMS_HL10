@@ -1202,9 +1202,23 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
         error_result[`${device}:${tag}:${bit_arr[i]}`] = {
           _id: `${device}:${tag}:${bit_arr[i]}`,
           time: time,
+          location: error_table[key_error][tag]["location"],
+          device: device,
+          level: `${
+            error_table[key_error][tag]["name"]
+              .toLowerCase()
+              .includes("fault")
+              ? "Fault"
+              : "Alarm"
+          }`,
+          content: error_arr[i],
           value: bit_status,
+          read: false,
+          recover: false,
+          recover_time: "",
           occurrence_time: occurrence_time,
         };
+        // console.log(error_result[`${device}:${tag}:${bit_arr[i]}`])
       }
     };
   } else {
@@ -1213,9 +1227,23 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
         error_result[`${device}:${tag}:${value}`] = {
           _id: `${device}:${tag}:${value}`,
           time: time,
+          location: error_table[key_error][tag]["location"],
+          device: device,
+          level: `${
+            error_table[key_error][tag]["name"]
+              .toLowerCase()
+              .includes("fault")
+              ? "Fault"
+              : "Alarm"
+          }`,
+          content: error_table[key_error][tag]["status"][value],
           value: value,
+          read: false,
+          recover: false,
+          recover_time: "",
           occurrence_time: occurrence_time,
         };
+        // console.log(error_result[`${device}:${tag}:${value}`])
       };
     } else if (error_type === "valve") {
       value = value * error_table[key_error][tag]["status"]["scale"];
@@ -1223,14 +1251,29 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
       let max = error_table[key_error][tag]["status"]["max"];
       // console.log(v)
       let valve_status = "";
-      if (value < min) {valve_status = "0"} else if (value > max) {valve_status = "1"};
-      if (valve_status) {
+      let content = "";
+      if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
+      if (valve_status && content) {
         error_result[`${device}:${tag}:${valve_status}`] = {
           _id: `${device}:${tag}:${valve_status}`,
           time: time,
+          location: error_table[key_error][tag]["location"],
+          device: device,
+          level: `${
+            error_table[key_error][tag]["name"]
+              .toLowerCase()
+              .includes("fault")
+              ? "Fault"
+              : "Alarm"
+          }`,
+          content: content,
           value: value,
+          read: false,
+          recover: false,
+          recover_time: "",
           occurrence_time: occurrence_time,
         };
+        // console.log(error_result[`${device}:${tag}:${valve_status}`])
       }
     }
   }
@@ -1441,9 +1484,11 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
         })
         .catch(err => {
             if (err.statusCode === 404) {
-                console.error('Data not found in update_trigger_alarms:', err);
+                console.error('Data not found in update_trigger_alarms:', err.request.data);
+            } else if (err.statusCode === 409) {
+                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
             } else {
-                console.error('Error checking update_trigger_alarms flag:', err);
+                console.error('Error checking update_trigger_alarms flag:', err.request.data);
             }
         });
   });
@@ -1452,19 +1497,15 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
   const income_promises = compare_result.income.map(_id => {
       return nanoDB.get(_id)
           .then(doc => {
-              doc.trigger = true;
-              doc.time = error_result[_id]["time"];
-              doc.value = error_result[_id]["value"];
-              doc.occurrence_time = error_result[_id]["occurrence_time"];
-              // sendLineNotify(doc);
-              // console.log(doc);
-              return nanoDB.insert(doc);
-          })
+            console.error('Data existed in update_trigger_alarms:', doc._id);
+          }) 
           .catch(err => {
               if (err.statusCode === 404) {
-                  console.error('Data not found in update_trigger_alarms:', err);
+                  nanoDB.insert(error_result[_id]);
+              } else if (err.statusCode === 409) {
+                  console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
               } else {
-                  console.error('Error checking update_trigger_alarms flag:', err);
+                  console.error('Error checking update_trigger_alarms flag:', err.request.data);
               }
           });
   });
@@ -1474,7 +1515,6 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
   const recover_promises = compare_result.recover.map(_id => {
     return nanoDB.get(_id)
         .then(doc => {
-            doc.trigger = false;
             doc.recover = true;
             doc.recover_time = current_locale_time(); 
             // console.log(doc);
@@ -1482,21 +1522,27 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
         })
         .catch(err => {
             if (err.statusCode === 404) {
-                console.error('Data not found in update_trigger_alarms:', err);
+                console.error('Data not found in update_trigger_alarms:', err.request.data);
+            } else if (err.statusCode === 409) {
+                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
             } else {
-                console.error('Error checking update_trigger_alarms flag:', err);
+                console.error('Error checking update_trigger_alarms flag:', err.request.data);
             }
         });
   });
 
-  const promises = [...remain_promises, ...income_promises, ...recover_promises];
+  const promises = [
+    ...remain_promises, 
+    ...income_promises, 
+    ...recover_promises
+  ];
   // Use Promise.all to wait for all promises to resolve
   Promise.all(promises)
       .then(() => {
-          // console.log(Object.values(error_result));
+          console.log("Promise.all in update_trigger_alarms: Suc!");
       })
-      .catch(error => {
-          console.error('Error in Promise.all in update_trigger_alarms:', error);
+      .catch(err => {
+          console.error('Error in Promise.all in update_trigger_alarms:', err.request.data);
       });
 }
 
