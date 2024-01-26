@@ -1,16 +1,15 @@
 const express = require("express");
-//const mongoose = require("mongoose");
-const session = require("express-session");
 const methodOverride = require("method-override");
 const path = require("path");
-const Lc = require("../models/lcschema");
-const Lc01 = Lc["Lc01"];
-const Lc02 = Lc["Lc02"];
-const Lc03 = Lc["Lc03"];
-const Lc04 = Lc["Lc04"];
 const app = express(); // Create an Express application instance
 const cors = require("cors");
 const router = express.Router();
+
+const nano = require("nano");
+const { Console } = require("console");
+const { ok } = require("assert");
+const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const nanoDb = nano(couchDBUrl);
 
 const {
   scaleProcess,
@@ -54,11 +53,58 @@ router.use(
   express.static(path.join(__dirname, "../public"))
 );
 
+//************************************************************************************************************************************************ */
+
+// 定義 CouchDB 資料庫名稱
+const databases = [
+  "lc1_rf10", //0
+  "lc2_rf10", //1
+  "lc3_rf10", //2
+  "lc4_rf10", //3
+  "dwctrl", //4
+  "log", //5
+];
+// 創建 Nano 實例的函式
+const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+
+// 設定index
+const getLatestDocument = async (nanoDb) => {
+  const indexDef = {
+    index: { fields: ["time"] },
+    name: "time_index",
+  };
+
+  //建立index
+  await nanoDb.createIndex(indexDef);
+
+  //利用mango作為篩選器
+  const mangoQuery = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+
+  return new Promise((resolve, reject) => {
+    nanoDb.find(mangoQuery, (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        reject(err);
+        return;
+      }
+
+      const latestData = body.docs[0]; //把資料存到latestData裡面
+      //console.log(`Latest data from ${nanoDb.config.db}:`, latestData);
+      resolve(latestData);
+    });
+  });
+};
+
 //pcs主頁
 router.get("/operateinfo/pcs", async (req, res) => {
   res.render("Op_PCS_InfoSummary", { permission: "manager" });
 });
-
 //************************************************************************************************************************************************ */
 //整合換頁功能
 //infodetail換頁及路由設定
@@ -67,47 +113,33 @@ const pcsGridStatus_MT = { 0: "離網", 1: "併網" };
 
 router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   try {
+    //獲取目前切換的頁數
     const pageNumber = parseInt(req.params.pageNumber);
-    //req.session.pageNumber = pageNumber;
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    //console.log("當前連接中的 collection 名稱：", collectionNames);
 
-    let selectedCollection;
+    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
 
-    // 根據 pageNumber 選擇不同的集合名稱
-    const collectionMap = {
-      1: "Lc01",
-      2: "Lc01",
-      3: "Lc02",
-      4: "Lc02",
-      5: "Lc03",
-      6: "Lc03",
-      7: "Lc04",
-      // 8: "Lc04", // 如果需要處理 8，可以取消註解
-    };
-
-    selectedCollection = collectionMap[pageNumber];
-
-    //console.log(pageNumber);
-    //console.log(selectedCollection);
-
-    if (!selectedCollection) {
-      throw new Error("Invalid pageNumber");
-    }
-
+    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
     const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
     const subNumber = pageNumber % 2 === 0 ? 2 : 1;
     const No_of_PCS = `${baseNumber}-${subNumber}`;
 
     // 根據選擇的集合名稱查詢資料
-    const lcData = await mongoose
-      .model(selectedCollection)
-      .findOne()
-      .sort({ time_log: -1 });
+    let lcData; // 在 if 區塊外部聲明變數
 
-    if (!lcData) {
-      throw new Error("No data found");
+    if (pageNumber == 1 || pageNumber == 2) {
+      lcData = allData[0];
+    } else if (pageNumber == 3 || pageNumber == 4) {
+      lcData = allData[1];
+    } else if (pageNumber == 5 || pageNumber == 6) {
+      lcData = allData[2];
+    } else if (pageNumber == 7) {
+      lcData = allData[3];
+    } else {
+      throw new Error("Invalid pageNumber");
     }
 
     //let processedPageNumber;
@@ -206,45 +238,30 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
     const pageNumber = parseInt(req.params.pageNumber);
-    const collections = mongoose.connection.collections;
-    const collectionNames = Object.keys(collections);
-    //console.log("當前連接中的 collection 名稱：", collectionNames);
+    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
 
-    let selectedCollection;
-
-    // 根據 pageNumber 選擇不同的集合名稱
-    const collectionMap = {
-      1: "Lc01",
-      2: "Lc01",
-      3: "Lc02",
-      4: "Lc02",
-      5: "Lc03",
-      6: "Lc03",
-      7: "Lc04",
-      // 8: "Lc04", // 如果需要處理 8，可以取消註解
-    };
-
-    selectedCollection = collectionMap[pageNumber];
-
-    //console.log(pageNumber);
-    //console.log(selectedCollection);
-
-    if (!selectedCollection) {
-      throw new Error("Alarm: Invalid pageNumber");
-    }
-
+    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
     const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
     const subNumber = pageNumber % 2 === 0 ? 2 : 1;
     const No_of_PCS = `${baseNumber}-${subNumber}`;
 
     // 根據選擇的集合名稱查詢資料
-    const lcData = await mongoose
-      .model(selectedCollection)
-      .findOne()
-      .sort({ time_log: -1 });
+    let lcData; // 在 if 區塊外部聲明變數
 
-    if (!lcData) {
-      throw new Error("No data found");
+    if (pageNumber == 1 || pageNumber == 2) {
+      lcData = allData[0];
+    } else if (pageNumber == 3 || pageNumber == 4) {
+      lcData = allData[1];
+    } else if (pageNumber == 5 || pageNumber == 6) {
+      lcData = allData[2];
+    } else if (pageNumber == 7) {
+      lcData = allData[3];
+    } else {
+      throw new Error("Invalid pageNumber");
     }
 
     //let processedPageNumber;
@@ -303,262 +320,262 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
 
 //************************************************************************************************************** */
 //點位顏色範例
-router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
-  try {
-    // 獲取當前連接的所有 collection 名稱
-    const collections = mongoose.connection.collections;
+// router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
+//   try {
+//     // 獲取當前連接的所有 collection 名稱
+//     //const collections = mongoose.connection.collections;
 
-    // 轉換為 collection 名稱的數組
-    const collectionNames = Object.keys(collections);
+//     // 轉換為 collection 名稱的數組
+//     //const collectionNames = Object.keys(collections);
 
-    //console.log("當前連接中的 collection 名稱：", collectionNames);
+//     //console.log("當前連接中的 collection 名稱：", collectionNames);
 
-    // 從數據庫中查詢 Other1 資料
-    const lcData = await Lc01.findOne().sort({ time_log: -1 });
+//     // 從數據庫中查詢 Other1 資料
+//     //const lcData = await Lc01.findOne().sort({ time_log: -1 });
 
-    // 檢查是否有找到數據
-    if (!lcData) {
-      throw new Error("No data found");
-    }
+//     // 檢查是否有找到數據
+//     // if (!lcData) {
+//     //   throw new Error("No data found");
+//     // }
 
-    // 定義屬性和相應的比例和小數點位數
-    const scaleAndPointMapping = {
-      403001: { scale: 0.1, point: 1 },
-      403002: { scale: 0.1, point: 1 },
-      403004: { scale: 0.1, point: 2 },
-      403006: { scale: 0.1, point: 2 },
-      403007: { scale: 1, point: 0 },
-      403009: { scale: 1, point: 0 },
-    };
+//     // 定義屬性和相應的比例和小數點位數
+//     const scaleAndPointMapping = {
+//       403001: { scale: 0.1, point: 1 },
+//       403002: { scale: 0.1, point: 1 },
+//       403004: { scale: 0.1, point: 2 },
+//       403006: { scale: 0.1, point: 2 },
+//       403007: { scale: 1, point: 0 },
+//       403009: { scale: 1, point: 0 },
+//     };
 
-    // 定義處理函數映射表
-    const processFunctions = {
-      403007: mapchargeStatus,
-      403009: mapPCSWorkingStatus,
-    };
-    const data = {};
-    //scaleProcess 是一個通用的轉換函數，可以應用在所有的屬性上，而 processFunctions 主要用於那些需要特殊處理的屬性。
+//     // 定義處理函數映射表
+//     const processFunctions = {
+//       403007: mapchargeStatus,
+//       403009: mapPCSWorkingStatus,
+//     };
+//     const data = {};
+//     //scaleProcess 是一個通用的轉換函數，可以應用在所有的屬性上，而 processFunctions 主要用於那些需要特殊處理的屬性。
 
-    Object.entries(scaleAndPointMapping).forEach(
-      ([property, { scale, point }]) => {
-        const originalValue = lcData.PCS1[property];
-        const scaledValue = scaleProcess(originalValue, scale, point);
+//     Object.entries(scaleAndPointMapping).forEach(
+//       ([property, { scale, point }]) => {
+//         const originalValue = lcData.PCS1[property];
+//         const scaledValue = scaleProcess(originalValue, scale, point);
 
-        // 如果有定義對應的處理函數，則應用
-        const processFunction = processFunctions[property];
-        const processedValue = processFunction
-          ? processFunction(scaledValue)
-          : scaledValue;
+//         // 如果有定義對應的處理函數，則應用
+//         const processFunction = processFunctions[property];
+//         const processedValue = processFunction
+//           ? processFunction(scaledValue)
+//           : scaledValue;
 
-        data[property] = processedValue;
-      }
-    );
+//         data[property] = processedValue;
+//       }
+//     );
 
-    const pcsCHGStatus_MT = {
-      0: "Charging",
-      1: "Discharging",
-      2: "Non-working state",
-    };
-    const hvacStatus_MT = {
-      0: "Comm error",
-      1: "Stop",
-      2: "Running",
-      3: "Fault",
-      85: "Not configured",
-    };
-    const upsMode_MT = {
-      66: "Battery mode",
-      67: "Converter mode",
-      68: "Shutdown mode",
-      69: "HE/ECO mode",
-      70: "Fault mode",
-      76: "Line mode",
-      80: "Power on mode",
-      83: "Standby mode",
-      84: "Battery test mode",
-      89: "Bypass mode",
-    };
-    const reactiveReg_MT = {
-      85: "Off",
-      161: "Power factor mode",
-      162: "Reactive power mode",
-    };
-    const SS_status_MT = {
-      0: { 0: "不可用", 1: "可用" },
-      1: { 0: "停止", 1: "運行" },
-      2: { 0: "否", 1: "是" },
-      3: { 0: "禁用", 1: "啟用" },
-      5: { 0: "頻率表", 1: "測試頻率" },
-      6: { 0: "手動", 1: "自動" },
-      9: { 0: "正常", 1: "異常" },
-      12: { 0: "正常", 1: "通訊異常" },
-      13: { 0: "SOC", 1: "Volt" },
-      14: { 0: "藍", 1: "橘" },
-    };
-    const Alm_spBitList = [1, 3, 4, 7, 8, 9, 11, 12, 15];
+//     const pcsCHGStatus_MT = {
+//       0: "Charging",
+//       1: "Discharging",
+//       2: "Non-working state",
+//     };
+//     const hvacStatus_MT = {
+//       0: "Comm error",
+//       1: "Stop",
+//       2: "Running",
+//       3: "Fault",
+//       85: "Not configured",
+//     };
+//     const upsMode_MT = {
+//       66: "Battery mode",
+//       67: "Converter mode",
+//       68: "Shutdown mode",
+//       69: "HE/ECO mode",
+//       70: "Fault mode",
+//       76: "Line mode",
+//       80: "Power on mode",
+//       83: "Standby mode",
+//       84: "Battery test mode",
+//       89: "Bypass mode",
+//     };
+//     const reactiveReg_MT = {
+//       85: "Off",
+//       161: "Power factor mode",
+//       162: "Reactive power mode",
+//     };
+//     const SS_status_MT = {
+//       0: { 0: "不可用", 1: "可用" },
+//       1: { 0: "停止", 1: "運行" },
+//       2: { 0: "否", 1: "是" },
+//       3: { 0: "禁用", 1: "啟用" },
+//       5: { 0: "頻率表", 1: "測試頻率" },
+//       6: { 0: "手動", 1: "自動" },
+//       9: { 0: "正常", 1: "異常" },
+//       12: { 0: "正常", 1: "通訊異常" },
+//       13: { 0: "SOC", 1: "Volt" },
+//       14: { 0: "藍", 1: "橘" },
+//     };
+//     const Alm_spBitList = [1, 3, 4, 7, 8, 9, 11, 12, 15];
 
-    let Rack2_11_405010_HLB = getHighLowByte(lcData.RackSub2.Rack11[405010]);
-    let Rack2_11_405001_BitStr = Convert_UInt_to_revBitString(
-      lcData.RackSub2.Rack11[405001],
-      16
-    );
-    let Rack2_11_405030 = Convert_UInt_to_BitString(
-      lcData.RackSub2.Rack11[405030],
-      16
-    );
+//     let Rack2_11_405010_HLB = getHighLowByte(lcData.RackSub2.Rack11[405010]);
+//     let Rack2_11_405001_BitStr = Convert_UInt_to_revBitString(
+//       lcData.RackSub2.Rack11[405001],
+//       16
+//     );
+//     let Rack2_11_405030 = Convert_UInt_to_BitString(
+//       lcData.RackSub2.Rack11[405030],
+//       16
+//     );
 
-    // 將數據傳遞給 EJS 模板，包括所有變數
-    res.render("../views/test_meter", {
-      permission: "manager",
-      overallFault: data["403001"],
-      overallAlarm: data["403002"],
-      Transformernodestatus: data["403004"], //暫無出現 先用描述暫代
-      Transformeroiltemperature: data["403006"], //暫無出現 先用描述暫代
-      HB_Counts: data["403007"],
-      leakage: data["403009"],
-      PCS1_403011: lcData.PCS1[403011],
-      PCS1_403013: lcData.PCS1[403013],
-      Sys_402002: lcData.System[402002],
+//     // 將數據傳遞給 EJS 模板，包括所有變數
+//     res.render("../views/test_meter", {
+//       permission: "manager",
+//       overallFault: data["403001"],
+//       overallAlarm: data["403002"],
+//       Transformernodestatus: data["403004"], //暫無出現 先用描述暫代
+//       Transformeroiltemperature: data["403006"], //暫無出現 先用描述暫代
+//       HB_Counts: data["403007"],
+//       leakage: data["403009"],
+//       PCS1_403011: lcData.PCS1[403011],
+//       PCS1_403013: lcData.PCS1[403013],
+//       Sys_402002: lcData.System[402002],
 
-      Rack2_11_405002: lcData.RackSub2.Rack11[405002],
-      Rack2_11_405002_AS: scaleProcess(lcData.RackSub2.Rack11[405002], 0.01, 1),
-      Rack2_11_405004: mapWordStatus(
-        lcData.RackSub2.Rack11[405004],
-        pcsCHGStatus_MT
-      ),
-      Rack2_11_405005: mapWordStatus(
-        lcData.RackSub2.Rack11[405005],
-        hvacStatus_MT
-      ),
-      Rack2_11_405006: mapWordStatus(
-        lcData.RackSub2.Rack11[405006],
-        upsMode_MT
-      ),
-      Rack2_11_405009: mapWordStatus(
-        lcData.RackSub2.Rack11[405009],
-        reactiveReg_MT
-      ),
-      Rack2_11_405010_rawD: lcData.RackSub2.Rack11[405010],
-      Rack2_11_405010: Rack2_11_405010_HLB,
-      Rack2_11_405010_H: Rack2_11_405010_HLB["hiByte"],
-      Rack2_11_405010_L: Rack2_11_405010_HLB.loByte,
-      Rack2_11_405011: Convert_unixTime_to_dateTime(
-        lcData.RackSub2.Rack11[405011]
-      ),
-      BMS_CHG_E: Calculate_BMS_energy(
-        lcData.RackSub2.Rack11[405012],
-        lcData.RackSub2.Rack11[405013],
-        lcData.RackSub2.Rack11[405014]
-      ),
-      AuxMeter_E: Calculate_CPM10_energy(
-        lcData.RackSub2.Rack11[405015],
-        lcData.RackSub2.Rack11[405016],
-        lcData.RackSub2.Rack11[405017]
-      ),
-      Rack2_11_405020: Calculate_N1450_PF(lcData.RackSub2.Rack11[405020]),
-      Rack2_11_405028: Calculate_Tr_oilTemp(lcData.RackSub2.Rack11[405028]),
-      Rack2_11_405001_rawD: lcData.RackSub2.Rack11[405001],
-      Rack2_11_405001: Rack2_11_405001_BitStr,
-      Rack2_11_405001_b0_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        0
-      ),
-      Rack2_11_405001_b1_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        1
-      ),
-      Rack2_11_405001_b2_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        2
-      ),
-      Rack2_11_405001_b3_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        3
-      ),
-      Rack2_11_405001_b4_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        4
-      ),
-      Rack2_11_405001_b5_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        5
-      ),
-      Rack2_11_405001_b6_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        6
-      ),
-      Rack2_11_405001_b7_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        7
-      ),
-      Rack2_11_405001_b8_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        8
-      ),
-      Rack2_11_405001_b9_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        9
-      ),
-      Rack2_11_405001_b10_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        10
-      ),
-      Rack2_11_405001_b11_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        11
-      ),
-      Rack2_11_405001_b12_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        12
-      ),
-      Rack2_11_405001_b13_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        13
-      ),
-      Rack2_11_405001_b14_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        14
-      ),
-      Rack2_11_405001_b15_status: mapBitStatus(
-        Rack2_11_405001_BitStr,
-        SS_status_MT,
-        15
-      ),
+//       Rack2_11_405002: lcData.RackSub2.Rack11[405002],
+//       Rack2_11_405002_AS: scaleProcess(lcData.RackSub2.Rack11[405002], 0.01, 1),
+//       Rack2_11_405004: mapWordStatus(
+//         lcData.RackSub2.Rack11[405004],
+//         pcsCHGStatus_MT
+//       ),
+//       Rack2_11_405005: mapWordStatus(
+//         lcData.RackSub2.Rack11[405005],
+//         hvacStatus_MT
+//       ),
+//       Rack2_11_405006: mapWordStatus(
+//         lcData.RackSub2.Rack11[405006],
+//         upsMode_MT
+//       ),
+//       Rack2_11_405009: mapWordStatus(
+//         lcData.RackSub2.Rack11[405009],
+//         reactiveReg_MT
+//       ),
+//       Rack2_11_405010_rawD: lcData.RackSub2.Rack11[405010],
+//       Rack2_11_405010: Rack2_11_405010_HLB,
+//       Rack2_11_405010_H: Rack2_11_405010_HLB["hiByte"],
+//       Rack2_11_405010_L: Rack2_11_405010_HLB.loByte,
+//       Rack2_11_405011: Convert_unixTime_to_dateTime(
+//         lcData.RackSub2.Rack11[405011]
+//       ),
+//       BMS_CHG_E: Calculate_BMS_energy(
+//         lcData.RackSub2.Rack11[405012],
+//         lcData.RackSub2.Rack11[405013],
+//         lcData.RackSub2.Rack11[405014]
+//       ),
+//       AuxMeter_E: Calculate_CPM10_energy(
+//         lcData.RackSub2.Rack11[405015],
+//         lcData.RackSub2.Rack11[405016],
+//         lcData.RackSub2.Rack11[405017]
+//       ),
+//       Rack2_11_405020: Calculate_N1450_PF(lcData.RackSub2.Rack11[405020]),
+//       Rack2_11_405028: Calculate_Tr_oilTemp(lcData.RackSub2.Rack11[405028]),
+//       Rack2_11_405001_rawD: lcData.RackSub2.Rack11[405001],
+//       Rack2_11_405001: Rack2_11_405001_BitStr,
+//       Rack2_11_405001_b0_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         0
+//       ),
+//       Rack2_11_405001_b1_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         1
+//       ),
+//       Rack2_11_405001_b2_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         2
+//       ),
+//       Rack2_11_405001_b3_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         3
+//       ),
+//       Rack2_11_405001_b4_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         4
+//       ),
+//       Rack2_11_405001_b5_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         5
+//       ),
+//       Rack2_11_405001_b6_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         6
+//       ),
+//       Rack2_11_405001_b7_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         7
+//       ),
+//       Rack2_11_405001_b8_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         8
+//       ),
+//       Rack2_11_405001_b9_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         9
+//       ),
+//       Rack2_11_405001_b10_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         10
+//       ),
+//       Rack2_11_405001_b11_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         11
+//       ),
+//       Rack2_11_405001_b12_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         12
+//       ),
+//       Rack2_11_405001_b13_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         13
+//       ),
+//       Rack2_11_405001_b14_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         14
+//       ),
+//       Rack2_11_405001_b15_status: mapBitStatus(
+//         Rack2_11_405001_BitStr,
+//         SS_status_MT,
+//         15
+//       ),
 
-      Rack2_11_405030_rawD: lcData.RackSub2.Rack11[405030],
-      Rack2_11_405030: Rack2_11_405030,
+//       Rack2_11_405030_rawD: lcData.RackSub2.Rack11[405030],
+//       Rack2_11_405030: Rack2_11_405030,
 
-      Alm_SBL: Alm_spBitList,
-      Rack2_11_405032_rawD: lcData.RackSub2.Rack11[405032],
-      Rack2_11_405032_BitStr: Convert_UInt_to_revBitString(
-        lcData.RackSub2.Rack11[405032],
-        16
-      ),
-      Rack2_11_405032: Count_SpecificClosedBit(
-        lcData.RackSub2.Rack11[405032],
-        16,
-        Alm_spBitList
-      ),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+//       Alm_SBL: Alm_spBitList,
+//       Rack2_11_405032_rawD: lcData.RackSub2.Rack11[405032],
+//       Rack2_11_405032_BitStr: Convert_UInt_to_revBitString(
+//         lcData.RackSub2.Rack11[405032],
+//         16
+//       ),
+//       Rack2_11_405032: Count_SpecificClosedBit(
+//         lcData.RackSub2.Rack11[405032],
+//         16,
+//         Alm_spBitList
+//       ),
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 
 module.exports = router;

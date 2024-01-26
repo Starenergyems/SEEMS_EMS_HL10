@@ -1,5 +1,4 @@
 // app.js
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -14,6 +13,13 @@ const server = http.createServer(app);
 const io = socketIO(server);
 const dataUpdateEmitter = new EventEmitter();
 require("dotenv").config();
+const { calculateAverage, calculateAdd } = require("./function");
+
+const nano = require("nano");
+const { Console } = require("console");
+const { ok } = require("assert");
+const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const nanoDb = nano(couchDBUrl);
 
 // Middleware
 app.set("view engine", "ejs");
@@ -25,48 +31,67 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 app.use(cookieParser());
 
-//************************************************************* */
-// 匯入路由檔案並傳遞資料庫實例
-// const route1 = require("./routes/route1")(nano.use("database1"));
-// const route2 = require("./routes/route2")(nano.use("database2"));
-// // 你可以繼續匯入其他路由
+// 定義 CouchDB 資料庫名稱
+const databases = [
+  "lc1_rf10", //0
+  "lc2_rf10", //1
+  "lc3_rf10", //2
+  "lc4_rf10", //3
+  "GC", //4
+  "other_rf01", //5
+  "other_rf10", //6
+  "dwctrl", //7
+];
+// 創建 Nano 實例的函式
+const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
 
-// // 使用路由
-// app.use("/route1", route1);
-// app.use("/route2", route2);
-// 可以繼續使用其他路由
-//************************************************************* */
+// 設定index
+const getLatestDocument = async (nanoDb) => {
+  const indexDef = {
+    index: { fields: ["time"] },
+    name: "time_index",
+  };
 
-// Socket.IO 連線事件
-// io.on("connection", (socket) => {
-//   //console.log("app.js : A user connected");
+  //建立index
+  await nanoDb.createIndex(indexDef);
 
-//   // 訂閱 "dataUpdated" 事件
-//   dataUpdateEmitter.on("dataUpdated", (items) => {
-//     // 向連接的客戶端發送更新事件
-//     socket.emit("updateItems", items);
-//     console.log("Update items event sent to connected client");
-//   });
+  //利用mango作為篩選器
+  const mangoQuery = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
 
-//   // 發送一次更新以初始化客戶端的資料
-//   updateDataPeriodically();
+  return new Promise((resolve, reject) => {
+    nanoDb.find(mangoQuery, (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        reject(err);
+        return;
+      }
 
-//   socket.on("disconnect", () => {
-//     console.log("User disconnected");
-//   });
-// });
+      const latestData = body.docs[0]; //把資料存到latestData裡面
+      //console.log(`Latest data from ${nanoDb.config.db}:`, latestData);
+      resolve(latestData);
+    });
+  });
+};
+
+//***************************************************************************************************************** */
 
 // 引入多個路由檔案
 // const accountRouter = require("./rAccount");
 // const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
-// const pcsRouter = require("./rPCS");
+const pcsRouter = require("./rPCS");
 const batteryRouter = require("./rBattery");
 const commuRouter = require("./rCommu");
-// const deviceRouter = require("./rDevice");
+//const deviceRouter = require("./rDevice");
 const environmentRouter = require("./rEnvironment");
 //const alarmRouter = require("./rAlarm");
-// const eventRouter = require("./rEvent");
+const eventRouter = require("./rEvent");
 //const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
@@ -78,26 +103,104 @@ const environmentRouter = require("./rEnvironment");
 // app.use(accountRouter);
 // app.use(modeRouter);
 app.use(meterRouter);
-// app.use(pcsRouter);
+app.use(pcsRouter);
 app.use(batteryRouter);
 app.use(commuRouter);
-// app.use(deviceRouter);
+//app.use(deviceRouter);
 app.use(environmentRouter);
 //app.use(alarmRouter);
-// app.use(eventRouter);
+app.use(eventRouter);
 //app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
 // app.use(alarmFunctions);
 // 查看目前連線路徑
-app.use((req, res, next) => {
-  // console.log(
-  //   `Current API URL: ${req.protocol}://${req.get("host")}${req.originalUrl}`
-  // );
-  next();
-});
 
 //************************************************************* */
+
+// 中介軟體 - 在每個請求上設置 navbarData 和其他變數
+// app.use(async (req, res, next) => {
+//   try {
+//     // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+//     const dataPromises = databases.map(async (dbName) => {
+//       const nanoDb = createNanoInstance(dbName);
+//       return getLatestDocument(nanoDb);
+//     });
+
+//     const allData = await Promise.all(dataPromises); // 取得所有資料庫的數值 存在陣列裡面 由零開始
+//     const lc1Data = allData[0];
+//     const lc2Data = allData[1];
+//     const lc3Data = allData[2];
+//     const lc4Data = allData[3];
+//     const GCData = allData[4];
+//     const Other01Data = allData[4];
+
+//     // 將這些數值設置到 res.locals 中
+//     res.locals.navbarData = {
+//       title: "模式控制",
+//       stylesheets: [
+//         "../public/styles/style_template.css",
+//         "../public/styles/Mode_SysCtrl.css",
+//       ],
+//       permission: "admin",
+
+//       L_M_systemMode:
+//         (GCData.System[400078],
+//         GCData.System[400079],
+//         GCData.System[400080],
+//         GCData.System[400081]),
+//       //400078~400081 bit15 + bit5  + bit3
+
+//       //警告
+//       totalWarningNum,
+//       WarningNum_Meter: 0,
+//       //408181:Oil temperature/408205: VCB Status(1、2)/408206:ACB Status(bit1 3 5)/Relay 408201-408203
+//       WarningNum_PCS: calculateAverage(
+//         lc1Data.PCS1[403002],
+//         lc1Data.PCS1[403034],
+//         lc1Data.PCS1[403035]
+//       ),
+//       WarningNum_Bat: lc1Data.BMS1[405028],
+//       WarningNum_Env: lc1Data.BSC1[406003],
+//       WarningNum_FF: lc1Data.BSC1[406005],
+//       //錯誤
+//       totalAlarmNum,
+//       AlarmNum_Meter,
+//       AlarmNum_PCS:
+//         (lc1Data.PCS1[403001], lc1Data.PCS1[403036], lc1Data.PCS1[403038]),
+//       AlarmNum_Bat: (lc1Data.BMS1[405030], lc1Data.BMS1[405032]),
+//       AlarmNum_Env:
+//         (lc1Data.BSC1[406001] + lc1Data.BSC1[406007] + lc1Data.BSC1[406060],
+//         lc1Data.BSC1[406061]),
+//       AlarmNum_FF: lc1Data.BSC1[406005],
+
+//       //系統資訊
+//       L_M_freq: Other01Data.Freq[408026],
+//       L_M_activeP: Other01Data.Freq[408019],
+//       L_M_reactiveP: Other01Data.Freq[408021],
+//       L_M_voltage: Other01Data.Freq[408007],
+//       L_M_current: Other01Data.Freq[408017],
+//       L_M_powerFactor: Other01Data.Freq[408025],
+//       L_M_avgSOC: (lc1Data.BMS1[404007], lc1Data.BMS2[404007]),
+//       L_M_minSOH: (lc1Data.BMS1[404005], lc1Data.BMS2[404005]),
+//       L_M_SBSPM: GCData.System[400037],
+//       L_M_chgEtoday:
+//         (lc1Data.BMS1[404079], lc1Data.BMS1[404080], lc1Data.BMS1[404081]),
+//       L_M_dcgEtoday:
+//         (lc1Data.BMS1[404082], lc1Data.BMS1[404083], lc1Data.BMS1[404084]),
+//     };
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+
+//   // 將其他變數也設置到 res.locals 中，這些是例子，實際上應該是你的應用的真實數值
+//   res.locals.someOtherValue = "This is another value";
+
+//   next();
+// });
+
+//緊急停止按紐也要做
 
 app.get("/", (req, res) => {
   res.render("Login");
@@ -106,7 +209,7 @@ app.get("/", (req, res) => {
 app.post("/login", async (req, res) => {});
 
 app.get("/login", (req, res) => {
-  res.render("Login");
+  res.render("Login", { navbarData: res.locals.navbarData });
 });
 
 app.get("/error", (req, res) => {

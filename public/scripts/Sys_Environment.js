@@ -390,6 +390,55 @@ async function sendDataToBackend() {
 }
 
 /////////////////////////////////////////////////////////////////////////
+//rEnvironment.js operateinfo/battery "空調制熱溫度 "SET按鈕 把數值帶入打勾
+//blockId 會直接給lc是幾
+// async function getacuHeat(blockId) {
+//   try {
+//     console.log("空調制熱溫度把數值帶入 嘗試向後端發出請求");
+//     //const selectedValue = $('input[name="dataStatus"]:checked').val();
+//     const response = await fetch("/getDataForacuHeat", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ blockId }),
+//     });
+
+//     const data = await response.json();
+//     console.log(data);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
+
+//前端按下確認時觸發
+// async function sendacuHeat() {
+//   const selectedValue = $('input[name="dataStatus"]:checked').val();
+//   console.log("selectedValue:" + selectedValue);
+//   //const title = document.querySelector(".titlePUW");
+//   try {
+//     console.log("空調制熱溫度新數值 嘗試向後端發出請求");
+//     //ejs回傳id
+//     const lcnum = $(".dataStatus_Set .titlePUW").text();
+//     console.log("lcnum:" + lcnum);
+
+//     const response = await fetch("/acuHeatbackendEndpoint", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ selectedValue, lcnum }),
+//     }).catch((error) => console.error("Error in fetch:", error));
+
+//     const data = await response.json();
+//     console.log(data);
+//     //displayData(data);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
+
+/////////////////////////////////////////////////////////////////////////
 //環境頁面下方彈出視窗 獲取該區塊id
 async function getDataenv(blockId) {
   try {

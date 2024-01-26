@@ -1,5 +1,6 @@
 const { timeLog } = require("console");
 const readline = require("readline");
+
 // 定義計算平均值的函數
 function calculateAverage(...numbers) {
   if (numbers.length === 0) {
@@ -7,6 +8,15 @@ function calculateAverage(...numbers) {
   }
   const sum = numbers.reduce((acc, num) => acc + num, 0);
   return sum / numbers.length;
+}
+
+// 加總
+function calculateAdd(...numbers) {
+  if (numbers.length === 0) {
+    return 0;
+  }
+  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  return sum;
 }
 
 // const result1 = calculateAverage(2, 4, 6, 8);
@@ -184,9 +194,6 @@ function mapgridStatus(decimalValue) {
 // console.log(result);
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
-
-// const ab = 13579.02468;
-// console.log(ab.toFixed(2));
 
 let i;
 let j;
@@ -512,6 +519,7 @@ module.exports = {
   Determine_DL_of_CommPCSBMS,
   checkValues,
   workStatuschange,
+  calculateAdd,
 };
 // //***************************************************************************** */
 // //轉換存陣列

@@ -62,6 +62,8 @@ const alarmDB_db_name_index = {
 alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
 
 // alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
+alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
+
 // const alarmDB_trigger_index = {
 //   index: { fields: ["trigger"] },
 //   name: "alarmDB_trigger_index",
