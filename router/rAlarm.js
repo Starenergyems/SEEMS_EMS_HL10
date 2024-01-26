@@ -119,7 +119,7 @@ app.get("/alarm", (req, res) => {
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
           // console.log(compare_result);
-          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb);
+          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=true);
         })
         .catch((err) => {
             console.error("Error with mangoQuery_latest_rawdata:", err);        

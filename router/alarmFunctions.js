@@ -1546,7 +1546,7 @@ function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
       });
 }
 
-function update_trigger_alarms_batch(error_result, compare_result, nanoDB) {
+function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_flag=false) {
   // update for the remain alarms
   // console.log("remain_promises");
   let remain_promises = true;
@@ -1584,9 +1584,13 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB) {
   if (compare_result.income.length > 0) {
     income_promises = nanoDB.fetch({keys: compare_result.income})
       .then((resp) => {
+        // console.log(resp)
         let docs_batch = resp.rows.map((element) => {
           if (element.hasOwnProperty("error")) {
             const _id = element.key;
+            if (line_flag) {
+              sendLineNotify(error_result[_id]);
+            }
             return error_result[_id];
           } else if (element.hasOwnProperty("doc")) {
             const _id = element.doc._id;
@@ -1643,6 +1647,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB) {
     income_promises, 
     recover_promises,
   ];
+  console.log(promises);
   // Use Promise.all to wait for all promises to resolve
   Promise.all(promises)
       .then(() => {
@@ -1680,7 +1685,7 @@ function sendLineNotify(error_result_item) {
       console.log(resp.data);
     })
     .catch((err) => {
-      console.log(err.response);
+      console.error("Line Notify Error", err.response.data ,err.response.request.path);
     });
 }
 
