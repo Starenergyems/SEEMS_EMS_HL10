@@ -119,7 +119,24 @@ app.get("/alarm", (req, res) => {
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
           // console.log(compare_result);
-          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=true);
+          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
+          
+          const hisAlarm_batch = Object.values(error_result).map(obj => {
+            // Create a shallow copy of the object and modify the copy
+            const newObj = { ...obj };
+            delete newObj["_id"];
+            return newObj;
+          });
+          hisalarmnanoDb.bulk({docs: hisAlarm_batch})
+          .catch(err => {
+            if (err.statusCode === 404) {
+                console.error('Data not found in update_trigger_alarms:', err.request.data);
+            } else if (err.statusCode === 409) {
+                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+            } else {
+                console.error('Error checking update_trigger_alarms flag:', err.request.data);
+            }
+          })
         })
         .catch((err) => {
             console.error("Error with mangoQuery_latest_rawdata:", err);        

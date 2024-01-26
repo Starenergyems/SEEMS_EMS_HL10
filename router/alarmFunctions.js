@@ -1285,7 +1285,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
   //console.log(Object.keys(error_table))
   const time = current_locale_time();
   const occurrence_time = item.time;
-  const error_result = {};
+  let error_result = {};
   for (let key in item) {
     if (item.hasOwnProperty(key)) {
       key_error = checkPartialMatch(key, Object.keys(error_table));
@@ -1326,7 +1326,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
 function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
-  const error_result = [];
+  let error_result = {};
   // console.log(Object.keys(error_table))
   for (let [key, v] of Object.entries(item)) {
     if (typeof v === "object" && v !== null) {
@@ -1337,26 +1337,23 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
           if (value === error_table[tag]["status"]) {
             let device = `${db_name}_${key}`;
             
-            error_msg = {
+            error_result[`${device}:${tag}`] = {
+              _id: `${device}:${tag}`,
               time: time,
-              location: db_name,
+              location: error_table[tag]["location"],
               device: device,
               level: `${
                 error_table[tag]["name"].toLowerCase().includes("fault")
                   ? "Fault"
                   : "Alarm"
               }`,
-              content: [
-                `${tag}:${error_table[tag]["name"]}`,
-                error_table[tag]["name"],
-              ],
+              content: error_table[tag]["name"],
               value: value,
               read: false,
               recover: false,
               recover_time: "",
               occurrence_time: occurrence_time,
             };
-            error_result.push(error_msg);
           }
         }
       }
@@ -1429,7 +1426,7 @@ function Other_error_result_unit(db_name, time, occurrence_time, error_table, ta
 function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
-  const error_result = [];
+  let error_result = [];
   // console.log(Object.keys(error_table))
   for (let [key, v] of Object.entries(item)) {
     if (typeof v === "object" && v !== null) {
@@ -1560,8 +1557,9 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
           } else if (element.hasOwnProperty("doc")) {
             const _id = element.doc._id;
             let doc = element.doc;
-            error_result[_id]["_rev"] = doc._rev;
-            return error_result[_id];
+            let error_element = error_result[_id];
+            error_element["_rev"] = doc._rev;
+            return error_element;
           }
         })
         // console.log(docs_batch)
@@ -1595,8 +1593,9 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
           } else if (element.hasOwnProperty("doc")) {
             const _id = element.doc._id;
             let doc = element.doc;
-            error_result[_id]["_rev"] = doc._rev;
-            return error_result[_id];
+            let error_element = error_result[_id];
+            error_element["_rev"] = doc._rev;
+            return error_element;
           }
         })
         // console.log(docs_batch)
