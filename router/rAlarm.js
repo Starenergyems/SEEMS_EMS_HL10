@@ -15,7 +15,7 @@ const {
   sendLineNotify,
   init_Alarm_DB,
   compare_trigger_alarms,
-  update_trigger_alarms,
+  update_trigger_alarms_batch,
 } = require("./alarmFunctions");
 
 app.set("view engine", "ejs");
@@ -55,6 +55,7 @@ const indexDef_time = {
   otherrf10nanoDb,
 ].forEach((element) => element.createIndex(indexDef_time));
 
+// alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
 // const alarmDB_trigger_index = {
 //   index: { fields: ["trigger"] },
 //   name: "alarmDB_trigger_index",
@@ -118,7 +119,7 @@ app.get("/alarm", (req, res) => {
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
           // console.log(compare_result);
-          update_trigger_alarms(error_result, compare_result, alarm_test_nanoDb);
+          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb);
         })
         .catch((err) => {
             console.error("Error with mangoQuery_latest_rawdata:", err);        

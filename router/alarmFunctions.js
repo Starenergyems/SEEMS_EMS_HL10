@@ -1470,7 +1470,7 @@ function compare_trigger_alarms(error_result, response) {
   }
 }
 
-function update_trigger_alarms(error_result, compare_result, nanoDB) {
+function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
   // update for the remain alarms
   // console.log("remain_promises");
   const remain_promises = compare_result.remain.map(_id => {
@@ -1543,6 +1543,113 @@ function update_trigger_alarms(error_result, compare_result, nanoDB) {
       })
       .catch(err => {
           console.error('Error in Promise.all in update_trigger_alarms:', err.request.data);
+      });
+}
+
+function update_trigger_alarms_batch(error_result, compare_result, nanoDB) {
+  // update for the remain alarms
+  // console.log("remain_promises");
+  let remain_promises = true;
+  if (compare_result.remain.length > 0) {
+    remain_promises = nanoDB.fetch({keys: compare_result.remain})
+      .then((resp) => {
+        let docs_batch = resp.rows.map((element) => {
+          if (element.hasOwnProperty("error")) {
+            const _id = element.key;
+            return error_result[_id];
+          } else if (element.hasOwnProperty("doc")) {
+            const _id = element.doc._id;
+            let doc = element.doc;
+            error_result[_id]["_rev"] = doc._rev;
+            return error_result[_id];
+          }
+        })
+        // console.log(docs_batch)
+        return nanoDB.bulk({docs: docs_batch});
+      })
+      .catch(err => {
+          if (err.statusCode === 404) {
+              console.error('Data not found in update_trigger_alarms:', err.request.data);
+          } else if (err.statusCode === 409) {
+              console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+          } else {
+              console.error('Error checking update_trigger_alarms flag:', err.request.data);
+          }
+      })
+  };
+  
+  // update for the new income alarms
+  // console.log("income_promises");
+  let income_promises = true;
+  if (compare_result.income.length > 0) {
+    income_promises = nanoDB.fetch({keys: compare_result.income})
+      .then((resp) => {
+        let docs_batch = resp.rows.map((element) => {
+          if (element.hasOwnProperty("error")) {
+            const _id = element.key;
+            return error_result[_id];
+          } else if (element.hasOwnProperty("doc")) {
+            const _id = element.doc._id;
+            let doc = element.doc;
+            error_result[_id]["_rev"] = doc._rev;
+            return error_result[_id];
+          }
+        })
+        // console.log(docs_batch)
+        return nanoDB.bulk({docs: docs_batch});
+      })
+      .catch(err => {
+          if (err.statusCode === 404) {
+              console.error('Data not found in update_trigger_alarms:', err.request.data);
+          } else if (err.statusCode === 409) {
+              console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+          } else {
+              console.error('Error checking update_trigger_alarms flag:', err);
+          }
+      })
+  };
+  
+  // update for the recover alarms
+  // console.log("recover_promises");
+  let recover_promises = true;
+  if (compare_result.recover.length > 0) {
+    recover_promises = nanoDB.fetch({keys: compare_result.recover})
+      .then((resp) => {
+        let docs_batch = resp.rows.map((element) => {
+         if (element.hasOwnProperty("doc")) {
+            const _id = element.doc._id;
+            let doc = element.doc;
+            doc.recover = true;
+            doc.recover_time = current_locale_time(); 
+            return doc;
+          }
+        })
+        // console.log(docs_batch)
+        return nanoDB.bulk({docs: docs_batch});
+      })
+      .catch(err => {
+          if (err.statusCode === 404) {
+              console.error('Data not found in update_trigger_alarms:', err.request.data);
+          } else if (err.statusCode === 409) {
+              console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+          } else {
+              console.error('Error checking update_trigger_alarms flag:', err.request.data);
+          }
+      })
+  };
+
+  const promises = [
+    remain_promises, 
+    income_promises, 
+    recover_promises,
+  ];
+  // Use Promise.all to wait for all promises to resolve
+  Promise.all(promises)
+      .then(() => {
+          console.log("Promise.all in update_trigger_alarms: Suc!");
+      })
+      .catch(err => {
+          console.error('Error in Promise.all in update_trigger_alarms:', err);
       });
 }
 
@@ -1776,5 +1883,5 @@ module.exports = {
   sendLineNotify,
   init_Alarm_DB,
   compare_trigger_alarms,
-  update_trigger_alarms,
+  update_trigger_alarms_batch,
 };
