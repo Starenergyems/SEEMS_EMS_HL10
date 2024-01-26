@@ -55,6 +55,12 @@ const indexDef_time = {
   otherrf10nanoDb,
 ].forEach((element) => element.createIndex(indexDef_time));
 
+const alarmDB_db_name_index = {
+  index: { fields: ["db_name"] },
+  name: "alarmDB_db_name_index",
+};
+alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
+
 // alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
 // const alarmDB_trigger_index = {
 //   index: { fields: ["trigger"] },
@@ -114,7 +120,7 @@ app.get("/alarm", (req, res) => {
 
       alarm_test_nanoDb.list()
         .then((body) => {
-          return alarm_test_nanoDb.find({ selector: {}, limit: body.total_rows })
+          return alarm_test_nanoDb.find({ selector: {db_name: db_name}, limit: body.total_rows })
         })
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
@@ -145,143 +151,92 @@ app.get("/alarm", (req, res) => {
     .catch((err) => {
         console.error("Error with mangoQuery_latest_rawdata:", err);
     });
+  
+  dcnanoDb
+    .find(mangoQuery_latest_rawdata)
+    .then((response) => {
+      const db_name = dcnanoDb["config"]["db"];
+      const item = response.docs[0];
+      // console.log(item);
+      const error_result = DC_error_result_gen(item, db_name);
+      // console.log(error_result);
 
-  // try {
-  //   //目前查詢且輸出的是lc1nanoD內的資料
-  //   lc1nanoDb.find(mangoQuery_latest_rawdata, async (err, body) => {
-  //     if (err) {
-  //       console.error("Error:", err);
-  //       res.status(500).send("Internal Server Error");
-  //       return;
-  //     }
-  //     // console.dir(body)
-  //     // const doc = body.docs[0]; // 取得數據的第一個元素
-  //     const db_name = lc1nanoDb["config"]["db"];
-  //     for (let item of body.docs) {
-  //       // console.log(item);
-  //       const error_result = LC_error_result_gen(item, db_name);
-  //       console.log(error_result)
+      alarm_test_nanoDb.list()
+        .then((body) => {
+          return alarm_test_nanoDb.find({ selector: {db_name: db_name}, limit: body.total_rows })
+        })
+        .then((response) => {
+          const compare_result = compare_trigger_alarms(error_result, response);
+          // console.log(compare_result);
+          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
+          
+          const hisAlarm_batch = Object.values(error_result).map(obj => {
+            // Create a shallow copy of the object and modify the copy
+            const newObj = { ...obj };
+            delete newObj["_id"];
+            return newObj;
+          });
+          hisalarmnanoDb.bulk({docs: hisAlarm_batch})
+          .catch(err => {
+            if (err.statusCode === 404) {
+                console.error('Data not found in update_trigger_alarms:', err.request.data);
+            } else if (err.statusCode === 409) {
+                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+            } else {
+                console.error('Error checking update_trigger_alarms flag:', err.request.data);
+            }
+          })
+        })
+        .catch((err) => {
+            console.error("Error with mangoQuery_latest_rawdata:", err);        
+        });
+    })
+    .catch((err) => {
+        console.error("Error with mangoQuery_latest_rawdata:", err);
+    });
+  
+  otherrf10nanoDb
+    .find(mangoQuery_latest_rawdata)
+    .then((response) => {
+      const db_name = otherrf10nanoDb["config"]["db"];
+      const item = response.docs[0];
+      // console.log(item);
+      const error_result = Other_error_result_gen(item, db_name);
+      // console.log(error_result);
 
-  //       // for (let i of error_result) {
-  //         // sendLineNotify(i);
-
-  //         // alarmnanoDb
-  //         //   .insert(i)
-  //         //   .then((body) => {
-  //         //     console.log(
-  //         //       "User document inserted successfully. ID:",
-  //         //       body.id,
-  //         //       alarmnanoDb["config"]["db"]
-  //         //     );
-  //         //   })
-  //         //   .catch((err) => {
-  //         //     console.error(
-  //         //       "Error inserting user document:",
-  //         //       err.message,
-  //         //       alarmnanoDb["config"]["db"]
-  //         //     );
-  //         //   });
-
-  //         // Specify the keys you want to remove
-  //         // ["read", "recover", "recover_time"].forEach((key) => {
-  //         //   delete i[key];
-  //         // });
-
-  //         // hisalarmnanoDb
-  //         //   .insert(i)
-  //         //   .then((body) => {
-  //         //     console.log("User document inserted successfully. ID:", body.id, hisalarmnanoDb["config"]["db"]);
-  //         //   })
-  //         //   .catch((err) => {
-  //         //     console.error("Error inserting user document:", err.message, hisalarmnanoDb["config"]["db"]);
-  //         //   });
-  //       // }
-  //     }
-  //   });
-
-  //   // dcnanoDb.find(mangoQuery, async (err, body) => {
-  //   //   if (err) {
-  //   //     console.error("Error:", err);
-  //   //     res.status(500).send("Internal Server Error");
-  //   //     return;
-  //   //   }
-  //   //   // console.dir(body)
-  //   //   // const doc = body.docs[0]; // 取得數據的第一個元素
-  //   //   const db_name = dcnanoDb["config"]["db"]
-  //   //   for (const item of body.docs) {
-  //   //     console.log(item);
-  //   //     const error_result = DC_error_result_gen(item, db_name);
-  //   //     for (let i of error_result) {
-  //   //       console.log(i.value, i.content)
-  //   //       // sendLineNotify(i);
-
-  //   //       // alarmnanoDb
-  //   //       //   .insert(i)
-  //   //       //   .then((body) => {
-  //   //       //     console.log("User document inserted successfully. ID:", body.id, alarmnanoDb["config"]["db"]);
-  //   //       //   })
-  //   //       //   .catch((err) => {
-  //   //       //     console.error("Error inserting user document:", err.message, alarmnanoDb["config"]["db"]);
-  //   //       //   });
-
-  //   //       // // Specify the keys you want to remove
-  //   //       // ['read', 'recover', 'recover_time'].forEach(key => {
-  //   //       //   delete i[key];
-  //   //       // });
-
-  //   //       // hisalarmnanoDb
-  //   //       //   .insert(i)
-  //   //       //   .then((body) => {
-  //   //       //     console.log("User document inserted successfully. ID:", body.id, hisalarmnanoDb["config"]["db"]);
-  //   //       //   })
-  //   //       //   .catch((err) => {
-  //   //       //     console.error("Error inserting user document:", err.message, hisalarmnanoDb["config"]["db"]);
-  //   //       //   });
-  //   //     }
-  //   //   }
-  //   // });
-
-  //   // otherrf10nanoDb.find(mangoQuery, async (err, body) => {
-  //   //   if (err) {
-  //   //     console.error("Error:", err);
-  //   //     res.status(500).send("Internal Server Error");
-  //   //     return;
-  //   //   }
-  //   //   // console.dir(body)
-  //   //   // const doc = body.docs[0]; // 取得數據的第一個元素
-  //   //   const db_name = otherrf10nanoDb["config"]["db"];
-  //   //   for (const item of body.docs) {
-  //   //     // console.log(item);
-  //   //     const error_result = Other_error_result_gen(item, db_name);
-  //   //     for (let i of error_result) {
-  //   //       // console.log(i.value, i.content)
-  //   //       // sendLineNotify(i);
-
-  //   //       alarmnanoDb
-  //   //         .insert(i)
-  //   //         .then((body) => {
-  //   //           console.log("User document inserted successfully. ID:", body.id, alarmnanoDb["config"]["db"]);
-  //   //         })
-  //   //         .catch((err) => {
-  //   //           console.error("Error inserting user document:", err.message, alarmnanoDb["config"]["db"]);
-  //   //         });
-
-  //   //       // Specify the keys you want to remove
-  //   //       ['read', 'recover', 'recover_time'].forEach(key => {
-  //   //         delete i[key];
-  //   //       });
-
-  //   //       // hisalarmnanoDb
-  //   //       //   .insert(i)
-  //   //       //   .then((body) => {
-  //   //       //     console.log("User document inserted successfully. ID:", body.id, hisalarmnanoDb["config"]["db"]);
-  //   //       //   })
-  //   //       //   .catch((err) => {
-  //   //       //     console.error("Error inserting user document:", err.message, hisalarmnanoDb["config"]["db"]);
-  //   //       //   });
-  //   //     }
-  //   //   }
-  //   // });
+      alarm_test_nanoDb.list()
+        .then((body) => {
+          return alarm_test_nanoDb.find({ selector: {db_name: db_name}, limit: body.total_rows })
+        })
+        .then((response) => {
+          const compare_result = compare_trigger_alarms(error_result, response);
+          console.log(compare_result);
+          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
+          
+          const hisAlarm_batch = Object.values(error_result).map(obj => {
+            // Create a shallow copy of the object and modify the copy
+            const newObj = { ...obj };
+            delete newObj["_id"];
+            return newObj;
+          });
+          hisalarmnanoDb.bulk({docs: hisAlarm_batch})
+          .catch(err => {
+            if (err.statusCode === 404) {
+                console.error('Data not found in update_trigger_alarms:', err.request.data);
+            } else if (err.statusCode === 409) {
+                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+            } else {
+                console.error('Error checking update_trigger_alarms flag:', err.request.data);
+            }
+          })
+        })
+        .catch((err) => {
+            console.error("Error with mangoQuery_latest_rawdata:", err);        
+        });
+    })
+    .catch((err) => {
+        console.error("Error with mangoQuery_latest_rawdata:", err);
+    });
   // } catch (error) {
   //   console.error(error);
   //   res.status(500).send("Internal Server Error");

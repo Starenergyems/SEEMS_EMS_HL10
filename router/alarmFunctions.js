@@ -1172,7 +1172,7 @@ function checkPartialMatch(k, array) {
   return null; // Return null if no match is found
 }
 
-function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag, value, device, error_result,) {  
+function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,) {  
   let error_type = error_table[key_error][tag]["type"];
 
   if (error_type.includes("bit")) {
@@ -1201,6 +1201,7 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
       for (let i = 0; i < bit_arr.length; i++) {
         error_result[`${device}:${tag}:${bit_arr[i]}`] = {
           _id: `${device}:${tag}:${bit_arr[i]}`,
+          db_name: db_name,
           time: time,
           location: error_table[key_error][tag]["location"],
           device: device,
@@ -1226,6 +1227,7 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
       if (error_table[key_error][tag]["status"][value]) {
         error_result[`${device}:${tag}:${value}`] = {
           _id: `${device}:${tag}:${value}`,
+          db_name: db_name,
           time: time,
           location: error_table[key_error][tag]["location"],
           device: device,
@@ -1256,6 +1258,7 @@ function LC_error_result_unit(time, occurrence_time, error_table, key_error, tag
       if (valve_status && content) {
         error_result[`${device}:${tag}:${valve_status}`] = {
           _id: `${device}:${tag}:${valve_status}`,
+          db_name: db_name,
           time: time,
           location: error_table[key_error][tag]["location"],
           device: device,
@@ -1301,7 +1304,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
             //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
             let value = item[key][tag];
             let device = `${db_name}_${key}`;
-            LC_error_result_unit(time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
+            LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
           }
         } else {
           inner_item = item[key];
@@ -1313,7 +1316,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
               let value = inner_item[inner_key][tag];
               let device = `${db_name}_${key}_${inner_key}`;
-              LC_error_result_unit(time, occurrence_time, error_table, key_error, tag, value, device, error_result,);
+              LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
             }
           }
         }
@@ -1339,6 +1342,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
             
             error_result[`${device}:${tag}`] = {
               _id: `${device}:${tag}`,
+              db_name: db_name,
               time: time,
               location: error_table[tag]["location"],
               device: device,
@@ -1362,63 +1366,112 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
   return error_result;
 }
 
-function Other_error_result_unit(db_name, time, occurrence_time, error_table, tag, value, device, error_result,) {
-  let error_arr = [];
+function Other_error_result_unit(time, occurrence_time, db_name, error_table, tag, value, device, error_result,) {  
   let error_type = error_table[tag]["type"];
 
-  if (error_type === "bit") {
-    [error_arr, value] = mapBitToStatus(
-      value,
-      error_table[tag]["status"],
-      error_arr
-    );
-  } else if (error_type === "int") {
-    if (error_table[tag]["status"][value]) {
-      error_arr.push(error_table[tag]["status"][value]);
-    };
-  } else if (error_type === "bit_abnormal") {
-    [error_arr, value] = mapBitToStatus_abnormal(
-      value,
-      error_table[tag]["status"],
-      error_arr
-    );
-  } else if (error_type === "valve") {
-    value = value * error_table[tag]["status"]["scale"];
-    let min = error_table[tag]["status"]["min"];
-    let max = error_table[tag]["status"]["max"];
-    // console.log(v)
-    if (value < min) {
-      error_arr.push(`Value is less than ${min}`);
-    } else if (value > max) {
-      error_arr.push(`Value is greater than ${max}`);
+  if (error_type.includes("bit")) {
+    let error_arr = [];
+    let bit_arr = [];
+    if (error_type === "bit") {
+      bit_status = "1";
+      [error_arr, bit_arr] = mapBitToStatus(
+        value,
+        error_table[tag]["status"],
+        error_arr,
+        bit_arr,
+        bit_status,
+      );
+    } else if (error_type === "bit_abnormal") {
+      bit_status = "0";
+      [error_arr, bit_arr] = mapBitToStatus(
+        value,
+        error_table[tag]["status"],
+        error_arr,
+        bit_arr,
+        bit_status,
+      );
     }
-  }
-  if (error_arr.length > 0) {
-    // console.log(error_arr);
-    for (const e of error_arr) {
-      // console.log(e);
-      error_msg = {
-        time: time,
-        location: db_name,
-        device: device,
-        level: `${
-          error_table[tag]["name"]
-            .toLowerCase()
-            .includes("fault")
-            ? "Fault"
-            : "Alarm"
-        }`,
-        content: [
-          `${tag}:${error_table[tag]["name"]}`,
-          e,
-        ],
-        value: value,
-        read: false,
-        recover: false,
-        recover_time: "",
-        occurrence_time: occurrence_time,
+    if (bit_arr.length > 0) {
+      for (let i = 0; i < bit_arr.length; i++) {
+        error_result[`${device}:${tag}:${bit_arr[i]}`] = {
+          _id: `${device}:${tag}:${bit_arr[i]}`,
+          db_name: db_name,
+          time: time,
+          location: error_table[tag]["location"],
+          device: device,
+          level: `${
+            error_table[tag]["name"]
+              .toLowerCase()
+              .includes("fault")
+              ? "Fault"
+              : "Alarm"
+          }`,
+          content: error_arr[i],
+          value: bit_status,
+          read: false,
+          recover: false,
+          recover_time: "",
+          occurrence_time: occurrence_time,
+        };
+        // console.log(error_result[`${device}:${tag}:${bit_arr[i]}`])
+      }
+    };
+  } else {
+    if (error_type === "int") {
+      if (error_table[tag]["status"][value]) {
+        error_result[`${device}:${tag}:${value}`] = {
+          _id: `${device}:${tag}:${value}`,
+          db_name: db_name,
+          time: time,
+          location: error_table[tag]["location"],
+          device: device,
+          level: `${
+            error_table[tag]["name"]
+              .toLowerCase()
+              .includes("fault")
+              ? "Fault"
+              : "Alarm"
+          }`,
+          content: error_table[tag]["status"][value],
+          value: value,
+          read: false,
+          recover: false,
+          recover_time: "",
+          occurrence_time: occurrence_time,
+        };
+        // console.log(error_result[`${device}:${tag}:${value}`])
       };
-      error_result.push(error_msg);
+    } else if (error_type === "valve") {
+      value = value * error_table[tag]["status"]["scale"];
+      let min = error_table[tag]["status"]["min"];
+      let max = error_table[tag]["status"]["max"];
+      // console.log(v)
+      let valve_status = "";
+      let content = "";
+      if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
+      if (valve_status && content) {
+        error_result[`${device}:${tag}:${valve_status}`] = {
+          _id: `${device}:${tag}:${valve_status}`,
+          db_name: db_name,
+          time: time,
+          location: error_table[tag]["location"],
+          device: device,
+          level: `${
+            error_table[tag]["name"]
+              .toLowerCase()
+              .includes("fault")
+              ? "Fault"
+              : "Alarm"
+          }`,
+          content: content,
+          value: value,
+          read: false,
+          recover: false,
+          recover_time: "",
+          occurrence_time: occurrence_time,
+        };
+        // console.log(error_result[`${device}:${tag}:${valve_status}`])
+      }
     }
   }
 }
@@ -1426,7 +1479,7 @@ function Other_error_result_unit(db_name, time, occurrence_time, error_table, ta
 function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
-  let error_result = [];
+  let error_result = {};
   // console.log(Object.keys(error_table))
   for (let [key, v] of Object.entries(item)) {
     if (typeof v === "object" && v !== null) {
@@ -1435,7 +1488,7 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, value)
           let device = `${db_name}_${key}`;
-          Other_error_result_unit(db_name, time, occurrence_time, error_table, tag, value, device, error_result,)
+          Other_error_result_unit(time, occurrence_time, db_name, error_table, tag, value, device, error_result,)
         }
       }
     }
