@@ -1303,7 +1303,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
             // console.log(item[key])
             //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
             let value = item[key][tag];
-            let device = `${db_name}_${key}`;
+            let device = `${key}`;
             LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
           }
         } else {
@@ -1315,7 +1315,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
               //console.log(item[key])
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
               let value = inner_item[inner_key][tag];
-              let device = `${db_name}_${key}_${inner_key}`;
+              let device = `${key}_${inner_key}`;
               LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
             }
           }
@@ -1338,7 +1338,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, status)
           if (value === error_table[tag]["status"]) {
-            let device = `${db_name}_${key}`;
+            let device = `${key}`;
             
             error_result[`${device}:${tag}`] = {
               _id: `${device}:${tag}`,
@@ -1487,7 +1487,7 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
       for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, value)
-          let device = `${db_name}_${key}`;
+          let device = `${key}`;
           Other_error_result_unit(time, occurrence_time, db_name, error_table, tag, value, device, error_result,)
         }
       }
@@ -1673,10 +1673,12 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
       .then((resp) => {
         let docs_batch = resp.rows.map((element) => {
          if (element.hasOwnProperty("doc")) {
-            const _id = element.doc._id;
-            let doc = element.doc;
-            doc.recover = true;
-            doc.recover_time = current_locale_time(); 
+           const _id = element.doc._id;
+           let doc = element.doc;
+            if (!doc.recover) {
+              doc.recover = true;
+              doc.recover_time = current_locale_time(); 
+            };
             return doc;
           }
         })
@@ -1937,8 +1939,6 @@ module.exports = {
   LC_error_result_gen,
   DC_error_result_gen,
   Other_error_result_gen,
-  sendLineNotify,
-  init_Alarm_DB,
   compare_trigger_alarms,
   update_trigger_alarms_batch,
 };

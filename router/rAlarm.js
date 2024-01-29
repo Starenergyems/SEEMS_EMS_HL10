@@ -12,8 +12,6 @@ const {
   LC_error_result_gen,
   DC_error_result_gen,
   Other_error_result_gen,
-  sendLineNotify,
-  init_Alarm_DB,
   compare_trigger_alarms,
   update_trigger_alarms_batch,
 } = require("./alarmFunctions");
@@ -56,13 +54,13 @@ const indexDef_time = {
 ].forEach((element) => element.createIndex(indexDef_time));
 
 const alarmDB_db_name_index = {
-  index: { fields: ["db_name"] },
+  index: { fields: ["db_name", "time", "read", "recover",] },
   name: "alarmDB_db_name_index",
 };
 alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
 
 // alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
-alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
+// alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
 
 // const alarmDB_trigger_index = {
 //   index: { fields: ["trigger"] },
@@ -122,11 +120,11 @@ app.get("/alarm", (req, res) => {
 
       alarm_test_nanoDb.list()
         .then((body) => {
-          return alarm_test_nanoDb.find({ selector: {db_name: db_name}, limit: body.total_rows })
+          return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
         })
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
-          // console.log(compare_result);
+          console.log(compare_result);
           update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
           
           const hisAlarm_batch = Object.values(error_result).map(obj => {
@@ -165,11 +163,11 @@ app.get("/alarm", (req, res) => {
 
       alarm_test_nanoDb.list()
         .then((body) => {
-          return alarm_test_nanoDb.find({ selector: {db_name: db_name}, limit: body.total_rows })
+          return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
         })
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
-          // console.log(compare_result);
+          console.log(compare_result);
           update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
           
           const hisAlarm_batch = Object.values(error_result).map(obj => {
@@ -208,7 +206,7 @@ app.get("/alarm", (req, res) => {
 
       alarm_test_nanoDb.list()
         .then((body) => {
-          return alarm_test_nanoDb.find({ selector: {db_name: db_name}, limit: body.total_rows })
+          return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
         })
         .then((response) => {
           const compare_result = compare_trigger_alarms(error_result, response);
@@ -271,7 +269,24 @@ app.post("/alarm/realtime/edit", (req, res) => {
   try {
     const { ID, Checked } = req.body;
     console.log("Received ID:", ID);
-    console.log("Received Checked:", Checked);
+
+    alarm_test_nanoDb.get(ID)
+      .then((resp) => {
+        resp.read = Checked;
+        if (resp.recover && Checked) {
+          return alarm_test_nanoDb.destroy(resp._id, resp._rev);
+        } else {
+          return alarm_test_nanoDb.insert(resp);
+        }
+      })
+      .catch(err => {
+        if (err.statusCode === 404) {
+            console.error('Data not found in /alarm/realtime/edit:', err.request.data);
+        } else {
+            console.error('Error checking /alarm/realtime/edit:', err);
+        }
+      })
+    console.log("done")
 
     res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
   } catch (error) {
@@ -283,45 +298,42 @@ app.post("/alarm/realtime/edit", (req, res) => {
 
 //傳數值到前端的表格中
 app.get("/alarm/realtime/edit", (req, res) => {
-  const mangoQuery = {
-    selector: {
-      time: { $exists: true },
-    },
-    sort: [{ time: "desc" }],
-  };
-
-  alarmnanoDb.find(mangoQuery, (err, body) => {
-    if (err) {
-      console.error("Error:", err);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-
-    const alarm_db_array = [];
-    for (const item of body.docs) {
-      // console.log(item);
-      ["_rev", "time", "value"].forEach((key) => {
-        delete item[key];
-      });
-      item["index"] = "";
-      item["content"] = item["content"][1];
-      if (Array.isArray(item["content"])) {
-        for (let i of item["content"]) {
-          let new_item = {
-            ...item,
-            content: i,
-          };
-          alarm_db_array.push(new_item);
-        }
-      } else {
+  alarm_test_nanoDb.list()
+    .then((body) => {
+      return alarm_test_nanoDb.find({
+        selector: {
+          time: { $exists: true },
+          $or: [
+            { read: { $exists: true, $eq: false } },
+            { recover: { $exists: true, $eq: false } }
+          ]
+        },
+        fields: ["_id", "time", "location", "device", "level", "content", "value", "read", "recover", "recover_time", "occurrence_time"],
+        sort: [{ time: "desc" }],
+        limit: body.total_rows,
+      })
+    })
+    .then((resp) => {
+      const alarm_db_array = [];
+      for (const item of resp.docs) {
+        // console.log(item);
+        // ["_rev", "time", "db_name", "value"].forEach((key) => {
+        //   delete item[key];
+        // });
+        item["index"] = "";
         alarm_db_array.push(item);
       }
-    }
-
-    // console.log(alarm_db_array);
-    res.send(alarm_db_array);
+      // console.log(alarm_db_array);
+      res.send(alarm_db_array);
+    })
+    .catch(err => {
+      if (err.statusCode === 404) {
+          console.error('Data not found in /alarm/realtime/edit:', err.request.data);
+      } else {
+          console.error('Error checking /alarm/realtime/edit:', err);
+      }
+    })
   });
-});
 
 app.get("/alarm/history", (req, res) => {
   // num與fun
