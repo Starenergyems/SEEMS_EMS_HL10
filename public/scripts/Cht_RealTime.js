@@ -34,8 +34,8 @@
 const duration = document.querySelector(".timeRangeSet #duration");
 const unitDura_Select = document.querySelector(".timeRangeSet #unitDura_Select");
 
-duration.value = 1;
-unitDura_Select.value = "60000";
+//duration.value = 1;
+//unitDura_Select.value = "60000";
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -257,7 +257,7 @@ function triggerSet() {
     alertMessage.textContent = "時間長度設定有誤！";
     window_WrongDataSet.classList.add("appear");
   } else {
-    let v_Duration = Number(duration.value) * Number(unitDura_Select.value);
+   /* let v_Duration = Number(duration.value) * Number(unitDura_Select.value);
 
     raw_DT_now = new Date();
     DT_now_Millisec = raw_DT_now.getTime();
@@ -266,7 +266,10 @@ function triggerSet() {
     searchStartT.textContent = "" + (Number(searchEndT.textContent) - v_Duration);
     searchDuration.textContent = "" + v_Duration;
 
-    update_xMin_xMax(searchStartT.textContent, searchEndT.textContent);
+    update_xMin_xMax(searchStartT.textContent, searchEndT.textContent);*/
+    console.log(duration.value);
+    console.log(unitDura_Select.value);
+    dataPost('http://localhost:3005/chart/realtime', duration.value, unitDura_Select.value); //port要改
   }
 }
 

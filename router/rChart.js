@@ -1,25 +1,10 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
-const port = 3000;
-const Lc = require("../models/lcschema");
-//const Other1 = require("../models/lc_schema"); 還會引用?
+//const port = 3005;
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-// mongoose
-//   .connect("mongodb://localhost:27017/ems")
-//   .then(() => {
-//     console.log("成功連結mongoDB....");
-
-//     // 檢查當前數據庫名稱
-//     const currentDBName = mongoose.connection.name;
-//     console.log("我是圖表，當前數據庫名稱：", currentDBName);
-//   })
-//   .catch((e) => {
-//     console.log(e);
-//   });
 
 //set
 app.set("view engine", "ejs");
@@ -31,8 +16,7 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 
-// 創建一個Mongoose模型
-//const DataModel = mongoose.model("Data", Schema, "account");
+//以下app要改回router
 router.get("/chart", (req, res) => {
   // num與fun
   res.render("Cht_RealTime");
@@ -43,9 +27,20 @@ router.get("/chart/realtime", (req, res) => {
   res.render("Cht_RealTime");
 });
 
+router.post("/chart/realtime", (req, res) => {
+  // num與fun
+  const { input1, input2} = req.body;
+  console.log("num: "+input1);
+  console.log("unit:" +input2);
+});
+
 router.get("/chart/history", (req, res) => {
   // num與fun
   res.render("Cht_History");
 });
 
 module.exports = router;
+
+/*app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});*/
