@@ -216,6 +216,7 @@ async function updateTable(){
     ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
     //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
     pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
+    pageLength:15,// 預設為'10'，若需更改初始每頁顯示筆數，才需設定
     responsive: true,
 
     /*"ajax": {
@@ -240,7 +241,7 @@ async function updateTable(){
           var rowIndex = row.index; // Get the index from the row object
           //var checkboxId = "chb_Ack_" + rowIndex;
 
-          if (permission === "manager") {
+          if (permission === "manager") {//管理者才可打勾
             if (data === true) {
               return (
                 '<input type="checkbox" checked class="chb_Ack">'
@@ -273,6 +274,7 @@ async function updateTable(){
     ],          
     
   });
+  createIndex('#almTable');
   readCheck();//監測所有已讀是否打勾
 }
 
@@ -313,8 +315,9 @@ function remove() {
 }
 function allCheck() {//確定全選後執行
   remove();
-  const isChecked = $("#chb_AckAll").prop("checked");
-  dataPost('http://localhost:3200/alarm/realtime/edit', 'all', isChecked);
+  let isChecked = $("#chb_AckAll").prop("checked");
+  console.log("id"+isChecked);
+  dataPost('http://localhost:3001/alarm/realtime/edit', 'all', isChecked);
 
   //$(".chb_Ack").prop("checked", isChecked); //所有告警皆已讀
   $("#chb_AckAll").prop("checked", !isChecked); // 全選欄復歸
@@ -323,7 +326,7 @@ function allCheck() {//確定全選後執行
 
 var rowId, rowChecked;
 function readCheck() {  //監測是否勾選已讀，勾選後刪除
-  let table = new DataTable('#almTable'); 
+  /*let table = new DataTable('#almTable'); 
 
   $(".chb_Ack")
     .off("change")
@@ -335,5 +338,18 @@ function readCheck() {  //監測是否勾選已讀，勾選後刪除
       console.log("已讀框偵測: "+rowChecked);
       // Send an AJAX request to remove the row from the database
       dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked); //端口要改
+    });*/
+
+    $("#almTable").on("change", ".chb_Ack", function () {
+      var table = $("#almTable").DataTable();
+      var rowData = table.row($(this).closest("tr")).data();
+      var rowId = rowData._id; // Assuming _id is the property containing the unique identifier
+      var rowChecked = $(this).prop("checked");
+  
+      console.log("Row ID:", rowId);
+      console.log("已讀框偵測:", rowChecked);
+  
+      // Send an AJAX request to update the row in the database
+      dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked);
     });
 }

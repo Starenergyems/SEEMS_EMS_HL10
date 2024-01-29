@@ -269,13 +269,19 @@ app.post("/alarm/realtime/edit", (req, res) => {
   try {
     const { ID, Checked } = req.body;
     console.log("Received ID:", ID);
+    console.log("read:", typeof Checked);
+
+    const read = Checked === "true";
+    console.log(read)
 
     alarm_test_nanoDb.get(ID)
       .then((resp) => {
-        resp.read = Checked;
-        if (resp.recover && Checked) {
+        resp.read = read;
+        console.log(resp);
+        if (resp.recover && read) {
           return alarm_test_nanoDb.destroy(resp._id, resp._rev);
         } else {
+          console.log(resp);
           return alarm_test_nanoDb.insert(resp);
         }
       })
@@ -286,7 +292,6 @@ app.post("/alarm/realtime/edit", (req, res) => {
             console.error('Error checking /alarm/realtime/edit:', err);
         }
       })
-    console.log("done")
 
     res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
   } catch (error) {
