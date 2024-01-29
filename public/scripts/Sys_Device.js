@@ -2,7 +2,7 @@
 // myHeading.textContent = "Hello world!";
 $(document).ready(function () {
     updateTable()
-
+    classAdd('#nB_System', 'default_nB');
 });
 
 let lang = {
@@ -319,6 +319,7 @@ async function updateTable() {
             pagingType: "simple_numbers",
             responsive: true,
             data: combinedData,
+            pageLength:20,// 預設為'10'，若需更改初始每頁顯示筆數，才需設定
             // Specify column headers for both fixed and dynamic columns
             /*columns: [
                 { title: "Fixed Column 1" },
