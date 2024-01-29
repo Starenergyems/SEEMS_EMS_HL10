@@ -272,6 +272,8 @@ function update_xMin_xMax(StartTime, EndTime, update_DT_start) {
   cht_History.options.scales.x.min = yy_xMin + "-" + mm_xMin + "-" + dd_xMin + " " + hh_xMin + ":" + m_xMin + ":" + ss_xMin + "." + ms_xMin;
   cht_History.options.scales.x.max = yy_xMax + "-" + mm_xMax + "-" + dd_xMax + " " + hh_xMax + ":" + m_xMax + ":" + ss_xMax + "." + ms_xMax;
   console.log(cht_History.options.scales.x.min + "_!_" + cht_History.options.scales.x.max);
+  let v_Interval = Number(interval.value) * Number(unitInte_Select.value);
+  dataPost('http://localhost:3005/chart/history', cht_History.options.scales.x.min, cht_History.options.scales.x.max, v_Interval)//傳送資料區間到後端
 
   if (update_DT_start) {
     // console.log("abc");

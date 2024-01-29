@@ -39,6 +39,14 @@ router.get("/chart/history", (req, res) => {
   res.render("Cht_History");
 });
 
+router.post("/chart/history", (req, res) => {
+  // num與fun
+  const { input1, input2, input3} = req.body;
+  console.log("start: "+input1);
+  console.log("end:" +input2);
+  console.log("unit(ms):" +input3);
+});
+
 module.exports = router;
 
 /*app.listen(port, () => {
