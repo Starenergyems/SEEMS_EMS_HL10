@@ -201,10 +201,10 @@ async function updateTable(){
   console.log(dataset);	
 
 
-  $("#almTable").DataTable({
+  var table = $("#almTable").DataTable({
     lengthMenu: [10, 20, 25, 50, 100],
     scrollY: "660px",
-
+    order:[[1, "desc"]], //預設以時間排序
     destroy: true,
     language: lang, //提示資訊
     autoWidth: false, //禁用自動調整列寬
@@ -274,6 +274,9 @@ async function updateTable(){
     ],          
     
   });
+
+  // Set the DataTable to the previously obtained page index
+  table.page(currentPageIndex).draw('page');
   createIndex('#almTable');
   readCheck();//監測所有已讀是否打勾
 }
@@ -287,7 +290,7 @@ $(document).ready(function () {
   console.log("start reading js");
   updateTable();
   // 彈出視窗確定全選
-  $("#chb_AckAll").on("change", function () {
+  $("#chb_AckAll").off("change").on("change", function () {
     appear();
   });
 
@@ -325,6 +328,8 @@ function allCheck() {//確定全選後執行
 
 
 var rowId, rowChecked;
+var currentPageIndex = 0; //一開始在第一頁
+
 function readCheck() {  //監測是否勾選已讀，勾選後刪除
   /*let table = new DataTable('#almTable'); 
 
@@ -340,7 +345,8 @@ function readCheck() {  //監測是否勾選已讀，勾選後刪除
       dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked); //端口要改
     });*/
 
-    $("#almTable").on("change", ".chb_Ack", function () {
+
+    $("#almTable").off("change").on("change", ".chb_Ack", function () {
       var table = $("#almTable").DataTable();
       var rowData = table.row($(this).closest("tr")).data();
       var rowId = rowData._id; // Assuming _id is the property containing the unique identifier
@@ -348,8 +354,10 @@ function readCheck() {  //監測是否勾選已讀，勾選後刪除
   
       console.log("Row ID:", rowId);
       console.log("已讀框偵測:", rowChecked);
-  
-      // Send an AJAX request to update the row in the database
-      dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked);
+      currentPageIndex = $("#almTable").DataTable().page.info().page; // Get the current page index again after updating the table   
+      console.log("點擊頁碼:"+currentPageIndex);  
+      dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked);// Send an AJAX request to update the row in the database
+
+
     });
 }
