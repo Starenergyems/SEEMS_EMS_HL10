@@ -51,6 +51,7 @@ const indexDef_time = {
   dcnanoDb,
   gcnanoDb,
   otherrf10nanoDb,
+  alarm_test_nanoDb,
 ].forEach((element) => element.createIndex(indexDef_time));
 
 const alarmDB_db_name_index = {
@@ -269,31 +270,66 @@ app.post("/alarm/realtime/edit", (req, res) => {
   try {
     const { ID, Checked } = req.body;
     console.log("Received ID:", ID);
-    console.log("read:", typeof Checked);
+    console.log("read:", Checked);
 
     const read = Checked === "true";
-    console.log(read)
+    // console.log(read)
 
-    alarm_test_nanoDb.get(ID)
-      .then((resp) => {
-        resp.read = read;
-        console.log(resp);
-        if (resp.recover && read) {
-          return alarm_test_nanoDb.destroy(resp._id, resp._rev);
-        } else {
-          console.log(resp);
-          return alarm_test_nanoDb.insert(resp);
-        }
-      })
-      .catch(err => {
-        if (err.statusCode === 404) {
-            console.error('Data not found in /alarm/realtime/edit:', err.request.data);
-        } else {
-            console.error('Error checking /alarm/realtime/edit:', err);
-        }
-      })
+    let promise = true;
+    if (ID === "all") {
+      promise = alarm_test_nanoDb.list()
+        .then((body) => {
+          return alarm_test_nanoDb.find({ selector: { read: { $exists: true, $eq: false }, }, limit: body.total_rows })
+        })
+        .then((resp) => {
+          // console.log(resp.docs);
+          let docs_batch = resp.docs.map((element) => {
+            element.read = read;
+            if (element.recover && element.read) {
+              element._deleted = true;
+            }
+            return element;
+          });
+          return alarm_test_nanoDb.bulk({docs: docs_batch});
+        })
+        .catch(err => {
+          if (err.statusCode === 404) {
+              console.error('Data not found in update_trigger_alarms:', err.request.data);
+          } else if (err.statusCode === 409) {
+              console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+          } else {
+              console.error('Error checking update_trigger_alarms flag:', err.request.data);
+          }
+        })
+    } else {
+      promise = alarm_test_nanoDb.get(ID)
+        .then((resp) => {
+          resp.read = read;
+          // console.log(resp);
+          if (resp.recover && resp.read) {
+            return alarm_test_nanoDb.destroy(resp._id, resp._rev);
+          } else {
+            // console.log(resp);
+            return alarm_test_nanoDb.insert(resp);
+          }
+        })
+        .catch(err => {
+          if (err.statusCode === 404) {
+              console.error('Data not found in /alarm/realtime/edit:', err.request.data);
+          } else {
+              console.error('Error checking /alarm/realtime/edit:', err);
+          }
+        })
+    }
 
-    res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
+    console.log(promise);
+    promise
+      .then(() => {
+        res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
+      })
+      .catch((error) => {
+        console.error('Promise rejected:', error.message);
+      });
   } catch (error) {
     console.error(error);
     res.status(500).send("伺服器錯誤");
@@ -305,6 +341,7 @@ app.post("/alarm/realtime/edit", (req, res) => {
 app.get("/alarm/realtime/edit", (req, res) => {
   alarm_test_nanoDb.list()
     .then((body) => {
+      // console.log(body);
       return alarm_test_nanoDb.find({
         selector: {
           time: { $exists: true },

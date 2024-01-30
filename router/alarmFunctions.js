@@ -1114,6 +1114,7 @@ function init_Alarm_DB(nanoDB,) {
       console.error('Error initializing database:', err);
     });
 }
+
 // Functions //--------------------------------------------------------------------------------
 function getLargestKey(obj) {
   // Get all keys of the object
@@ -1170,6 +1171,23 @@ function checkPartialMatch(k, array) {
     }
   }
   return null; // Return null if no match is found
+}
+
+function createErrorRecord(device, tag, value, db_name, time, occurrence_time, key_error, error_table) {
+  return {
+    _id: `${device}:${tag}:${value}`,
+    db_name: db_name,
+    time: time,
+    location: error_table[key_error][tag]["location"],
+    device: device,
+    level: error_table[key_error][tag]["name"].toLowerCase().includes("fault") ? "Fault" : "Alarm",
+    content: error_table[key_error][tag]["status"][value],
+    value: value,
+    read: false,
+    recover: false,
+    recover_time: "",
+    occurrence_time: occurrence_time,
+  };
 }
 
 function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,) {  
@@ -1603,16 +1621,18 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
   if (compare_result.remain.length > 0) {
     remain_promises = nanoDB.fetch({keys: compare_result.remain})
       .then((resp) => {
-        let docs_batch = resp.rows.map((element) => {
+        let docs_batch = [];
+        resp.rows.forEach((element) => {
           if (element.hasOwnProperty("error")) {
             const _id = element.key;
-            return error_result[_id];
+            docs_batch.push(error_result[_id]);
           } else if (element.hasOwnProperty("doc")) {
             const _id = element.doc._id;
             let doc = element.doc;
             let error_element = error_result[_id];
             error_element["_rev"] = doc._rev;
-            return error_element;
+            error_element["read"] = doc.read;
+            docs_batch.push(error_element);
           }
         })
         // console.log(docs_batch)
@@ -1635,20 +1655,27 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
   if (compare_result.income.length > 0) {
     income_promises = nanoDB.fetch({keys: compare_result.income})
       .then((resp) => {
-        // console.log(resp)
-        let docs_batch = resp.rows.map((element) => {
+        // console.log(resp.rows)
+        let docs_batch = [];
+        resp.rows.forEach((element) => {
           if (element.hasOwnProperty("error")) {
             const _id = element.key;
             if (line_flag) {
               sendLineNotify(error_result[_id]);
             }
-            return error_result[_id];
+            docs_batch.push(error_result[_id]);
           } else if (element.hasOwnProperty("doc")) {
-            const _id = element.doc._id;
-            let doc = element.doc;
-            let error_element = error_result[_id];
-            error_element["_rev"] = doc._rev;
-            return error_element;
+            const _id = element.id;
+            if (element.doc) {
+              // console.log(element.doc);
+              let doc = element.doc;
+              let error_element = error_result[_id];
+              error_element["_rev"] = doc._rev;
+              // console.log(error_element);
+              docs_batch.push(error_element);
+            } else {
+              docs_batch.push(error_result[_id]);
+            }
           }
         })
         // console.log(docs_batch)
@@ -1671,15 +1698,19 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
   if (compare_result.recover.length > 0) {
     recover_promises = nanoDB.fetch({keys: compare_result.recover})
       .then((resp) => {
-        let docs_batch = resp.rows.map((element) => {
+        let docs_batch = [];
+        resp.rows.forEach((element) => {
          if (element.hasOwnProperty("doc")) {
            const _id = element.doc._id;
            let doc = element.doc;
             if (!doc.recover) {
               doc.recover = true;
-              doc.recover_time = current_locale_time(); 
+              doc.recover_time = current_locale_time();
+              if (doc.recover && doc.read) {
+                doc._deleted = true;
+              }; 
             };
-            return doc;
+            docs_batch.push(doc);
           }
         })
         // console.log(docs_batch)
