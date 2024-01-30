@@ -152,14 +152,14 @@ const LC_System_402100 = {
 };
 
 const LC_System_error_table = {
-  402013: { name: "LC_System_System CHG/DCG status", status: LC_System_402013, type: "int", location: "pending" },
-  402019: { name: "LC_System_Running mode", status: LC_System_402019, type: "int", location: "pending" },
-  402020: { name: "LC_System_Grid status", status: LC_System_402020, type: "int", location: "pending" },
-  402021: { name: "LC_System_System status", status: LC_System_402021, type: "bit", location: "pending" },
-  402048: { name: "LC_System_PCS communication status", status: LC_System_402048, type: "bit_abnormal", location: "pending" },
-  402050: { name: "LC_System_BMS communication status", status: LC_System_402050, type: "bit_abnormal", location: "pending" },
-  402099: { name: "LC_System_Fault status", status: LC_System_402099, type: "bit", location: "pending" },
-  402100: { name: "LC_System_Alarm status", status: LC_System_402100, type: "bit", location: "pending" },
+  402013: { name: "LC_System_System CHG/DCG status", status: LC_System_402013, type: "int", location: "pending", line: false},
+  402019: { name: "LC_System_Running mode", status: LC_System_402019, type: "int", location: "pending", line: false },
+  402020: { name: "LC_System_Grid status", status: LC_System_402020, type: "int", location: "pending", line: false },
+  402021: { name: "LC_System_System status", status: LC_System_402021, type: "bit", location: "pending", line: true },
+  402048: { name: "LC_System_PCS communication status", status: LC_System_402048, type: "bit_abnormal", location: "pending", line: false },
+  402050: { name: "LC_System_BMS communication status", status: LC_System_402050, type: "bit_abnormal", location: "pending", line: false },
+  402099: { name: "LC_System_Fault status", status: LC_System_402099, type: "bit", location: "pending", line: true },
+  402100: { name: "LC_System_Alarm status", status: LC_System_402100, type: "bit", location: "pending", line: true },
 };
 
 const LC_PCS_403001 = {
@@ -331,20 +331,20 @@ const LC_PCS_403058 = {
 };
 
 const LC_PCS_error_table = {
-  403001: { name: "LC_PCS_Overall fault status", status: LC_PCS_403001, type: "bit", location: "pending" },
-  403002: { name: "LC_PCS_Overall alarm status", status: LC_PCS_403002, type: "bit", location: "pending" },
-  403004: { name: "LC_PCS_Transformer node status", status: LC_PCS_403004, type: "bit", location: "pending" },
-  403008: { name: "LC_PCS_Leakage current", status: LC_PCS_403008, type: "valve", location: "pending" },
-  403009: { name: "LC_PCS_Transformer node status1", status: LC_PCS_403009, type: "bit", location: "pending" },
-  403011: { name: "LC_PCS_Transformer node status2", status: LC_PCS_403011, type: "bit", location: "pending" },
-  403034: { name: "LC_PCS_Alarm status1", status: LC_PCS_403034, type: "bit", location: "pending" },
-  403035: { name: "LC_PCS_Alarm status2", status: LC_PCS_403035, type: "bit", location: "pending" },
-  403036: { name: "LC_PCS_Fault status1", status: LC_PCS_403036, type: "bit", location: "pending" },
-  403038: { name: "LC_PCS_Fault status2", status: LC_PCS_403038, type: "bit", location: "pending" },
-  403040: { name: "LC_PCS_Charge status", status: LC_PCS_403040, type: "int", location: "pending" },
-  403049: { name: "LC_PCS_Working status", status: LC_PCS_403049, type: "bit", location: "pending" },
-  403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int", location: "pending" },
-  403058: { name: "LC_PCS_Node status", status: LC_PCS_403058, type: "bit", location: "pending" },
+  403001: { name: "LC_PCS_Overall fault status", status: LC_PCS_403001, type: "bit", location: "pending", line: true },
+  403002: { name: "LC_PCS_Overall alarm status", status: LC_PCS_403002, type: "bit", location: "pending", line: true },
+  403004: { name: "LC_PCS_Transformer node status", status: LC_PCS_403004, type: "bit", location: "pending", line: true },
+  403008: { name: "LC_PCS_Leakage current", status: LC_PCS_403008, type: "valve", location: "pending", line: false },
+  403009: { name: "LC_PCS_Transformer node status1", status: LC_PCS_403009, type: "bit", location: "pending", line: true },
+  403011: { name: "LC_PCS_Transformer node status2", status: LC_PCS_403011, type: "bit", location: "pending", line: true },
+  403034: { name: "LC_PCS_Alarm status1", status: LC_PCS_403034, type: "bit", location: "pending", line: true },
+  403035: { name: "LC_PCS_Alarm status2", status: LC_PCS_403035, type: "bit", location: "pending", line: true },
+  403036: { name: "LC_PCS_Fault status1", status: LC_PCS_403036, type: "bit", location: "pending", line: true },
+  403038: { name: "LC_PCS_Fault status2", status: LC_PCS_403038, type: "bit", location: "pending", line: true },
+  403040: { name: "LC_PCS_Charge status", status: LC_PCS_403040, type: "int", location: "pending", line: false },
+  403049: { name: "LC_PCS_Working status", status: LC_PCS_403049, type: "bit", location: "pending", line: true },
+  403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int", location: "pending", line: false },
+  403058: { name: "LC_PCS_Node status", status: LC_PCS_403058, type: "bit", location: "pending", line: true },
 };
 
 const LC_BMS_404011 = {
@@ -414,11 +414,11 @@ const LC_BMS_404061 = {
 };
 
 const LC_BMS_error_table = {
-  404011: { name: "LC_BMS_System mode", status: LC_BMS_404011, type: "bit", location: "pending" },
-  404044: { name: "LC_BMS_CMU alarm word", status: LC_BMS_404044, type: "bit", location: "pending" },
-  404046: { name: "LC_BMS_CMU fault word", status: LC_BMS_404046, type: "bit", location: "pending" },
-  404048: { name: "LC_BMS_Hardware fault word", status: LC_BMS_404048, type: "bit", location: "pending" },
-  404061: { name: "LC_BMS_SMU fault status", status: LC_BMS_404061, type: "bit", location: "pending" },
+  404011: { name: "LC_BMS_System mode", status: LC_BMS_404011, type: "bit", location: "pending", line: true },
+  404044: { name: "LC_BMS_CMU alarm word", status: LC_BMS_404044, type: "bit", location: "pending", line: true },
+  404046: { name: "LC_BMS_CMU fault word", status: LC_BMS_404046, type: "bit", location: "pending", line: true },
+  404048: { name: "LC_BMS_Hardware fault word", status: LC_BMS_404048, type: "bit", location: "pending", line: true },
+  404061: { name: "LC_BMS_SMU fault status", status: LC_BMS_404061, type: "bit", location: "pending", line: true },
 };
 
 const LC_Rack_405028 = {
@@ -460,8 +460,8 @@ const LC_Rack_405030 = {
 };
 
 const LC_Rack_error_table = {
-  405028: { name: "LC_Rack_CMU alarm word", status: LC_Rack_405028, type: "bit", location: "pending" },
-  405030: { name: "LC_Rack_CMU fault word", status: LC_Rack_405030, type: "bit", location: "pending" },
+  405028: { name: "LC_Rack_CMU alarm word", status: LC_Rack_405028, type: "bit", location: "pending", line: true },
+  405030: { name: "LC_Rack_CMU fault word", status: LC_Rack_405030, type: "bit", location: "pending", line: true },
 };
 
 const LC_BSC_406001 = {
@@ -701,33 +701,33 @@ const LC_BSC_406050 = {
 };
 
 const LC_BSC_error_table = {
-  406001: { name: "LC_BSC_Fault status", status: LC_BSC_406001, type: "bit", location: "pending" },
-  406003: { name: "LC_BSC_Alarm status", status: LC_BSC_406003, type: "bit", location: "pending" },
-  406005: { name: "LC_BSC_FFS status", status: LC_BSC_406005, type: "bit", location: "pending" },
-  406007: { name: 'LC_BSC_HVAC_1 running status', status: LC_BSC_406007, type: "int", location: "pending" },
-  406009: { name: 'LC_BSC_HVAC_2 running status', status: LC_BSC_406009, type: "int", location: "pending" },
-  406011: { name: 'LC_BSC_HVAC_3 running status', status: LC_BSC_406011, type: "int", location: "pending" },
-  406013: { name: 'LC_BSC_HVAC_4 running status', status: LC_BSC_406013, type: "int", location: "pending" },
-  406015: { name: 'LC_BSC_HVAC_5 running status', status: LC_BSC_406015, type: "int", location: "pending" },
-  406017: { name: 'LC_BSC_HVAC_6 running status', status: LC_BSC_406017, type: "int", location: "pending" },
-  406019: { name: 'LC_BSC_HVAC_7 running status', status: LC_BSC_406019, type: "int", location: "pending" },
-  406021: { name: 'LC_BSC_HVAC_8 running status', status: LC_BSC_406021, type: "int", location: "pending" },
-  406023: { name: 'LC_BSC_HVAC_9 running status', status: LC_BSC_406023, type: "int", location: "pending" },
-  406025: { name: 'LC_BSC_HVAC_10 running status', status: LC_BSC_406025, type: "int", location: "pending" },
-  406027: { name: 'LC_BSC_HVAC_11 running status', status: LC_BSC_406027, type: "int", location: "pending" },
-  406029: { name: 'LC_BSC_HVAC_12 running status', status: LC_BSC_406029, type: "int", location: "pending" },
-  406031: { name: 'LC_BSC_HVAC_13 running status', status: LC_BSC_406031, type: "int", location: "pending" },
-  406033: { name: 'LC_BSC_HVAC_14 running status', status: LC_BSC_406033, type: "int", location: "pending" },
-  406035: { name: 'LC_BSC_HVAC_15 running status', status: LC_BSC_406035, type: "int", location: "pending" },
-  406037: { name: 'LC_BSC_HVAC_16 running status', status: LC_BSC_406037, type: "int", location: "pending" },
-  406039: { name: 'LC_BSC_HVAC_17 running status', status: LC_BSC_406039, type: "int", location: "pending" },
-  406041: { name: 'LC_BSC_HVAC_18 running status', status: LC_BSC_406041, type: "int", location: "pending" },
-  406043: { name: 'LC_BSC_HVAC_19 running status', status: LC_BSC_406043, type: "int", location: "pending" },
-  406045: { name: 'LC_BSC_HVAC_20 running status', status: LC_BSC_406045, type: "int", location: "pending" },
-  406047: { name: 'LC_BSC_TH_1 Temperature', status: LC_BSC_406047, type: "valve", location: "pending" },
-  406048: { name: 'LC_BSC_TH_1 Humidity', status: LC_BSC_406048, type: "valve", location: "pending" },
-  406049: { name: 'LC_BSC_TH_2 Temperature', status: LC_BSC_406049, type: "valve", location: "pending" },
-  406050: { name: 'LC_BSC_TH_2 Humidity', status: LC_BSC_406050, type: "valve", location: "pending" },
+  406001: { name: "LC_BSC_Fault status", status: LC_BSC_406001, type: "bit", location: "pending", line: true },
+  406003: { name: "LC_BSC_Alarm status", status: LC_BSC_406003, type: "bit", location: "pending", line: true },
+  406005: { name: "LC_BSC_FFS status", status: LC_BSC_406005, type: "bit", location: "pending", line: false },
+  406007: { name: 'LC_BSC_HVAC_1 running status', status: LC_BSC_406007, type: "int", location: "pending", line: true },
+  406009: { name: 'LC_BSC_HVAC_2 running status', status: LC_BSC_406009, type: "int", location: "pending", line: true },
+  406011: { name: 'LC_BSC_HVAC_3 running status', status: LC_BSC_406011, type: "int", location: "pending", line: true },
+  406013: { name: 'LC_BSC_HVAC_4 running status', status: LC_BSC_406013, type: "int", location: "pending", line: true },
+  406015: { name: 'LC_BSC_HVAC_5 running status', status: LC_BSC_406015, type: "int", location: "pending", line: true },
+  406017: { name: 'LC_BSC_HVAC_6 running status', status: LC_BSC_406017, type: "int", location: "pending", line: true },
+  406019: { name: 'LC_BSC_HVAC_7 running status', status: LC_BSC_406019, type: "int", location: "pending", line: true },
+  406021: { name: 'LC_BSC_HVAC_8 running status', status: LC_BSC_406021, type: "int", location: "pending", line: true },
+  406023: { name: 'LC_BSC_HVAC_9 running status', status: LC_BSC_406023, type: "int", location: "pending", line: true },
+  406025: { name: 'LC_BSC_HVAC_10 running status', status: LC_BSC_406025, type: "int", location: "pending", line: true },
+  406027: { name: 'LC_BSC_HVAC_11 running status', status: LC_BSC_406027, type: "int", location: "pending", line: true },
+  406029: { name: 'LC_BSC_HVAC_12 running status', status: LC_BSC_406029, type: "int", location: "pending", line: true },
+  406031: { name: 'LC_BSC_HVAC_13 running status', status: LC_BSC_406031, type: "int", location: "pending", line: true },
+  406033: { name: 'LC_BSC_HVAC_14 running status', status: LC_BSC_406033, type: "int", location: "pending", line: true },
+  406035: { name: 'LC_BSC_HVAC_15 running status', status: LC_BSC_406035, type: "int", location: "pending", line: true },
+  406037: { name: 'LC_BSC_HVAC_16 running status', status: LC_BSC_406037, type: "int", location: "pending", line: true },
+  406039: { name: 'LC_BSC_HVAC_17 running status', status: LC_BSC_406039, type: "int", location: "pending", line: true },
+  406041: { name: 'LC_BSC_HVAC_18 running status', status: LC_BSC_406041, type: "int", location: "pending", line: true },
+  406043: { name: 'LC_BSC_HVAC_19 running status', status: LC_BSC_406043, type: "int", location: "pending", line: true },
+  406045: { name: 'LC_BSC_HVAC_20 running status', status: LC_BSC_406045, type: "int", location: "pending", line: true },
+  406047: { name: 'LC_BSC_TH_1 Temperature', status: LC_BSC_406047, type: "valve", location: "pending", line: false },
+  406048: { name: 'LC_BSC_TH_1 Humidity', status: LC_BSC_406048, type: "valve", location: "pending", line: false },
+  406049: { name: 'LC_BSC_TH_2 Temperature', status: LC_BSC_406049, type: "valve", location: "pending", line: false },
+  406050: { name: 'LC_BSC_TH_2 Humidity', status: LC_BSC_406050, type: "valve", location: "pending", line: false },
 };
 
 const LC_error_table = {
@@ -856,33 +856,33 @@ const Other_408207 = {
 };
 
 const Other_error_table = {
-  408154: { name: "Other_UPS status", status: Other_408154, type: "bit", location: "pending" },
-  408186: { name: "Other_Temperature", status: Other_408186, type: "valve", location: "pending" },
-  408187: { name: "Other_Humidity", status: Other_408187, type: "valve", location: "pending" },
-  408201: { name: "Other_Relay_MVCB-1", status: Other_408201, type: "bit", location: "pending" },
-  408202: { name: "Other_Relay_MVCB-2", status: Other_408202, type: "bit", location: "pending" },
-  408203: { name: "Other_Relay_VCB", status: Other_408203, type: "bit", location: "pending" },
-  408204: { name: "Other_FFS Status", status: Other_408204, type: "bit", location: "pending" },
-  408205: { name: "Other_VCB Status", status: Other_408205, type: "bit", location: "pending" },
-  408206: { name: "Other_ACB Status", status: Other_408206, type: "bit", location: "pending" },
-  408207: { name: "Other_ACB Control", status: Other_408207, type: "bit", location: "pending" },
+  408154: { name: "Other_UPS status", status: Other_408154, type: "bit", location: "pending", line: true },
+  408186: { name: "Other_Temperature", status: Other_408186, type: "valve", location: "pending", line: true },
+  408187: { name: "Other_Humidity", status: Other_408187, type: "valve", location: "pending", line: true },
+  408201: { name: "Other_Relay_MVCB-1", status: Other_408201, type: "bit", location: "pending", line: true },
+  408202: { name: "Other_Relay_MVCB-2", status: Other_408202, type: "bit", location: "pending", line: true },
+  408203: { name: "Other_Relay_VCB", status: Other_408203, type: "bit", location: "pending", line: true },
+  408204: { name: "Other_FFS Status", status: Other_408204, type: "bit", location: "pending", line: true },
+  408205: { name: "Other_VCB Status", status: Other_408205, type: "bit", location: "pending", line: true },
+  408206: { name: "Other_ACB Status", status: Other_408206, type: "bit", location: "pending", line: true },
+  408207: { name: "Other_ACB Control", status: Other_408207, type: "bit", location: "pending", line: true },
 };
 
 const DC_error_table = {
-  409101: { name: "DC_LC_Comm_Error", status: 1, type: "int", location: "pending" },
-  409103: { name: "DC_Freq-M_Comm_Error", status: 1, type: "int", location: "pending" },
-  409105: { name: "DC_ACPM_Comm_Error", status: 1, type: "int", location: "pending" },
-  409107: { name: "DC_AuxMtot_Comm_Error", status: 1, type: "int", location: "pending" },
-  409109: { name: "DC_AuxM_Comm_Error", status: 1, type: "int", location: "pending" },
-  409111: { name: "DC_UPS_Comm_Error", status: 1, type: "int", location: "pending" },
-  409113: { name: "DC_TR_Comm_Error", status: 1, type: "int", location: "pending" },
-  409115: { name: "DC_TH_Comm_Error", status: 1, type: "int", location: "pending" },
-  409117: { name: "DC_RelayMVCB_Comm_Error", status: 1, type: "int", location: "pending" },
-  409119: { name: "DC_RelayVCB_Comm_Error", status: 1, type: "int", location: "pending" },
-  409121: { name: "DC_RIO_CtrlRoom_Comm_Error", status: 1, type: "int", location: "pending" },
-  409123: { name: "DC_RIO_MVCB_Comm_Error", status: 1, type: "int", location: "pending" },
-  409125: { name: "DC_RIO_ACP_Comm_Error", status: 1, type: "int", location: "pending" },
-  409127: { name: "DC_GC_Comm_Error", status: 1, type: "int", location: "pending" },
+  409101: { name: "DC_LC_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409103: { name: "DC_Freq-M_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409105: { name: "DC_ACPM_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409107: { name: "DC_AuxMtot_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409109: { name: "DC_AuxM_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409111: { name: "DC_UPS_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409113: { name: "DC_TR_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409115: { name: "DC_TH_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409117: { name: "DC_RelayMVCB_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409119: { name: "DC_RelayVCB_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409121: { name: "DC_RIO_CtrlRoom_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409123: { name: "DC_RIO_MVCB_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409125: { name: "DC_RIO_ACP_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409127: { name: "DC_GC_Comm_Error", status: 1, type: "int", location: "pending", line: true },
 };
 
 const GC_400033 = {
@@ -897,8 +897,8 @@ const GC_400129 = {
 };
 
 const GC_error_table = {
-  400033: { name: "SBSPM", status: GC_400033, type: "threshold", location: "pending" },
-  400129: { name: "SOC", status: GC_400129, type: "valve", location: "pending" },
+  400033: { name: "SBSPM", status: GC_400033, type: "threshold", location: "pending", line: true },
+  400129: { name: "SOC", status: GC_400129, type: "valve", location: "pending", line: true },
 };
 
 // Alarm DB //--------------------------------------------------------------------------------
