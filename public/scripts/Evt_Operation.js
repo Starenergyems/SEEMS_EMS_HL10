@@ -5,7 +5,7 @@ $(document).ready(async function () {
   classAdd("#nB_Event", "default_nB"); //側欄按鈕綠色
 
   updateTable();
-  createIndex("#evtTable");
+
 });
 
 let lang = {
@@ -65,6 +65,7 @@ async function updateTable() {
     ],
     columnDefs: [{ targets: [5], width: "50%", className: "text-align-left" }],
   });
+  createIndex("#evtTable");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
