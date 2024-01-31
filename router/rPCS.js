@@ -1,3 +1,5 @@
+// const port = 6789;
+
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -35,23 +37,11 @@ app.use(methodOverride("_method"));
 
 router.use(cors());
 router.use("/public", express.static(path.join(__dirname, "../public")));
-router.use(
-  "/operateinfo",
-  express.static(path.join(__dirname, "../public/operateinfo"))
-);
-router.use(
-  "/operateinfo/pcs",
-  express.static(path.join(__dirname, "../public/operateinfo/pcs"))
-);
-router.use(
-  "/operateinfo/pcs/alarm/:id",
-  express.static(path.join(__dirname, "../public"))
-);
+router.use("/operateinfo", express.static(path.join(__dirname, "../public/operateinfo")));
+router.use("/operateinfo/pcs", express.static(path.join(__dirname, "../public/operateinfo/pcs")));
+router.use("/operateinfo/pcs/alarm/:id", express.static(path.join(__dirname, "../public")));
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-router.use(
-  "/operateinfo/pcs/infodetail/:id",
-  express.static(path.join(__dirname, "../public"))
-);
+router.use("/operateinfo/pcs/infodetail/:id", express.static(path.join(__dirname, "../public")));
 
 //************************************************************************************************************************************************ */
 
@@ -318,6 +308,141 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   }
 });
 
+let dVS_Data_dataName;
+let dVS_Data_numInDataGroup;
+
+router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
+  try {
+    console.log("接收到前端請求");
+    dVS_Data_dataName = req.body.dataName;
+    dVS_Data_numInDataGroup = req.body.numInDataGroup;
+
+    const data_MT = {
+      setBut_P_LC: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407078, scale: 1, decPlace: 0, minLimit: -5000, maxLimit: 5000, unit: "kW" },
+      setBut_acuHeatT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407016, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
+      setBut_acuCoolT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407017, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
+      // 
+      // 
+      // 
+    };
+
+    const data_AfM = data_MT[dVS_Data_dataName];
+    console.log(data_AfM.dbName_gD);
+
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    const allData = await Promise.all(dataPromises);
+
+    const getData_raw = allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][data_AfM.dataID];
+    const response = {
+      originData: scaleProcess(getData_raw, data_AfM.scale, data_AfM.decPlace),
+      dataRange: `數值範圍: ${scaleProcess(data_AfM.minLimit, data_AfM.scale, data_AfM.decPlace)}~${scaleProcess(data_AfM.maxLimit, data_AfM.scale, data_AfM.decPlace)} ${data_AfM.unit}`,
+      unit: data_AfM.unit
+    };
+
+    res.json(response);
+    // if (!lcData) {
+    //   throw new Error("No data found");
+    // }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.post("/set_dVS_Data", async (req, res) => {
+  try {
+    const setValue_raw = req.body.setValue;
+
+    let response;
+
+    if (setValue_raw !== "" && !Number.isNaN(Number(setValue_raw))) {
+      const data_MT = {
+        setBut_P_LC: {
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407078", scale: 1, decPlace: 0, minLimit: -5000, maxLimit: 5000, unit: "kW",
+          category: "設備控制", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`
+        },
+        setBut_acuHeatT: {
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407016", scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C",
+          category: "設備控制123", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`
+        },
+        setBut_acuCoolT: {
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407017", scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C",
+          category: "設備控制456", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`
+        },
+        // 
+        // 
+        // 
+        // 
+      };
+
+      const data_AfM = data_MT[dVS_Data_dataName];
+      const setValue = Math.round(Number(setValue_raw) / data_AfM.scale);
+      console.log(setValue);
+
+      if (setValue >= data_AfM.minLimit && setValue <= data_AfM.maxLimit) {
+        const dataPromises = databases.map(async (dbName) => {
+          const nanoDb = createNanoInstance(dbName);
+          return getLatestDocument(nanoDb);
+        });
+
+        const allData = await Promise.all(dataPromises);
+        const dwctrlData = allData[4];
+        const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+        newdwctrlData[data_AfM.dicName][data_AfM.dataID] = setValue;
+
+        //const accountDb = createNanoInstance("account");
+        //存入資料庫的時區問題
+        const currentDate = new Date();
+        const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
+        const localTime = new Date(currentDate - timezoneOffset);
+        const isoString = localTime.toISOString().replace("Z", "+08:00");
+
+        // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+        newdwctrlData.time = isoString;
+        delete newdwctrlData._id;
+        delete newdwctrlData._rev;
+        await nanoDb.use("dwctrl").insert(newdwctrlData);       // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+
+        //log紀錄
+        const logDb = createNanoInstance("log");
+
+        const doc = {
+          tag: `${data_AfM.dicName}.${data_AfM.dataID}`,
+          time: isoString,
+          category: data_AfM.category,
+          device: data_AfM.device,
+          username: "SE0008",
+          content: `將${data_AfM.log_dataName}設為${(Math.round(Number(setValue_raw) / data_AfM.scale) * data_AfM.scale).toFixed(data_AfM.decPlace)} ${data_AfM.unit}`,
+        };
+        console.log(doc);
+
+        // if (selectedValue != 0) {
+        const result = await logDb.insert(doc);   // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        //   //console.log(result);
+        // }
+
+        //console.log("Document added to database. ID: " + result.id);
+        response = { ststus: ok, alarmCMU_rawD: 314159, faultCMU_rawD: 6626, DL_of_statusHW: 1602 };
+      } else {
+        console.log("數值範圍有誤~~~");
+        response = { status: "error" };
+      }
+    } else {
+      console.log("數值輸入錯誤~@@");
+      response = { status: "error" };
+    }
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
 //************************************************************************************************************** */
 //點位顏色範例
 // router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
@@ -579,3 +704,7 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
 // });
 
 module.exports = router;
+
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

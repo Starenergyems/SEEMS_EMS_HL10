@@ -44,6 +44,8 @@ function hide_ssNavBar(clickItem) {
 
 /////////////////////////////////////////////////////////////////////////
 
+let dVS_Data_dataName;
+
 let minLimit;
 let maxLimit;
 let scale;
@@ -52,83 +54,118 @@ let dataUnit;
 const window_dataValue_Set = document.querySelector(".dataValue_Set");
 const title_dataValue_Set = document.querySelector(".dataValue_Set .titlePUW");
 let valNow_dataValue_Set;
-const val_origin_dataValue_Set = document.querySelector(
-  ".dataValue_Set #valueOrigin"
-);
-const unit_origin_dataValue_Set = document.querySelector(
-  ".dataValue_Set .valOrigin .data_unit"
-);
-const unit_new_dataValue_Set = document.querySelector(
-  ".dataValue_Set .valNew .data_unit"
-);
-const range_info_dataValue_Set = document.querySelector(
-  ".dataValue_Set .rangeInfo"
-);
-const val_new_dataValue_Set = document.querySelector(
-  ".dataValue_Set #valueNew"
-);
+const val_origin_dataValue_Set = document.querySelector(".dataValue_Set #valueOrigin");
+const unit_origin_dataValue_Set = document.querySelector(".dataValue_Set .valOrigin .data_unit");
+const unit_new_dataValue_Set = document.querySelector(".dataValue_Set .valNew .data_unit");
+const range_info_dataValue_Set = document.querySelector(".dataValue_Set .rangeInfo");
+const val_new_dataValue_Set = document.querySelector(".dataValue_Set #valueNew");
 
-function Set_P_LC() {
-  minLimit = "-5000";
-  maxLimit = "5000";
-  scale = 1;
-  decPlace = 0;
-  dataUnit = "kW";
+// function Set_P_LC(dataName, numInDataGroup) {
+//   minLimit = "-5000";
+//   maxLimit = "5000";
+//   scale = 1;
+//   decPlace = 0;
+//   dataUnit = "kW";
+//   window_dataValue_Set.classList.add("appear");
+
+//   get_dVS_Data_WhenClicking(dataName, numInDataGroup);
+
+//   val_origin_dataValue_Set.textContent = valNow_dataValue_Set.textContent;
+//   unit_origin_dataValue_Set.textContent = dataUnit;
+//   unit_new_dataValue_Set.textContent = dataUnit;
+//   range_info_dataValue_Set.textContent =
+//     "數值範圍: " + minLimit + "~" + maxLimit + " " + dataUnit;
+//   val_new_dataValue_Set.focus();
+// }
+
+async function Set_P_LC(numInDataGroup) {
+  dVS_Data_dataName = "setBut_P_LC";
+
+  title_dataValue_Set.textContent = `LC${numInDataGroup}_實功輸出設定`;
   window_dataValue_Set.classList.add("appear");
-  val_origin_dataValue_Set.textContent = valNow_dataValue_Set.textContent;
-  unit_origin_dataValue_Set.textContent = dataUnit;
-  unit_new_dataValue_Set.textContent = dataUnit;
-  range_info_dataValue_Set.textContent =
-    "數值範圍: " + minLimit + "~" + maxLimit + " " + dataUnit;
+
+  let getData = await get_dVS_Data_WhenClicking(dVS_Data_dataName, numInDataGroup);
+  console.log("qaz123");
+  console.log(getData);
+  console.log("qwe456");
+  val_origin_dataValue_Set.textContent = getData.originData;
+  unit_origin_dataValue_Set.textContent = getData.unit;
+  unit_new_dataValue_Set.textContent = getData.unit;
+  range_info_dataValue_Set.textContent = getData.dataRange;
+
   val_new_dataValue_Set.focus();
 }
 
-const setBut_P_LC1 = document.querySelector(".infoLC #setBut_P_LC1");
-setBut_P_LC1.addEventListener("click", Set_P_LC1);
-function Set_P_LC1() {
-  title_dataValue_Set.textContent = "LC1_實功輸出設定";
-  valNow_dataValue_Set = document.querySelector(".block_temp #spareVal_01"); // 記得改點位的id
-  Set_P_LC();
+async function get_dVS_Data_WhenClicking(dataName, numInDataGroup) {
+  try {
+    console.log("嘗試向後端發出請求");
+    const response = await fetch("/get_dVS_Data_WhenClicking", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ dataName, numInDataGroup }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
+
+async function set_dVS_Data(setValue) {
+  try {
+    console.log("嘗試向後端發出請求");
+    const response = await fetch("/set_dVS_Data", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ setValue }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+const setBut_P_LC1 = document.querySelector(".infoLC #setBut_P_LC1");
+setBut_P_LC1.addEventListener("click", function () { Set_P_LC(1); });
+// setBut_P_LC1.addEventListener("click", Set_P_LC1);
+// function Set_P_LC1() {
+//   title_dataValue_Set.textContent = "LC1_實功輸出設定";
+//   valNow_dataValue_Set = document.querySelector(".block_temp #spareVal_01"); // 記得改點位的id
+//   Set_P_LC("setBut_P_LC", 1);
+// }
 
 const setBut_P_LC2 = document.querySelector(".infoLC #setBut_P_LC2");
-setBut_P_LC2.addEventListener("click", Set_P_LC2);
-function Set_P_LC2() {
-  title_dataValue_Set.textContent = "LC2_實功輸出設定";
-  valNow_dataValue_Set = document.querySelector(".block_temp #spareVal_02"); // 記得改點位的id
-  Set_P_LC();
-}
+setBut_P_LC2.addEventListener("click", function () { Set_P_LC(2); });
 
 const setBut_P_LC3 = document.querySelector(".infoLC #setBut_P_LC3");
-setBut_P_LC3.addEventListener("click", Set_P_LC3);
-function Set_P_LC3() {
-  title_dataValue_Set.textContent = "LC3_實功輸出設定";
-  valNow_dataValue_Set = document.querySelector(".block_temp #spareVal_03"); // 記得改點位的id
-  Set_P_LC();
-}
+setBut_P_LC3.addEventListener("click", function () { Set_P_LC(3); });
 
 const setBut_P_LC4 = document.querySelector(".infoLC #setBut_P_LC4");
-setBut_P_LC4.addEventListener("click", Set_P_LC4);
-function Set_P_LC4() {
-  title_dataValue_Set.textContent = "LC4_實功輸出設定";
-  valNow_dataValue_Set = document.querySelector(".block_temp #spareVal_04"); // 記得改點位的id
-  Set_P_LC();
-}
+setBut_P_LC4.addEventListener("click", function () { Set_P_LC(4); });
 
 const closeWB_Yes_dVS = document.querySelector(".dataValue_Set #closeWB_Yes");
 closeWB_Yes_dVS.addEventListener("click", closePopup_dVS_Yes);
 function closePopup_dVS_Yes() {
   let value_set_raw = val_new_dataValue_Set.value;
-  if (value_set_raw && value_set_raw !== null) {
-    let value_set = Math.round(Number(value_set_raw) * scale);
-    if (
-      value_set >= Number(minLimit) * scale &&
-      value_set <= Number(maxLimit) * scale
-    ) {
-      let val = value_set / scale;
-      valNow_dataValue_Set.textContent = val.toFixed(decPlace);
-    }
-  }
+  // if (value_set_raw && value_set_raw !== null) {
+  //   let value_set = Math.round(Number(value_set_raw) * scale);
+  //   if (
+  //     value_set >= Number(minLimit) * scale &&
+  //     value_set <= Number(maxLimit) * scale
+  //   ) {
+  //     let val = value_set / scale;
+  //     valNow_dataValue_Set.textContent = val.toFixed(decPlace);
+  //   }
+  // }
+
+  set_dVS_Data(value_set_raw);
 
   val_new_dataValue_Set.value = "";
   window_dataValue_Set.classList.remove("appear");

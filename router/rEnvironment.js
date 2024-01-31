@@ -6,17 +6,17 @@ const router = express.Router();
 const app = express();
 const cors = require("cors");
 
-const {
-  scaleProcess,
-  mapWordStatus,
-  Determine_DL_of_upsStatus2,
-} = require("./function");
-
 const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
 const nanoDb = nano(couchDBUrl);
+
+const {
+  scaleProcess,
+  mapWordStatus,
+  Determine_DL_of_upsStatus2,
+} = require("./function");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
