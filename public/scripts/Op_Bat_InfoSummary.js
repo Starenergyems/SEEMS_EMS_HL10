@@ -4,6 +4,7 @@ $(document).ready(function () {
 
   console.log("start reading js, update data every 5 sec");
   classAdd('#nB_Operation', 'default_nB')
+  updateData();
 });
 
 // 5秒更新一次

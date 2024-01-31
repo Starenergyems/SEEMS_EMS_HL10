@@ -5,6 +5,8 @@ $(document).ready(function () {
   console.log("start reading js");
   classAdd('#nB_Operation', 'default_nB')
   classAdd('#infoRack', 'subTitle_unclick')
+
+  updateData();
 });
 
 
@@ -45,6 +47,14 @@ function hide_ssNavBar(clickItem) {
     }
 }
 
+async function updateData(){
+    var router = window.location.href+"data";
+    console.log(router);
+    var data = await getData(router);
+    console.log(data);
+    $('#BMSMode').text(data.BMSMode);  ///////////////還沒打完
+    console.log("data updated");
+}
 
 
 
