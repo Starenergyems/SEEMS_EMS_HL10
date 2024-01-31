@@ -1,3 +1,13 @@
+//var permission="viewer"; //需讀權限
+var permission = "manager";
+$(document).ready(function () {
+
+  console.log("start reading js, update data every 5 sec");
+  classAdd('#nB_Operation', 'default_nB')
+});
+
+// 5秒更新一次
+setInterval(updateData, 5000);
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
@@ -213,4 +223,95 @@ async function sendDataToBackend() {
   } catch (error) {
     console.error("Error fetching data:", error);
   }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+async function updateData(){
+  var data = await getData('http://localhost:3005/operateinfo/battery/data');//port要改
+
+  $('#workStatus').text(data.workStatus);
+  $('#onGridStatus').text(data.onGridStatus);
+  $('#onlineNume').text(data.onloneNum);
+  $('#systemV').text(data.systemV);
+  $('#systemI').text(data.systemI);
+  $('#systemSOC').text(data.systemSOC);
+  $('#systemSOH').text(data.systemSOH);
+  $('#avgContainerTemp').text(data.avgContainerTemp);
+  $('#heartBeat').text(data.heartBeat);
+/*LC1************************************ */
+  $('#onlineNum_LC1').text(data.onlineNum_LC1);
+  $('#workStatus_LC1').text(data.workStatus_LC1);
+  $('#onGridStatus_LC1').text(data.onGridStatus_LC1);
+  $('#voltage_LC1').text(data.voltage_LC1);
+  $('#current_LC1').text(data.current_LC1);
+  $('#SOC_LC1').text(data.SOC_LC1);
+  $('#SOH_LC1').text(data.SOH_LC1);
+  $('#V_cell_Max_LC1').text(data.V_cell_Max_LC1);
+  $('#V_cell_Min_LC1').text(data.V_cell_Min_LC1);
+  $('#V_cell_MaxDiff_LC1').text(data.V_cell_MaxDiff_LC1);
+  $('#T_cell_Max_LC1').text(data.T_cell_Max_LC1);
+  $('#T_cell_Min_LC1').text(data.T_cell_Min_LC1);
+  $('#T_cell_MaxDiff_LC1').text(data.T_cell_MaxDiff_LC1);
+  $('#alarm_BMS1_1').text(data.alarm_BMS1_1);
+  $('#alarm_BMS1_2').text(data.alarm_BMS1_2);
+  $('#fault_BMS1_1').text(data.fault_BMS1_1);
+  $('#fault_BMS1_2').text(data.fault_BMS1_2);
+
+  /*LC2*********************** */
+  $('#onlineNum_LC2').text(data.onlineNum_LC2);
+  $('#workStatus_LC2').text(data.workStatus_LC2);
+  $('#onGridStatus_LC2').text(data.onGridStatus_LC2);
+  $('#voltage_LC2').text(data.voltage_LC2);
+  $('#current_LC2').text(data.current_LC2);
+  $('#SOC_LC2').text(data.SOC_LC2);
+  $('#SOH_LC2').text(data.SOH_LC2);
+  $('#V_cell_Max_LC2').text(data.V_cell_Max_LC2);
+  $('#V_cell_Min_LC2').text(data.V_cell_Min_LC2);
+  $('#V_cell_MaxDiff_LC2').text(data.V_cell_MaxDiff_LC2);
+  $('#T_cell_Max_LC2').text(data.T_cell_Max_LC2);
+  $('#T_cell_Min_LC2').text(data.T_cell_Min_LC2);
+  $('#T_cell_MaxDiff_LC2').text(data.T_cell_MaxDiff_LC2);
+  $('#alarm_BMS2_1').text(data.alarm_BMS2_1);
+  $('#alarm_BMS2_2').text(data.alarm_BMS2_2);
+  $('#fault_BMS2_1').text(data.fault_BMS2_1);
+  $('#fault_BMS2_2').text(data.fault_BMS2_2);
+
+  /*LC3*********************** */
+  $('#onlineNum_LC3').text(data.onlineNum_LC3);
+  $('#workStatus_LC3').text(data.workStatus_LC3);
+  $('#onGridStatus_LC3').text(data.onGridStatus_LC3);
+  $('#voltage_LC3').text(data.voltage_LC3);
+  $('#current_LC3').text(data.current_LC3);
+  $('#SOC_LC3').text(data.SOC_LC3);
+  $('#SOH_LC3').text(data.SOH_LC3);
+  $('#V_cell_Max_LC3').text(data.V_cell_Max_LC3);
+  $('#V_cell_Min_LC3').text(data.V_cell_Min_LC3);
+  $('#V_cell_MaxDiff_LC3').text(data.V_cell_MaxDiff_LC3);
+  $('#T_cell_Max_LC3').text(data.T_cell_Max_LC3);
+  $('#T_cell_Min_LC3').text(data.T_cell_Min_LC3);
+  $('#T_cell_MaxDiff_LC3').text(data.T_cell_MaxDiff_LC3);
+  $('#alarm_BMS3_1').text(data.alarm_BMS3_1);
+  $('#alarm_BMS3_2').text(data.alarm_BMS3_2);
+  $('#fault_BMS3_1').text(data.fault_BMS3_1);
+  $('#fault_BMS3_2').text(data.fault_BMS3_2);
+
+  /*LC4*********************** */
+  $('#onlineNum_LC4').text(data.onlineNum_LC4);
+  $('#workStatus_LC4').text(data.workStatus_LC4);
+  $('#onGridStatus_LC4').text(data.onGridStatus_LC4);
+  $('#voltage_LC4').text(data.voltage_LC4);
+  $('#current_LC4').text(data.current_LC4);
+  $('#SOC_LC4').text(data.SOC_LC4);
+  $('#SOH_LC4').text(data.SOH_LC4);
+  $('#V_cell_Max_LC4').text(data.V_cell_Max_LC4);
+  $('#V_cell_Min_LC4').text(data.V_cell_Min_LC4);
+  $('#V_cell_MaxDiff_LC4').text(data.V_cell_MaxDiff_LC4);
+  $('#T_cell_Max_LC4').text(data.T_cell_Max_LC4);
+  $('#T_cell_Min_LC4').text(data.T_cell_Min_LC4);
+  $('#T_cell_MaxDiff_LC4').text(data.T_cell_MaxDiff_LC4);
+  $('#alarm_BMS4_1').text(data.alarm_BMS4_1);
+  $('#alarm_BMS4_2').text(data.alarm_BMS4_2);
+  $('#fault_BMS4_1').text(data.fault_BMS4_1);
+  $('#fault_BMS4_2').text(data.fault_BMS4_2);
+  console.log("data updated");
 }

@@ -1,5 +1,11 @@
-// var myHeading = document.querySelector("h1");
-// myHeading.textContent = "Hello world!";
+//var permission="viewer"; //需讀權限
+var permission = "manager";
+$(document).ready(function () {
+
+  console.log("start reading js");
+  classAdd('#nB_Operation', 'default_nB')
+  classAdd('#infoRack', 'subTitle_unclick')
+});
 
 
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");

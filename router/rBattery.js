@@ -1,3 +1,5 @@
+const port=3005;
+
 const express = require("express");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
@@ -31,34 +33,36 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-router.use("/public", express.static(path.join(__dirname, "../public")));
-router.use(
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+app.use("/public", express.static(path.join(__dirname, "../public")));//app要改回router
+app.use(
   "/operateinfo",
   express.static(path.join(__dirname, "../public/operateinfo"))
 );
-router.use(
+app.use(
   "/operateinfo/battery",
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
-router.use(
+app.use(
   "/operateinfo/battery/infodetail",
   express.static(path.join(__dirname, "../public"))
 );
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-router.use(
+app.use(
   "/operateinfo/battery/infodetail/:id",
   express.static(path.join(__dirname, "../public"))
 );
-router.use(
+app.use(
   "/operateinfo/battery/rack",
   express.static(path.join(__dirname, "../public"))
 );
-router.use(
+app.use(
   "/operateinfo/battery/rack/:id",
   express.static(path.join(__dirname, "../public"))
 );
 
-router.use(cors());
+app.use(cors());
 //***************************************************************************************************************** */
 // 定義 CouchDB 資料庫名稱
 const databases = [
@@ -108,11 +112,11 @@ const getLatestDocument = async (nanoDb) => {
 
 //***************************************************************************************************************** */
 
-router.get("/operateinfo", (req, res) => {
+app.get("/operateinfo", (req, res) => { //以下app要改回router
   res.redirect("/operateinfo/battery");
 });
 
-router.get("/operateinfo/battery", async (req, res) => {
+app.get("/operateinfo/battery", async (req, res) => {
   try {
     // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
     const dataPromises = databases.map(async (dbName) => {
@@ -179,14 +183,20 @@ router.get("/operateinfo/battery", async (req, res) => {
       ),
 
       avgContainerTemp: calculateAverage(
-        lc1Data.System["406047"],
-        lc1Data.System["406049"],
-        lc2Data.System["406047"],
-        lc2Data.System["406049"],
-        lc3Data.System["406047"],
-        lc3Data.System["406049"],
-        lc4Data.System["406047"],
-        lc4Data.System["406049"]
+        lc1Data.BSC1["406047"],
+        lc1Data.BSC1["406049"],
+        lc1Data.BSC2["406047"],
+        lc1Data.BSC2["406049"],
+        lc2Data.BSC1["406047"],
+        lc2Data.BSC1["406049"],
+        lc2Data.BSC2["406047"],
+        lc2Data.BSC2["406049"],
+        lc3Data.BSC1["406047"],
+        lc3Data.BSC1["406049"],
+        lc3Data.BSC2["406047"],
+        lc3Data.BSC2["406049"],
+        lc4Data.BSC1["406047"],
+        lc4Data.BSC1["406049"]
       ),
 
       heartBeat: lc1Data.System["402018"], //心跳還要再看用哪個為主 應該不會是各LC的
@@ -442,10 +452,338 @@ router.get("/operateinfo/battery", async (req, res) => {
   }
 });
 
+app.get("/operateinfo/battery/data", async (req, res) => {
+  try {
+    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+    const lc1Data = allData[0];
+    const lc2Data = allData[1];
+    const lc3Data = allData[2];
+    const lc4Data = allData[3];
+
+    const responseData = {
+      workStatus: "正常",
+      onGridStatus: lc1Data.System["402019"],
+      onlineNum: lc1Data.System["402089"],
+      systemV: calculateAverage(
+        lc1Data.BMS1["404002"],
+        lc1Data.BMS2["404002"],
+        lc2Data.BMS1["404002"],
+        lc2Data.BMS2["404002"],
+        lc3Data.BMS1["404002"],
+        lc3Data.BMS2["404002"],
+        lc4Data.BMS1["404002"]
+      ),
+      //所有BMS電壓平均
+      systemI: calculateAverage(
+        lc1Data.BMS1["404003"],
+        lc1Data.BMS2["404003"],
+        lc2Data.BMS1["404003"],
+        lc2Data.BMS2["404003"],
+        lc3Data.BMS1["404003"],
+        lc3Data.BMS2["404003"],
+        lc4Data.BMS1["404003"]
+      ), //所有BMS電流平均
+      systemSOC: calculateAverage(
+        lc1Data.BMS1["404007"],
+        lc1Data.BMS2["404007"],
+        lc2Data.BMS1["404007"],
+        lc2Data.BMS2["404007"],
+        lc3Data.BMS1["404007"],
+        lc3Data.BMS2["404007"],
+        lc4Data.BMS1["404007"]
+      ),
+      systemSOH: calculateAverage(
+        lc1Data.BMS1["404005"],
+        lc1Data.BMS2["404005"],
+        lc2Data.BMS1["404005"],
+        lc2Data.BMS2["404005"],
+        lc3Data.BMS1["404005"],
+        lc3Data.BMS2["404005"],
+        lc4Data.BMS1["404005"]
+      ),
+
+      avgContainerTemp: calculateAverage(
+        lc1Data.BSC1["406047"],
+        lc1Data.BSC1["406049"],
+        lc1Data.BSC2["406047"],
+        lc1Data.BSC2["406049"],
+        lc2Data.BSC1["406047"],
+        lc2Data.BSC1["406049"],
+        lc2Data.BSC2["406047"],
+        lc2Data.BSC2["406049"],
+        lc3Data.BSC1["406047"],
+        lc3Data.BSC1["406049"],
+        lc3Data.BSC2["406047"],
+        lc3Data.BSC2["406049"],
+        lc4Data.BSC1["406047"],
+        lc4Data.BSC1["406049"]
+      ),
+
+      heartBeat: lc1Data.System["402018"], //心跳還要再看用哪個為主 應該不會是各LC的
+
+      //************************************************************************************************ */
+      //lc01
+      onlineNum_LC1: lc1Data.BMS1["404008"] + lc1Data.BMS2["404008"],
+
+      workStatus_LC1: lc1Data.System["402019"], //還需轉換輸出結果
+
+      onGridStatus_LC1: calculateAverage(lc1Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+
+      voltage_LC1: calculateAverage(
+        lc1Data.BMS1["404002"],
+        lc1Data.BMS1["404002"]
+      ),
+      current_LC1: calculateAverage(
+        lc1Data.BMS1["404003"],
+        lc1Data.BMS1["404003"]
+      ),
+
+      SOC_LC1: calculateAverage(lc1Data.BMS1["404007"], lc1Data.BMS2["404007"]),
+      SOH_LC1: calculateAverage(lc1Data.BMS1["404005"], lc1Data.BMS2["404005"]),
+
+      containerTemp_LC1: calculateAverage(
+        lc1Data.BSC1["406047"],
+        lc1Data.BSC1["406049"],
+        lc1Data.BSC2["406047"],
+        lc1Data.BSC2["406049"]
+      ),
+
+      V_cell_Max_LC1: calculateAverage(
+        lc1Data.BMS1["404021"],
+        lc1Data.BMS2["404021"]
+      ),
+      V_cell_Min_LC1: calculateAverage(
+        lc1Data.BMS1["404022"],
+        lc1Data.BMS2["404022"]
+      ),
+      V_cell_MaxDiff_LC1: calculateAverage(
+        lc1Data.BMS1["404025"],
+        lc1Data.BMS2["404025"]
+      ),
+      T_cell_Max_LC1: calculateAverage(
+        lc1Data.BMS1["404023"],
+        lc1Data.BMS2["404023"]
+      ),
+      T_cell_Min_LC1: calculateAverage(
+        lc1Data.BMS1["404024"],
+        lc1Data.BMS2["404024"]
+      ),
+      T_cell_MaxDiff_LC1: calculateAverage(
+        lc1Data.BMS1["404026"],
+        lc1Data.BMS2["404026"]
+      ),
+
+      alarm_BMS1_1: lc1Data.BMS1["404044"],
+      alarm_BMS1_2: lc1Data.BMS2["404044"],
+
+      //要做判斷 回傳一個結果 紅燈1和綠燈0
+      fault_BMS1_1: checkValues(
+        lc1Data.BMS1["404046"],
+        lc1Data.BMS1["404048"],
+        lc1Data.BMS1["404061"]
+      ),
+
+      fault_BMS1_2: checkValues(
+        lc1Data.BMS2["404046"],
+        lc1Data.BMS2["404048"],
+        lc1Data.BMS2["404061"]
+      ),
+      //************************************************************************************************ */
+      //lc02
+      onlineNum_LC2: lc2Data.BMS1["404008"] + lc2Data.BMS2["404008"],
+
+      workStatus_LC2: lc2Data.System["402019"], //還需轉換輸出結果
+
+      onGridStatus_LC2: calculateAverage(lc2Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+
+      voltage_LC2: calculateAverage(
+        lc2Data.BMS1["404002"],
+        lc2Data.BMS1["404002"]
+      ),
+      current_LC2: calculateAverage(
+        lc2Data.BMS1["404003"],
+        lc2Data.BMS1["404003"]
+      ),
+
+      SOC_LC2: calculateAverage(lc2Data.BMS1["404007"], lc2Data.BMS2["404007"]),
+      SOH_LC2: calculateAverage(lc2Data.BMS1["404005"], lc2Data.BMS2["404005"]),
+
+      containerTemp_LC2: calculateAverage(
+        lc2Data.BSC1["406047"],
+        lc2Data.BSC1["406049"],
+        lc2Data.BSC2["406047"],
+        lc2Data.BSC2["406049"]
+      ),
+
+      V_cell_Max_LC2: calculateAverage(
+        lc2Data.BMS1["404021"],
+        lc2Data.BMS2["404021"]
+      ),
+      V_cell_Min_LC2: calculateAverage(
+        lc2Data.BMS1["404022"],
+        lc2Data.BMS2["404022"]
+      ),
+      V_cell_MaxDiff_LC2: calculateAverage(
+        lc2Data.BMS1["404025"],
+        lc2Data.BMS2["404025"]
+      ),
+      T_cell_Max_LC2: calculateAverage(
+        lc2Data.BMS1["404023"],
+        lc2Data.BMS2["404023"]
+      ),
+      T_cell_Min_LC2: calculateAverage(
+        lc2Data.BMS1["404024"],
+        lc2Data.BMS2["404024"]
+      ),
+      T_cell_MaxDiff_LC2: calculateAverage(
+        lc2Data.BMS1["404026"],
+        lc2Data.BMS2["404026"]
+      ),
+
+      alarm_BMS2_1: lc2Data.BMS1["404044"],
+      alarm_BMS2_2: lc2Data.BMS2["404044"],
+
+      //要做判斷 回傳一個結果 紅燈1和綠燈0
+      fault_BMS2_1: checkValues(
+        lc2Data.BMS1["404046"],
+        lc2Data.BMS1["404048"],
+        lc2Data.BMS1["404061"]
+      ),
+
+      fault_BMS2_2: checkValues(
+        lc2Data.BMS2["404046"],
+        lc2Data.BMS2["404048"],
+        lc2Data.BMS2["404061"]
+      ),
+      //************************************************************************************************ */
+      //LC3
+      onlineNum_LC3: lc3Data.BMS1["404008"] + lc3Data.BMS2["404008"],
+
+      workStatus_LC3: lc3Data.System["402019"], //還需轉換輸出結果
+
+      onGridStatus_LC3: calculateAverage(lc3Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+
+      voltage_LC3: calculateAverage(
+        lc3Data.BMS1["404002"],
+        lc3Data.BMS1["404002"]
+      ),
+      current_LC3: calculateAverage(
+        lc3Data.BMS1["404003"],
+        lc3Data.BMS1["404003"]
+      ),
+
+      SOC_LC3: calculateAverage(lc3Data.BMS1["404007"], lc3Data.BMS2["404007"]),
+      SOH_LC3: calculateAverage(lc3Data.BMS1["404005"], lc3Data.BMS2["404005"]),
+
+      containerTemp_LC3: calculateAverage(
+        lc3Data.BSC1["406047"],
+        lc3Data.BSC1["406049"],
+        lc3Data.BSC2["406047"],
+        lc3Data.BSC2["406049"]
+      ),
+
+      V_cell_Max_LC3: calculateAverage(
+        lc3Data.BMS1["404021"],
+        lc3Data.BMS2["404021"]
+      ),
+      V_cell_Min_LC3: calculateAverage(
+        lc3Data.BMS1["404022"],
+        lc3Data.BMS2["404022"]
+      ),
+      V_cell_MaxDiff_LC3: calculateAverage(
+        lc3Data.BMS1["404025"],
+        lc3Data.BMS2["404025"]
+      ),
+      T_cell_Max_LC3: calculateAverage(
+        lc3Data.BMS1["404023"],
+        lc3Data.BMS2["404023"]
+      ),
+      T_cell_Min_LC3: calculateAverage(
+        lc3Data.BMS1["404024"],
+        lc3Data.BMS2["404024"]
+      ),
+      T_cell_MaxDiff_LC3: calculateAverage(
+        lc3Data.BMS1["404026"],
+        lc3Data.BMS2["404026"]
+      ),
+
+      alarm_BMS3_1: lc3Data.BMS1["404044"],
+      alarm_BMS3_2: lc3Data.BMS2["404044"],
+
+      //要做判斷 回傳一個結果 紅燈1和綠燈0
+      fault_BMS3_1: checkValues(
+        lc3Data.BMS1["404046"],
+        lc3Data.BMS1["404048"],
+        lc3Data.BMS1["404061"]
+      ),
+
+      fault_BMS3_2: checkValues(
+        lc3Data.BMS2["404046"],
+        lc3Data.BMS2["404048"],
+        lc3Data.BMS2["404061"]
+      ),
+      //************************************************************************************************ */
+      //LC4
+      onlineNum_LC4: lc4Data.BMS1["404008"],
+
+      workStatus_LC4: lc4Data.System["402019"], //還需轉換輸出結果
+
+      onGridStatus_LC4: calculateAverage(lc4Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+
+      voltage_LC4: calculateAverage(
+        lc4Data.BMS1["404002"],
+        lc4Data.BMS1["404002"]
+      ),
+      current_LC4: calculateAverage(
+        lc4Data.BMS1["404003"],
+        lc4Data.BMS1["404003"]
+      ),
+
+      SOC_LC4: calculateAverage(lc4Data.BMS1["404007"]),
+      SOH_LC4: calculateAverage(lc4Data.BMS1["404005"]),
+
+      containerTemp_LC4: calculateAverage(
+        lc4Data.BSC1["406047"],
+        lc4Data.BSC1["406049"]
+      ),
+
+      V_cell_Max_LC4: calculateAverage(lc4Data.BMS1["404021"]),
+      V_cell_Min_LC4: calculateAverage(lc4Data.BMS1["404022"]),
+      V_cell_MaxDiff_LC4: calculateAverage(lc4Data.BMS1["404025"]),
+      T_cell_Max_LC4: calculateAverage(lc4Data.BMS1["404023"]),
+      T_cell_Min_LC4: calculateAverage(lc4Data.BMS1["404024"]),
+      T_cell_MaxDiff_LC4: calculateAverage(lc4Data.BMS1["404026"]),
+
+      alarm_BMS4_1: lc4Data.BMS1["404044"],
+
+      //要做判斷 回傳一個結果 紅燈1和綠燈0
+      fault_BMS4_1: checkValues(
+        lc4Data.BMS1["404046"],
+        lc4Data.BMS1["404048"],
+        lc4Data.BMS1["404061"]
+      ),
+    };
+
+    res.json(responseData);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+    
+     
+});
+
 //***************************************************************************************** */
 //Op_Bat_InfoSummary.js
 ///operateinfo/battery SET按鈕把數值帶入打勾
-router.post("/getDataForSet", async (req, res) => {
+app.post("/getDataForSet", async (req, res) => {
   try {
     //console.log("接收到前端請求");
     const blockId = req.body.blockId; //可以得到是哪台lc
@@ -475,7 +813,7 @@ router.post("/getDataForSet", async (req, res) => {
 });
 
 //SET按鈕 控制下行
-router.post("/backendEndpoint", async (req, res) => {
+app.post("/backendEndpoint", async (req, res) => {
   try {
     const dataPromises = databases.map(async (dbName) => {
       const nanoDb = createNanoInstance(dbName);
@@ -567,7 +905,7 @@ router.post("/backendEndpoint", async (req, res) => {
 //***************************************************************************************** */
 //BMS的infodetail
 let globalPageNumber = 0;
-router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
+app.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   try {
     const pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
@@ -749,7 +1087,7 @@ const rackWorkStatus_MT = {
   128: "測試",
 };
 
-router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
+app.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
   try {
     const pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
@@ -1252,7 +1590,7 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
 app.use(bodyParser.json());
 
 //各rack單獨彈出視窗
-router.post("/getData", async (req, res) => {
+app.post("/getData", async (req, res) => {
   try {
     //console.log("接收到前端請求");
     const blockId = req.body.blockId;
@@ -1322,3 +1660,6 @@ router.post("/getData", async (req, res) => {
 //***************************************************************************************** */
 module.exports = router;
 //***************************************************************************************** */
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});

@@ -886,3 +886,9 @@ table.dataTable tbody td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     background: #F9E06C;
 }
+
+.subTitle_unclick{ 
+    background-color: #F9E06C;
+    border-color: #FFFFFF;
+    text-decoration: none;
+}

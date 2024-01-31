@@ -85,7 +85,7 @@ async function getData(url) { //跟後端拿資料
     const values = await response.json();
     return values;}
 
-async function dataPost(url, input1, input2, input3, input4) {//提交資料給後端
+async function dataPost(url, input1, input2, input3, input4) {//提交資料給後端並更新表格
 
     console.log('開始嘗試POST')
 

@@ -1,3 +1,12 @@
+//var permission="viewer"; //需讀權限
+var permission = "manager";
+$(document).ready(function () {
+
+  console.log("start reading js");
+  classAdd('#nB_Operation', 'default_nB')
+  classAdd('#infoBMS', 'subTitle_unclick')
+});
+
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
