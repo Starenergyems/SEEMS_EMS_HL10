@@ -1173,15 +1173,15 @@ function checkPartialMatch(k, array) {
   return null; // Return null if no match is found
 }
 
-function createErrorRecord(device, tag, value, db_name, time, occurrence_time, key_error, error_table) {
+function createErrorRecord(_id, db_name, time, error_table_tag, device, content, value , occurrence_time,) {
   return {
-    _id: `${device}:${tag}:${value}`,
+    _id: _id,
     db_name: db_name,
     time: time,
-    location: error_table[key_error][tag]["location"],
+    location: error_table_tag["location"],
     device: device,
-    level: error_table[key_error][tag]["name"].toLowerCase().includes("fault") ? "Fault" : "Alarm",
-    content: error_table[key_error][tag]["status"][value],
+    level: error_table_tag["name"].toLowerCase().includes("fault") ? "Fault" : "Alarm",
+    content: content,
     value: value,
     read: false,
     recover: false,
@@ -1196,8 +1196,9 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
   if (error_type.includes("bit")) {
     let error_arr = [];
     let bit_arr = [];
+    let bit_status;
     if (error_type === "bit") {
-      bit_status = "1";
+      bit_status = 1;
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[key_error][tag]["status"],
@@ -1206,7 +1207,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
         bit_status,
       );
     } else if (error_type === "bit_abnormal") {
-      bit_status = "0";
+      bit_status = 0;
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[key_error][tag]["status"],
@@ -1217,53 +1218,37 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
     }
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
-        error_result[`${device}:${tag}:${bit_arr[i]}`] = {
-          _id: `${device}:${tag}:${bit_arr[i]}`,
-          db_name: db_name,
-          time: time,
-          location: error_table[key_error][tag]["location"],
-          device: device,
-          level: `${
-            error_table[key_error][tag]["name"]
-              .toLowerCase()
-              .includes("fault")
-              ? "Fault"
-              : "Alarm"
-          }`,
-          content: error_arr[i],
-          value: bit_status,
-          read: false,
-          recover: false,
-          recover_time: "",
-          occurrence_time: occurrence_time,
-        };
-        // console.log(error_result[`${device}:${tag}:${bit_arr[i]}`])
+        const _id = `${device}:${tag}:${bit_arr[i]}`;
+        error_result[_id] = 
+          createErrorRecord(
+            _id,
+            db_name,
+            time,
+            error_table[key_error][tag],
+            device,
+            error_arr[i],
+            bit_status,
+            occurrence_time,
+          );
+        // console.log(error_result[_id])
       }
     };
   } else {
     if (error_type === "int") {
-      if (error_table[key_error][tag]["status"][value]) {
-        error_result[`${device}:${tag}:${value}`] = {
-          _id: `${device}:${tag}:${value}`,
-          db_name: db_name,
-          time: time,
-          location: error_table[key_error][tag]["location"],
-          device: device,
-          level: `${
-            error_table[key_error][tag]["name"]
-              .toLowerCase()
-              .includes("fault")
-              ? "Fault"
-              : "Alarm"
-          }`,
-          content: error_table[key_error][tag]["status"][value],
-          value: value,
-          read: false,
-          recover: false,
-          recover_time: "",
-          occurrence_time: occurrence_time,
-        };
-        // console.log(error_result[`${device}:${tag}:${value}`])
+      const _id = `${device}:${tag}:${value}`;
+      const content = error_table[key_error][tag]["status"][value];
+      if (content) {
+        error_result[_id] = 
+          createErrorRecord(
+            _id,
+            db_name,
+            time,
+            error_table[key_error][tag],
+            device,
+            content,
+            value,
+            occurrence_time,
+          );
       };
     } else if (error_type === "valve") {
       value = value * error_table[key_error][tag]["status"]["scale"];
@@ -1274,27 +1259,18 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
       let content = "";
       if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
       if (valve_status && content) {
-        error_result[`${device}:${tag}:${valve_status}`] = {
-          _id: `${device}:${tag}:${valve_status}`,
-          db_name: db_name,
-          time: time,
-          location: error_table[key_error][tag]["location"],
-          device: device,
-          level: `${
-            error_table[key_error][tag]["name"]
-              .toLowerCase()
-              .includes("fault")
-              ? "Fault"
-              : "Alarm"
-          }`,
-          content: content,
-          value: value,
-          read: false,
-          recover: false,
-          recover_time: "",
-          occurrence_time: occurrence_time,
-        };
-        // console.log(error_result[`${device}:${tag}:${valve_status}`])
+        const _id = `${device}:${tag}:${valve_status}`;
+        error_result[_id] = 
+          createErrorRecord(
+            _id,
+            db_name,
+            time,
+            error_table[key_error][tag],
+            device,
+            content,
+            value,
+            occurrence_time,
+          );
       }
     }
   }
@@ -1355,27 +1331,21 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
       for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, status)
+          const device = `${key}`;
+          const _id = `${device}:${tag}`;
+          const content = error_table[tag]["name"];
           if (value === error_table[tag]["status"]) {
-            let device = `${key}`;
-            
-            error_result[`${device}:${tag}`] = {
-              _id: `${device}:${tag}`,
-              db_name: db_name,
-              time: time,
-              location: error_table[tag]["location"],
-              device: device,
-              level: `${
-                error_table[tag]["name"].toLowerCase().includes("fault")
-                  ? "Fault"
-                  : "Alarm"
-              }`,
-              content: error_table[tag]["name"],
-              value: value,
-              read: false,
-              recover: false,
-              recover_time: "",
-              occurrence_time: occurrence_time,
-            };
+            error_result[_id] = 
+              createErrorRecord(
+                _id,
+                db_name,
+                time,
+                error_table[tag],
+                device,
+                content,
+                value,
+                occurrence_time,
+              );
           }
         }
       }
@@ -1390,8 +1360,9 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
   if (error_type.includes("bit")) {
     let error_arr = [];
     let bit_arr = [];
+    let bit_status;
     if (error_type === "bit") {
-      bit_status = "1";
+      bit_status = 1;
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[tag]["status"],
@@ -1400,7 +1371,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
         bit_status,
       );
     } else if (error_type === "bit_abnormal") {
-      bit_status = "0";
+      bit_status = 0;
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[tag]["status"],
@@ -1411,53 +1382,36 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
     }
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
-        error_result[`${device}:${tag}:${bit_arr[i]}`] = {
-          _id: `${device}:${tag}:${bit_arr[i]}`,
-          db_name: db_name,
-          time: time,
-          location: error_table[tag]["location"],
-          device: device,
-          level: `${
-            error_table[tag]["name"]
-              .toLowerCase()
-              .includes("fault")
-              ? "Fault"
-              : "Alarm"
-          }`,
-          content: error_arr[i],
-          value: bit_status,
-          read: false,
-          recover: false,
-          recover_time: "",
-          occurrence_time: occurrence_time,
-        };
-        // console.log(error_result[`${device}:${tag}:${bit_arr[i]}`])
+        const _id = `${device}:${tag}:${bit_arr[i]}`;
+        error_result[_id] = 
+          createErrorRecord(
+            _id,
+            db_name,
+            time,
+            error_table[tag],
+            device,
+            error_arr[i],
+            bit_status,
+            occurrence_time,
+          );
       }
     };
   } else {
     if (error_type === "int") {
-      if (error_table[tag]["status"][value]) {
-        error_result[`${device}:${tag}:${value}`] = {
-          _id: `${device}:${tag}:${value}`,
-          db_name: db_name,
-          time: time,
-          location: error_table[tag]["location"],
-          device: device,
-          level: `${
-            error_table[tag]["name"]
-              .toLowerCase()
-              .includes("fault")
-              ? "Fault"
-              : "Alarm"
-          }`,
-          content: error_table[tag]["status"][value],
-          value: value,
-          read: false,
-          recover: false,
-          recover_time: "",
-          occurrence_time: occurrence_time,
-        };
-        // console.log(error_result[`${device}:${tag}:${value}`])
+      const _id = `${device}:${tag}:${value}`;
+      const content = error_table[tag]["status"][value];
+      if (content) {
+        error_result[_id] = 
+          createErrorRecord(
+            _id,
+            db_name,
+            time,
+            error_table[tag],
+            device,
+            content,
+            value,
+            occurrence_time,
+          );
       };
     } else if (error_type === "valve") {
       value = value * error_table[tag]["status"]["scale"];
@@ -1468,27 +1422,18 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
       let content = "";
       if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
       if (valve_status && content) {
-        error_result[`${device}:${tag}:${valve_status}`] = {
-          _id: `${device}:${tag}:${valve_status}`,
-          db_name: db_name,
-          time: time,
-          location: error_table[tag]["location"],
-          device: device,
-          level: `${
-            error_table[tag]["name"]
-              .toLowerCase()
-              .includes("fault")
-              ? "Fault"
-              : "Alarm"
-          }`,
-          content: content,
-          value: value,
-          read: false,
-          recover: false,
-          recover_time: "",
-          occurrence_time: occurrence_time,
-        };
-        // console.log(error_result[`${device}:${tag}:${valve_status}`])
+        const _id = `${device}:${tag}:${valve_status}`;
+        error_result[_id] = 
+          createErrorRecord(
+            _id,
+            db_name,
+            time,
+            error_table[tag],
+            device,
+            content,
+            value,
+            occurrence_time,
+          );
       }
     }
   }
@@ -1666,7 +1611,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
               // console.log(docs_batch)
               return nanoDB.bulk({docs: docs_batch});
             });
-          console.log("remain_result");
+          // console.log("remain_result");
         };
       })
       .then(() => {
@@ -1717,7 +1662,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
               // console.log(docs_batch)
               return nanoDB.bulk({docs: docs_batch});
             });
-          console.log("income_result");
+          // console.log("income_result");
         };
       })
       .then(() => {
@@ -1749,7 +1694,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
               // console.log(docs_batch)
               return nanoDB.bulk({docs: docs_batch});
             })
-          console.log("recover_result");
+          // console.log("recover_result");
         };
       })
       .then(() => {

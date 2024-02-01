@@ -137,27 +137,33 @@ app.get("/alarm", (req, res) => {
             });
             const hisalarm_db_promise = hisalarmnanoDb.bulk({docs: hisAlarm_batch})
             
-            console.log([alarm_db_promise, hisalarm_db_promise]);
+            // console.log([alarm_db_promise, hisalarm_db_promise]);
             Promise.all([alarm_db_promise, hisalarm_db_promise])
               .then(() => {
-                  console.log("alarm_db_promise and hisalarm_db_promise: Suc!");
+                  resolve("alarm_db_promise and hisalarm_db_promise: Suc!");
               })
               .catch(err => {
-                  console.error('Error in alarm_db_promise and hisalarm_db_promise:', err);
+                  reject('Error in alarm_db_promise and hisalarm_db_promise:', err);
               });
           })
         })
       .catch(err => {
         if (err.statusCode === 404) {
-            console.error('Data not found in alarm_promise:', err.request.data);
+          reject('Data not found in alarm_promise:', err.request.data);
         } else if (err.statusCode === 409) {
-            console.error('Error update conflict alarm_promise:', err.request.data)
+          reject('Error update conflict alarm_promise:', err.request.data)
         } else {
-            console.error('Error checking alarm_promise:', err.request.data);
+          reject('Error checking alarm_promise:', err.request.data);
         }
       })
   })
   
+  // console.log(lc_alarm_promise)
+  // Promise.race([lc_alarm_promise]).then(() => {
+  //   console.log(lc_alarm_promise)
+  //   console.log("done");
+  //   })
+
   dcnanoDb
     .find(mangoQuery_latest_rawdata)
     .then((response) => {
