@@ -118,6 +118,11 @@ function classAdd(element, className){
 	$(element).addClass(className);
 }
 
+//刪除CLASS
+function classRemove(element, className){
+	$(element).removeClass(className);
+}
+
 
 
 
