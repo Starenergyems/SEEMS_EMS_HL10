@@ -1767,6 +1767,56 @@ function current_locale_time() {
 
   return formattedString;
 }
+
+function alarm_processor(original_nanoDB, mangoQuery, error_result_gen_func, alarm_nanoDB, hisalarm_nanoDB ) {
+  return new Promise((resolve, reject) => {
+    original_nanoDB.find(mangoQuery)
+      .then((response) => {
+        const db_name = original_nanoDB["config"]["db"];
+        const item = response.docs[0];
+        // console.log(item);
+        const error_result = error_result_gen_func(item, db_name);
+        // console.log(error_result);
+  
+        alarm_nanoDB.list()
+          .then((body) => {
+            return alarm_nanoDB.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
+          })
+          .then((response) => {
+
+            const compare_result = compare_trigger_alarms(error_result, response);
+            console.log(compare_result);
+            const alarm_db_promise = update_trigger_alarms_batch(error_result, compare_result, alarm_nanoDB, line_flag=false);
+            
+            const hisAlarm_batch = Object.values(error_result).map(obj => {
+              // Create a shallow copy of the object and modify the copy
+              const newObj = { ...obj };
+              delete newObj["_id"];
+              return newObj;
+            });
+            const hisalarm_db_promise = hisalarm_nanoDB.bulk({docs: hisAlarm_batch})
+            
+            // console.log([alarm_db_promise, hisalarm_db_promise]);
+            Promise.all([alarm_db_promise, hisalarm_db_promise])
+              .then(() => {
+                  resolve("alarm_db_promise and hisalarm_db_promise: Suc!");
+              })
+              .catch(err => {
+                  reject('Error in alarm_db_promise and hisalarm_db_promise:', err);
+              });
+          })
+        })
+      .catch(err => {
+        if (err.statusCode === 404) {
+          reject('Data not found in alarm_promise:', err.request.data);
+        } else if (err.statusCode === 409) {
+          reject('Error update conflict alarm_promise:', err.request.data)
+        } else {
+          reject('Error checking alarm_promise:', err.request.data);
+        }
+      })
+  })
+}
 //************************************************************* */
 router.use(async (req, res, next) => {
   try {
@@ -1958,4 +2008,5 @@ module.exports = {
   Other_error_result_gen,
   compare_trigger_alarms,
   update_trigger_alarms_batch,
+  alarm_processor,
 };

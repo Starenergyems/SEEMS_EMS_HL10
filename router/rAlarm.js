@@ -14,6 +14,7 @@ const {
   Other_error_result_gen,
   compare_trigger_alarms,
   update_trigger_alarms_batch,
+  alarm_processor,
 } = require("./alarmFunctions");
 
 app.set("view engine", "ejs");
@@ -102,157 +103,6 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 
 //告警紀錄
 app.get("/alarm", (req, res) => {
-  const mangoQuery_latest_rawdata = {
-    selector: {
-      time: { $exists: true },
-    },
-    sort: [{ time: "desc" }],
-    limit: 1,
-  };
-
-  const lc_alarm_promise = new Promise((resolve, reject) => {
-    lc1nanoDb.find(mangoQuery_latest_rawdata)
-      .then((response) => {
-        const db_name = lc1nanoDb["config"]["db"];
-        const item = response.docs[0];
-        // console.log(item);
-        const error_result = LC_error_result_gen(item, db_name);
-        // console.log(error_result);
-  
-        alarm_test_nanoDb.list()
-          .then((body) => {
-            return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
-          })
-          .then((response) => {
-
-            const compare_result = compare_trigger_alarms(error_result, response);
-            console.log(compare_result);
-            const alarm_db_promise = update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
-            
-            const hisAlarm_batch = Object.values(error_result).map(obj => {
-              // Create a shallow copy of the object and modify the copy
-              const newObj = { ...obj };
-              delete newObj["_id"];
-              return newObj;
-            });
-            const hisalarm_db_promise = hisalarmnanoDb.bulk({docs: hisAlarm_batch})
-            
-            // console.log([alarm_db_promise, hisalarm_db_promise]);
-            Promise.all([alarm_db_promise, hisalarm_db_promise])
-              .then(() => {
-                  resolve("alarm_db_promise and hisalarm_db_promise: Suc!");
-              })
-              .catch(err => {
-                  reject('Error in alarm_db_promise and hisalarm_db_promise:', err);
-              });
-          })
-        })
-      .catch(err => {
-        if (err.statusCode === 404) {
-          reject('Data not found in alarm_promise:', err.request.data);
-        } else if (err.statusCode === 409) {
-          reject('Error update conflict alarm_promise:', err.request.data)
-        } else {
-          reject('Error checking alarm_promise:', err.request.data);
-        }
-      })
-  })
-  
-  // console.log(lc_alarm_promise)
-  // Promise.race([lc_alarm_promise]).then(() => {
-  //   console.log(lc_alarm_promise)
-  //   console.log("done");
-  //   })
-
-  dcnanoDb
-    .find(mangoQuery_latest_rawdata)
-    .then((response) => {
-      const db_name = dcnanoDb["config"]["db"];
-      const item = response.docs[0];
-      // console.log(item);
-      const error_result = DC_error_result_gen(item, db_name);
-      // console.log(error_result);
-
-      alarm_test_nanoDb.list()
-        .then((body) => {
-          return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
-        })
-        .then((response) => {
-          const compare_result = compare_trigger_alarms(error_result, response);
-          console.log(compare_result);
-          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
-          
-          const hisAlarm_batch = Object.values(error_result).map(obj => {
-            // Create a shallow copy of the object and modify the copy
-            const newObj = { ...obj };
-            delete newObj["_id"];
-            return newObj;
-          });
-          hisalarmnanoDb.bulk({docs: hisAlarm_batch})
-          .catch(err => {
-            if (err.statusCode === 404) {
-                console.error('Data not found in update_trigger_alarms:', err.request.data);
-            } else if (err.statusCode === 409) {
-                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
-            } else {
-                console.error('Error checking update_trigger_alarms flag:', err.request.data);
-            }
-          })
-        })
-        .catch((err) => {
-            console.error("Error with mangoQuery_latest_rawdata:", err);        
-        });
-    })
-    .catch((err) => {
-        console.error("Error with mangoQuery_latest_rawdata:", err);
-    });
-  
-  otherrf10nanoDb
-    .find(mangoQuery_latest_rawdata)
-    .then((response) => {
-      const db_name = otherrf10nanoDb["config"]["db"];
-      const item = response.docs[0];
-      // console.log(item);
-      const error_result = Other_error_result_gen(item, db_name);
-      // console.log(error_result);
-
-      alarm_test_nanoDb.list()
-        .then((body) => {
-          return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
-        })
-        .then((response) => {
-          const compare_result = compare_trigger_alarms(error_result, response);
-          console.log(compare_result);
-          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
-          
-          const hisAlarm_batch = Object.values(error_result).map(obj => {
-            // Create a shallow copy of the object and modify the copy
-            const newObj = { ...obj };
-            delete newObj["_id"];
-            return newObj;
-          });
-          hisalarmnanoDb.bulk({docs: hisAlarm_batch})
-          .catch(err => {
-            if (err.statusCode === 404) {
-                console.error('Data not found in update_trigger_alarms:', err.request.data);
-            } else if (err.statusCode === 409) {
-                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
-            } else {
-                console.error('Error checking update_trigger_alarms flag:', err.request.data);
-            }
-          })
-        })
-        .catch((err) => {
-            console.error("Error with mangoQuery_latest_rawdata:", err);        
-        });
-    })
-    .catch((err) => {
-        console.error("Error with mangoQuery_latest_rawdata:", err);
-    });
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).send("Internal Server Error");
-  // }
   res.render("Alm_RealTime");
 });
 
@@ -350,34 +200,57 @@ app.post("/alarm/realtime/edit", (req, res) => {
 
 //傳數值到前端的表格中
 app.get("/alarm/realtime/edit", (req, res) => {
-  alarm_test_nanoDb.list()
-    .then((body) => {
-      // console.log(body);
-      return alarm_test_nanoDb.find({
-        selector: {
-          time: { $exists: true },
-          $or: [
-            { read: { $exists: true, $eq: false } },
-            { recover: { $exists: true, $eq: false } }
-          ]
-        },
-        fields: ["_id", "time", "location", "device", "level", "content", "value", "read", "recover", "recover_time", "occurrence_time"],
-        sort: [{ time: "desc" }],
-        limit: body.total_rows,
-      })
-    })
-    .then((resp) => {
-      const alarm_db_array = [];
-      for (const item of resp.docs) {
-        // console.log(item);
-        // ["_rev", "time", "db_name", "value"].forEach((key) => {
-        //   delete item[key];
-        // });
-        item["index"] = "";
-        alarm_db_array.push(item);
-      }
-      // console.log(alarm_db_array);
-      res.send(alarm_db_array);
+  const mangoQuery_latest_rawdata = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+
+  const lc_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  
+  // console.log(lc_alarm_promise)
+  // Promise.race([lc_alarm_promise]).then(() => {
+  //   console.log(lc_alarm_promise)
+  //   console.log("done");
+  //   })
+
+  const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  
+  Promise.all([lc_alarm_promise, dc_alarm_promise, other_alarm_promise])
+    .then(() => {
+      console.log("All alarm_processor: Suc!");
+      alarm_test_nanoDb.list()
+        .then((body) => {
+          // console.log(body);
+          return alarm_test_nanoDb.find({
+            selector: {
+              time: { $exists: true },
+              $or: [
+                { read: { $exists: true, $eq: false } },
+                { recover: { $exists: true, $eq: false } }
+              ]
+            },
+            fields: ["_id", "time", "location", "device", "level", "content", "value", "read", "recover", "recover_time", "occurrence_time"],
+            sort: [{ time: "desc" }],
+            limit: body.total_rows,
+          })
+        })
+        .then((resp) => {
+          const alarm_db_array = [];
+          for (const item of resp.docs) {
+            // console.log(item);
+            // ["_rev", "time", "db_name", "value"].forEach((key) => {
+            //   delete item[key];
+            // });
+            item["index"] = "";
+            alarm_db_array.push(item);
+          }
+          // console.log(alarm_db_array);
+          res.send(alarm_db_array);
+        })
     })
     .catch(err => {
       if (err.statusCode === 404) {
@@ -386,6 +259,12 @@ app.get("/alarm/realtime/edit", (req, res) => {
           console.error('Error checking /alarm/realtime/edit:', err);
       }
     })
+  // } catch (error) {
+  //   console.error(error);
+  //   res.status(500).send("Internal Server Error");
+  // }
+
+  
   });
 
 app.get("/alarm/history", (req, res) => {
