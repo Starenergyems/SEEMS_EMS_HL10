@@ -1614,149 +1614,174 @@ function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
       });
 }
 
-async function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_flag=false) {
-  // update for the remain alarms (Recongnized as an error from the filter func which also is the error remian in the AlarmDB)
-  // console.log("remain_promises");
-  if (compare_result.remain.length > 0) {
-    // fetch an array of _id from the AlarmDB
-    const remain_result = await nanoDB.fetch({keys: compare_result.remain})
-      .then((resp) => {
-        let docs_batch = [];
-        resp.rows.forEach((element) => {
-          // In case, the _id has not yet inserted in the DB
-            // then line notify + insert to DB
-          if (element.hasOwnProperty("error")) {
-            const _id = element.key;
-            if (line_flag) {
-              sendLineNotify(error_result[_id]);
-            };
-            docs_batch.push(error_result[_id]);
-          
-          // The cases which the _id has been inserted into the DB once
-          } else if (element.hasOwnProperty("doc")) {
-            const _id = element.id;
-
-            // Case 1: it remains in the DB correctly
-              // Then, update the doc with current status and values
-              // the read boolean should follow the current setting from the DB
-            if (element.doc) {
-              let doc = element.doc;
-              let error_element = error_result[_id];
-              error_element["_rev"] = doc._rev;
-              error_element["read"] = doc.read;
-              docs_batch.push(error_element);
-
-            // Case 2: it has been deleted before and not existed in the db currently
-              // then line notify + insert to DB
-            } else {
-              if (line_flag) {
-                sendLineNotify(error_result[_id]);
-              };
-              docs_batch.push(error_result[_id]);
-            }
-          }
-        })
-        // console.log(docs_batch)
-        return nanoDB.bulk({docs: docs_batch});
-      });
-    // console.log("remain_result");
-  };
+function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_flag=false) {
+  return new Promise((resolve, reject) => {
+    let remain_result = [];
+    let income_result = [];
+    let recover_result = [];
   
-  // update for the new income alarms (Recongnized as an error from the filter func which also is not yet an error in the AlarmDB)
-  // console.log("income_promises");
-  if (compare_result.income.length > 0) {
-    // fetch an array of _id from the AlarmDB
-    const income_result = await nanoDB.fetch({keys: compare_result.income})
-      .then((resp) => {
-        // console.log(resp.rows)
-        let docs_batch = [];
-        resp.rows.forEach((element) => {
-          // In case, the _id has not yet inserted in the DB
-            // then line notify + insert to DB
-          if (element.hasOwnProperty("error")) {
-            const _id = element.key;
-            if (line_flag) {
-              sendLineNotify(error_result[_id]);
-            };
-            docs_batch.push(error_result[_id]);
-          
-          // The cases which the _id has been inserted into the DB once 
-          } else if (element.hasOwnProperty("doc")) {
-            const _id = element.id;
-
-            // Case 1: it is somehow remain in the DB although it should be a newcomer
-              // Then, update the doc with current status and values
-              // the read boolean should follow the current setting from the DB
-            if (element.doc) {
-              // console.log(element.doc);
-              let doc = element.doc;
-              let error_element = error_result[_id];
-              error_element["_rev"] = doc._rev;
-              error_element["read"] = doc.read;
-              // console.log(error_element);
-              docs_batch.push(error_element);
-
-            // Case 2: it has been deleted before and not existed in the db currently
-              // then line notify + insert to DB
-            } else {
-              if (line_flag) {
-                sendLineNotify(error_result[_id]);
-              };
-              docs_batch.push(error_result[_id]);
-            }
-          }
-        })
-        // console.log(docs_batch)
-        return nanoDB.bulk({docs: docs_batch});
-      });
-    // console.log("income_result");
-  };
-  
-  // update for the recover alarms (Not recongnized as an error from the filter func which also is currently an error in the AlarmDB)
-  // console.log("recover_promises");
-  if (compare_result.recover.length > 0) {
-    // fetch an array of _id from the AlarmDB
-    const recover_result = await nanoDB.fetch({keys: compare_result.recover})
-      .then((resp) => {
-        let docs_batch = [];
-        resp.rows.forEach((element) => {
-          // As the _id is fetched in the DB
-            // Do nothing if _id is not found in the DB
-          if (element.hasOwnProperty("doc")) {
-            const _id = element.id;
-            let doc = element.doc;
-            if (!doc.recover) {
-              // Set the recover boolean as true and the time to the current time as it is not an error now
-              doc.recover = true;
-              doc.recover_time = current_locale_time();
-              // if the recover and read boolean are both true: del the doc
-              if (doc.recover && doc.read) {
-                doc._deleted = true;
-              }; 
-            };
-            docs_batch.push(doc);
-          }
-        })
-        // console.log(docs_batch)
-        return nanoDB.bulk({docs: docs_batch});
+    Promise.resolve('Initial data')
+      .then(() => {
+        // update for the remain alarms (Recongnized as an error from the filter func which also is the error remian in the AlarmDB)
+        // console.log("remain_promises");
+        if (compare_result.remain.length > 0) {
+          // fetch an array of _id from the AlarmDB
+          remain_result = nanoDB.fetch({keys: compare_result.remain})
+            .then((resp) => {
+              let docs_batch = [];
+              resp.rows.forEach((element) => {
+                // In case, the _id has not yet inserted in the DB
+                  // then line notify + insert to DB
+                if (element.hasOwnProperty("error")) {
+                  const _id = element.key;
+                  if (line_flag) {
+                    sendLineNotify(error_result[_id]);
+                  };
+                  docs_batch.push(error_result[_id]);
+                
+                // The cases which the _id has been inserted into the DB once
+                } else if (element.hasOwnProperty("doc")) {
+                  const _id = element.id;
+      
+                  // Case 1: it remains in the DB correctly
+                    // Then, update the doc with current status and values
+                    // the read boolean should follow the current setting from the DB
+                  if (element.doc) {
+                    let doc = element.doc;
+                    let error_element = error_result[_id];
+                    error_element["_rev"] = doc._rev;
+                    error_element["read"] = doc.read;
+                    docs_batch.push(error_element);
+      
+                  // Case 2: it has been deleted before and not existed in the db currently
+                    // then line notify + insert to DB
+                  } else {
+                    if (line_flag) {
+                      sendLineNotify(error_result[_id]);
+                    };
+                    docs_batch.push(error_result[_id]);
+                  }
+                }
+              })
+              // console.log(docs_batch)
+              return nanoDB.bulk({docs: docs_batch});
+            });
+          console.log("remain_result");
+        };
       })
-    // console.log("recover_result");
-  };
-
-  // const promises = [
-  //   remain_promises, 
-  //   income_promises, 
-  //   recover_promises,
-  // ];
-  // console.log(promises);
-  // // Use Promise.all to wait for all promises to resolve
-  // Promise.all(promises)
-  //     .then(() => {
-  //         console.log("Promise.all in update_trigger_alarms: Suc!");
-  //     })
-  //     .catch(err => {
-  //         console.error('Error in Promise.all in update_trigger_alarms:', err);
-  //     });
+      .then(() => {
+        // update for the new income alarms (Recongnized as an error from the filter func which also is not yet an error in the AlarmDB)
+        // console.log("income_promises");
+        if (compare_result.income.length > 0) {
+          // fetch an array of _id from the AlarmDB
+          income_result = nanoDB.fetch({keys: compare_result.income})
+            .then((resp) => {
+              // console.log(resp.rows)
+              let docs_batch = [];
+              resp.rows.forEach((element) => {
+                // In case, the _id has not yet inserted in the DB
+                  // then line notify + insert to DB
+                if (element.hasOwnProperty("error")) {
+                  const _id = element.key;
+                  if (line_flag) {
+                    sendLineNotify(error_result[_id]);
+                  };
+                  docs_batch.push(error_result[_id]);
+                
+                // The cases which the _id has been inserted into the DB once 
+                } else if (element.hasOwnProperty("doc")) {
+                  const _id = element.id;
+      
+                  // Case 1: it is somehow remain in the DB although it should be a newcomer
+                    // Then, update the doc with current status and values
+                    // the read boolean should follow the current setting from the DB
+                  if (element.doc) {
+                    // console.log(element.doc);
+                    let doc = element.doc;
+                    let error_element = error_result[_id];
+                    error_element["_rev"] = doc._rev;
+                    error_element["read"] = doc.read;
+                    // console.log(error_element);
+                    docs_batch.push(error_element);
+      
+                  // Case 2: it has been deleted before and not existed in the db currently
+                    // then line notify + insert to DB
+                  } else {
+                    if (line_flag) {
+                      sendLineNotify(error_result[_id]);
+                    };
+                    docs_batch.push(error_result[_id]);
+                  }
+                }
+              })
+              // console.log(docs_batch)
+              return nanoDB.bulk({docs: docs_batch});
+            });
+          console.log("income_result");
+        };
+      })
+      .then(() => {
+        // update for the recover alarms (Not recongnized as an error from the filter func which also is currently an error in the AlarmDB)
+        // console.log("recover_promises");
+        if (compare_result.recover.length > 0) {
+          // fetch an array of _id from the AlarmDB
+          recover_result = nanoDB.fetch({keys: compare_result.recover})
+            .then((resp) => {
+              let docs_batch = [];
+              resp.rows.forEach((element) => {
+                // As the _id is fetched in the DB
+                  // Do nothing if _id is not found in the DB
+                if (element.hasOwnProperty("doc")) {
+                  const _id = element.id;
+                  let doc = element.doc;
+                  if (!doc.recover) {
+                    // Set the recover boolean as true and the time to the current time as it is not an error now
+                    doc.recover = true;
+                    doc.recover_time = current_locale_time();
+                    // if the recover and read boolean are both true: del the doc
+                    if (doc.recover && doc.read) {
+                      doc._deleted = true;
+                    }; 
+                  };
+                  docs_batch.push(doc);
+                }
+              })
+              // console.log(docs_batch)
+              return nanoDB.bulk({docs: docs_batch});
+            })
+          console.log("recover_result");
+        };
+      })
+      .then(() => {
+        // console.log({
+        //   remain_result, 
+        //   income_result,
+        //   recover_result,
+        // });
+        resolve({
+          remain_result, 
+          income_result,
+          recover_result,
+        });
+      })
+      .catch(error => {
+        reject(error);
+      })
+    // const promises = [
+    //   remain_promises, 
+    //   income_promises, 
+    //   recover_promises,
+    // ];
+    // console.log(promises);
+    // // Use Promise.all to wait for all promises to resolve
+    // Promise.all(promises)
+    //     .then(() => {
+    //         console.log("Promise.all in update_trigger_alarms: Suc!");
+    //     })
+    //     .catch(err => {
+    //         console.error('Error in Promise.all in update_trigger_alarms:', err);
+    //     });
+  })
 }
 
 function sendLineNotify(error_result_item) {

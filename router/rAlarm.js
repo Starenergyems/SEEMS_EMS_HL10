@@ -110,48 +110,53 @@ app.get("/alarm", (req, res) => {
     limit: 1,
   };
 
-  lc1nanoDb
-    .find(mangoQuery_latest_rawdata)
-    .then((response) => {
-      const db_name = lc1nanoDb["config"]["db"];
-      const item = response.docs[0];
-      // console.log(item);
-      const error_result = LC_error_result_gen(item, db_name);
-      // console.log(error_result);
+  const lc_alarm_promise = new Promise((resolve, reject) => {
+    lc1nanoDb.find(mangoQuery_latest_rawdata)
+      .then((response) => {
+        const db_name = lc1nanoDb["config"]["db"];
+        const item = response.docs[0];
+        // console.log(item);
+        const error_result = LC_error_result_gen(item, db_name);
+        // console.log(error_result);
+  
+        alarm_test_nanoDb.list()
+          .then((body) => {
+            return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
+          })
+          .then((response) => {
 
-      alarm_test_nanoDb.list()
-        .then((body) => {
-          return alarm_test_nanoDb.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
-        })
-        .then((response) => {
-          const compare_result = compare_trigger_alarms(error_result, response);
-          console.log(compare_result);
-          update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
-          
-          const hisAlarm_batch = Object.values(error_result).map(obj => {
-            // Create a shallow copy of the object and modify the copy
-            const newObj = { ...obj };
-            delete newObj["_id"];
-            return newObj;
-          });
-          hisalarmnanoDb.bulk({docs: hisAlarm_batch})
-          .catch(err => {
-            if (err.statusCode === 404) {
-                console.error('Data not found in update_trigger_alarms:', err.request.data);
-            } else if (err.statusCode === 409) {
-                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
-            } else {
-                console.error('Error checking update_trigger_alarms flag:', err.request.data);
-            }
+            const compare_result = compare_trigger_alarms(error_result, response);
+            console.log(compare_result);
+            const alarm_db_promise = update_trigger_alarms_batch(error_result, compare_result, alarm_test_nanoDb, line_flag=false);
+            
+            const hisAlarm_batch = Object.values(error_result).map(obj => {
+              // Create a shallow copy of the object and modify the copy
+              const newObj = { ...obj };
+              delete newObj["_id"];
+              return newObj;
+            });
+            const hisalarm_db_promise = hisalarmnanoDb.bulk({docs: hisAlarm_batch})
+            
+            console.log([alarm_db_promise, hisalarm_db_promise]);
+            Promise.all([alarm_db_promise, hisalarm_db_promise])
+              .then(() => {
+                  console.log("alarm_db_promise and hisalarm_db_promise: Suc!");
+              })
+              .catch(err => {
+                  console.error('Error in alarm_db_promise and hisalarm_db_promise:', err);
+              });
           })
         })
-        .catch((err) => {
-            console.error("Error with mangoQuery_latest_rawdata:", err);        
-        });
-    })
-    .catch((err) => {
-        console.error("Error with mangoQuery_latest_rawdata:", err);
-    });
+      .catch(err => {
+        if (err.statusCode === 404) {
+            console.error('Data not found in alarm_promise:', err.request.data);
+        } else if (err.statusCode === 409) {
+            console.error('Error update conflict alarm_promise:', err.request.data)
+        } else {
+            console.error('Error checking alarm_promise:', err.request.data);
+        }
+      })
+  })
   
   dcnanoDb
     .find(mangoQuery_latest_rawdata)
