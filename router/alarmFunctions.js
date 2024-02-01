@@ -1198,7 +1198,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
     let bit_arr = [];
     let bit_status;
     if (error_type === "bit") {
-      bit_status = 1;
+      bit_status = "1";
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[key_error][tag]["status"],
@@ -1207,7 +1207,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
         bit_status,
       );
     } else if (error_type === "bit_abnormal") {
-      bit_status = 0;
+      bit_status = "0";
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[key_error][tag]["status"],
@@ -1362,7 +1362,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
     let bit_arr = [];
     let bit_status;
     if (error_type === "bit") {
-      bit_status = 1;
+      bit_status = "1";
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[tag]["status"],
@@ -1371,7 +1371,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
         bit_status,
       );
     } else if (error_type === "bit_abnormal") {
-      bit_status = 0;
+      bit_status = "0";
       [error_arr, bit_arr] = mapBitToStatus(
         value,
         error_table[tag]["status"],
@@ -1449,7 +1449,7 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
       //console.log(Object.keys(v))
       for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
-          // console.log(key, tag, value)
+          console.log(key, tag, value)
           let device = `${key}`;
           Other_error_result_unit(time, occurrence_time, db_name, error_table, tag, value, device, error_result,)
         }

@@ -217,7 +217,7 @@ app.get("/alarm/realtime/edit", (req, res) => {
   //   })
 
   const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
-  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
   
   Promise.all([lc_alarm_promise, dc_alarm_promise, other_alarm_promise])
     .then(() => {
