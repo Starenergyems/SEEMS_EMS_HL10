@@ -209,8 +209,8 @@ async function getElement(htmlid){
   }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-
 // from https://ithelp.ithome.com.tw/articles/10231926 use to verify timezone problem.
+
 Date.prototype.toISOString = function () {
   let pad =(n)=>(n < 10)?'0' + n:n;
   let hours_offset = this.getTimezoneOffset() / 60;
@@ -242,8 +242,8 @@ function uuid() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
 }
 // window.location.assign("https://www.google.com");
-
 // window.location.replace("https://www.google.com")
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // The function for login page submit.
 async function submit(){
@@ -297,9 +297,3 @@ async function submit(){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// console.log(`a:${datetime(0)}`)
-// console.log(`b:${datetime(1)}`)
-// console.log(Date.parse(datetime(1)))
-// console.log(`a>b: ${Date.parse(datetime(1))>Date.parse(datetime(0))}`)
-// console.log(`a>b: ${new Date(datetime(1)).getTime>new Date(datetime(0)).getTime}`)
-// console.log(datetime(1).ms)
