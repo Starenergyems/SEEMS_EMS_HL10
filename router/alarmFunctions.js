@@ -1173,7 +1173,7 @@ function checkPartialMatch(k, array) {
   return null; // Return null if no match is found
 }
 
-function createErrorRecord(_id, db_name, time, error_table_tag, device, content, value , occurrence_time,) {
+function createErrorRecord(_id, db_name, time, error_table_tag, device, content, value , occurrence_time, line, ) {
   return {
     _id: _id,
     db_name: db_name,
@@ -1187,6 +1187,7 @@ function createErrorRecord(_id, db_name, time, error_table_tag, device, content,
     recover: false,
     recover_time: "",
     occurrence_time: occurrence_time,
+    line: line,
   };
 }
 
@@ -1219,6 +1220,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
         const _id = `${device}:${tag}:${bit_arr[i]}`;
+        const line = error_table[key_error][tag]["line"];
         error_result[_id] = 
           createErrorRecord(
             _id,
@@ -1229,6 +1231,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
             error_arr[i],
             bit_status,
             occurrence_time,
+            line
           );
         // console.log(error_result[_id])
       }
@@ -1237,6 +1240,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
     if (error_type === "int") {
       const _id = `${device}:${tag}:${value}`;
       const content = error_table[key_error][tag]["status"][value];
+      const line = error_table[key_error][tag]["line"];
       if (content) {
         error_result[_id] = 
           createErrorRecord(
@@ -1248,6 +1252,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
             content,
             value,
             occurrence_time,
+            line
           );
       };
     } else if (error_type === "valve") {
@@ -1260,6 +1265,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
       if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
       if (valve_status && content) {
         const _id = `${device}:${tag}:${valve_status}`;
+        const line = error_table[key_error][tag]["line"];
         error_result[_id] = 
           createErrorRecord(
             _id,
@@ -1270,6 +1276,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
             content,
             value,
             occurrence_time,
+            line
           );
       }
     }
@@ -1334,6 +1341,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
           const device = `${key}`;
           const _id = `${device}:${tag}`;
           const content = error_table[tag]["name"];
+          const line = error_table[tag]["line"];
           if (value === error_table[tag]["status"]) {
             error_result[_id] = 
               createErrorRecord(
@@ -1345,6 +1353,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
                 content,
                 value,
                 occurrence_time,
+                line
               );
           }
         }
@@ -1383,6 +1392,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
         const _id = `${device}:${tag}:${bit_arr[i]}`;
+        const line = error_table[tag]["line"];
         error_result[_id] = 
           createErrorRecord(
             _id,
@@ -1393,6 +1403,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
             error_arr[i],
             bit_status,
             occurrence_time,
+            line
           );
       }
     };
@@ -1400,6 +1411,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
     if (error_type === "int") {
       const _id = `${device}:${tag}:${value}`;
       const content = error_table[tag]["status"][value];
+      const line = error_table[tag]["line"];
       if (content) {
         error_result[_id] = 
           createErrorRecord(
@@ -1411,6 +1423,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
             content,
             value,
             occurrence_time,
+            line
           );
       };
     } else if (error_type === "valve") {
@@ -1423,6 +1436,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
       if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
       if (valve_status && content) {
         const _id = `${device}:${tag}:${valve_status}`;
+        const line = error_table[tag]["line"];
         error_result[_id] = 
           createErrorRecord(
             _id,
@@ -1433,6 +1447,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
             content,
             value,
             occurrence_time,
+            line
           );
       }
     }
@@ -1449,7 +1464,7 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
       //console.log(Object.keys(v))
       for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
-          console.log(key, tag, value)
+          // console.log(key, tag, value)
           let device = `${key}`;
           Other_error_result_unit(time, occurrence_time, db_name, error_table, tag, value, device, error_result,)
         }
@@ -1579,7 +1594,9 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                   // then line notify + insert to DB
                 if (element.hasOwnProperty("error")) {
                   const _id = element.key;
-                  if (line_flag) {
+                  const line = error_result[_id]["line"];
+                  delete error_result[_id]["line"];
+                  if (line_flag && line) {
                     sendLineNotify(error_result[_id]);
                   };
                   docs_batch.push(error_result[_id]);
@@ -1587,7 +1604,8 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                 // The cases which the _id has been inserted into the DB once
                 } else if (element.hasOwnProperty("doc")) {
                   const _id = element.id;
-      
+                  const line = error_result[_id]["line"];
+                  delete error_result[_id]["line"];
                   // Case 1: it remains in the DB correctly
                     // Then, update the doc with current status and values
                     // the read boolean should follow the current setting from the DB
@@ -1601,7 +1619,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                   // Case 2: it has been deleted before and not existed in the db currently
                     // then line notify + insert to DB
                   } else {
-                    if (line_flag) {
+                    if (line_flag && line) {
                       sendLineNotify(error_result[_id]);
                     };
                     docs_batch.push(error_result[_id]);
@@ -1628,7 +1646,9 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                   // then line notify + insert to DB
                 if (element.hasOwnProperty("error")) {
                   const _id = element.key;
-                  if (line_flag) {
+                  const line = error_result[_id]["line"];
+                  delete error_result[_id]["line"];
+                  if (line_flag && line) {
                     sendLineNotify(error_result[_id]);
                   };
                   docs_batch.push(error_result[_id]);
@@ -1636,7 +1656,8 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                 // The cases which the _id has been inserted into the DB once 
                 } else if (element.hasOwnProperty("doc")) {
                   const _id = element.id;
-      
+                  const line = error_result[_id]["line"];
+                  delete error_result[_id]["line"];
                   // Case 1: it is somehow remain in the DB although it should be a newcomer
                     // Then, update the doc with current status and values
                     // the read boolean should follow the current setting from the DB
@@ -1652,7 +1673,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                   // Case 2: it has been deleted before and not existed in the db currently
                     // then line notify + insert to DB
                   } else {
-                    if (line_flag) {
+                    if (line_flag && line) {
                       sendLineNotify(error_result[_id]);
                     };
                     docs_batch.push(error_result[_id]);
@@ -1679,6 +1700,8 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                 if (element.hasOwnProperty("doc")) {
                   const _id = element.id;
                   let doc = element.doc;
+                  const line = error_result[_id]["line"];
+                  delete error_result[_id]["line"];
                   if (!doc.recover) {
                     // Set the recover boolean as true and the time to the current time as it is not an error now
                     doc.recover = true;
@@ -1786,7 +1809,7 @@ function alarm_processor(original_nanoDB, mangoQuery, error_result_gen_func, ala
 
             const compare_result = compare_trigger_alarms(error_result, response);
             console.log(compare_result);
-            const alarm_db_promise = update_trigger_alarms_batch(error_result, compare_result, alarm_nanoDB, line_flag=false);
+            const alarm_db_promise = update_trigger_alarms_batch(error_result, compare_result, alarm_nanoDB, line_flag=true);
             
             const hisAlarm_batch = Object.values(error_result).map(obj => {
               // Create a shallow copy of the object and modify the copy
