@@ -184,10 +184,11 @@ app.post("/alarm/realtime/edit", (req, res) => {
         })
     }
 
-    console.log(promise);
+    // console.log(promise);
     promise
       .then(() => {
         res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
+        console.log("/alarm/realtime/edit");
       })
       .catch((error) => {
         console.error('Promise rejected:', error.message);
@@ -229,7 +230,7 @@ app.get("/alarm/realtime/edit", (req, res) => {
             item["index"] = "";
             alarm_db_array.push(item);
           }
-          // console.log(alarm_db_array);
+          console.log("alarm_db_array");
           res.send(alarm_db_array);
         })
     })
