@@ -8,6 +8,7 @@ const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
+const axios = require("axios");
 const {
   LC_error_result_gen,
   DC_error_result_gen,
@@ -200,28 +201,8 @@ app.post("/alarm/realtime/edit", (req, res) => {
 
 //傳數值到前端的表格中
 app.get("/alarm/realtime/edit", (req, res) => {
-  const mangoQuery_latest_rawdata = {
-    selector: {
-      time: { $exists: true },
-    },
-    sort: [{ time: "desc" }],
-    limit: 1,
-  };
-
-  const lc_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
-  
-  // console.log(lc_alarm_promise)
-  // Promise.race([lc_alarm_promise]).then(() => {
-  //   console.log(lc_alarm_promise)
-  //   console.log("done");
-  //   })
-
-  const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
-  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
-  
-  Promise.all([lc_alarm_promise, dc_alarm_promise, other_alarm_promise])
+  Promise.resolve('Init')
     .then(() => {
-      console.log("All alarm_processor: Suc!");
       alarm_test_nanoDb.list()
         .then((body) => {
           // console.log(body);
@@ -263,14 +244,43 @@ app.get("/alarm/realtime/edit", (req, res) => {
   //   console.error(error);
   //   res.status(500).send("Internal Server Error");
   // }
-
-  
   });
 
 app.get("/alarm/history", (req, res) => {
   // num與fun
   res.render("Alm_History");
 });
+
+function alarm_processor_call() {
+  const mangoQuery_latest_rawdata = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+
+  const lc_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  
+  // console.log(lc_alarm_promise)
+  // Promise.race([lc_alarm_promise]).then(() => {
+  //   console.log(lc_alarm_promise)
+  //   console.log("done");
+  //   })
+
+  const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  
+  Promise.all([lc_alarm_promise, dc_alarm_promise, other_alarm_promise])
+  .then(() => {
+    console.log("All alarm_processor: Suc!");
+  })
+}
+const interval = 10000; // 1s
+// Make the initial API call
+alarm_processor_call();
+// Set up the interval to make the API call regularly
+setInterval(alarm_processor_call, interval);
 
 module.exports = router;
 
