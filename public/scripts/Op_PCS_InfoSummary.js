@@ -31,11 +31,7 @@ function showHide_ssNavBar3() {
 
 document.addEventListener("click", hide_ssNavBar);
 function hide_ssNavBar(clickItem) {
-  if (
-    clickItem.target.id !== "dDL_sNB_01" &&
-    clickItem.target.id !== "dDL_sNB_02" &&
-    clickItem.target.id !== "dDL_sNB_03"
-  ) {
+  if (clickItem.target.id !== "dDL_sNB_01" && clickItem.target.id !== "dDL_sNB_02" && clickItem.target.id !== "dDL_sNB_03") {
     ssNavBar_sNB_01.classList.remove("appear");
     ssNavBar_sNB_02.classList.remove("appear");
     ssNavBar_sNB_03.classList.remove("appear");
@@ -181,24 +177,14 @@ function closePopup_dVS_No() {
 /////////////////////////////////////////////////////////////////////////
 
 const window_dataStatus_Set = document.querySelector(".dataStatus_Set");
-const title_dataStatus_Set = document.querySelector(
-  ".dataStatus_Set .titlePUW"
-);
-const option1_dataStatus_Set = document.querySelector(
-  ".dataStatus_Set #option_1"
-);
-const option2_dataStatus_Set = document.querySelector(
-  ".dataStatus_Set #option_2"
-);
-const option3_dataStatus_Set = document.querySelector(
-  ".dataStatus_Set #option_3"
-);
+const title_dataStatus_Set = document.querySelector(".dataStatus_Set .titlePUW");
+const option1_dataStatus_Set = document.querySelector(".dataStatus_Set #option_1");
+const option2_dataStatus_Set = document.querySelector(".dataStatus_Set #option_2");
+const option3_dataStatus_Set = document.querySelector(".dataStatus_Set #option_3");
 const radioOption1 = document.querySelector(".dataStatus_Set #radioOpt_1");
 const radioOption2 = document.querySelector(".dataStatus_Set #radioOpt_2");
 const radioOption3 = document.querySelector(".dataStatus_Set #radioOpt_3");
-const alertInfo_dataStatus_Set = document.querySelector(
-  ".dataStatus_Set .alertInfo"
-);
+const alertInfo_dataStatus_Set = document.querySelector(".dataStatus_Set .alertInfo");
 let valNow_dataStatus_Set;
 // let valLightNow_dataStatus_Set;
 let option1_Description;
@@ -212,141 +198,115 @@ function clearCheckedRadioOption() {
   radioOption3.checked = false;
 }
 
-function Set_modeActPas_LC() {
+// function Set_modeActPas_LC() {
+//   window_dataStatus_Set.classList.add("appear");
+//   clearCheckedRadioOption();
+//   option1_dataStatus_Set.textContent = "主動";
+//   option2_dataStatus_Set.textContent = "被動";
+//   alertInfo_dataStatus_Set.textContent = "";
+//   option1_Description = "主動";
+//   option2_Description = "被動";
+
+//   window_dataStatus_Set.classList.remove("threeOptions");
+// }
+
+let qSelectAll_option = document.querySelectorAll(".dataStatus_Set .option");
+let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set .radioOpt");
+let i;
+
+async function Set_modeActPas_LC(numInDataGroup) {
+  dataName = "setBut_modeAP";
+
+  title_dataStatus_Set.textContent = `LC${numInDataGroup}_主/被動模式`;
   window_dataStatus_Set.classList.add("appear");
-  clearCheckedRadioOption();
-  option1_dataStatus_Set.textContent = "主動";
-  option2_dataStatus_Set.textContent = "被動";
-  alertInfo_dataStatus_Set.textContent = "";
-  option1_Description = "主動";
-  option2_Description = "被動";
-
   window_dataStatus_Set.classList.remove("threeOptions");
-}
-
-const setBut_modeActPas_LC1 = document.querySelector(
-  ".infoLC #setBut_modeAP_LC1"
-);
-setBut_modeActPas_LC1.addEventListener("click", Set_modeActPas_LC1);
-function Set_modeActPas_LC1() {
-  Set_modeActPas_LC();
-  title_dataStatus_Set.textContent = "LC1_主/被動模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeActPas_LC1");
-  // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
-}
-
-const setBut_modeActPas_LC2 = document.querySelector(
-  ".infoLC #setBut_modeAP_LC2"
-);
-setBut_modeActPas_LC2.addEventListener("click", Set_modeActPas_LC2);
-function Set_modeActPas_LC2() {
-  Set_modeActPas_LC();
-  title_dataStatus_Set.textContent = "LC2_主/被動模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeActPas_LC2");
-}
-
-const setBut_modeActPas_LC3 = document.querySelector(
-  ".infoLC #setBut_modeAP_LC3"
-);
-setBut_modeActPas_LC3.addEventListener("click", Set_modeActPas_LC3);
-function Set_modeActPas_LC3() {
-  Set_modeActPas_LC();
-  title_dataStatus_Set.textContent = "LC3_主/被動模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeActPas_LC3");
-}
-
-const setBut_modeActPas_LC4 = document.querySelector(
-  ".infoLC #setBut_modeAP_LC4"
-);
-setBut_modeActPas_LC4.addEventListener("click", Set_modeActPas_LC4);
-function Set_modeActPas_LC4() {
-  Set_modeActPas_LC();
-  title_dataStatus_Set.textContent = "LC4_主/被動模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeActPas_LC4");
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-function Set_standbyCmd_LC() {
-  window_dataStatus_Set.classList.add("appear");
   clearCheckedRadioOption();
-  option1_dataStatus_Set.textContent = "待機";
-  option2_dataStatus_Set.textContent = "停止待機";
+
+  let getData = await get_dSS_Data_WhenClicking(dataName, numInDataGroup);
+  console.log(getData);
+  // console.log(getData.status_MT);
+  // console.log(Object.keys(getData.status_MT));
+
+  for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+    qSelectAll_option[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+    qSelectAll_radioOpt[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
+
+    if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+      qSelectAll_radioOpt[i].checked = true;
+    }
+  }
+
   alertInfo_dataStatus_Set.textContent = "";
-  // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
-  option1_Description = "待機";
-  option2_Description = "停止待機";
-
-  window_dataStatus_Set.classList.remove("threeOptions");
 }
 
-const setBut_standbyCmd_LC1 = document.querySelector(
-  ".infoLC #setBut_standbyCmd_LC1"
-);
-setBut_standbyCmd_LC1.addEventListener("click", Set_standbyCmd_LC1);
-function Set_standbyCmd_LC1() {
-  Set_standbyCmd_LC();
-  title_dataStatus_Set.textContent = "LC1_PCS待機指令";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #standbyCmd_LC1");
-}
+// async function get_dSS_Data_WhenClicking(dataName, numInDataGroup) {
+//   try {
+//     console.log("嘗試向後端發出請求");
+//     const response = await fetch("/get_dSS_Data_WhenClicking", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ dataName, numInDataGroup }),
+//     });
 
-const setBut_standbyCmd_LC2 = document.querySelector(
-  ".infoLC #setBut_standbyCmd_LC2"
-);
-setBut_standbyCmd_LC2.addEventListener("click", Set_standbyCmd_LC2);
-function Set_standbyCmd_LC2() {
-  Set_standbyCmd_LC();
-  title_dataStatus_Set.textContent = "LC2_PCS待機指令";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #standbyCmd_LC2");
-}
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
 
-const setBut_standbyCmd_LC3 = document.querySelector(
-  ".infoLC #setBut_standbyCmd_LC3"
-);
-setBut_standbyCmd_LC3.addEventListener("click", Set_standbyCmd_LC3);
-function Set_standbyCmd_LC3() {
-  Set_standbyCmd_LC();
-  title_dataStatus_Set.textContent = "LC3_PCS待機指令";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #standbyCmd_LC3");
-}
+// async function set_dSS_Data(setValue) {
+//   try {
+//     console.log("嘗試向後端發出請求");
+//     const response = await fetch("/set_dSS_Data", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ setValue }),
+//     });
 
-const setBut_standbyCmd_LC4 = document.querySelector(
-  ".infoLC #setBut_standbyCmd_LC4"
-);
-setBut_standbyCmd_LC4.addEventListener("click", Set_standbyCmd_LC4);
-function Set_standbyCmd_LC4() {
-  Set_standbyCmd_LC();
-  title_dataStatus_Set.textContent = "LC4_PCS待機指令";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #standbyCmd_LC4");
-}
+//     const data = await response.json();
+//     console.log(data);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
+
+const setBut_modeActPas_LC1 = document.querySelector(".infoLC #setBut_modeAP_LC1");
+setBut_modeActPas_LC1.addEventListener("click", function () { Set_modeActPas_LC(1); });
+// setBut_modeActPas_LC1.addEventListener("click", Set_modeActPas_LC1);
+// function Set_modeActPas_LC1() {
+//   Set_modeActPas_LC();
+//   title_dataStatus_Set.textContent = "LC1_主/被動模式";
+//   valNow_dataStatus_Set = document.querySelector(".infoLC #modeActPas_LC1");
+//   // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
+// }
+
+const setBut_modeActPas_LC2 = document.querySelector(".infoLC #setBut_modeAP_LC2");
+setBut_modeActPas_LC2.addEventListener("click", function () { Set_modeActPas_LC(2); });
+
+const setBut_modeActPas_LC3 = document.querySelector(".infoLC #setBut_modeAP_LC3");
+setBut_modeActPas_LC3.addEventListener("click", function () { Set_modeActPas_LC(3); });
+
+const setBut_modeActPas_LC4 = document.querySelector(".infoLC #setBut_modeAP_LC4");
+setBut_modeActPas_LC4.addEventListener("click", function () { Set_modeActPas_LC(4); });
 
 /////////////////////////////////////////////////////////////////////////
 
 const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
 closeWB_Yes_dSS.addEventListener("click", closePopup_dSS_Yes);
 function closePopup_dSS_Yes() {
-  if (
-    radioOption1.checked === true ||
-    radioOption2.checked === true ||
-    radioOption3.checked === true
-  ) {
-    optionChecked_dataStatus_Set = document.querySelector(
-      ".dataStatus_Set [name=dataStatus]:checked"
-    );
+  if (radioOption1.checked === true || radioOption2.checked === true || radioOption3.checked === true) {
+    optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set [name=dataStatus]:checked");
 
-    if (optionChecked_dataStatus_Set.value === "1") {
-      valNow_dataStatus_Set.textContent = option1_Description;
-      // valLightNow_dataStatus_Set.classList.add("setToClose");
-    } else if (optionChecked_dataStatus_Set.value === "2") {
-      valNow_dataStatus_Set.textContent = option2_Description;
-      // valLightNow_dataStatus_Set.classList.remove("setToClose");
-    } else if (optionChecked_dataStatus_Set.value === "3") {
-      valNow_dataStatus_Set.textContent = option3_Description;
-      // valLightNow_dataStatus_Set.classList.remove("setToClose");
-    }
+    set_dSS_Data(optionChecked_dataStatus_Set.value);
 
     optionChecked_dataStatus_Set.checked = false;
   }
+
   window_dataStatus_Set.classList.remove("appear", "threeOptions");
 }
 
@@ -361,102 +321,128 @@ function closePopup_dSS_No() {
 
 /////////////////////////////////////////////////////////////////////////
 
-function Set_modeQctrl_LC() {
+// function Set_modeQctrl_LC() {
+//   window_dataStatus_Set.classList.add("appear", "threeOptions");
+//   clearCheckedRadioOption();
+//   option1_dataStatus_Set.textContent = "功率(kVar)模式";
+//   option2_dataStatus_Set.textContent = "功因模式";
+//   option3_dataStatus_Set.textContent = "關閉";
+//   alertInfo_dataStatus_Set.textContent = "";
+//   // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
+//   option1_Description = "功率(kVar)模式";
+//   option2_Description = "功因模式";
+//   option3_Description = "關閉";
+// }
+
+async function Set_modeQctrl_LC(numInDataGroup) {
+  dataName = "setBut_modeQctrl";
+
+  title_dataStatus_Set.textContent = `LC${numInDataGroup}_虛功模式設定`;
   window_dataStatus_Set.classList.add("appear", "threeOptions");
   clearCheckedRadioOption();
-  option1_dataStatus_Set.textContent = "功率(kVar)模式";
-  option2_dataStatus_Set.textContent = "功因模式";
-  option3_dataStatus_Set.textContent = "關閉";
+
+  let getData = await get_dSS_Data_WhenClicking(dataName, numInDataGroup);
+  console.log(getData);
+
+  for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+    qSelectAll_option[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+    qSelectAll_radioOpt[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
+
+    if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+      qSelectAll_radioOpt[i].checked = true;
+    }
+  }
+
   alertInfo_dataStatus_Set.textContent = "";
-  // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
-  option1_Description = "功率(kVar)模式";
-  option2_Description = "功因模式";
-  option3_Description = "關閉";
 }
 
-const setBut_modeQctrl_LC1 = document.querySelector(
-  ".infoLC #setBut_modeQctrl_LC1"
-);
-setBut_modeQctrl_LC1.addEventListener("click", Set_modeQctrl_LC1);
-function Set_modeQctrl_LC1() {
-  Set_modeQctrl_LC();
-  title_dataStatus_Set.textContent = "LC1_虛功模式設定";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeQctrl_LC1");
-}
+const setBut_modeQctrl_LC1 = document.querySelector(".infoLC #setBut_modeQctrl_LC1");
+setBut_modeQctrl_LC1.addEventListener("click", function () { Set_modeQctrl_LC(1); });
+// setBut_modeQctrl_LC1.addEventListener("click", Set_modeQctrl_LC1);
+// function Set_modeQctrl_LC1() {
+//   Set_modeQctrl_LC();
+//   title_dataStatus_Set.textContent = "LC1_虛功模式設定";
+//   valNow_dataStatus_Set = document.querySelector(".infoLC #modeQctrl_LC1");
+// }
 
-const setBut_modeQctrl_LC2 = document.querySelector(
-  ".infoLC #setBut_modeQctrl_LC2"
-);
-setBut_modeQctrl_LC2.addEventListener("click", Set_modeQctrl_LC2);
-function Set_modeQctrl_LC2() {
-  Set_modeQctrl_LC();
-  title_dataStatus_Set.textContent = "LC2_虛功模式設定";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeQctrl_LC2");
-}
+const setBut_modeQctrl_LC2 = document.querySelector(".infoLC #setBut_modeQctrl_LC2");
+setBut_modeQctrl_LC2.addEventListener("click", function () { Set_modeQctrl_LC(2); });
 
-const setBut_modeQctrl_LC3 = document.querySelector(
-  ".infoLC #setBut_modeQctrl_LC3"
-);
-setBut_modeQctrl_LC3.addEventListener("click", Set_modeQctrl_LC3);
-function Set_modeQctrl_LC3() {
-  Set_modeQctrl_LC();
-  title_dataStatus_Set.textContent = "LC3_虛功模式設定";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeQctrl_LC3");
-}
+const setBut_modeQctrl_LC3 = document.querySelector(".infoLC #setBut_modeQctrl_LC3");
+setBut_modeQctrl_LC3.addEventListener("click", function () { Set_modeQctrl_LC(3); });
 
-const setBut_modeQctrl_LC4 = document.querySelector(
-  ".infoLC #setBut_modeQctrl_LC4"
-);
-setBut_modeQctrl_LC4.addEventListener("click", Set_modeQctrl_LC4);
-function Set_modeQctrl_LC4() {
-  Set_modeQctrl_LC();
-  title_dataStatus_Set.textContent = "LC4_虛功模式設定";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeQctrl_LC4");
-}
+const setBut_modeQctrl_LC4 = document.querySelector(".infoLC #setBut_modeQctrl_LC4");
+setBut_modeQctrl_LC4.addEventListener("click", function () { Set_modeQctrl_LC(4); });
 
 /////////////////////////////////////////////////////////////////////////
 
-function Set_modeLR_LC() {
+async function Set_standbyCmd_LC(numInDataGroup) {
+  dataName = "setBut_standbyCmd";
+
+  title_dataStatus_Set.textContent = `LC${numInDataGroup}_PCS待機指令`;
+  window_dataStatus_Set.classList.add("appear");
+  window_dataStatus_Set.classList.remove("threeOptions");
+  clearCheckedRadioOption();
+
+  let getData = await get_dSS_Data_WhenClicking(dataName, numInDataGroup);
+  console.log(getData);
+
+  for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+    qSelectAll_option[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+    qSelectAll_radioOpt[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
+
+    if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+      qSelectAll_radioOpt[i].checked = true;
+    }
+  }
+
+  alertInfo_dataStatus_Set.textContent = "";
+}
+
+const setBut_standbyCmd_LC1 = document.querySelector(".infoLC #setBut_standbyCmd_LC1");
+setBut_standbyCmd_LC1.addEventListener("click", function () { Set_standbyCmd_LC(1); });
+
+const setBut_standbyCmd_LC2 = document.querySelector(".infoLC #setBut_standbyCmd_LC2");
+setBut_standbyCmd_LC2.addEventListener("click", function () { Set_standbyCmd_LC(2); });
+
+const setBut_standbyCmd_LC3 = document.querySelector(".infoLC #setBut_standbyCmd_LC3");
+setBut_standbyCmd_LC3.addEventListener("click", function () { Set_standbyCmd_LC(3); });
+
+const setBut_standbyCmd_LC4 = document.querySelector(".infoLC #setBut_standbyCmd_LC4");
+setBut_standbyCmd_LC4.addEventListener("click", function () { Set_standbyCmd_LC(4); });
+
+/////////////////////////////////////////////////////////////////////////
+
+async function Set_modeLR_LC(numInDataGroup) {
+  dataName = "setBut_modeLR";
+
+  title_dataStatus_Set.textContent = `LC${numInDataGroup}_本地/遠端模式`;
   window_dataStatus_Set.classList.add("appear", "threeOptions");
   clearCheckedRadioOption();
-  option1_dataStatus_Set.textContent = "本地 & 遠端";
-  option2_dataStatus_Set.textContent = "遠端";
-  option3_dataStatus_Set.textContent = "本地";
+
+  let getData = await get_dSS_Data_WhenClicking(dataName, numInDataGroup);
+  console.log(getData);
+
+  for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+    qSelectAll_option[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+    qSelectAll_radioOpt[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
+
+    if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+      qSelectAll_radioOpt[i].checked = true;
+    }
+  }
+
   alertInfo_dataStatus_Set.textContent = "";
-  // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
-  option1_Description = "本地 & 遠端";
-  option2_Description = "遠端";
-  option3_Description = "本地";
 }
 
 const setBut_modeLR_LC1 = document.querySelector(".infoLC #setBut_modeLR_LC1");
-setBut_modeLR_LC1.addEventListener("click", Set_modeLR_LC1);
-function Set_modeLR_LC1() {
-  Set_modeLR_LC();
-  title_dataStatus_Set.textContent = "LC1_本地/遠端模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeLR_LC1");
-}
+setBut_modeLR_LC1.addEventListener("click", function () { Set_modeLR_LC(1); });
 
 const setBut_modeLR_LC2 = document.querySelector(".infoLC #setBut_modeLR_LC2");
-setBut_modeLR_LC2.addEventListener("click", Set_modeLR_LC2);
-function Set_modeLR_LC2() {
-  Set_modeLR_LC();
-  title_dataStatus_Set.textContent = "LC2_本地/遠端模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeLR_LC2");
-}
+setBut_modeLR_LC2.addEventListener("click", function () { Set_modeLR_LC(2); });
 
 const setBut_modeLR_LC3 = document.querySelector(".infoLC #setBut_modeLR_LC3");
-setBut_modeLR_LC3.addEventListener("click", Set_modeLR_LC3);
-function Set_modeLR_LC3() {
-  Set_modeLR_LC();
-  title_dataStatus_Set.textContent = "LC3_本地/遠端模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeLR_LC3");
-}
+setBut_modeLR_LC3.addEventListener("click", function () { Set_modeLR_LC(3); });
 
 const setBut_modeLR_LC4 = document.querySelector(".infoLC #setBut_modeLR_LC4");
-setBut_modeLR_LC4.addEventListener("click", Set_modeLR_LC4);
-function Set_modeLR_LC4() {
-  Set_modeLR_LC();
-  title_dataStatus_Set.textContent = "LC4_本地/遠端模式";
-  valNow_dataStatus_Set = document.querySelector(".infoLC #modeLR_LC4");
-}
+setBut_modeLR_LC4.addEventListener("click", function () { Set_modeLR_LC(4); });

@@ -80,10 +80,49 @@ function closePopup_epo_No() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+async function get_dSS_Data_WhenClicking(dataName, numInDataGroup) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/get_dSS_Data_WhenClicking", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ dataName, numInDataGroup }),
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+async function set_dSS_Data(setValue) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/set_dSS_Data", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ setValue }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 async function getData(url) { //跟後端拿資料
     const response = await fetch(url);
     const values = await response.json();
-    return values;}
+    return values;
+}
 
 async function dataPost(url, input1, input2, input3, input4) {//提交資料給後端並更新表格
 
@@ -92,13 +131,13 @@ async function dataPost(url, input1, input2, input3, input4) {//提交資料給�
     $.ajax({
         type: 'POST',
         url: url,
-        data: {input1, input2, input3, input4},
-        success: function(){
-        console.log("POST完成")
-        updateTable()//更新表格
+        data: { input1, input2, input3, input4 },
+        success: function () {
+            console.log("POST完成")
+            updateTable()//更新表格
         },
         error: function (error) {
-        reject(error);
+            reject(error);
         },
     });
 
@@ -114,13 +153,13 @@ function createIndex(tableID) {//幫TABLE產出新的index
     });
 }
 //增加CLASS
-function classAdd(element, className){
-	$(element).addClass(className);
+function classAdd(element, className) {
+    $(element).addClass(className);
 }
 
 //刪除CLASS
-function classRemove(element, className){
-	$(element).removeClass(className);
+function classRemove(element, className) {
+    $(element).removeClass(className);
 }
 
 

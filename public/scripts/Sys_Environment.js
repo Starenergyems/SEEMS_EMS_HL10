@@ -19,52 +19,97 @@ function clearCheckedRadioOption() {
   radioOption2.checked = false;
 }
 
-function Set_acuOnOff() {
+// function Set_acuOnOff() {
+//   window_dataStatus_Set.classList.add("appear");
+//   clearCheckedRadioOption();
+//   option1_dataStatus_Set.textContent = "啟動";
+//   option2_dataStatus_Set.textContent = "停止";
+//   alertInfo_dataStatus_Set.textContent = "";
+//   option1_Description = "啟動";
+//   option2_Description = "停止";
+// }
+
+let qSelectAll_option = document.querySelectorAll(".dataStatus_Set .option");
+let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set .radioOpt");
+let i;
+
+async function Set_acuOnOff(numInDataGroup) {
+  dataName = "setBut_acuOnOff";
+
+  title_dataStatus_Set.textContent = `LC${numInDataGroup}_空調啟停設定`;
   window_dataStatus_Set.classList.add("appear");
   clearCheckedRadioOption();
-  option1_dataStatus_Set.textContent = "啟動";
-  option2_dataStatus_Set.textContent = "停止";
+
+  let getData = await get_dSS_Data_WhenClicking(dataName, numInDataGroup);
+  console.log(getData);
+
+  for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+    qSelectAll_option[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+    qSelectAll_radioOpt[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
+
+    if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+      qSelectAll_radioOpt[i].checked = true;
+    }
+  }
+
   alertInfo_dataStatus_Set.textContent = "";
-  option1_Description = "啟動";
-  option2_Description = "停止";
 }
+
+// async function get_dSS_Data_WhenClicking(dataName, numInDataGroup) {
+//   try {
+//     console.log("嘗試向後端發出請求");
+//     const response = await fetch("/get_dSS_Data_WhenClicking", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ dataName, numInDataGroup }),
+//     });
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
+
+// async function set_dSS_Data(setValue) {
+//   try {
+//     console.log("嘗試向後端發出請求");
+//     const response = await fetch("/set_dSS_Data", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ setValue }),
+//     });
+
+//     const data = await response.json();
+//     console.log(data);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
 
 const setBut_acuOnOff_1 = document.querySelector(".environSC #setBut_acuOnOff_1");
-setBut_acuOnOff_1.addEventListener("click", Set_acuOnOff_1);
-function Set_acuOnOff_1() {
-  Set_acuOnOff();
-  title_dataStatus_Set.textContent = "LC1_空調啟停設定";
-  valNow_dataStatus_Set = document.querySelector(".environSC #acuOnOff_1");
-  // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
-  getDataForacuOnOff(1);
-}
+setBut_acuOnOff_1.addEventListener("click", function () { Set_acuOnOff(1); });
+// setBut_acuOnOff_1.addEventListener("click", Set_acuOnOff_1);
+// function Set_acuOnOff_1() {
+//   Set_acuOnOff();
+//   title_dataStatus_Set.textContent = "LC1_空調啟停設定";
+//   valNow_dataStatus_Set = document.querySelector(".environSC #acuOnOff_1");
+//   // valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
+//   getDataForacuOnOff(1);
+// }
 
 const setBut_acuOnOff_2 = document.querySelector(".environSC #setBut_acuOnOff_2");
-setBut_acuOnOff_2.addEventListener("click", Set_acuOnOff_2);
-function Set_acuOnOff_2() {
-  Set_acuOnOff();
-  title_dataStatus_Set.textContent = "LC2_空調啟停設定";
-  valNow_dataStatus_Set = document.querySelector(".environSC #acuOnOff_2");
-  getDataForacuOnOff(2);
-}
+setBut_acuOnOff_2.addEventListener("click", function () { Set_acuOnOff(2); });
 
 const setBut_acuOnOff_3 = document.querySelector(".environSC #setBut_acuOnOff_3");
-setBut_acuOnOff_3.addEventListener("click", Set_acuOnOff_3);
-function Set_acuOnOff_3() {
-  Set_acuOnOff();
-  title_dataStatus_Set.textContent = "LC3_空調啟停設定";
-  valNow_dataStatus_Set = document.querySelector(".environSC #acuOnOff_3");
-  getDataForacuOnOff(3);
-}
+setBut_acuOnOff_3.addEventListener("click", function () { Set_acuOnOff(3); });
 
 const setBut_acuOnOff_4 = document.querySelector(".environSC #setBut_acuOnOff_4");
-setBut_acuOnOff_4.addEventListener("click", Set_acuOnOff_4);
-function Set_acuOnOff_4() {
-  Set_acuOnOff();
-  title_dataStatus_Set.textContent = "LC4_空調啟停設定";
-  valNow_dataStatus_Set = document.querySelector(".environSC #acuOnOff_4");
-  getDataForacuOnOff(4);
-}
+setBut_acuOnOff_4.addEventListener("click", function () { Set_acuOnOff(4); });
 
 const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
 closeWB_Yes_dSS.addEventListener("click", closePopup_dSS_Yes);
@@ -72,13 +117,7 @@ function closePopup_dSS_Yes() {
   if (radioOption1.checked === true || radioOption2.checked === true) {
     optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set [name=dataStatus]:checked");
 
-    if (optionChecked_dataStatus_Set.value === "1") {
-      valNow_dataStatus_Set.textContent = option1_Description;
-      // valLightNow_dataStatus_Set.classList.add("setToClose");
-    } else if (optionChecked_dataStatus_Set.value === "2") {
-      valNow_dataStatus_Set.textContent = option2_Description;
-      // valLightNow_dataStatus_Set.classList.remove("setToClose");
-    }
+    set_dSS_Data(optionChecked_dataStatus_Set.value);
 
     optionChecked_dataStatus_Set.checked = false;
   }
@@ -313,108 +352,7 @@ OpenEnvironAlm_4_1.addEventListener("click", function () {
 });
 
 /////////////////////////////////////////////////////////////////////////
-//rEnvironment.js operateinfo/battery "空調啟停"SET按鈕 把數值帶入打勾
-//blockId 會直接給lc是幾
-async function getDataForacuOnOff(blockId) {
-  try {
-    console.log("空調啟停 把數值帶入打勾 嘗試向後端發出請求");
-    //const selectedValue = $('input[name="dataStatus"]:checked').val();
-    const response = await fetch("/getDataForacuOnOff", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ blockId }),
-    });
 
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
-
-document
-  .getElementById("closeWB_Yes")
-  .addEventListener("click", sendDataToBackend);
-
-//前端按下確認時觸發
-async function sendDataToBackend() {
-  const selectedValue = $('input[name="dataStatus"]:checked').val();
-  console.log("selectedValue:" + selectedValue);
-  //const title = document.querySelector(".titlePUW");
-  try {
-    console.log("嘗試向後端發出請求");
-    //ejs回傳id
-    const lcnum = $(".dataStatus_Set .titlePUW").text();
-    console.log("lcnum:" + lcnum);
-
-    const response = await fetch("/envbackendEndpoint", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ selectedValue, lcnum }),
-    }).catch((error) => console.error("Error in fetch:", error));
-
-    const data = await response.json();
-    console.log(data);
-    //displayData(data);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
-
-/////////////////////////////////////////////////////////////////////////
-//rEnvironment.js operateinfo/battery "空調制熱溫度 "SET按鈕 把數值帶入打勾
-//blockId 會直接給lc是幾
-// async function getacuHeat(blockId) {
-//   try {
-//     console.log("空調制熱溫度把數值帶入 嘗試向後端發出請求");
-//     //const selectedValue = $('input[name="dataStatus"]:checked').val();
-//     const response = await fetch("/getDataForacuHeat", {
-//       method: "post",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ blockId }),
-//     });
-
-//     const data = await response.json();
-//     console.log(data);
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// }
-
-//前端按下確認時觸發
-// async function sendacuHeat() {
-//   const selectedValue = $('input[name="dataStatus"]:checked').val();
-//   console.log("selectedValue:" + selectedValue);
-//   //const title = document.querySelector(".titlePUW");
-//   try {
-//     console.log("空調制熱溫度新數值 嘗試向後端發出請求");
-//     //ejs回傳id
-//     const lcnum = $(".dataStatus_Set .titlePUW").text();
-//     console.log("lcnum:" + lcnum);
-
-//     const response = await fetch("/acuHeatbackendEndpoint", {
-//       method: "post",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ selectedValue, lcnum }),
-//     }).catch((error) => console.error("Error in fetch:", error));
-
-//     const data = await response.json();
-//     console.log(data);
-//     //displayData(data);
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// }
-
-/////////////////////////////////////////////////////////////////////////
 //環境頁面下方彈出視窗 獲取該區塊id
 async function getDataenv(blockId) {
   try {

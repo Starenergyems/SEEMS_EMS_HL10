@@ -443,6 +443,156 @@ router.post("/set_dVS_Data", async (req, res) => {
   }
 });
 
+
+let dSS_Data_dataName;
+let dSS_Data_numInDataGroup;
+let dSS_Data_bitNum;
+let dSS_Data_status_MT;
+
+router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
+  try {
+    console.log("接收到前端請求");
+    dSS_Data_dataName = req.body.dataName;
+    dSS_Data_numInDataGroup = req.body.numInDataGroup;
+
+    const data_MT = {
+      setBut_modeAP: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407010, bitNum: 999, status_MT: { " 0": "主動", " 1": "被動" } },
+      setBut_modeQctrl: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407011, bitNum: 999, status_MT: { " 162": "功率(kVar)模式", " 161": "功因模式", " 85": "關閉" } },
+      setBut_standbyCmd: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407012, bitNum: 999, status_MT: { " 170": "待機", " 85": "停止待機" } },
+      setBut_modeLR: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407013, bitNum: 999, status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" } },
+      setBut_acuOnOff: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407018, bitNum: 999, status_MT: { " 1": "啟動", " 0": "停止" } },
+      // 
+      // 
+    };
+
+    const data_AfM = data_MT[dSS_Data_dataName];
+    dSS_Data_bitNum = data_AfM.bitNum;
+    dSS_Data_status_MT = data_AfM.status_MT;
+    // console.log(data_AfM.dbName_gD);
+
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    const allData = await Promise.all(dataPromises);
+
+    const getData_raw = allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][data_AfM.dataID];
+
+    let getData;
+    if (data_AfM.bitNum === 999) {
+      getData = `${getData_raw}`;
+    } else {
+      getData = Convert_UInt_to_revBitString(getData_raw, 32)[data_AfM.bitNum];
+    }
+
+    const response = { originData: getData, status_MT: data_AfM.status_MT };
+
+    res.json(response);
+    // if (!lcData) {
+    //   throw new Error("No data found");
+    // }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.post("/set_dSS_Data", async (req, res) => {
+  try {
+    const setValue_raw = req.body.setValue;
+
+    const data_MT = {
+      setBut_modeAP: {
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407010",
+        category: "設備控制", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`
+      },
+      setBut_modeQctrl: {
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407011",
+        category: "設備控制9101", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`
+      },
+      setBut_standbyCmd: {
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407012",
+        category: "設備控制2531", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`
+      },
+      setBut_modeLR: {
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407013",
+        category: "設備控制4587", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`
+      },
+      setBut_acuOnOff: {
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407018",
+        category: "設備控制7096", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`
+      },
+      // 
+      // 
+    };
+
+    const data_AfM = data_MT[dSS_Data_dataName];
+
+    const dataPromises = databases.map(async (dbName) => {
+      const nanoDb = createNanoInstance(dbName);
+      return getLatestDocument(nanoDb);
+    });
+
+    const allData = await Promise.all(dataPromises);
+    const dwctrlData = allData[4];
+    const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+    let setValue;
+    if (dSS_Data_bitNum === 999) {
+      setValue = Number(setValue_raw);
+    } else {
+      let setValue_old = Convert_UInt_to_BitString(newdwctrlData[data_AfM.dicName][data_AfM.dataID], 32).bitString;
+      console.log(setValue_old);
+      setValue_old = setValue_old.slice(0, 31 - dSS_Data_bitNum) + setValue_raw.slice(1) + setValue_old.slice(31 - dSS_Data_bitNum + 1);
+      console.log(setValue_old);
+      setValue = parseInt(setValue_old, 2);
+    }
+
+    console.log(setValue);
+    newdwctrlData[data_AfM.dicName][data_AfM.dataID] = setValue;
+
+    //const accountDb = createNanoInstance("account");
+    //存入資料庫的時區問題
+    const currentDate = new Date();
+    const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
+    const localTime = new Date(currentDate - timezoneOffset);
+    const isoString = localTime.toISOString().replace("Z", "+08:00");
+
+    // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+    newdwctrlData.time = isoString;
+    delete newdwctrlData._id;
+    delete newdwctrlData._rev;
+    await nanoDb.use("dwctrl").insert(newdwctrlData);       // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+
+    //log紀錄
+    const logDb = createNanoInstance("log");
+
+    const doc = {
+      tag: `${data_AfM.dicName}.${data_AfM.dataID}`,
+      time: isoString,
+      category: data_AfM.category,
+      device: data_AfM.device,
+      username: "SE0008",
+      content: `將${data_AfM.log_dataName}設為${dSS_Data_status_MT[setValue_raw]}`,
+    };
+    console.log(doc);
+
+    // if (selectedValue != 0) {
+    const result = await logDb.insert(doc);   // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+    //   //console.log(result);
+    // }
+
+    //console.log("Document added to database. ID: " + result.id);
+    let response = { ststus: ok, alarmCMU_rawD: 314159, faultCMU_rawD: 6626, DL_of_statusHW: 1602 };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
 //************************************************************************************************************** */
 //點位顏色範例
 // router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
