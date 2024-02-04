@@ -310,6 +310,11 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
 
 let dVS_Data_dataName;
 let dVS_Data_numInDataGroup;
+let dVS_Data_scale;
+let dVS_Data_decPlace;
+let dVS_Data_minLimit;
+let dVS_Data_maxLimit;
+let dVS_Data_unit;
 
 router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   try {
@@ -327,6 +332,11 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
     };
 
     const data_AfM = data_MT[dVS_Data_dataName];
+    dVS_Data_scale = data_AfM.scale;
+    dVS_Data_decPlace = data_AfM.decPlace;
+    dVS_Data_minLimit = data_AfM.minLimit;
+    dVS_Data_maxLimit = data_AfM.maxLimit;
+    dVS_Data_unit = data_AfM.unit;
     console.log(data_AfM.dbName_gD);
 
     const dataPromises = databases.map(async (dbName) => {
@@ -362,15 +372,15 @@ router.post("/set_dVS_Data", async (req, res) => {
     if (setValue_raw !== "" && !Number.isNaN(Number(setValue_raw))) {
       const data_MT = {
         setBut_P_LC: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407078", scale: 1, decPlace: 0, minLimit: -5000, maxLimit: 5000, unit: "kW",
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407078",
           category: "設備控制", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`
         },
         setBut_acuHeatT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407016", scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C",
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407016",
           category: "設備控制123", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`
         },
         setBut_acuCoolT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407017", scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C",
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407017",
           category: "設備控制456", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`
         },
         // 
@@ -380,10 +390,10 @@ router.post("/set_dVS_Data", async (req, res) => {
       };
 
       const data_AfM = data_MT[dVS_Data_dataName];
-      const setValue = Math.round(Number(setValue_raw) / data_AfM.scale);
+      const setValue = Math.round(Number(setValue_raw) / dVS_Data_scale);
       console.log(setValue);
 
-      if (setValue >= data_AfM.minLimit && setValue <= data_AfM.maxLimit) {
+      if (setValue >= dVS_Data_minLimit && setValue <= dVS_Data_maxLimit) {
         const dataPromises = databases.map(async (dbName) => {
           const nanoDb = createNanoInstance(dbName);
           return getLatestDocument(nanoDb);
@@ -417,7 +427,7 @@ router.post("/set_dVS_Data", async (req, res) => {
           category: data_AfM.category,
           device: data_AfM.device,
           username: "SE0008",
-          content: `將${data_AfM.log_dataName}設為${(Math.round(Number(setValue_raw) / data_AfM.scale) * data_AfM.scale).toFixed(data_AfM.decPlace)} ${data_AfM.unit}`,
+          content: `將${data_AfM.log_dataName}設為${(Math.round(Number(setValue_raw) / dVS_Data_scale) * dVS_Data_scale).toFixed(dVS_Data_decPlace)} ${dVS_Data_unit}`,
         };
         console.log(doc);
 

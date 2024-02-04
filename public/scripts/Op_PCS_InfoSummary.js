@@ -92,41 +92,41 @@ async function Set_P_LC(numInDataGroup) {
   val_new_dataValue_Set.focus();
 }
 
-async function get_dVS_Data_WhenClicking(dataName, numInDataGroup) {
-  try {
-    console.log("嘗試向後端發出請求");
-    const response = await fetch("/get_dVS_Data_WhenClicking", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ dataName, numInDataGroup }),
-    });
+// async function get_dVS_Data_WhenClicking(dataName, numInDataGroup) {
+//   try {
+//     console.log("嘗試向後端發出請求");
+//     const response = await fetch("/get_dVS_Data_WhenClicking", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ dataName, numInDataGroup }),
+//     });
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
 
-async function set_dVS_Data(setValue) {
-  try {
-    console.log("嘗試向後端發出請求");
-    const response = await fetch("/set_dVS_Data", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ setValue }),
-    });
+// async function set_dVS_Data(setValue) {
+//   try {
+//     console.log("嘗試向後端發出請求");
+//     const response = await fetch("/set_dVS_Data", {
+//       method: "post",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ setValue }),
+//     });
 
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
+//     const data = await response.json();
+//     console.log(data);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
 
 const setBut_P_LC1 = document.querySelector(".infoLC #setBut_P_LC1");
 setBut_P_LC1.addEventListener("click", function () { Set_P_LC(1); });

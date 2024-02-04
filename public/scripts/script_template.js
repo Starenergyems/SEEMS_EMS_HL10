@@ -118,6 +118,44 @@ async function set_dSS_Data(setValue) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+async function get_dVS_Data_WhenClicking(dataName, numInDataGroup) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/get_dVS_Data_WhenClicking", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ dataName, numInDataGroup }),
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+async function set_dVS_Data(setValue) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/set_dVS_Data", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ setValue }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 async function getData(url) { //跟後端拿資料
     const response = await fetch(url);
     const values = await response.json();
