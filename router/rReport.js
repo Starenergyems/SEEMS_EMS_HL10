@@ -1,10 +1,7 @@
 const port = 3200;
 const express = require("express");
-//const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
-//const port = 3000;
-//const Dc = require("../models/dc_schema");  再建立一個所有使用者的/且定義門禁的
 const router = express.Router();
 const app = express();
 const cors = require("cors");
@@ -23,6 +20,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
+
+const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+
+//建立index
+const indexDef = {
+  index: { fields: ["time"] }, //基於time作為查詢條件
+  name: "time_index",
+};
 
 //報表
 app.get("/report", (req, res) => {
@@ -306,6 +312,111 @@ cron.schedule("0 1 * * *", async () => {
     console.error("Cron job: Error generating Excel file:", error);
   }
 });
+
+async function getDayData() {
+  //讀取DB資料+計算執行率+換算服務品質指標
+  const mangoQuery = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+
+  const dcDb = createNanoInstance("dc_rf10");
+  await dcDb.createIndex(indexDef);
+  // const response = dcDb.createIndex(indexDef);
+  // console.log(response);
+
+  dcDb.find(mangoQuery, (err, body) => {
+    if (err) {
+      // 如果發生錯誤，印出錯誤信息並回應500 Internal Server Error
+      console.error("Error:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    const db_array = [];
+    // 遍歷查詢結果的每一個文檔
+    for (const item of body.docs) {
+      // 刪除文檔中的'_rev'
+      ["_rev"].forEach((key) => {
+        delete item[key];
+      });
+
+      item["index"] = "";
+      db_array.push(item);
+    }
+    console.log(db_array);
+    // 將處理過的文檔陣列回應給前端
+    res.send(db_array);
+  });
+  return [
+    //回傳執行率 一天24小時
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+    [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  ];
+}
+
+function getMonthData() {
+  //讀取DB資料+計算執行率+換算服務品質指標
+  return [
+    //回傳執行率 月報 共12筆
+    [611, 222, 33, 44, 55, 366, 177],
+    [711, 22, 33, 44, 55, 266, 277],
+    [911, 22, 33, 44, 55, 166, 177],
+    [600, 20, 30, 40, 50, 20, 100],
+    [511, 222, 33, 44, 55, 266, 277],
+    [811, 222, 33, 44, 55, 166, 177],
+    [911, 22, 33, 44, 55, 66, 177],
+    [800, 200, 30, 40, 50, 60, 300],
+    [711, 222, 33, 44, 55, 66, 177],
+    [711, 22, 33, 44, 55, 66, 177],
+    [711, 222, 33, 44, 55, 26, 177],
+    [800, 20, 30, 40, 50, 20, 100],
+  ];
+}
+
+function getYearData() {
+  //讀取DB資料+計算執行率+換算服務品質指標
+  return [
+    //回傳執行率 年報1個月1筆 共12筆
+    [611, 222, 33, 44, 55, 366, 177],
+    [711, 22, 33, 44, 55, 266, 277],
+    [911, 22, 33, 44, 55, 166, 177],
+    [600, 20, 30, 40, 50, 20, 100],
+    [511, 222, 33, 44, 55, 266, 277],
+    [811, 222, 33, 44, 55, 166, 177],
+    [911, 22, 33, 44, 55, 66, 177],
+    [800, 200, 30, 40, 50, 60, 300],
+    [711, 222, 33, 44, 55, 66, 177],
+    [711, 22, 33, 44, 55, 66, 177],
+    [711, 222, 33, 44, 55, 26, 177],
+    [800, 20, 30, 40, 50, 20, 100],
+  ];
+}
 
 module.exports = router;
 
