@@ -10,7 +10,7 @@ const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
-const nanoDb = nano(couchDBUrl);
+//const nanoDb = nano(couchDBUrl);
 
 //set
 app.set("view engine", "ejs");
@@ -108,7 +108,10 @@ app.get("/event/operation/edit", async (req, res) => {
     sort: [{ time: "desc" }],
   };
   const logDb = createNanoInstance("log");
+  const dcDb = createNanoInstance("dc_rf10");
   await logDb.createIndex(indexDef);
+  await dcDb.createIndex(indexDef);
+
   // 使用logDb對CouchDB執行Mango查詢
   logDb.find(mangoQuery, (err, body) => {
     if (err) {

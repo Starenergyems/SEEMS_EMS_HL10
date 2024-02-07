@@ -288,6 +288,7 @@ var permission = "manager";
 $(document).ready(function () {
 
   console.log("start reading js");
+  classAdd('#nB_Report', 'default_nB')
   updateTable();
   // 彈出視窗確定全選
   $("#chb_AckAll").off("change").on("change", function () {

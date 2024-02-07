@@ -1,6 +1,6 @@
 const { timeLog } = require("console");
 const readline = require("readline");
-
+//-------------------------------------------------------------------------------------------------
 // 定義計算平均值的函數
 function calculateAverage(...numbers) {
   if (numbers.length === 0) {
@@ -19,13 +19,8 @@ function calculateAdd(...numbers) {
   return sum;
 }
 
-// const result1 = calculateAverage(2, 4, 6, 8);
-// const result2 = calculateAverage(10, 20, 30, 40, 50);
+//-------------------------------------------------------------------------------------------------
 
-// console.log('平均值1:', result1); // 預期輸出: 5
-// console.log('平均值2:', result2); // 預期輸出: 30
-
-//chargeStatus
 function scaleProcess(decimalValue, scale, point) {
   // 檢查輸入是否合法
   if (
@@ -174,10 +169,6 @@ function mapgridStatus(decimalValue) {
   const binaryString = decimalValue.toString(2);
 
   // 對照表
-  const modeMapping = {
-    0: "Off - grid",
-    1: "On - grid",
-  };
 
   if (decimalValue >= 2) {
     return "Error";
@@ -434,6 +425,38 @@ function countOnes(value) {
   return count;
 }
 
+function mapL_M_systemMode(var1, var2, var3, var4) {
+  // 檢查第四個位元的值
+  const bit4_var1 = (var1 & 8) >> 3;
+  const bit4_var2 = (var2 & 8) >> 3;
+  const bit4_var3 = (var3 & 8) >> 3;
+  const bit4_var4 = (var4 & 8) >> 3;
+
+  // 判斷是否都是1，都是0，或者部分為1部分為0
+  if (
+    bit4_var1 === 1 &&
+    bit4_var2 === 1 &&
+    bit4_var3 === 1 &&
+    bit4_var4 === 105032
+  ) {
+    return "正常";
+  } else if (
+    bit4_var1 === 0 &&
+    bit4_var2 === 0 &&
+    bit4_var3 === 0 &&
+    bit4_var4 === 0
+  ) {
+    return "停機";
+  } else {
+    return "部分";
+  }
+}
+//計算總警告數量
+function counttotalWarningNum() {}
+//電表總錯誤數量
+function countWarningNum_Meter() {}
+//console.log(mapL_M_systemMode(1, 15, 15, 15)); // Output: 正常
+
 // let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
 // for (i = 0; i < cd_BitString.length; i++) {
 //   console.log(cd_BitString[i]);
@@ -494,7 +517,10 @@ function countOnes(value) {
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
+//-------------------------------------------------------------------------------------------------
+
 module.exports = {
+  mapL_M_systemMode,
   calculateAverage,
   mapchargeStatus,
   scaleProcess,
@@ -520,6 +546,8 @@ module.exports = {
   checkValues,
   workStatuschange,
   calculateAdd,
+  counttotalWarningNum,
+  countWarningNum_Meter,
 };
 // //***************************************************************************** */
 // //轉換存陣列
@@ -561,138 +589,3 @@ module.exports = {
 // // };
 
 // //********************************************************************************************************** */
-// //********************************************************************************************************** */
-// function BMSmapNumberToStatus(number) {
-//   if (number >= 2) {
-//     switch (number) {
-//       case 0:
-//         return "充電";
-//       case 1:
-//         return "放電";
-//       case 2:
-//         return "停止";
-//       default:
-//         return "N/A";
-//     }
-//   } else {
-//     return "N/A";
-//   }
-// }
-
-// module.exports = { BMSmapNumberToStatus };
-
-// //引用方法
-// // const express = require('express');
-// // const router = express.Router();
-
-// // // 引用你的 translateStatus 函數
-// // const { translateStatus } = require('./path-to-your-translateStatus-file');
-
-// // // 假設你有一個路由處理程序
-// // router.get('/your/route', (req, res) => {
-// //   // 假設你從數據庫中讀取到了一個數字狀態
-// //   const statusFromDatabase = 1;
-
-// //   // 使用 translateStatus 將數字狀態轉換為文字描述
-// //   const translatedStatus = translateStatus(statusFromDatabase);
-
-// //   // 將結果傳遞給 EJS 模板
-// //   res.render('your_template', { translatedStatus });
-// // });
-
-// // module.exports = router;
-
-// //計算
-// // fun.js
-
-// const sumNumbers = (num1, num2) => {
-//   // 在這裡執行你的判斷和計算邏輯
-//   let sum = num1 + num2;
-
-//   // 四捨五入到小數點第二位
-//   sum = Math.round(sum * 100) / 100;
-//   return sum.toFixed(2);
-// };
-
-// // 將 sumNumbers 函式導出，以便其他檔案可以使用
-// module.exports = {
-//   sumNumbers,
-// };
-// //引用方法
-// // app.js
-
-// const express = require("express");
-// const app = express();
-// const fun = require("./fun"); // 引入 fun.js
-
-// // 使用 sumNumbers 函式
-// app.get("/calculate", (req, res) => {
-//   // 假設你有數字 num1 和 num2
-//   const num1 = 10;
-//   const num2 = 20;
-
-//   // 使用 sumNumbers 函式進行計算
-//   const result = fun.sumNumbers(num1, num2);
-
-//   // 將結果返回或者使用它進一步的處理
-//   res.send(`Result: ${result}`);
-// });
-
-// // 十進制轉二進制
-// const decToBin32 = (decimal) => {
-//   if (isNaN(decimal)) {
-//     throw new Error("Invalid input. Please provide a valid decimal number.");
-//   }
-//   return ("00000000000000000000000000000000" + decimal.toString(2)).slice(-32);
-// };
-// //-------------------------------------------------------------------------------------------------
-// //計算有幾個警告
-// const decToBincount = (decimal) => {
-//   if (isNaN(decimal)) {
-//     throw new Error("Invalid input. Please provide a valid decimal number.");
-//   }
-//   const binaryString = (
-//     "00000000000000000000000000000000" + decimal.toString(2)
-//   ).slice(-32);
-//   const countOnes = binaryString.split("1").length - 1;
-//   return { binaryString, countOnes };
-// };
-
-// //-------------------------------------------------------------------------------------------------
-
-// //-------------------------------------------------------------------------------------------------
-// //時間計算
-
-// //-------------------------------------------------------------------------------------------------
-// //測試用
-// // module.exports = {
-// //   decToBin32,
-// //   decimalToBinaryArray,
-// // };
-
-// const rl = readline.createInterface({
-//   input: process.stdin,
-//   output: process.stdout,
-// });
-
-// //測試
-// rl.question("Enter a decimal value: ", (decimalValue) => {
-//   try {
-//     const binaryResult = decimalToBinaryArray(parseInt(decimalValue));
-//     console.log("Binary Result:", binaryResult);
-
-//     rl.question("Enter the index to retrieve (0-31): ", (bitIndex) => {
-//       const index = parseInt(bitIndex);
-//       if (isNaN(index) || index < 0 || index >= binaryResult.length) {
-//         console.error("Invalid index. Please provide a valid index.");
-//       } else {
-//         console.log(`Binary [${index}]: ${binaryResult[index]}`);
-//       }
-
-//       rl.close();
-//     });
-//   } catch (error) {
-//     console.error("Error:", error.message);
-//     rl.close();
-//   }
-// });

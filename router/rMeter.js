@@ -23,9 +23,100 @@ router.get("/operateinfo", (req, res) => {
   res.redirect("/operateinfo/singlelinediagram");
 });
 
-router.get("/operateinfo/singlelinediagram", (req, res) => {
+router.get("/operateinfo/singlelinediagram", async (req, res) => {
   // num與fun
-  res.render("Op_Meter_SLD", { permission: "manager" });
+  const mangoQuery = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+  rf10Db.find(mangoQuery, async (err, body) => {
+    try {
+      const indexDef = {
+        index: { fields: ["time"] },
+        name: "time_index",
+      };
+
+      await rf10Db.createIndex(indexDef);
+
+      const mangoQuery = {
+        selector: {
+          time: { $exists: true },
+        },
+        sort: [{ time: "desc" }],
+        limit: 1,
+      };
+
+      rf10Db.find(mangoQuery, async (err, body) => {
+        if (err) {
+          console.error("Error:", err);
+          res.status(500).send("Internal Server Error");
+          return;
+        }
+
+        const other10Data = body.docs[0]; // 取得數據的第一個元素
+
+        res.render("Op_Meter_SLD", {
+          //layout: false,
+          permission: "manager",
+          MVCB: other10Data.VCBStatus1[408205] || 0,
+          VCB_1: other10Data.VCBStatus2[408205] || 0,
+          VCB_2: other10Data.VCBStatus3[408205] || 0,
+          VCB_3: other10Data.VCBStatus4[408205] || 0,
+          VCB_4: other10Data.VCBStatus5[408205] || 0,
+
+          ACB_1_1: other10Data.ACBStatus1[408206] || 0,
+          ACB_1_2: other10Data.ACBStatus1[408206] || 0,
+          ACB_1_3: other10Data.ACBStatus1[408206] || 0,
+          ACB_2_1: other10Data.ACBStatus2[408206] || 0,
+          ACB_2_2: other10Data.ACBStatus2[408206] || 0,
+          ACB_2_3: other10Data.ACBStatus2[408206] || 0,
+          ACB_3_1: other10Data.ACBStatus3[408206] || 0,
+          ACB_3_2: other10Data.ACBStatus3[408206] || 0,
+          ACB_3_3: other10Data.ACBStatus3[408206] || 0,
+          ACB_4_1: other10Data.ACBStatus4[408206] || 0,
+
+          ACB_1_1v: other10Data.ACBStatus1[408206] || 0,
+          ACB_1_2v: other10Data.ACBStatus1[408206] || 0,
+          ACB_1_3v: other10Data.ACBStatus1[408206] || 0,
+          ACB_2_1v: other10Data.ACBStatus2[408206] || 0,
+          ACB_2_2v: other10Data.ACBStatus2[408206] || 0,
+          ACB_2_3v: other10Data.ACBStatus2[408206] || 0,
+          ACB_3_1v: other10Data.ACBStatus3[408206] || 0,
+          ACB_3_2v: other10Data.ACBStatus3[408206] || 0,
+          ACB_3_3v: other10Data.ACBStatus3[408206] || 0,
+          ACB_4_1v: other10Data.ACBStatus4[408206] || 0,
+
+          //VCB_aux,
+          // Rly_MVCB: scaleProcess(other10Data.RelayMVCB[408181], 0.1, 1) || 0,
+          // Recloser_MVCB:
+          //   scaleProcess(other10Data.Recloser[408210], 0.1, 1) || 0,
+          // Rly_VCB_1: other10Data.RelayVCB1[408203] || 0,
+          // Rly_VCB_2: other10Data.RelayVCB2[408203] || 0,
+          // Rly_VCB_3: other10Data.RelayVCB3[408203] || 0,
+          // Rly_VCB_4: other10Data.RelayVCB4[408203] || 0,
+          // Rly_VCB_aux: other10Data.RelayVCB5[408203] || 0,
+
+          temp_TR1: scaleProcess(other10Data.TR1[408181], 0.1, 1) || 0,
+          temp_TR2: scaleProcess(other10Data.TR2[408181], 0.1, 1) || 0,
+          temp_TR3: scaleProcess(other10Data.TR3[408181], 0.1, 1) || 0,
+          temp_TR4: scaleProcess(other10Data.TR4[408181], 0.1, 1) || 0,
+          temp_TR_aux: scaleProcess(other10Data.TR5[408181], 0.1, 1) || 0,
+
+          // thermoBot_TR1: other10Data.TR3[408181] || 0,
+          // thermoBot_TR2: other10Data.TR3[408181] || 0,
+          // thermoBot_TR3: other10Data.TR3[408181] || 0,
+          // thermoBot_TR4: other10Data.TR3[408181] || 0,
+          // thermoBot_TR_aux: other10Data.TR3[408181] || 0,
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  });
 });
 
 router.get("/operateinfo/mainmeter", async (req, res) => {
@@ -88,7 +179,7 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
           // console.log("轉換後數值", scaledValue);
         }
       );
-
+      //因為都是 Freq  所以直接利用迴圈先跑
       res.render("Op_Meter_MainMeter", {
         volt_ab: data["408001"],
         volt_bc: data["408003"],

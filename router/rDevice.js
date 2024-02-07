@@ -9,7 +9,7 @@ const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
-const nanoDb = nano(couchDBUrl);
+//const nanoDb = nano(couchDBUrl);
 
 //set
 app.set("view engine", "ejs");
@@ -24,12 +24,12 @@ app.use(cors());
 
 const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
 
-app.get("/systeminfo/device", (req, res) => {
+router.get("/systeminfo/device", (req, res) => {
   //以下app要改回router
   res.render("Sys_Device");
 });
 
-app.get("/systeminfo/device/edit", (req, res) => {
+router.get("/systeminfo/device/edit", (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
@@ -67,6 +67,6 @@ app.get("/systeminfo/device/edit", (req, res) => {
 });
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });
