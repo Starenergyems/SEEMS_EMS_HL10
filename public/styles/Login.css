@@ -117,6 +117,7 @@ body {
     line-height: 64px;
     font-weight: bold;
     border-radius: 35px;
+    cursor: pointer;
 }
 
 /* .loginWindow a {

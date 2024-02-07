@@ -90,31 +90,33 @@ const getLatestDocument = async (nanoDb) => {
 // const commuRouter = require("./rCommu");
 // const deviceRouter = require("./rDevice");
 // const environmentRouter = require("./rEnvironment");
-//const alarmRouter = require("./rAlarm");
-//const eventRouter = require("./rEvent");
-//const reportRouter = require("./rReport");
+// const alarmRouter = require("./rAlarm");
+// const eventRouter = require("./rEvent");
+// const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
 // const alarmFunctions = require("./alarmFunctions");
+const login = ("./rLogin.js")
 // 使用驗證
-//app.use(authMiddleware);
+// app.use(authMiddleware);
 
 // 使用這些路由
 // app.use(accountRouter);
 // app.use(modeRouter);
 // app.use(meterRouter);
 // app.use(pcsRouter);
-// //app.use(batteryRouter);
+// app.use(batteryRouter);
 // app.use(commuRouter);
 // app.use(deviceRouter);
 // app.use(environmentRouter);
-//app.use(alarmRouter);
-//app.use(eventRouter);
-//app.use(reportRouter);
+// app.use(alarmRouter);
+// app.use(eventRouter);
+// app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
 // app.use(alarmFunctions);
 // 查看目前連線路徑
+// app.use(login)
 
 //************************************************************* */
 
@@ -208,6 +210,9 @@ app.get("/", (req, res) => {
 
 app.post("/login", async (req, res) => {});
   // When login page submit through backend to db
+  const username = req.body['username']
+  const password = req.body['password']
+  console.log(username, password)
 app.get("/login", (req, res) => {
   res.render("Login", { navbarData: res.locals.navbarData });
 });
