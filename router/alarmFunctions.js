@@ -1129,7 +1129,7 @@ function getLargestKey(obj) {
 }
 
 function mapBitToStatus(rawData, statusDict, error_arr, bit_arr, bit_status) {
-  const bitlength = getLargestKey(statusDict);
+  const bitlength = getLargestKey(statusDict) + 1;
   //console.log(bitlength);
   const rawBitString = rawData.toString(2);
   const bitString_rev = rawBitString
@@ -1700,8 +1700,8 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                 if (element.hasOwnProperty("doc")) {
                   const _id = element.id;
                   let doc = element.doc;
-                  const line = error_result[_id]["line"];
-                  delete error_result[_id]["line"];
+                  // const line = error_result[_id]["line"];
+                  // delete error_result[_id]["line"];
                   if (!doc.recover) {
                     // Set the recover boolean as true and the time to the current time as it is not an error now
                     doc.recover = true;
