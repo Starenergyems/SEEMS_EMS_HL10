@@ -1,4 +1,4 @@
-// const port = 6789;
+const port = 3005;
 
 const express = require("express");
 const methodOverride = require("method-override");
@@ -35,13 +35,15 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-router.use(cors());
-router.use("/public", express.static(path.join(__dirname, "../public")));
-router.use("/operateinfo", express.static(path.join(__dirname, "../public/operateinfo")));
-router.use("/operateinfo/pcs", express.static(path.join(__dirname, "../public/operateinfo/pcs")));
-router.use("/operateinfo/pcs/alarm/:id", express.static(path.join(__dirname, "../public")));
+
+/*以下router要改回app*************************** */
+app.use(cors());
+app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use("/operateinfo", express.static(path.join(__dirname, "../public/operateinfo")));
+app.use("/operateinfo/pcs", express.static(path.join(__dirname, "../public/operateinfo/pcs")));
+app.use("/operateinfo/pcs/alarm/:id", express.static(path.join(__dirname, "../public")));
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-router.use("/operateinfo/pcs/infodetail/:id", express.static(path.join(__dirname, "../public")));
+app.use("/operateinfo/pcs/infodetail/:id", express.static(path.join(__dirname, "../public")));
 
 //************************************************************************************************************************************************ */
 
@@ -92,7 +94,7 @@ const getLatestDocument = async (nanoDb) => {
 };
 
 //pcs主頁
-router.get("/operateinfo/pcs", async (req, res) => {
+app.get("/operateinfo/pcs", async (req, res) => {
   res.render("Op_PCS_InfoSummary", { permission: "manager" });
 });
 //************************************************************************************************************************************************ */
@@ -101,7 +103,125 @@ router.get("/operateinfo/pcs", async (req, res) => {
 const pcsCHGStatus_MT = { 0: "充電", 1: "放電", 2: "非工作狀態" };
 const pcsGridStatus_MT = { 0: "離網", 1: "併網" };
 
-router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
+var pcsDetail_variables;
+var pageNumber;
+
+//PCS
+async function queryPcsDetail(){ 
+  // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+  const dataPromises = databases.map(async (dbName) => {
+    const nanoDb = createNanoInstance(dbName);
+    return getLatestDocument(nanoDb);
+  });
+
+  const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+  const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
+  const subNumber = pageNumber % 2 === 0 ? 2 : 1;
+  const No_of_PCS = `${baseNumber}-${subNumber}`;
+
+  // 根據選擇的集合名稱查詢資料
+  let lcData; // 在 if 區塊外部聲明變數
+
+  if (pageNumber == 1 || pageNumber == 2) {
+    lcData = allData[0];
+  } else if (pageNumber == 3 || pageNumber == 4) {
+    lcData = allData[1];
+  } else if (pageNumber == 5 || pageNumber == 6) {
+    lcData = allData[2];
+  } else if (pageNumber == 7) {
+    lcData = allData[3];
+  } else {
+    throw new Error("Invalid pageNumber");
+  }   
+
+  //let processedPageNumber;
+  if (pageNumber % 2 === 0) {
+    // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    pcsDetail_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_PCS,
+      chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
+      tot_E_chg: scaleProcess(lcData.PCS2[403045], 0.01, 1),
+      tot_E_dcg: scaleProcess(lcData.PCS2[403047], 0.01, 1),
+      max_P_chg: scaleProcess(lcData.PCS2[403066], 0.1, 1),
+      max_P_dcg: scaleProcess(lcData.PCS2[403067], 0.1, 1),
+      max_Q_l: scaleProcess(lcData.PCS2[403068], 0.1, 1),
+      max_Q_c: scaleProcess(lcData.PCS2[403069], 0.1, 1),
+      HB_Counts: lcData.PCS2[403007],
+      leakage_I: scaleProcess(lcData.PCS2[403008], 0.01, 2),
+      gridStatus: mapWordStatus(lcData.PCS2[403054], pcsGridStatus_MT),
+      activePower: scaleProcess(lcData.PCS2[403026], 0.1, 1),
+      reactivePower: scaleProcess(lcData.PCS2[403028], 0.1, 1),
+      powerFactor: scaleProcess(lcData.PCS2[403056], 0.001, 3),
+      voltageRS: scaleProcess(lcData.PCS2[403020], 0.1, 1),
+      voltageST: scaleProcess(lcData.PCS2[403021], 0.1, 1),
+      voltageTR: scaleProcess(lcData.PCS2[403022], 0.1, 1),
+      currentR: scaleProcess(lcData.PCS2[403023], 0.1, 1),
+      currentS: scaleProcess(lcData.PCS2[403024], 0.1, 1),
+      currentT: scaleProcess(lcData.PCS2[403025], 0.1, 1),
+      gridFreq: scaleProcess(lcData.PCS2[403055], 0.01, 2),
+      pElectrodeR: scaleProcess(lcData.PCS2[403030], 0.01, 2),
+      nElectrodeR: scaleProcess(lcData.PCS2[403032], 0.01, 2),
+      DCvoltage: scaleProcess(lcData.PCS2[403017], 0.1, 1),
+      DCcurrent: scaleProcess(lcData.PCS2[403018], 0.1, 1),
+      DCpower: scaleProcess(lcData.PCS2[403019], 0.1, 1),
+      overallFault: lcData.PCS2[403001],
+      overallAlarm: lcData.PCS2[403002],
+      faultStatus: lcData.PCS2[403036] + lcData.PCS2[403038],
+      alarmStatus: lcData.PCS2[403034] + lcData.PCS2[403035],
+      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS2[403058], 16),
+      innerTemp: scaleProcess(lcData.PCS2[403057], 0.1, 1),
+      moduleTemp1: scaleProcess(lcData.PCS2[403014], 0.1, 1),
+      moduleTemp2: scaleProcess(lcData.PCS2[403015], 0.1, 1),
+      moduleTemp3: scaleProcess(lcData.PCS2[403016], 0.1, 1),
+    };
+  } else {
+    // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    pcsDetail_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_PCS,
+      chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
+      tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
+      tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
+      max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
+      max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
+      max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
+      max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
+      HB_Counts: lcData.PCS1[403007],
+      leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
+      gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
+      activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
+      reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
+      powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
+      voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
+      voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
+      voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
+      currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
+      currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
+      currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
+      gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
+      pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
+      nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
+      DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
+      DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
+      DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
+      overallFault: lcData.PCS1[403001],
+      overallAlarm: lcData.PCS1[403002],
+      faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
+      alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
+      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
+      innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
+      moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
+      moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
+      moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
+    };
+  }
+}
+/***************************************************************** */
+
+app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   try {
     //獲取目前切換的頁數
     const pageNumber = parseInt(req.params.pageNumber);
@@ -222,9 +342,23 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
+app.get("/operateinfo/pcs/infodetail/:pageNumber/:data", async (req, res) => {
+  try {
+    //獲取目前切換的頁數
+    pageNumber = parseInt(req.params.pageNumber);
+    await queryPcsDetail();
+    const responseData = pcsDetail_variables;
+    console.log(responseData);
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 //************************************************************************************************************************************************ */
 //alarm換頁
-router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
+app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
     const pageNumber = parseInt(req.params.pageNumber);
@@ -316,7 +450,7 @@ let dVS_Data_minLimit;
 let dVS_Data_maxLimit;
 let dVS_Data_unit;
 
-router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
+app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dVS_Data_dataName = req.body.dataName;
@@ -363,7 +497,7 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-router.post("/set_dVS_Data", async (req, res) => {
+app.post("/set_dVS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -459,7 +593,7 @@ let dSS_Data_numInDataGroup;
 let dSS_Data_bitNum;
 let dSS_Data_status_MT;
 
-router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
+app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dSS_Data_dataName = req.body.dataName;
@@ -508,7 +642,7 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-router.post("/set_dSS_Data", async (req, res) => {
+app.post("/set_dSS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -605,7 +739,7 @@ router.post("/set_dSS_Data", async (req, res) => {
 
 //************************************************************************************************************** */
 //點位顏色範例
-// router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
+// app.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
 //   try {
 //     // 獲取當前連接的所有 collection 名稱
 //     //const collections = mongoose.connection.collections;
@@ -865,6 +999,6 @@ router.post("/set_dSS_Data", async (req, res) => {
 
 module.exports = router;
 
-// app.listen(port, () => {
-//   console.log(`應用程式正在監聽端口 ${port}`);
-// });
+ app.listen(port, () => {
+   console.log(`應用程式正在監聽端口 ${port}`);
+ });

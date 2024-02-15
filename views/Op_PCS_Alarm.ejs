@@ -53,7 +53,7 @@
                 <h2>】</h2>
                 <!-- <a href="/operateinfo/pcs/infodetail" class="infoStatus" id="infoPCS">狀態與數值</a>
                 <a href="#" class="infoStatus" id="statusPCS">故障與告警</a> -->
-                <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>">狀態與數值</a>
+                <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>" class="subTitle_unclick">狀態與數值</a>
                 <a href="/operateinfo/pcs/alarm/<%= pageNumber %>">故障與告警</a>
                 <% if (pageNumber > 1) { %>
                 <a href="/operateinfo/pcs/alarm/<%= pageNumber - 1 %>" class="preNext" id="previousPCS">上一頁</a><% } %>
