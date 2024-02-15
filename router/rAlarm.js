@@ -276,6 +276,9 @@ function alarm_processor_call() {
   .then(() => {
     console.log("All alarm_processor: Suc!");
   })
+  .catch(error => {
+    console.log(error)
+  })
 }
 const interval = 10000; // 1s
 // Make the initial API call
