@@ -1,5 +1,3 @@
-const port = 3001;
-
 // testforalarm.js
 const express = require("express");
 const path = require("path");
@@ -8,13 +6,10 @@ const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-const axios = require("axios");
 const {
   LC_error_result_gen,
   DC_error_result_gen,
   Other_error_result_gen,
-  compare_trigger_alarms,
-  update_trigger_alarms_batch,
   alarm_processor,
 } = require("./alarmFunctions");
 
@@ -24,9 +19,6 @@ app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(cors());
-
-app.use(cors());
-
 //************************************************************* */
 const lc1nanoDb = nano.use("lc1_rf10");
 // console.log(lc1nanoDb["config"]["db"])
@@ -39,7 +31,7 @@ const otherrf01nanoDb = nano.use("other_rf01");
 const otherrf10nanoDb = nano.use("other_rf10");
 const alarmnanoDb = nano.use("alarm");
 const hisalarmnanoDb = nano.use("hisalarm");
-const alarm_test_nanoDb = nano.use("alarm_test");
+// const alarm_test_nanoDb = nano.use("alarm_test");
 
 const indexDef_time = {
   index: { fields: ["time"] },
@@ -53,14 +45,16 @@ const indexDef_time = {
   dcnanoDb,
   gcnanoDb,
   otherrf10nanoDb,
-  alarm_test_nanoDb,
+  // alarm_test_nanoDb,
+  alarmnanoDb,
 ].forEach((element) => element.createIndex(indexDef_time));
 
 const alarmDB_db_name_index = {
   index: { fields: ["db_name", "time", "read", "recover",] },
   name: "alarmDB_db_name_index",
 };
-alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
+// alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
+alarmnanoDb.createIndex(alarmDB_db_name_index);
 
 // alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
 // alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
@@ -102,33 +96,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 
+
+//////////////////////////////////////
 //告警紀錄
-app.get("/alarm", (req, res) => {
+router.get("/alarm", (req, res) => {
   res.render("Alm_RealTime");
 });
 
-// router.get("/alarm/re", async (req, res) => {
-//   try {
-//     // 從資料庫中獲取資料
-//     const sourceData = await SourceData.find();
-//     // 處理資料，這裡假設有一個處理函式 processData
-//     const processedData = processData(sourceData);
-//     // 將處理完的資料儲存到新的collection中
-//     await ProcessedData.create(processedData);
-//     // 回傳處理完的資料給前端
-//     res.json(processedData);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-
-app.get("/alarm/realtime", (req, res) => {
+router.get("/alarm/realtime", (req, res) => {
   // num與fun
   res.render("Alm_RealTime");
 });
 
-app.post("/alarm/realtime/edit", (req, res) => {
+router.post("/alarm/realtime/edit", (req, res) => {
   try {
     const { ID, Checked } = req.body;
     console.log("Received ID:", ID);
@@ -139,9 +119,9 @@ app.post("/alarm/realtime/edit", (req, res) => {
 
     let promise = true;
     if (ID === "all") {
-      promise = alarm_test_nanoDb.list()
+      promise = alarmnanoDb.list()
         .then((body) => {
-          return alarm_test_nanoDb.find({ selector: { read: { $exists: true, $eq: false }, }, limit: body.total_rows })
+          return alarmnanoDb.find({ selector: { read: { $exists: true, $eq: false }, }, limit: body.total_rows })
         })
         .then((resp) => {
           // console.log(resp.docs);
@@ -152,7 +132,7 @@ app.post("/alarm/realtime/edit", (req, res) => {
             }
             return element;
           });
-          return alarm_test_nanoDb.bulk({docs: docs_batch});
+          return alarmnanoDb.bulk({docs: docs_batch});
         })
         .catch(err => {
           if (err.statusCode === 404) {
@@ -164,15 +144,15 @@ app.post("/alarm/realtime/edit", (req, res) => {
           }
         })
     } else {
-      promise = alarm_test_nanoDb.get(ID)
+      promise = alarmnanoDb.get(ID)
         .then((resp) => {
           resp.read = read;
           // console.log(resp);
           if (resp.recover && resp.read) {
-            return alarm_test_nanoDb.destroy(resp._id, resp._rev);
+            return alarmnanoDb.destroy(resp._id, resp._rev);
           } else {
             // console.log(resp);
-            return alarm_test_nanoDb.insert(resp);
+            return alarmnanoDb.insert(resp);
           }
         })
         .catch(err => {
@@ -201,13 +181,13 @@ app.post("/alarm/realtime/edit", (req, res) => {
 });
 
 //傳數值到前端的表格中
-app.get("/alarm/realtime/edit", (req, res) => {
+router.get("/alarm/realtime/edit", (req, res) => {
   Promise.resolve('Init')
     .then(() => {
-      alarm_test_nanoDb.list()
+      alarmnanoDb.list()
         .then((body) => {
           // console.log(body);
-          return alarm_test_nanoDb.find({
+          return alarmnanoDb.find({
             selector: {
               time: { $exists: true },
               $or: [
@@ -247,7 +227,7 @@ app.get("/alarm/realtime/edit", (req, res) => {
   // }
   });
 
-app.get("/alarm/history", (req, res) => {
+router.get("/alarm/history", (req, res) => {
   // num與fun
   res.render("Alm_History");
 });
@@ -261,7 +241,10 @@ function alarm_processor_call() {
     limit: 1,
   };
 
-  const lc_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  const lc1_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+  const lc2_alarm_promise = alarm_processor(lc2nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+  const lc3_alarm_promise = alarm_processor(lc3nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+  const lc4_alarm_promise = alarm_processor(lc4nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
   
   // console.log(lc_alarm_promise)
   // Promise.race([lc_alarm_promise]).then(() => {
@@ -269,10 +252,17 @@ function alarm_processor_call() {
   //   console.log("done");
   //   })
 
-  const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
-  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarm_test_nanoDb, hisalarmnanoDb);
+  const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
   
-  Promise.all([lc_alarm_promise, dc_alarm_promise, other_alarm_promise])
+  Promise.all([
+    lc1_alarm_promise, 
+    lc2_alarm_promise, 
+    lc3_alarm_promise, 
+    lc4_alarm_promise, 
+    dc_alarm_promise, 
+    other_alarm_promise
+  ])
   .then(() => {
     console.log("All alarm_processor: Suc!");
   })
@@ -280,7 +270,7 @@ function alarm_processor_call() {
     console.log(error)
   })
 }
-const interval = 10000; // 1s
+const interval = 1000; // 1s
 // Make the initial API call
 alarm_processor_call();
 // Set up the interval to make the API call regularly
@@ -288,8 +278,8 @@ setInterval(alarm_processor_call, interval);
 
 module.exports = router;
 
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });
 
 //************************************* */

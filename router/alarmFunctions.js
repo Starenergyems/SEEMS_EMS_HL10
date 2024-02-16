@@ -1180,7 +1180,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
     }
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
-        const _id = `${device}:${tag}:${bit_arr[i]}`;
+        const _id = `${db_name}:${device}:${tag}:${bit_arr[i]}`;
         const line = error_table[key_error][tag]["line"];
         error_result[_id] = 
           createErrorRecord(
@@ -1199,7 +1199,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
     };
   } else {
     if (error_type === "int") {
-      const _id = `${device}:${tag}:${value}`;
+      const _id = `${db_name}:${device}:${tag}:${value}`;
       const content = error_table[key_error][tag]["status"][value];
       const line = error_table[key_error][tag]["line"];
       if (content) {
@@ -1225,7 +1225,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
       let content = "";
       if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
       if (valve_status && content) {
-        const _id = `${device}:${tag}:${valve_status}`;
+        const _id = `${db_name}:${device}:${tag}:${valve_status}`;
         const line = error_table[key_error][tag]["line"];
         error_result[_id] = 
           createErrorRecord(
@@ -1244,13 +1244,14 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
   }
 }
 
-function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
+function LC_error_result_gen(item, db_name, error_table=LC_error_table, ) {
   //console.dir(item)
   //console.log(Object.keys(item._doc)) //mongodb obj, data is under the _doc key
   //console.log(Object.keys(error_table))
   const time = current_locale_time();
   const occurrence_time = item.time;
   let error_result = {};
+
   for (let key in item) {
     if (item.hasOwnProperty(key)) {
       key_error = checkPartialMatch(key, Object.keys(error_table));
@@ -1266,7 +1267,10 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
             //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
             let value = item[key][tag];
             let device = `${key}`;
-            LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
+            // console.log(key_error, tag, value, device)
+            if (typeof value !== 'undefined') {
+              LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
+            }
           }
         } else {
           inner_item = item[key];
@@ -1278,7 +1282,9 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table) {
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
               let value = inner_item[inner_key][tag];
               let device = `${key}_${inner_key}`;
-              LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
+              if (typeof value !== 'undefined') {
+                LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
+              }
             }
           }
         }
@@ -1300,7 +1306,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, status)
           const device = `${key}`;
-          const _id = `${device}:${tag}`;
+          const _id = `${db_name}:${device}:${tag}`;
           const content = error_table[tag]["name"];
           const line = error_table[tag]["line"];
           if (value === error_table[tag]["status"]) {
@@ -1352,7 +1358,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
     }
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
-        const _id = `${device}:${tag}:${bit_arr[i]}`;
+        const _id = `${db_name}:${device}:${tag}:${bit_arr[i]}`;
         const line = error_table[tag]["line"];
         error_result[_id] = 
           createErrorRecord(
@@ -1370,7 +1376,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
     };
   } else {
     if (error_type === "int") {
-      const _id = `${device}:${tag}:${value}`;
+      const _id = `${db_name}:${device}:${tag}:${value}`;
       const content = error_table[tag]["status"][value];
       const line = error_table[tag]["line"];
       if (content) {
@@ -1396,7 +1402,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
       let content = "";
       if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
       if (valve_status && content) {
-        const _id = `${device}:${tag}:${valve_status}`;
+        const _id = `${db_name}:${device}:${tag}:${valve_status}`;
         const line = error_table[tag]["line"];
         error_result[_id] = 
           createErrorRecord(
@@ -1727,11 +1733,11 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
 
 function sendLineNotify(error_result_item) {
   const message = `
-    \nLevel: \n  ${error_result_item["level"]} 
-    \nLocation: \n  ${error_result_item["location"]}
-    \nDevice: \n  ${error_result_item["device"]}
-    \nValue: \n  ${error_result_item["value"]}
-    \nWarning: \n  ${error_result_item["content"].replace(/\[|\]/g, "_")}
+    \nLevel:   ${error_result_item["level"]} 
+    \nLocation:   ${error_result_item["location"]}
+    \nDevice:   ${error_result_item["device"]}
+    \nValue:   ${error_result_item["value"]}
+    \nWarning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
   `
   const accessToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
   const request = {
@@ -1808,7 +1814,8 @@ function alarm_processor(original_nanoDB, mangoQuery, error_result_gen_func, ala
         } else if (err.statusCode === 409) {
           reject('Error update conflict alarm_promise:', err.request.data)
         } else {
-          reject('Error checking alarm_promise:', err.request.data);
+          console.log(err);
+          reject('Error checking alarm_promise:', err);
         }
       })
   })
