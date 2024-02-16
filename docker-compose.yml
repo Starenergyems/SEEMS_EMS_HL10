@@ -4,7 +4,7 @@ services:
 
   ems-service:
     # restart: always
-    image: ems-service
+    image: ems-service_v6
     build: 
       context: .
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
     # volumes:
     #   - ./backend/Test:/app
     ports:
-      - "3001:3001"
+      - "3000:3000"
     # environment:
       # - POSTGRES_NAME=postgres
       # - POSTGRES_USER=postgres
