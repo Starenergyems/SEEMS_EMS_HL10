@@ -162,75 +162,8 @@ const LC_System_error_table = {
   402100: { name: "LC_System_Alarm status", status: LC_System_402100, type: "bit", location: "pending", line: true },
 };
 
-const LC_PCS_403001 = {
-  1: "LV room door-opening protection",
-  2: "Local emergency stop",
-  3: "Remote emergency stop",
-  5: "Smoke detection in low pressure room",
-  13: "BMS communication exception",
-  15: "Goose communication exception",
-};
 
-const LC_PCS_403002 = {
-  1: "Heartbeat stopped",
-  2: "Measuring board communication exception",
-  10: "Distribution power supply exception",
-};
-
-const LC_PCS_403004 = {
-  0: "Gas trip",
-  1: "Gas alarm",
-  2: "Oil temperature alarm",
-  3: "Oil temperature trip",
-  4: "Low oil level trip",
-  5: "Low oil level alarm",
-  6: "Oil pressure trip",
-  8: "Medium voltage load switch 1",
-  9: "Medium voltage load switch 2",
-  10: "Medium voltage circuit breaker",
-  11: "Medium voltage isolation switch",
-  13: "High oil level alarm",
-  14: "Winding temperature trip",
-  15: "Winding temperature alarm",
-};
-
-const LC_PCS_403008 = {
-  min: 0,
-  max: 655,
-  scale: 0.01,  
-};
-
-const LC_PCS_403009 = {
-  6: "HV chamber access control",
-  11: "External emergency stop",
-  13: "HV chamber smoke sensor",
-  14: "HV remote control",
-};
-
-const LC_PCS_403011 = {
-  0: "Medium voltage load switch",
-  1: "HV remote control opening",
-  3: "BMS dry node",
-  4: "Source network load fast power dispatch",
-  6: "HV chamber remote control closing",
-  7: "Transformer room access control",
-  8: "Transformer room smoke sensor",
-  9: "UPS fault alarm",
-  10: "Grid node",
-  11: "Medium voltage grounding switch",
-  12: "Medium voltage grounding switch 1",
-  13: "Medium voltage grounding switch 2",
-  14: "Medium voltage grounding switch 3",
-  15: "High oil level trip",
-  16: "BMS dry node 1",
-  17: "BMS dry node 2",
-  18: "Load switch T-A",
-  19: "Load switch T-B",
-  20: "Load switch T-AB",
-  21: "Load switch A-B",
-};
-
-const LC_PCS_403034 = {
+const LC_PCS_403063 = {
   0: "Temperature exception alarm",
   1: "Low insulation impedance alarm",
   2: "GFRT running",
@@ -244,37 +177,7 @@ const LC_PCS_403034 = {
   13: "Fan 1 exception",
 };
 
-const LC_PCS_403035 = {
-  0: "Branch board communication exception",
-  1: "AC switch exception",
-  2: "Fan 2 exception",
-  3: "AC main contactor contact exception",
-};
-
-const LC_PCS_403036 = {
-  0: "DC under voltage",
-  1: "DC over voltage",
-  2: "AC under voltage",
-  3: "AC over voltage",
-  4: "AC under frequency",
-  5: "AC over frequency",
-  6: "AC contactor fault",
-  7: "Island protection",
-  9: "Module protection",
-  10: "Module over temperature",
-  11: "Reactor over temperature",
-  12: "Transformer over temperature",
-  13: "Leakage current protection",
-  15: "Overload protection",
-  17: "Fan 1 fault",
-  18: "DC fuse fault",
-  20: "DC over current",
-  21: "AC over current",
-  23: "Ambient temperature exception",
-  24: "Hardware fault",
-};
-
-const LC_PCS_403038 = {
+const LC_PCS_403067 = {
   0: "Insulation impedance",
   1: "AC SPD fault",
   2: "Sampling fault",
@@ -300,51 +203,107 @@ const LC_PCS_403038 = {
   27: "Carrier synchronization fault",
 };
 
-const LC_PCS_403040 = {
-  0: "Charging",
-  1: "Discharging",
-  2: "Non-working state",
+const LC_PCS_403102 = {
+  0: "Temperature exception alarm",
+  1: "Low insulation impedance alarm",
+  2: "GFRT running",
+  4: "DC fuse exception",
+  6: "DC sensor exception",
+  7: "DC SPD alarm",
+  8: "AC SPD alarm",
+  9: "Battery voltage high",
+  10: "Battery voltage low",
+  12: "DC switch exception",
+  13: "Fan 1 exception",
 };
 
-const LC_PCS_403049 = {
-  0: "Running",
-  3: "Key stop",
-  4: "Standby",
-  6: "Start in process",
-  9: "Fault stop",
-  10: "Alarm running",
-  11: "Derating running",
-  15: "Communication exception",
+const LC_PCS_403106 = {
+  0: "Insulation impedance",
+  1: "AC SPD fault",
+  2: "Sampling fault",
+  3: "Battery polarity reversed",
+  5: "LCD-DSP communication fault",
+  6: "AC current imbalance 1",
+  7: "Host fault",
+  8: "DC SPD fault",
+  10: "DC component fault",
+  11: "DC switch fault",
+  12: "Machine code duplication fault",
+  13: "Parallel communication fault",
+  14: "Control cabinet temperature fault",
+  16: "AC voltage imbalance fault",
+  19: "AC switch fault",
+  20: "Soft start fault",
+  21: "DC voltage sampling fault",
+  22: "Fan 2 fault",
+  23: "AC current imbalance 2",
+  24: "AC current imbalance 3",
+  25: "Driver board fault",
+  26: "Midpoint potential shift",
+  27: "Carrier synchronization fault",
 };
 
-const LC_PCS_403054 = {
-  0: "Off-grid",
-  1: "On-grid",
+const LC_PCS_403534 = {
+  0: "Temperature exception alarm",
+  1: "Low insulation impedance alarm",
+  2: "GFRT running",
+  4: "DC fuse exception",
+  6: "DC sensor exception",
+  7: "DC SPD alarm",
+  8: "AC SPD alarm",
+  9: "Battery voltage high",
+  10: "Battery voltage low",
+  12: "DC switch exception",
+  13: "Fan 1 exception",
 };
 
-const LC_PCS_403058 = {
-  1: "AC switch status",
-  2: "DC switch status",
-  3: "DC fuse status",
-  4: "DC auxiliary switch 1 status",
-  5: "DC auxiliary switch 2 status",
+const LC_PCS_403538 = {
+  0: "Insulation impedance",
+  1: "AC SPD fault",
+  2: "Sampling fault",
+  3: "Battery polarity reversed",
+  5: "LCD-DSP communication fault",
+  6: "AC current imbalance 1",
+  7: "Host fault",
+  8: "DC SPD fault",
+  10: "DC component fault",
+  11: "DC switch fault",
+  12: "Machine code duplication fault",
+  13: "Parallel communication fault",
+  14: "Control cabinet temperature fault",
+  16: "AC voltage imbalance fault",
+  19: "AC switch fault",
+  20: "Soft start fault",
+  21: "DC voltage sampling fault",
+  22: "Fan 2 fault",
+  23: "AC current imbalance 2",
+  24: "AC current imbalance 3",
+  25: "Driver board fault",
+  26: "Midpoint potential shift",
+  27: "Carrier synchronization fault",
 };
 
 const LC_PCS_error_table = {
-  403001: { name: "LC_PCS_Overall fault status", status: LC_PCS_403001, type: "bit", location: "pending", line: true },
-  403002: { name: "LC_PCS_Overall alarm status", status: LC_PCS_403002, type: "bit", location: "pending", line: true },
-  403004: { name: "LC_PCS_Transformer node status", status: LC_PCS_403004, type: "bit", location: "pending", line: true },
-  403008: { name: "LC_PCS_Leakage current", status: LC_PCS_403008, type: "valve", location: "pending", line: false },
-  403009: { name: "LC_PCS_Transformer node status1", status: LC_PCS_403009, type: "bit", location: "pending", line: true },
-  403011: { name: "LC_PCS_Transformer node status2", status: LC_PCS_403011, type: "bit", location: "pending", line: true },
-  403034: { name: "LC_PCS_Alarm status1", status: LC_PCS_403034, type: "bit", location: "pending", line: true },
-  403035: { name: "LC_PCS_Alarm status2", status: LC_PCS_403035, type: "bit", location: "pending", line: true },
-  403036: { name: "LC_PCS_Fault status1", status: LC_PCS_403036, type: "bit", location: "pending", line: true },
-  403038: { name: "LC_PCS_Fault status2", status: LC_PCS_403038, type: "bit", location: "pending", line: true },
-  403040: { name: "LC_PCS_Charge status", status: LC_PCS_403040, type: "int", location: "pending", line: false },
-  403049: { name: "LC_PCS_Working status", status: LC_PCS_403049, type: "bit", location: "pending", line: true },
-  403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int", location: "pending", line: false },
-  403058: { name: "LC_PCS_Node status", status: LC_PCS_403058, type: "bit", location: "pending", line: true },
+  // 403001: { name: "LC_PCS_Overall fault status", status: LC_PCS_403001, type: "bit", location: "pending", line: true },
+  // 403002: { name: "LC_PCS_Overall alarm status", status: LC_PCS_403002, type: "bit", location: "pending", line: true },
+  // 403004: { name: "LC_PCS_Transformer node status", status: LC_PCS_403004, type: "bit", location: "pending", line: true },
+  // 403008: { name: "LC_PCS_Leakage current", status: LC_PCS_403008, type: "valve", location: "pending", line: false },
+  // 403009: { name: "LC_PCS_Transformer node status1", status: LC_PCS_403009, type: "bit", location: "pending", line: true },
+  // 403011: { name: "LC_PCS_Transformer node status2", status: LC_PCS_403011, type: "bit", location: "pending", line: true },
+  // 403034: { name: "LC_PCS_Alarm status1", status: LC_PCS_403034, type: "bit", location: "pending", line: true },
+  // 403035: { name: "LC_PCS_Alarm status2", status: LC_PCS_403035, type: "bit", location: "pending", line: true },
+  // 403036: { name: "LC_PCS_Fault status1", status: LC_PCS_403036, type: "bit", location: "pending", line: true },
+  // 403038: { name: "LC_PCS_Fault status2", status: LC_PCS_403038, type: "bit", location: "pending", line: true },
+  // 403040: { name: "LC_PCS_Charge status", status: LC_PCS_403040, type: "int", location: "pending", line: false },
+  // 403049: { name: "LC_PCS_Working status", status: LC_PCS_403049, type: "bit", location: "pending", line: true },
+  // 403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int", location: "pending", line: false },
+  // 403058: { name: "LC_PCS_Node status", status: LC_PCS_403058, type: "bit", location: "pending", line: true },
+  403063: { name: "LC_PCS_Unit 1_Alarm status1", status: LC_PCS_403063, type: "bit", location: "pending", line: true },
+  403067: { name: "LC_PCS_Unit 1_Fault status2", status: LC_PCS_403067, type: "bit", location: "pending", line: true },
+  403102: { name: "LC_PCS_Unit 2_Alarm status1", status: LC_PCS_403102, type: "bit", location: "pending", line: true },
+  403106: { name: "LC_PCS_Unit 2_Fault status2", status: LC_PCS_403106, type: "bit", location: "pending", line: true },
+  403534: { name: "LC_PCS_Alarm status1", status: LC_PCS_403534, type: "bit", location: "pending", line: true },
+  403538: { name: "LC_PCS_Fault status2", status: LC_PCS_403538, type: "bit", location: "pending", line: true },
 };
 
 const LC_BMS_404011 = {
@@ -883,6 +842,8 @@ const DC_error_table = {
   409123: { name: "DC_RIO_MVCB_Comm_Error", status: 1, type: "int", location: "pending", line: true },
   409125: { name: "DC_RIO_ACP_Comm_Error", status: 1, type: "int", location: "pending", line: true },
   409127: { name: "DC_GC_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409129: { name: "DC_HVAC_Comm_Error", status: 1, type: "int", location: "pending", line: true },
+  409131: { name: "DC_Recloser_Comm_Error", status: 1, type: "int", location: "pending", line: true },
 };
 
 const GC_400033 = {
