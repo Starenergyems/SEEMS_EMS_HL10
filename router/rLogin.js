@@ -1,10 +1,24 @@
+const express = require("express");
+const path = require("path");
+const methodOverride = require("method-override");
+const router = express.Router();
+const app = express();
+const cors = require("cors");
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "../views"));
+app.use(methodOverride("_method"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../public")));
+app.use(cors());
+
 const db_USERNAME = "admin"; // Couchdb username use for login db.
 const db_PASSWORD = "ems45877096"; // Couchdb password use for login db.
 const db_IP = "192.168.8.101"; // Couchdb IPv4 address.
 const db_PORT = "5984"; // Couchdb service use port.
 
 const db_account = "account"; // The account database name.
-const doc_CONFIG = "CONFIG"; // The account setting doc id.
+const doc_CONFIG = "config"; // The account setting doc id.
 
 // login page html id variable declare
 const id_EMAIL = "userAccount"; // The email input element's id.
@@ -43,56 +57,85 @@ var duration; // new var Cookies maintain time. unit is hour.
 // Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
 async function getconfig() {
   const URL = `${db_URL}/${db_account}/${doc_CONFIG}`;
-  await fetch(URL, {
+//   await fetch(URL, {
+//     method: "GET",
+//     headers: { Authorization: AUTHORIZATION },
+//     credentials: "include", // HTTP authentication in the request.
+//   })
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error("Request failed");
+//       }
+//       return response.json();
+//     })
+//     .then((data) => {
+//       data.atleast === undefined
+//         ? (atleast = 5)
+//         : (atleast = parseInt(data.atleast));
+//       data.atmost === undefined
+//         ? (atmost = 10)
+//         : (atmost = parseInt(data.atmost));
+//       data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
+//       data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
+//       data.special === undefined
+//         ? (special = 1)
+//         : (special = parseInt(data.special));
+//       data.num === undefined ? (num = 1) : (num = parseInt(data.num));
+//       data.locktimes === undefined
+//         ? (locktimes = 3)
+//         : (locktimes = parseInt(data.locktimes));
+//       data.suspendtime === undefined
+//         ? (suspendtime = "永久")
+//         : (suspendtime = data.suspendtime);
+//       data.logintext === undefined
+//         ? (logintext = "登入頁面提示字元")
+//         : (logintext = data.logintext);
+//       data.duration === undefined
+//         ? (duration = "")
+//         : (duration = data.duration);
+
+//       // console.log(`atleast: ${atleast}`);
+//       // console.log(`atmost: ${atmost}`);
+//       // console.log(`upper: ${upper}`);
+//       // console.log(`lower: ${lower}`);
+//       // console.log(`special: ${special}`);
+//       // console.log(`num: ${num}`);
+//       // console.log(`locktimes: ${locktimes}, ${typeof(locktimes)}`);
+//       // console.log(`suspendtime: ${suspendtime}`);
+//       // console.log(`logintext: ${logintext}`);
+//     })
+//     .catch((error) => {
+//       console.error("Error:", error.message);
+//     });
+// }
+
+
+try {
+  const response = await fetch(URL, {
     method: "GET",
     headers: { Authorization: AUTHORIZATION },
     credentials: "include", // HTTP authentication in the request.
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      data.atleast === undefined
-        ? (atleast = 5)
-        : (atleast = parseInt(data.atleast));
-      data.atmost === undefined
-        ? (atmost = 10)
-        : (atmost = parseInt(data.atmost));
-      data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
-      data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
-      data.special === undefined
-        ? (special = 1)
-        : (special = parseInt(data.special));
-      data.num === undefined ? (num = 1) : (num = parseInt(data.num));
-      data.locktimes === undefined
-        ? (locktimes = 3)
-        : (locktimes = parseInt(data.locktimes));
-      data.suspendtime === undefined
-        ? (suspendtime = "永久")
-        : (suspendtime = data.suspendtime);
-      data.logintext === undefined
-        ? (logintext = "登入頁面提示字元")
-        : (logintext = data.logintext);
-      data.duration === undefined
-        ? (duration = "")
-        : (duration = data.duration);
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+  const data = await response.json();
+  data.atleast === undefined ? (atleast = 5) : (atleast = parseInt(data.atleast));
+  data.atmost === undefined ? (atmost = 10) : (atmost = parseInt(data.atmost));
+  data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
+  data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
+  data.special === undefined ? (special = 1) : (special = parseInt(data.special));
+  data.num === undefined ? (num = 1) : (num = parseInt(data.num));
+  data.locktimes === undefined ? (locktimes = 3) : (locktimes = parseInt(data.locktimes));
+  data.suspendtime === undefined ? (suspendtime = "永久") : (suspendtime = data.suspendtime);
+  data.logintext === undefined ? (logintext = "登入頁面提示字元") : (logintext = data.logintext);
+  data.duration === undefined ? (duration = "") : (duration = data.duration);
 
-      // console.log(`atleast: ${atleast}`);
-      // console.log(`atmost: ${atmost}`);
-      // console.log(`upper: ${upper}`);
-      // console.log(`lower: ${lower}`);
-      // console.log(`special: ${special}`);
-      // console.log(`num: ${num}`);
-      // console.log(`locktimes: ${locktimes}, ${typeof(locktimes)}`);
-      // console.log(`suspendtime: ${suspendtime}`);
-      // console.log(`logintext: ${logintext}`);
-    })
-    .catch((error) => {
-      console.error("Error:", error.message);
-    });
+  // Output the retrieved data for debugging
+  console.log(`Retrieved data:`, data);
+} catch (error) {
+  console.error("Error:", error.message);
+}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -291,8 +334,9 @@ function uuid() {
 // The function for login page submit.
 async function submit() {
   let response; // Use for return.
-  const PASSWORD = await getElement(id_PASSWORD); // The password key by loginer.
   const EMAIL = await getElement(id_EMAIL); // The email key by loginer.
+  const PASSWORD = await getElement(id_PASSWORD); // The password key by loginer.
+  console.log(PASSWORD, EMAIL)
   await findaccount(EMAIL); // According login page submit mail to select account data
 
   // state errcount bantill
@@ -340,3 +384,9 @@ async function submit() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+module.exports = {
+  submit,
+  initialize,
+  getconfig
+}
+//router

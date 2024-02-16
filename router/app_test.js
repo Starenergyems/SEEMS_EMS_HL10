@@ -14,6 +14,7 @@ const io = socketIO(server);
 const dataUpdateEmitter = new EventEmitter();
 require("dotenv").config();
 const { calculateAverage, calculateAdd } = require("./function");
+const { getconfig, submit } =  require("./rLogin");
 
 const nano = require("nano");
 const { Console } = require("console");
@@ -96,7 +97,8 @@ const getLatestDocument = async (nanoDb) => {
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
 // const alarmFunctions = require("./alarmFunctions");
-const login = ("./rLogin.js")
+
+// app.use(submit)
 // 使用驗證
 // app.use(authMiddleware);
 
@@ -208,11 +210,18 @@ app.get("/", (req, res) => {
   res.render("Login");
 });
 
-app.post("/login", async (req, res) => {});
+app.post("/login", async (req, res) => {
+  // getconfig()
+  submit()
+  // initialize();
+  console.log(5,req)})
   // When login page submit through backend to db
-  const username = req.body['username']
-  const password = req.body['password']
-  console.log(username, password)
+  
+  // const username = req.body['username']
+  // const password = req.body['password']
+  // console.log(username, password)});
+
+
 app.get("/login", (req, res) => {
   res.render("Login", { navbarData: res.locals.navbarData });
 });
@@ -249,3 +258,136 @@ function updateDataPeriodically() {
 }
 
 //module.exports = { nano };
+
+
+// note
+// 我也建議直接學jsx的框架，但基礎DOM的操作還是要有概念，bootstrap就不用浪費時間去摸了，直接改用tailwindcss比較有機會在不同框架裡面使用。
+
+// 至於你想學vue、react還是其他新出的框架就真的比較沒差了，但我會建議找有支援jsx的框架，solid、qwik我覺得都還算蠻不錯的，但基底其實都是從react的概念延伸的，
+// 如果後面想學full stack的話還可以轉使用 Next、remix這些框架，但是基礎的概念是一樣的。 
+
+// 所以基礎觀念夠好、要摸不同的框架其實不難也蠻容易上手的，搞清楚自己學這個工具是要拿來處理怎樣的問題比較重要，不要因為別人學而學！
+
+// const db_USERNAME = "admin"; // Couchdb username use for login db.
+// const db_PASSWORD = "ems45877096"; // Couchdb password use for login db.
+// const db_IP = "192.168.8.101"; // Couchdb IPv4 address.
+// const db_PORT = "5984"; // Couchdb service use port.
+
+// const db_account = "account"; // The account database name.
+// const doc_CONFIG = "CONFIG"; // The account setting doc id.
+
+// // login page html id variable declare
+// const id_EMAIL = "userAccount"; // The email input element's id.
+// const id_PASSWORD = "userPassword"; //  The password input element's id.
+// const id_TEXT = ""; // Show hint text element's id.
+
+// ////////////////////////////////////////////////////////////////////////////////////////
+// // Do not need change.
+
+// const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
+// // const db_URL = couchDBUrl; // Use for fetch database function.
+// const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
+
+// ////////////////////////////////////////////////////////////////////////////////////////
+// // Do not need change, when load Login.js execute
+
+// async function initialize() {
+//   await getconfig();
+// }
+
+// ////////////////////////////////////////////////////////////////////////////////////////
+// // Variable declare, config data.
+// var atleast; // The maximum password length.
+// var atmost; // The minimum password length.
+// var upper; // Uppercase alphbet at least in password. ABC
+// var lower; // Lowercase alphbet at least in password. abc
+// var special; // Special character at least in password. !@#
+// var num; // Nunber at least in password. 123
+// var locktimes; // System setting for how many times login failure to lock the account.
+// var suspendtime; // System setting for how long to lock the account. unit is hour
+// var logintext; // Show in login page html.
+// var duration; // new var Cookies maintain time. unit is hour.
+
+// // Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
+// async function getconfig() {
+//   const URL = `${db_URL}/${db_account}/${doc_CONFIG}`;
+// //   await fetch(URL, {
+// //     method: "GET",
+// //     headers: { Authorization: AUTHORIZATION },
+// //     credentials: "include", // HTTP authentication in the request.
+// //   })
+// //     .then((response) => {
+// //       if (!response.ok) {
+// //         throw new Error("Request failed");
+// //       }
+// //       return response.json();
+// //     })
+// //     .then((data) => {
+// //       data.atleast === undefined
+// //         ? (atleast = 5)
+// //         : (atleast = parseInt(data.atleast));
+// //       data.atmost === undefined
+// //         ? (atmost = 10)
+// //         : (atmost = parseInt(data.atmost));
+// //       data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
+// //       data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
+// //       data.special === undefined
+// //         ? (special = 1)
+// //         : (special = parseInt(data.special));
+// //       data.num === undefined ? (num = 1) : (num = parseInt(data.num));
+// //       data.locktimes === undefined
+// //         ? (locktimes = 3)
+// //         : (locktimes = parseInt(data.locktimes));
+// //       data.suspendtime === undefined
+// //         ? (suspendtime = "永久")
+// //         : (suspendtime = data.suspendtime);
+// //       data.logintext === undefined
+// //         ? (logintext = "登入頁面提示字元")
+// //         : (logintext = data.logintext);
+// //       data.duration === undefined
+// //         ? (duration = "")
+// //         : (duration = data.duration);
+
+// //       // console.log(`atleast: ${atleast}`);
+// //       // console.log(`atmost: ${atmost}`);
+// //       // console.log(`upper: ${upper}`);
+// //       // console.log(`lower: ${lower}`);
+// //       // console.log(`special: ${special}`);
+// //       // console.log(`num: ${num}`);
+// //       // console.log(`locktimes: ${locktimes}, ${typeof(locktimes)}`);
+// //       // console.log(`suspendtime: ${suspendtime}`);
+// //       // console.log(`logintext: ${logintext}`);
+// //     })
+// //     .catch((error) => {
+// //       console.error("Error:", error.message);
+// //     });
+// // }
+
+
+// try {
+//   const response = await fetch(URL, {
+//     method: "GET",
+//     headers: { Authorization: AUTHORIZATION },
+//     credentials: "include", // HTTP authentication in the request.
+//   });
+//   if (!response.ok) {
+//     throw new Error(`Request failed with status ${response.status}`);
+//   }
+//   const data = await response.json();
+//   data.atleast === undefined ? (atleast = 5) : (atleast = parseInt(data.atleast));
+//   data.atmost === undefined ? (atmost = 10) : (atmost = parseInt(data.atmost));
+//   data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
+//   data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
+//   data.special === undefined ? (special = 1) : (special = parseInt(data.special));
+//   data.num === undefined ? (num = 1) : (num = parseInt(data.num));
+//   data.locktimes === undefined ? (locktimes = 3) : (locktimes = parseInt(data.locktimes));
+//   data.suspendtime === undefined ? (suspendtime = "永久") : (suspendtime = data.suspendtime);
+//   data.logintext === undefined ? (logintext = "登入頁面提示字元") : (logintext = data.logintext);
+//   data.duration === undefined ? (duration = "") : (duration = data.duration);
+
+//   // Output the retrieved data for debugging
+//   console.log(`Retrieved data:`, data);
+// } catch (error) {
+//   console.error("Error:", error.message);
+// }
+// }

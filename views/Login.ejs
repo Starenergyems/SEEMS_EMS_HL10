@@ -31,27 +31,74 @@
 
         <div class="pt-1 my-4">
           <!-- <input type="btn_Login" class="btn btn-dark" value="登入" onclick=""> -->
-          <a id="btn_Login" onclick="submit()">LOG&nbspIN</a> 
+          <a id="btn_Login">LOG&nbspIN</a> 
         </div>
         
       </div>
     </div>
     <div class="bgStripe bgStripe_4"></div>
     <div class="bgStripe bgStripe_5"></div>
+
+
+    <script>
+      document.getElementById('btn_Login').addEventListener('click', async function() {
+        const acc = document.getElementById("account").value
+        const pas = document.getElementById("password").value
+        await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({username: acc, password:pas })
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.text();
+          })
+          .then(data => {
+              console.log(data);
+              // Do something with the response if needed
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      });
+  </script>
+
+
+
+  <!-- <script>
+    // $(document).ready(
+    function submit() {
+      console.log("login hihi")
+      // $('#btn_Login').click(function() {
+      const acc = document.getElementById("account").value
+      // const acc = $('#account').val();
+      const pas = document.getElementById("password").value //$('#password').val();
+      console.log(1, acc, pas)
+      fetch('http://localhost:8888/submit',{method: 'POST',
+            body:{"account":acc, "password":pas}
+      })}
+  </script> -->
+
+  <!-- <script>
+    function submit() {
+      const URL = "http://localhost:8888/login/"; // "http://192.168.8.101/login/";
+      console.log("login")
+      fetch(URL, {
+        method: "POST",
+        // headers: {
+        //   "Content-Type": "application/json",
+        //   Authorization: "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`),
+        // },
+        // credentials: "include",
+        body: {"account":document.getElementById("account"), "password":document.getElementById("password")}
+      })}
+  </script> -->
+
+
   </body>
 </html>
 
-<script>
-  async function submit() {
-    const URL = "./login/"; // "http://192.168.8.101/login/";
-    console.log("login")
-    await fetch(URL, {
-      method: "POST",
-      // headers: {
-      //   "Content-Type": "application/json",
-      //   Authorization: "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`),
-      // },
-      // credentials: "include",
-      body: {"account":document.getElementById("account"), "password":document.getElementById("password")}
-    })}
-</script>
