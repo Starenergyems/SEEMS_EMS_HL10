@@ -32,18 +32,18 @@ const indexDef = {
 };
 
 // 事件紀錄
-app.get("/event", async (req, res) => {
+router.get("/event", async (req, res) => {
   //以下app要改回router
   res.redirect("/event/operation");
 });
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
-app.get("/event/operation", (req, res) => {
+router.get("/event/operation", (req, res) => {
   res.render("Evt_Operation");
 });
 
-app.post("/event/operation/edit", async (req, res) => {
+router.post("/event/operation/edit", async (req, res) => {
   try {
     const { input1, input2, input3, input4 } = req.body;
     console.log("原始Received start:", input1 + " " + input2);
@@ -99,7 +99,7 @@ app.post("/event/operation/edit", async (req, res) => {
 });
 
 // 處理GET /event/operation/edit的請求
-app.get("/event/operation/edit", async (req, res) => {
+router.get("/event/operation/edit", async (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
@@ -140,12 +140,12 @@ app.get("/event/operation/edit", async (req, res) => {
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
-app.get("/event/door", (req, res) => {
+router.get("/event/door", (req, res) => {
   // num與fun
   res.render("Evt_Door");
 });
 
-app.post("/event/door/edit", async (req, res) => {
+router.post("/event/door/edit", async (req, res) => {
   try {
     const { input1, input2, input3, input4 } = req.body;
     console.log("原始Received start:", input1 + " " + input2);
@@ -202,7 +202,7 @@ app.post("/event/door/edit", async (req, res) => {
 });
 
 // 處理GET /event/operation/edit的請求
-app.get("/event/door/edit", (req, res) => {
+router.get("/event/door/edit", (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
@@ -239,6 +239,7 @@ app.get("/event/door/edit", (req, res) => {
 });
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

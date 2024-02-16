@@ -25,9 +25,12 @@ const {
 const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
-const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
-const nanoDb = nano(couchDBUrl);
 
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const gc_rf10 = "gc_rf10";
+const gcDb = nano.use(gc_rf10);
+const dc_rf10 = "dc_rf10";
+const dcDb = nano.use(dc_rf10);
 // Middleware
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -101,20 +104,6 @@ const myMiddleware = (req, res, next) => {
 
 app.use(async (req, res, next) => {
   try {
-    const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
-    });
-
-    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
-    const lc1Data = allData[0];
-    const lc2Data = allData[1];
-    const lc3Data = allData[2];
-    const lc4Data = allData[3];
-    const dwctrlData = allData[4];
-    const logData = allData[5];
-    const gcData = allData[6];
-
     res.locals.navbarData = {
       title: "模式控制",
       stylesheets: [
