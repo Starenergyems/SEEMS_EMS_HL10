@@ -152,14 +152,14 @@ const LC_System_402100 = {
 };
 
 const LC_System_error_table = {
-  402013: { name: "LC_System_System CHG/DCG status", status: LC_System_402013, type: "int", location: "ESS?x-1", line: false},
-  402019: { name: "LC_System_Running mode", status: LC_System_402019, type: "int", location: "ESS?x-1", line: false },
-  402020: { name: "LC_System_Grid status", status: LC_System_402020, type: "int", location: "ESS?x-1", line: false },
-  402021: { name: "LC_System_System status", status: LC_System_402021, type: "bit", location: "ESS?x-1", line: true },
-  402048: { name: "LC_System_PCS communication status", status: LC_System_402048, type: "bit_abnormal", location: "ESS?x-1", line: false },
-  402050: { name: "LC_System_BMS communication status", status: LC_System_402050, type: "bit_abnormal", location: "ESS?x-1", line: false },
-  402099: { name: "LC_System_Fault status", status: LC_System_402099, type: "bit", location: "ESS?x-1", line: true },
-  402100: { name: "LC_System_Alarm status", status: LC_System_402100, type: "bit", location: "ESS?x-1", line: true },
+  402013: { name: "System CHG/DCG status", status: LC_System_402013, type: "int", location: "ESS?x-1", line: false},
+  402019: { name: "Running mode", status: LC_System_402019, type: "int", location: "ESS?x-1", line: false },
+  402020: { name: "Grid status", status: LC_System_402020, type: "int", location: "ESS?x-1", line: false },
+  402021: { name: "System status", status: LC_System_402021, type: "bit", location: "ESS?x-1", line: true },
+  402048: { name: "PCS communication status", status: LC_System_402048, type: "bit_abnormal", location: "ESS?x-1", line: false },
+  402050: { name: "BMS communication status", status: LC_System_402050, type: "bit_abnormal", location: "ESS?x-1", line: false },
+  402099: { name: "Fault status", status: LC_System_402099, type: "bit", location: "ESS?x-1", line: true },
+  402100: { name: "Alarm status", status: LC_System_402100, type: "bit", location: "ESS?x-1", line: true },
 };
 
 
@@ -298,12 +298,12 @@ const LC_PCS_error_table = {
   // 403049: { name: "LC_PCS_Working status", status: LC_PCS_403049, type: "bit", location: "ESS?x-1", line: true },
   // 403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int", location: "ESS?x-1", line: false },
   // 403058: { name: "LC_PCS_Node status", status: LC_PCS_403058, type: "bit", location: "ESS?x-1", line: true },
-  403063: { name: "LC_PCS_Unit 1_Alarm status1", status: LC_PCS_403063, type: "bit", location: "ESS?x-1", line: true },
-  403067: { name: "LC_PCS_Unit 1_Fault status2", status: LC_PCS_403067, type: "bit", location: "ESS?x-1", line: true },
-  403102: { name: "LC_PCS_Unit 2_Alarm status1", status: LC_PCS_403102, type: "bit", location: "ESS?x-1", line: true },
-  403106: { name: "LC_PCS_Unit 2_Fault status2", status: LC_PCS_403106, type: "bit", location: "ESS?x-1", line: true },
-  403534: { name: "LC_PCS_Alarm status1", status: LC_PCS_403534, type: "bit", location: "ESS?x-1", line: true },
-  403538: { name: "LC_PCS_Fault status2", status: LC_PCS_403538, type: "bit", location: "ESS?x-1", line: true },
+  403063: { name: "Unit 1_Alarm status1", status: LC_PCS_403063, type: "bit", location: "ESS?x-1", line: true },
+  403067: { name: "Unit 1_Fault status2", status: LC_PCS_403067, type: "bit", location: "ESS?x-1", line: true },
+  403102: { name: "Unit 2_Alarm status1", status: LC_PCS_403102, type: "bit", location: "ESS?x-1", line: true },
+  403106: { name: "Unit 2_Fault status2", status: LC_PCS_403106, type: "bit", location: "ESS?x-1", line: true },
+  403534: { name: "Alarm status1", status: LC_PCS_403534, type: "bit", location: "ESS?x-1", line: true },
+  403538: { name: "Fault status2", status: LC_PCS_403538, type: "bit", location: "ESS?x-1", line: true },
 };
 
 const LC_BMS_404011 = {
@@ -373,11 +373,11 @@ const LC_BMS_404061 = {
 };
 
 const LC_BMS_error_table = {
-  404011: { name: "LC_BMS_System mode", status: LC_BMS_404011, type: "bit", location: "ESS?x-1", line: true },
-  404044: { name: "LC_BMS_CMU alarm word", status: LC_BMS_404044, type: "bit", location: "ESS?x-1", line: true },
-  404046: { name: "LC_BMS_CMU fault word", status: LC_BMS_404046, type: "bit", location: "ESS?x-1", line: true },
-  404048: { name: "LC_BMS_Hardware fault word", status: LC_BMS_404048, type: "bit", location: "ESS?x-1", line: true },
-  404061: { name: "LC_BMS_SMU fault status", status: LC_BMS_404061, type: "bit", location: "ESS?x-1", line: true },
+  404011: { name: "System mode", status: LC_BMS_404011, type: "bit", location: "ESS?x-1", line: true },
+  404044: { name: "CMU alarm word", status: LC_BMS_404044, type: "bit", location: "ESS?x-1", line: true },
+  404046: { name: "CMU fault word", status: LC_BMS_404046, type: "bit", location: "ESS?x-1", line: true },
+  404048: { name: "Hardware fault word", status: LC_BMS_404048, type: "bit", location: "ESS?x-1", line: true },
+  404061: { name: "SMU fault status", status: LC_BMS_404061, type: "bit", location: "ESS?x-1", line: true },
 };
 
 const LC_Rack_405028 = {
@@ -419,8 +419,8 @@ const LC_Rack_405030 = {
 };
 
 const LC_Rack_error_table = {
-  405028: { name: "LC_Rack_CMU alarm word", status: LC_Rack_405028, type: "bit", location: "ESS?x-1", line: true },
-  405030: { name: "LC_Rack_CMU fault word", status: LC_Rack_405030, type: "bit", location: "ESS?x-1", line: true },
+  405028: { name: "CMU alarm word", status: LC_Rack_405028, type: "bit", location: "ESS?x-1", line: true },
+  405030: { name: "CMU fault word", status: LC_Rack_405030, type: "bit", location: "ESS?x-1", line: true },
 };
 
 const LC_BSC_406001 = {
@@ -660,33 +660,33 @@ const LC_BSC_406050 = {
 };
 
 const LC_BSC_error_table = {
-  406001: { name: "LC_BSC_Fault status", status: LC_BSC_406001, type: "bit", location: "ESS?x-1", line: true },
-  406003: { name: "LC_BSC_Alarm status", status: LC_BSC_406003, type: "bit", location: "ESS?x-1", line: true },
-  406005: { name: "LC_BSC_FFS status", status: LC_BSC_406005, type: "bit", location: "ESS?x-1", line: false },
-  406007: { name: 'LC_BSC_HVAC_1 running status', status: LC_BSC_406007, type: "int", location: "ESS?x-1", line: true },
-  406009: { name: 'LC_BSC_HVAC_2 running status', status: LC_BSC_406009, type: "int", location: "ESS?x-1", line: true },
-  406011: { name: 'LC_BSC_HVAC_3 running status', status: LC_BSC_406011, type: "int", location: "ESS?x-1", line: true },
-  406013: { name: 'LC_BSC_HVAC_4 running status', status: LC_BSC_406013, type: "int", location: "ESS?x-1", line: true },
-  406015: { name: 'LC_BSC_HVAC_5 running status', status: LC_BSC_406015, type: "int", location: "ESS?x-1", line: true },
-  406017: { name: 'LC_BSC_HVAC_6 running status', status: LC_BSC_406017, type: "int", location: "ESS?x-1", line: true },
-  406019: { name: 'LC_BSC_HVAC_7 running status', status: LC_BSC_406019, type: "int", location: "ESS?x-1", line: true },
-  406021: { name: 'LC_BSC_HVAC_8 running status', status: LC_BSC_406021, type: "int", location: "ESS?x-1", line: true },
-  406023: { name: 'LC_BSC_HVAC_9 running status', status: LC_BSC_406023, type: "int", location: "ESS?x-1", line: true },
-  406025: { name: 'LC_BSC_HVAC_10 running status', status: LC_BSC_406025, type: "int", location: "ESS?x-1", line: true },
-  406027: { name: 'LC_BSC_HVAC_11 running status', status: LC_BSC_406027, type: "int", location: "ESS?x-1", line: true },
-  406029: { name: 'LC_BSC_HVAC_12 running status', status: LC_BSC_406029, type: "int", location: "ESS?x-1", line: true },
-  406031: { name: 'LC_BSC_HVAC_13 running status', status: LC_BSC_406031, type: "int", location: "ESS?x-1", line: true },
-  406033: { name: 'LC_BSC_HVAC_14 running status', status: LC_BSC_406033, type: "int", location: "ESS?x-1", line: true },
-  406035: { name: 'LC_BSC_HVAC_15 running status', status: LC_BSC_406035, type: "int", location: "ESS?x-1", line: true },
-  406037: { name: 'LC_BSC_HVAC_16 running status', status: LC_BSC_406037, type: "int", location: "ESS?x-1", line: true },
-  406039: { name: 'LC_BSC_HVAC_17 running status', status: LC_BSC_406039, type: "int", location: "ESS?x-1", line: true },
-  406041: { name: 'LC_BSC_HVAC_18 running status', status: LC_BSC_406041, type: "int", location: "ESS?x-1", line: true },
-  406043: { name: 'LC_BSC_HVAC_19 running status', status: LC_BSC_406043, type: "int", location: "ESS?x-1", line: true },
-  406045: { name: 'LC_BSC_HVAC_20 running status', status: LC_BSC_406045, type: "int", location: "ESS?x-1", line: true },
-  406047: { name: 'LC_BSC_TH_1 Temperature', status: LC_BSC_406047, type: "valve", location: "ESS?x-1", line: false },
-  406048: { name: 'LC_BSC_TH_1 Humidity', status: LC_BSC_406048, type: "valve", location: "ESS?x-1", line: false },
-  406049: { name: 'LC_BSC_TH_2 Temperature', status: LC_BSC_406049, type: "valve", location: "ESS?x-1", line: false },
-  406050: { name: 'LC_BSC_TH_2 Humidity', status: LC_BSC_406050, type: "valve", location: "ESS?x-1", line: false },
+  406001: { name: "Fault status", status: LC_BSC_406001, type: "bit", location: "ESS?x-1", line: true },
+  406003: { name: "Alarm status", status: LC_BSC_406003, type: "bit", location: "ESS?x-1", line: true },
+  406005: { name: "FFS status", status: LC_BSC_406005, type: "bit", location: "ESS?x-1", line: false },
+  406007: { name: 'HVAC_1 running status', status: LC_BSC_406007, type: "int", location: "ESS?x-1", line: true },
+  406009: { name: 'HVAC_2 running status', status: LC_BSC_406009, type: "int", location: "ESS?x-1", line: true },
+  406011: { name: 'HVAC_3 running status', status: LC_BSC_406011, type: "int", location: "ESS?x-1", line: true },
+  406013: { name: 'HVAC_4 running status', status: LC_BSC_406013, type: "int", location: "ESS?x-1", line: true },
+  406015: { name: 'HVAC_5 running status', status: LC_BSC_406015, type: "int", location: "ESS?x-1", line: true },
+  406017: { name: 'HVAC_6 running status', status: LC_BSC_406017, type: "int", location: "ESS?x-1", line: true },
+  406019: { name: 'HVAC_7 running status', status: LC_BSC_406019, type: "int", location: "ESS?x-1", line: true },
+  406021: { name: 'HVAC_8 running status', status: LC_BSC_406021, type: "int", location: "ESS?x-1", line: true },
+  406023: { name: 'HVAC_9 running status', status: LC_BSC_406023, type: "int", location: "ESS?x-1", line: true },
+  406025: { name: 'HVAC_10 running status', status: LC_BSC_406025, type: "int", location: "ESS?x-1", line: true },
+  406027: { name: 'HVAC_11 running status', status: LC_BSC_406027, type: "int", location: "ESS?x-1", line: true },
+  406029: { name: 'HVAC_12 running status', status: LC_BSC_406029, type: "int", location: "ESS?x-1", line: true },
+  406031: { name: 'HVAC_13 running status', status: LC_BSC_406031, type: "int", location: "ESS?x-1", line: true },
+  406033: { name: 'HVAC_14 running status', status: LC_BSC_406033, type: "int", location: "ESS?x-1", line: true },
+  406035: { name: 'HVAC_15 running status', status: LC_BSC_406035, type: "int", location: "ESS?x-1", line: true },
+  406037: { name: 'HVAC_16 running status', status: LC_BSC_406037, type: "int", location: "ESS?x-1", line: true },
+  406039: { name: 'HVAC_17 running status', status: LC_BSC_406039, type: "int", location: "ESS?x-1", line: true },
+  406041: { name: 'HVAC_18 running status', status: LC_BSC_406041, type: "int", location: "ESS?x-1", line: true },
+  406043: { name: 'HVAC_19 running status', status: LC_BSC_406043, type: "int", location: "ESS?x-1", line: true },
+  406045: { name: 'HVAC_20 running status', status: LC_BSC_406045, type: "int", location: "ESS?x-1", line: true },
+  406047: { name: 'TH_1 Temperature', status: LC_BSC_406047, type: "valve", location: "ESS?x-1", line: false },
+  406048: { name: 'TH_1 Humidity', status: LC_BSC_406048, type: "valve", location: "ESS?x-1", line: false },
+  406049: { name: 'TH_2 Temperature', status: LC_BSC_406049, type: "valve", location: "ESS?x-1", line: false },
+  406050: { name: 'TH_2 Humidity', status: LC_BSC_406050, type: "valve", location: "ESS?x-1", line: false },
 };
 
 const LC_error_table = {
@@ -815,35 +815,35 @@ const Other_408207 = {
 };
 
 const Other_error_table = {
-  408154: { name: "Other_UPS status", status: Other_408154, type: "bit", location: "device", line: true },
-  408186: { name: "Other_Temperature", status: Other_408186, type: "valve", location: "Control Room", line: true },
-  408187: { name: "Other_Humidity", status: Other_408187, type: "valve", location: "Control Room", line: true },
-  408201: { name: "Other_Relay_MVCB-1", status: Other_408201, type: "bit", location: "MVCB", line: true },
-  408202: { name: "Other_Relay_MVCB-2", status: Other_408202, type: "bit", location: "MVCB", line: true },
-  408203: { name: "Other_Relay_VCB", status: Other_408203, type: "bit", location: "device", line: true },
-  408204: { name: "Other_FFS Status", status: Other_408204, type: "bit", location: "FFS Control Room", line: true },
-  408205: { name: "Other_VCB Status", status: Other_408205, type: "bit", location: "device", line: true },
-  408206: { name: "Other_ACB Status", status: Other_408206, type: "bit", location: "device", line: true },
-  408207: { name: "Other_ACB Control", status: Other_408207, type: "bit", location: "device", line: true },
+  408154: { name: "UPS status", status: Other_408154, type: "bit", location: "device", line: true },
+  408186: { name: "Temperature", status: Other_408186, type: "valve", location: "Control Room", line: true },
+  408187: { name: "Humidity", status: Other_408187, type: "valve", location: "Control Room", line: true },
+  408201: { name: "Relay_MVCB-1", status: Other_408201, type: "bit", location: "MVCB", line: true },
+  408202: { name: "Relay_MVCB-2", status: Other_408202, type: "bit", location: "MVCB", line: true },
+  408203: { name: "Relay_VCB", status: Other_408203, type: "bit", location: "device", line: true },
+  408204: { name: "FFS Status", status: Other_408204, type: "bit", location: "FFS Control Room", line: true },
+  408205: { name: "VCB Status", status: Other_408205, type: "bit", location: "device", line: true },
+  408206: { name: "ACB Status", status: Other_408206, type: "bit", location: "device", line: true },
+  408207: { name: "ACB Control", status: Other_408207, type: "bit", location: "device", line: true },
 };
 
 const DC_error_table = {
-  409101: { name: "DC_LC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409103: { name: "DC_Freq-M_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409105: { name: "DC_ACPM_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409107: { name: "DC_AuxMtot_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409109: { name: "DC_AuxM_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409111: { name: "DC_UPS_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409113: { name: "DC_TR_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409115: { name: "DC_TH_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409117: { name: "DC_RelayMVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409119: { name: "DC_RelayVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409121: { name: "DC_RIO_CtrlRoom_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409123: { name: "DC_RIO_MVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409125: { name: "DC_RIO_ACP_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409127: { name: "DC_GC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409129: { name: "DC_HVAC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409131: { name: "DC_Recloser_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409101: { name: "LC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409103: { name: "Freq-M_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409105: { name: "ACPM_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409107: { name: "AuxMtot_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409109: { name: "AuxM_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409111: { name: "UPS_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409113: { name: "TR_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409115: { name: "TH_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409117: { name: "RelayMVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409119: { name: "RelayVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409121: { name: "RIO_CtrlRoom_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409123: { name: "RIO_MVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409125: { name: "RIO_ACP_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409127: { name: "GC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409129: { name: "HVAC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409131: { name: "Recloser_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
 };
 
 const GC_400033 = {
@@ -1151,8 +1151,8 @@ function createErrorRecord(_id, db_name, time, error_table_tag, device, content,
       location = "ACP-A" + device.replace("ACBControl", "");
     }
   };
-  console.log(location);
-  console.log(error_table_tag["location"]);
+  // console.log(location);
+  // console.log(error_table_tag["location"]);
   return {
     _id: _id,
     db_name: db_name,
@@ -1207,7 +1207,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
             time,
             error_table[key_error][tag],
             device,
-            error_arr[i],
+            error_table[key_error][tag]["name"] + ":" + error_arr[i],
             bit_status,
             occurrence_time,
             line
@@ -1228,7 +1228,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
             time,
             error_table[key_error][tag],
             device,
-            content,
+            error_table[key_error][tag]["name"] + ":" + content,
             value,
             occurrence_time,
             line
@@ -1252,7 +1252,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
             time,
             error_table[key_error][tag],
             device,
-            content,
+            error_table[key_error][tag]["name"] + ":" + content,
             value,
             occurrence_time,
             line
@@ -1335,7 +1335,7 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
                 time,
                 error_table[tag],
                 device,
-                content,
+                error_table[tag]["name"] + ":" + content,
                 value,
                 occurrence_time,
                 line
@@ -1385,7 +1385,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
             time,
             error_table[tag],
             device,
-            error_arr[i],
+            error_table[tag]["name"] + ":" + error_arr[i],
             bit_status,
             occurrence_time,
             line
@@ -1405,7 +1405,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
             time,
             error_table[tag],
             device,
-            content,
+            error_table[tag]["name"] + ":" + content,
             value,
             occurrence_time,
             line
@@ -1429,7 +1429,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
             time,
             error_table[tag],
             device,
-            content,
+            error_table[tag]["name"] + ":" + content,
             value,
             occurrence_time,
             line
@@ -1751,11 +1751,11 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
 
 function sendLineNotify(error_result_item) {
   const message = `
-    \nLevel:   ${error_result_item["level"]} 
-    \nLocation:   ${error_result_item["location"]}
-    \nDevice:   ${error_result_item["device"]}
-    \nValue:   ${error_result_item["value"]}
-    \nWarning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
+    Level:   ${error_result_item["level"]} 
+    Location:   ${error_result_item["location"]}
+    Device:   ${error_result_item["device"]}
+    Value:   ${error_result_item["value"]}
+    Warning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
   `
   const accessToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
   const request = {
@@ -1805,7 +1805,7 @@ function alarm_processor(original_nanoDB, mangoQuery, error_result_gen_func, ala
           .then((response) => {
 
             const compare_result = compare_trigger_alarms(error_result, response);
-            console.log(compare_result);
+            // console.log(compare_result);
             const alarm_db_promise = update_trigger_alarms_batch(error_result, compare_result, alarm_nanoDB, line_flag=true);
             
             const hisAlarm_batch = Object.values(error_result).map(obj => {
