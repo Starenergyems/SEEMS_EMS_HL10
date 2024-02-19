@@ -35,15 +35,26 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-
 /*以下router要改回app*************************** */
 app.use(cors());
 app.use("/public", express.static(path.join(__dirname, "../public")));
-app.use("/operateinfo", express.static(path.join(__dirname, "../public/operateinfo")));
-app.use("/operateinfo/pcs", express.static(path.join(__dirname, "../public/operateinfo/pcs")));
-app.use("/operateinfo/pcs/alarm/:id", express.static(path.join(__dirname, "../public")));
+app.use(
+  "/operateinfo",
+  express.static(path.join(__dirname, "../public/operateinfo"))
+);
+app.use(
+  "/operateinfo/pcs",
+  express.static(path.join(__dirname, "../public/operateinfo/pcs"))
+);
+app.use(
+  "/operateinfo/pcs/alarm/:id",
+  express.static(path.join(__dirname, "../public"))
+);
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-app.use("/operateinfo/pcs/infodetail/:id", express.static(path.join(__dirname, "../public")));
+app.use(
+  "/operateinfo/pcs/infodetail/:id",
+  express.static(path.join(__dirname, "../public"))
+);
 
 //************************************************************************************************************************************************ */
 
@@ -107,7 +118,7 @@ var pcsDetail_variables;
 var pageNumber;
 
 //PCS
-async function queryPcsDetail(){ 
+async function queryPcsDetail() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
@@ -132,310 +143,313 @@ async function queryPcsDetail(){
     lcData = allData[3];
   } else {
     throw new Error("Invalid pageNumber");
-  }   
+  }
 
   //let processedPageNumber;
-  if (pageNumber % 2 === 0) {
-    // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
-    pcsDetail_variables = {
-      permission: "manager",
-      pageNumber,
-      No_of_PCS,
-      chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS2[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS2[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS2[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS2[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS2[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS2[403069], 0.1, 1),
-      HB_Counts: lcData.PCS2[403007],
-      leakage_I: scaleProcess(lcData.PCS2[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS2[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS2[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS2[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS2[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS2[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS2[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS2[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS2[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS2[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS2[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS2[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS2[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS2[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS2[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS2[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS2[403019], 0.1, 1),
-      overallFault: lcData.PCS2[403001],
-      overallAlarm: lcData.PCS2[403002],
-      faultStatus: lcData.PCS2[403036] + lcData.PCS2[403038],
-      alarmStatus: lcData.PCS2[403034] + lcData.PCS2[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS2[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS2[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS2[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS2[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS2[403016], 0.1, 1),
-    };
-  } else {
+  if (pageNumber % 2 === 1 && pageNumber <= 6) {
     // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
     pcsDetail_variables = {
       permission: "manager",
       pageNumber,
       No_of_PCS,
-      chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
-      tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
-      max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
-      HB_Counts: lcData.PCS1[403007],
-      leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
-      activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
-      reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
-      powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
-      voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
-      voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
-      voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
-      currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
-      currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
-      currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
-      gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
-      pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
-      nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
-      DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
-      DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
-      DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
-      overallFault: lcData.PCS1[403001],
-      overallAlarm: lcData.PCS1[403002],
-      faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
-      alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
-      innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
-      moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
-      moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
+      //Workingstatus:lcData.PCS[403078]
+      chargeStatus: mapWordStatus(lcData.PCS[403069], pcsCHGStatus_MT),
+      tot_E_chg: scaleProcess(lcData.PCS[403074], 0.01, 1),
+      tot_E_dcg: scaleProcess(lcData.PCS[403076], 0.01, 1),
+      // max_P_chg: scaleProcess(lcData.PCS[403066], 0.1, 1), //刪除
+      // max_P_dcg: scaleProcess(lcData.PCS[403067], 0.1, 1), //刪除
+      // max_Q_l: scaleProcess(lcData.PCS[403068], 0.1, 1), //刪除
+      // max_Q_c: scaleProcess(lcData.PCS[403069], 0.1, 1), //刪除
+      HB_Counts: lcData.PCS[403039],
+      leakage_I: scaleProcess(lcData.PCS[403044], 0.01, 2),
+      //gridStatus: mapWordStatus(lcData.PCS[403054], pcsGridStatus_MT), //刪除
+      activePower: scaleProcess(lcData.PCS[403059], 0.1, 1),
+      reactivePower: scaleProcess(lcData.PCS[403061], 0.1, 1),
+      powerFactor: scaleProcess(lcData.PCS[403085], 0.001, 3),
+
+      voltageRS: scaleProcess(lcData.PCS[403053], 0.1, 1),
+      voltageST: scaleProcess(lcData.PCS[403054], 0.1, 1),
+      voltageTR: scaleProcess(lcData.PCS[403055], 0.1, 1),
+      currentR: scaleProcess(lcData.PCS[403056], 0.1, 1),
+      currentS: scaleProcess(lcData.PCS[403057], 0.1, 1),
+      currentT: scaleProcess(lcData.PCS[403058], 0.1, 1),
+      gridFreq: scaleProcess(lcData.PCS[403084], 0.01, 2),
+
+      pElectrodeR: scaleProcess(lcData.PCS[403023], 0.01, 2),
+      nElectrodeR: scaleProcess(lcData.PCS[403025], 0.01, 2),
+
+      DCvoltage: scaleProcess(lcData.PCS[403050], 0.1, 1),
+      DCcurrent: scaleProcess(lcData.PCS[403051], 0.1, 1),
+      DCpower: scaleProcess(lcData.PCS[403052], 0.1, 1),
+
+      overallFault: lcData.PCS[403140],
+      overallAlarm: lcData.PCS[403037],
+
+      faultStatus: lcData.PCS[403065] + lcData.PCS[403067],
+      //faultStatus3:lcData.PCS[403146],
+      alarmStatus: lcData.PCS[403063] + lcData.PCS[403064],
+      //alarmStatus3: lcData.PCS[403144],
+      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS[403086], 16),
+      // innerTemp: scaleProcess(lcData.PCS[403057], 0.1, 1),
+      // moduleTemp1: scaleProcess(lcData.PCS[403014], 0.1, 1),
+      // moduleTemp2: scaleProcess(lcData.PCS[403015], 0.1, 1),
+      // moduleTemp3: scaleProcess(lcData.PCS[403016], 0.1, 1),
     };
+  } else if (pageNumber % 2 === 0 && pageNumber <= 6) {
+    // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    pcsDetail_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_PCS,
+      chargeStatus: mapWordStatus(lcData.PCS[403108], pcsCHGStatus_MT),
+      tot_E_chg: scaleProcess(lcData.PCS[403113], 0.01, 1),
+      tot_E_dcg: scaleProcess(lcData.PCS[403115], 0.01, 1),
+      // max_P_chg: scaleProcess(lcData.PCS[403066], 0.1, 1),
+      // max_P_dcg: scaleProcess(lcData.PCS[403067], 0.1, 1),
+      // max_Q_l: scaleProcess(lcData.PCS[403068], 0.1, 1),
+      // max_Q_c: scaleProcess(lcData.PCS[403069], 0.1, 1),
+      HB_Counts: lcData.PCS[403039],
+      leakage_I: scaleProcess(lcData.PCS[403044], 0.01, 2),
+      // gridStatus: mapWordStatus(lcData.PCS[403054], pcsGridStatus_MT),
+      activePower: scaleProcess(lcData.PCS[403098], 0.1, 1),
+      reactivePower: scaleProcess(lcData.PCS[403100], 0.1, 1),
+      powerFactor: scaleProcess(lcData.PCS[403124], 0.001, 3),
+      voltageRS: scaleProcess(lcData.PCS[403092], 0.1, 1),
+      voltageST: scaleProcess(lcData.PCS[403093], 0.1, 1),
+      voltageTR: scaleProcess(lcData.PCS[403094], 0.1, 1),
+      currentR: scaleProcess(lcData.PCS[403095], 0.1, 1),
+      currentS: scaleProcess(lcData.PCS[403096], 0.1, 1),
+      currentT: scaleProcess(lcData.PCS[403097], 0.1, 1),
+      gridFreq: scaleProcess(lcData.PCS[403123], 0.01, 2),
+
+      pElectrodeR: scaleProcess(lcData.PCS[403023], 0.01, 2),
+      nElectrodeR: scaleProcess(lcData.PCS[403025], 0.01, 2),
+
+      DCvoltage: scaleProcess(lcData.PCS[403089], 0.1, 1),
+      DCcurrent: scaleProcess(lcData.PCS[403090], 0.1, 1),
+      DCpower: scaleProcess(lcData.PCS[403091], 0.1, 1),
+
+      //
+      overallFault: lcData.PCS[403140],
+      overallAlarm: lcData.PCS[403037],
+      faultStatus: lcData.PCS[403104] + lcData.PCS[403106],
+      //faultStatus3:lcData.PCS[403150],
+      alarmStatus: lcData.PCS[403102] + lcData.PCS[403103],
+      //alarmStatus3: lcData.PCS[403148],
+      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS[403125], 16),
+      // innerTemp: scaleProcess(lcData.PCS[403057], 0.1, 1),
+      // moduleTemp1: scaleProcess(lcData.PCS[403014], 0.1, 1),
+      // moduleTemp2: scaleProcess(lcData.PCS[403015], 0.1, 1),
+      // moduleTemp3: scaleProcess(lcData.PCS[403016], 0.1, 1),
+    };
+    //單台 LC4-pcs7
+  } else if (pageNumber == 7) {
+    pcsDetail_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_PCS,
+      chargeStatus: mapWordStatus(lcData.PCS[403540], pcsCHGStatus_MT),
+      tot_E_chg: scaleProcess(lcData.PCS[403545], 0.01, 1),
+      tot_E_dcg: scaleProcess(lcData.PCS[403547], 0.01, 1),
+      max_P_chg: scaleProcess(lcData.PCS[403566], 0.1, 1),
+      max_P_dcg: scaleProcess(lcData.PCS[403567], 0.1, 1),
+      max_Q_l: scaleProcess(lcData.PCS[403568], 0.1, 1),
+      max_Q_c: scaleProcess(lcData.PCS[403569], 0.1, 1),
+      HB_Counts: lcData.PCS[403507],
+      leakage_I: scaleProcess(lcData.PCS[403508], 0.01, 2),
+      gridStatus: mapWordStatus(lcData.PCS[403554], pcsGridStatus_MT),
+      activePower: scaleProcess(lcData.PCS[403526], 0.1, 1),
+      reactivePower: scaleProcess(lcData.PCS[403528], 0.1, 1),
+      powerFactor: scaleProcess(lcData.PCS[403556], 0.001, 3),
+      voltageRS: scaleProcess(lcData.PCS[403520], 0.1, 1),
+      voltageST: scaleProcess(lcData.PCS[403521], 0.1, 1),
+      voltageTR: scaleProcess(lcData.PCS[403522], 0.1, 1),
+      currentR: scaleProcess(lcData.PCS[403523], 0.1, 1),
+      currentS: scaleProcess(lcData.PCS[403524], 0.1, 1),
+      currentT: scaleProcess(lcData.PCS[403525], 0.1, 1),
+      gridFreq: scaleProcess(lcData.PCS[403555], 0.01, 2),
+      pElectrodeR: scaleProcess(lcData.PCS[403530], 0.01, 2),
+      nElectrodeR: scaleProcess(lcData.PCS[403532], 0.01, 2),
+      DCvoltage: scaleProcess(lcData.PCS[403517], 0.1, 1),
+      DCcurrent: scaleProcess(lcData.PCS[403518], 0.1, 1),
+      DCpower: scaleProcess(lcData.PCS[403519], 0.1, 1),
+      overallFault: lcData.PCS[403501],
+      overallAlarm: lcData.PCS[403502],
+      faultStatus: lcData.PCS[403536] + lcData.PCS[403538],
+      alarmStatus: lcData.PCS[403534] + lcData.PCS[403535],
+      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS[403558], 16),
+      innerTemp: scaleProcess(lcData.PCS[403557], 0.1, 1),
+      moduleTemp1: scaleProcess(lcData.PCS[403514], 0.1, 1),
+      moduleTemp2: scaleProcess(lcData.PCS[403515], 0.1, 1),
+      moduleTemp3: scaleProcess(lcData.PCS[403516], 0.1, 1),
+    };
+  } else {
+    console.log("頁數超出範圍!");
   }
 }
 /***************************************************************** */
-
 app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
-  try {
-    //獲取目前切換的頁數
-    const pageNumber = parseInt(req.params.pageNumber);
-
-    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
-    const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
-    });
-
-    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
-    const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
-    const subNumber = pageNumber % 2 === 0 ? 2 : 1;
-    const No_of_PCS = `${baseNumber}-${subNumber}`;
-
-    // 根據選擇的集合名稱查詢資料
-    let lcData; // 在 if 區塊外部聲明變數
-
-    if (pageNumber == 1 || pageNumber == 2) {
-      lcData = allData[0];
-    } else if (pageNumber == 3 || pageNumber == 4) {
-      lcData = allData[1];
-    } else if (pageNumber == 5 || pageNumber == 6) {
-      lcData = allData[2];
-    } else if (pageNumber == 7) {
-      lcData = allData[3];
-    } else {
-      throw new Error("Invalid pageNumber");
-    }
-
-    //let processedPageNumber;
-    if (pageNumber % 2 === 0) {
-      // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
-      res.render("Op_PCS_InfoDetail", {
-        permission: "manager",
-        pageNumber,
-        No_of_PCS,
-        chargeStatus: mapWordStatus(lcData.PCS2[403040], pcsCHGStatus_MT),
-        tot_E_chg: scaleProcess(lcData.PCS2[403045], 0.01, 1),
-        tot_E_dcg: scaleProcess(lcData.PCS2[403047], 0.01, 1),
-        max_P_chg: scaleProcess(lcData.PCS2[403066], 0.1, 1),
-        max_P_dcg: scaleProcess(lcData.PCS2[403067], 0.1, 1),
-        max_Q_l: scaleProcess(lcData.PCS2[403068], 0.1, 1),
-        max_Q_c: scaleProcess(lcData.PCS2[403069], 0.1, 1),
-        HB_Counts: lcData.PCS2[403007],
-        leakage_I: scaleProcess(lcData.PCS2[403008], 0.01, 2),
-        gridStatus: mapWordStatus(lcData.PCS2[403054], pcsGridStatus_MT),
-        activePower: scaleProcess(lcData.PCS2[403026], 0.1, 1),
-        reactivePower: scaleProcess(lcData.PCS2[403028], 0.1, 1),
-        powerFactor: scaleProcess(lcData.PCS2[403056], 0.001, 3),
-        voltageRS: scaleProcess(lcData.PCS2[403020], 0.1, 1),
-        voltageST: scaleProcess(lcData.PCS2[403021], 0.1, 1),
-        voltageTR: scaleProcess(lcData.PCS2[403022], 0.1, 1),
-        currentR: scaleProcess(lcData.PCS2[403023], 0.1, 1),
-        currentS: scaleProcess(lcData.PCS2[403024], 0.1, 1),
-        currentT: scaleProcess(lcData.PCS2[403025], 0.1, 1),
-        gridFreq: scaleProcess(lcData.PCS2[403055], 0.01, 2),
-        pElectrodeR: scaleProcess(lcData.PCS2[403030], 0.01, 2),
-        nElectrodeR: scaleProcess(lcData.PCS2[403032], 0.01, 2),
-        DCvoltage: scaleProcess(lcData.PCS2[403017], 0.1, 1),
-        DCcurrent: scaleProcess(lcData.PCS2[403018], 0.1, 1),
-        DCpower: scaleProcess(lcData.PCS2[403019], 0.1, 1),
-        overallFault: lcData.PCS2[403001],
-        overallAlarm: lcData.PCS2[403002],
-        faultStatus: lcData.PCS2[403036] + lcData.PCS2[403038],
-        alarmStatus: lcData.PCS2[403034] + lcData.PCS2[403035],
-        nodeStatus: Convert_UInt_to_revBitString(lcData.PCS2[403058], 16),
-        innerTemp: scaleProcess(lcData.PCS2[403057], 0.1, 1),
-        moduleTemp1: scaleProcess(lcData.PCS2[403014], 0.1, 1),
-        moduleTemp2: scaleProcess(lcData.PCS2[403015], 0.1, 1),
-        moduleTemp3: scaleProcess(lcData.PCS2[403016], 0.1, 1),
-      });
-    } else {
-      // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
-      res.render("Op_PCS_InfoDetail", {
-        permission: "manager",
-        pageNumber,
-        No_of_PCS,
-        chargeStatus: mapWordStatus(lcData.PCS1[403040], pcsCHGStatus_MT),
-        tot_E_chg: scaleProcess(lcData.PCS1[403045], 0.01, 1),
-        tot_E_dcg: scaleProcess(lcData.PCS1[403047], 0.01, 1),
-        max_P_chg: scaleProcess(lcData.PCS1[403066], 0.1, 1),
-        max_P_dcg: scaleProcess(lcData.PCS1[403067], 0.1, 1),
-        max_Q_l: scaleProcess(lcData.PCS1[403068], 0.1, 1),
-        max_Q_c: scaleProcess(lcData.PCS1[403069], 0.1, 1),
-        HB_Counts: lcData.PCS1[403007],
-        leakage_I: scaleProcess(lcData.PCS1[403008], 0.01, 2),
-        gridStatus: mapWordStatus(lcData.PCS1[403054], pcsGridStatus_MT),
-        activePower: scaleProcess(lcData.PCS1[403026], 0.1, 1),
-        reactivePower: scaleProcess(lcData.PCS1[403028], 0.1, 1),
-        powerFactor: scaleProcess(lcData.PCS1[403056], 0.001, 3),
-        voltageRS: scaleProcess(lcData.PCS1[403020], 0.1, 1),
-        voltageST: scaleProcess(lcData.PCS1[403021], 0.1, 1),
-        voltageTR: scaleProcess(lcData.PCS1[403022], 0.1, 1),
-        currentR: scaleProcess(lcData.PCS1[403023], 0.1, 1),
-        currentS: scaleProcess(lcData.PCS1[403024], 0.1, 1),
-        currentT: scaleProcess(lcData.PCS1[403025], 0.1, 1),
-        gridFreq: scaleProcess(lcData.PCS1[403055], 0.01, 2),
-        pElectrodeR: scaleProcess(lcData.PCS1[403030], 0.01, 2),
-        nElectrodeR: scaleProcess(lcData.PCS1[403032], 0.01, 2),
-        DCvoltage: scaleProcess(lcData.PCS1[403017], 0.1, 1),
-        DCcurrent: scaleProcess(lcData.PCS1[403018], 0.1, 1),
-        DCpower: scaleProcess(lcData.PCS1[403019], 0.1, 1),
-        overallFault: lcData.PCS1[403001],
-        overallAlarm: lcData.PCS1[403002],
-        faultStatus: lcData.PCS1[403036] + lcData.PCS1[403038],
-        alarmStatus: lcData.PCS1[403034] + lcData.PCS1[403035],
-        nodeStatus: Convert_UInt_to_revBitString(lcData.PCS1[403058], 16),
-        innerTemp: scaleProcess(lcData.PCS1[403057], 0.1, 1),
-        moduleTemp1: scaleProcess(lcData.PCS1[403014], 0.1, 1),
-        moduleTemp2: scaleProcess(lcData.PCS1[403015], 0.1, 1),
-        moduleTemp3: scaleProcess(lcData.PCS1[403016], 0.1, 1),
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.get("/operateinfo/pcs/infodetail/:pageNumber/:data", async (req, res) => {
   try {
     //獲取目前切換的頁數
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsDetail();
-    const responseData = pcsDetail_variables;
-    console.log(responseData);
-    res.json(responseData);
+    res.render("Op_PCS_InfoDetail", pcsDetail_variables);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
 
+app.get(
+  "/operateinfo/pcs/infodetail/:pageNumber/:data",
+  async (req, res) => {
+    try {
+      //獲取目前切換的頁數
+      pageNumber = parseInt(req.params.pageNumber);
+      await queryPcsDetail();
+      const responseData = pcsDetail_variables;
+      console.log(responseData);
+      res.json(responseData);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
 //************************************************************************************************************************************************ */
-//alarm換頁
+//alarm告警換頁
+var pcsAlarm_variables;
+async function queryPcsAlarm(){
+  // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+  const dataPromises = databases.map(async (dbName) => {
+    const nanoDb = createNanoInstance(dbName);
+    return getLatestDocument(nanoDb);
+  });
+
+  const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+  const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
+  const subNumber = pageNumber % 2 === 0 ? 2 : 1;
+  const No_of_PCS = `${baseNumber}-${subNumber}`;
+
+  // 根據選擇的集合名稱查詢資料
+  let lcData; // 在 if 區塊外部聲明變數
+  if (pageNumber == 1 || pageNumber == 2) {
+    lcData = allData[0];
+  } else if (pageNumber == 3 || pageNumber == 4) {
+    lcData = allData[1];
+  } else if (pageNumber == 5 || pageNumber == 6) {
+    lcData = allData[2];
+  } else if (pageNumber == 7) {
+    lcData = allData[3];
+  } else {
+    throw new Error("Invalid pageNumber");
+  }
+
+  //let processedPageNumber;
+
+  if (pageNumber % 2 === 1 && pageNumber <= 6) {
+    // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    pcsAlarm_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_PCS,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS[403140], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS[403037], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS[403065], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS[403067], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS[403063], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS[403064], 16).num_ClosedBit,
+
+      OF: Convert_UInt_to_revBitString(lcData.PCS[403140], 16),
+      OA: Convert_UInt_to_revBitString(lcData.PCS[403037], 16),
+
+      Alarm1: Convert_UInt_to_revBitString(lcData.PCS[403063], 16),
+      Alarm2: Convert_UInt_to_revBitString(lcData.PCS[403064], 16),
+      Alarm3: Convert_UInt_to_revBitString(lcData.PCS[403144], 16),
+      Fault1: Convert_UInt_to_revBitString(lcData.PCS[403065], 32),
+      Fault2: Convert_UInt_to_revBitString(lcData.PCS[403067], 32),
+      Fault3: Convert_UInt_to_revBitString(lcData.PCS[403146], 32),
+    };
+  } else if (pageNumber % 2 === 0 && pageNumber <= 6) {
+    // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    pcsAlarm_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_PCS,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS[403140], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS[403037], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS[403104], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS[403106], 32).num_ClosedBit,
+
+      //
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS[403102], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS[403103], 16).num_ClosedBit,
+
+      //
+      OF: Convert_UInt_to_revBitString(lcData.PCS[403140], 16),
+      OA: Convert_UInt_to_revBitString(lcData.PCS[403037], 16),
+
+      Alarm1: Convert_UInt_to_revBitString(lcData.PCS[403102], 16),
+      Alarm2: Convert_UInt_to_revBitString(lcData.PCS[403103], 16),
+      Alarm3: Convert_UInt_to_revBitString(lcData.PCS[403148], 16), //NEW
+      Fault1: Convert_UInt_to_revBitString(lcData.PCS[403104], 32),
+      Fault2: Convert_UInt_to_revBitString(lcData.PCS[403106], 32), //NEW
+      Fault3: Convert_UInt_to_revBitString(lcData.PCS[403150], 32),
+    };
+  } else if (pageNumber == 7) {
+    pcsAlarm_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_PCS,
+      noOverallFault: Convert_UInt_to_BitString(lcData.PCS[403501], 16)
+        .num_ClosedBit,
+      noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS[403502], 16)
+        .num_ClosedBit,
+      noFault:
+        Convert_UInt_to_BitString(lcData.PCS[403536], 32).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS[403538], 32).num_ClosedBit,
+      noAlarm:
+        Convert_UInt_to_BitString(lcData.PCS[403534], 16).num_ClosedBit +
+        Convert_UInt_to_BitString(lcData.PCS[403535], 16).num_ClosedBit,
+      OF: Convert_UInt_to_revBitString(lcData.PCS[403501], 16),
+      OA: Convert_UInt_to_revBitString(lcData.PCS[403502], 16),
+      Alarm1: Convert_UInt_to_revBitString(lcData.PCS[403534], 16),
+      Alarm2: Convert_UInt_to_revBitString(lcData.PCS[403535], 16),
+      Fault1: Convert_UInt_to_revBitString(lcData.PCS[403536], 32),
+      Fault2: Convert_UInt_to_revBitString(lcData.PCS[403538], 32),
+    };
+  } else {
+    console.log("err");
+  }
+};
+
 app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
-    const pageNumber = parseInt(req.params.pageNumber);
-    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
-    const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
-    });
+    pageNumber = parseInt(req.params.pageNumber);    
+    await queryPcsAlarm();
+    res.render("Op_PCS_Alarm", pcsAlarm_variables);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
-    const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
-    const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
-    const subNumber = pageNumber % 2 === 0 ? 2 : 1;
-    const No_of_PCS = `${baseNumber}-${subNumber}`;
-
-    // 根據選擇的集合名稱查詢資料
-    let lcData; // 在 if 區塊外部聲明變數
-
-    if (pageNumber == 1 || pageNumber == 2) {
-      lcData = allData[0];
-    } else if (pageNumber == 3 || pageNumber == 4) {
-      lcData = allData[1];
-    } else if (pageNumber == 5 || pageNumber == 6) {
-      lcData = allData[2];
-    } else if (pageNumber == 7) {
-      lcData = allData[3];
-    } else {
-      throw new Error("Invalid pageNumber");
-    }
-
-    //let processedPageNumber;
-    if (pageNumber % 2 === 0) {
-      // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
-      res.render("Op_PCS_Alarm", {
-        permission: "manager",
-        pageNumber,
-        No_of_PCS,
-        noOverallFault: Convert_UInt_to_BitString(lcData.PCS2[403001], 16)
-          .num_ClosedBit,
-        noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS2[403002], 16)
-          .num_ClosedBit,
-        noFault:
-          Convert_UInt_to_BitString(lcData.PCS2[403036], 32).num_ClosedBit +
-          Convert_UInt_to_BitString(lcData.PCS2[403038], 32).num_ClosedBit,
-        noAlarm:
-          Convert_UInt_to_BitString(lcData.PCS2[403034], 16).num_ClosedBit +
-          Convert_UInt_to_BitString(lcData.PCS2[403035], 16).num_ClosedBit,
-        OF: Convert_UInt_to_revBitString(lcData.PCS2[403001], 16),
-        OA: Convert_UInt_to_revBitString(lcData.PCS2[403002], 16),
-        Alarm1: Convert_UInt_to_revBitString(lcData.PCS2[403034], 16),
-        Alarm2: Convert_UInt_to_revBitString(lcData.PCS2[403035], 16),
-        Fault1: Convert_UInt_to_revBitString(lcData.PCS2[403036], 32),
-        Fault2: Convert_UInt_to_revBitString(lcData.PCS2[403038], 32),
-      });
-    } else {
-      // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
-      res.render("Op_PCS_Alarm", {
-        permission: "manager",
-        pageNumber,
-        No_of_PCS,
-        noOverallFault: Convert_UInt_to_BitString(lcData.PCS1[403001], 16)
-          .num_ClosedBit,
-        noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS1[403002], 16)
-          .num_ClosedBit,
-        noFault:
-          Convert_UInt_to_BitString(lcData.PCS1[403036], 32).num_ClosedBit +
-          Convert_UInt_to_BitString(lcData.PCS1[403038], 32).num_ClosedBit,
-        noAlarm:
-          Convert_UInt_to_BitString(lcData.PCS1[403034], 16).num_ClosedBit +
-          Convert_UInt_to_BitString(lcData.PCS1[403035], 16).num_ClosedBit,
-        OF: Convert_UInt_to_revBitString(lcData.PCS1[403001], 16),
-        OA: Convert_UInt_to_revBitString(lcData.PCS1[403002], 16),
-        Alarm1: Convert_UInt_to_revBitString(lcData.PCS1[403034], 16),
-        Alarm2: Convert_UInt_to_revBitString(lcData.PCS1[403035], 16),
-        Fault1: Convert_UInt_to_revBitString(lcData.PCS1[403036], 32),
-        Fault2: Convert_UInt_to_revBitString(lcData.PCS1[403038], 32),
-      });
-    }
+app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
+  try {
+    //const pageNumber = req.session.pageNumber;
+    pageNumber = parseInt(req.params.pageNumber);    
+    await queryPcsAlarm();
+    res.json(pcsAlarm_variables);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -457,12 +471,39 @@ app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
     dVS_Data_numInDataGroup = req.body.numInDataGroup;
 
     const data_MT = {
-      setBut_P_LC: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407078, scale: 1, decPlace: 0, minLimit: -5000, maxLimit: 5000, unit: "kW" },
-      setBut_acuHeatT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407016, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
-      setBut_acuCoolT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407017, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
-      // 
-      // 
-      // 
+      setBut_P_LC: {
+        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407078,
+        scale: 1,
+        decPlace: 0,
+        minLimit: -5000,
+        maxLimit: 5000,
+        unit: "kW",
+      },
+      setBut_acuHeatT: {
+        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407016,
+        scale: 0.1,
+        decPlace: 1,
+        minLimit: -1000,
+        maxLimit: 2000,
+        unit: "°C",
+      },
+      setBut_acuCoolT: {
+        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407017,
+        scale: 0.1,
+        decPlace: 1,
+        minLimit: -1000,
+        maxLimit: 2000,
+        unit: "°C",
+      },
+      //
+      //
+      //
     };
 
     const data_AfM = data_MT[dVS_Data_dataName];
@@ -480,11 +521,14 @@ app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
 
     const allData = await Promise.all(dataPromises);
 
-    const getData_raw = allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][data_AfM.dataID];
+    const getData_raw =
+      allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
+        data_AfM.dataID
+      ];
     const response = {
       originData: scaleProcess(getData_raw, data_AfM.scale, data_AfM.decPlace),
       dataRange: `數值範圍: ${scaleProcess(data_AfM.minLimit, data_AfM.scale, data_AfM.decPlace)}~${scaleProcess(data_AfM.maxLimit, data_AfM.scale, data_AfM.decPlace)} ${data_AfM.unit}`,
-      unit: data_AfM.unit
+      unit: data_AfM.unit,
     };
 
     res.json(response);
@@ -506,21 +550,30 @@ app.post("/set_dVS_Data", async (req, res) => {
     if (setValue_raw !== "" && !Number.isNaN(Number(setValue_raw))) {
       const data_MT = {
         setBut_P_LC: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407078",
-          category: "設備控制", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`
+          dicName: `lc${dVS_Data_numInDataGroup}`,
+          dataID: "W407078",
+          category: "設備控制",
+          device: `LC${dVS_Data_numInDataGroup}`,
+          log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`,
         },
         setBut_acuHeatT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407016",
-          category: "設備控制123", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`
+          dicName: `lc${dVS_Data_numInDataGroup}`,
+          dataID: "W407016",
+          category: "設備控制123",
+          device: `LC${dVS_Data_numInDataGroup}`,
+          log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`,
         },
         setBut_acuCoolT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407017",
-          category: "設備控制456", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`
+          dicName: `lc${dVS_Data_numInDataGroup}`,
+          dataID: "W407017",
+          category: "設備控制456",
+          device: `LC${dVS_Data_numInDataGroup}`,
+          log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`,
         },
-        // 
-        // 
-        // 
-        // 
+        //
+        //
+        //
+        //
       };
 
       const data_AfM = data_MT[dVS_Data_dataName];
@@ -550,7 +603,8 @@ app.post("/set_dVS_Data", async (req, res) => {
         newdwctrlData.time = isoString;
         delete newdwctrlData._id;
         delete newdwctrlData._rev;
-        await nanoDb.use("dwctrl").insert(newdwctrlData);       // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        await nanoDb.use("dwctrl").insert(newdwctrlData);
+        // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
 
         //log紀錄
         const logDb = createNanoInstance("log");
@@ -566,12 +620,18 @@ app.post("/set_dVS_Data", async (req, res) => {
         console.log(doc);
 
         // if (selectedValue != 0) {
-        const result = await logDb.insert(doc);   // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        const result = await logDb.insert(doc);
+        // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
         //   //console.log(result);
         // }
 
         //console.log("Document added to database. ID: " + result.id);
-        response = { ststus: ok, alarmCMU_rawD: 314159, faultCMU_rawD: 6626, DL_of_statusHW: 1602 };
+        response = {
+          ststus: ok,
+          alarmCMU_rawD: 314159,
+          faultCMU_rawD: 6626,
+          DL_of_statusHW: 1602,
+        };
       } else {
         console.log("數值範圍有誤~~~");
         response = { status: "error" };
@@ -587,7 +647,6 @@ app.post("/set_dVS_Data", async (req, res) => {
   }
 });
 
-
 let dSS_Data_dataName;
 let dSS_Data_numInDataGroup;
 let dSS_Data_bitNum;
@@ -600,13 +659,47 @@ app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
     dSS_Data_numInDataGroup = req.body.numInDataGroup;
 
     const data_MT = {
-      setBut_modeAP: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407010, bitNum: 999, status_MT: { " 0": "主動", " 1": "被動" } },
-      setBut_modeQctrl: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407011, bitNum: 999, status_MT: { " 162": "功率(kVar)模式", " 161": "功因模式", " 85": "關閉" } },
-      setBut_standbyCmd: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407012, bitNum: 999, status_MT: { " 170": "待機", " 85": "停止待機" } },
-      setBut_modeLR: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407013, bitNum: 999, status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" } },
-      setBut_acuOnOff: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407018, bitNum: 999, status_MT: { " 1": "啟動", " 0": "停止" } },
-      // 
-      // 
+      setBut_modeAP: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407010,
+        bitNum: 999,
+        status_MT: { " 0": "主動", " 1": "被動" },
+      },
+      setBut_modeQctrl: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407011,
+        bitNum: 999,
+        status_MT: {
+          " 162": "功率(kVar)模式",
+          " 161": "功因模式",
+          " 85": "關閉",
+        },
+      },
+      setBut_standbyCmd: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407012,
+        bitNum: 999,
+        status_MT: { " 170": "待機", " 85": "停止待機" },
+      },
+      setBut_modeLR: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407013,
+        bitNum: 999,
+        status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" },
+      },
+      setBut_acuOnOff: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407018,
+        bitNum: 999,
+        status_MT: { " 1": "啟動", " 0": "停止" },
+      },
+      //
+      //
     };
 
     const data_AfM = data_MT[dSS_Data_dataName];
@@ -621,7 +714,10 @@ app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
 
     const allData = await Promise.all(dataPromises);
 
-    const getData_raw = allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][data_AfM.dataID];
+    const getData_raw =
+      allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
+        data_AfM.dataID
+      ];
 
     let getData;
     if (data_AfM.bitNum === 999) {
@@ -648,27 +744,42 @@ app.post("/set_dSS_Data", async (req, res) => {
 
     const data_MT = {
       setBut_modeAP: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407010",
-        category: "設備控制", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407010",
+        category: "設備控制",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`,
       },
       setBut_modeQctrl: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407011",
-        category: "設備控制9101", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407011",
+        category: "設備控制9101",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`,
       },
       setBut_standbyCmd: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407012",
-        category: "設備控制2531", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407012",
+        category: "設備控制2531",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`,
       },
       setBut_modeLR: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407013",
-        category: "設備控制4587", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407013",
+        category: "設備控制4587",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`,
       },
       setBut_acuOnOff: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407018",
-        category: "設備控制7096", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407018",
+        category: "設備控制7096",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`,
       },
-      // 
-      // 
+      //
+      //
     };
 
     const data_AfM = data_MT[dSS_Data_dataName];
@@ -686,9 +797,15 @@ app.post("/set_dSS_Data", async (req, res) => {
     if (dSS_Data_bitNum === 999) {
       setValue = Number(setValue_raw);
     } else {
-      let setValue_old = Convert_UInt_to_BitString(newdwctrlData[data_AfM.dicName][data_AfM.dataID], 32).bitString;
+      let setValue_old = Convert_UInt_to_BitString(
+        newdwctrlData[data_AfM.dicName][data_AfM.dataID],
+        32
+      ).bitString;
       console.log(setValue_old);
-      setValue_old = setValue_old.slice(0, 31 - dSS_Data_bitNum) + setValue_raw.slice(1) + setValue_old.slice(31 - dSS_Data_bitNum + 1);
+      setValue_old =
+        setValue_old.slice(0, 31 - dSS_Data_bitNum) +
+        setValue_raw.slice(1) +
+        setValue_old.slice(31 - dSS_Data_bitNum + 1);
       console.log(setValue_old);
       setValue = parseInt(setValue_old, 2);
     }
@@ -707,7 +824,7 @@ app.post("/set_dSS_Data", async (req, res) => {
     newdwctrlData.time = isoString;
     delete newdwctrlData._id;
     delete newdwctrlData._rev;
-    await nanoDb.use("dwctrl").insert(newdwctrlData);       // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+    await nanoDb.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
 
     //log紀錄
     const logDb = createNanoInstance("log");
@@ -723,12 +840,17 @@ app.post("/set_dSS_Data", async (req, res) => {
     console.log(doc);
 
     // if (selectedValue != 0) {
-    const result = await logDb.insert(doc);   // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+    const result = await logDb.insert(doc); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
     //   //console.log(result);
     // }
 
     //console.log("Document added to database. ID: " + result.id);
-    let response = { ststus: ok, alarmCMU_rawD: 314159, faultCMU_rawD: 6626, DL_of_statusHW: 1602 };
+    let response = {
+      ststus: ok,
+      alarmCMU_rawD: 314159,
+      faultCMU_rawD: 6626,
+      DL_of_statusHW: 1602,
+    };
 
     res.json(response);
   } catch (error) {
@@ -777,7 +899,7 @@ app.post("/set_dSS_Data", async (req, res) => {
 
 //     Object.entries(scaleAndPointMapping).forEach(
 //       ([property, { scale, point }]) => {
-//         const originalValue = lcData.PCS1[property];
+//         const originalValue = lcData.PCS[property];
 //         const scaledValue = scaleProcess(originalValue, scale, point);
 
 //         // 如果有定義對應的處理函數，則應用
@@ -852,8 +974,8 @@ app.post("/set_dSS_Data", async (req, res) => {
 //       Transformeroiltemperature: data["403006"], //暫無出現 先用描述暫代
 //       HB_Counts: data["403007"],
 //       leakage: data["403009"],
-//       PCS1_403011: lcData.PCS1[403011],
-//       PCS1_403013: lcData.PCS1[403013],
+//       PCS1_403011: lcData.PCS[403011],
+//       PCS1_403013: lcData.PCS[403013],
 //       Sys_402002: lcData.System[402002],
 
 //       Rack2_11_405002: lcData.RackSub2.Rack11[405002],
