@@ -1598,9 +1598,11 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                     if (element.doc) {
                       let doc = element.doc;
                       let error_element = error_result[_id];
-                      error_element["_rev"] = doc._rev;
-                      error_element["read"] = doc.read;
-                      docs_batch.push(error_element);
+                      if (doc.value !== error_element["value"]) {
+                        error_element["_rev"] = doc._rev;
+                        error_element["read"] = doc.read;
+                        docs_batch.push(error_element);
+                      }
         
                     // Case 2: it has been deleted before and not existed in the db currently
                       // then line notify + insert to DB
@@ -1655,10 +1657,11 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                       // console.log(element.doc);
                       let doc = element.doc;
                       let error_element = error_result[_id];
-                      error_element["_rev"] = doc._rev;
-                      error_element["read"] = doc.read;
-                      // console.log(error_element);
-                      docs_batch.push(error_element);
+                      if (doc.value !== error_element["value"]) {
+                        error_element["_rev"] = doc._rev;
+                        error_element["read"] = doc.read;
+                        docs_batch.push(error_element);
+                      }
         
                     // Case 2: it has been deleted before and not existed in the db currently
                       // then line notify + insert to DB

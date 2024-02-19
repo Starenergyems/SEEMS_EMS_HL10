@@ -31,6 +31,8 @@ const otherrf01nanoDb = nano.use("other_rf01");
 const otherrf10nanoDb = nano.use("other_rf10");
 const alarmnanoDb = nano.use("alarm");
 const hisalarmnanoDb = nano.use("hisalarm");
+
+let alarm_db_event_lock = false;
 // const alarm_test_nanoDb = nano.use("alarm_test");
 
 const indexDef_time = {
@@ -109,6 +111,13 @@ router.get("/alarm/realtime", (req, res) => {
 });
 
 router.post("/alarm/realtime/edit", (req, res) => {
+  while (alarm_db_event_lock) {
+    setTimeout(()=>{console.log("Hi")}, 100);
+    // await new Promise(resolve => setTimeout(resolve, 100));  // Wait for a short time
+  }
+  console.log("/alarm/realtime/edit", alarm_db_event_lock)
+  alarm_db_event_lock = true;
+
   try {
     const { ID, Checked } = req.body;
     console.log("Received ID:", ID);
@@ -147,7 +156,7 @@ router.post("/alarm/realtime/edit", (req, res) => {
       promise = alarmnanoDb.get(ID)
         .then((resp) => {
           resp.read = read;
-          // console.log(resp);
+          console.log(resp);
           if (resp.recover && resp.read) {
             return alarmnanoDb.destroy(resp._id, resp._rev);
           } else {
@@ -168,7 +177,6 @@ router.post("/alarm/realtime/edit", (req, res) => {
     promise
       .then(() => {
         res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
-        console.log("/alarm/realtime/edit");
       })
       .catch((error) => {
         console.error('Promise rejected:', error.message);
@@ -176,9 +184,12 @@ router.post("/alarm/realtime/edit", (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("伺服器錯誤");
+  } finally {
+    console.log("/alarm/realtime/edit already done!!!");
+    //res.render("Alm_RealTime");
+    alarm_db_event_lock = false
   }
-  //res.render("Alm_RealTime");
-});
+  });
 
 //傳數值到前端的表格中
 router.get("/alarm/realtime/edit", (req, res) => {
@@ -201,17 +212,24 @@ router.get("/alarm/realtime/edit", (req, res) => {
           })
         })
         .then((resp) => {
-          const alarm_db_array = [];
+          let alarm_db_array = [];
+          let alarm_db_array_read = [];
+
           for (const item of resp.docs) {
             // console.log(item);
             // ["_rev", "time", "db_name", "value"].forEach((key) => {
             //   delete item[key];
             // });
             item["index"] = "";
-            alarm_db_array.push(item);
+            if (item.read) {
+              alarm_db_array_read.push(item);
+            } else {
+              alarm_db_array.push(item);
+            }
           }
-          console.log("alarm_db_array");
-          res.send(alarm_db_array);
+          // console.log("alarm_db_array");
+          // console.log(alarm_db_array);
+          res.send([...alarm_db_array_read, ...alarm_db_array]);
         })
     })
     .catch(err => {
@@ -233,48 +251,56 @@ router.get("/alarm/history", (req, res) => {
 });
 
 function alarm_processor_call() {
-  const mangoQuery_latest_rawdata = {
-    selector: {
-      time: { $exists: true },
-    },
-    sort: [{ time: "desc" }],
-    limit: 1,
-  };
+  while (alarm_db_event_lock) {
+    setTimeout(()=>{console.log("Hi")}, 100);
+    // await new Promise(resolve => setTimeout(resolve, 100));  // Wait for a short time
+  }
+  console.log("alarm_processor_call", alarm_db_event_lock)
+  alarm_db_event_lock = true;
 
-  const lc1_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-  const lc2_alarm_promise = alarm_processor(lc2nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-  const lc3_alarm_promise = alarm_processor(lc3nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-  const lc4_alarm_promise = alarm_processor(lc4nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+  try {
+    const mangoQuery_latest_rawdata = {
+      selector: {
+        time: { $exists: true },
+      },
+      sort: [{ time: "desc" }],
+      limit: 1,
+    };
   
-  // console.log(lc_alarm_promise)
-  // Promise.race([lc_alarm_promise]).then(() => {
-  //   console.log(lc_alarm_promise)
-  //   console.log("done");
-  //   })
-
-  const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-  const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const lc1_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const lc2_alarm_promise = alarm_processor(lc2nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const lc3_alarm_promise = alarm_processor(lc3nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const lc4_alarm_promise = alarm_processor(lc4nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    
+    // console.log(lc_alarm_promise)
+    // Promise.race([lc_alarm_promise]).then(() => {
+    //   console.log(lc_alarm_promise)
+    //   console.log("done");
+    //   })
   
-  Promise.all([
-    lc1_alarm_promise, 
-    lc2_alarm_promise, 
-    lc3_alarm_promise, 
-    lc4_alarm_promise, 
-    dc_alarm_promise, 
-    other_alarm_promise
-  ])
-  .then(() => {
-    console.log("All alarm_processor: Suc!");
-  })
-  .catch(error => {
-    console.log(error)
-  })
+    const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    
+    Promise.all([
+      lc1_alarm_promise, 
+      lc2_alarm_promise, 
+      lc3_alarm_promise, 
+      lc4_alarm_promise, 
+      dc_alarm_promise, 
+      other_alarm_promise
+    ])
+    .then(() => {
+      console.log("All alarm_processor: Suc!");
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  } finally {
+    alarm_db_event_lock = false;
+  }
 }
-const interval = 1000; // 1s
-// Make the initial API call
-alarm_processor_call();
 // Set up the interval to make the API call regularly
-setInterval(alarm_processor_call, interval);
+setInterval(alarm_processor_call, 1000);
 
 module.exports = router;
 
