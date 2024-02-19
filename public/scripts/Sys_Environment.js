@@ -1,3 +1,12 @@
+//var permission="viewer"; //需讀權限
+var permission = "manager";
+$(document).ready(function () {
+  console.log("start reading js");
+  updateData();
+});
+
+setInterval(updateData, 5000);
+
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
@@ -379,3 +388,428 @@ function displayData(data) {
   const dataContainer = document.getElementById("data-container");
   dataContainer.innerHTML = `<p>${data}</p>`;
 }
+
+async function updateData(){ //更新資料ajax
+  var router = window.location.href+"/data";
+  var data = await getData(router);
+  console.log(data);
+  /*空調起停*************************************** */
+  $('#acuOnOff_1').text(data.acuOnOff_1);  
+  $('#acuOnOff_2').text(data.acuOnOff_2);
+  $('#acuOnOff_3').text(data.acuOnOff_3);
+  $('#acuOnOff_4').text(data.acuOnOff_4);
+
+  /*空調制熱溫度*************************************** */
+  $('#acuHeatT_1').text(data.acuHeatT_1);  
+  $('#acuHeatT_2').text(data.acuHeatT_2);
+  $('#acuHeatT_3').text(data.acuHeatT_3);
+  $('#acuHeatT_4').text(data.acuHeatT_4);
+  
+  /*空調制冷溫度*************************************** */
+  $('#acuCoolT_1').text(data.acuCoolT_1);  
+  $('#acuCoolT_2').text(data.acuCoolT_2);
+  $('#acuCoolT_3').text(data.acuCoolT_3);
+  $('#acuCoolT_4').text(data.acuCoolT_4);
+
+  /*空調#1************************************************* */
+  $('#acu_1_Status_1-1').text(data.acu_1_Status_1_1);  
+  $('#acu_1_Temp_1-1').text(data.acu_1_Temp_1_1);
+
+  $('#acu_1_Status_1-2').text(data.acu_1_Status_1_2);  
+  $('#acu_1_Temp_1-2').text(data.acu_1_Temp_1_2);
+
+  $('#acu_1_Status_2-1').text(data.acu_1_Status_2_1);  
+  $('#acu_1_Temp_2-1').text(data.acu_1_Temp_2_1);
+
+  $('#acu_1_Status_2-2').text(data.acu_1_Status_2_2);  
+  $('#acu_1_Temp_2-2').text(data.acu_1_Temp_2_2);
+
+  $('#acu_1_Status_3-1').text(data.acu_1_Status_3_1);  
+  $('#acu_1_Temp_3-1').text(data.acu_1_Temp_3_1);
+
+  $('#acu_1_Status_3-2').text(data.acu_1_Status_3_2);  
+  $('#acu_1_Temp_3-2').text(data.acu_1_Temp_3_2);
+
+  $('#acu_1_Status_4-1').text(data.acu_1_Status_4_1);  
+  $('#acu_1_Temp_4-1').text(data.acu_1_Temp_4_1);
+
+  /*空調#2************************************************* */
+  $('#acu_2_Status_1-1').text(data.acu_2_Status_1_1);  
+  $('#acu_2_Temp_1-1').text(data.acu_2_Temp_1_1);
+
+  $('#acu_2_Status_1-2').text(data.acu_2_Status_1_2);  
+  $('#acu_2_Temp_1-2').text(data.acu_2_Temp_1_2);
+
+  $('#acu_2_Status_2-1').text(data.acu_2_Status_2_1);  
+  $('#acu_2_Temp_2-1').text(data.acu_2_Temp_2_1);
+
+  $('#acu_2_Status_2-2').text(data.acu_2_Status_2_2);  
+  $('#acu_2_Temp_2-2').text(data.acu_2_Temp_2_2);
+
+  $('#acu_2_Status_3-1').text(data.acu_2_Status_3_1);  
+  $('#acu_2_Temp_3-1').text(data.acu_2_Temp_3_1);
+
+  $('#acu_2_Status_3-2').text(data.acu_2_Status_3_2);  
+  $('#acu_2_Temp_3-2').text(data.acu_2_Temp_3_2);
+
+  $('#acu_2_Status_4-1').text(data.acu_2_Status_4_1);  
+  $('#acu_2_Temp_4-1').text(data.acu_2_Temp_4_1);
+
+  /*空調#3************************************************* */
+  $('#acu_3_Status_1-1').text(data.acu_3_Status_1_1);  
+  $('#acu_3_Temp_1-1').text(data.acu_3_Temp_1_1);
+
+  $('#acu_3_Status_1-2').text(data.acu_3_Status_1_2);  
+  $('#acu_3_Temp_1-2').text(data.acu_3_Temp_1_2);
+
+  $('#acu_3_Status_2-1').text(data.acu_3_Status_2_1);  
+  $('#acu_3_Temp_2-1').text(data.acu_3_Temp_2_1);
+
+  $('#acu_3_Status_2-2').text(data.acu_3_Status_2_2);  
+  $('#acu_3_Temp_2-2').text(data.acu_3_Temp_2_2);
+
+  $('#acu_3_Status_3-1').text(data.acu_3_Status_3_1);  
+  $('#acu_3_Temp_3-1').text(data.acu_3_Temp_3_1);
+
+  $('#acu_3_Status_3-2').text(data.acu_3_Status_3_2);  
+  $('#acu_3_Temp_3-2').text(data.acu_3_Temp_3_2);
+
+  $('#acu_3_Status_4-1').text(data.acu_3_Status_4_1);  
+  $('#acu_3_Temp_4-1').text(data.acu_3_Temp_4_1);
+
+  /*空調#4************************************************* */
+  $('#acu_4_Status_1-1').text(data.acu_4_Status_1_1);  
+  $('#acu_4_Temp_1-1').text(data.acu_4_Temp_1_1);
+
+  $('#acu_4_Status_1-2').text(data.acu_4_Status_1_2);  
+  $('#acu_4_Temp_1-2').text(data.acu_4_Temp_1_2);
+
+  $('#acu_4_Status_2-1').text(data.acu_4_Status_2_1);  
+  $('#acu_4_Temp_2-1').text(data.acu_4_Temp_2_1);
+
+  $('#acu_4_Status_2-2').text(data.acu_4_Status_2_2);  
+  $('#acu_4_Temp_2-2').text(data.acu_4_Temp_2_2);
+
+  $('#acu_4_Status_3-1').text(data.acu_4_Status_3_1);  
+  $('#acu_4_Temp_3-1').text(data.acu_4_Temp_3_1);
+
+  $('#acu_4_Status_3-2').text(data.acu_4_Status_3_2);  
+  $('#acu_4_Temp_3-2').text(data.acu_4_Temp_3_2);
+
+  $('#acu_4_Status_4-1').text(data.acu_4_Status_4_1);  
+  $('#acu_4_Temp_4-1').text(data.acu_4_Temp_4_1);
+
+  /*溫溼度計#1************************************************************* */
+  $('#th_1_Temp_1-1').text(data.th_1_Temp_1_1);  
+  $('#th_1_Humidity_1-1').text(data.th_1_Humidity_1_1);
+
+  $('#th_1_Temp_1-2').text(data.th_1_Temp_1_2);  
+  $('#th_1_Humidity_1-2').text(data.th_1_Humidity_1_2);
+
+  $('#th_1_Temp_2-1').text(data.th_1_Temp_2_1);  
+  $('#th_1_Humidity_2-1').text(data.th_1_Humidity_2_1);
+
+  $('#th_1_Temp_2-2').text(data.th_1_Temp_2_2);  
+  $('#th_1_Humidity_2-2').text(data.th_1_Humidity_2_2);
+
+  $('#th_1_Temp_3-1').text(data.th_1_Temp_3_1);  
+  $('#th_1_Humidity_3-1').text(data.th_1_Humidity_3_1);
+
+  $('#th_1_Temp_3-2').text(data.th_1_Temp_3_2);  
+  $('#th_1_Humidity_3-2').text(data.th_1_Humidity_3_2);
+
+  $('#th_1_Temp_4-1').text(data.th_1_Temp_4_1);  
+  $('#th_1_Humidity_4-1').text(data.th_1_Humidity_4_1);
+
+  /*溫溼度計#2************************************************************* */
+  $('#th_2_Temp_1-1').text(data.th_2_Temp_1_1);  
+  $('#th_2_Humidity_1-1').text(data.th_2_Humidity_1_1);
+
+  $('#th_2_Temp_1-2').text(data.th_2_Temp_1_2);  
+  $('#th_2_Humidity_1-2').text(data.th_2_Humidity_1_2);
+
+  $('#th_2_Temp_2-1').text(data.th_2_Temp_2_1);  
+  $('#th_2_Humidity_2-1').text(data.th_2_Humidity_2_1);
+
+  $('#th_2_Temp_2-2').text(data.th_2_Temp_2_2);  
+  $('#th_2_Humidity_2-2').text(data.th_2_Humidity_2_2);
+
+  $('#th_2_Temp_3-1').text(data.th_2_Temp_3_1);  
+  $('#th_2_Humidity_3-1').text(data.th_2_Humidity_3_1);
+
+  $('#th_2_Temp_3-2').text(data.th_2_Temp_3_2);  
+  $('#th_2_Humidity_3-2').text(data.th_2_Humidity_3_2);
+
+  $('#th_2_Temp_4-1').text(data.th_2_Temp_4_1);  
+  $('#th_2_Humidity_4-1').text(data.th_2_Humidity_4_1);
+
+  /*UPS模式*********************************************************** */  
+  $('#upsMode_1-1').text(data.upsMode_1_1);
+  $('#upsMode_1-2').text(data.upsMode_1_2);
+  $('#upsMode_2-1').text(data.upsMode_2_1);
+  $('#upsMode_2-2').text(data.upsMode_2_2);
+  $('#upsMode_3-1').text(data.upsMode_3_1);
+  $('#upsMode_3-2').text(data.upsMode_3_2);
+  $('#upsMode_4-1').text(data.upsMode_4_1);
+
+  /*UPS輸出負載*********************************************************** */  
+  $('#upsLoad_1-1').text(data.upsLoad_1_1);
+  $('#upsLoad_1-2').text(data.upsLoad_1_2);
+  $('#upsLoad_2-1').text(data.upsLoad_2_1);
+  $('#upsLoad_2-2').text(data.upsLoad_2_2);
+  $('#upsLoad_3-1').text(data.upsLoad_3_1);
+  $('#upsLoad_3-2').text(data.upsLoad_3_2);
+  $('#upsLoad_4-1').text(data.upsLoad_4_1);
+
+  /*UPS輸出電壓*********************************************************** */  
+  $('#upsVout_1-1').text(data.upsVout_1_1);
+  $('#upsVout_1-2').text(data.upsVout_1_2);
+  $('#upsVout_2-1').text(data.upsVout_2_1);
+  $('#upsVout_2-2').text(data.upsVout_2_2);
+  $('#upsVout_3-1').text(data.upsVout_3_1);
+  $('#upsVout_3-2').text(data.upsVout_3_2);
+  $('#upsVout_4-1').text(data.upsVout_4_1);
+
+  /*UPS輸出電流*********************************************************** */  
+  $('#upsIout_1-1').text(data.upsIout_1_1);
+  $('#upsIout_1-2').text(data.upsIout_1_2);
+  $('#upsIout_2-1').text(data.upsIout_2_1);
+  $('#upsIout_2-2').text(data.upsIout_2_2);
+  $('#upsIout_3-1').text(data.upsIout_3_1);
+  $('#upsIout_3-2').text(data.upsIout_3_2);
+  $('#upsIout_4-1').text(data.upsIout_4_1);
+
+  /*UPS電池溫度*********************************************************** */  
+  $('#upsTemp_1-1').text(data.upsTemp_1_1);
+  $('#upsTemp_1-2').text(data.upsTemp_1_2);
+  $('#upsTemp_2-1').text(data.upsTemp_2_1);
+  $('#upsTemp_2-2').text(data.upsTemp_2_2);
+  $('#upsTemp_3-1').text(data.upsTemp_3_1);
+  $('#upsTemp_3-2').text(data.upsTemp_3_2);
+  $('#upsTemp_4-1').text(data.upsTemp_4_1);  
+
+  /*UPS SOC*********************************************************** */  
+  $('#upsSOC_1-1').text(data.upsSOC_1_1);
+  $('#upsSOC_1-2').text(data.upsSOC_1_2);
+  $('#upsSOC_2-1').text(data.upsSOC_2_1);
+  $('#upsSOC_2-2').text(data.upsSOC_2_2);
+  $('#upsSOC_3-1').text(data.upsSOC_3_1);
+  $('#upsSOC_3-2').text(data.upsSOC_3_2);
+  $('#upsSOC_4-1').text(data.upsSOC_4_1); 
+
+  /*UPS狀態1***************************************************************** */
+  if (data.upsStatus1_1_1_rawD > 0) {
+    classAdd("#upsStatus1_1-1", "setToClose");
+  } else {
+    classRemove("#upsStatus1_1-1", "setToClose");
+  }
+
+  if (data.upsStatus1_1_2_rawD > 0) {
+    classAdd("#upsStatus1_1-2", "setToClose");
+  } else {
+    classRemove("#upsStatus1_1-2", "setToClose");
+  }
+
+  if (data.upsStatus1_2_1_rawD > 0) {
+    classAdd("#upsStatus1_2-1", "setToClose");
+  } else {
+    classRemove("#upsStatus1_2-1", "setToClose");
+  }
+
+  if (data.upsStatus1_2_2_rawD > 0) {
+    classAdd("#upsStatus1_2-2", "setToClose");
+  } else {
+    classRemove("#upsStatus1_2-2", "setToClose");
+  }
+
+  if (data.upsStatus1_3_1_rawD > 0) {
+    classAdd("#upsStatus1_3-1", "setToClose");
+  } else {
+    classRemove("#upsStatus1_3-1", "setToClose");
+  }
+
+  if (data.upsStatus1_3_2_rawD > 0) {
+    classAdd("#upsStatus1_3-2", "setToClose");
+  } else {
+    classRemove("#upsStatus1_3-2", "setToClose");
+  }
+
+  if (data.upsStatus1_4_1_rawD > 0) {
+    classAdd("#upsStatus1_4-1", "setToClose");
+  } else {
+    classRemove("#upsStatus1_4-1", "setToClose");
+  }
+
+  /*UPS狀態2***************************************************************** */
+  //ejs沒有class????????
+  if (data.upsStatus2_1_1_rawD > 0) {
+    classAdd("#upsStatus2_1-1", "setToClose");
+  } else {
+    classRemove("#upsStatus2_1-1", "setToClose");
+  }
+
+  if (data.upsStatus2_1_2_rawD > 0) {
+    classAdd("#upsStatus2_1-2", "setToClose");
+  } else {
+    classRemove("#upsStatus2_1-2", "setToClose");
+  }
+
+  if (data.upsStatus2_2_1_rawD > 0) {
+    classAdd("#upsStatus2_2-1", "setToClose");
+  } else {
+    classRemove("#upsStatus2_2-1", "setToClose");
+  }
+
+  if (data.upsStatus2_2_2_rawD > 0) {
+    classAdd("#upsStatus2_2-2", "setToClose");
+  } else {
+    classRemove("#upsStatus2_2-2", "setToClose");
+  }
+
+  if (data.upsStatus2_3_1_rawD > 0) {
+    classAdd("#upsStatus2_3-1", "setToClose");
+  } else {
+    classRemove("#upsStatus2_3-1", "setToClose");
+  }
+
+  if (data.upsStatus2_3_2_rawD > 0) {
+    classAdd("#upsStatus2_3-2", "setToClose");
+  } else {
+    classRemove("#upsStatus2_3-2", "setToClose");
+  }
+
+  if (data.upsStatus2_4_1_rawD > 0) {
+    classAdd("#upsStatus2_4-1", "setToClose");
+  } else {
+    classRemove("#upsStatus2_4-1", "setToClose");
+  }
+
+  /*BSC告警******************************************************* */
+  if (data.bscAlarm_1_1_rawD > 0) {
+    classAdd("#bscAlarm_1-1", "setToClose");
+  } else {
+    classRemove("#bscAlarm_1-1", "setToClose");
+  }
+
+  if (data.bscAlarm_1_2_rawD > 0) {
+    classAdd("#bscAlarm_1-2", "setToClose");
+  } else {
+    classRemove("#bscAlarm_1-2", "setToClose");
+  }
+
+  if (data.bscAlarm_2_1_rawD > 0) {
+    classAdd("#bscAlarm_2-1", "setToClose");
+  } else {
+    classRemove("#bscAlarm_2-1", "setToClose");
+  }
+
+  if (data.bscAlarm_2_2_rawD > 0) {
+    classAdd("#bscAlarm_2-2", "setToClose");
+  } else {
+    classRemove("#bscAlarm_2-2", "setToClose");
+  }
+
+  if (data.bscAlarm_3_1_rawD > 0) {
+    classAdd("#bscAlarm_3-1", "setToClose");
+  } else {
+    classRemove("#bscAlarm_3-1", "setToClose");
+  }
+
+  if (data.bscAlarm_3_2_rawD > 0) {
+    classAdd("#bscAlarm_3-2", "setToClose");
+  } else {
+    classRemove("#bscAlarm_3-2", "setToClose");
+  }
+
+  if (data.bscAlarm_4_1_rawD > 0) {
+    classAdd("#bscAlarm_4-1", "setToClose");
+  } else {
+    classRemove("#bscAlarm_4-1", "setToClose");
+  }
+
+  /*BSC故障******************************************************* */
+  if (data.bscFault_1_1_rawD > 0) {
+    classAdd("#bscFault_1-1", "setToClose");
+  } else {
+    classRemove("#bscFault_1-1", "setToClose");
+  }
+
+  if (data.bscFault_1_2_rawD > 0) {
+    classAdd("#bscFault_1-2", "setToClose");
+  } else {
+    classRemove("#bscFault_1-2", "setToClose");
+  }
+
+  if (data.bscFault_2_1_rawD > 0) {
+    classAdd("#bscFault_2-1", "setToClose");
+  } else {
+    classRemove("#bscFault_2-1", "setToClose");
+  }
+
+  if (data.bscFault_2_2_rawD > 0) {
+    classAdd("#bscFault_2-2", "setToClose");
+  } else {
+    classRemove("#bscFault_2-2", "setToClose");
+  }
+
+  if (data.bscFault_3_1_rawD > 0) {
+    classAdd("#bscFault_3-1", "setToClose");
+  } else {
+    classRemove("#bscFault_3-1", "setToClose");
+  }
+
+  if (data.bscFault_3_2_rawD > 0) {
+    classAdd("#bscFault_3-2", "setToClose");
+  } else {
+    classRemove("#bscFault_3-2", "setToClose");
+  }
+
+  if (data.bscFault_4_1_rawD > 0) {
+    classAdd("#bscFault_4-1", "setToClose");
+  } else {
+    classRemove("#bscFault_4-1", "setToClose");
+  }
+
+  /*消防狀態******************************************************* */
+  if (data.ffsStatus_1_1_rawD > 0) {
+    classAdd("#ffsStatus_1-1", "setToClose");
+  } else {
+    classRemove("#ffsStatus_1-1", "setToClose");
+  }
+
+  if (data.ffsStatus_1_2_rawD > 0) {
+    classAdd("#ffsStatus_1-2", "setToClose");
+  } else {
+    classRemove("#ffsStatus_1-2", "setToClose");
+  }
+
+  if (data.ffsStatus_2_1_rawD > 0) {
+    classAdd("#ffsStatus_2-1", "setToClose");
+  } else {
+    classRemove("#ffsStatus_2-1", "setToClose");
+  }
+
+  if (data.ffsStatus_2_2_rawD > 0) {
+    classAdd("#ffsStatus_2-2", "setToClose");
+  } else {
+    classRemove("#ffsStatus_2-2", "setToClose");
+  }
+
+  if (data.ffsStatus_3_1_rawD > 0) {
+    classAdd("#ffsStatus_3-1", "setToClose");
+  } else {
+    classRemove("#ffsStatus_3-1", "setToClose");
+  }
+
+  if (data.ffsStatus_3_2_rawD > 0) {
+    classAdd("#ffsStatus_3-2", "setToClose");
+  } else {
+    classRemove("#ffsStatus_3-2", "setToClose");
+  }
+
+  if (data.ffsStatus_4_1_rawD > 0) {
+    classAdd("#ffsStatus_4-1", "setToClose");
+  } else {
+    classRemove("#ffsStatus_4-1", "setToClose");
+  }
+  }

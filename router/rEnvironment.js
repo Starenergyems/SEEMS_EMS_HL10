@@ -1,7 +1,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
-//const port = 3000;
+const port = 3005;
 const router = express.Router();
 const app = express();
 const cors = require("cors");
@@ -92,9 +92,9 @@ const getLatestDocument = async (nanoDb) => {
     });
   });
 };
-
-router.get("/systeminfo/environment", async (req, res) => {
-  try {
+/************************************************************************************ */ 
+var Env_variables;
+async function queryEnv_variables(){
     // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
     const dataPromises = databases.map(async (dbName) => {
       const nanoDb = createNanoInstance(dbName);
@@ -108,7 +108,7 @@ router.get("/systeminfo/environment", async (req, res) => {
     const lc4Data = allData[3];
     const dwctrlData = allData[4];
 
-    res.render("Sys_Environment", {
+    Env_variables = {
       acuOnOff_1: mapWordStatus(lc1Data.Ctrl[407018], acuOnOff_MT),
       acuHeatT_1: scaleProcess(lc1Data.Ctrl[407016], 0.1, 1),
       acuCoolT_1: scaleProcess(lc1Data.Ctrl[407017], 0.1, 1),
@@ -293,8 +293,26 @@ router.get("/systeminfo/environment", async (req, res) => {
       bscAlarm_4_1_rawD: lc4Data.BSC1[406003],
       bscFault_4_1_rawD: lc4Data.BSC1[406001],
       ffsStatus_4_1_rawD: lc4Data.BSC1[406005],
-    });
+    };
+  
+}
+
+app.get("/systeminfo/environment", async (req, res) => {
+  try {
+    await queryEnv_variables();
+    res.render("Sys_Environment", Env_variables);
   } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/systeminfo/environment/:data", async (req, res) => {
+  try {
+    await queryEnv_variables();
+    res.json(Env_variables);
+  }
+   catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
@@ -302,7 +320,7 @@ router.get("/systeminfo/environment", async (req, res) => {
 
 //******************************************************************** */
 //環境控制下方彈出視窗
-router.post("/getDataforenv", async (req, res) => {
+app.post("/getDataforenv", async (req, res) => {
   try {
     console.log("接收到環境監控的前端請求");
     const blockId = req.body.blockId;
@@ -367,3 +385,6 @@ router.post("/getDataforenv", async (req, res) => {
 });
 
 module.exports = router;
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});
