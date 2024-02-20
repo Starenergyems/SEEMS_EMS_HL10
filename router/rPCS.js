@@ -35,7 +35,7 @@ app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-/*以下router要改回app*************************** */
+/*以下app要改回router*************************** */
 app.use(cors());
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(
@@ -118,6 +118,36 @@ app.get("/operateinfo/pcs", async (req, res) => {
   res.render("Op_PCS_InfoSummary", {
     //id,
     permission: "manager",
+
+    workStatus:1,
+    onlineNum:1,
+    totalP:1,
+    totalQ:1,
+    totalRatedP:1,
+    today_E_chg:1,
+    today_E_dcg:1,
+    tot_E_chg:1,
+    tot_E_dcg:1,
+
+    onlineNum_LC1:1,
+    ratedP_LC1:1,
+    activePower_LC1:1,
+    reactivePower_LC1:1,
+    today_E_chg_LC1:1,
+    today_E_dcg_LC1:1,
+    tot_E_chg_LC1:1,
+    tot_E_dcg_LC1:1,
+
+    alarm_PCS1_1:1,
+    alarm_PCS1_2:1,
+    fault_PCS1_1:1,
+    fault_PCS1_2:1,
+
+    modeActPas_LC1:1,
+    modeQctrl_LC1:1,
+    standbyCmd_LC1:1,
+    modeLR_LC1:1
+
   });
 });
 //************************************************************************************************************************************************ */

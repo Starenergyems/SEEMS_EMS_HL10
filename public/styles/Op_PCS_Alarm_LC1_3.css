@@ -224,4 +224,5 @@
     display: inline-block;
     width:20%;
     margin: 5px 5px 5px 25px;
+    min-width: 320px;
 }
