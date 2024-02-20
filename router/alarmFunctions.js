@@ -1501,7 +1501,7 @@ function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
             } else if (err.statusCode === 409) {
                 console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
             } else {
-                console.error('Error checking update_trigger_alarms flag:', err.request.data);
+                console.error('Error checking update_trigger_alarms flag:', err);
             }
         });
   });
@@ -1518,7 +1518,7 @@ function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
               } else if (err.statusCode === 409) {
                   console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
               } else {
-                  console.error('Error checking update_trigger_alarms flag:', err.request.data);
+                  console.error('Error checking update_trigger_alarms flag:', err);
               }
           });
   });
@@ -1539,7 +1539,7 @@ function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
             } else if (err.statusCode === 409) {
                 console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
             } else {
-                console.error('Error checking update_trigger_alarms flag:', err.request.data);
+                console.error('Error checking update_trigger_alarms flag:', err);
             }
         });
   });
@@ -1555,7 +1555,7 @@ function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
           console.log("Promise.all in update_trigger_alarms: Suc!");
       })
       .catch(err => {
-          console.error('Error in Promise.all in update_trigger_alarms:', err.request.data);
+          console.error('Error in Promise.all in update_trigger_alarms:', err);
       });
 }
 
@@ -1701,6 +1701,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                     // delete error_result[_id]["line"];
                     if (!doc.recover) {
                       // Set the recover boolean as true and the time to the current time as it is not an error now
+                      // doc.value = "Normal";
                       doc.recover = true;
                       doc.recover_time = current_locale_time();
                       // if the recover and read boolean are both true: del the doc

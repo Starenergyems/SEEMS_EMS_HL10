@@ -111,22 +111,17 @@ router.get("/alarm/realtime", (req, res) => {
 });
 
 router.post("/alarm/realtime/edit", (req, res) => {
-  while (alarm_db_event_lock) {
-    setTimeout(()=>{console.log("Hi")}, 100);
-    // await new Promise(resolve => setTimeout(resolve, 100));  // Wait for a short time
-  }
-  console.log("/alarm/realtime/edit", alarm_db_event_lock)
   alarm_db_event_lock = true;
 
+  let promise = true;
   try {
     const { ID, Checked } = req.body;
-    console.log("Received ID:", ID);
-    console.log("read:", Checked);
+    // console.log("Received ID:", ID);
+    // console.log("read:", Checked);
 
     const read = Checked === "true";
     // console.log(read)
 
-    let promise = true;
     if (ID === "all") {
       promise = alarmnanoDb.list()
         .then((body) => {
@@ -149,14 +144,14 @@ router.post("/alarm/realtime/edit", (req, res) => {
           } else if (err.statusCode === 409) {
               console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
           } else {
-              console.error('Error checking update_trigger_alarms flag:', err.request.data);
+              console.error('Error checking update_trigger_alarms flag:', err);
           }
         })
     } else {
       promise = alarmnanoDb.get(ID)
         .then((resp) => {
           resp.read = read;
-          console.log(resp);
+          // console.log(resp);
           if (resp.recover && resp.read) {
             return alarmnanoDb.destroy(resp._id, resp._rev);
           } else {
@@ -173,21 +168,23 @@ router.post("/alarm/realtime/edit", (req, res) => {
         })
     }
 
-    // console.log(promise);
-    promise
-      .then(() => {
-        res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
-      })
-      .catch((error) => {
-        console.error('Promise rejected:', error.message);
-      });
   } catch (error) {
     console.error(error);
     res.status(500).send("伺服器錯誤");
   } finally {
-    console.log("/alarm/realtime/edit already done!!!");
-    //res.render("Alm_RealTime");
-    alarm_db_event_lock = false
+    // console.log(promise);
+    promise
+      .then(() => {
+        alarm_db_event_lock = false;
+        // setTimeout(() => {
+        //   alarm_db_event_lock = false;
+        // }, 1000);
+        console.log("/alarm/realtime/edit post: Suc!")
+        res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
+      })
+      .catch((error) => {
+        console.error('Promise rejected:', error);
+      });
   }
   });
 
@@ -229,7 +226,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
           }
           // console.log("alarm_db_array");
           // console.log(alarm_db_array);
-          res.send([...alarm_db_array_read, ...alarm_db_array]);
+          res.send([...alarm_db_array, ...alarm_db_array_read]);
         })
     })
     .catch(err => {
@@ -251,14 +248,18 @@ router.get("/alarm/history", (req, res) => {
 });
 
 function alarm_processor_call() {
-  while (alarm_db_event_lock) {
-    setTimeout(()=>{console.log("Hi")}, 100);
-    // await new Promise(resolve => setTimeout(resolve, 100));  // Wait for a short time
-  }
-  console.log("alarm_processor_call", alarm_db_event_lock)
-  alarm_db_event_lock = true;
-
-  try {
+  // alarm_db_event_lock = true;
+  // while (alarm_db_event_lock) {
+  //   // console.log("a")
+  //   setTimeout(()=>{console.log("Hi")}, 3000);
+  //   // console.log("b")
+  //   console.log('a')
+  //   // await new Promise(resolve => setTimeout(resolve, 3000));  // Wait for a short time
+  //   // console.log('b')
+  // }
+  // console.log("alarm_processor_call", alarm_db_event_lock)
+  
+  if (! alarm_db_event_lock) {
     const mangoQuery_latest_rawdata = {
       selector: {
         time: { $exists: true },
@@ -295,12 +296,10 @@ function alarm_processor_call() {
     .catch(error => {
       console.log(error)
     })
-  } finally {
-    alarm_db_event_lock = false;
   }
 }
 // Set up the interval to make the API call regularly
-setInterval(alarm_processor_call, 1000);
+setInterval(alarm_processor_call, 3000);
 
 module.exports = router;
 
