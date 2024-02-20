@@ -50,6 +50,11 @@ app.use(
   "/operateinfo/pcs/alarm/:id",
   express.static(path.join(__dirname, "../public"))
 );
+
+app.use(
+  "/operateinfo/pcs/alarm_lc13/:id",
+  express.static(path.join(__dirname, "../public"))
+);
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
 app.use(
   "/operateinfo/pcs/infodetail/:id",
@@ -106,7 +111,14 @@ const getLatestDocument = async (nanoDb) => {
 
 //pcs主頁
 app.get("/operateinfo/pcs", async (req, res) => {
-  res.render("Op_PCS_InfoSummary", { permission: "manager" });
+  const dataPromises = databases.map(async (dbName) => {
+    const nanoDb = createNanoInstance(dbName);
+    return getLatestDocument(nanoDb);
+  });
+  res.render("Op_PCS_InfoSummary", {
+    //id,
+    permission: "manager",
+  });
 });
 //************************************************************************************************************************************************ */
 //整合換頁功能
@@ -300,27 +312,24 @@ app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
-app.get(
-  "/operateinfo/pcs/infodetail/:pageNumber/:data",
-  async (req, res) => {
-    try {
-      //獲取目前切換的頁數
-      pageNumber = parseInt(req.params.pageNumber);
-      await queryPcsDetail();
-      const responseData = pcsDetail_variables;
-      console.log(responseData);
-      res.json(responseData);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
+app.get("/operateinfo/pcs/infodetail/:pageNumber/:data", async (req, res) => {
+  try {
+    //獲取目前切換的頁數
+    pageNumber = parseInt(req.params.pageNumber);
+    await queryPcsDetail();
+    const responseData = pcsDetail_variables;
+    console.log(responseData);
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
-);
+});
 
 //************************************************************************************************************************************************ */
 //alarm告警換頁
 var pcsAlarm_variables;
-async function queryPcsAlarm(){
+async function queryPcsAlarm() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
@@ -430,12 +439,12 @@ async function queryPcsAlarm(){
   } else {
     console.log("err");
   }
-};
+}
 
 app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
-    pageNumber = parseInt(req.params.pageNumber);    
+    pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm();
     res.render("Op_PCS_Alarm", pcsAlarm_variables);
   } catch (error) {
@@ -446,8 +455,30 @@ app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
 
 app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   try {
-    //const pageNumber = req.session.pageNumber;
-    pageNumber = parseInt(req.params.pageNumber);    
+    pageNumber = parseInt(req.params.pageNumber);
+    await queryPcsAlarm();
+    res.json(pcsAlarm_variables);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/operateinfo/pcs/alarm_lc13/:pageNumber", async (req, res) => {
+  try {
+    pageNumber = parseInt(req.params.pageNumber);
+    console.log(pageNumber);
+    await queryPcsAlarm();
+    res.render("Op_PCS_Alarm_LC1_3", pcsAlarm_variables);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/operateinfo/pcs/alarm_lc13/:pageNumber/:data", async (req, res) => {
+  try {
+    pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm();
     res.json(pcsAlarm_variables);
   } catch (error) {
@@ -1121,6 +1152,6 @@ app.post("/set_dSS_Data", async (req, res) => {
 
 module.exports = router;
 
- app.listen(port, () => {
-   console.log(`應用程式正在監聽端口 ${port}`);
- });
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});

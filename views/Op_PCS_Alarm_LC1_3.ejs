@@ -2,7 +2,7 @@
     title: 'PCS故障告警', 
      stylesheets: [
         '../public/styles/style_template.css',
-        '../public/styles/Op_PCS_Alarm.css'
+        '../public/styles/Op_PCS_Alarm_LC1_3.css'
     ],
     permission: 'admin'
 }) %>
@@ -54,67 +54,73 @@
                 <!-- <a href="/operateinfo/pcs/infodetail" class="infoStatus" id="infoPCS">狀態與數值</a>
                 <a href="#" class="infoStatus" id="statusPCS">故障與告警</a> -->
                 <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>" class="subTitle_unclick">狀態與數值</a>
+                <% if (pageNumber === 7){ %>
                 <a href="/operateinfo/pcs/alarm/<%= pageNumber %>">故障與告警</a>
+                <% } else {%> 
+                <a href="/operateinfo/pcs/alarm_lc13/<%= pageNumber %>">故障與告警</a><% } %>
                 <% if (pageNumber > 1) { %>
                 <a href="/operateinfo/pcs/alarm_lc13/<%= pageNumber - 1 %>" class="preNext" id="previousPCS">上一頁</a><% } %>
-                <% if (pageNumber < 7) { %>
-                <a href="/operateinfo/pcs/alarm/<%= pageNumber + 1 %>" class="preNext" id="nextPCS">下一頁</a><% } %>
+                <% if (pageNumber === 6) { %>
+                    <a href="/operateinfo/pcs/alarm/<%= pageNumber + 1 %>" class="preNext" id="nextPCS">下一頁</a><% } %>
+                <% if (pageNumber < 7 && pageNumber !== 6) { %>
+                <a href="/operateinfo/pcs/alarm_lc13/<%= pageNumber + 1 %>" class="preNext" id="nextPCS">下一頁</a><% } %>
             </div>
 
-            <div class="overview">
-                <div class="bigInfo bI_noOverallFault">
-                    <div class="BG_bigInfo">
-                        <div class="subBG_bigInfo">整機故障</div>
-                        <label class="data_val" id="noOverallFault"><%=noOverallFault%></label>
+            <div class="FirstColumn">
+                <div class="overview">
+                    <div class="bigInfo bI_noOverallFault">
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">整機故障</div>
+                            <label class="data_val" id="noOverallFault"><%=noOverallFault%></label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_noOverallAlarm">
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">整機告警</div>
+                            <label class="data_val" id="noOverallAlarm"><%=noOverallAlarm%></label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_noFault">
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">故障狀態</div>
+                            <label class="data_val" id="noFault"><%=noFault%></label>
+                        </div>
+                    </div>
+                    <div class="bigInfo bI_noAlarm">
+                        <div class="BG_bigInfo">
+                            <div class="subBG_bigInfo">告警狀態</div>
+                            <label class="data_val" id="noAlarm"><%=noAlarm%></label>
+                        </div>
                     </div>
                 </div>
-                <div class="bigInfo bI_noOverallAlarm">
-                    <div class="BG_bigInfo">
-                        <div class="subBG_bigInfo">整機告警</div>
-                        <label class="data_val" id="noOverallAlarm"><%=noOverallAlarm%></label>
+
+                <div class="overallAlarm">
+                    <h3>整機告警狀態</h3>
+                    <div class="columnDLL">
+                        <div class="DL_Line">心跳停止<label class="dataLight OG_L <%=OA[1]==='1'?'setToClose':''%>" id="OA_bit_1"></label></div>
+                        <div class="DL_Line">MV異常<label class="dataLight OG_L <%=OA[2]==='1'?'setToClose':''%>" id="OA_bit_2"></label></div>
+                        <div class="DL_Line lastLine">配電供電電源異常
+                            <label class="dataLight OG_L <%=OA[10]==='1'?'setToClose':''%>" id="OA_bit_10"></label>
+                        </div>
                     </div>
                 </div>
-                <div class="bigInfo bI_noFault">
-                    <div class="BG_bigInfo">
-                        <div class="subBG_bigInfo">故障狀態</div>
-                        <label class="data_val" id="noFault"><%=noFault%></label>
-                    </div>
-                </div>
-                <div class="bigInfo bI_noAlarm">
-                    <div class="BG_bigInfo">
-                        <div class="subBG_bigInfo">告警狀態</div>
-                        <label class="data_val" id="noAlarm"><%=noAlarm%></label>
+    
+                <div class="overallFault">
+                    <h3>整機故障狀態</h3>
+                    <div class="columnDLL">
+                        <div class="DL_Line">低壓室門禁保護<label class="dataLight RG_L <%=OF[1]==='1'?'setToClose':''%>" id="OF_bit_1"></label></div>
+                        <div class="DL_Line">本地緊急停機<label class="dataLight RG_L <%=OF[2]==='1'?'setToClose':''%>" id="OF_bit_2"></label></div>
+                        <div class="DL_Line">遠程緊急停機<label class="dataLight RG_L <%=OF[3]==='1'?'setToClose':''%>" id="OF_bit_3"></label></div>
+                        <div class="DL_Line">低壓室煙感<label class="dataLight RG_L <%=OF[5]==='1'?'setToClose':''%>" id="OF_bit_5"></label></div>
+                        <div class="DL_Line">主從通訊異常<label class="dataLight RG_L <%=OF[13]==='1'?'setToClose':''%>" id="OF_bit_13"></label></div>
+                        <div class="DL_Line lastLine">Goose通訊異常
+                            <label class="dataLight RG_L <%=OF[15]==='1'?'setToClose':''%>" id="OF_bit_15"></label>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="overallFault">
-                <h3>整機故障狀態</h3>
-                <div class="columnDLL">
-                    <div class="DL_Line">低壓室門禁保護<label class="dataLight RG_L <%=OF[1]==='1'?'setToClose':''%>" id="OF_bit_1"></label></div>
-                    <div class="DL_Line">本地緊急停機<label class="dataLight RG_L <%=OF[2]==='1'?'setToClose':''%>" id="OF_bit_2"></label></div>
-                    <div class="DL_Line">遠程緊急停機<label class="dataLight RG_L <%=OF[3]==='1'?'setToClose':''%>" id="OF_bit_3"></label></div>
-                </div>
-                <div class="columnDLL">
-                    <div class="DL_Line">低壓室煙感<label class="dataLight RG_L <%=OF[5]==='1'?'setToClose':''%>" id="OF_bit_5"></label></div>
-                    <div class="DL_Line">BMS通訊異常<label class="dataLight RG_L <%=OF[13]==='1'?'setToClose':''%>" id="OF_bit_13"></label></div>
-                    <div class="DL_Line lastLine">Goose通訊異常
-                        <label class="dataLight RG_L <%=OF[15]==='1'?'setToClose':''%>" id="OF_bit_15"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="overallAlarm">
-                <h3>整機告警狀態</h3>
-                <div class="columnDLL">
-                    <div class="DL_Line">心跳停止<label class="dataLight OG_L <%=OA[1]==='1'?'setToClose':''%>" id="OA_bit_1"></label></div>
-                    <div class="DL_Line">計量板通訊異常<label class="dataLight OG_L <%=OA[2]==='1'?'setToClose':''%>" id="OA_bit_2"></label></div>
-                    <div class="DL_Line lastLine">配電供電電源異常
-                        <label class="dataLight OG_L <%=OA[10]==='1'?'setToClose':''%>" id="OA_bit_10"></label>
-                    </div>
-                </div>
-            </div>
-
+            
+            
             <div class="Alarm">
                 <h3>告警狀態</h3>
                 <div class="columnDLL columnDLL_0">
@@ -154,8 +160,22 @@
                         <label class="dataLight OG_L <%=Alarm2[0]==='1'?'setToClose':''%>" id="A2_bit_0"></label>
                     </div>
                 </div>
+
+                <div class="columnDLL"><!--AJAX還沒做-->
+                    <div class="DL_Line lastLine">SCU-DSP通訊異常
+                        <label class="dataLight OG_L" id=""></label>
+                    </div>
+                    <div class="DL_Line lastLine">BMS通訊異常
+                        <label class="dataLight OG_L" id=""></label>
+                    </div>
+                    <div class="DL_Line lastLine">BMS乾接點
+                        <label class="dataLight OG_L" id=""></label>
+                    </div>
+                </div>
+
             </div>
 
+            
             <div class="Fault">
                 <h3>故障狀態</h3>
                 <div class="columnDLL">
@@ -170,9 +190,14 @@
                     <div class="DL_Line">交流電流不平衡1<label class="dataLight RG_L <%=Fault2[6]==='1'?'setToClose':''%>" id="F2_bit_6"></label></div>
                     <div class="DL_Line">交流電流不平衡2<label class="dataLight RG_L <%=Fault2[23]==='1'?'setToClose':''%>" id="F2_bit_23"></label></div>
                     <div class="DL_Line">交流電流不平衡3<label class="dataLight RG_L <%=Fault2[24]==='1'?'setToClose':''%>" id="F2_bit_24"></label></div>
-                    <div class="DL_Line lastLine">交流開關故障
+                    <div class="DL_Line gapLine">交流開關故障
                         <label class="dataLight RG_L <%=Fault2[19]==='1'?'setToClose':''%>" id="F2_bit_19"></label>
                     </div>
+                    <div class="DL_Line">LCD-DSP通訊故障<label class="dataLight RG_L <%=Fault2[5]==='1'?'setToClose':''%>" id="F2_bit_5"></label></div>
+                    <div class="DL_Line">併機通訊故障
+                        <label class="dataLight RG_L <%=Fault2[13]==='1'?'setToClose':''%>" id="F2_bit_13"></label>
+                    </div>
+                    <div class="DL_Line gapLine">SCU計量板通訊異常<label class="dataLight RG_L" id=""></label></div><!--AJAX還沒-->
                 </div>
 
                 <div class="columnDLL">
@@ -193,6 +218,11 @@
                     <div class="DL_Line lastLine">過載保護
                         <label class="dataLight RG_L <%=Fault1[15]==='1'?'setToClose':''%>" id="F1_bit_15"></label>
                     </div>
+
+                    <div class="DL_Line">風機1故障<label class="dataLight RG_L <%=Fault1[17]==='1'?'setToClose':''%>" id="F1_bit_17"></label></div>
+                    <div class="DL_Line gapLine">風機2故障
+                        <label class="dataLight RG_L <%=Fault2[22]==='1'?'setToClose':''%>" id="F2_bit_22"></label>
+                    </div>
                 </div>
 
                 <div class="columnDLL">
@@ -205,12 +235,10 @@
                     <div class="DL_Line">軟啟動故障<label class="dataLight RG_L <%=Fault2[20]==='1'?'setToClose':''%>" id="F2_bit_20"></label></div>
                     <div class="DL_Line">驅動板故障<label class="dataLight RG_L <%=Fault2[25]==='1'?'setToClose':''%>" id="F2_bit_25"></label></div>
                     <div class="DL_Line">中點電位偏移<label class="dataLight RG_L <%=Fault2[26]==='1'?'setToClose':''%>" id="F2_bit_26"></label></div>
-                    <div class="DL_Line lastLine">載波同步故障
+                    <div class="DL_Line gapLine">載波同步故障
                         <label class="dataLight RG_L <%=Fault2[27]==='1'?'setToClose':''%>" id="F2_bit_27"></label>
                     </div>
-                </div>
 
-                <div class="columnDLL">
                     <div class="DL_Line">模塊過溫<label class="dataLight RG_L <%=Fault1[10]==='1'?'setToClose':''%>" id="F1_bit_10"></label></div>
                     <div class="DL_Line">電抗器過溫<label class="dataLight RG_L <%=Fault1[11]==='1'?'setToClose':''%>" id="F1_bit_11"></label></div>
                     <div class="DL_Line">變壓器過溫<label class="dataLight RG_L <%=Fault1[12]==='1'?'setToClose':''%>" id="F1_bit_12"></label></div>
@@ -219,17 +247,14 @@
                         <label class="dataLight RG_L <%=Fault2[14]==='1'?'setToClose':''%>" id="F2_bit_14"></label>
                     </div>
 
-                    <div class="DL_Line">風機1故障<label class="dataLight RG_L <%=Fault1[17]==='1'?'setToClose':''%>" id="F1_bit_17"></label></div>
-                    <div class="DL_Line gapLine">風機2故障
-                        <label class="dataLight RG_L <%=Fault2[22]==='1'?'setToClose':''%>" id="F2_bit_22"></label>
-                    </div>
-
-                    <div class="DL_Line">LCD-DSP通訊故障<label class="dataLight RG_L <%=Fault2[5]==='1'?'setToClose':''%>" id="F2_bit_5"></label></div>
-                    <div class="DL_Line lastLine">併機通訊故障
-                        <label class="dataLight RG_L <%=Fault2[13]==='1'?'setToClose':''%>" id="F2_bit_13"></label>
-                    </div>
                 </div>
             </div>
+
+
+
+
+
+
         </div>
     </div>
 

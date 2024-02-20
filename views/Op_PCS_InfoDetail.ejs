@@ -54,7 +54,10 @@
                 <h2>】</h2>
                 <!-- <a href="#" class="infoStatus" id="infoPCS">狀態與數值</a> -->
                 <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>">狀態與數值</a>
-                <a href="/operateinfo/pcs/alarm/<%= pageNumber %>" class="subTitle_unclick">故障與告警</a>
+                <% if (pageNumber === 7){ %>
+                    <a href="/operateinfo/pcs/alarm/<%= pageNumber %>" class="subTitle_unclick">故障與告警</a>
+                    <% } else {%> 
+                    <a href="/operateinfo/pcs/alarm_lc13/<%= pageNumber %>" class="subTitle_unclick">故障與告警</a><% } %>
                 <% if (pageNumber > 1) { %>
                 <a href="/operateinfo/pcs/infodetail/<%= pageNumber - 1 %>" class="preNext" id="previousPCS">上一頁</a><% } %>
                 <% if (pageNumber < 7) { %>
@@ -101,16 +104,16 @@
 
             <div class="infoBlock outputLimit">
                 <h3>輸出限制</h3>
-                <div class="DV_Line">最大充電功率<label class="dataValue" id="max_P_chg"><%=max_P_chg%></label>
+                <div class="DV_Line">最大充電功率<label class="dataValue" id="max_P_chg">刪除</label>
                     <p class="dataUnit">kW</p>
                 </div>
-                <div class="DV_Line">最大放電功率<label class="dataValue" id="max_P_dcg"><%=max_P_dcg%></label>
+                <div class="DV_Line">最大放電功率<label class="dataValue" id="max_P_dcg">刪除</label>
                     <p class="dataUnit">kW</p>
                 </div>
-                <div class="DV_Line">最大感性無功<label class="dataValue" id="max_Q_l"><%=max_Q_l%></label>
+                <div class="DV_Line">最大感性無功<label class="dataValue" id="max_Q_l">刪除</label>
                     <p class="dataUnit">kVar</p>
                 </div>
-                <div class="DV_Line lastLine">最大容性無功<label class="dataValue" id="max_Q_c"><%=max_Q_c%></label>
+                <div class="DV_Line lastLine">最大容性無功<label class="dataValue" id="max_Q_c">刪除</label>
                     <p class="dataUnit">kVar</p>
                 </div>
             </div>
@@ -133,7 +136,7 @@
             <div class="infoBlock ACside">
                 <h3>交流側</h3>
                 <div class="columnDVL">
-                    <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus"><%=gridStatus%></label></div>
+                    <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus">on 我是假值</label></div>
                     <div class="DV_Line">實功<label class="dataValue" id="activePower"><%=activePower%></label>
                         <p class="dataUnit">kW</p>
                     </div>
@@ -225,16 +228,16 @@
 
             <div class="infoBlock tempPCS">
                 <h3>溫度值</h3>
-                <div class="DV_Line">機內溫度<label class="dataValue" id="innerTemp"><%=innerTemp%></label>
+                <div class="DV_Line">機內溫度<label class="dataValue" id="innerTemp">刪除</label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">模組溫度1<label class="dataValue" id="moduleTemp1"><%=moduleTemp1%></label>
+                <div class="DV_Line">模組溫度1<label class="dataValue" id="moduleTemp1">刪除</label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">模組溫度2<label class="dataValue" id="moduleTemp2"><%=moduleTemp2%></label>
+                <div class="DV_Line">模組溫度2<label class="dataValue" id="moduleTemp2">刪除</label>
                     <p class="dataUnit">&#176C</p>
                 </div>
-                <div class="DV_Line">模組溫度3<label class="dataValue" id="moduleTemp3"><%=moduleTemp3%></label>
+                <div class="DV_Line">模組溫度3<label class="dataValue" id="moduleTemp3">刪除</label>
                     <p class="dataUnit">&#176C</p>
                 </div>
                 <div class="DVR_Line lastLine">

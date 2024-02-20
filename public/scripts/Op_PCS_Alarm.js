@@ -2,6 +2,7 @@
 var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
+  classAdd("#nB_Operation","default_nB");
   updateData();
 });
 
