@@ -63,7 +63,7 @@ async function updateTable(){
         "event": "開啟",
         "cardni": "123459878",
     }];*/
-    dataset = await getData('http://localhost:3005/event/door/edit');//port要改
+    dataset = await getData('http://localhost:3000/event/door/edit');//port要改
     console.log(dataset);
     $('#evtTable').DataTable({
 

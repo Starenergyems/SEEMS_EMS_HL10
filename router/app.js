@@ -21,7 +21,7 @@ const {
   submit,
 } = require("./rLogin");
 
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 
@@ -41,12 +41,11 @@ app.use(cookieParser());
 // const accountRouter = require("./rAccount");
 const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
-// const pcsRouter = require("./rPCS");
-// const batteryRouter = require("./rBattery");
+const pcsRouter = require("./rPCS");
+const batteryRouter = require("./rBattery");
 const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
-//const environmentRouter = require("./rEnvironment");
-//const alarmRouter = require("./rAlarm");
+const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
 //const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
@@ -62,12 +61,11 @@ const { nextTick } = require("process");
 // app.use(accountRouter);
 app.use(modeRouter);
 app.use(meterRouter);
-// app.use(pcsRouter);
-//app.use(batteryRouter);
+app.use(pcsRouter);
+app.use(batteryRouter);
 app.use(commuRouter);
 app.use(deviceRouter);
-//app.use(environmentRouter);
-//app.use(alarmRouter);
+app.use(environmentRouter);
 app.use(eventRouter);
 //app.use(reportRouter);
 // app.use(chartRouter);

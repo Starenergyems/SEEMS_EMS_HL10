@@ -1,4 +1,4 @@
-const port=3005;
+//const port=3005;
 
 const express = require("express");
 const methodOverride = require("method-override");
@@ -26,7 +26,7 @@ const {
 const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
-const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const couchDBUrl = "http://admin:ems45877096@192.168.1.12:5984";
 const nanoDb = nano(couchDBUrl);
 
 app.set("view engine", "ejs");
@@ -35,34 +35,34 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-app.use("/public", express.static(path.join(__dirname, "../public")));//app要改回router
-app.use(
+router.use("/public", express.static(path.join(__dirname, "../public")));//app要改回router
+router.use(
   "/operateinfo",
   express.static(path.join(__dirname, "../public/operateinfo"))
 );
-app.use(
+router.use(
   "/operateinfo/battery",
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
-app.use(
+router.use(
   "/operateinfo/battery/infodetail",
   express.static(path.join(__dirname, "../public"))
 );
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-app.use(
+router.use(
   "/operateinfo/battery/infodetail/:id",
   express.static(path.join(__dirname, "../public"))
 );
-app.use(
+router.use(
   "/operateinfo/battery/rack",
   express.static(path.join(__dirname, "../public"))
 );
-app.use(
+router.use(
   "/operateinfo/battery/rack/:id",
   express.static(path.join(__dirname, "../public"))
 );
 
-app.use(cors());
+router.use(cors());
 //***************************************************************************************************************** */
 // 定義 CouchDB 資料庫名稱
 const databases = [
@@ -112,7 +112,7 @@ const getLatestDocument = async (nanoDb) => {
 
 //***************************************************************************************************************** */
 
-app.get("/operateinfo", (req, res) => { //以下app要改回router
+router.get("/operateinfo", (req, res) => { //以下app要改回router
   res.redirect("/operateinfo/battery");
 });
 
@@ -448,7 +448,7 @@ async function querySumData(){
         permission: "manager"};
 };
 
-app.get("/operateinfo/battery", async (req, res) => {
+router.get("/operateinfo/battery", async (req, res) => {
   try {
     await querySumData();
     res.render("Op_Bat_InfoSummary", batterySum_variables);
@@ -458,7 +458,7 @@ app.get("/operateinfo/battery", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/battery/data", async (req, res) => {
+router.get("/operateinfo/battery/data", async (req, res) => {
   try {
     // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
     /*const dataPromises = databases.map(async (dbName) => {
@@ -488,7 +488,7 @@ app.get("/operateinfo/battery/data", async (req, res) => {
 //***************************************************************************************** */
 //Op_Bat_InfoSummary.js
 ///operateinfo/battery SET按鈕把數值帶入打勾
-app.post("/getDataForSet", async (req, res) => {
+router.post("/getDataForSet", async (req, res) => {
   try {
     //console.log("接收到前端請求");
     const blockId = req.body.blockId; //可以得到是哪台lc
@@ -518,7 +518,7 @@ app.post("/getDataForSet", async (req, res) => {
 });
 
 //SET按鈕 控制下行
-app.post("/backendEndpoint", async (req, res) => {
+router.post("/backendEndpoint", async (req, res) => {
   try {
     const dataPromises = databases.map(async (dbName) => {
       const nanoDb = createNanoInstance(dbName);
@@ -777,7 +777,7 @@ async function queryDetailData(){
     }
 }
 
-app.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
+router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
@@ -790,7 +790,7 @@ app.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/battery/infodetail/:pageNumber/:data", async (req, res) => {
+router.get("/operateinfo/battery/infodetail/:pageNumber/:data", async (req, res) => {
   try {    
     pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
@@ -1309,7 +1309,7 @@ async function queryRackData(){
   };
 }
 
-app.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
+router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
@@ -1321,7 +1321,7 @@ app.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/battery/rack/:pageNumber/:data", async (req, res) => {
+router.get("/operateinfo/battery/rack/:pageNumber/:data", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
@@ -1334,10 +1334,10 @@ app.get("/operateinfo/battery/rack/:pageNumber/:data", async (req, res) => {
   }
 });
 // //***************************************************************************************** */
-app.use(bodyParser.json());
+router.use(bodyParser.json());
 
 //各rack單獨彈出視窗
-app.post("/getData", async (req, res) => {
+router.post("/getData", async (req, res) => {
   try {
     //console.log("接收到前端請求");
     const blockId = req.body.blockId;
@@ -1407,6 +1407,6 @@ app.post("/getData", async (req, res) => {
 //***************************************************************************************** */
 module.exports = router;
 //***************************************************************************************** */
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

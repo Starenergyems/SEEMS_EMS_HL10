@@ -1,5 +1,4 @@
-const port = 3005;
-
+//const port = 3005;
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -10,7 +9,7 @@ const router = express.Router();
 const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
-const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const couchDBUrl = "http://admin:ems45877096@192.168.1.12:5984";
 const nanoDb = nano(couchDBUrl);
 
 const {
@@ -37,26 +36,26 @@ app.use(methodOverride("_method"));
 
 /*以下app要改回router*************************** */
 app.use(cors());
-app.use("/public", express.static(path.join(__dirname, "../public")));
-app.use(
+router.use("/public", express.static(path.join(__dirname, "../public")));
+router.use(
   "/operateinfo",
   express.static(path.join(__dirname, "../public/operateinfo"))
 );
-app.use(
+router.use(
   "/operateinfo/pcs",
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
-app.use(
+router.use(
   "/operateinfo/pcs/alarm/:id",
   express.static(path.join(__dirname, "../public"))
 );
 
-app.use(
+router.use(
   "/operateinfo/pcs/alarm_lc13/:id",
   express.static(path.join(__dirname, "../public"))
 );
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-app.use(
+router.use(
   "/operateinfo/pcs/infodetail/:id",
   express.static(path.join(__dirname, "../public"))
 );
@@ -110,7 +109,7 @@ const getLatestDocument = async (nanoDb) => {
 };
 
 //pcs主頁
-app.get("/operateinfo/pcs", async (req, res) => {
+router.get("/operateinfo/pcs", async (req, res) => {
   const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
     return getLatestDocument(nanoDb);
@@ -186,7 +185,7 @@ async function queryPcsDetail() {
   } else {
     throw new Error("Invalid pageNumber");
   }
-
+  console.log("lcData:"+lcData);
   //let processedPageNumber;
   if (pageNumber % 2 === 1 && pageNumber <= 6) {
     // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
@@ -330,7 +329,7 @@ async function queryPcsDetail() {
   }
 }
 /***************************************************************** */
-app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
+router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   try {
     //獲取目前切換的頁數
     pageNumber = parseInt(req.params.pageNumber);
@@ -342,7 +341,7 @@ app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/pcs/infodetail/:pageNumber/:data", async (req, res) => {
+router.get("/operateinfo/pcs/infodetail/:pageNumber/:data", async (req, res) => {
   try {
     //獲取目前切換的頁數
     pageNumber = parseInt(req.params.pageNumber);
@@ -471,7 +470,7 @@ async function queryPcsAlarm() {
   }
 }
 
-app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
+router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
     pageNumber = parseInt(req.params.pageNumber);
@@ -483,7 +482,7 @@ app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
+router.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm();
@@ -494,7 +493,7 @@ app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/pcs/alarm_lc13/:pageNumber", async (req, res) => {
+router.get("/operateinfo/pcs/alarm_lc13/:pageNumber", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     console.log(pageNumber);
@@ -506,7 +505,7 @@ app.get("/operateinfo/pcs/alarm_lc13/:pageNumber", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/pcs/alarm_lc13/:pageNumber/:data", async (req, res) => {
+router.get("/operateinfo/pcs/alarm_lc13/:pageNumber/:data", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm();
@@ -525,7 +524,7 @@ let dVS_Data_minLimit;
 let dVS_Data_maxLimit;
 let dVS_Data_unit;
 
-app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
+router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dVS_Data_dataName = req.body.dataName;
@@ -602,7 +601,7 @@ app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-app.post("/set_dVS_Data", async (req, res) => {
+router.post("/set_dVS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -713,7 +712,7 @@ let dSS_Data_numInDataGroup;
 let dSS_Data_bitNum;
 let dSS_Data_status_MT;
 
-app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
+router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dSS_Data_dataName = req.body.dataName;
@@ -799,7 +798,7 @@ app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-app.post("/set_dSS_Data", async (req, res) => {
+router.post("/set_dSS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -1182,6 +1181,6 @@ app.post("/set_dSS_Data", async (req, res) => {
 
 module.exports = router;
 
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

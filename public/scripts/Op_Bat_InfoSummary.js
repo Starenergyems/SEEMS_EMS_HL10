@@ -228,7 +228,7 @@ async function sendDataToBackend() {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 async function updateData(){
-  var data = await getData('http://localhost:3005/operateinfo/battery/data');//port要改
+  var data = await getData('http://localhost:3000/operateinfo/battery/data');//port要改
 
   $('#workStatus').text(data.workStatus);
   $('#onGridStatus').text(data.onGridStatus);

@@ -16,7 +16,7 @@ app.use(cors());
 // Need change.
 const db_USERNAME = "admin"; // Couchdb username use for login db.
 const db_PASSWORD = "ems45877096"; // Couchdb password use for login db.
-const db_IP = "192.168.8.101"; // Couchdb IPv4 address.
+const db_IP = "localhost"; // Couchdb IPv4 address.
 const db_PORT = "5984"; // Couchdb service use port.
 
 const db_account = "account"; // The account database name.

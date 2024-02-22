@@ -28,7 +28,7 @@ function scaleProcess(decimalValue, scale, point) {
     typeof scale !== "number" ||
     typeof point !== "number"
   ) {
-    throw new Error("All parameters must be numbers");
+    console.log("All parameters must be numbers");
   }
 
   // 將 decimalValue 乘上 scale
