@@ -12,7 +12,7 @@ const fs = require("fs");
 const cron = require("node-cron"); //指定幾點做什麼
 const axios = require("axios"); //在server執行get
 
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10); // 請注意這裡使用 nano.use() 來設定數據庫
 
