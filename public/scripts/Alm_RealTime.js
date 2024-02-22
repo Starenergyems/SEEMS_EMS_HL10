@@ -85,29 +85,30 @@ function hideFiltOptions(clickItem) {
 
 //////////////////與後端互動/////////////////////////////////////////////
 
-async function dataGet(url) { //跟後端拿資料
+async function dataGet(url) {
+  //跟後端拿資料
   const response = await fetch(url);
   const values = await response.json();
-  return values;}
+  return values;
+}
 
-async function dataPost(url, ID, Checked) {//提交資料給後端
+async function dataPost(url, ID, Checked) {
+  //提交資料給後端
 
-      console.log('開始嘗試POST')
+  console.log("開始嘗試POST");
 
-      $.ajax({
-        type: 'POST',
-        url: url,
-        data: {ID, Checked},
-        success: function(){
-          console.log("POST完成")
-          updateTable()//更新表格
-        },
-        error: function (error) {
-          reject(error);
-        },
-      });
-
-
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: { ID, Checked },
+    success: function () {
+      console.log("POST完成");
+      updateTable(); //更新表格
+    },
+    error: function (error) {
+      reject(error);
+    },
+  });
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,11 +138,9 @@ let lang = {
   },
 };
 
-var dataset=[];
+var dataset = [];
 
-async function updateTable(){
-
-  
+async function updateTable() {
   /*var dataset = [
     {
       index: "1",
@@ -197,14 +196,13 @@ async function updateTable(){
     },
   ];*/
 
-  dataset = await dataGet('http://localhost:3001/alarm/realtime/edit'); //port改端口要改
-  console.log(dataset);	
-
+  dataset = await dataGet("http://localhost:3000/alarm/realtime/edit"); //port改端口要改
+  console.log(dataset);
 
   var table = $("#almTable").DataTable({
     lengthMenu: [10, 20, 25, 50, 100],
     scrollY: "660px",
-    order:[[1, "desc"]], //預設以時間排序
+    order: [[1, "desc"]], //預設以時間排序
     destroy: true,
     language: lang, //提示資訊
     autoWidth: false, //禁用自動調整列寬
@@ -216,7 +214,7 @@ async function updateTable(){
     ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
     //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
     pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
-    pageLength:15,// 預設為'10'，若需更改初始每頁顯示筆數，才需設定
+    pageLength: 15, // 預設為'10'，若需更改初始每頁顯示筆數，才需設定
     responsive: true,
 
     /*"ajax": {
@@ -228,7 +226,8 @@ async function updateTable(){
      },*/
 
     data: dataset,
-    columns: [//要再加一欄index
+    columns: [
+      //要再加一欄index
       { data: "index" },
       { data: "occurrence_time" },
       { data: "location" },
@@ -241,15 +240,12 @@ async function updateTable(){
           var rowIndex = row.index; // Get the index from the row object
           //var checkboxId = "chb_Ack_" + rowIndex;
 
-          if (permission === "manager") {//管理者才可打勾
+          if (permission === "manager") {
+            //管理者才可打勾
             if (data === true) {
-              return (
-                '<input type="checkbox" checked class="chb_Ack">'
-              );
+              return '<input type="checkbox" checked class="chb_Ack">';
             } else {
-              return (
-                '<input type="checkbox" class="chb_Ack">'
-              );
+              return '<input type="checkbox" class="chb_Ack">';
             }
           } else {
             if (data === true) {
@@ -271,14 +267,13 @@ async function updateTable(){
         },
       },
       { data: "recover_time" },
-    ],          
-    
+    ],
   });
 
   // Set the DataTable to the previously obtained page index
-  table.page(currentPageIndex).draw('page');
-  createIndex('#almTable');
-  readCheck();//監測所有已讀是否打勾
+  table.page(currentPageIndex).draw("page");
+  createIndex("#almTable");
+  readCheck(); //監測所有已讀是否打勾
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,22 +281,20 @@ async function updateTable(){
 //var permission="viewer"; //需讀權限
 var permission = "manager";
 $(document).ready(function () {
-
   console.log("start reading js");
-  classAdd('#nB_Report', 'default_nB')
+  classAdd("#nB_Report", "default_nB");
   updateTable();
   // 彈出視窗確定全選
-  $("#chb_AckAll").off("change").on("change", function () {
-    appear();
-  });
-
-
+  $("#chb_AckAll")
+    .off("change")
+    .on("change", function () {
+      appear();
+    });
 });
 /*async function waitTable(){
     await updateTable();//更新表格
     //checkAllStatus(dataset);//判斷已讀全選是否該勾
 }*/
-
 
 /*function checkAllStatus(data){//判斷全選欄是否該勾選
   
@@ -317,21 +310,22 @@ function appear() {
 function remove() {
   $("#message").removeClass("appear");
 }
-function allCheck() {//確定全選後執行
+function allCheck() {
+  //確定全選後執行
   remove();
   let isChecked = $("#chb_AckAll").prop("checked");
-  console.log("id"+isChecked);
-  dataPost('http://localhost:3001/alarm/realtime/edit', 'all', isChecked);
+  console.log("id" + isChecked);
+  dataPost("http://localhost:3000/alarm/realtime/edit", "all", isChecked);
 
   //$(".chb_Ack").prop("checked", isChecked); //所有告警皆已讀
   $("#chb_AckAll").prop("checked", !isChecked); // 全選欄復歸
 }
 
-
 var rowId, rowChecked;
 var currentPageIndex = 0; //一開始在第一頁
 
-function readCheck() {  //監測是否勾選已讀，勾選後刪除
+function readCheck() {
+  //監測是否勾選已讀，勾選後刪除
   /*let table = new DataTable('#almTable'); 
 
   $(".chb_Ack")
@@ -346,19 +340,18 @@ function readCheck() {  //監測是否勾選已讀，勾選後刪除
       dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked); //端口要改
     });*/
 
-
-    $("#almTable").off("change").on("change", ".chb_Ack", function () {
+  $("#almTable")
+    .off("change")
+    .on("change", ".chb_Ack", function () {
       var table = $("#almTable").DataTable();
       var rowData = table.row($(this).closest("tr")).data();
       var rowId = rowData._id; // Assuming _id is the property containing the unique identifier
       var rowChecked = $(this).prop("checked");
-  
+
       console.log("Row ID:", rowId);
       console.log("已讀框偵測:", rowChecked);
-      currentPageIndex = $("#almTable").DataTable().page.info().page; // Get the current page index again after updating the table   
-      console.log("點擊頁碼:"+currentPageIndex);  
-      dataPost('http://localhost:3001/alarm/realtime/edit', rowId, rowChecked);// Send an AJAX request to update the row in the database
-
-
+      currentPageIndex = $("#almTable").DataTable().page.info().page; // Get the current page index again after updating the table
+      console.log("點擊頁碼:" + currentPageIndex);
+      dataPost("http://localhost:3000/alarm/realtime/edit", rowId, rowChecked); // Send an AJAX request to update the row in the database
     });
 }

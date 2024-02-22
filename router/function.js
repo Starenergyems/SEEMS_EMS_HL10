@@ -1,4 +1,4 @@
-const { timeLog } = require("console");
+const { timeLog, Console } = require("console");
 const readline = require("readline");
 //-------------------------------------------------------------------------------------------------
 // 定義計算平均值的函數
@@ -409,7 +409,7 @@ function workStatuschange(var1, var2, var3, var4) {
   }
 
   // 如果位置不一致或條件不滿足，返回 0
-  return "100";
+  return "0";
 }
 
 // Example Usage:
@@ -425,37 +425,627 @@ function countOnes(value) {
   return count;
 }
 
+//******************************************************************************* */
+//側邊欄位
+//最上面的狀態顯示轉換
 function mapL_M_systemMode(var1, var2, var3, var4) {
-  // 檢查第四個位元的值
-  const bit4_var1 = (var1 & 8) >> 3;
-  const bit4_var2 = (var2 & 8) >> 3;
-  const bit4_var3 = (var3 & 8) >> 3;
-  const bit4_var4 = (var4 & 8) >> 3;
+  // 將 var1 轉換為二進制字串
+  const bVar1 = var1.toString(2).padStart(32, "0");
+  const bVar2 = var2.toString(2).padStart(32, "0");
+  const bVar3 = var3.toString(2).padStart(32, "0");
+  const bVar4 = var4.toString(2).padStart(32, "0");
+  //console.log("binaryVar1: " + bVar1);
 
-  // 判斷是否都是1，都是0，或者部分為1部分為0
+  // 提取特定位元的值
+  const binaryArray1 = bVar1.split("").reverse(); // 反轉字串並轉換為字元陣列
+  const binaryArray2 = bVar2.split("").reverse(); // 反轉字串並轉換為字元陣列
+  const binaryArray3 = bVar3.split("").reverse(); // 反轉字串並轉換為字元陣列
+  const binaryArray4 = bVar4.split("").reverse(); // 反轉字串並轉換為字元陣列
+
+  const SystemAvailability = parseInt(binaryArray1[14] || "0"); // bit15 總系統狀態
+
+  const var1_SubSys_Availability = parseInt(binaryArray1[3] || "0"); // bit4
+  const var1_edReg = parseInt(binaryArray1[4] || "0"); // bit5
+  const var2_SubSys_Availability = parseInt(binaryArray2[3] || "0"); // bit4
+  const var2_edReg = parseInt(binaryArray2[4] || "0"); // bit5
+  const var3_SubSys_Availability = parseInt(binaryArray3[3] || "0"); // bit4
+  const var3_edReg = parseInt(binaryArray3[4] || "0"); // bit5
+  const var4_SubSys_Availability = parseInt(binaryArray4[3] || "0"); // bit4
+  const var4_edReg = parseInt(binaryArray4[4] || "0"); // bit5
+
+  // console.log("SystemAvailability: " + SystemAvailability);
+  // console.log("binaryArray1: " + binaryArray1);
+  // console.log("binaryArray2: " + binaryArray2);
+  // console.log("binaryArray3: " + binaryArray3);
+  // console.log("binaryArray4: " + binaryArray4);
+  // console.log("****************************************");
+  // console.log("1-bit4: " + var1_SubSys_Availability);
+  // console.log("1-bit5: " + var1_edReg);
+  // console.log("2-bit4: " + var2_SubSys_Availability);
+  // console.log("2-bit5: " + var2_edReg);
+  // console.log("3-bit4: " + var3_SubSys_Availability);
+  // console.log("3-bit5: " + var3_edReg);
+  // console.log("4-bit4: " + var4_SubSys_Availability);
+  // console.log("4-bit5: " + var4_edReg);
+  // console.log("****************************************");
+
+  // 0: Not Available, 1: Available
+  // if (SystemAvailability == 1) {
+  //   return "System is not available";
+  // }
   if (
-    bit4_var1 === 1 &&
-    bit4_var2 === 1 &&
-    bit4_var3 === 1 &&
-    bit4_var4 === 105032
+    var1_SubSys_Availability == 1 &&
+    var1_edReg == 1 &&
+    var2_SubSys_Availability == 1 &&
+    var2_edReg == 1 &&
+    var3_SubSys_Availability == 1 &&
+    var3_edReg == 1 &&
+    var4_SubSys_Availability == 1 &&
+    var4_edReg == 1
   ) {
-    return "正常";
-  } else if (
-    bit4_var1 === 0 &&
-    bit4_var2 === 0 &&
-    bit4_var3 === 0 &&
-    bit4_var4 === 0
-  ) {
-    return "停機";
+    console.log("調頻服務中");
+    return "調頻服務中";
   } else {
-    return "部分";
+    if (
+      (var1_SubSys_Availability == 1 && var1_edReg == 1) ||
+      (var2_SubSys_Availability == 1 && var2_edReg == 1) ||
+      (var3_SubSys_Availability == 1 && var3_edReg == 1) ||
+      (var4_SubSys_Availability == 1 && var4_edReg == 1)
+    ) {
+      console.log("部分服務中");
+      return "部分服務中";
+    } else {
+      console.log("暫停服務");
+      return "暫停服務";
+    }
   }
 }
-//計算總警告數量
+//mapL_M_systemMode(32895, 127, 0, 127);
+//******************************************************************************* */
+// 告警總數量(右邊/黃色)
 function counttotalWarningNum() {}
-//電表總錯誤數量
+//******************************************************************************* */
+// 電表總告警數量
 function countWarningNum_Meter() {}
-//console.log(mapL_M_systemMode(1, 15, 15, 15)); // Output: 正常
+//******************************************************************************* */
+// PCS總告警數量
+function calculateWarningNum_PCS(
+  lc1_all,
+  lc1_u1_1,
+  lc1_u1_2,
+  lc1_u1_3,
+  lc1_u2_1,
+  lc1_u2_2,
+  lc1_u2_3,
+  lc2_all,
+  lc2_u1_1,
+  lc2_u1_2,
+  lc2_u1_3,
+  lc2_u2_1,
+  lc2_u2_2,
+  lc2_u2_3,
+  lc3_all,
+  lc3_u1_1,
+  lc3_u1_2,
+  lc3_u1_3,
+  lc3_u2_1,
+  lc3_u2_2,
+  lc3_u2_3,
+  lc4_all,
+  lc4_u1,
+  lc4_u2
+) {
+  // 定義一個輔助函數來計算二進制中的 1 的數量
+  function countOnes(binary, name) {
+    const onesCount = (binary.toString(2).match(/1/g) || []).length;
+    //console.log(`${name}: ${onesCount}`);
+    return onesCount;
+  }
+
+  // 定義一個函數來檢查 1 的數量是否超過限制
+  function checkOnes(name, value, limit) {
+    const onesCount = countOnes(value, name);
+    if (onesCount > limit) {
+      onesCount == 0;
+      console.log(`Warning: ${name} has more than ${limit} ones.`);
+    }
+    return onesCount;
+  }
+
+  let totalOnes = 0;
+
+  // 處理 lc1
+  const lc1_all_ones = checkOnes("lc1_all", lc1_all, 3);
+  const lc1_u1_1_ones = checkOnes("lc1_u1_1", lc1_u1_1, 11);
+  const lc1_u1_2_ones = checkOnes("lc1_u1_2", lc1_u1_2, 4);
+  const lc1_u1_3_ones = checkOnes("lc1_u1_3", lc1_u1_3, 3);
+  const lc1_u2_1_ones = checkOnes("lc1_u2_1", lc1_u2_1, 11);
+  const lc1_u2_2_ones = checkOnes("lc1_u2_2", lc1_u2_2, 4);
+  const lc1_u2_3_ones = checkOnes("lc1_u2_3", lc1_u2_3, 3);
+
+  // 處理 lc2
+  const lc2_all_ones = checkOnes("lc2_all", lc2_all, 3);
+  const lc2_u1_1_ones = checkOnes("lc2_u1_1", lc2_u1_1, 11);
+  const lc2_u1_2_ones = checkOnes("lc2_u1_2", lc2_u1_2, 4);
+  const lc2_u1_3_ones = checkOnes("lc2_u1_3", lc2_u1_3, 3);
+  const lc2_u2_1_ones = checkOnes("lc2_u2_1", lc2_u2_1, 11);
+  const lc2_u2_2_ones = checkOnes("lc2_u2_2", lc2_u2_2, 4);
+  const lc2_u2_3_ones = checkOnes("lc2_u2_3", lc2_u2_3, 3);
+
+  // 處理 lc3
+  const lc3_all_ones = checkOnes("lc3_all", lc3_all, 3);
+  const lc3_u1_1_ones = checkOnes("lc3_u1_1", lc3_u1_1, 11);
+  const lc3_u1_2_ones = checkOnes("lc3_u1_2", lc3_u1_2, 4);
+  const lc3_u1_3_ones = checkOnes("lc3_u1_3", lc3_u1_3, 3);
+  const lc3_u2_1_ones = checkOnes("lc3_u2_1", lc3_u2_1, 11);
+  const lc3_u2_2_ones = checkOnes("lc3_u2_2", lc3_u2_2, 4);
+  const lc3_u2_3_ones = checkOnes("lc3_u2_3", lc3_u2_3, 3);
+
+  // 處理 lc4
+  const lc4_all_ones = checkOnes("lc4_all", lc4_all, 3);
+  const lc4_u1_ones = checkOnes("lc4_u1", lc4_u1, 11);
+  const lc4_u2_ones = checkOnes("lc4_u2", lc4_u2, 4);
+
+  totalOnes =
+    lc1_all_ones +
+    lc1_u1_1_ones +
+    lc1_u1_2_ones +
+    lc1_u1_3_ones +
+    lc1_u2_1_ones +
+    lc1_u2_2_ones +
+    lc1_u2_3_ones +
+    lc2_all_ones +
+    lc2_u1_1_ones +
+    lc2_u1_2_ones +
+    lc2_u1_3_ones +
+    lc2_u2_1_ones +
+    lc2_u2_2_ones +
+    lc2_u2_3_ones +
+    lc3_all_ones +
+    lc3_u1_1_ones +
+    lc3_u1_2_ones +
+    lc3_u1_3_ones +
+    lc3_u2_1_ones +
+    lc3_u2_2_ones +
+    lc3_u2_3_ones +
+    lc4_all_ones +
+    lc4_u1_ones +
+    lc4_u2_ones;
+
+  //console.log(`Total ones: ${totalOnes}`);
+
+  return totalOnes;
+}
+// calculateWarningNum_PCS(
+//   10, // lc1_all,
+//   1, // lc1_u1_1,
+//   0, // lc1_u1_2,
+//   0, // lc1_u1_3,
+//   0, // lc1_u2_1,
+//   0, // lc1_u2_2,
+//   0, // lc1_u2_3,
+//   0, // lc2_all,
+//   46, // lc2_u1_1,
+//   0, // lc2_u1_2,
+//   0, // lc2_u1_3,
+//   0, // lc2_u2_1,
+//   0, //lc2_u2_2,
+//   0, // lc2_u2_3,
+//   0, // lc3_all,
+//   0, // lc3_u1_1,
+//   0, // lc3_u1_2,
+//   0, // lc3_u1_3,
+//   0, // lc3_u2_1,
+//   0, // lc3_u2_2,
+//   5, // lc3_u2_3,
+//   0, // lc4_all,
+//   0, // lc4_u1,
+//   0 // lc4_u2
+// );
+
+//******************************************************************************* */
+// 電池總告警數量
+// BSC告警數量
+function cal_BSC(...args) {
+  let totalOnes = 0;
+
+  // 遍歷傳入的所有參數
+  for (let i = 0; i < args.length; i++) {
+    const binary = args[i].toString(2); // 將參數轉換為二進制
+
+    // 檢查二進制中的位元，只計算出現在 bit0 或 bit1 的 1 的個數
+    totalOnes += (binary[0] === "1" ? 1 : 0) + (binary[1] === "1" ? 1 : 0);
+  }
+
+  return totalOnes; // 返回計算的結果
+}
+
+// 測試示例
+console.log("test1:" + cal_BSC(3, 0, 0)); // 2，因為 10 的二進制是 1010，有兩個 1 在 bit0 或 bit1 上
+console.log("test2:" + cal_BSC(7, 7, 7)); // 9，因為 1 的二進制是 1，有一個 1 在 bit0 上
+
+function cal_HVAC(...args) {
+  let totalCount = 0;
+
+  // 遍歷傳入的所有參數
+  for (let i = 0; i < args.length; i++) {
+    const binary = args[i].toString(2); // 將參數轉換為二進制
+
+    // 檢查二進制中的位元，如果只有 bit2 出現 1，則 totalCount 不加 1，否則加 1
+    if (binary[2] === "1") {
+      if (binary.slice(0, 2).includes("1")) {
+        totalCount++;
+      }
+    } else {
+      // 如果 bit2 是 0 且其他 bit 出現 1，則 totalCount 加 1
+      if (binary.slice(0, 2).includes("1")) {
+        totalCount++;
+      }
+    }
+  }
+
+  return totalCount; // 返回計算的結果
+}
+
+// 測試示例
+console.log("HVAC test1:" + cal_HVAC(1, 2, 1));
+console.log("HVAC test2:" + cal_HVAC(0, 2, 0));
+console.log("HVAC test3:" + cal_HVAC(0, 0, 7));
+
+function cal_Temperature(...args) {
+  let countOverTemp = 0;
+
+  // 遍歷傳入的所有參數
+  for (let i = 0; i < args.length; i++) {
+    // 如果變數介於400到550之間，則計數加 1
+    if (args[i] >= 400 && args[i] < 550) {
+      countOverTemp++;
+    }
+  }
+
+  return countOverTemp; // 返回計算的結果
+}
+
+// 測試示例
+console.log("Temperature test1:" + cal_Temperature(300, 400, 500)); // 1，只有一個變數大於 400
+console.log("Temperature test2:" + cal_Temperature(450, 410, 390)); // 2，有兩個變數大於 400
+console.log("Temperature test3:" + cal_Temperature(350, 200, 300)); // 0，沒有變數大於 400
+
+function cal_Humidity(...args) {
+  let countOverHumidity = 0;
+
+  // 遍歷傳入的所有參數
+  for (let i = 0; i < args.length; i++) {
+    // 如果變數(濕度)介於650~800，則計數加 1
+    if (args[i] >= 650 && args[i] < 800) {
+      countOverHumidity++;
+    }
+  }
+  return countOverHumidity; // 返回計算的結果
+}
+// 測試示例
+console.log("Humidity test1:" + cal_Humidity(300, 400, 799)); // 1，只有一個變數大於 650
+console.log("Humidity test2:" + cal_Humidity(700, 700, 900)); // 0，沒有變數大於 400
+console.log("Humidity test3:" + cal_Humidity(700, 800, 900)); // 0，沒有變數大於 400
+
+function cal_UPS_1(...args) {
+  let totalOnes = 0;
+
+  // 遍歷傳入的所有參數
+  for (let i = 0; i < args.length; i++) {
+    const binary = args[i].toString(2); // 將參數轉換為二進制
+
+    // 檢查二進制中的位元，只有 bit4 或 bit7 出現 1 才計算
+    if (binary[3] === "1" || binary[6] === "1") {
+      // 計算二進制中出現的 1 的個數
+      const onesCount = (binary.match(/1/g) || []).length;
+
+      // 將計算的結果加到總數中
+      totalOnes += onesCount;
+    }
+  }
+
+  return totalOnes; // 返回計算的結果
+}
+
+//要再檢查//
+// 測試示例
+console.log("**********cal_UPS_1 test1:" + cal_UPS_1(5, 6, 7)); // 3，因為 5 的二進制是 101，bit4 出現 1；6 的二進制是 110，bit7 出現 1；7 的二進制是 111，bit4 和 bit7 都出現 1。總共有 3 個 1
+console.log("**********cal_UPS_1 test2:" + cal_UPS_1(3, 4, 8)); // 0，因為 3 的二進制是 11，沒有 bit4 或 bit7 出現 1；4 的二進制是 100，沒有 bit4 或 bit7 出現 1；8 的二進制是 1000，沒有 bit4 或 bit7 出現 1。總共有 0 個 1
+
+function cal_UPS_2(...args) {
+  let totalOnes = 0;
+
+  // 遍歷傳入的所有參數
+  for (let i = 0; i < args.length; i++) {
+    const binary = args[i].toString(2); // 將參數轉換為二進制
+
+    // 檢查二進制中的位元，只有 bit15 出現 1 且 bit14 不是 1 才計算
+    if (binary[0] === "1" && binary[1] !== "1") {
+      // 計算二進制中出現的 1 的個數
+      const onesCount = (binary.match(/1/g) || []).length;
+
+      // 將計算的結果加到總數中
+      totalOnes += onesCount;
+    }
+  }
+
+  return totalOnes; // 返回計算的結果
+}
+
+// 測試示例
+console.log("**********cal_UPS_2 test1:" + cal_UPS_2(32768, 16384, 8192)); // 2，因為 32768 的二進制是 1000000000000000，只有 bit15 出現 1；16384 的二進制是 10000000000000，只有 bit14 出現 1，忽略；8192 的二進制是 1000000000000，只有 bit13 出現 1，忽略。總共有 1 個 1
+console.log("**********cal_UPS_2 test2:" + cal_UPS_2(24576, 12288, 4096)); // 0，因為 24576 的二進制是 110000000000000，bit15 和 bit14 都出現 1，忽略；12288 的二進制是 11000000000000，bit15 出現 1，但 bit14 也出現 1，忽略；4096 的二進制是 1000000000000，只有 bit12 出現 1，忽略。總共有 0
+
+function calculateWarningNum_Bat(
+  BSC_result,
+  HVAC_result,
+  Temperature_result,
+  Humidity_result,
+  UPS_1_result,
+  UPS_2_result
+) {
+  return (
+    BSC_result +
+    HVAC_result +
+    Temperature_result +
+    Humidity_result +
+    UPS_1_result +
+    UPS_2_result
+  );
+}
+
+const WarningNum_Env = calculateWarningNum_Bat(
+  cal_BSC(0, 0, 0),
+  cal_HVAC(0, 0, 0),
+  cal_Temperature(660, 300, 800), //1
+  cal_Humidity(700, 800, 900), //2
+  cal_UPS_1(5, 6, 7),
+  cal_UPS_2(0, 0, 0)
+);
+
+console.log("環境警告數量：", WarningNum_Env);
+//******************************************************************************* */
+// 環境總告警數量
+function calculateWarningNum_Env() {
+  // 定義一個輔助函數來計算二進制中的 1 的數量
+  // function countOnes(binary) {
+  //   return (binary.toString(2).match(/1/g) || []).length;
+  // }
+
+  // 計算所有變數中的 1 的總數
+  // let totalOnes = 0;
+
+  // args.forEach((value) => {
+  //   totalOnes += countOnes(value);
+  // });
+
+  return totalOnes;
+}
+//******************************************************************************* */
+// FF(消防)總告警數量
+function calculateWarningNum_FF(...args) {
+  // 定義一個輔助函數來計算二進制中的 1 的數量
+  function countOnes(binary) {
+    return (binary.toString(2).match(/1/g) || []).length;
+  }
+
+  // 計算所有變數中的 1 的總數
+  let totalOnes = 0;
+
+  args.forEach((value) => {
+    totalOnes += countOnes(value);
+  });
+
+  return totalOnes;
+}
+// // 呼叫函數並傳遞參數，然後輸出結果
+// const totalWarnings = calculateWarningNum_Bat(
+//   1, // lc1_bms1,
+//   4, // lc1_bms2,
+//   11, // lc1_rs1_r1,
+//   0, // lc1_rs1_r2,
+//   0, // lc1_rs1_r3,
+//   0, // lc1_rs1_r4,
+//   0, // lc1_rs1_r5,
+//   0, // lc1_rs1_r6,
+//   0, // lc1_rs1_r7,
+//   0, // lc1_rs1_r8,
+//   0, // lc1_rs1_r9,
+//   0, // lc1_rs1_r10,
+//   0, // lc1_rs1_r11,
+//   0, // lc1_rs1_r12,
+//   0, // lc1_rs2_r1,
+//   0, // lc1_rs2_r2,
+//   0, // lc1_rs2_r3,
+//   0, // lc1_rs2_r4,
+//   0, // lc1_rs2_r5,
+//   0, // lc1_rs2_r6,
+//   0, // lc1_rs2_r7,
+//   0, // lc1_rs2_r8,
+//   0, // lc1_rs2_r9,
+//   0, // lc1_rs2_r10,
+//   0, // lc1_rs2_r11,
+//   0, // lc1_rs2_r12,
+//   0, // lc2_bms1,
+//   0, // lc2_bms2,
+//   0, // lc2_rs1_r1,
+//   0, // lc2_rs1_r2,
+//   0, // lc2_rs1_r3,
+//   0, // lc2_rs1_r4,
+//   0, // lc2_rs1_r5,
+//   0, // lc2_rs1_r6,
+//   0, // lc2_rs1_r7,
+//   0, // lc2_rs1_r8,
+//   0, // lc2_rs1_r9,
+//   0, // lc2_rs1_r10,
+//   0, // lc2_rs1_r11,
+//   0, // lc2_rs1_r12,
+//   0, // lc2_rs2_r1,
+//   0, // lc2_rs2_r2,
+//   0, // lc2_rs2_r3,
+//   0, // lc2_rs2_r4,
+//   0, // lc2_rs2_r5,
+//   0, // lc2_rs2_r6,
+//   0, // lc2_rs2_r7,
+//   0, // lc2_rs2_r8,
+//   0, // lc2_rs2_r9,
+//   0, // lc2_rs2_r10,
+//   0, // lc2_rs2_r11,
+//   0, // lc2_rs2_r12,
+//   0, // lc3_bms1,
+//   0, // lc3_bms2,
+//   0, // lc3_rs1_r1,
+//   0, // lc3_rs1_r2,
+//   0, // lc3_rs1_r3,
+//   0, // lc3_rs1_r4,
+//   0, // lc3_rs1_r5,
+//   0, // lc3_rs1_r6,
+//   0, // lc3_rs1_r7,
+//   0, // lc3_rs1_r8,
+//   0, // lc3_rs1_r9,
+//   0, // lc3_rs1_r10,
+//   0, // lc3_rs1_r11,
+//   0, // lc3_rs1_r12,
+//   0, // lc3_rs2_r1,
+//   0, // lc3_rs2_r2,
+//   0, // lc3_rs2_r3,
+//   0, // lc3_rs2_r4,
+//   0, // lc3_rs2_r5,
+//   0, // lc3_rs2_r6,
+//   0, // lc3_rs2_r7,
+//   0, // lc3_rs2_r8,
+//   0, // lc3_rs2_r9,
+//   0, // lc3_rs2_r10,
+//   0, // lc3_rs2_r11,
+//   0, // lc3_rs2_r12,
+//   0, // lc4_bms1,
+//   0, // lc4_bms2,
+//   0, // lc4_rs1_r1,
+//   0, // lc4_rs1_r2,
+//   0, // lc4_rs1_r3,
+//   0, // lc4_rs1_r4,
+//   0, // lc4_rs1_r5,
+//   0, // lc4_rs1_r6,
+//   0, // lc4_rs1_r7,
+//   0, // lc4_rs1_r8,
+//   0, // lc4_rs1_r9,
+//   0, // lc4_rs1_r10,
+//   0, // lc4_rs1_r11,
+//   0, // lc4_rs1_r12,
+//   0, // lc4_rs2_r1,
+//   0, // lc4_rs2_r2,
+//   0, // lc4_rs2_r3,
+//   0, // lc4_rs2_r4,
+//   0, // lc4_rs2_r5,
+//   0, // lc4_rs2_r6,
+//   0, // lc4_rs2_r7,
+//   0, // lc4_rs2_r8,
+//   0, // lc4_rs2_r9,
+//   0, // lc4_rs2_r10,
+//   0, // lc4_rs2_r11,
+//   0 // lc4_rs2_r12
+// );
+
+// console.log(`Total ones: ${totalWarnings}`);
+//******************************************************************************* */
+//******************************************************************************* */
+//******************************************************************************* */
+//******************************************************************************* */
+// 錯誤總數量(左邊/紅色)
+function calculatetotalAlarmNum() {}
+//******************************************************************************* */
+// 電表總錯誤數量
+function calculateAlarmNum_Meter() {}
+//******************************************************************************* */
+// PCS總錯誤數量
+function calculatetAlarmNum_PCS() {}
+//******************************************************************************* */
+// 電池總錯誤數量
+function calculatetAlarmNum_Bat() {}
+//******************************************************************************* */
+// 環境總錯誤數量
+function calculatetAlarmNum_Env() {}
+//******************************************************************************* */
+// 消防總錯誤數量
+function calculatetAlarmNum_FF() {}
+//******************************************************************************* */
+//******************************************************************************* */
+//******************************************************************************* */
+//系統資訊
+
+module.exports = {
+  calculateAverage,
+  mapchargeStatus,
+  scaleProcess,
+  mapPCSWorkingStatus,
+  mapPCSWorkingMode,
+  mapgridStatus,
+  Convert_UInt_to_revBitString,
+  Convert_UInt_to_BitString,
+  mapWordStatus,
+  mapBitStatus,
+  getHighLowByte,
+  Convert_unixTime_to_dateTime,
+  Calculate_BMS_energy,
+  Calculate_CPM10_energy,
+  Calculate_N1450_PF,
+  Calculate_Tr_oilTemp,
+  Count_SpecificClosedBit,
+  Determine_BGC_of_VcMaxDiff,
+  Determine_BGC_of_TcMaxDiff,
+  Determine_DL_of_RackHWStatus,
+  Determine_DL_of_upsStatus2,
+  Determine_DL_of_CommPCSBMS,
+  checkValues,
+  workStatuschange,
+  calculateAdd,
+  //****************** */
+  mapL_M_systemMode,
+  calculateWarningNum_PCS,
+  calculateWarningNum_Bat,
+};
+
+// //***************************************************************************** */
+// //轉換存陣列
+// const decimalToBinaryArray = (decimal) => {
+//   // 檢查是否為有效的十進制數字
+//   if (isNaN(decimal)) {
+//     throw new Error("Invalid input. Please provide a valid decimal number.");
+//   }
+
+//   // 將十進制轉換為二進制字符串
+//   const binaryString = decimal.toString(2);
+
+//   // 確保二進制字符串的長度為32字元，不足的部分補0
+//   const paddedBinaryString =
+//     "00000000000000000000000000000000".slice(-32) + binaryString;
+
+//   // 將二進制字符串轉換為數字陣列，按照bit0開始的順序
+//   const binaryArray = Array.from(paddedBinaryString).map(Number);
+//   //binaryArray 反過來存放 這樣個別對應的位元才會是他的位置
+//   const reversedBinaryArray = Array.from(paddedBinaryString)
+//     .map(Number)
+//     .reverse();
+
+//   return reversedBinaryArray;
+// };
+
+// module.exports = { decimalToBinaryArray };
+
+// // // 使用範例
+// // const decimalValue = 32;
+
+// // try {
+// //   const binaryResult = decimalToBinaryArray(decimalValue);
+// //   console.log("Binary Result:", binaryResult);
+// //   console.log("Binary Result:", binaryResult.join(" "));
+// //   console.log("Binary [i]:", binaryResult[i]);
+// // } catch (error) {
+// //   console.error("Error:", error.message);
+// // };
+
+// //********************************************************************************************************** */
 
 // let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
 // for (i = 0; i < cd_BitString.length; i++) {
@@ -518,74 +1108,3 @@ function countWarningNum_Meter() {}
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 //-------------------------------------------------------------------------------------------------
-
-module.exports = {
-  mapL_M_systemMode,
-  calculateAverage,
-  mapchargeStatus,
-  scaleProcess,
-  mapPCSWorkingStatus,
-  mapPCSWorkingMode,
-  mapgridStatus,
-  Convert_UInt_to_revBitString,
-  Convert_UInt_to_BitString,
-  mapWordStatus,
-  mapBitStatus,
-  getHighLowByte,
-  Convert_unixTime_to_dateTime,
-  Calculate_BMS_energy,
-  Calculate_CPM10_energy,
-  Calculate_N1450_PF,
-  Calculate_Tr_oilTemp,
-  Count_SpecificClosedBit,
-  Determine_BGC_of_VcMaxDiff,
-  Determine_BGC_of_TcMaxDiff,
-  Determine_DL_of_RackHWStatus,
-  Determine_DL_of_upsStatus2,
-  Determine_DL_of_CommPCSBMS,
-  checkValues,
-  workStatuschange,
-  calculateAdd,
-  counttotalWarningNum,
-  countWarningNum_Meter,
-};
-// //***************************************************************************** */
-// //轉換存陣列
-// const decimalToBinaryArray = (decimal) => {
-//   // 檢查是否為有效的十進制數字
-//   if (isNaN(decimal)) {
-//     throw new Error("Invalid input. Please provide a valid decimal number.");
-//   }
-
-//   // 將十進制轉換為二進制字符串
-//   const binaryString = decimal.toString(2);
-
-//   // 確保二進制字符串的長度為32字元，不足的部分補0
-//   const paddedBinaryString =
-//     "00000000000000000000000000000000".slice(-32) + binaryString;
-
-//   // 將二進制字符串轉換為數字陣列，按照bit0開始的順序
-//   const binaryArray = Array.from(paddedBinaryString).map(Number);
-//   //binaryArray 反過來存放 這樣個別對應的位元才會是他的位置
-//   const reversedBinaryArray = Array.from(paddedBinaryString)
-//     .map(Number)
-//     .reverse();
-
-//   return reversedBinaryArray;
-// };
-
-// module.exports = { decimalToBinaryArray };
-
-// // // 使用範例
-// // const decimalValue = 32;
-
-// // try {
-// //   const binaryResult = decimalToBinaryArray(decimalValue);
-// //   console.log("Binary Result:", binaryResult);
-// //   console.log("Binary Result:", binaryResult.join(" "));
-// //   console.log("Binary [i]:", binaryResult[i]);
-// // } catch (error) {
-// //   console.error("Error:", error.message);
-// // };
-
-// //********************************************************************************************************** */

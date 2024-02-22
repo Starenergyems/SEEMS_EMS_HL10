@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
 const port = 3000;
@@ -18,7 +17,9 @@ app.use(cors());
 
 //導向童話面作法同於METER
 router.get("/mode", (req, res) => {
-  res.redirect("Mode_SysCtrl", { permission: "manager" });
+  // 在這裡修改重定向的方式，可以直接將 URL 修改為 "/mode/sysctrl"
+  // 如果需要傳遞額外資訊，可以使用查詢字串或 session 等機制
+  res.redirect("/mode/sysctrl");
 });
 
 //系統模式控制頁面切換
