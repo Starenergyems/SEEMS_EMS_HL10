@@ -12,6 +12,14 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
+const {
+  getconfig,
+  findaccount,
+  updateaccount,
+  datetime,
+  uuid,
+  submit,
+} = require("./rLogin");
 
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const gc_rf10 = "gc_rf10";
@@ -31,39 +39,40 @@ app.use(cookieParser());
 
 // 引入多個路由檔案
 // const accountRouter = require("./rAccount");
-// const modeRouter = require("./rMode");
+const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
-//const pcsRouter = require("./rPCS");
+// const pcsRouter = require("./rPCS");
 // const batteryRouter = require("./rBattery");
 const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
-const environmentRouter = require("./rEnvironment");
+//const environmentRouter = require("./rEnvironment");
 //const alarmRouter = require("./rAlarm");
 const eventRouter = require("./rEvent");
 //const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
-// const alarmFunctions = require("./alarmFunctions");
-const middleware = require("./middleware");
+const alarmRouter = require("./rAlarm");
+const { nextTick } = require("process");
+//const middleware = require("./middleware");
 // const login = require("./rLogin")
 //app.use(authMiddleware);
 
 //***************************************************************************************************************** */
 // 使用這些路由
 // app.use(accountRouter);
-// app.use(modeRouter);
+app.use(modeRouter);
 app.use(meterRouter);
-//app.use(pcsRouter);
+// app.use(pcsRouter);
 //app.use(batteryRouter);
 app.use(commuRouter);
 app.use(deviceRouter);
-app.use(environmentRouter);
+//app.use(environmentRouter);
 //app.use(alarmRouter);
 app.use(eventRouter);
 //app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
-// app.use(alarmFunctions);
+app.use(alarmRouter);
 //app.use(middleware);
 //***************************************************************************************************************** */
 
@@ -71,7 +80,31 @@ app.get("/", (req, res) => {
   res.render("Login");
 });
 
-app.post("/login", async (req, res) => {});
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+app.post("/login", async (req, res) => {
+  try {
+    const email = req.body["username"];
+    const password = req.body["password"];
+    console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
+
+    const response = await submit(email, password);
+    console.log(response)
+    if (response["result"] === true) {
+      console.log(response["text"]);
+      res.cookie("token", response["token"])
+      //, { maxAge: 10, httpOnly: true }); 
+      // if cookies add this the cookies will live 10s, and will not abandon after close browser. 
+      res.json({"redirect":"http://localhost:3000/mode"})
+    } else {
+      res.status(401).send(response["text"]);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 // app.get("/login", (req, res) => {
 //   res.render("Login", { navbarData: res.locals.navbarData });
@@ -91,7 +124,7 @@ app.get("/health", (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
+  console.log(`app.js 應用程式正在監聽端口 ${port}`);
 });
 
 // 在應用程式結束時，關閉伺服器

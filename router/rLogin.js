@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(cors());
 
+////////////////////////////////////////////////////////////////////////////////////////
+// Need change.
 const db_USERNAME = "admin"; // Couchdb username use for login db.
 const db_PASSWORD = "ems45877096"; // Couchdb password use for login db.
 const db_IP = "192.168.8.101"; // Couchdb IPv4 address.
@@ -20,26 +22,11 @@ const db_PORT = "5984"; // Couchdb service use port.
 const db_account = "account"; // The account database name.
 const doc_CONFIG = "config"; // The account setting doc id.
 
-// login page html id variable declare
-const id_EMAIL = "userAccount"; // The email input element's id.
-const id_PASSWORD = "userPassword"; //  The password input element's id.
-const id_TEXT = ""; // Show hint text element's id.
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
-
 const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
 // const db_URL = couchDBUrl; // Use for fetch database function.
 const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
-
-////////////////////////////////////////////////////////////////////////////////////////
-// Do not need change, when load Login.js execute
-
-initialize();
-
-async function initialize() {
-  await getconfig();
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare, config data.
@@ -52,95 +39,50 @@ var num; // Nunber at least in password. 123
 var locktimes; // System setting for how many times login failure to lock the account.
 var suspendtime; // System setting for how long to lock the account. unit is hour
 var logintext; // Show in login page html.
-var duration; // new var Cookies maintain time. unit is hour.
+var duration; // Cookies maintain time. unit is hour.
 
 // Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
 async function getconfig() {
   const URL = `${db_URL}/${db_account}/${doc_CONFIG}`;
-//   await fetch(URL, {
-//     method: "GET",
-//     headers: { Authorization: AUTHORIZATION },
-//     credentials: "include", // HTTP authentication in the request.
-//   })
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error("Request failed");
-//       }
-//       return response.json();
-//     })
-//     .then((data) => {
-//       data.atleast === undefined
-//         ? (atleast = 5)
-//         : (atleast = parseInt(data.atleast));
-//       data.atmost === undefined
-//         ? (atmost = 10)
-//         : (atmost = parseInt(data.atmost));
-//       data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
-//       data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
-//       data.special === undefined
-//         ? (special = 1)
-//         : (special = parseInt(data.special));
-//       data.num === undefined ? (num = 1) : (num = parseInt(data.num));
-//       data.locktimes === undefined
-//         ? (locktimes = 3)
-//         : (locktimes = parseInt(data.locktimes));
-//       data.suspendtime === undefined
-//         ? (suspendtime = "永久")
-//         : (suspendtime = data.suspendtime);
-//       data.logintext === undefined
-//         ? (logintext = "登入頁面提示字元")
-//         : (logintext = data.logintext);
-//       data.duration === undefined
-//         ? (duration = "")
-//         : (duration = data.duration);
+  try {
+    const response = await fetch(URL, {
+      method: "GET",
+      headers: { Authorization: AUTHORIZATION },
+      credentials: "include", // HTTP authentication in the request.
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    data.atleast === undefined ? (atleast = 5) : (atleast = parseInt(data.atleast));
+    data.atmost === undefined ? (atmost = 10) : (atmost = parseInt(data.atmost));
+    data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
+    data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
+    data.special === undefined ? (special = 1) : (special = parseInt(data.special));
+    data.num === undefined ? (num = 1) : (num = parseInt(data.num));
+    data.locktimes === undefined ? (locktimes = 3) : (locktimes = parseInt(data.locktimes));
+    data.suspendtime === undefined ? (suspendtime = "永久") : (suspendtime = data.suspendtime);
+    data.logintext === undefined ? (logintext = "登入頁面提示字元") : (logintext = data.logintext);
+    data.duration === undefined ? (duration = "") : (duration = data.duration);
 
-//       // console.log(`atleast: ${atleast}`);
-//       // console.log(`atmost: ${atmost}`);
-//       // console.log(`upper: ${upper}`);
-//       // console.log(`lower: ${lower}`);
-//       // console.log(`special: ${special}`);
-//       // console.log(`num: ${num}`);
-//       // console.log(`locktimes: ${locktimes}, ${typeof(locktimes)}`);
-//       // console.log(`suspendtime: ${suspendtime}`);
-//       // console.log(`logintext: ${logintext}`);
-//     })
-//     .catch((error) => {
-//       console.error("Error:", error.message);
-//     });
-// }
+    // console.log(`atleast： ${atleast}`)
+    // console.log(`atmost： ${atmost}`)
+    // console.log(`upper： ${upper}`)
+    // console.log(`lower： ${lower}`)
+    // console.log(`special： ${special}`)
+    // console.log(`num： ${num}`)
+    // console.log(`locktimes： ${locktimes}`)
+    // console.log(`suspendtime： ${suspendtime}`)
+    // console.log(`logintext： ${logintext}`)
+    // console.log(`duration： ${duration}`)
 
-
-try {
-  const response = await fetch(URL, {
-    method: "GET",
-    headers: { Authorization: AUTHORIZATION },
-    credentials: "include", // HTTP authentication in the request.
-  });
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-  const data = await response.json();
-  data.atleast === undefined ? (atleast = 5) : (atleast = parseInt(data.atleast));
-  data.atmost === undefined ? (atmost = 10) : (atmost = parseInt(data.atmost));
-  data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
-  data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
-  data.special === undefined ? (special = 1) : (special = parseInt(data.special));
-  data.num === undefined ? (num = 1) : (num = parseInt(data.num));
-  data.locktimes === undefined ? (locktimes = 3) : (locktimes = parseInt(data.locktimes));
-  data.suspendtime === undefined ? (suspendtime = "永久") : (suspendtime = data.suspendtime);
-  data.logintext === undefined ? (logintext = "登入頁面提示字元") : (logintext = data.logintext);
-  data.duration === undefined ? (duration = "") : (duration = data.duration);
-
-  // Output the retrieved data for debugging
-  console.log(`Retrieved data:`, data);
-} catch (error) {
-  console.error("Error:", error.message);
-}
-}
-
+    // Output the retrieved data for debugging
+    // console.log(`Retrieved data:`, data);
+  } catch (error) {
+    console.error("Error:", error.message);
+  }}
 ////////////////////////////////////////////////////////////////////////////////////////
-// Variable declare, to store data in the account doc.
-
+// Variable declare to store data in the account doc.
 var id; // _id.
 var rev; // _rev.
 var time; // At first is establish time, else verify time.
@@ -159,9 +101,9 @@ var bantill; // New var, use for record if user is locked when to unlock.
 var token; // New var, when user login success, system will random generate for validation.
 var validtime; // New var, the token will be validate to validtime.
 
-async function findaccount(mail) {
+async function findaccount(maill) {
   const URL = `${db_URL}/${db_account}/_find`;
-  const mangoQuery = { selector: { "user.mail": { $eq: mail } } }; // use login page submit email to search account db.
+  const mangoQuery = { selector: { "user.mail": { $eq: maill } } }; // use login page submit email to search account db.
   await fetch(URL, {
     method: "POST",
     headers: {
@@ -170,10 +112,12 @@ async function findaccount(mail) {
     },
     credentials: "include",
     body: JSON.stringify(mangoQuery),
+    // json: JSON.stringify(mangoQuery),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
+      console.log(`findaccount data length:${data.docs.length}`)
       if (data.docs.length === 1) {
         // If select doc only one to implement var.
         id = data.docs[0]._id; // Impossible  undefined.
@@ -184,26 +128,16 @@ async function findaccount(mail) {
         mail = data.mail; // Impossible  undefined.
         data.name === undefined ? (namee = "") : (namee = data.name);
         data.comapny === undefined ? (company = "") : (company = data.comapny);
-        data.department === undefined
-          ? (department = "")
-          : (department = data.department);
+        data.department === undefined ? (department = "") : (department = data.department);
         data.level === undefined ? (level = "general") : (level = data.level);
-        data.state === undefined
-          ? (state = "deactivate")
-          : (state = data.state);
-        data.errcount === undefined
-          ? (errcount = 0)
-          : (errcount = parseInt(data.errcount));
+        data.state === undefined ? (state = "deactivate") : (state = data.state);
+        data.errcount === undefined ? (errcount = 0) : (errcount = parseInt(data.errcount));
         data.note === undefined ? (note = "") : (note = data.note);
-        data.last_time === undefined
-          ? (last_time = "")
-          : (last_time = data.last_time);
+        data.last_time === undefined ? (last_time = "") : (last_time = data.last_time);
         password = data.password;
         data.bantill === undefined ? (bantill = "") : (bantill = data.bantill);
         data.token === undefined ? (token = "") : (token = data.token);
-        data.validtime === undefined
-          ? (validtime = "")
-          : (validtime = data.validtime);
+        data.validtime === undefined ? (validtime = "") : (validtime = data.validtime);
         // console.log(`_id: ${id}`);
         // console.log(`_rev: ${rev}`);
         // console.log(`time: ${time}`);
@@ -259,7 +193,7 @@ async function updateaccount(id) {
       validtime: `${validtime}`,
     },
   };
-  fetch(URL, {
+  await fetch(URL, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -278,13 +212,6 @@ async function updateaccount(id) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// Get login page html element value.
-async function getElement(htmlid) {
-  const value = document.getElementById(htmlid).value;
-  return value;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
 // The funciotn generate datetime string default now, offset is back/forward hours.
 function datetime(offset = 0) {
   const time = new Date(
@@ -300,93 +227,88 @@ Date.prototype.toISOString = function () {
   let offset_date = this.setHours(this.getHours() - hours_offset);
   let symbol = hours_offset >= 0 ? "-" : "+";
   let time_zone = symbol + pad(Math.abs(hours_offset)) + ":00";
-
   return (
-    this.getUTCFullYear() +
-    "-" +
-    pad(this.getUTCMonth() + 1) +
-    "-" +
-    pad(this.getUTCDate()) +
-    "T" +
-    pad(this.getUTCHours()) +
-    ":" +
-    pad(this.getUTCMinutes()) +
-    ":" +
-    pad(this.getUTCSeconds()) +
-    "." +
-    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
-    time_zone
-  );
+    this.getUTCFullYear() + "-" + pad(this.getUTCMonth() + 1) + "-" + pad(this.getUTCDate()) + "T" + pad(this.getUTCHours()) + ":" + pad(this.getUTCMinutes()) +
+    ":" + pad(this.getUTCSeconds()) + "." + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + time_zone);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The function use to generate random uuid
-
-function uuid() {
+async function uuid() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     var r = (Math.random() * 16) | 0,
-      v = c == "x" ? r : (r & 0x3) | 0x8;
+    v = c == "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The function for login page submit.
-async function submit() {
-  let response; // Use for return.
-  const EMAIL = await getElement(id_EMAIL); // The email key by loginer.
-  const PASSWORD = await getElement(id_PASSWORD); // The password key by loginer.
-  console.log(PASSWORD, EMAIL)
+async function submit(EMAIL, PASSWORD) {
+  let response = {"result":"", "text":"", "mail":"", "token":"", "validtime":"", "permission":""};
+  await getconfig();
   await findaccount(EMAIL); // According login page submit mail to select account data
-
-  // state errcount bantill
-  if (
-    state === "normal" &&
-    errcount < locktimes &&
-    (bantill === "" || Date.parse(bantill) <= Date.parse(time))
-  ) {
-    // Judge either the user can login or not. bantill may null
+  // console.log(suspendtime, typeof(suspendtime), suspendtime===1,suspendtime==="1", suspendtime==1)
+  console.log(errcount, typeof(errcount), locktimes, typeof(locktimes))
+  if (errcount === "NaN" || errcount === ""){errcount = 0}
+  if (Date.parse(bantill) > Date.parse(time) || state === "lock" && suspendtime !== "永久") {
+    console.log(`bantill：${bantill}, state:${state}`)
+    errcount = 0;
+    bantill = "";
+    state = "activate";
+  }
+  if (errcount >= locktimes || Date.parse(bantill) > Date.parse(time) || state === "lock") {
+    console.log(`errcount:${errcount}, locktimes:${locktimes}, bantill：${bantill}, state:${state}`)
+    token = ""
+    validtime = "";
+    state = "lock";
+  }
+  if (state === "activate" && (errcount === "" || errcount < locktimes) && (bantill === "" || Date.parse(bantill) < Date.parse(time))) {
+    console.log(`User ${mail} is loginable.`)
     if (password === PASSWORD) {
-      // submit password is correct.
       errcount = 0;
       bantill = "";
       last_time = datetime();
-      token = uuid();
+      token = await uuid();
       validtime = datetime(duration);
-      document.cookie = `token=${token}; max-age=${duration * 3600}`;
-      console.log(document.cookie);
-      window.location.href = "./main"; // href can change by "assign" or "replace".
-      resopnse = `login success, login validtime is ${validtime} hours.`;
-    } else if (errcount < locktimes) {
-      // error password
+      response["result"] = true;
+      response["text"] = `User ${mail} Login Success.`;
+      response["id"] = id;
+      response["mail"] = mail;
+      response["token"] = token;
+      response["validtime"] = validtime;
+      response["permission"] = level;
+    } else if (errcount < locktimes-1) {
+      // keyin password is incorrect.
       errcount += 1;
-      response = `Login failtimes is "${errcount}". If continuous loginfail up to "${locktimes}" times, the user will be lock`;
-      if (suspendtime != "永久") {
-        response += `"${suspendtime}" hours.`;
-      } else {
-        response += ".";
-      }
-    }
-  } else if (errcount >= locktimes || Date.parse(bantill) > Date.parse(time)) {
-    validtime == "";
-    state = "deactivate";
-    response = `Continuous loginfail up to ${locktimes} times, the user locked`;
-    if (suspendtime != "永久") {
-      bantill = "";
-      response += `untill${bantill}.`;
-    } else {
-      bantill = datetime(parseFloat(suspendtime));
-      response += ".";
-    }
+      response["result"] = false;
+      response["text"] = `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
+      if (suspendtime !== "永久") { response["text"] += `"${suspendtime}" hours.` } else {response["text"] += "."}}
+      else if (errcount === locktimes-1) {
+        errcount +=1 ;
+        token = ""
+        validtime = "";
+        state = "lock";
+        response["text"] = `Continuous loginfail up to ${locktimes} times, the user locked`;
+        if (suspendtime !== "永久") {
+        bantill = datetime(parseFloat(suspendtime));
+        response["text"] += `untill${bantill}.`;
+        } else {suspendtime === "永久"
+        bantill = "";
+        response["text"] += ".";
+        }}
   }
   updateaccount(id);
-  return { Error: response };
+  console.log(response["text"])
+  return response
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
   submit,
-  initialize,
-  getconfig
+  getconfig,
+  findaccount,
+  updateaccount, 
+  datetime,
+  uuid,
 }
-//router

@@ -1,104 +1,67 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>登入頁面</title>
-    <link href="../public/styles/Login.css" rel="stylesheet" type="text/css" />
-  </head>
 
-  <body>
-    <div class="bgStripe bgStripe_1">
-      <img src="../public/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登入頁面</title>
+  <link href="../public/styles/Login.css" rel="stylesheet" type="text/css" />
+</head>
 
-    <div class="bgStripe bgStripe_2"></div>
-
-    <div class="bgStripe bgStripe_3">
-      <div class="loginWindow">
-        <h2>EMS管理系統</h2>
-        <h3>花蓮E-dReg10MW案</h3>
-
-        <div class="AccPW_Field accountField">
-          <img src="../public/images/UserAccount_Logo.png" alt="使用者帳號Logo"/>
-          <input type="email" class="AccPW_Input" name="account" id="account" placeholder="name@hdrenewables.com">
-        </div>
-        <div class="AccPW_Field passwordField">
-          <img src="../public/images/Password_Logo.png" alt="使用者密碼Logo" />
-          <input type="password" class="AccPW_Input" name="password" id="password" placeholder="Password">
-        </div>
-
-        <div class="pt-1 my-4">
-          <!-- <input type="btn_Login" class="btn btn-dark" value="登入" onclick=""> -->
-          <a id="btn_Login">LOG&nbspIN</a> 
-        </div>
-        
+<body>
+  <div class="bgStripe bgStripe_1">
+    <img src="../public/images/Star_Energy_Logo_v1.png" alt="星佑能源Logo" />
+  </div>
+  <div class="bgStripe bgStripe_2"></div>
+  <div class="bgStripe bgStripe_3">
+    <div class="loginWindow">
+      <h2>EMS管理系統</h2>
+      <h3>花蓮E-dReg10MW案</h3>
+      <div class="AccPW_Field accountField">
+        <img src="../public/images/UserAccount_Logo.png" alt="使用者帳號Logo"/>
+        <input type="email" class="AccPW_Input" name="account" id="account" placeholder="name@hdrenewables.com">
+      </div>
+      <div class="AccPW_Field passwordField">
+        <img src="../public/images/Password_Logo.png" alt="使用者密碼Logo" />
+        <input type="password" class="AccPW_Input" name="password" id="password" placeholder="Password">
+      </div>
+      <div class="pt-1 my-4">
+        <a id="btn_Login">LOG&nbspIN</a> 
       </div>
     </div>
-    <div class="bgStripe bgStripe_4"></div>
-    <div class="bgStripe bgStripe_5"></div>
+  </div>
+  <div class="bgStripe bgStripe_4"></div>
+  <div class="bgStripe bgStripe_5"></div>
 
-
-    <script>
-      document.getElementById('btn_Login').addEventListener('click', async function() {
-        const acc = document.getElementById("account").value
-        const pas = document.getElementById("password").value
-        await fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({username: acc, password:pas })
-          })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.text();
-          })
-          .then(data => {
-              console.log(data);
-              // Do something with the response if needed
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
+  <script>
+    document.getElementById('btn_Login').addEventListener('click', async function() {
+      const username = document.getElementById("account").value
+      const password = document.getElementById("password").value
+      fetch('/login', {
+        method: 'POST',
+        headers: { 
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.185",
+          'Content-Type': 'application/json' },
+        // headers: { 'Content-Type': 'text/html' },
+        body: JSON.stringify({username: username, password:password }),
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+          return response.json();
+            }).then(data => {
+            console.log(data)
+            // console.log(data.slice(13, -2));
+            // console.log(data.redirect)
+            window.location.href = data["redirect"];
+            // window.location.href = data.slice(13, -2);
+            }).catch(error => {
+            console.error('Error:', error);
+            });
       });
   </script>
-
-
-
-  <!-- <script>
-    // $(document).ready(
-    function submit() {
-      console.log("login hihi")
-      // $('#btn_Login').click(function() {
-      const acc = document.getElementById("account").value
-      // const acc = $('#account').val();
-      const pas = document.getElementById("password").value //$('#password').val();
-      console.log(1, acc, pas)
-      fetch('http://localhost:8888/submit',{method: 'POST',
-            body:{"account":acc, "password":pas}
-      })}
-  </script> -->
-
-  <!-- <script>
-    function submit() {
-      const URL = "http://localhost:8888/login/"; // "http://192.168.8.101/login/";
-      console.log("login")
-      fetch(URL, {
-        method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        //   Authorization: "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`),
-        // },
-        // credentials: "include",
-        body: {"account":document.getElementById("account"), "password":document.getElementById("password")}
-      })}
-  </script> -->
-
-
-  </body>
+</body>
 </html>
+
 
