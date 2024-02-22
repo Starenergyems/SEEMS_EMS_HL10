@@ -19,7 +19,9 @@ const {
   datetime,
   uuid,
   submit,
+  db_USERNAME
 } = require("./rLogin");
+
 
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const gc_rf10 = "gc_rf10";
@@ -34,6 +36,14 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 app.use(cookieParser());
+
+auth = require("./authMiddleware")
+
+const {a, aa, authentication} = require("./authMiddleware")
+// app.use(auth)
+// console.log(db_USERNAME)
+// console.log(aa)
+a();
 
 //***************************************************************************************************************** */
 
@@ -76,9 +86,34 @@ app.use(alarmRouter);
 //app.use(middleware);
 //***************************************************************************************************************** */
 
-app.get("/", (req, res) => {
+// app.get("*", (req, res, next) => {
+//   console.log(req.cookies);
+//   next();
+// })
+
+// app.get("/", (req, res, next) => {
+//     console.log(req.cookies);
+//     next();
+//   })
+
+app.get("/", (req, res) => {  
   res.render("Login");
 });
+
+app.get("/", (req, res, next) => {
+  console.log(req.cookies);
+  next();
+})
+
+app.get("*", (req, res, next) => {
+  console.log(req.cookies);
+  next();
+})
+
+app.get("test", (req,res,next) =>{
+  
+})
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 

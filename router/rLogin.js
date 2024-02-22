@@ -101,7 +101,8 @@ var bantill; // New var, use for record if user is locked when to unlock.
 var token; // New var, when user login success, system will random generate for validation.
 var validtime; // New var, the token will be validate to validtime.
 
-async function findaccount(maill) {
+async function findaccount(maill="", token="") {
+  if (token === "") {
   const URL = `${db_URL}/${db_account}/_find`;
   const mangoQuery = { selector: { "user.mail": { $eq: maill } } }; // use login page submit email to search account db.
   await fetch(URL, {
@@ -164,7 +165,72 @@ async function findaccount(maill) {
     .catch((error) => {
       console.error("Error executing Mango query:", error);
     });
-}
+} else if (token !== ""){
+  const URL = `${db_URL}/${db_account}/_find`;
+  const mangoQuery = { selector: { "user.token": { $eq: token } } }; // use login page submit email to search account db.
+  let res
+  await fetch(URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: AUTHORIZATION,
+  },
+  credentials: "include",
+  body: JSON.stringify(mangoQuery),
+  // json: JSON.stringify(mangoQuery),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    // console.log(data);
+    console.log(`findaccount data length:${data.docs.length}`)
+    if (data.docs.length === 1) {
+      // If select doc only one to implement var.
+      id = data.docs[0]._id; // Impossible  undefined.
+      rev = data.docs[0]._rev; // Impossible  undefined.
+      time = datetime(); // function findaccount execute time.
+      data = data.docs[0].user; // data from doc become doc.user.
+      data.num === undefined ? (employeenum = "") : (employeenum = data.num);
+      mail = data.mail; // Impossible  undefined.
+      data.name === undefined ? (namee = "") : (namee = data.name);
+      data.comapny === undefined ? (company = "") : (company = data.comapny);
+      data.department === undefined ? (department = "") : (department = data.department);
+      data.level === undefined ? (level = "general") : (level = data.level);
+      data.state === undefined ? (state = "deactivate") : (state = data.state);
+      data.errcount === undefined ? (errcount = 0) : (errcount = parseInt(data.errcount));
+      data.note === undefined ? (note = "") : (note = data.note);
+      data.last_time === undefined ? (last_time = "") : (last_time = data.last_time);
+      password = data.password;
+      data.bantill === undefined ? (bantill = "") : (bantill = data.bantill);
+      data.token === undefined ? (token = "") : (token = data.token);
+      data.validtime === undefined ? (validtime = "") : (validtime = data.validtime);
+      return {'token': token}
+      // console.log(`_id: ${id}`);
+      // console.log(`_rev: ${rev}`);
+      // console.log(`time: ${time}`);
+      // console.log(`employeenum: ${employeenum}`);
+      // console.log(`mail: ${mail}`);
+      // console.log(`namee: ${namee}`);
+      // console.log(`company: ${company}`);
+      // console.log(`department: ${department}`);
+      // console.log(`level: ${level}`);
+      // console.log(`state: ${state}`);
+      // console.log(`errcount: ${errcount}`);
+      // console.log(`note: ${note}`);
+      // console.log(`last_time: ${last_time}`);
+      // console.log(`password: ${password}`);
+      // console.log(`bantill: ${bantill}`);
+      // console.log(`token: ${token}`);
+      // console.log(`validtime: ${validtime}`);
+    } else {
+      const response = `帳號或密碼錯誤`;
+      console.log(response);
+      return { Error: response };
+    }
+  })
+  .catch((error) => {
+    console.error("Error executing Mango query:", error);
+  });
+}}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Use _id updata account doc. put method need content, if not will be null.
@@ -305,10 +371,12 @@ async function submit(EMAIL, PASSWORD) {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
+
   submit,
   getconfig,
   findaccount,
   updateaccount, 
   datetime,
   uuid,
+  db_USERNAME
 }

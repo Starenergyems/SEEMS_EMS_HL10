@@ -661,8 +661,8 @@ function cal_BSC(...args) {
 }
 
 // 測試示例
-console.log("test1:" + cal_BSC(3, 0, 0)); // 2，因為 10 的二進制是 1010，有兩個 1 在 bit0 或 bit1 上
-console.log("test2:" + cal_BSC(7, 7, 7)); // 9，因為 1 的二進制是 1，有一個 1 在 bit0 上
+// console.log("test1:" + cal_BSC(3, 0, 0)); // 2，因為 10 的二進制是 1010，有兩個 1 在 bit0 或 bit1 上
+// console.log("test2:" + cal_BSC(7, 7, 7)); // 9，因為 1 的二進制是 1，有一個 1 在 bit0 上
 
 function cal_HVAC(...args) {
   let totalCount = 0;
@@ -688,9 +688,9 @@ function cal_HVAC(...args) {
 }
 
 // 測試示例
-console.log("HVAC test1:" + cal_HVAC(1, 2, 1));
-console.log("HVAC test2:" + cal_HVAC(0, 2, 0));
-console.log("HVAC test3:" + cal_HVAC(0, 0, 7));
+// console.log("HVAC test1:" + cal_HVAC(1, 2, 1));
+// console.log("HVAC test2:" + cal_HVAC(0, 2, 0));
+// console.log("HVAC test3:" + cal_HVAC(0, 0, 7));
 
 function cal_Temperature(...args) {
   let countOverTemp = 0;
@@ -713,7 +713,6 @@ console.log("Temperature test3:" + cal_Temperature(350, 200, 300)); // 0，沒�
 
 function cal_Humidity(...args) {
   let countOverHumidity = 0;
-
   // 遍歷傳入的所有參數
   for (let i = 0; i < args.length; i++) {
     // 如果變數(濕度)介於650~800，則計數加 1
@@ -723,59 +722,64 @@ function cal_Humidity(...args) {
   }
   return countOverHumidity; // 返回計算的結果
 }
-// 測試示例
+//測試示例
 console.log("Humidity test1:" + cal_Humidity(300, 400, 799)); // 1，只有一個變數大於 650
 console.log("Humidity test2:" + cal_Humidity(700, 700, 900)); // 0，沒有變數大於 400
 console.log("Humidity test3:" + cal_Humidity(700, 800, 900)); // 0，沒有變數大於 400
 
 function cal_UPS_1(...args) {
-  let totalOnes = 0;
+  let totalups1Ones = 0;
+  const binaryArray = [];
 
   // 遍歷傳入的所有參數
   for (let i = 0; i < args.length; i++) {
-    const binary = args[i].toString(2); // 將參數轉換為二進制
+    const binary = args[i].toString(2).padStart(32, '0'); // 將參數轉換為固定長度的二進制，並在左邊補零
+    //const reversedBinary = binary.split('').reverse(); // 反轉二進制字串並轉換為陣列
+    //binaryArray.push(reversedBinary); // 將反轉後的二進制陣列存入 binaryArray 中
+    //console.log(binary);
 
-    // 檢查二進制中的位元，只有 bit4 或 bit7 出現 1 才計算
-    if (binary[3] === "1" || binary[6] === "1") {
-      // 計算二進制中出現的 1 的個數
-      const onesCount = (binary.match(/1/g) || []).length;
-
+    //bit 7
+    if (binary[24] === "1") {
+      totalups1Ones ++;
+    }
+    //bit 4
+    if (binary[27] == "1") {
       // 將計算的結果加到總數中
-      totalOnes += onesCount;
+      totalups1Ones ++;
     }
   }
 
-  return totalOnes; // 返回計算的結果
+  //console.log(binaryArray); // 輸出反轉後的二進制陣列
+  return totalups1Ones; // 返回計算的結果
 }
 
-//要再檢查//
 // 測試示例
-console.log("**********cal_UPS_1 test1:" + cal_UPS_1(5, 6, 7)); // 3，因為 5 的二進制是 101，bit4 出現 1；6 的二進制是 110，bit7 出現 1；7 的二進制是 111，bit4 和 bit7 都出現 1。總共有 3 個 1
-console.log("**********cal_UPS_1 test2:" + cal_UPS_1(3, 4, 8)); // 0，因為 3 的二進制是 11，沒有 bit4 或 bit7 出現 1；4 的二進制是 100，沒有 bit4 或 bit7 出現 1；8 的二進制是 1000，沒有 bit4 或 bit7 出現 1。總共有 0 個 1
+// console.log("***********************************************");
+// console.log("cal_UPS_1 test1:" + cal_UPS_1(16)); // 正確的結果應該是1
+// console.log("cal_UPS_1 test2:" + cal_UPS_1(128)); // 正確的結果應該是0
+// console.log("cal_UPS_1 test3:" + cal_UPS_1(16, 128)); // 正確的結果應該是2
+
 
 function cal_UPS_2(...args) {
-  let totalOnes = 0;
+  let totalups2Ones = 0;
 
   // 遍歷傳入的所有參數
   for (let i = 0; i < args.length; i++) {
-    const binary = args[i].toString(2); // 將參數轉換為二進制
-
+    const binary = args[i].toString(2).padStart(32, '0'); 
+    //console.log(binary);
     // 檢查二進制中的位元，只有 bit15 出現 1 且 bit14 不是 1 才計算
-    if (binary[0] === "1" && binary[1] !== "1") {
-      // 計算二進制中出現的 1 的個數
-      const onesCount = (binary.match(/1/g) || []).length;
-
+    if (binary[16] === "1" && binary[17] !== "1") {
       // 將計算的結果加到總數中
-      totalOnes += onesCount;
+      totalups2Ones ++;
     }
   }
 
-  return totalOnes; // 返回計算的結果
+  return totalups2Ones; // 返回計算的結果
 }
 
 // 測試示例
-console.log("**********cal_UPS_2 test1:" + cal_UPS_2(32768, 16384, 8192)); // 2，因為 32768 的二進制是 1000000000000000，只有 bit15 出現 1；16384 的二進制是 10000000000000，只有 bit14 出現 1，忽略；8192 的二進制是 1000000000000，只有 bit13 出現 1，忽略。總共有 1 個 1
-console.log("**********cal_UPS_2 test2:" + cal_UPS_2(24576, 12288, 4096)); // 0，因為 24576 的二進制是 110000000000000，bit15 和 bit14 都出現 1，忽略；12288 的二進制是 11000000000000，bit15 出現 1，但 bit14 也出現 1，忽略；4096 的二進制是 1000000000000，只有 bit12 出現 1，忽略。總共有 0
+// console.log("***********************************************");
+// console.log("cal_UPS_2 test1:" + cal_UPS_2(32768, 16384, 8192));
 
 function calculateWarningNum_Bat(
   BSC_result,
@@ -798,10 +802,10 @@ function calculateWarningNum_Bat(
 const WarningNum_Env = calculateWarningNum_Bat(
   cal_BSC(0, 0, 0),
   cal_HVAC(0, 0, 0),
-  cal_Temperature(660, 300, 800), //1
-  cal_Humidity(700, 800, 900), //2
-  cal_UPS_1(5, 6, 7),
-  cal_UPS_2(0, 0, 0)
+  cal_Temperature(0, 0, 0), //0
+  cal_Humidity(0, 0, 759), //1
+  cal_UPS_1(0, 0, 0), //
+  cal_UPS_2(0, 0, 0) //3
 );
 
 console.log("環境警告數量：", WarningNum_Env);
@@ -839,6 +843,8 @@ function calculateWarningNum_FF(...args) {
 
   return totalOnes;
 }
+
+//******************************************************************************* */
 // // 呼叫函數並傳遞參數，然後輸出結果
 // const totalWarnings = calculateWarningNum_Bat(
 //   1, // lc1_bms1,
@@ -1003,7 +1009,6 @@ module.exports = {
   //****************** */
   mapL_M_systemMode,
   calculateWarningNum_PCS,
-  calculateWarningNum_Bat,
 };
 
 // //***************************************************************************** */
