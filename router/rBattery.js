@@ -1,4 +1,5 @@
 //const port=3005;
+//const port=3005;
 
 const express = require("express");
 const methodOverride = require("method-override");
@@ -26,7 +27,7 @@ const {
 const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
-const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const couchDBUrl = "http://admin:ems45877096@192.168.1.12:5984";
 const nanoDb = nano(couchDBUrl);
 
 app.set("view engine", "ejs");
@@ -451,6 +452,7 @@ async function querySumData() {
 }
 
 router.get("/operateinfo/battery", async (req, res) => {
+router.get("/operateinfo/battery", async (req, res) => {
   try {
     await querySumData();
     res.render("Op_Bat_InfoSummary", batterySum_variables);
@@ -460,6 +462,7 @@ router.get("/operateinfo/battery", async (req, res) => {
   }
 });
 
+router.get("/operateinfo/battery/data", async (req, res) => {
 router.get("/operateinfo/battery/data", async (req, res) => {
   try {
     // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
@@ -479,6 +482,8 @@ router.get("/operateinfo/battery/data", async (req, res) => {
 
     res.json(responseData);
   } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
     console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -624,17 +629,39 @@ async function queryDetailData() {
     7: "Lc04",
     // 8: "Lc04", // 如果需要處理 8，可以取消註解
   };
+async function queryDetailData() {
+  // 定義資料庫集合的映射
+  const collectionMap = {
+    1: "Lc01",
+    2: "Lc01",
+    3: "Lc02",
+    4: "Lc02",
+    5: "Lc03",
+    6: "Lc03",
+    7: "Lc04",
+    // 8: "Lc04", // 如果需要處理 8，可以取消註解
+  };
 
   // 根據 pageNumber 選擇不同的集合名稱
   const selectedCollection = collectionMap[pageNumber];
+  // 根據 pageNumber 選擇不同的集合名稱
+  const selectedCollection = collectionMap[pageNumber];
 
+  //console.log("pageNumber: " + pageNumber);
+  //console.log("selectedCollection: " + selectedCollection);
   //console.log("pageNumber: " + pageNumber);
   //console.log("selectedCollection: " + selectedCollection);
 
   if (!selectedCollection) {
     throw new Error("infodetail: Invalid pageNumber");
   }
+  if (!selectedCollection) {
+    throw new Error("infodetail: Invalid pageNumber");
+  }
 
+  const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值 得到第幾組也可以得到lc的組數
+  const subNumber = pageNumber % 2 === 0 ? 2 : 1; //第N組的第一台或是第二台
+  const No_of_BMS = `${baseNumber}-${subNumber}`; //a-b 第幾組的第幾台
   const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值 得到第幾組也可以得到lc的組數
   const subNumber = pageNumber % 2 === 0 ? 2 : 1; //第N組的第一台或是第二台
   const No_of_BMS = `${baseNumber}-${subNumber}`; //a-b 第幾組的第幾台
@@ -643,7 +670,20 @@ async function queryDetailData() {
     const nanoDb = createNanoInstance(dbName);
     return getLatestDocument(nanoDb);
   });
+  const dataPromises = databases.map(async (dbName) => {
+    const nanoDb = createNanoInstance(dbName);
+    return getLatestDocument(nanoDb);
+  });
 
+  const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+  // const lc1Data = allData[0];
+  // const lc2Data = allData[1];
+  // const lc3Data = allData[2];
+  // const lc4Data = allData[3];
+  const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
+  const lcData = allData[num];
+  //console.log("num: " + num);
+  //console.log("baseNumber:" + baseNumber);
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
   // const lc1Data = allData[0];
   // const lc2Data = allData[1];
@@ -773,7 +813,123 @@ async function queryDetailData() {
     };
   }
 }
+  //let processedPageNumber;
+  if (pageNumber % 2 === 0) {
+    // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    batteryDetail_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_BMS,
+      onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
+      BMSsystemV: scaleProcess(lcData.BMS2[404002], 0.1, 1),
+      BMSsystemI: scaleProcess(lcData.BMS2[404003], 0.1, 1),
+      BMSsystemSOC: scaleProcess(lcData.BMS2[404007], 0.1, 1),
+      BMSsystemSOH: scaleProcess(lcData.BMS2[404005], 0.1, 1),
+      heartBeat: lcData.BMS2[404001],
+      rackVoltDiff: scaleProcess(lcData.BMS2[404028], 0.1, 1),
+      rackNoVmaxmin: getHighLowByte(lcData.BMS2[404042]),
+      rackCurrDiff: scaleProcess(lcData.BMS2[404029], 0.1, 1),
+      rackNoImaxmin: getHighLowByte(lcData.BMS2[404043]),
+      rackSOCDiff: scaleProcess(lcData.BMS2[404027], 0.1, 1),
+      V_cell_Max: scaleProcess(lcData.BMS2[404021], 0.0001, 4),
+      rackNoVcMax: lcData.BMS2[404034],
+      bmucellNoVcMax: getHighLowByte(lcData.BMS2[404035]),
+      V_cell_Min: scaleProcess(lcData.BMS2[404022], 0.0001, 4),
+      rackNoVcMin: lcData.BMS2[404036],
+      bmucellNoVcMin: getHighLowByte(lcData.BMS2[404037]),
+      V_cell_MaxDiff: scaleProcess(lcData.BMS2[404025], 0.1, 1),
+      T_cell_Max: scaleProcess(lcData.BMS2[404023], 0.1, 1),
+      rackNoTcMax: lcData.BMS2[404038],
+      bmucellNoTcMax: getHighLowByte(lcData.BMS2[404039]),
+      T_cell_Min: scaleProcess(lcData.BMS2[404024], 0.1, 1),
+      rackNoTcMin: lcData.BMS2[404040],
+      bmucellNoTcMin: getHighLowByte(lcData.BMS2[404041]),
+      T_cell_MaxDiff: scaleProcess(lcData.BMS2[404026], 0.1, 1),
+      totalChgE: Calculate_BMS_energy(
+        lcData.BMS2[404079],
+        lcData.BMS2[404080],
+        lcData.BMS2[404081]
+      ),
+      totalDcgE: Calculate_BMS_energy(
+        lcData.BMS2[404082],
+        lcData.BMS2[404083],
+        lcData.BMS2[404084]
+      ),
+      tempAmb_1: scaleProcess(lcData.BMS2[404013], 0.1, 1),
+      tempAmb_2: scaleProcess(lcData.BMS2[404014], 0.1, 1),
+      rackNo_alarmCMU: lcData.BMS2[404054],
+      rackNo_faultCMU: lcData.BMS2[404055],
+      rackNo_faultPRelay: lcData.BMS2[404056],
+      rackNo_faultNRelay: lcData.BMS2[404057],
+      rackNo_faultFuse: lcData.BMS2[404058],
+      rackNo_commSMUCMU: lcData.BMS2[404059],
+      statusDI: Convert_UInt_to_revBitString(lcData.BMS2[404062], 16),
+      faultHW: Convert_UInt_to_revBitString(lcData.BMS2[404048], 16),
+      faultSMU: Convert_UInt_to_revBitString(lcData.BMS2[404061], 16),
+      SOCcali: Convert_UInt_to_revBitString(lcData.BMS2[404060], 16),
+      alarm: Convert_UInt_to_revBitString(lcData.BMS2[404044], 32),
+      fault: Convert_UInt_to_revBitString(lcData.BMS2[404046], 32),
+    };
+  } else {
+    // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    batteryDetail_variables = {
+      permission: "manager",
+      pageNumber,
+      No_of_BMS,
+      onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
+      BMSsystemV: scaleProcess(lcData.BMS1[404002], 0.1, 1),
+      BMSsystemI: scaleProcess(lcData.BMS1[404003], 0.1, 1),
+      BMSsystemSOC: scaleProcess(lcData.BMS1[404007], 0.1, 1),
+      BMSsystemSOH: scaleProcess(lcData.BMS1[404005], 0.1, 1),
+      heartBeat: lcData.BMS1[404001],
+      rackVoltDiff: scaleProcess(lcData.BMS1[404028], 0.1, 1),
+      rackNoVmaxmin: getHighLowByte(lcData.BMS1[404042]),
+      rackCurrDiff: scaleProcess(lcData.BMS1[404029], 0.1, 1),
+      rackNoImaxmin: getHighLowByte(lcData.BMS1[404043]),
+      rackSOCDiff: scaleProcess(lcData.BMS1[404027], 0.1, 1),
+      V_cell_Max: scaleProcess(lcData.BMS1[404021], 0.0001, 4),
+      rackNoVcMax: lcData.BMS1[404034],
+      bmucellNoVcMax: getHighLowByte(lcData.BMS1[404035]),
+      V_cell_Min: scaleProcess(lcData.BMS1[404022], 0.0001, 4),
+      rackNoVcMin: lcData.BMS1[404036],
+      bmucellNoVcMin: getHighLowByte(lcData.BMS1[404037]),
+      V_cell_MaxDiff: scaleProcess(lcData.BMS1[404025], 0.1, 1),
+      T_cell_Max: scaleProcess(lcData.BMS1[404023], 0.1, 1),
+      rackNoTcMax: lcData.BMS1[404038],
+      bmucellNoTcMax: getHighLowByte(lcData.BMS1[404039]),
+      T_cell_Min: scaleProcess(lcData.BMS1[404024], 0.1, 1),
+      rackNoTcMin: lcData.BMS1[404040],
+      bmucellNoTcMin: getHighLowByte(lcData.BMS1[404041]),
+      T_cell_MaxDiff: scaleProcess(lcData.BMS1[404026], 0.1, 1),
+      totalChgE: Calculate_BMS_energy(
+        lcData.BMS1[404079],
+        lcData.BMS1[404080],
+        lcData.BMS1[404081]
+      ),
+      totalDcgE: Calculate_BMS_energy(
+        lcData.BMS1[404082],
+        lcData.BMS1[404083],
+        lcData.BMS1[404084]
+      ),
+      tempAmb_1: scaleProcess(lcData.BMS1[404013], 0.1, 1),
+      tempAmb_2: scaleProcess(lcData.BMS1[404014], 0.1, 1),
+      rackNo_alarmCMU: lcData.BMS1[404054],
+      rackNo_faultCMU: lcData.BMS1[404055],
+      rackNo_faultPRelay: lcData.BMS1[404056],
+      rackNo_faultNRelay: lcData.BMS1[404057],
+      rackNo_faultFuse: lcData.BMS1[404058],
+      rackNo_commSMUCMU: lcData.BMS1[404059],
+      statusDI: Convert_UInt_to_revBitString(lcData.BMS1[404062], 16),
+      faultHW: Convert_UInt_to_revBitString(lcData.BMS1[404048], 16),
+      faultSMU: Convert_UInt_to_revBitString(lcData.BMS1[404061], 16),
+      SOCcali: Convert_UInt_to_revBitString(lcData.BMS1[404060], 16),
+      alarm: Convert_UInt_to_revBitString(lcData.BMS1[404044], 32),
+      fault: Convert_UInt_to_revBitString(lcData.BMS1[404046], 32),
+    };
+  }
+}
 
+router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
 router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
@@ -781,6 +937,7 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     console.log(pageNumber);
     await queryDetailData();
     res.render("Op_Bat_InfoDetail", batteryDetail_variables);
+  } catch (error) {
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

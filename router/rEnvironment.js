@@ -1,7 +1,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
-const port = 3005;
+//const port = 3005;
 const router = express.Router();
 const app = express();
 const cors = require("cors");
@@ -9,7 +9,7 @@ const cors = require("cors");
 const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
-const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const couchDBUrl = "http://admin:ems45877096@192.168.1.12:5984";
 const nanoDb = nano(couchDBUrl);
 
 const {
@@ -297,7 +297,7 @@ async function queryEnv_variables(){
   
 }
 
-app.get("/systeminfo/environment", async (req, res) => {
+router.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables();
     res.render("Sys_Environment", Env_variables);
@@ -307,7 +307,7 @@ app.get("/systeminfo/environment", async (req, res) => {
   }
 });
 
-app.get("/systeminfo/environment/:data", async (req, res) => {
+router.get("/systeminfo/environment/:data", async (req, res) => {
   try {
     await queryEnv_variables();
     res.json(Env_variables);
@@ -320,7 +320,7 @@ app.get("/systeminfo/environment/:data", async (req, res) => {
 
 //******************************************************************** */
 //環境控制下方彈出視窗
-app.post("/getDataforenv", async (req, res) => {
+router.post("/getDataforenv", async (req, res) => {
   try {
     console.log("接收到環境監控的前端請求");
     const blockId = req.body.blockId;
@@ -385,6 +385,6 @@ app.post("/getDataforenv", async (req, res) => {
 });
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

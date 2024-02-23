@@ -1,7 +1,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
-const port = 3000;
+//const port = 3000;
 const Gc = require("../models/gcschema");
 const router = express.Router();
 const app = express();
@@ -15,6 +15,14 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 //app.use(myMiddleware);
 
+
+// for authmiddlie
+// router.get("*", (req, res, next) => {
+//   console.log(req.cookies);
+//   next();
+// })
+
+
 //導向童話面作法同於METER
 router.get("/mode", (req, res) => {
   // 在這裡修改重定向的方式，可以直接將 URL 修改為 "/mode/sysctrl"
@@ -26,6 +34,14 @@ router.get("/mode", (req, res) => {
 router.get("/mode/sysctrl", (req, res) => {
   res.render("Mode_SysCtrl", { permission: "manager" });
 });
+
+
+// for authmiddlie
+// router.get("*", (req, res, next) => {
+//   console.log(req.cookies);
+//   next();
+// })
+
 //  排程
 router.get("/mode/schedule", (req, res) => {
   res.render("Mode_Schedule", { permission: "manager" });

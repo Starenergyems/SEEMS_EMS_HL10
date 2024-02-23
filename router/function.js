@@ -28,7 +28,7 @@ function scaleProcess(decimalValue, scale, point) {
     typeof scale !== "number" ||
     typeof point !== "number"
   ) {
-    throw new Error("All parameters must be numbers");
+    console.log("All parameters must be numbers");
   }
 
   // 將 decimalValue 乘上 scale
@@ -709,7 +709,6 @@ function cal_Temperature(...args) {
 
 function cal_Humidity(...args) {
   let countOverHumidity = 0;
-
   // 遍歷傳入的所有參數
   for (let i = 0; i < args.length; i++) {
     // 如果變數(濕度)介於650~800，則計數加 1
@@ -723,7 +722,8 @@ function cal_Humidity(...args) {
 //console.log("Humidity test1:" + cal_Humidity(300, 400, 799)); // 1，只有一個變數大於 650
 
 function cal_UPS_1(...args) {
-  let totalOnes = 0;
+  let totalups1Ones = 0;
+  const binaryArray = [];
 
   // 遍歷傳入的所有參數
   for (let i = 0; i < args.length; i++) {
@@ -738,13 +738,14 @@ function cal_UPS_1(...args) {
     }
   }
 
-  return totalOnes; // 返回計算的結果
+  //console.log(binaryArray); // 輸出反轉後的二進制陣列
+  return totalups1Ones; // 返回計算的結果
 }
 
 //console.log("cal_UPS_1 test1:" + cal_UPS_1(16, 0, 128));
 
 function cal_UPS_2(...args) {
-  let totalOnes = 0;
+  let totalups2Ones = 0;
 
   // 遍歷傳入的所有參數
   for (let i = 0; i < args.length; i++) {
@@ -760,7 +761,7 @@ function cal_UPS_2(...args) {
     }
   }
 
-  return totalOnes; // 返回計算的結果
+  return totalups2Ones; // 返回計算的結果
 }
 
 //測試示例
@@ -828,6 +829,8 @@ function calculateWarningNum_FF(...args) {
 
   return totalOnes;
 }
+
+//******************************************************************************* */
 // // 呼叫函數並傳遞參數，然後輸出結果
 // const totalWarnings = calculateWarningNum_Bat(
 //   1, // lc1_bms1,
@@ -992,7 +995,6 @@ module.exports = {
   //****************** */
   mapL_M_systemMode,
   calculateWarningNum_PCS,
-  calculateWarningNum_Bat,
 };
 
 // //***************************************************************************** */

@@ -19,9 +19,10 @@ const {
   datetime,
   uuid,
   submit,
+  db_USERNAME,
 } = require("./rLogin");
 
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 
@@ -35,18 +36,25 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 app.use(cookieParser());
 
+auth = require("./authMiddleware");
+
+const { a, aa, authentication } = require("./authMiddleware");
+// app.use(auth)
+// console.log(db_USERNAME)
+// console.log(aa)
+a();
+
 //***************************************************************************************************************** */
 
 // 引入多個路由檔案
 // const accountRouter = require("./rAccount");
 const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
-// const pcsRouter = require("./rPCS");
-// const batteryRouter = require("./rBattery");
+const pcsRouter = require("./rPCS");
+const batteryRouter = require("./rBattery");
 const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
-//const environmentRouter = require("./rEnvironment");
-//const alarmRouter = require("./rAlarm");
+const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
 //const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
@@ -62,12 +70,11 @@ const { nextTick } = require("process");
 // app.use(accountRouter);
 app.use(modeRouter);
 app.use(meterRouter);
-// app.use(pcsRouter);
-//app.use(batteryRouter);
+app.use(pcsRouter);
+app.use(batteryRouter);
 app.use(commuRouter);
 app.use(deviceRouter);
-//app.use(environmentRouter);
-//app.use(alarmRouter);
+app.use(environmentRouter);
 app.use(eventRouter);
 //app.use(reportRouter);
 // app.use(chartRouter);
@@ -76,12 +83,33 @@ app.use(alarmRouter);
 //app.use(middleware);
 //***************************************************************************************************************** */
 
+// app.get("*", (req, res, next) => {
+//   console.log(req.cookies);
+//   next();
+// })
+
+// app.get("/", (req, res, next) => {
+//     console.log(req.cookies);
+//     next();
+//   })
+
 app.get("/", (req, res) => {
   res.render("Login");
 });
 
-///////////////////////////////////////////////////////////////////////////////////////
+app.get("/", (req, res, next) => {
+  console.log(req.cookies);
+  next();
+});
 
+app.get("*", (req, res, next) => {
+  console.log(req.cookies);
+  next();
+});
+
+app.get("test", (req, res, next) => {});
+
+///////////////////////////////////////////////////////////////////////////////////////
 
 app.post("/login", async (req, res) => {
   try {
@@ -90,13 +118,13 @@ app.post("/login", async (req, res) => {
     console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
 
     const response = await submit(email, password);
-    console.log(response)
+    console.log(response);
     if (response["result"] === true) {
       console.log(response["text"]);
-      res.cookie("token", response["token"])
-      //, { maxAge: 10, httpOnly: true }); 
-      // if cookies add this the cookies will live 10s, and will not abandon after close browser. 
-      res.json({"redirect":"http://localhost:3000/mode"})
+      res.cookie("token", response["token"]);
+      //, { maxAge: 10, httpOnly: true });
+      // if cookies add this the cookies will live 10s, and will not abandon after close browser.
+      res.json({ redirect: "http://localhost:3000/mode" });
     } else {
       res.status(401).send(response["text"]);
     }

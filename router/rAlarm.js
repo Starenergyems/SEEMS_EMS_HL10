@@ -1,7 +1,7 @@
 // testforalarm.js
 const express = require("express");
 const path = require("path");
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
 const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
@@ -280,7 +280,7 @@ function alarm_processor_call() {
     //   })
   
     const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-    const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    // const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
     
     Promise.all([
       lc1_alarm_promise, 
@@ -288,7 +288,7 @@ function alarm_processor_call() {
       lc3_alarm_promise, 
       lc4_alarm_promise, 
       dc_alarm_promise, 
-      other_alarm_promise
+      // other_alarm_promise
     ])
     .then(() => {
       console.log("All alarm_processor: Suc!");

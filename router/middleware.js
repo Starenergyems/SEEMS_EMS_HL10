@@ -23,7 +23,7 @@ const {
 const { Console } = require("console");
 const { ok } = require("assert");
 
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 const dc_rf10 = "dc_rf10";
