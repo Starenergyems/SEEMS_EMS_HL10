@@ -1,7 +1,7 @@
 // testforalarm.js
 const express = require("express");
 const path = require("path");
-const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.1.10:5984");
 const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
@@ -52,7 +52,7 @@ const indexDef_time = {
 ].forEach((element) => element.createIndex(indexDef_time));
 
 const alarmDB_db_name_index = {
-  index: { fields: ["db_name", "time", "read", "recover",] },
+  index: { fields: ["db_name", "time", "read", "recover", "occurrence_time"] },
   name: "alarmDB_db_name_index",
 };
 // alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
@@ -204,7 +204,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
               ]
             },
             fields: ["_id", "time", "location", "device", "level", "content", "value", "read", "recover", "recover_time", "occurrence_time"],
-            sort: [{ time: "desc" }],
+            sort: [{ occurrence_time: "desc" }],
             limit: body.total_rows,
           })
         })
