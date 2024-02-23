@@ -7,7 +7,7 @@ const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http");
 const e = require("connect-flash");
-const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const axios = require("axios");
 const moment = require('moment');
 

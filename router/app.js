@@ -12,17 +12,9 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
-const {
-  getconfig,
-  findaccount,
-  updateaccount,
-  datetime,
-  uuid,
-  submit,
-  db_USERNAME,
-} = require("./rLogin");
+const { submit } = require("./rLogin");
 
-const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 
@@ -36,80 +28,71 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 app.use(cookieParser());
 
-auth = require("./authMiddleware");
-
-const { a, aa, authentication } = require("./authMiddleware");
-// app.use(auth)
-// console.log(db_USERNAME)
-// console.log(aa)
-a();
-
 //***************************************************************************************************************** */
 
 // 引入多個路由檔案
+// const {authentication} = require("./authMiddleware")
+
+app.get("/", (req, res) => {
+  res.render("Login");
+});
 // const accountRouter = require("./rAccount");
 const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
 const pcsRouter = require("./rPCS");
 const batteryRouter = require("./rBattery");
-const commuRouter = require("./rCommu");
+//const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
 const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
 //const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
-const alarmRouter = require("./rAlarm");
-const { nextTick } = require("process");
+//const alarmRouter = require("./rAlarm");
+// const { nextTick } = require("process");
 //const middleware = require("./middleware");
 // const login = require("./rLogin")
 //app.use(authMiddleware);
 
 //***************************************************************************************************************** */
 // 使用這些路由
+// app.use(authentication)
 // app.use(accountRouter);
 app.use(modeRouter);
 app.use(meterRouter);
 app.use(pcsRouter);
 app.use(batteryRouter);
-app.use(commuRouter);
+//app.use(commuRouter);
 app.use(deviceRouter);
 app.use(environmentRouter);
 app.use(eventRouter);
 //app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
-app.use(alarmRouter);
+//app.use(alarmRouter);
 //app.use(middleware);
-//***************************************************************************************************************** */
 
-// app.get("*", (req, res, next) => {
-//   console.log(req.cookies);
-//   next();
-// })
-
-// app.get("/", (req, res, next) => {
-//     console.log(req.cookies);
-//     next();
-//   })
-
-app.get("/", (req, res) => {
-  res.render("Login");
-});
-
-app.get("/", (req, res, next) => {
-  console.log(req.cookies);
-  next();
-});
+const { authentication } = require("./authMiddleware");
 
 app.get("*", (req, res, next) => {
-  console.log(req.cookies);
+  // Assuming `authentication` returns true if authenticated, false otherwise
+  if (!authentication(req)) {
+    // If authentication fails, you may send a response or perform some other action
+    console.log("doaihdihas");
+    return res.status(401).send("Unauthorized");
+  }
+  // If authenticated, continue to the next middleware or route handler
   next();
 });
 
-app.get("test", (req, res, next) => {});
+//***************************************************************************************************************** */
 
-///////////////////////////////////////////////////////////////////////////////////////
+// app.get('*', (req, res, next) => {
+//   if (!authentication(req)) {
+//     console.log("Unauthorized")
+//     return res.status(401).send('Unauthorized')}
+//   next();
+// })
 
 app.post("/login", async (req, res) => {
   try {
@@ -118,7 +101,6 @@ app.post("/login", async (req, res) => {
     console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
 
     const response = await submit(email, password);
-    console.log(response);
     if (response["result"] === true) {
       console.log(response["text"]);
       res.cookie("token", response["token"]);

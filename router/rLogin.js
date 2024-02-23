@@ -1,10 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////////////
+// Node.js setting, do not change.
+
 const express = require("express");
 const path = require("path");
 const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(methodOverride("_method"));
@@ -14,9 +16,10 @@ app.use(cors());
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Need change.
+
 const db_USERNAME = "admin"; // Couchdb username use for login db.
 const db_PASSWORD = "ems45877096"; // Couchdb password use for login db.
-const db_IP = "localhost"; // Couchdb IPv4 address.
+const db_IP = "192.168.8.101"; // Couchdb IPv4 address.
 const db_PORT = "5984"; // Couchdb service use port.
 
 const db_account = "account"; // The account database name.
@@ -24,12 +27,14 @@ const doc_CONFIG = "config"; // The account setting doc id.
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
+
 const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
 // const db_URL = couchDBUrl; // Use for fetch database function.
 const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare, config data.
+
 var atleast; // The maximum password length.
 var atmost; // The minimum password length.
 var upper; // Uppercase alphbet at least in password. ABC
@@ -48,11 +53,9 @@ async function getconfig() {
     const response = await fetch(URL, {
       method: "GET",
       headers: { Authorization: AUTHORIZATION },
-      credentials: "include", // HTTP authentication in the request.
+      credentials: "include",
     });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
+    if (!response.ok) {throw new Error(`Request failed with status ${response.status}`)}
     const data = await response.json();
     data.atleast === undefined ? (atleast = 5) : (atleast = parseInt(data.atleast));
     data.atmost === undefined ? (atmost = 10) : (atmost = parseInt(data.atmost));
@@ -64,25 +67,11 @@ async function getconfig() {
     data.suspendtime === undefined ? (suspendtime = "永久") : (suspendtime = data.suspendtime);
     data.logintext === undefined ? (logintext = "登入頁面提示字元") : (logintext = data.logintext);
     data.duration === undefined ? (duration = "") : (duration = data.duration);
+  } catch (error) {console.error("Error:", error.message)}}
 
-    // console.log(`atleast： ${atleast}`)
-    // console.log(`atmost： ${atmost}`)
-    // console.log(`upper： ${upper}`)
-    // console.log(`lower： ${lower}`)
-    // console.log(`special： ${special}`)
-    // console.log(`num： ${num}`)
-    // console.log(`locktimes： ${locktimes}`)
-    // console.log(`suspendtime： ${suspendtime}`)
-    // console.log(`logintext： ${logintext}`)
-    // console.log(`duration： ${duration}`)
-
-    // Output the retrieved data for debugging
-    // console.log(`Retrieved data:`, data);
-  } catch (error) {
-    console.error("Error:", error.message);
-  }}
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare to store data in the account doc.
+
 var id; // _id.
 var rev; // _rev.
 var time; // At first is establish time, else verify time.
@@ -102,89 +91,20 @@ var token; // New var, when user login success, system will random generate for 
 var validtime; // New var, the token will be validate to validtime.
 
 async function findaccount(maill="", token="") {
-  if (token === "") {
+  // use login page submit email or token to search account db.
   const URL = `${db_URL}/${db_account}/_find`;
-  const mangoQuery = { selector: { "user.mail": { $eq: maill } } }; // use login page submit email to search account db.
-  await fetch(URL, {
+  let mangoQuery = "", response = "", data = ""
+  if (maill !== "" && token === "") {mangoQuery = {selector:{"user.mail":{$eq:maill}}}}
+  else if (maill === "" && token !== "") {mangoQuery = {selector:{"user.mail":{$eq:token}}}}
+  try {data = await fetch(URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: AUTHORIZATION,
-    },
+    headers: {"Content-Type": "application/json", Authorization: AUTHORIZATION},
     credentials: "include",
-    body: JSON.stringify(mangoQuery),
-    // json: JSON.stringify(mangoQuery),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log(data);
-      console.log(`findaccount data length:${data.docs.length}`)
-      if (data.docs.length === 1) {
-        // If select doc only one to implement var.
-        id = data.docs[0]._id; // Impossible  undefined.
-        rev = data.docs[0]._rev; // Impossible  undefined.
-        time = datetime(); // function findaccount execute time.
-        data = data.docs[0].user; // data from doc become doc.user.
-        data.num === undefined ? (employeenum = "") : (employeenum = data.num);
-        mail = data.mail; // Impossible  undefined.
-        data.name === undefined ? (namee = "") : (namee = data.name);
-        data.comapny === undefined ? (company = "") : (company = data.comapny);
-        data.department === undefined ? (department = "") : (department = data.department);
-        data.level === undefined ? (level = "general") : (level = data.level);
-        data.state === undefined ? (state = "deactivate") : (state = data.state);
-        data.errcount === undefined ? (errcount = 0) : (errcount = parseInt(data.errcount));
-        data.note === undefined ? (note = "") : (note = data.note);
-        data.last_time === undefined ? (last_time = "") : (last_time = data.last_time);
-        password = data.password;
-        data.bantill === undefined ? (bantill = "") : (bantill = data.bantill);
-        data.token === undefined ? (token = "") : (token = data.token);
-        data.validtime === undefined ? (validtime = "") : (validtime = data.validtime);
-        // console.log(`_id: ${id}`);
-        // console.log(`_rev: ${rev}`);
-        // console.log(`time: ${time}`);
-        // console.log(`employeenum: ${employeenum}`);
-        // console.log(`mail: ${mail}`);
-        // console.log(`namee: ${namee}`);
-        // console.log(`company: ${company}`);
-        // console.log(`department: ${department}`);
-        // console.log(`level: ${level}`);
-        // console.log(`state: ${state}`);
-        // console.log(`errcount: ${errcount}`);
-        // console.log(`note: ${note}`);
-        // console.log(`last_time: ${last_time}`);
-        // console.log(`password: ${password}`);
-        // console.log(`bantill: ${bantill}`);
-        // console.log(`token: ${token}`);
-        // console.log(`validtime: ${validtime}`);
-      } else {
-        const response = `帳號或密碼錯誤`;
-        console.log(response);
-        return { Error: response };
-      }
-    })
-    .catch((error) => {
-      console.error("Error executing Mango query:", error);
-    });
-} else if (token !== ""){
-  const URL = `${db_URL}/${db_account}/_find`;
-  const mangoQuery = { selector: { "user.token": { $eq: token } } }; // use login page submit email to search account db.
-  let res
-  await fetch(URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: AUTHORIZATION,
-  },
-  credentials: "include",
-  body: JSON.stringify(mangoQuery),
-  // json: JSON.stringify(mangoQuery),
-})
-  .then((response) => response.json())
-  .then((data) => {
-    // console.log(data);
-    console.log(`findaccount data length:${data.docs.length}`)
+    body: JSON.stringify(mangoQuery)})
+    data = await data.json();
+    
+
     if (data.docs.length === 1) {
-      // If select doc only one to implement var.
       id = data.docs[0]._id; // Impossible  undefined.
       rev = data.docs[0]._rev; // Impossible  undefined.
       time = datetime(); // function findaccount execute time.
@@ -203,34 +123,15 @@ async function findaccount(maill="", token="") {
       data.bantill === undefined ? (bantill = "") : (bantill = data.bantill);
       data.token === undefined ? (token = "") : (token = data.token);
       data.validtime === undefined ? (validtime = "") : (validtime = data.validtime);
-      return {'token': token}
-      // console.log(`_id: ${id}`);
-      // console.log(`_rev: ${rev}`);
-      // console.log(`time: ${time}`);
-      // console.log(`employeenum: ${employeenum}`);
-      // console.log(`mail: ${mail}`);
-      // console.log(`namee: ${namee}`);
-      // console.log(`company: ${company}`);
-      // console.log(`department: ${department}`);
-      // console.log(`level: ${level}`);
-      // console.log(`state: ${state}`);
-      // console.log(`errcount: ${errcount}`);
-      // console.log(`note: ${note}`);
-      // console.log(`last_time: ${last_time}`);
-      // console.log(`password: ${password}`);
-      // console.log(`bantill: ${bantill}`);
-      // console.log(`token: ${token}`);
-      // console.log(`validtime: ${validtime}`);
-    } else {
-      const response = `帳號或密碼錯誤`;
-      console.log(response);
-      return { Error: response };
     }
-  })
-  .catch((error) => {
-    console.error("Error executing Mango query:", error);
-  });
-}}
+    if (maill !== "" && token === "") {response = `帳號或密碼錯誤`}
+    else if (maill === "" && token !== "") {response = token}
+    return response;
+  } catch (error) {
+    console.error(`Execute mango query occur error : ${error}`);
+    throw error;
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Use _id updata account doc. put method need content, if not will be null.
@@ -256,37 +157,27 @@ async function updateaccount(id) {
       password: `${password}`,
       bantill: `${bantill}`,
       token: `${token}`,
-      validtime: `${validtime}`,
+      validtime: `${validtime}`
     },
   };
   await fetch(URL, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: AUTHORIZATION,
-    },
+    headers: {"Content-Type": "application/json", Authorization: AUTHORIZATION},
     credentials: "include",
     body: JSON.stringify(updatedDoc),
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      console.log("Document updated successfully:", result);
-    })
-    .catch((error) => {
-      console.error("Error updating document:", error);
-    });
+  }).then((response) => response.json())
+    .then((result) => {console.log("Document updated successfully:", result)})
+    .catch((error) => {console.error("Error updating document:", error)});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// The funciotn generate datetime string default now, offset is back/forward hours.
+// Generate datetime string default now, offset for back or forward hours.
+
 function datetime(offset = 0) {
-  const time = new Date(
-    new Date().getTime() + offset * 60 * 60 * 1000
-  ).toISOString();
-  return time;
+  return new Date(new Date().getTime() + offset * 60 * 60 * 1000).toISOString();
 }
 
-// Verify timezone problem from https://ithelp.ithome.com.tw/articles/10231926.
+// Verify timezone problem, code from https://ithelp.ithome.com.tw/articles/10231926.
 Date.prototype.toISOString = function () {
   let pad = (n) => (n < 10 ? "0" + n : n);
   let hours_offset = this.getTimezoneOffset() / 60;
@@ -294,12 +185,19 @@ Date.prototype.toISOString = function () {
   let symbol = hours_offset >= 0 ? "-" : "+";
   let time_zone = symbol + pad(Math.abs(hours_offset)) + ":00";
   return (
-    this.getUTCFullYear() + "-" + pad(this.getUTCMonth() + 1) + "-" + pad(this.getUTCDate()) + "T" + pad(this.getUTCHours()) + ":" + pad(this.getUTCMinutes()) +
-    ":" + pad(this.getUTCSeconds()) + "." + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + time_zone);
+    this.getUTCFullYear() + "-" + 
+    pad(this.getUTCMonth() + 1) + "-" + 
+    pad(this.getUTCDate()) + "T" + 
+    pad(this.getUTCHours()) + ":" + 
+    pad(this.getUTCMinutes()) + ":" + 
+    pad(this.getUTCSeconds()) + "." + 
+    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + time_zone
+    );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// The function use to generate random uuid
+// Generate random uuid
+
 async function uuid() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     var r = (Math.random() * 16) | 0,
@@ -310,12 +208,14 @@ async function uuid() {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The function for login page submit.
+
 async function submit(EMAIL, PASSWORD) {
   let response = {"result":"", "text":"", "mail":"", "token":"", "validtime":"", "permission":""};
   await getconfig();
-  await findaccount(EMAIL); // According login page submit mail to select account data
-  // console.log(suspendtime, typeof(suspendtime), suspendtime===1,suspendtime==="1", suspendtime==1)
-  console.log(errcount, typeof(errcount), locktimes, typeof(locktimes))
+  await findaccount(maill = EMAIL).then(temp => {console.log(temp)})
+  // According login page submit mail to select account data
+  // console.log(response)
+
   if (errcount === "NaN" || errcount === ""){errcount = 0}
   if (Date.parse(bantill) > Date.parse(time) || state === "lock" && suspendtime !== "永久") {
     console.log(`bantill：${bantill}, state:${state}`)
@@ -370,13 +270,5 @@ async function submit(EMAIL, PASSWORD) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-module.exports = {
 
-  submit,
-  getconfig,
-  findaccount,
-  updateaccount, 
-  datetime,
-  uuid,
-  db_USERNAME
-}
+module.exports = {submit, getconfig, findaccount, updateaccount, datetime, uuid}

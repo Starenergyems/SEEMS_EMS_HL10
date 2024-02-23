@@ -1,7 +1,7 @@
 // testforalarm.js
 const express = require("express");
 const path = require("path");
-const nano = require("nano")("http://admin:ems45877096@192.168.1.12:5984");
+const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();

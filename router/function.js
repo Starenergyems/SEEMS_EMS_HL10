@@ -6,6 +6,7 @@ function calculateAverage(...numbers) {
   if (numbers.length === 0) {
     return 0; // 避免除以零的情況
   }
+  countWarningNum_Meter;
   const sum = numbers.reduce((acc, num) => acc + num, 0);
   return sum / numbers.length;
 }
@@ -63,71 +64,89 @@ function mapchargeStatus(decimalValue) {
 
 //***************************************************************************** */
 //PCSWorkingStatus
-function mapPCSWorkingStatus(decimalValue) {
-  if (decimalValue === 0) {
-    return "N/A";
+function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
+  const sum = lc1 + lc2 + lc3 + lc4;
+  if (sum === 7) {
+    return "運轉中";
+  } else if (sum <= 6 && sum >= 1) {
+    return "部分運轉中";
+  } else {
+    return "停機";
   }
+}
 
-  const binaryString =
-    decimalValue < 10
-      ? `0${decimalValue.toString(2)}`
-      : decimalValue.toString(2);
+// console.log("pcs測試結果1:" + mapPCSworkStatus(2, 2, 2, 1));
+// console.log("pcs測試結果2:" + mapPCSworkStatus(1, 1, 1, 1));
+// console.log("pcs測試結果3:" + mapPCSworkStatus(0, 0, 0, 0));
 
-  const statusMapping = {
+function mapPCSonlineNum(lc1, lc2, lc3, lc4) {
+  if (lc1 < 3 && lc2 < 3 && lc3 < 3 && lc4 < 3) {
+    const sum = lc1 + lc2 + lc3 + lc4;
+    return sum;
+  } else {
+    return "err?";
+  }
+}
+//console.log("pcs加總測試結果1:" + mapPCSonlineNum(1, 2, 0, 1));
+
+function mapModeActPas(input) {
+  if (input === 0) {
+    return "Active mode";
+  }
+  if (input === 1) {
+    return "Passive mode";
+  }
+}
+function mapModeQctrl(input) {
+  if (input === 85) {
+    return "Off";
+  }
+  if (input === 161) {
+    return "Power factor mode";
+  }
+  if (input === 162) {
+    return "Reactive power mode";
+  }
+}
+function mapStandbyCmd(input) {
+  if (input === 85) {
+    return "PCS exit standby";
+  }
+  if (input === 170) {
+    return "PCS standby";
+  }
+}
+function mapModeLR(input) {
+  if (input === 1) {
+    return "Local & Remote";
+  }
+  if (input === 2) {
+    return "Remote";
+  }
+  if (input === 3) {
+    return "local";
+  }
+}
+//***************************************************************************** */
+//PCSWorkingMode
+function mapPCSWorkingstatus(input1, input2) {
+  // 將參數轉換為二進制並填補為固定長度為32
+  const binary1 = input1.toString(2).padStart(32, "0");
+  const binary2 = input2.toString(2).padStart(32, "0");
+
+  // 定義對應的狀態
+  const statusMap1 = {
     0: "Running",
     3: "Key stop",
     4: "Standby",
-    6: "Start in process",
+    6: "Starting",
     9: "Fault stop",
     10: "Alarm running",
-    11: "Derating running",
+    11: "Derated running",
     15: "Communication exception",
   };
 
-  const onesCount = binaryString.split("1").length - 1;
-
-  if (onesCount >= 2) {
-    return "Error for too many bits";
-  }
-
-  let result = "";
-
-  for (let i = 0; i < binaryString.length; i++) {
-    const bit = binaryString[i];
-    const position = binaryString.length - 1 - i;
-
-    if (bit === "1" && statusMapping[position]) {
-      // 使用 += 來串聯結果
-      result += statusMapping[position] + ", ";
-    } else if (bit === "1") {
-      return "Error , not in list";
-    }
-  }
-
-  // 移除結果字串末尾的逗號和空格
-  result = result.slice(0, -2);
-
-  return result;
-}
-
-// 使用例子
-// const testdecimalValue = 8;
-// const result = mapPCSWorkingStatus(testdecimalValue);
-// console.log(result);
-
-//***************************************************************************** */
-//PCSWorkingMode
-function mapPCSWorkingMode(decimalValue) {
-  if (decimalValue == 0) {
-    return "N/A";
-  }
-
-  const binaryString =
-    decimalValue < 10
-      ? `0${decimalValue.toString(2)}`
-      : decimalValue.toString(2);
-
-  const modeMapping = {
+  const statusMap2 = {
     0: "On-grid constant current",
     1: "On-grid constant voltage",
     2: "On-grid constant power (AC)",
@@ -137,25 +156,90 @@ function mapPCSWorkingMode(decimalValue) {
     11: "VSG mode",
   };
 
-  const onesCount = binaryString.split("1").length - 1;
-
-  if (onesCount >= 2) {
-    return "Error";
-  }
-
-  let result = "";
-
-  for (let i = 0; i < binaryString.length; i++) {
-    const bit = binaryString[i];
-    const position = binaryString.length - 1 - i;
-
-    if (bit === "1" && modeMapping[position]) {
-      result = modeMapping[position];
+  // 處理第一個變數
+  let result1 = "";
+  for (let bit in statusMap1) {
+    if (binary1[31 - bit] === "1") {
+      result1 += statusMap1[bit] + ", ";
     }
   }
+  // 移除最後的逗號和空格
+  result1 = result1.slice(0, -2);
 
-  return result;
+  // 處理第二個變數
+  let result2 = "";
+  for (let bit in statusMap2) {
+    if (binary2[31 - bit] === "1") {
+      result2 += statusMap2[bit] + ", ";
+    }
+  }
+  // 移除最後的逗號和空格
+  result2 = result2.slice(0, -2);
+
+  // 回傳組合後的結果
+  return result1 + result2;
 }
+
+//計算pcs告警和錯誤的總數
+function countPCSAlarmAndFault(input1, input2, input3) {
+  // 將參數轉換為二進制並填補為固定長度為32
+  const binary1 = input1.toString(2).padStart(32, "0");
+  const binary2 = input2.toString(2).padStart(32, "0");
+  const binary3 = input3.toString(2).padStart(32, "0");
+
+  // 計算三個變數的二進制中包含的1的總數
+  let count = 0;
+  for (let i = 0; i < 32; i++) {
+    if (binary1[i] === "1") count++;
+    if (binary2[i] === "1") count++;
+    if (binary3[i] === "1") count++;
+  }
+
+  // 回傳三個變數的二進制中1的總數
+  return count;
+}
+
+//***************************************************************************** */
+//PCSWorkingMode
+// function mapPCSWorkingMode(decimalValue) {
+//   if (decimalValue == 0) {
+//     return "N/A";
+//   }
+
+//   const binaryString =
+//     decimalValue < 10
+//       ? `0${decimalValue.toString(2)}`
+//       : decimalValue.toString(2);
+
+//   const modeMapping = {
+//     0: "On-grid constant current",
+//     1: "On-grid constant voltage",
+//     2: "On-grid constant power (AC)",
+//     3: "On-grid constant power (DC)",
+//     9: "On-grid mode",
+//     10: "Off-grid mode",
+//     11: "VSG mode",
+//   };
+
+//   const onesCount = binaryString.split("1").length - 1;
+
+//   if (onesCount >= 2) {
+//     return "Error";
+//   }
+
+//   let result = "";
+
+//   for (let i = 0; i < binaryString.length; i++) {
+//     const bit = binaryString[i];
+//     const position = binaryString.length - 1 - i;
+
+//     if (bit === "1" && modeMapping[position]) {
+//       result = modeMapping[position];
+//     }
+//   }
+
+//   return result;
+// }
 
 // 使用例子;
 // const decimalValue = 2048; // 試試不同的數值
@@ -731,10 +815,10 @@ function cal_UPS_1(...args) {
     //console.log("UPS_1: " + binary);
     // 檢查二進制中的位元，只有 bit4 或 bit7 出現 1 才計算
     if (binary[27] === "1") {
-      totalOnes++;
+      totalups1Ones++;
     }
     if (binary[24] === "1") {
-      totalOnes++;
+      totalups1Ones++;
     }
   }
 
@@ -757,7 +841,7 @@ function cal_UPS_2(...args) {
     // }
     if (binary[16] === "1" && binary[17] !== "1") {
       // 將計算的結果加到總數中
-      totalOnes++;
+      totalups2Ones++;
     }
   }
 
@@ -794,7 +878,7 @@ const WarningNum_Env = calculateWarningNum_Bat(
   cal_UPS_2(32768, 0, 0)
 );
 
-console.log("環境警告數量：", WarningNum_Env);
+//console.log("環境警告數量：", WarningNum_Env);
 //******************************************************************************* */
 // 環境總告警數量
 function calculateWarningNum_Env() {
@@ -967,11 +1051,12 @@ function calculatetAlarmNum_FF() {}
 //系統資訊
 
 module.exports = {
+  mapPCSworkStatus,
+  mapPCSonlineNum,
   calculateAverage,
   mapchargeStatus,
   scaleProcess,
-  mapPCSWorkingStatus,
-  mapPCSWorkingMode,
+  //mapPCSWorkingMode,
   mapgridStatus,
   Convert_UInt_to_revBitString,
   Convert_UInt_to_BitString,
@@ -995,6 +1080,12 @@ module.exports = {
   //****************** */
   mapL_M_systemMode,
   calculateWarningNum_PCS,
+  mapModeLR,
+  mapStandbyCmd,
+  mapModeQctrl,
+  mapModeActPas,
+  countPCSAlarmAndFault,
+  mapPCSWorkingstatus,
 };
 
 // //***************************************************************************** */
