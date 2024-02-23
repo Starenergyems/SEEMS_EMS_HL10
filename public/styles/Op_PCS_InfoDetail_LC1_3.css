@@ -1,0 +1,296 @@
+.Title {
+    background-color: #F9E06CB3;
+    height: 50px;
+    margin: 10px 25px 5px;
+    border-radius: 25px;
+    position: relative;
+}
+
+.Title h2 {
+    display: inline-block;
+    font-size: 36px;
+    line-height: 50px;
+}
+
+.Title label {
+    display: inline-block;
+    width: 55px;
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 50px;
+}
+
+.Title a {
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 40px;
+    width: 210px;
+    border: 2px solid #F9E06C;
+    margin: 5px 0px 0px;
+    font-size: 30px;
+    color: #000000;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 20px;
+    vertical-align: top;
+}
+
+.Title #infoPCS {
+    margin-left: 5%;
+}
+
+.Title #statusPCS {
+    background-color: #F9E06C;
+    border-color: #FFFFFF;
+    text-decoration: none;
+}
+
+.Title .preNext {
+    height: 30px;
+    width: 80px;
+    border: 1px solid #D9D9D9;
+    /* margin-top: 10px; */
+    font-size: 20px;
+    line-height: 28px;
+    text-decoration: none;
+    border-radius: 10px;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+}
+
+.Title #previousPCS {
+    right: 105px;
+}
+
+.overview {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    width: 96.3%;
+    margin: 5px 5px 5px 25px;
+    border-radius: 5px;
+    vertical-align: top;
+}
+
+.overview .bigInfo {
+    width: 20%;
+}
+
+.overview .bigInfo p {
+    margin: 20px 0px 15px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.overview .BG_bigInfo {
+    margin-bottom: 20px;
+}
+
+.overview .bI_tot_E_chg .BG_bigInfo,
+.overview .bI_tot_E_dcg .BG_bigInfo {
+    background-color: #D9D9D9;
+}
+
+.overview .subBG_bigInfo {
+    padding-top: 90px;
+}
+
+.overview label {
+    top: 63px;
+}
+
+.infoBlock {
+    display: inline-block;
+    background-color: #FFFFFF80;
+    box-sizing: border-box;
+    margin: 5px;
+    border-radius: 5px;
+    vertical-align: top;
+}
+
+.outputLimit {
+    width: 21.43%;
+    min-width: 320px;
+}
+
+.infoBlock h3 {
+    background-color: #F9E06CB2;
+    box-sizing: border-box;
+    padding: 0px 0px 0px 20px;
+    margin: 5px;
+    font-size: 30px;
+    line-height: 40px;
+    border-radius: 20px;
+}
+
+.infoBlock .DV_Line {
+    padding-left: 15px;
+    line-height: 45px;
+}
+
+.infoBlock .DV_Line .dataValue,
+.infoBlock .DV_Line .dataUnit {
+    top: 10px;
+}
+
+.infoBlock .lastLine {
+    margin-bottom: 5px;
+}
+
+.heartBeat_leakageCurrent {
+    display: inline-block;
+    width: 23.81%;
+    min-width: 320px;
+    vertical-align: top;
+}
+
+.heartBeat {
+    width: 100%;
+    margin-right: 10px;
+    min-width: 320px;
+}
+
+.heartBeat img {
+    display: inline-block;
+    margin: 1px 25px 6px 45px;
+}
+
+.heartBeat .dataValue {
+    display: inline-block;
+    width: 120px;
+    margin: 20px 0px 20px 25px;
+    font-size: 30px;
+    vertical-align: top;
+}
+
+.leakageCurrent {
+    width: 100%;
+    margin-right: 10px;
+    min-width: 320px;
+}
+
+.leakageCurrent .DV_Line {
+    height: 45px;
+}
+
+.leakageCurrent .DV_Line .dataValue {
+    width: 120px;
+    left: 20px;
+}
+
+.leakageCurrent .DV_Line .dataUnit {
+    left: 150px;
+}
+
+.ACside {
+    width:96.3%;
+    margin-left: 25px;
+    min-width: 320px;
+}
+
+.ACside .columnDVL {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 33.333%;
+    padding: 0px 15px;
+    vertical-align: top;
+    min-width: 320px;
+}
+
+.ACside .DS_Line {
+    line-height: 45px;
+    min-width: 290px;
+}
+
+.ACside .DS_Line .dataStatus {
+    top: 10px;
+}
+
+.ACside .DV_Line {
+    padding-left: 0px;
+    min-width: 290px;
+}
+
+.ACside .DV_Line .dataValue {
+    right: 80px;
+}
+
+.resistanceToGnd {
+    width: 100%;
+    margin-right: 10px;
+    min-width: 320px;
+    min-height: 525px;
+}
+
+.infoBlock .DVR_Line {
+    box-sizing: border-box;
+    height: 45px;
+    position: relative;
+}
+
+.infoBlock .dataRange {
+    width: 270px;
+    font-size: 20px;
+    text-align: right;
+    position: absolute;
+    right: 70px;
+    top: 0px;
+}
+
+.infoBlock .DVR_Line .dataUnit {
+    width: 60px;
+    font-size: 20px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.DCside {
+    width: 31.5%;
+    margin-left: 25px;
+    min-width: 320px;
+}
+
+.DCside .dataValue {
+    right: 80px;
+}
+
+.DCside .lastLine {
+    margin-bottom: 95px;
+}
+
+.faultAlarm {
+    width: 31.5%;
+    min-width: 320px;
+}
+
+.infoBlock .DL_Line {
+    padding-left: 15px;
+    line-height: 45px;
+}
+
+.infoBlock .dataLight {
+    /* background-color: #236E37; */
+    right: 15px;
+    top: 8px;
+}
+
+.faultAlarm .lastLine {
+    margin-bottom: 50px;
+}
+
+.nodeStatus {
+    width: 31.5%;
+    min-width: 320px;
+}
+
+.tempPCS {
+    width: 23.81%;
+    min-width: 340px;
+}
+
+.left{
+    width: 72.62%;
+    display: inline-block;
+}

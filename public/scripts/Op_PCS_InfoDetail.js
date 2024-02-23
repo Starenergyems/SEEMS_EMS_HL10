@@ -62,10 +62,10 @@ async function updateData() {
   $("#tot_E_dcg").text(data.tot_E_dcg);
 
   /*輸出限制************************************* */
-  //$('#max_P_chg').text(data.max_P_chg);
-  //$("#max_P_dcg").text(data.max_P_dcg);
-  //$("#max_Q_l").text(data.max_Q_l);
-  //$("#max_Q_c").text(data.max_Q_c);
+  $('#max_P_chg').text(data.max_P_chg);
+  $("#max_P_dcg").text(data.max_P_dcg);
+  $("#max_Q_l").text(data.max_Q_l);
+  $("#max_Q_c").text(data.max_Q_c);
 
   /*心跳計數******************************************** */
   $("#HB_Counts").text(data.HB_Counts);
@@ -154,8 +154,8 @@ async function updateData() {
   }
 
   /*溫度值*************************************************** */
-  //$("#innerTemp").text(data.innerTemp);
-  //   $("#innerTemp1").text(data.innerTemp1);
-  //   $("#innerTemp2").text(data.innerTemp2);
-  //   $("#innerTemp3").text(data.innerTemp3);
+  $("#innerTemp").text(data.innerTemp);
+  $("#moduleTemp1").text(data.moduleTemp1);
+  $("#moduleTemp2").text(data.moduleTemp2);
+  $("#moduleTemp3").text(data.moduleTemp3);
 }

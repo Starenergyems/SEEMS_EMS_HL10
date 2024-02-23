@@ -56,7 +56,7 @@
                 <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>" class="subTitle_unclick">狀態與數值</a>
                 <a href="/operateinfo/pcs/alarm/<%= pageNumber %>">故障與告警</a>
                 <% if (pageNumber > 1) { %>
-                <a href="/operateinfo/pcs/alarm_lc13/<%= pageNumber - 1 %>" class="preNext" id="previousPCS">上一頁</a><% } %>
+                <a href="/operateinfo/pcs/alarm/<%= pageNumber - 1 %>" class="preNext" id="previousPCS">上一頁</a><% } %>
                 <% if (pageNumber < 7) { %>
                 <a href="/operateinfo/pcs/alarm/<%= pageNumber + 1 %>" class="preNext" id="nextPCS">下一頁</a><% } %>
             </div>

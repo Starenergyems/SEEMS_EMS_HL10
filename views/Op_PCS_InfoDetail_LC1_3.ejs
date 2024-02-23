@@ -1,0 +1,220 @@
+<%- include('Navbar', { 
+    title: 'PCS詳細資訊', 
+     stylesheets: [
+        '../public/styles/style_template.css',
+        '../public/styles/Op_PCS_InfoDetail_LC1_3.css'
+    ],
+    permission: 'admin'
+}) %>
+
+    <div class="R_Main">
+        <div class="subNavBar" id="sub_NavBar">
+            <!-- <h2>模式控制</h2> -->
+            <div class="button_sNB" id="sNB_01">
+                <a href="/operateinfo/singlelinediagram" class="name_button_sNB">單線圖</a>
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
+                <div class="ssNavBar">
+                    <a href="/operateinfo/singlelinediagram" id="ssNB_01">電力單線圖</a>
+                    <a href="/operateinfo/mainmeter" id="ssNB_02">主電表</a>
+                    <a href="/operateinfo/auxmeter" id="ssNB_03">輔電表</a>
+                </div>
+            </div>
+            <div class="button_sNB default_sNB" id="sNB_02">
+                <a href="/operateinfo/pcs" class="name_button_sNB">PCS</a>
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
+                <div class="ssNavBar">
+                    <a href="/operateinfo/pcs/infodetail/1" id="ssNB_01">PCS 1-1</a>
+                    <a href="/operateinfo/pcs/infodetail/2" id="ssNB_02">PCS 1-2</a>
+                    <a href="/operateinfo/pcs/infodetail/3" id="ssNB_03">PCS 2-1</a>
+                    <a href="/operateinfo/pcs/infodetail/4" id="ssNB_04">PCS 2-2</a>
+                    <a href="/operateinfo/pcs/infodetail/5" id="ssNB_05">PCS 3-1</a>
+                    <a href="/operateinfo/pcs/infodetail/6" id="ssNB_06">PCS 3-2</a>
+                    <a href="/operateinfo/pcs/infodetail/7" id="ssNB_07">PCS 4</a>
+                </div>
+            </div>
+            <div class="button_sNB button_sNB_last" id="sNB_03">
+                <a href="/operateinfo/battery" class="name_button_sNB">電池</a>
+                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
+                <div class="ssNavBar">
+                    <a href="/operateinfo/battery/infodetail/1" id="ssNB_01">BMS 1-1</a>
+                    <a href="/operateinfo/battery/infodetail/2" id="ssNB_02">BMS 1-2</a>
+                    <a href="/operateinfo/battery/infodetail/3" id="ssNB_03">BMS 2-1</a>
+                    <a href="/operateinfo/battery/infodetail/4" id="ssNB_04">BMS 2-2</a>
+                    <a href="/operateinfo/battery/infodetail/5" id="ssNB_05">BMS 3-1</a>
+                    <a href="/operateinfo/battery/infodetail/6" id="ssNB_06">BMS 3-2</a>
+                    <a href="/operateinfo/battery/infodetail/7" id="ssNB_07">BMS 4</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="M_Page">
+            <div class="Title">
+                <h2>【PCS</h2><label id="No_of_PCS"><%=No_of_PCS%></label>
+                <!-- <h2>【****PAGE</h2><label id="pageNumber"><%=pageNumber%></label> -->
+                <h2>】</h2>
+                <!-- <a href="#" class="infoStatus" id="infoPCS">狀態與數值</a> -->
+                <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>">狀態與數值</a>
+                <a href="/operateinfo/pcs/alarm/<%= pageNumber %>" class="subTitle_unclick">故障與告警</a>
+
+                <% if (pageNumber > 1) { %>
+                <a href="/operateinfo/pcs/infodetail/<%= pageNumber - 1 %>" class="preNext" id="previousPCS">上一頁</a><% } %>
+                <% if (pageNumber < 7) { %>
+                <a href="/operateinfo/pcs/infodetail/<%= pageNumber + 1 %>" class="preNext" id="nextPCS">下一頁</a><% } %>
+            </div>
+
+                <div class="left">
+                    <div class="overview">
+                        <div class="bigInfo bI_workStatus">
+                            <p>工作狀態</p>
+                            <div class="BG_bigInfo">
+                                <div class="subBG_bigInfo"></div>
+                                <label class="data_val" id="workStatus">運行(假值)</label>
+                            </div>
+                        </div>
+                        <div class="bigInfo bI_workMode">
+                            <p>工作模式</p>
+                            <div class="BG_bigInfo">
+                                <div class="subBG_bigInfo"></div>
+                                <label class="data_val" id="workMode">併網恆功率(AC)(假值)</label>
+                            </div>
+                        </div>
+                        <div class="bigInfo bI_chargeStatus">
+                            <p>充放電狀態</p>
+                            <div class="BG_bigInfo">
+                                <div class="subBG_bigInfo"></div>
+                                <label class="data_val" id="chargeStatus"><%=chargeStatus%></label>
+                            </div>
+                        </div>
+                        <div class="bigInfo bI_tot_E_chg">
+                            <p>總充電量</p>
+                            <div class="BG_bigInfo">
+                                <div class="subBG_bigInfo">MWh</div>
+                                <label class="data_val" id="tot_E_chg"><%=tot_E_chg%></label>
+                            </div>
+                        </div>
+                        <div class="bigInfo bI_tot_E_dcg">
+                            <p>總放電量</p>
+                            <div class="BG_bigInfo">
+                                <div class="subBG_bigInfo">MWh</div>
+                                <label class="data_val" id="tot_E_dcg"><%=tot_E_dcg%></label>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="infoBlock ACside">
+                        <h3>交流側</h3>
+                        <div class="columnDVL">
+                            <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus">on 我是假值</label></div>
+                            <div class="DV_Line">實功<label class="dataValue" id="activePower"><%=activePower%></label>
+                                <p class="dataUnit">kW</p>
+                            </div>
+                            <div class="DV_Line">虛功<label class="dataValue" id="reactivePower"><%=reactivePower%></label>
+                                <p class="dataUnit">kVar</p>
+                            </div>
+                            <div class="DV_Line">功率因數<label class="dataValue" id="powerFactor"><%=powerFactor%></label>
+                            </div>
+                        </div>
+        
+                        <div class="columnDVL">
+                            <div class="DV_Line">RS線電壓<label class="dataValue" id="voltageRS"><%=voltageRS%></label>
+                                <p class="dataUnit">V</p>
+                            </div>
+                            <div class="DV_Line">ST線電壓<label class="dataValue" id="voltageST"><%=voltageST%></label>
+                                <p class="dataUnit">V</p>
+                            </div>
+                            <div class="DV_Line">TR線電壓<label class="dataValue" id="voltageTR"><%=voltageTR%></label>
+                                <p class="dataUnit">V</p>
+                            </div>
+                        </div>
+        
+                        <div class="columnDVL">
+                            <div class="DV_Line">R相電流<label class="dataValue" id="currentR"><%=currentR%></label>
+                                <p class="dataUnit">A</p>
+                            </div>
+                            <div class="DV_Line">S相電流<label class="dataValue" id="currentS"><%=currentS%></label>
+                                <p class="dataUnit">A</p>
+                            </div>
+                            <div class="DV_Line">T相電流<label class="dataValue" id="currentT"><%=currentT%></label>
+                                <p class="dataUnit">A</p>
+                            </div>
+                            <div class="DV_Line lastLine">電網頻率<label class="dataValue" id="gridFreq"><%=gridFreq%></label>
+                                <p class="dataUnit">Hz</p>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="infoBlock DCside">
+                        <h3>直流側</h3>
+                        <div class="DV_Line">直流電壓<label class="dataValue" id="DCvoltage"><%=DCvoltage%></label>
+                            <p class="dataUnit">V</p>
+                        </div>
+                        <div class="DV_Line">直流電流<label class="dataValue" id="DCcurrent"><%=DCcurrent%></label>
+                            <p class="dataUnit">A</p>
+                        </div>
+                        <div class="DV_Line lastLine">直流功率<label class="dataValue" id="DCpower"><%=DCpower%></label>
+                            <p class="dataUnit">kW</p>
+                        </div>
+                    </div>
+        
+                    <div class="infoBlock faultAlarm">
+                        <h3>故障與告警</h3>
+                        <div class="DL_Line">整機故障<label class="dataLight RG_L <%=overallFault>0?'setToClose':''%>" id="overallFault"></label></div>
+                        <div class="DL_Line">整機告警<label class="dataLight OG_L <%=overallAlarm>0?'setToClose':''%>" id="overallAlarm"></label></div>
+                        <div class="DL_Line">故障狀態<label class="dataLight RG_L <%=faultStatus>0?'setToClose':''%>" id="faultStatus"></label></div>
+                        <div class="DL_Line lastLine">告警狀態
+                            <label class="dataLight OG_L <%=alarmStatus>0?'setToClose':''%>" id="alarmStatus"></label>
+                        </div>
+                    </div>
+        
+                    <div class="infoBlock nodeStatus">
+                        <h3>節點狀態</h3>
+                        <div class="DL_Line">交流開關<label class="dataLight RG_L <%=nodeStatus[1]==='1'?'setToClose':''%>" id="NS_bit_1"></label></div>
+                        <div class="DL_Line">直流開關<label class="dataLight RG_L <%=nodeStatus[2]==='1'?'setToClose':''%>" id="NS_bit_2"></label></div>
+                        <div class="DL_Line">直流熔絲<label class="dataLight RG_L <%=nodeStatus[3]==='1'?'setToClose':''%>" id="NS_bit_3"></label></div>
+                        <div class="DL_Line">直流輔助開關1<label class="dataLight RG_L <%=nodeStatus[4]==='1'?'setToClose':''%>" id="NS_bit_4"></label></div>
+                        <div class="DL_Line lastLine">直流輔助開關2<label class="dataLight RG_L <%=nodeStatus[5]==='1'?'setToClose':''%>" id="NS_bit_5"></label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="heartBeat_leakageCurrent">
+                    <div class="infoBlock heartBeat">
+                        <h3>心跳計數</h3>
+                        <img src="../public/images/heartbeat_Logo.png" alt="心電圖圖示">
+                        <label class="dataValue" id="HB_Counts"><%=HB_Counts%></label>
+                    </div>
+    
+                    <div class="infoBlock leakageCurrent">
+                        <h3>漏電流</h3>
+                        <div class="DV_Line lastLine"><label class="dataValue" id="leakage_I"><%=leakage_I%></label>
+                            <p class="dataUnit">A</p>
+                        </div>
+                    </div>
+    
+                    <div class="infoBlock resistanceToGnd">
+                        <h3>阻抗值</h3>
+                        <div class="DV_Line">正極對地阻抗<label class="dataValue" id="pElectrodeR"><%=pElectrodeR%></label>
+                            <p class="dataUnit">kΩ</p>
+                        </div>
+                        <div class="DVR_Line">
+                            <p class="dataRange">(&nbsp正常範圍&nbsp&#62&nbsp1001.00</p>
+                            <p class="dataUnit">kΩ&nbsp)</p>
+                        </div>
+                        <div class="DV_Line">負極對地阻抗<label class="dataValue" id="nElectrodeR"><%=nElectrodeR%></label>
+                            <p class="dataUnit">kΩ</p>
+                        </div>
+                        <div class="DVR_Line lastLine">
+                            <p class="dataRange">(&nbsp正常範圍&nbsp&#62&nbsp1001.00</p>
+                            <p class="dataUnit">kΩ&nbsp)</p>
+                        </div>
+                    </div>
+                </div> 
+          
+        </div>
+    </div>
+    <script src="../public/scripts/jquery-3.6.0.js"></script>
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/Op_PCS_InfoDetail.js"></script>
+</body>
+
+</html>
