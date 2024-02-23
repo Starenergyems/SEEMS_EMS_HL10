@@ -5,8 +5,12 @@ const dateStart = document.querySelector(".timeRangeQuery #dateStart");
 const timeStart = document.querySelector(".timeRangeQuery #timeStart");
 const duration = document.querySelector(".timeRangeQuery #duration");
 const interval = document.querySelector(".timeRangeQuery #interval");
-const unitDura_Select = document.querySelector(".timeRangeQuery #unitDura_Select");
-const unitInte_Select = document.querySelector(".timeRangeQuery #unitInte_Select");
+const unitDura_Select = document.querySelector(
+  ".timeRangeQuery #unitDura_Select"
+);
+const unitInte_Select = document.querySelector(
+  ".timeRangeQuery #unitInte_Select"
+);
 
 let raw_DT_now = new Date();
 let DT_now_Millisec = raw_DT_now.getTime();
@@ -39,14 +43,31 @@ Chart.defaults.datasets.line.pointRadius = 1.5;
 // Chart.defaults.datasets.line.borderWidth = 1.5;
 // Chart.defaults.font.size = 16;
 
-const bgColor = ["#5AA2ED", "#F26085", "#F39F3B", "#F6CD4F", "#66C1C0", "#9D62FF", "#C9CBCF", "#0000FF", "#008000", "#804040",];
+const bgColor = [
+  "#5AA2ED",
+  "#F26085",
+  "#F39F3B",
+  "#F6CD4F",
+  "#66C1C0",
+  "#9D62FF",
+  "#C9CBCF",
+  "#0000FF",
+  "#008000",
+  "#804040",
+];
 
 const chtHist_Canvus = document.querySelector("#chartHist_Canvas");
 const cht_History = new Chart(chtHist_Canvus, {
   type: "line",
   data: {
-    labels: ["2023-10-24 13:02:41", "2023-10-24 13:02:45", "2023-10-24 13:02:43",
-      "2023-10-24 13:02:47", "2023-10-24 13:02:51", "2023-10-24 13:02:53",],
+    labels: [
+      "2023-10-24 13:02:41",
+      "2023-10-24 13:02:45",
+      "2023-10-24 13:02:43",
+      "2023-10-24 13:02:47",
+      "2023-10-24 13:02:51",
+      "2023-10-24 13:02:53",
+    ],
     // labels: ['2023-10-24 13:02:00', '2023-10-24 13:02:01', '2023-10-24 13:02:02', '2023-10-24 13:02:03', '2023-10-24 13:02:04'
     //   , '2023-10-24 13:02:05', '2023-10-24 13:02:06', '2023-10-24 13:02:07', '2023-10-24 13:02:08', '2023-10-24 13:02:09'
     //   , '2023-10-24 13:02:10', '2023-10-24 13:02:11', '2023-10-24 13:02:12', '2023-10-24 13:02:13', '2023-10-24 13:02:14'],
@@ -54,8 +75,12 @@ const cht_History = new Chart(chtHist_Canvus, {
       {
         label: "Freq",
         data: [
-          { x: "2023-10-24 13:02:47", y: 59.92 }, { x: "2023-10-24 13:02:45", y: 60.35 }, { x: "2023-10-24 13:02:46", y: 60.33 },
-          { x: "2023-10-24 13:02:48", y: 59.74 }, { x: "2023-10-24 13:02:50", y: 59.81 }, { x: "2023-10-24 13:02:52", y: 60.08 },
+          { x: "2023-10-24 13:02:47", y: 59.92 },
+          { x: "2023-10-24 13:02:45", y: 60.35 },
+          { x: "2023-10-24 13:02:46", y: 60.33 },
+          { x: "2023-10-24 13:02:48", y: 59.74 },
+          { x: "2023-10-24 13:02:50", y: 59.81 },
+          { x: "2023-10-24 13:02:52", y: 60.08 },
         ],
         yAxisID: "y_Freq",
         borderColor: "#5AA2ED",
@@ -64,8 +89,12 @@ const cht_History = new Chart(chtHist_Canvus, {
       {
         label: "ActivePower",
         data: [
-          { x: "2023-10-24 13:02:42", y: -600 }, { x: "2023-10-24 13:02:43", y: -2500 }, { x: "2023-10-24 13:02:46", y: 3000 },
-          { x: "2023-10-24 13:02:47", y: 5200 }, { x: "2023-10-24 13:02:49", y: -1800 }, { x: "2023-10-24 13:02:51", y: 900 },
+          { x: "2023-10-24 13:02:42", y: -600 },
+          { x: "2023-10-24 13:02:43", y: -2500 },
+          { x: "2023-10-24 13:02:46", y: 3000 },
+          { x: "2023-10-24 13:02:47", y: 5200 },
+          { x: "2023-10-24 13:02:49", y: -1800 },
+          { x: "2023-10-24 13:02:51", y: 900 },
         ],
         yAxisID: "y_ActivePower",
         borderColor: "#F26085",
@@ -74,8 +103,12 @@ const cht_History = new Chart(chtHist_Canvus, {
       {
         label: "ExecuteRate",
         data: [
-          { x: "2023-10-24 13:02:43", y: 100 }, { x: "2023-10-24 13:02:44", y: 98 }, { x: "2023-10-24 13:02:46", y: 97 },
-          { x: "2023-10-24 13:02:47", y: 92 }, { x: "2023-10-24 13:02:50", y: 95 }, { x: "2023-10-24 13:02:52", y: 96 },
+          { x: "2023-10-24 13:02:43", y: 100 },
+          { x: "2023-10-24 13:02:44", y: 98 },
+          { x: "2023-10-24 13:02:46", y: 97 },
+          { x: "2023-10-24 13:02:47", y: 92 },
+          { x: "2023-10-24 13:02:50", y: 95 },
+          { x: "2023-10-24 13:02:52", y: 96 },
         ],
         yAxisID: "y_ExecuteRate",
         borderColor: "#F39F3B",
@@ -84,8 +117,12 @@ const cht_History = new Chart(chtHist_Canvus, {
       {
         label: "SOC",
         data: [
-          { x: "2023-10-24 13:02:43", y: 70 }, { x: "2023-10-24 13:02:44", y: 72 }, { x: "2023-10-24 13:02:46", y: 73 },
-          { x: "2023-10-24 13:02:47", y: 71 }, { x: "2023-10-24 13:02:50", y: 68 }, { x: "2023-10-24 13:02:52", y: 69 },
+          { x: "2023-10-24 13:02:43", y: 70 },
+          { x: "2023-10-24 13:02:44", y: 72 },
+          { x: "2023-10-24 13:02:46", y: 73 },
+          { x: "2023-10-24 13:02:47", y: 71 },
+          { x: "2023-10-24 13:02:50", y: 68 },
+          { x: "2023-10-24 13:02:52", y: 69 },
         ],
         yAxisID: "y_SOC",
         borderColor: "#F6CD4F",
@@ -180,12 +217,19 @@ const searchInterval = document.querySelector(".block_temp #searchInterval");
 searchStartT.textContent = "" + (DT_now_Millisec - (DT_now_Millisec % 60000));
 searchEndT.textContent = "" + (Number(searchStartT.textContent) + 60000);
 // console.log(new Date(Number(searchStartT.textContent)));
-let EndOfToday_Millisec = DT_now_Millisec - (DT_now_Millisec % 86400000) + 86400000 - 28800000;
+let EndOfToday_Millisec =
+  DT_now_Millisec - (DT_now_Millisec % 86400000) + 86400000 - 28800000;
 
 let update_DT_search = false;
-update_xMin_xMax(searchStartT.textContent, searchEndT.textContent, update_DT_search);
+update_xMin_xMax(
+  searchStartT.textContent,
+  searchEndT.textContent,
+  update_DT_search
+);
 
-let yy_temp = Number(min_dateStart[0] + min_dateStart[1] + min_dateStart[2] + min_dateStart[3]);
+let yy_temp = Number(
+  min_dateStart[0] + min_dateStart[1] + min_dateStart[2] + min_dateStart[3]
+);
 let mm_temp = Number(min_dateStart[5] + min_dateStart[6]) - 1;
 let dd_temp = Number(min_dateStart[8] + min_dateStart[9]);
 
@@ -203,7 +247,8 @@ function update_DateStartMax() {
     mm_now = String(raw_DT_now.getMonth() + 1).padStart(2, "0");
     dd_now = String(raw_DT_now.getDate()).padStart(2, "0");
     dateStart.setAttribute("max", yy_now + "-" + mm_now + "-" + dd_now);
-    EndOfToday_Millisec = DT_now_Millisec - (DT_now_Millisec % 86400000) + 86400000 - 28800000;
+    EndOfToday_Millisec =
+      DT_now_Millisec - (DT_now_Millisec % 86400000) + 86400000 - 28800000;
     xAxisMax_Millisec = EndOfToday_Millisec;
   }
 }
@@ -219,15 +264,23 @@ function searchTime_GoBackward() {
 
   if (Number(searchStartT.textContent) <= xAxisMin_Millisec) {
     return 0;
-  } else if ((Number(searchStartT.textContent) - duration_ms * 0.25) <= xAxisMin_Millisec) {
+  } else if (
+    Number(searchStartT.textContent) - duration_ms * 0.25 <=
+    xAxisMin_Millisec
+  ) {
     searchStartT.textContent = "" + xAxisMin_Millisec;
     searchEndT.textContent = xAxisMin_Millisec + duration_ms;
   } else {
-    searchStartT.textContent = Number(searchStartT.textContent) - duration_ms * 0.25;
+    searchStartT.textContent =
+      Number(searchStartT.textContent) - duration_ms * 0.25;
     searchEndT.textContent = Number(searchStartT.textContent) + duration_ms;
   }
 
-  update_xMin_xMax(searchStartT.textContent, searchEndT.textContent, update_DT_search);
+  update_xMin_xMax(
+    searchStartT.textContent,
+    searchEndT.textContent,
+    update_DT_search
+  );
 }
 
 const goToNext = document.querySelector(".timeRangeQuery #goToNext");
@@ -238,15 +291,23 @@ function searchTime_GoForward() {
 
   if (Number(searchStartT.textContent) >= xAxisMax_Millisec) {
     return 0;
-  } else if ((Number(searchStartT.textContent) + duration_ms * 0.25) >= xAxisMax_Millisec) {
+  } else if (
+    Number(searchStartT.textContent) + duration_ms * 0.25 >=
+    xAxisMax_Millisec
+  ) {
     searchStartT.textContent = "" + xAxisMax_Millisec;
     searchEndT.textContent = xAxisMax_Millisec + duration_ms;
   } else {
-    searchStartT.textContent = Number(searchStartT.textContent) + duration_ms * 0.25;
+    searchStartT.textContent =
+      Number(searchStartT.textContent) + duration_ms * 0.25;
     searchEndT.textContent = Number(searchStartT.textContent) + duration_ms;
   }
 
-  update_xMin_xMax(searchStartT.textContent, searchEndT.textContent, update_DT_search);
+  update_xMin_xMax(
+    searchStartT.textContent,
+    searchEndT.textContent,
+    update_DT_search
+  );
 }
 
 function update_xMin_xMax(StartTime, EndTime, update_DT_start) {
@@ -259,21 +320,54 @@ function update_xMin_xMax(StartTime, EndTime, update_DT_start) {
   let dd_xMin = String(StartT.getDate()).padStart(2, "0");
   let hh_xMin = String(StartT.getHours()).padStart(2, "0");
   let m_xMin = String(StartT.getMinutes()).padStart(2, "0");
-  let ss_xMin = String(StartT.getSeconds()).padStart(2, '0');
-  let ms_xMin = String(StartT.getMilliseconds()).padStart(3, '0');
+  let ss_xMin = String(StartT.getSeconds()).padStart(2, "0");
+  let ms_xMin = String(StartT.getMilliseconds()).padStart(3, "0");
   let yy_xMax = String(EndT.getFullYear()).padStart(4, "0");
   let mm_xMax = String(EndT.getMonth() + 1).padStart(2, "0");
   let dd_xMax = String(EndT.getDate()).padStart(2, "0");
   let hh_xMax = String(EndT.getHours()).padStart(2, "0");
   let m_xMax = String(EndT.getMinutes()).padStart(2, "0");
-  let ss_xMax = String(EndT.getSeconds()).padStart(2, '0');
-  let ms_xMax = String(EndT.getMilliseconds()).padStart(3, '0');
+  let ss_xMax = String(EndT.getSeconds()).padStart(2, "0");
+  let ms_xMax = String(EndT.getMilliseconds()).padStart(3, "0");
 
-  cht_History.options.scales.x.min = yy_xMin + "-" + mm_xMin + "-" + dd_xMin + " " + hh_xMin + ":" + m_xMin + ":" + ss_xMin + "." + ms_xMin;
-  cht_History.options.scales.x.max = yy_xMax + "-" + mm_xMax + "-" + dd_xMax + " " + hh_xMax + ":" + m_xMax + ":" + ss_xMax + "." + ms_xMax;
-  console.log(cht_History.options.scales.x.min + "_!_" + cht_History.options.scales.x.max);
+  cht_History.options.scales.x.min =
+    yy_xMin +
+    "-" +
+    mm_xMin +
+    "-" +
+    dd_xMin +
+    " " +
+    hh_xMin +
+    ":" +
+    m_xMin +
+    ":" +
+    ss_xMin +
+    "." +
+    ms_xMin;
+  cht_History.options.scales.x.max =
+    yy_xMax +
+    "-" +
+    mm_xMax +
+    "-" +
+    dd_xMax +
+    " " +
+    hh_xMax +
+    ":" +
+    m_xMax +
+    ":" +
+    ss_xMax +
+    "." +
+    ms_xMax;
+  console.log(
+    cht_History.options.scales.x.min + "_!_" + cht_History.options.scales.x.max
+  );
   let v_Interval = Number(interval.value) * Number(unitInte_Select.value);
-  dataPost('http://localhost:3005/chart/history', cht_History.options.scales.x.min, cht_History.options.scales.x.max, v_Interval)//傳送資料區間到後端
+  dataPost(
+    "http://localhost:3000/chart/history",
+    cht_History.options.scales.x.min,
+    cht_History.options.scales.x.max,
+    v_Interval
+  ); //傳送資料區間到後端
 
   if (update_DT_start) {
     // console.log("abc");
@@ -300,16 +394,31 @@ function triggerQuery() {
     alertMessage.textContent = "查詢啟始日期有誤！";
     window_WrongDataSet.classList.add("appear");
   } else {
-    let yy_DS = Number(dateStart.value[0] + dateStart.value[1] + dateStart.value[2] + dateStart.value[3]);
+    let yy_DS = Number(
+      dateStart.value[0] +
+        dateStart.value[1] +
+        dateStart.value[2] +
+        dateStart.value[3]
+    );
     let mm_DS = Number(dateStart.value[5] + dateStart.value[6]) - 1;
     let dd_DS = Number(dateStart.value[8] + dateStart.value[9]);
     let hh_DS = Number(timeStart.value[0] + timeStart.value[1]);
     let m_DS = Number(timeStart.value[3] + timeStart.value[4]);
     let ss_DS = Number(timeStart.value[6] + timeStart.value[7]);
 
-    dateStart_Millisec = new Date(yy_DS, mm_DS, dd_DS, hh_DS, m_DS, ss_DS).getTime();
+    dateStart_Millisec = new Date(
+      yy_DS,
+      mm_DS,
+      dd_DS,
+      hh_DS,
+      m_DS,
+      ss_DS
+    ).getTime();
 
-    if ((dateStart_Millisec < xAxisMin_Millisec) || (dateStart_Millisec > EndOfToday_Millisec)) {
+    if (
+      dateStart_Millisec < xAxisMin_Millisec ||
+      dateStart_Millisec > EndOfToday_Millisec
+    ) {
       alertMessage.textContent = "查詢啟始日期超出合理設定範圍！";
       window_WrongDataSet.classList.add("appear");
       return 0;
@@ -331,8 +440,8 @@ function triggerQuery() {
     let v_Interval = Number(interval.value) * Number(unitInte_Select.value);
     console.log(v_Duration + "_~_" + v_Interval);
 
-    if ((v_Duration / v_Interval) > 50000) {
-      alertMessage.textContent = "點數超過50000點！";  // ~~~~!!!!!!!!@@@@@@@@#######$$$$$$%%%%%%%%%%^^^^&&&&&&********((((((()))))))
+    if (v_Duration / v_Interval > 50000) {
+      alertMessage.textContent = "點數超過50000點！"; // ~~~~!!!!!!!!@@@@@@@@#######$$$$$$%%%%%%%%%%^^^^&&&&&&********((((((()))))))
       window_WrongDataSet.classList.add("appear");
       return 0;
     }
@@ -343,7 +452,11 @@ function triggerQuery() {
     searchInterval.textContent = "" + v_Interval;
     update_DT_search = false;
 
-    update_xMin_xMax(searchStartT.textContent, searchEndT.textContent, update_DT_search);
+    update_xMin_xMax(
+      searchStartT.textContent,
+      searchEndT.textContent,
+      update_DT_search
+    );
   }
 }
 
@@ -386,30 +499,61 @@ function afterLoadDCM() {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 function updateRegDateSetting() {
-  qSelectAll_rDName = document.querySelectorAll(".table_regData .selected .rDName");
-  qSelectAll_rDAddress = document.querySelectorAll(".table_regData .selected .rDAddress");
-  qSelectAll_rDMax = document.querySelectorAll(".table_regData .selected .rDMax");
-  qSelectAll_rDMin = document.querySelectorAll(".table_regData .selected .rDMin");
-  qSelectAll_rDUnit = document.querySelectorAll(".table_regData .selected .rDUnit");
-  qSelectAll_rDColor = document.querySelectorAll(".table_regData .selected .rDColor");
-  qSelectAll_yDisplay = document.querySelectorAll(".table_regData .selected .yDisplay");
-  qSelectAll_yPosition = document.querySelectorAll(".table_regData .selected .yPosition");
-  qSelectAll_yAxisID = document.querySelectorAll(".table_regData .selected .yAxisID");
+  qSelectAll_rDName = document.querySelectorAll(
+    ".table_regData .selected .rDName"
+  );
+  qSelectAll_rDAddress = document.querySelectorAll(
+    ".table_regData .selected .rDAddress"
+  );
+  qSelectAll_rDMax = document.querySelectorAll(
+    ".table_regData .selected .rDMax"
+  );
+  qSelectAll_rDMin = document.querySelectorAll(
+    ".table_regData .selected .rDMin"
+  );
+  qSelectAll_rDUnit = document.querySelectorAll(
+    ".table_regData .selected .rDUnit"
+  );
+  qSelectAll_rDColor = document.querySelectorAll(
+    ".table_regData .selected .rDColor"
+  );
+  qSelectAll_yDisplay = document.querySelectorAll(
+    ".table_regData .selected .yDisplay"
+  );
+  qSelectAll_yPosition = document.querySelectorAll(
+    ".table_regData .selected .yPosition"
+  );
+  qSelectAll_yAxisID = document.querySelectorAll(
+    ".table_regData .selected .yAxisID"
+  );
 
   let m = qSelectAll_rDName.length;
   let n = cht_History.data.datasets.length;
 
   for (j = 0; j < m; j++) {
     for (i = 0; i < n; i++) {
-      if (cht_History.data.datasets[i].label === qSelectAll_rDName[j].textContent) {
+      if (
+        cht_History.data.datasets[i].label === qSelectAll_rDName[j].textContent
+      ) {
         cht_History.data.datasets[i].borderColor = qSelectAll_rDColor[j].value;
-        cht_History.data.datasets[i].backgroundColor = qSelectAll_rDColor[j].value + "90";
+        cht_History.data.datasets[i].backgroundColor =
+          qSelectAll_rDColor[j].value + "90";
 
-        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].display = Math.round(Number(qSelectAll_yDisplay[j].value));
-        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].position = qSelectAll_yPosition[j].value;
-        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].title.text = qSelectAll_rDName[j].textContent + " (" + qSelectAll_rDUnit[j].value + ")";
-        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].min = Math.round(Number(qSelectAll_rDMin[j].value) * 1000) / 1000;
-        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].max = Math.round(Number(qSelectAll_rDMax[j].value) * 1000) / 1000;
+        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].display =
+          Math.round(Number(qSelectAll_yDisplay[j].value));
+        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].position =
+          qSelectAll_yPosition[j].value;
+        cht_History.options.scales[
+          qSelectAll_yAxisID[j].textContent
+        ].title.text =
+          qSelectAll_rDName[j].textContent +
+          " (" +
+          qSelectAll_rDUnit[j].value +
+          ")";
+        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].min =
+          Math.round(Number(qSelectAll_rDMin[j].value) * 1000) / 1000;
+        cht_History.options.scales[qSelectAll_yAxisID[j].textContent].max =
+          Math.round(Number(qSelectAll_rDMax[j].value) * 1000) / 1000;
 
         // console.log(cht_History.data.datasets[i]);
         // console.log(cht_History.options.scales[qSelectAll_yAxisID[j].textContent]);
@@ -452,7 +596,9 @@ function configRegisterData() {
   window_editRegData.classList.add("appear");
 }
 
-const closeWB_Yes_editRegData = document.querySelector(".editRegData #closeWB_Yes");
+const closeWB_Yes_editRegData = document.querySelector(
+  ".editRegData #closeWB_Yes"
+);
 closeWB_Yes_editRegData.addEventListener("click", close_editRegData_Yes);
 function close_editRegData_Yes() {
   updateRegDateSetting();
@@ -480,13 +626,19 @@ function selectEditRegData(clickItem) {
   qSelectAll_rDName = document.querySelectorAll(".table_regData .rDName");
   for (i = 0; i < qSelectAll_rDName.length; i++) {
     if (qSelectAll_rDName[i].textContent === clickItem.target.textContent) {
-      qSelectAll_rDAddress = document.querySelectorAll(".table_regData .rDAddress");
+      qSelectAll_rDAddress = document.querySelectorAll(
+        ".table_regData .rDAddress"
+      );
       qSelectAll_rDMax = document.querySelectorAll(".table_regData .rDMax");
       qSelectAll_rDMin = document.querySelectorAll(".table_regData .rDMin");
       qSelectAll_rDUnit = document.querySelectorAll(".table_regData .rDUnit");
       qSelectAll_rDColor = document.querySelectorAll(".table_regData .rDColor");
-      qSelectAll_yDisplay = document.querySelectorAll(".table_regData .yDisplay");
-      qSelectAll_yPosition = document.querySelectorAll(".table_regData .yPosition");
+      qSelectAll_yDisplay = document.querySelectorAll(
+        ".table_regData .yDisplay"
+      );
+      qSelectAll_yPosition = document.querySelectorAll(
+        ".table_regData .yPosition"
+      );
 
       eRDName.textContent = qSelectAll_rDName[i].textContent;
       eRDAddress.value = qSelectAll_rDAddress[i].value;
@@ -497,7 +649,9 @@ function selectEditRegData(clickItem) {
       eRDyDisplay.value = qSelectAll_yDisplay[i].value;
       eRDyPosition.value = qSelectAll_yPosition[i].value;
 
-      qSelectAll_editRegData = document.querySelectorAll(".editRegData .regData");
+      qSelectAll_editRegData = document.querySelectorAll(
+        ".editRegData .regData"
+      );
       for (k = 0; k < qSelectAll_editRegData.length; k++) {
         qSelectAll_editRegData[k].classList.remove("chosen");
       }
@@ -508,18 +662,24 @@ function selectEditRegData(clickItem) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-const btn_updateEditRD = document.querySelector(".editRegData #btn_updateEditRD");
+const btn_updateEditRD = document.querySelector(
+  ".editRegData #btn_updateEditRD"
+);
 btn_updateEditRD.addEventListener("click", updateEditRegData);
 function updateEditRegData() {
   if (eRDName.textContent !== "") {
     qSelectAll_rDName = document.querySelectorAll(".table_regData .rDName");
-    qSelectAll_rDAddress = document.querySelectorAll(".table_regData .rDAddress");
+    qSelectAll_rDAddress = document.querySelectorAll(
+      ".table_regData .rDAddress"
+    );
     qSelectAll_rDMax = document.querySelectorAll(".table_regData .rDMax");
     qSelectAll_rDMin = document.querySelectorAll(".table_regData .rDMin");
     qSelectAll_rDUnit = document.querySelectorAll(".table_regData .rDUnit");
     qSelectAll_rDColor = document.querySelectorAll(".table_regData .rDColor");
     qSelectAll_yDisplay = document.querySelectorAll(".table_regData .yDisplay");
-    qSelectAll_yPosition = document.querySelectorAll(".table_regData .yPosition");
+    qSelectAll_yPosition = document.querySelectorAll(
+      ".table_regData .yPosition"
+    );
     qSelectAll_yAxisID = document.querySelectorAll(".table_regData .yAxisID");
 
     for (i = 0; i < qSelectAll_rDName.length; i++) {
@@ -540,9 +700,13 @@ function updateEditRegData() {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 const window_confirm_dRD = document.querySelector(".confirm_deleteEditRD");
-const deleteRDName = document.querySelector(".confirm_deleteEditRD #deleteRDName");
+const deleteRDName = document.querySelector(
+  ".confirm_deleteEditRD #deleteRDName"
+);
 
-const btn_deleteEditRD = document.querySelector(".editRegData #btn_deleteEditRD");
+const btn_deleteEditRD = document.querySelector(
+  ".editRegData #btn_deleteEditRD"
+);
 btn_deleteEditRD.addEventListener("click", deleteEditRegData);
 function deleteEditRegData() {
   if (eRDName.textContent !== "") {
@@ -551,13 +715,17 @@ function deleteEditRegData() {
   }
 }
 
-const closeWB_No_confirm_dRD = document.querySelector(".confirm_deleteEditRD #closeWB_No");
+const closeWB_No_confirm_dRD = document.querySelector(
+  ".confirm_deleteEditRD #closeWB_No"
+);
 closeWB_No_confirm_dRD.addEventListener("click", close_confirm_dRD_No);
 function close_confirm_dRD_No() {
   window_confirm_dRD.classList.remove("appear");
 }
 
-const closeWB_Yes_confirm_dRD = document.querySelector(".confirm_deleteEditRD #closeWB_Yes");
+const closeWB_Yes_confirm_dRD = document.querySelector(
+  ".confirm_deleteEditRD #closeWB_Yes"
+);
 closeWB_Yes_confirm_dRD.addEventListener("click", close_confirm_dRD_Yes);
 function close_confirm_dRD_Yes() {
   let deleteName = deleteRDName.textContent.slice(1, -1);
@@ -567,7 +735,9 @@ function close_confirm_dRD_Yes() {
   qSelectAll_regData = document.querySelectorAll(".registerData .regData");
   for (i = 0; i < qSelectAll_editRegData.length; i++) {
     if (qSelectAll_editRegData[i].textContent === deleteName) {
-      qSelectAll_editRegData[i].parentNode.removeChild(qSelectAll_editRegData[i]);
+      qSelectAll_editRegData[i].parentNode.removeChild(
+        qSelectAll_editRegData[i]
+      );
     }
   }
   for (i = 0; i < qSelectAll_regData.length; i++) {
@@ -640,7 +810,9 @@ const addRDName = document.querySelector(".confirm_addEditRD #addRDName");
 const window_confirm_aRD = document.querySelector(".confirm_addEditRD");
 const window_rDNameIsUsed = document.querySelector(".alert_rDNameIsUsed");
 
-const closeWB_Yes_addRegData = document.querySelector(".addRegData #closeWB_Yes");
+const closeWB_Yes_addRegData = document.querySelector(
+  ".addRegData #closeWB_Yes"
+);
 closeWB_Yes_addRegData.addEventListener("click", close_addRegData_Yes);
 function close_addRegData_Yes() {
   if (aRDName.value !== "") {
@@ -661,7 +833,11 @@ function close_addRegData_Yes() {
       let min_temp = Number(aRDMin.value);
 
       // 點位最大值、點位最小值 必須為數字，且 點位最大值 > 點位最小值
-      if (Number.isNaN(max_temp) || Number.isNaN(min_temp) || max_temp <= min_temp) {
+      if (
+        Number.isNaN(max_temp) ||
+        Number.isNaN(min_temp) ||
+        max_temp <= min_temp
+      ) {
         window_WrongDataSet.classList.add("appear");
       } else {
         addRDName.textContent = "「" + aRDName.value + "」";
@@ -671,13 +847,17 @@ function close_addRegData_Yes() {
   }
 }
 
-const closeWB_No_rDNameIsUsed = document.querySelector(".alert_rDNameIsUsed #closeWB_No");
+const closeWB_No_rDNameIsUsed = document.querySelector(
+  ".alert_rDNameIsUsed #closeWB_No"
+);
 closeWB_No_rDNameIsUsed.addEventListener("click", close_rDNameIsUsed_No);
 function close_rDNameIsUsed_No() {
   window_rDNameIsUsed.classList.remove("appear");
 }
 
-const closeWB_No_WrongDataSet = document.querySelector(".alert_WrongDataSet #closeWB_No");
+const closeWB_No_WrongDataSet = document.querySelector(
+  ".alert_WrongDataSet #closeWB_No"
+);
 closeWB_No_WrongDataSet.addEventListener("click", close_WrongDataSet_No);
 function close_WrongDataSet_No() {
   window_WrongDataSet.classList.remove("appear");
@@ -685,13 +865,17 @@ function close_WrongDataSet_No() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-const closeWB_No_confirm_aRD = document.querySelector(".confirm_addEditRD #closeWB_No");
+const closeWB_No_confirm_aRD = document.querySelector(
+  ".confirm_addEditRD #closeWB_No"
+);
 closeWB_No_confirm_aRD.addEventListener("click", close_confirm_aRD_No);
 function close_confirm_aRD_No() {
   window_confirm_aRD.classList.remove("appear");
 }
 
-const closeWB_Yes_confirm_aRD = document.querySelector(".confirm_addEditRD #closeWB_Yes");
+const closeWB_Yes_confirm_aRD = document.querySelector(
+  ".confirm_addEditRD #closeWB_Yes"
+);
 closeWB_Yes_confirm_aRD.addEventListener("click", close_confirm_aRD_Yes);
 function close_confirm_aRD_Yes() {
   // 新增regData，加上"dblclick" Function
@@ -699,7 +883,9 @@ function close_confirm_aRD_Yes() {
   regData_added.innerHTML = aRDName.value;
   regData_added.setAttribute("class", "regData");
   regData_added.id = "rD_" + aRDName.value;
-  document.querySelector(".registerData .regData_List").appendChild(regData_added);
+  document
+    .querySelector(".registerData .regData_List")
+    .appendChild(regData_added);
   addEventOn_regData(regData_added);
 
   // 新增EditRegData，加上"click" Function
@@ -707,18 +893,23 @@ function close_confirm_aRD_Yes() {
   editRegData_added.innerHTML = aRDName.value;
   editRegData_added.setAttribute("class", "regData");
   editRegData_added.id = "editRD_" + aRDName.value;
-  document.querySelector(".editRegData .regData_List").appendChild(editRegData_added);
+  document
+    .querySelector(".editRegData .regData_List")
+    .appendChild(editRegData_added);
   addEventOn_editRegData(editRegData_added);
 
   // 新增regData到暫存table
   let regData_rowTemp = document.querySelector(".table_temp tr");
   let regData_rowAdded = regData_rowTemp.cloneNode(true);
-  let regData_appended = document.querySelector(".block_temp .table_regData tbody").appendChild(regData_rowAdded);
+  let regData_appended = document
+    .querySelector(".block_temp .table_regData tbody")
+    .appendChild(regData_rowAdded);
 
   regData_appended.querySelector(".rDName").textContent = aRDName.value;
   regData_appended.querySelector(".rDName").id = "rDName_" + aRDName.value;
   regData_appended.querySelector(".rDAddress").value = aRDAddress.value;
-  regData_appended.querySelector(".rDAddress").id = "rDAddress_" + aRDName.value;
+  regData_appended.querySelector(".rDAddress").id =
+    "rDAddress_" + aRDName.value;
   regData_appended.querySelector(".rDMax").value = aRDMax.value;
   regData_appended.querySelector(".rDMax").id = "rDMax_" + aRDName.value;
   regData_appended.querySelector(".rDMin").value = aRDMin.value;
@@ -730,7 +921,8 @@ function close_confirm_aRD_Yes() {
   regData_appended.querySelector(".yDisplay").value = aRDyDisplay.value;
   regData_appended.querySelector(".yDisplay").id = "yDisplay_" + aRDName.value;
   regData_appended.querySelector(".yPosition").value = aRDyPosition.value;
-  regData_appended.querySelector(".yPosition").id = "yPosition_" + aRDName.value;
+  regData_appended.querySelector(".yPosition").id =
+    "yPosition_" + aRDName.value;
   regData_appended.querySelector(".yAxisID").textContent = "y_" + aRDName.value;
   regData_appended.querySelector(".yAxisID").id = "yAxisID_" + aRDName.value;
 
@@ -789,51 +981,87 @@ function regDataSelectDeselect(clickItem) {
         qSelectAll_rDMax = document.querySelectorAll(".table_regData .rDMax");
         qSelectAll_rDMin = document.querySelectorAll(".table_regData .rDMin");
         qSelectAll_rDUnit = document.querySelectorAll(".table_regData .rDUnit");
-        qSelectAll_rDColor = document.querySelectorAll(".table_regData .rDColor");
-        qSelectAll_yDisplay = document.querySelectorAll(".table_regData .yDisplay");
-        qSelectAll_yPosition = document.querySelectorAll(".table_regData .yPosition");
-        qSelectAll_yAxisID = document.querySelectorAll(".table_regData .yAxisID");
+        qSelectAll_rDColor = document.querySelectorAll(
+          ".table_regData .rDColor"
+        );
+        qSelectAll_yDisplay = document.querySelectorAll(
+          ".table_regData .yDisplay"
+        );
+        qSelectAll_yPosition = document.querySelectorAll(
+          ".table_regData .yPosition"
+        );
+        qSelectAll_yAxisID = document.querySelectorAll(
+          ".table_regData .yAxisID"
+        );
         let newElement_datasets = {
-          label: '', data: [],
-          yAxisID: '', borderColor: '', backgroundColor: '',
+          label: "",
+          data: [],
+          yAxisID: "",
+          borderColor: "",
+          backgroundColor: "",
         };
 
         // console.log(newElement_datasets);
         newElement_datasets.label = qSelectAll_rDName[i].textContent;
         newElement_datasets.yAxisID = "y_" + qSelectAll_rDName[i].textContent;
         newElement_datasets.borderColor = qSelectAll_rDColor[i].value;
-        newElement_datasets.backgroundColor = qSelectAll_rDColor[i].value + "90";
+        newElement_datasets.backgroundColor =
+          qSelectAll_rDColor[i].value + "90";
         // console.log(newElement_datasets);
 
         cht_History.data.datasets.push(newElement_datasets);
         console.log(cht_History.data.datasets[0]);
-        console.log(cht_History.data.datasets[cht_History.data.datasets.length - 1]);
+        console.log(
+          cht_History.data.datasets[cht_History.data.datasets.length - 1]
+        );
 
         // console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
 
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent] = {};
+        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent] =
+          {};
         // console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
 
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].display = Boolean(Number(qSelectAll_yDisplay[i].value));
+        cht_History.options.scales[
+          "y_" + qSelectAll_rDName[i].textContent
+        ].display = Boolean(Number(qSelectAll_yDisplay[i].value));
         // console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
 
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].position = qSelectAll_yPosition[i].value;
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].title = {};
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].title.display = true;
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].title.text = qSelectAll_rDName[i].textContent + ' (' + qSelectAll_rDUnit[i].value + ')';
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].min = Number(qSelectAll_rDMin[i].value);
-        cht_History.options.scales["y_" + qSelectAll_rDName[i].textContent].max = Number(qSelectAll_rDMax[i].value);
-        console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
+        cht_History.options.scales[
+          "y_" + qSelectAll_rDName[i].textContent
+        ].position = qSelectAll_yPosition[i].value;
+        cht_History.options.scales[
+          "y_" + qSelectAll_rDName[i].textContent
+        ].title = {};
+        cht_History.options.scales[
+          "y_" + qSelectAll_rDName[i].textContent
+        ].title.display = true;
+        cht_History.options.scales[
+          "y_" + qSelectAll_rDName[i].textContent
+        ].title.text =
+          qSelectAll_rDName[i].textContent +
+          " (" +
+          qSelectAll_rDUnit[i].value +
+          ")";
+        cht_History.options.scales[
+          "y_" + qSelectAll_rDName[i].textContent
+        ].min = Number(qSelectAll_rDMin[i].value);
+        cht_History.options.scales[
+          "y_" + qSelectAll_rDName[i].textContent
+        ].max = Number(qSelectAll_rDMax[i].value);
+        console.log(
+          cht_History.options.scales[qSelectAll_yAxisID[i].textContent]
+        );
 
         cht_History.update();
-        console.log(cht_History.options.scales[qSelectAll_yAxisID[i].textContent]);
+        console.log(
+          cht_History.options.scales[qSelectAll_yAxisID[i].textContent]
+        );
 
         console.log(cht_History.options.scales["y_Freq"]);
 
         // // 產生假資料值
 
         // // 把資料值放到點位的data.datasets.data
-
       }
     }
 
