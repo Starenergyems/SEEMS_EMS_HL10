@@ -451,7 +451,7 @@ async function querySumData() {
   };
 }
 
-router.get("/operateinfo/battery", async (req, res) => {
+// router.get("/operateinfo/battery", async (req, res) => {
 router.get("/operateinfo/battery", async (req, res) => {
   try {
     await querySumData();
@@ -462,7 +462,7 @@ router.get("/operateinfo/battery", async (req, res) => {
   }
 });
 
-router.get("/operateinfo/battery/data", async (req, res) => {
+// router.get("/operateinfo/battery/data", async (req, res) => {
 router.get("/operateinfo/battery/data", async (req, res) => {
   try {
     // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
@@ -645,10 +645,7 @@ async function queryDetailData() {
   // 根據 pageNumber 選擇不同的集合名稱
   const selectedCollection = collectionMap[pageNumber];
   // 根據 pageNumber 選擇不同的集合名稱
-  const selectedCollection = collectionMap[pageNumber];
 
-  //console.log("pageNumber: " + pageNumber);
-  //console.log("selectedCollection: " + selectedCollection);
   //console.log("pageNumber: " + pageNumber);
   //console.log("selectedCollection: " + selectedCollection);
 
@@ -662,28 +659,14 @@ async function queryDetailData() {
   const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值 得到第幾組也可以得到lc的組數
   const subNumber = pageNumber % 2 === 0 ? 2 : 1; //第N組的第一台或是第二台
   const No_of_BMS = `${baseNumber}-${subNumber}`; //a-b 第幾組的第幾台
-  const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值 得到第幾組也可以得到lc的組數
-  const subNumber = pageNumber % 2 === 0 ? 2 : 1; //第N組的第一台或是第二台
-  const No_of_BMS = `${baseNumber}-${subNumber}`; //a-b 第幾組的第幾台
+
 
   const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
     return getLatestDocument(nanoDb);
   });
-  const dataPromises = databases.map(async (dbName) => {
-    const nanoDb = createNanoInstance(dbName);
-    return getLatestDocument(nanoDb);
-  });
+ 
 
-  const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
-  // const lc1Data = allData[0];
-  // const lc2Data = allData[1];
-  // const lc3Data = allData[2];
-  // const lc4Data = allData[3];
-  const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
-  const lcData = allData[num];
-  //console.log("num: " + num);
-  //console.log("baseNumber:" + baseNumber);
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
   // const lc1Data = allData[0];
   // const lc2Data = allData[1];
@@ -929,7 +912,7 @@ async function queryDetailData() {
   }
 }
 
-router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
+
 router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
@@ -937,7 +920,6 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     console.log(pageNumber);
     await queryDetailData();
     res.render("Op_Bat_InfoDetail", batteryDetail_variables);
-  } catch (error) {
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -1561,7 +1543,3 @@ router.post("/getData", async (req, res) => {
 
 //***************************************************************************************** */
 module.exports = router;
-//***************************************************************************************** */
-// app.listen(port, () => {
-//   console.log(`應用程式正在監聽端口 ${port}`);
-// });
