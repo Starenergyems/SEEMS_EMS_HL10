@@ -124,7 +124,7 @@ async function findaccount(inmail="", intoken="") {
     }
     if (inmail !== "" && intoken === "" && data.docs.length !== 1) {response = `Keyin user mail or password is incorrect.`}
     if (inmail === "" && intoken !== "" && data.docs.length === 1) {
-      response = {'token': token, 'level': level}
+      response = {"id": id, "token": token, "level": level}
     } else {response = `Error findaccount token.`}
     return response;
   } catch (error) {

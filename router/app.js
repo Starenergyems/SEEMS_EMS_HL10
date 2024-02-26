@@ -83,7 +83,7 @@ app.use("*", async (req, res, next) => {
   try {
     const authenticated = await authentication(req);
     if (authenticated === false) {return res.status(401).send("Unauthorized")}
-    else {req.body = {"level" :authenticated }}
+    else {req.body = authenticated}
     next();
   } catch (error) {
     console.error("Authentication error:", error);
