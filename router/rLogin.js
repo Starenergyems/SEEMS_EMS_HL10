@@ -90,42 +90,42 @@ var bantill; // New var, use for record if user is locked when to unlock.
 var token; // New var, when user login success, system will random generate for validation.
 var validtime; // New var, the token will be validate to validtime.
 
-async function findaccount(maill="", token="") {
+async function findaccount(inmail="", intoken="") {
   // use login page submit email or token to search account db.
   const URL = `${db_URL}/${db_account}/_find`;
   let mangoQuery = "", response = "", data = ""
-  if (maill !== "" && token === "") {mangoQuery = {selector:{"user.mail":{$eq:maill}}}}
-  else if (maill === "" && token !== "") {mangoQuery = {selector:{"user.mail":{$eq:token}}}}
+  if (inmail !== "" && intoken === "") {mangoQuery = {selector:{"user.mail":{$eq:inmail}}}}
+  else if (inmail === "" && intoken !== "") {mangoQuery = {selector:{"user.token":{$eq:intoken}}}}
   try {data = await fetch(URL, {
     method: "POST",
     headers: {"Content-Type": "application/json", Authorization: AUTHORIZATION},
     credentials: "include",
     body: JSON.stringify(mangoQuery)})
     data = await data.json();
-    
-
     if (data.docs.length === 1) {
       id = data.docs[0]._id; // Impossible  undefined.
       rev = data.docs[0]._rev; // Impossible  undefined.
       time = datetime(); // function findaccount execute time.
-      data = data.docs[0].user; // data from doc become doc.user.
-      data.num === undefined ? (employeenum = "") : (employeenum = data.num);
-      mail = data.mail; // Impossible  undefined.
-      data.name === undefined ? (namee = "") : (namee = data.name);
-      data.comapny === undefined ? (company = "") : (company = data.comapny);
-      data.department === undefined ? (department = "") : (department = data.department);
-      data.level === undefined ? (level = "general") : (level = data.level);
-      data.state === undefined ? (state = "deactivate") : (state = data.state);
-      data.errcount === undefined ? (errcount = 0) : (errcount = parseInt(data.errcount));
-      data.note === undefined ? (note = "") : (note = data.note);
-      data.last_time === undefined ? (last_time = "") : (last_time = data.last_time);
-      password = data.password;
-      data.bantill === undefined ? (bantill = "") : (bantill = data.bantill);
-      data.token === undefined ? (token = "") : (token = data.token);
-      data.validtime === undefined ? (validtime = "") : (validtime = data.validtime);
+      user = data.docs[0].user; // data from doc become doc.user.
+      user.num === undefined ? (employeenum = "") : (employeenum = user.num);
+      mail = user.mail; // Impossible  undefined.
+      user.name === undefined ? (namee = "") : (namee = user.name);
+      user.comapny === undefined ? (company = "") : (company = user.comapny);
+      user.department === undefined ? (department = "") : (department = user.department);
+      user.level === undefined ? (level = "general") : (level = user.level);
+      user.state === undefined ? (state = "deactivate") : (state = user.state);
+      user.errcount === undefined ? (errcount = 0) : (errcount = parseInt(user.errcount));
+      user.note === undefined ? (note = "") : (note = user.note);
+      user.last_time === undefined ? (last_time = "") : (last_time = user.last_time);
+      user.password === undefined ? (password = id) : (password = user.password); // default password is employeenum.
+      user.bantill === undefined ? (bantill = "") : (bantill = user.bantill);
+      user.token === undefined ? (token = "") : (token = user.token);
+      user.validtime === undefined ? (validtime = "") : (validtime = user.validtime);
     }
-    if (maill !== "" && token === "") {response = `帳號或密碼錯誤`}
-    else if (maill === "" && token !== "") {response = token}
+    if (inmail !== "" && intoken === "" && data.docs.length !== 1) {response = `Keyin user mail or password is incorrect.`}
+    if (inmail === "" && intoken !== "" && data.docs.length === 1) {
+      response = {'token': token, 'level': level}
+    } else {response = `Error findaccount token.`}
     return response;
   } catch (error) {
     console.error(`Execute mango query occur error : ${error}`);

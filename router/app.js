@@ -36,11 +36,34 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.render("Login");
 });
+
+app.post("/login", async (req, res) => {
+  try {
+    const email = req.body["username"];
+    const password = req.body["password"];
+    console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
+
+    const response = await submit(email, password);
+    if (response["result"] === true) {
+      console.log(response["text"]);
+      res.cookie("token", response["token"]);
+      //, { maxAge: 10, httpOnly: true });
+      // if cookies add this the cookies will live 10s, and will not abandon after close browser.
+      res.json({ redirect: "http://localhost:3000/operateinfo" });
+    } else {
+      res.status(401).send(response["text"]);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 // const accountRouter = require("./rAccount");
 // const modeRouter = require("./rMode");
 // const meterRouter = require("./rMeter");
-const pcsRouter = require("./rPCS");
-//const batteryRouter = require("./rBattery");
+// const pcsRouter = require("./rPCS");
+const batteryRouter = require("./rBattery");
 //  const commuRouter = require("./rCommu");
 //  const deviceRouter = require("./rDevice");
 //  const environmentRouter = require("./rEnvironment");
@@ -56,10 +79,11 @@ const pcsRouter = require("./rPCS");
 
 const { authentication } = require("./authMiddleware");
 
-app.get("*", async (req, res, next) => {
+app.use("*", async (req, res, next) => {
   try {
     const authenticated = await authentication(req);
-    if (!authenticated) {return res.status(401).send("Unauthorized")}
+    if (authenticated === false) {return res.status(401).send("Unauthorized")}
+    else {req.body = {"level" :authenticated }}
     next();
   } catch (error) {
     console.error("Authentication error:", error);
@@ -73,8 +97,8 @@ app.get("*", async (req, res, next) => {
 // app.use(accountRouter);
 // app.use(modeRouter);
 // app.use(meterRouter);
-app.use(pcsRouter);
-//app.use(batteryRouter);
+// app.use(pcsRouter);
+app.use(batteryRouter);
 // app.use(commuRouter);
 // app.use(deviceRouter);
 // app.use(environmentRouter);
@@ -85,38 +109,7 @@ app.use(pcsRouter);
 // app.use(alarmRouter);
 // app.use(middleware);
 
-
-
 //***************************************************************************************************************** */
-
-// app.get('*', (req, res, next) => {
-//   if (!authentication(req)) {
-//     console.log("Unauthorized")
-//     return res.status(401).send('Unauthorized')}
-//   next();
-// })
-
-app.post("/login", async (req, res) => {
-  try {
-    const email = req.body["username"];
-    const password = req.body["password"];
-    console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
-
-    const response = await submit(email, password);
-    if (response["result"] === true) {
-      console.log(response["text"]);
-      res.cookie("token", response["token"]);
-      //, { maxAge: 10, httpOnly: true });
-      // if cookies add this the cookies will live 10s, and will not abandon after close browser.
-      res.json({ redirect: "http://localhost:3000/mode" });
-    } else {
-      res.status(401).send(response["text"]);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
 
 // app.get("/login", (req, res) => {
 //   res.render("Login", { navbarData: res.locals.navbarData });
