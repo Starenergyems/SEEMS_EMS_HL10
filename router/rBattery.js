@@ -1,5 +1,5 @@
 //const port=3005;
-//const port=3005;
+
 
 const express = require("express");
 const methodOverride = require("method-override");
@@ -36,34 +36,34 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-router.use("/public", express.static(path.join(__dirname, "../public"))); //app要改回router
-router.use(
+app.use("/public", express.static(path.join(__dirname, "../public"))); //app要改回router
+app.use(
   "/operateinfo",
   express.static(path.join(__dirname, "../public/operateinfo"))
 );
-router.use(
+app.use(
   "/operateinfo/battery",
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
-router.use(
+app.use(
   "/operateinfo/battery/infodetail",
   express.static(path.join(__dirname, "../public"))
 );
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-router.use(
+app.use(
   "/operateinfo/battery/infodetail/:id",
   express.static(path.join(__dirname, "../public"))
 );
-router.use(
+app.use(
   "/operateinfo/battery/rack",
   express.static(path.join(__dirname, "../public"))
 );
-router.use(
+app.use(
   "/operateinfo/battery/rack/:id",
   express.static(path.join(__dirname, "../public"))
 );
 
-router.use(cors());
+app.use(cors());
 //***************************************************************************************************************** */
 // 定義 CouchDB 資料庫名稱
 const databases = [
@@ -451,7 +451,6 @@ async function querySumData() {
   };
 }
 
-// router.get("/operateinfo/battery", async (req, res) => {
 router.get("/operateinfo/battery", async (req, res) => {
   try {
     await querySumData();
@@ -462,7 +461,6 @@ router.get("/operateinfo/battery", async (req, res) => {
   }
 });
 
-// router.get("/operateinfo/battery/data", async (req, res) => {
 router.get("/operateinfo/battery/data", async (req, res) => {
   try {
     // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
@@ -629,18 +627,7 @@ async function queryDetailData() {
     7: "Lc04",
     // 8: "Lc04", // 如果需要處理 8，可以取消註解
   };
-async function queryDetailData() {
-  // 定義資料庫集合的映射
-  const collectionMap = {
-    1: "Lc01",
-    2: "Lc01",
-    3: "Lc02",
-    4: "Lc02",
-    5: "Lc03",
-    6: "Lc03",
-    7: "Lc04",
-    // 8: "Lc04", // 如果需要處理 8，可以取消註解
-  };
+
 
   // 根據 pageNumber 選擇不同的集合名稱
   const selectedCollection = collectionMap[pageNumber];
@@ -659,7 +646,7 @@ async function queryDetailData() {
   const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值 得到第幾組也可以得到lc的組數
   const subNumber = pageNumber % 2 === 0 ? 2 : 1; //第N組的第一台或是第二台
   const No_of_BMS = `${baseNumber}-${subNumber}`; //a-b 第幾組的第幾台
-
+  console.log(No_of_BMS);
 
   const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
@@ -795,9 +782,9 @@ async function queryDetailData() {
       fault: Convert_UInt_to_revBitString(lcData.BMS1[404046], 32),
     };
   }
-}
+
   //let processedPageNumber;
-  if (pageNumber % 2 === 0) {
+ /*if (pageNumber % 2 === 0) {
     // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
     batteryDetail_variables = {
       permission: "manager",
@@ -908,9 +895,9 @@ async function queryDetailData() {
       SOCcali: Convert_UInt_to_revBitString(lcData.BMS1[404060], 16),
       alarm: Convert_UInt_to_revBitString(lcData.BMS1[404044], 32),
       fault: Convert_UInt_to_revBitString(lcData.BMS1[404046], 32),
-    };
+    };*/
   }
-}
+
 
 
 router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
@@ -1543,3 +1530,7 @@ router.post("/getData", async (req, res) => {
 
 //***************************************************************************************** */
 module.exports = router;
+
+ /*app.listen(port, () => {
+   console.log(`應用程式正在監聽端口 ${port}`);
+ });*/

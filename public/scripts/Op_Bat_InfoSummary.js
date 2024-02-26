@@ -229,10 +229,11 @@ async function sendDataToBackend() {
 ////////////////////////////////////////////////////////////////////////////////////////
 async function updateData(){
   var data = await getData('http://localhost:3000/operateinfo/battery/data');//port要改
+  console.log(data);
 
   $('#workStatus').text(data.workStatus);
   $('#onGridStatus').text(data.onGridStatus);
-  $('#onlineNume').text(data.onloneNum);
+  $('#onlineNume').text(data.onlineNum);
   $('#systemV').text(data.systemV);
   $('#systemI').text(data.systemI);
   $('#systemSOC').text(data.systemSOC);
@@ -247,16 +248,17 @@ async function updateData(){
   $('#current_LC1').text(data.current_LC1);
   $('#SOC_LC1').text(data.SOC_LC1);
   $('#SOH_LC1').text(data.SOH_LC1);
+  $('#containerTemp_LC1').text(data.containerTemp_LC1);
   $('#V_cell_Max_LC1').text(data.V_cell_Max_LC1);
   $('#V_cell_Min_LC1').text(data.V_cell_Min_LC1);
   $('#V_cell_MaxDiff_LC1').text(data.V_cell_MaxDiff_LC1);
   $('#T_cell_Max_LC1').text(data.T_cell_Max_LC1);
   $('#T_cell_Min_LC1').text(data.T_cell_Min_LC1);
   $('#T_cell_MaxDiff_LC1').text(data.T_cell_MaxDiff_LC1);
-  $('#alarm_BMS1_1').text(data.alarm_BMS1_1);
-  $('#alarm_BMS1_2').text(data.alarm_BMS1_2);
-  $('#fault_BMS1_1').text(data.fault_BMS1_1);
-  $('#fault_BMS1_2').text(data.fault_BMS1_2);
+  $('#alarm_BMS1-1').text(data.alarm_BMS1_1);//燈號資料????
+  $('#alarm_BMS1-2').text(data.alarm_BMS1_2);//燈號資料????
+  $('#fault_BMS1-1').text(data.fault_BMS1_1);//燈號資料????
+  $('#fault_BMS1-2').text(data.fault_BMS1_2);//燈號資料????
 
   /*LC2*********************** */
   $('#onlineNum_LC2').text(data.onlineNum_LC2);
@@ -266,16 +268,17 @@ async function updateData(){
   $('#current_LC2').text(data.current_LC2);
   $('#SOC_LC2').text(data.SOC_LC2);
   $('#SOH_LC2').text(data.SOH_LC2);
+  $('#containerTemp_LC2').text(data.containerTemp_LC2);
   $('#V_cell_Max_LC2').text(data.V_cell_Max_LC2);
   $('#V_cell_Min_LC2').text(data.V_cell_Min_LC2);
   $('#V_cell_MaxDiff_LC2').text(data.V_cell_MaxDiff_LC2);
   $('#T_cell_Max_LC2').text(data.T_cell_Max_LC2);
   $('#T_cell_Min_LC2').text(data.T_cell_Min_LC2);
   $('#T_cell_MaxDiff_LC2').text(data.T_cell_MaxDiff_LC2);
-  $('#alarm_BMS2_1').text(data.alarm_BMS2_1);
-  $('#alarm_BMS2_2').text(data.alarm_BMS2_2);
-  $('#fault_BMS2_1').text(data.fault_BMS2_1);
-  $('#fault_BMS2_2').text(data.fault_BMS2_2);
+  $('#alarm_BMS2-1').text(data.alarm_BMS2_1);
+  $('#alarm_BMS2-2').text(data.alarm_BMS2_2);
+  $('#fault_BMS2-1').text(data.fault_BMS2_1);
+  $('#fault_BMS2-2').text(data.fault_BMS2_2);
 
   /*LC3*********************** */
   $('#onlineNum_LC3').text(data.onlineNum_LC3);
@@ -285,16 +288,17 @@ async function updateData(){
   $('#current_LC3').text(data.current_LC3);
   $('#SOC_LC3').text(data.SOC_LC3);
   $('#SOH_LC3').text(data.SOH_LC3);
+  $('#containerTemp_LC3').text(data.containerTemp_LC3);
   $('#V_cell_Max_LC3').text(data.V_cell_Max_LC3);
   $('#V_cell_Min_LC3').text(data.V_cell_Min_LC3);
   $('#V_cell_MaxDiff_LC3').text(data.V_cell_MaxDiff_LC3);
   $('#T_cell_Max_LC3').text(data.T_cell_Max_LC3);
   $('#T_cell_Min_LC3').text(data.T_cell_Min_LC3);
   $('#T_cell_MaxDiff_LC3').text(data.T_cell_MaxDiff_LC3);
-  $('#alarm_BMS3_1').text(data.alarm_BMS3_1);
-  $('#alarm_BMS3_2').text(data.alarm_BMS3_2);
-  $('#fault_BMS3_1').text(data.fault_BMS3_1);
-  $('#fault_BMS3_2').text(data.fault_BMS3_2);
+  $('#alarm_BMS3-1').text(data.alarm_BMS3_1);
+  $('#alarm_BMS3-2').text(data.alarm_BMS3_2);
+  $('#fault_BMS3-1').text(data.fault_BMS3_1);
+  $('#fault_BMS3-2').text(data.fault_BMS3_2);
 
   /*LC4*********************** */
   $('#onlineNum_LC4').text(data.onlineNum_LC4);
@@ -304,15 +308,16 @@ async function updateData(){
   $('#current_LC4').text(data.current_LC4);
   $('#SOC_LC4').text(data.SOC_LC4);
   $('#SOH_LC4').text(data.SOH_LC4);
+  $('#containerTemp_LC4').text(data.containerTemp_LC4);
   $('#V_cell_Max_LC4').text(data.V_cell_Max_LC4);
   $('#V_cell_Min_LC4').text(data.V_cell_Min_LC4);
   $('#V_cell_MaxDiff_LC4').text(data.V_cell_MaxDiff_LC4);
   $('#T_cell_Max_LC4').text(data.T_cell_Max_LC4);
   $('#T_cell_Min_LC4').text(data.T_cell_Min_LC4);
   $('#T_cell_MaxDiff_LC4').text(data.T_cell_MaxDiff_LC4);
-  $('#alarm_BMS4_1').text(data.alarm_BMS4_1);
-  $('#alarm_BMS4_2').text(data.alarm_BMS4_2);
-  $('#fault_BMS4_1').text(data.fault_BMS4_1);
-  $('#fault_BMS4_2').text(data.fault_BMS4_2);
+  $('#alarm_BMS4-1').text(data.alarm_BMS4_1);
+  $('#alarm_BMS4-2').text(data.alarm_BMS4_2);
+  $('#fault_BMS4-1').text(data.fault_BMS4_1);
+  $('#fault_BMS4-2').text(data.fault_BMS4_2);
   console.log("data updated");
 }

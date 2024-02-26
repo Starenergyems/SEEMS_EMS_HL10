@@ -98,25 +98,25 @@ async function updateData() {
   $("#DCpower").text(data.DCpower);
 
   /*故障與告警****************************************************** */
-  if (data.overallFault === "0") {
+  if (data.overallFault > 0) {
     classAdd("#overallFault", "setToClose");
   } else {
     classRemove("#overallFault", "setToClose");
   }
 
-  if (data.overallAlarm === "0") {
+  if (data.overallAlarm > 0) {
     classAdd("#overallAlarm", "setToClose");
   } else {
     classRemove("#overallAlarm", "setToClose");
   }
 
-  if (data.faultStatus === "0") {
+  if (data.faultStatus > 0) {
     classAdd("#faultStatus", "setToClose");
   } else {
     classRemove("#faultStatus", "setToClose");
   }
 
-  if (data.alarmStatus === "0") {
+  if (data.alarmStatus > 0) {
     classAdd("#alarmStatus", "setToClose");
   } else {
     classRemove("#alarmStatus", "setToClose");

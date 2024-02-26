@@ -3,10 +3,10 @@ var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
   classAdd("#nB_Operation","default_nB");
-  //updateData();
+  updateData();
 });
 
-//setInterval(updateData, 5000);
+setInterval(updateData, 5000);
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
@@ -455,3 +455,153 @@ setBut_modeLR_LC3.addEventListener("click", function () { Set_modeLR_LC(3); });
 
 const setBut_modeLR_LC4 = document.querySelector(".infoLC #setBut_modeLR_LC4");
 setBut_modeLR_LC4.addEventListener("click", function () { Set_modeLR_LC(4); });
+
+async function updateData() {
+  //更新資料
+  var router = window.location.href + "/data";
+  console.log(router);
+  var data = await getData(router);
+  console.log(data);
+  $("#workStatus").text(data.workStatus);
+  $("#onlineNum").text(data.onlineNum);
+  $("#totalP").text(data.totalP);
+  $("#totalQ").text(data.totalQ);
+  $("#totalRatedP").text(data.totalRatedP);
+  $("#today_E_chg").text(data.today_E_chg);
+  $("#today_E_dcg").text(data.today_E_dcg);
+  $("#tot_E_chg").text(data.tot_E_chg);
+  $("#tot_E_dcg").text(data.tot_E_dcg);
+  /*LC1******************************************** */
+  $("#onlineNum_LC1").text(data.onlineNum_LC1);
+  $("#ratedP_LC1").text(data.ratedP_LC1);
+  $("#activePower_LC1").text(data.activePower_LC1);
+  $("#reactivePower_LC1").text(data.reactivePower_LC1);
+  $("#today_E_chg_LC1").text(data.today_E_chg_LC1);
+  $("#today_E_dcg_LC1").text(data.today_E_dcg_LC1);
+  $("#tot_E_chg_LC1").text(data.tot_E_chg_LC1);
+  $("#tot_E_dcg_LC1").text(data.tot_E_dcg_LC1);
+  /*告警/故障********************************************** */
+  if (data.alarm_PCS1_1 > 0) {
+    classAdd("#alarm_PCS1-1", "setToClose");
+  } else {
+    classRemove("#alarm_PCS1-1", "setToClose");
+  }
+  if (data.alarm_PCS1_2 > 0) {
+    classAdd("#alarm_PCS1-2", "setToClose");
+  } else {
+    classRemove("#alarm_PCS1-2", "setToClose");
+  }
+  if (data.fault_PCS1_1 > 0) {
+    classAdd("#fault_PCS1-1", "setToClose");
+  } else {
+    classRemove("#fault_PCS1-1", "setToClose");
+  }
+  if (data.fault_PCS1_2 > 0) {
+    classAdd("#fault_PCS1-2", "setToClose");
+  } else {
+    classRemove("#fault_PCS1-2", "setToClose");
+  }
+
+  $("#modeActPas_LC1").text(data.modeActPas_LC1);
+  $("#modeQctrl_LC1").text(data.modeQctrl_LC1);
+  $("#standbyCmd_LC1").text(data.standbyCmd_LC1);
+  $("#modeLR_LC1").text(data.modeLR_LC1);
+  /*LC2************************************************* */
+  $("#onlineNum_LC2").text(data.onlineNum_LC2);
+  $("#ratedP_LC2").text(data.ratedP_LC2);
+  $("#activePower_LC2").text(data.activePower_LC2);
+  $("#reactivePower_LC2").text(data.reactivePower_LC2);
+  $("#today_E_chg_LC2").text(data.today_E_chg_LC2);
+  $("#today_E_dcg_LC2").text(data.today_E_dcg_LC2);
+  $("#tot_E_chg_LC2").text(data.tot_E_chg_LC2);
+  $("#tot_E_dcg_LC2").text(data.tot_E_dcg_LC2);
+  /*告警/故障********************************************** */
+  if (data.alarm_PCS2_1 > 0) {
+    classAdd("#alarm_PCS2-1", "setToClose");
+  } else {
+    classRemove("#alarm_PCS2-1", "setToClose");
+  }
+  if (data.alarm_PCS2_2 > 0) {
+    classAdd("#alarm_PCS2-2", "setToClose");
+  } else {
+    classRemove("#alarm_PCS2-2", "setToClose");
+  }
+  if (data.fault_PCS2_1 > 0) {
+    classAdd("#fault_PCS2-1", "setToClose");
+  } else {
+    classRemove("#fault_PCS2-1", "setToClose");
+  }
+  if (data.fault_PCS2_2 > 0) {
+    classAdd("#fault_PCS2-2", "setToClose");
+  } else {
+    classRemove("#fault_PCS2-2", "setToClose");
+  }
+
+  $("#modeActPas_LC2").text(data.modeActPas_LC2);
+  $("#modeQctrl_LC2").text(data.modeQctrl_LC2);
+  $("#standbyCmd_LC2").text(data.standbyCmd_LC2);
+  $("#modeLR_LC2").text(data.modeLR_LC2);
+
+   /*LC3************************************************* */
+   $("#onlineNum_LC3").text(data.onlineNum_LC3);
+   $("#ratedP_LC3").text(data.ratedP_LC3);
+   $("#activePower_LC3").text(data.activePower_LC3);
+   $("#reactivePower_LC3").text(data.reactivePower_LC3);
+   $("#today_E_chg_LC3").text(data.today_E_chg_LC3);
+   $("#today_E_dcg_LC3").text(data.today_E_dcg_LC3);
+   $("#tot_E_chg_LC3").text(data.tot_E_chg_LC3);
+   $("#tot_E_dcg_LC3").text(data.tot_E_dcg_LC3);
+   /*告警/故障********************************************** */
+   if (data.alarm_PCS3_1 > 0) {
+     classAdd("#alarm_PCS3-1", "setToClose");
+   } else {
+     classRemove("#alarm_PCS3-1", "setToClose");
+   }
+   if (data.alarm_PCS3_2 > 0) {
+     classAdd("#alarm_PCS3-2", "setToClose");
+   } else {
+     classRemove("#alarm_PCS3-2", "setToClose");
+   }
+   if (data.fault_PCS3_1 > 0) {
+     classAdd("#fault_PCS3-1", "setToClose");
+   } else {
+     classRemove("#fault_PCS3-1", "setToClose");
+   }
+   if (data.fault_PCS3_2 > 0) {
+     classAdd("#fault_PCS3-2", "setToClose");
+   } else {
+     classRemove("#fault_PCS3-2", "setToClose");
+   }
+ 
+   $("#modeActPas_LC3").text(data.modeActPas_LC3);
+   $("#modeQctrl_LC3").text(data.modeQctrl_LC3);
+   $("#standbyCmd_LC3").text(data.standbyCmd_LC3);
+   $("#modeLR_LC3").text(data.modeLR_LC3);
+
+    /*LC4************************************************* */
+  $("#onlineNum_LC4").text(data.onlineNum_LC4);
+  $("#ratedP_LC4").text(data.ratedP_LC4);
+  $("#activePower_LC4").text(data.activePower_LC4);
+  $("#reactivePower_LC4").text(data.reactivePower_LC4);
+  $("#today_E_chg_LC4").text(data.today_E_chg_LC4);
+  $("#today_E_dcg_LC4").text(data.today_E_dcg_LC4);
+  $("#tot_E_chg_LC4").text(data.tot_E_chg_LC4);
+  $("#tot_E_dcg_LC4").text(data.tot_E_dcg_LC4);
+  /*告警/故障********************************************** */
+  if (data.alarm_PCS4_1 > 0) {
+    classAdd("#alarm_PCS4-1", "setToClose");
+  } else {
+    classRemove("#alarm_PCS4-1", "setToClose");
+  }
+
+  if (data.fault_PCS4_1 > 0) {
+    classAdd("#fault_PCS4-1", "setToClose");
+  } else {
+    classRemove("#fault_PCS4-1", "setToClose");
+  }
+
+  $("#modeActPas_LC4").text(data.modeActPas_LC4);
+  $("#modeQctrl_LC4").text(data.modeQctrl_LC4);
+  $("#standbyCmd_LC4").text(data.standbyCmd_LC4);
+  $("#modeLR_LC4").text(data.modeLR_LC4);
+}
