@@ -26,17 +26,21 @@ async function authentication(req) {
     let token = ""
     let browser_token = ""
     req.cookies.token === undefined ? browser_token = "" : browser_token = req.cookies.token
-    if (browser_token === ""){console.log('The browser is not exist cookies.')}
+    if (browser_token === ""){
+        console.log("The token is not exist in browser's cookie.")
+        return false
+    }
     else if (browser_token !== ""){
         await findaccount("", browser_token).then(temp => {token = temp})
-        console.log(`The token in browser's cookies is ${browser_token}`)
-        console.log(`From findaccount token is ${token}`)
+        const res = `\nCookie's token is ${browser_token}\nAccount token is ${token}`
         if (token === browser_token) {
-            console.log("Authentication is OK.")
+            console.log("Authentication is OK.", res)
             return true
-        } else if (token !== browser_token){console.log("Authentication is not OK.")}
+        } else {
+            console.log("Authentication is not OK.", res)
+            return false
+        }
     }
-    return false
 }
 
 module.exports = {authentication}

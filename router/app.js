@@ -37,53 +37,55 @@ app.get("/", (req, res) => {
   res.render("Login");
 });
 // const accountRouter = require("./rAccount");
-const modeRouter = require("./rMode");
-const meterRouter = require("./rMeter");
+// const modeRouter = require("./rMode");
+// const meterRouter = require("./rMeter");
 const pcsRouter = require("./rPCS");
-const batteryRouter = require("./rBattery");
-//const commuRouter = require("./rCommu");
-const deviceRouter = require("./rDevice");
-const environmentRouter = require("./rEnvironment");
-const eventRouter = require("./rEvent");
-//const reportRouter = require("./rReport");
+//const batteryRouter = require("./rBattery");
+//  const commuRouter = require("./rCommu");
+//  const deviceRouter = require("./rDevice");
+//  const environmentRouter = require("./rEnvironment");
+// const eventRouter = require("./rEvent");
+// const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
-//const alarmRouter = require("./rAlarm");
+//  const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
-//const middleware = require("./middleware");
+// const middleware = require("./middleware");
 // const login = require("./rLogin")
-//app.use(authMiddleware);
+// app.use(authMiddleware);
+
+const { authentication } = require("./authMiddleware");
+
+app.get("*", async (req, res, next) => {
+  try {
+    const authenticated = await authentication(req);
+    if (!authenticated) {return res.status(401).send("Unauthorized")}
+    next();
+  } catch (error) {
+    console.error("Authentication error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 //***************************************************************************************************************** */
 // 使用這些路由
 // app.use(authentication)
 // app.use(accountRouter);
-app.use(modeRouter);
-app.use(meterRouter);
+// app.use(modeRouter);
+// app.use(meterRouter);
 app.use(pcsRouter);
-app.use(batteryRouter);
-//app.use(commuRouter);
-app.use(deviceRouter);
-app.use(environmentRouter);
-app.use(eventRouter);
-//app.use(reportRouter);
+//app.use(batteryRouter);
+// app.use(commuRouter);
+// app.use(deviceRouter);
+// app.use(environmentRouter);
+// app.use(eventRouter);
+// app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
-//app.use(alarmRouter);
-//app.use(middleware);
+// app.use(alarmRouter);
+// app.use(middleware);
 
-const { authentication } = require("./authMiddleware");
 
-app.get("*", (req, res, next) => {
-  // Assuming `authentication` returns true if authenticated, false otherwise
-  if (!authentication(req)) {
-    // If authentication fails, you may send a response or perform some other action
-    console.log("doaihdihas");
-    return res.status(401).send("Unauthorized");
-  }
-  // If authenticated, continue to the next middleware or route handler
-  next();
-});
 
 //***************************************************************************************************************** */
 
