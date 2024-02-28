@@ -24,12 +24,27 @@ function calculateAdd(...numbers) {
 
 function scaleProcess(decimalValue, scale, point) {
   // 檢查輸入是否合法
-  if (
-    typeof decimalValue !== "number" ||
-    typeof scale !== "number" ||
-    typeof point !== "number"
-  ) {
-    console.log("All parameters must be numbers");
+  if (typeof decimalValue !== "number" || isNaN(decimalValue)) {
+    if (decimalValue === null) {
+      decimalValue = 0;
+      console.log("decimalValue=null");
+    } else if (typeof decimalValue === "string") {
+      decimalValue = 0;
+      console.log("decimalValue=" + decimalValue);
+    } else {
+      console.log("decimalValue must be a number.");
+      return;
+    }
+  }
+
+  if (typeof scale !== "number" || isNaN(scale)) {
+    console.log("scale must be a number.");
+    return;
+  }
+
+  if (typeof point !== "number" || isNaN(point)) {
+    console.log("point must be a number.");
+    return;
   }
 
   // 將 decimalValue 乘上 scale
@@ -39,6 +54,13 @@ function scaleProcess(decimalValue, scale, point) {
   result = result.toFixed(point);
   return result;
 }
+
+// 測試
+console.log(scaleProcess(5, 2, 2)); // 10.00
+console.log(scaleProcess(null, 2, 2)); // decimalValue=null
+console.log(scaleProcess("test", 2, 2)); // decimalValue=test
+console.log(scaleProcess(5, "test", 2)); // scale must be a number.
+console.log(scaleProcess(5, 2, "test")); // point must be a number.
 
 //-------------------------------------------------------------------------------------------------
 //chargeStatus pcs充放電狀態
@@ -198,53 +220,6 @@ function countPCSAlarmAndFault(input1, input2, input3) {
   // 回傳三個變數的二進制中1的總數
   return count;
 }
-
-//***************************************************************************** */
-//PCSWorkingMode
-// function mapPCSWorkingMode(decimalValue) {
-//   if (decimalValue == 0) {
-//     return "N/A";
-//   }
-
-//   const binaryString =
-//     decimalValue < 10
-//       ? `0${decimalValue.toString(2)}`
-//       : decimalValue.toString(2);
-
-//   const modeMapping = {
-//     0: "On-grid constant current",
-//     1: "On-grid constant voltage",
-//     2: "On-grid constant power (AC)",
-//     3: "On-grid constant power (DC)",
-//     9: "On-grid mode",
-//     10: "Off-grid mode",
-//     11: "VSG mode",
-//   };
-
-//   const onesCount = binaryString.split("1").length - 1;
-
-//   if (onesCount >= 2) {
-//     return "Error";
-//   }
-
-//   let result = "";
-
-//   for (let i = 0; i < binaryString.length; i++) {
-//     const bit = binaryString[i];
-//     const position = binaryString.length - 1 - i;
-
-//     if (bit === "1" && modeMapping[position]) {
-//       result = modeMapping[position];
-//     }
-//   }
-
-//   return result;
-// }
-
-// 使用例子;
-// const decimalValue = 2048; // 試試不同的數值
-// const result = mapPCSWorkingMode(decimalValue);
-// console.log(result);
 
 //***************************************************************************** */
 //gridStatus
@@ -537,26 +512,6 @@ function mapL_M_systemMode(var1, var2, var3, var4) {
   const var4_SubSys_Availability = parseInt(binaryArray4[3] || "0"); // bit4
   const var4_edReg = parseInt(binaryArray4[4] || "0"); // bit5
 
-  // console.log("SystemAvailability: " + SystemAvailability);
-  // console.log("binaryArray1: " + binaryArray1);
-  // console.log("binaryArray2: " + binaryArray2);
-  // console.log("binaryArray3: " + binaryArray3);
-  // console.log("binaryArray4: " + binaryArray4);
-  // console.log("****************************************");
-  // console.log("1-bit4: " + var1_SubSys_Availability);
-  // console.log("1-bit5: " + var1_edReg);
-  // console.log("2-bit4: " + var2_SubSys_Availability);
-  // console.log("2-bit5: " + var2_edReg);
-  // console.log("3-bit4: " + var3_SubSys_Availability);
-  // console.log("3-bit5: " + var3_edReg);
-  // console.log("4-bit4: " + var4_SubSys_Availability);
-  // console.log("4-bit5: " + var4_edReg);
-  // console.log("****************************************");
-
-  // 0: Not Available, 1: Available
-  // if (SystemAvailability == 1) {
-  //   return "System is not available";
-  // }
   if (
     var1_SubSys_Availability == 1 &&
     var1_edReg == 1 &&
@@ -593,438 +548,18 @@ function counttotalWarningNum() {}
 function countWarningNum_Meter() {}
 //******************************************************************************* */
 // PCS總告警數量
-function calculateWarningNum_PCS(
-  lc1_all,
-  lc1_u1_1,
-  lc1_u1_2,
-  lc1_u1_3,
-  lc1_u2_1,
-  lc1_u2_2,
-  lc1_u2_3,
-  lc2_all,
-  lc2_u1_1,
-  lc2_u1_2,
-  lc2_u1_3,
-  lc2_u2_1,
-  lc2_u2_2,
-  lc2_u2_3,
-  lc3_all,
-  lc3_u1_1,
-  lc3_u1_2,
-  lc3_u1_3,
-  lc3_u2_1,
-  lc3_u2_2,
-  lc3_u2_3,
-  lc4_all,
-  lc4_u1,
-  lc4_u2
-) {
-  // 定義一個輔助函數來計算二進制中的 1 的數量
-  function countOnes(binary, name) {
-    const onesCount = (binary.toString(2).match(/1/g) || []).length;
-    //console.log(`${name}: ${onesCount}`);
-    return onesCount;
-  }
-
-  // 定義一個函數來檢查 1 的數量是否超過限制
-  function checkOnes(name, value, limit) {
-    const onesCount = countOnes(value, name);
-    if (onesCount > limit) {
-      onesCount == 0;
-      console.log(`Warning: ${name} has more than ${limit} ones.`);
-    }
-    return onesCount;
-  }
-
-  let totalOnes = 0;
-
-  // 處理 lc1
-  const lc1_all_ones = checkOnes("lc1_all", lc1_all, 3);
-  const lc1_u1_1_ones = checkOnes("lc1_u1_1", lc1_u1_1, 11);
-  const lc1_u1_2_ones = checkOnes("lc1_u1_2", lc1_u1_2, 4);
-  const lc1_u1_3_ones = checkOnes("lc1_u1_3", lc1_u1_3, 3);
-  const lc1_u2_1_ones = checkOnes("lc1_u2_1", lc1_u2_1, 11);
-  const lc1_u2_2_ones = checkOnes("lc1_u2_2", lc1_u2_2, 4);
-  const lc1_u2_3_ones = checkOnes("lc1_u2_3", lc1_u2_3, 3);
-
-  // 處理 lc2
-  const lc2_all_ones = checkOnes("lc2_all", lc2_all, 3);
-  const lc2_u1_1_ones = checkOnes("lc2_u1_1", lc2_u1_1, 11);
-  const lc2_u1_2_ones = checkOnes("lc2_u1_2", lc2_u1_2, 4);
-  const lc2_u1_3_ones = checkOnes("lc2_u1_3", lc2_u1_3, 3);
-  const lc2_u2_1_ones = checkOnes("lc2_u2_1", lc2_u2_1, 11);
-  const lc2_u2_2_ones = checkOnes("lc2_u2_2", lc2_u2_2, 4);
-  const lc2_u2_3_ones = checkOnes("lc2_u2_3", lc2_u2_3, 3);
-
-  // 處理 lc3
-  const lc3_all_ones = checkOnes("lc3_all", lc3_all, 3);
-  const lc3_u1_1_ones = checkOnes("lc3_u1_1", lc3_u1_1, 11);
-  const lc3_u1_2_ones = checkOnes("lc3_u1_2", lc3_u1_2, 4);
-  const lc3_u1_3_ones = checkOnes("lc3_u1_3", lc3_u1_3, 3);
-  const lc3_u2_1_ones = checkOnes("lc3_u2_1", lc3_u2_1, 11);
-  const lc3_u2_2_ones = checkOnes("lc3_u2_2", lc3_u2_2, 4);
-  const lc3_u2_3_ones = checkOnes("lc3_u2_3", lc3_u2_3, 3);
-
-  // 處理 lc4
-  const lc4_all_ones = checkOnes("lc4_all", lc4_all, 3);
-  const lc4_u1_ones = checkOnes("lc4_u1", lc4_u1, 11);
-  const lc4_u2_ones = checkOnes("lc4_u2", lc4_u2, 4);
-
-  totalOnes =
-    lc1_all_ones +
-    lc1_u1_1_ones +
-    lc1_u1_2_ones +
-    lc1_u1_3_ones +
-    lc1_u2_1_ones +
-    lc1_u2_2_ones +
-    lc1_u2_3_ones +
-    lc2_all_ones +
-    lc2_u1_1_ones +
-    lc2_u1_2_ones +
-    lc2_u1_3_ones +
-    lc2_u2_1_ones +
-    lc2_u2_2_ones +
-    lc2_u2_3_ones +
-    lc3_all_ones +
-    lc3_u1_1_ones +
-    lc3_u1_2_ones +
-    lc3_u1_3_ones +
-    lc3_u2_1_ones +
-    lc3_u2_2_ones +
-    lc3_u2_3_ones +
-    lc4_all_ones +
-    lc4_u1_ones +
-    lc4_u2_ones;
-
-  //console.log(`Total ones: ${totalOnes}`);
-
-  return totalOnes;
-}
-// calculateWarningNum_PCS(
-//   10, // lc1_all,
-//   1, // lc1_u1_1,
-//   0, // lc1_u1_2,
-//   0, // lc1_u1_3,
-//   0, // lc1_u2_1,
-//   0, // lc1_u2_2,
-//   0, // lc1_u2_3,
-//   0, // lc2_all,
-//   46, // lc2_u1_1,
-//   0, // lc2_u1_2,
-//   0, // lc2_u1_3,
-//   0, // lc2_u2_1,
-//   0, //lc2_u2_2,
-//   0, // lc2_u2_3,
-//   0, // lc3_all,
-//   0, // lc3_u1_1,
-//   0, // lc3_u1_2,
-//   0, // lc3_u1_3,
-//   0, // lc3_u2_1,
-//   0, // lc3_u2_2,
-//   5, // lc3_u2_3,
-//   0, // lc4_all,
-//   0, // lc4_u1,
-//   0 // lc4_u2
-// );
+function calculateWarningNum_PCS() {}
 
 //******************************************************************************* */
-// 電池總告警數量
+// 電池告警數量
+function calculateWarningNum_Bat(...args) {}
+//******************************************************************************* */
+// 環境告警數量
 // BSC告警數量
-function cal_BSC(...args) {
-  let totalOnes = 0;
-
-  // 遍歷傳入的所有參數
-  for (let i = 0; i < args.length; i++) {
-    const binary = args[i].toString(2); // 將參數轉換為二進制
-
-    // 檢查二進制中的位元，只計算出現在 bit0 或 bit1 的 1 的個數
-    totalOnes += (binary[0] === "1" ? 1 : 0) + (binary[1] === "1" ? 1 : 0);
-  }
-
-  return totalOnes; // 返回計算的結果
-}
-
-// 測試示例
-//console.log("BSC test1:" + cal_BSC(3, 0, 0)); // 2，因為 10 的二進制是 1010，有兩個 1 在 bit0 或 bit1 上
-//console.log("BSC test2:" + cal_BSC(7, 7, 7)); // 9，因為 1 的二進制是 1，有一個 1 在 bit0 上
-
-function cal_HVAC(...args) {
-  let totalCount = 0;
-
-  // 遍歷傳入的所有參數
-  for (let i = 0; i < args.length; i++) {
-    const binary = args[i].toString(2); // 將參數轉換為二進制
-
-    // 檢查二進制中的位元，如果只有 bit2 出現 1，則 totalCount 不加 1，否則加 1
-    if (binary[2] === "1") {
-      if (binary.slice(0, 2).includes("1")) {
-        totalCount++;
-      }
-    } else {
-      // 如果 bit2 是 0 且其他 bit 出現 1，則 totalCount 加 1
-      if (binary.slice(0, 2).includes("1")) {
-        totalCount++;
-      }
-    }
-  }
-
-  return totalCount; // 返回計算的結果
-}
-
-// 測試示例
-//console.log("HVAC test1:" + cal_HVAC(1, 2, 1));
-
-function cal_Temperature(...args) {
-  let countOverTemp = 0;
-
-  // 遍歷傳入的所有參數
-  for (let i = 0; i < args.length; i++) {
-    // 如果變數介於400到550之間，則計數加 1
-    if (args[i] >= 400 && args[i] < 550) {
-      countOverTemp++;
-    }
-  }
-
-  return countOverTemp; // 返回計算的結果
-}
-
-// 測試示例
-//console.log("Temperature test1:" + cal_Temperature(300, 400, 500)); // 1，只有一個變數大於 400
-
-function cal_Humidity(...args) {
-  let countOverHumidity = 0;
-  // 遍歷傳入的所有參數
-  for (let i = 0; i < args.length; i++) {
-    // 如果變數(濕度)介於650~800，則計數加 1
-    if (args[i] >= 650 && args[i] < 800) {
-      countOverHumidity++;
-    }
-  }
-  return countOverHumidity; // 返回計算的結果
-}
-// 測試示例
-//console.log("Humidity test1:" + cal_Humidity(300, 400, 799)); // 1，只有一個變數大於 650
-
-function cal_UPS_1(...args) {
-  let totalups1Ones = 0;
-  const binaryArray = [];
-
-  // 遍歷傳入的所有參數
-  for (let i = 0; i < args.length; i++) {
-    const binary = args[i].toString(2).padStart(32, "0"); // 將參數轉換為32位的二進制，不足32位的左側補0
-    //console.log("UPS_1: " + binary);
-    // 檢查二進制中的位元，只有 bit4 或 bit7 出現 1 才計算
-    if (binary[27] === "1") {
-      totalups1Ones++;
-    }
-    if (binary[24] === "1") {
-      totalups1Ones++;
-    }
-  }
-
-  //console.log(binaryArray); // 輸出反轉後的二進制陣列
-  return totalups1Ones; // 返回計算的結果
-}
-
-//console.log("cal_UPS_1 test1:" + cal_UPS_1(16, 0, 128));
-
-function cal_UPS_2(...args) {
-  let totalups2Ones = 0;
-
-  // 遍歷傳入的所有參數
-  for (let i = 0; i < args.length; i++) {
-    const binary = args[i].toString(2).padStart(32, "0"); // 將參數轉換為32位的二進制，不足32位的左側補0
-    //console.log("I=" + i + ": binary:" + binary);
-    // 檢查二進制中的位元，只有 bit15 出現 1 且 bit14 不是 1 才計算
-    // for (let j = 0; j < 32; j++) {
-    //   console.log("binary[" + j + "]" + binary[j] + " ");
-    // }
-    if (binary[16] === "1" && binary[17] !== "1") {
-      // 將計算的結果加到總數中
-      totalups2Ones++;
-    }
-  }
-
-  return totalups2Ones; // 返回計算的結果
-}
-
-//測試示例
-//console.log("cal_UPS_2 test1:" + cal_UPS_2(32768, 49152));
-
-function calculateWarningNum_Bat(
-  BSC_result,
-  HVAC_result,
-  Temperature_result,
-  Humidity_result,
-  UPS_1_result,
-  UPS_2_result
-) {
-  return (
-    BSC_result +
-    HVAC_result +
-    Temperature_result +
-    Humidity_result +
-    UPS_1_result +
-    UPS_2_result
-  );
-}
-
-const WarningNum_Env = calculateWarningNum_Bat(
-  cal_BSC(3, 0, 0),
-  cal_HVAC(1, 0, 0),
-  cal_Temperature(420, 0, 800), //1
-  cal_Humidity(660, 0, 900), //2
-  cal_UPS_1(16, 0, 128),
-  cal_UPS_2(32768, 0, 0)
-);
-
-//console.log("環境警告數量：", WarningNum_Env);
-//******************************************************************************* */
-// 環境總告警數量
-function calculateWarningNum_Env() {
-  // 定義一個輔助函數來計算二進制中的 1 的數量
-  // function countOnes(binary) {
-  //   return (binary.toString(2).match(/1/g) || []).length;
-  // }
-
-  // 計算所有變數中的 1 的總數
-  // let totalOnes = 0;
-
-  // args.forEach((value) => {
-  //   totalOnes += countOnes(value);
-  // });
-
-  return totalOnes;
-}
+function calculateWarningNum_Env() {}
 //******************************************************************************* */
 // FF(消防)總告警數量
-function calculateWarningNum_FF(...args) {
-  // 定義一個輔助函數來計算二進制中的 1 的數量
-  function countOnes(binary) {
-    return (binary.toString(2).match(/1/g) || []).length;
-  }
-
-  // 計算所有變數中的 1 的總數
-  let totalOnes = 0;
-
-  args.forEach((value) => {
-    totalOnes += countOnes(value);
-  });
-
-  return totalOnes;
-}
-
-//******************************************************************************* */
-// // 呼叫函數並傳遞參數，然後輸出結果
-// const totalWarnings = calculateWarningNum_Bat(
-//   1, // lc1_bms1,
-//   4, // lc1_bms2,
-//   11, // lc1_rs1_r1,
-//   0, // lc1_rs1_r2,
-//   0, // lc1_rs1_r3,
-//   0, // lc1_rs1_r4,
-//   0, // lc1_rs1_r5,
-//   0, // lc1_rs1_r6,
-//   0, // lc1_rs1_r7,
-//   0, // lc1_rs1_r8,
-//   0, // lc1_rs1_r9,
-//   0, // lc1_rs1_r10,
-//   0, // lc1_rs1_r11,
-//   0, // lc1_rs1_r12,
-//   0, // lc1_rs2_r1,
-//   0, // lc1_rs2_r2,
-//   0, // lc1_rs2_r3,
-//   0, // lc1_rs2_r4,
-//   0, // lc1_rs2_r5,
-//   0, // lc1_rs2_r6,
-//   0, // lc1_rs2_r7,
-//   0, // lc1_rs2_r8,
-//   0, // lc1_rs2_r9,
-//   0, // lc1_rs2_r10,
-//   0, // lc1_rs2_r11,
-//   0, // lc1_rs2_r12,
-//   0, // lc2_bms1,
-//   0, // lc2_bms2,
-//   0, // lc2_rs1_r1,
-//   0, // lc2_rs1_r2,
-//   0, // lc2_rs1_r3,
-//   0, // lc2_rs1_r4,
-//   0, // lc2_rs1_r5,
-//   0, // lc2_rs1_r6,
-//   0, // lc2_rs1_r7,
-//   0, // lc2_rs1_r8,
-//   0, // lc2_rs1_r9,
-//   0, // lc2_rs1_r10,
-//   0, // lc2_rs1_r11,
-//   0, // lc2_rs1_r12,
-//   0, // lc2_rs2_r1,
-//   0, // lc2_rs2_r2,
-//   0, // lc2_rs2_r3,
-//   0, // lc2_rs2_r4,
-//   0, // lc2_rs2_r5,
-//   0, // lc2_rs2_r6,
-//   0, // lc2_rs2_r7,
-//   0, // lc2_rs2_r8,
-//   0, // lc2_rs2_r9,
-//   0, // lc2_rs2_r10,
-//   0, // lc2_rs2_r11,
-//   0, // lc2_rs2_r12,
-//   0, // lc3_bms1,
-//   0, // lc3_bms2,
-//   0, // lc3_rs1_r1,
-//   0, // lc3_rs1_r2,
-//   0, // lc3_rs1_r3,
-//   0, // lc3_rs1_r4,
-//   0, // lc3_rs1_r5,
-//   0, // lc3_rs1_r6,
-//   0, // lc3_rs1_r7,
-//   0, // lc3_rs1_r8,
-//   0, // lc3_rs1_r9,
-//   0, // lc3_rs1_r10,
-//   0, // lc3_rs1_r11,
-//   0, // lc3_rs1_r12,
-//   0, // lc3_rs2_r1,
-//   0, // lc3_rs2_r2,
-//   0, // lc3_rs2_r3,
-//   0, // lc3_rs2_r4,
-//   0, // lc3_rs2_r5,
-//   0, // lc3_rs2_r6,
-//   0, // lc3_rs2_r7,
-//   0, // lc3_rs2_r8,
-//   0, // lc3_rs2_r9,
-//   0, // lc3_rs2_r10,
-//   0, // lc3_rs2_r11,
-//   0, // lc3_rs2_r12,
-//   0, // lc4_bms1,
-//   0, // lc4_bms2,
-//   0, // lc4_rs1_r1,
-//   0, // lc4_rs1_r2,
-//   0, // lc4_rs1_r3,
-//   0, // lc4_rs1_r4,
-//   0, // lc4_rs1_r5,
-//   0, // lc4_rs1_r6,
-//   0, // lc4_rs1_r7,
-//   0, // lc4_rs1_r8,
-//   0, // lc4_rs1_r9,
-//   0, // lc4_rs1_r10,
-//   0, // lc4_rs1_r11,
-//   0, // lc4_rs1_r12,
-//   0, // lc4_rs2_r1,
-//   0, // lc4_rs2_r2,
-//   0, // lc4_rs2_r3,
-//   0, // lc4_rs2_r4,
-//   0, // lc4_rs2_r5,
-//   0, // lc4_rs2_r6,
-//   0, // lc4_rs2_r7,
-//   0, // lc4_rs2_r8,
-//   0, // lc4_rs2_r9,
-//   0, // lc4_rs2_r10,
-//   0, // lc4_rs2_r11,
-//   0 // lc4_rs2_r12
-// );
-
-// console.log(`Total ones: ${totalWarnings}`);
-//******************************************************************************* */
+function calculateWarningNum_FF(...args) {}
 //******************************************************************************* */
 //******************************************************************************* */
 //******************************************************************************* */
@@ -1047,8 +582,186 @@ function calculatetAlarmNum_Env() {}
 function calculatetAlarmNum_FF() {}
 //******************************************************************************* */
 //******************************************************************************* */
+
+//@*******************************************************************************@ */
+//模式控制頁面相關
+//對照系統可用性
+function mapSysMode(SysMode) {
+  const binary = SysMode.toString(2).padStart(32, "0");
+  console.log("binary:" + binary);
+  const bit = 31 - 15;
+  console.log("bit:" + bit);
+  if (binary[bit] === "0") {
+    //console.log("Not Available");
+    return "Not Available";
+  } else if (binary[bit] === "1") {
+    //console.log("Available");
+    return "Available";
+  }
+}
+
+// mapSysMode(0);
+// mapSysMode(32768);
 //******************************************************************************* */
-//系統資訊
+
+function mapStatusAllPCS(pcs1, pcs2, pcs3, pcs4) {
+  const pcs1_binary = pcs1.toString(2).padStart(32, "0");
+  const pcs2_binary = pcs2.toString(2).padStart(32, "0");
+  const pcs3_binary = pcs3.toString(2).padStart(32, "0");
+  const pcs4_binary = pcs4.toString(2).padStart(32, "0");
+
+  console.log("pcs1_binary:" + pcs1_binary);
+  console.log("pcs2_binary:" + pcs2_binary);
+  console.log("pcs3_binary:" + pcs3_binary);
+  console.log("pcs4_binary:" + pcs4_binary);
+
+  const bit = 31 - 2;
+  console.log("bit:" + bit);
+
+  if (
+    pcs1_binary[bit] === "1" ||
+    pcs2_binary[bit] === "1" ||
+    pcs3_binary[bit] === "1" ||
+    pcs4_binary[bit] === "1"
+  ) {
+    console.log("Available");
+    //return "Available";
+  } else {
+    console.log("Not Available");
+    //return "Not Available";
+  }
+}
+//mapStatusAllPCS(0, 0, 0, 0);
+//******************************************************************************* */
+
+function mapStatusAllBMS(bms1, bms2, bms3, bms4) {
+  const bms1_binary = bms1.toString(2).padStart(32, "0");
+  const bms2_binary = bms2.toString(2).padStart(32, "0");
+  const bms3_binary = bms3.toString(2).padStart(32, "0");
+  const bms4_binary = bms3.toString(2).padStart(32, "0");
+
+  console.log("bms1_binary:" + bms1_binary);
+  console.log("bms2_binary:" + bms2_binary);
+  console.log("bms3_binary:" + bms3_binary);
+  console.log("bms4_binary:" + bms4_binary);
+
+  const bit0 = 31 - 0;
+  const bit1 = 31 - 1;
+  console.log("bit0:" + bit0);
+  console.log("bit1:" + bit1);
+
+  if (
+    bms1_binary[bit0] === "1" ||
+    bms2_binary[bit0] === "1" ||
+    bms3_binary[bit0] === "1" ||
+    bms4_binary[bit0] === "1" ||
+    bms1_binary[bit1] === "1" ||
+    bms2_binary[bit1] === "1" ||
+    bms3_binary[bit1] === "1" ||
+    bms4_binary[bit1] === "1"
+  ) {
+    //console.log("Available");
+    return "Available";
+  } else {
+    //console.log("Not Available");
+    return "Not Available";
+  }
+}
+//******************************************************************************* */
+function mapSysAvailability(SysAvailability) {
+  const SysAvailability_binary = SysAvailability.toString(2).padStart(32, "0");
+  //console.log("SysAvailability_binary:" + SysAvailability_binary);
+
+  const bit15 = 31 - 15;
+  //console.log("bit15:" + bit15);
+  if (SysAvailability_binary[bit15] === "0") {
+    //console.log("Not Available");
+    return "Not Available";
+  } else if (SysAvailability_binary[bit15] === "1") {
+    //console.log("Available");
+    return "Available";
+  }
+}
+
+function mapStopCHGsched(StopCHGsched) {
+  //bit 14: Force P_LS to 0 ( 0: No, 1: Yes )
+  const StopCHGsched_binary = StopCHGsched.toString(2).padStart(32, "0");
+  //console.log("StopCHGsched_binary:" + StopCHGsched_binary);
+  const bit14 = 31 - 14;
+  //console.log("bit14:" + bit14);
+  if (StopCHGsched_binary[bit14] === "0") {
+    //console.log("Not Available");
+    return "No";
+  } else if (StopCHGsched_binary[bit14] === "1") {
+    //console.log("Available");
+    return "Yes";
+  }
+}
+
+//******************************************************************************* */
+function mapAutoMan(input, bit) {
+  //( 0: Manual, 1: Auto )
+  const input_binary = input.toString(2).padStart(32, "0");
+  const bits = 31 - bit;
+  if (input_binary[bits] === "0") {
+    //console.log("Manual");
+    return "Manual";
+  } else if (input_binary[bits] === "1") {
+    //console.log("Auto");
+    return "Auto";
+  }
+}
+//******************************************************************************* *///******************************************************************************* */
+//bit 3: ESS & PCS Availability ( 0: Not Available, 1: Available )
+function mapBMSPCSstatus(input) {
+  const input_binary = input.toString(2).padStart(32, "0");
+  const bits3 = 31 - 3;
+  if (input_binary[bits3] === "0") {
+    //console.log("Not Available");
+    return "Not Available";
+  } else if (input_binary[bits3] === "1") {
+    //console.log("Available");
+    return "Available";
+  }
+}
+//******************************************************************************* *///******************************************************************************* */
+function mapAvail_SS(input) {
+  const input_binary = input.toString(2).padStart(32, "0");
+  const bits4 = 31 - 4;
+  if (input_binary[bits4] === "0") {
+    //console.log("Not Available");
+    return "Not Available";
+  } else if (input_binary[bits4] === "1") {
+    //console.log("Available");
+    return "Available";
+  }
+}
+//******************************************************************************* *///******************************************************************************* */
+function mapAvail_SS(input) {
+  const input_binary = input.toString(2).padStart(32, "0");
+  const bits4 = 31 - 4;
+  if (input_binary[bits4] === "0") {
+    //console.log("Not Available");
+    return "Not Available";
+  } else if (input_binary[bits4] === "1") {
+    //console.log("Available");
+    return "Available";
+  }
+}
+//******************************************************************************* *///******************************************************************************* */
+//bit 5: E-dReg ( 0: Stop, 1: Running )
+function mapEdReg_SS(input) {
+  const input_binary = input.toString(2).padStart(32, "0");
+  const bits5 = 31 - 5;
+  if (input_binary[bits5] === "0") {
+    //console.log("Not Available");
+    return "Not Available";
+  } else if (input_binary[bits5] === "1") {
+    //console.log("Available");
+    return "Available";
+  }
+}
+//******************************************************************************* *///******************************************************************************* */
 
 module.exports = {
   mapPCSworkStatus,
@@ -1079,13 +792,28 @@ module.exports = {
   calculateAdd,
   //****************** */
   mapL_M_systemMode,
+  counttotalWarningNum,
+  countWarningNum_Meter,
   calculateWarningNum_PCS,
-  mapModeLR,
-  mapStandbyCmd,
-  mapModeQctrl,
-  mapModeActPas,
-  countPCSAlarmAndFault,
-  mapPCSWorkingstatus,
+  calculateWarningNum_Bat,
+  calculateWarningNum_FF,
+  cal_BSC,
+  cal_HVAC,
+  cal_Temperature,
+  cal_Humidity,
+  cal_UPS_1,
+  cal_UPS_2,
+  calculateWarningNum_Env,
+  //****************** */
+  mapSysMode,
+  mapStatusAllBMS,
+  mapStatusAllPCS,
+  mapSysAvailability,
+  mapStopCHGsched,
+  mapAutoMan,
+  mapBMSPCSstatus,
+  mapAvail_SS,
+  mapEdReg_SS,
 };
 
 // //***************************************************************************** */

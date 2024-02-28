@@ -27,21 +27,21 @@
                 <div class="bigInfo">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="sysAvailability">正常</label>
+                        <label class="data_val" id="sysAvailability"><%=sysAvailability%></label>
                     </div>
                     <P>系統可用性</P>
                 </div>
                 <div class="bigInfo">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">%</div>
-                        <label class="data_val" id="SOC">65.4</label>
+                        <label class="data_val" id="SOC"><%=SOC%></label>
                     </div>
                     <P>SOC</P>
                 </div>
                 <div class="bigInfo">
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo">%</div>
-                        <label class="data_val" id="SBSPM">98.7</label>
+                        <label class="data_val" id="SBSPM"><%=SBSPM%></label>
                     </div>
                     <P>執行率</P>
                 </div>
@@ -49,7 +49,7 @@
                 <table>
                     <tr>
                         <td class="col_01"><span>運作模式</span></td>
-                        <td class="col_02"><label class="data_status" id="sysMode">E-dReg</label>
+                        <td class="col_02"><label class="data_status" id="sysMode"><%=sysMode%></label>
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
                                 <button id="sysMode_set">Set</button>
@@ -58,7 +58,7 @@
                     </tr>
                     <tr>
                         <td class="col_01"><span>額定功率</span></td>
-                        <td class="col_02 data_R_align"><label class="data_val" id="P_Project">10000</label>kW
+                        <td class="col_02 data_R_align"><label class="data_val" id="P_Project"><%=P_Project%></label>kW
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
                                 <button id="P_Project_set">Set</button>
@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td class="col_01"><span>PCS狀態設定</span></td>
-                        <td class="col_02"><label class="data_status" id="statusAllPCS">全部投入</label>
+                        <td class="col_02"><label class="data_status" id="statusAllPCS"><%=statusAllPCS%></label>
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
                                 <button id="statusAllPCS_set">Set</button>
@@ -85,7 +85,7 @@
                     </tr>
                     <tr>
                         <td class="col_01"><span>電池狀態設定</span></td>
-                        <td class="col_02"><label class="data_status" id="statusAllBMS">全部切離</label>
+                        <td class="col_02"><label class="data_status" id="statusAllBMS"><%=statusAllBMS%></label>
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
                                 <button id="statusAllBMS_set">Set</button>
@@ -94,7 +94,7 @@
                     </tr>
                     <tr>
                         <td class="col_01"><span>充電排程</span></td>
-                        <td class="col_02"><label class="data_status" id="stopCHGsched">停止排程</label>
+                        <td class="col_02"><label class="data_status" id="stopCHGsched"><%=stopCHGsched%></label>
                             <div class="BG_button"></div><button  class="data_Light" id="stopCHGsched_Light"></button>
                         </td>
                     </tr>
@@ -111,50 +111,50 @@
                         <td colspan="2">頻率(Freq)&nbsp&&nbsp功率(Power)規格</td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_A:<label class="Freq_val" id="Freq_A">59.50</label>
+                        <td class="col_01">Freq_A:<label class="Freq_val" id="Freq_A"><%=Freq_A%></label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_t:<label class="P_val" id="P_t">100.0</label>
+                        <td class="col_02">P_t:<label class="P_val" id="P_t"><%=P_t%></label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_B:<label class="Freq_val" id="Freq_B">59.75</label>
+                        <td class="col_01">Freq_B:<label class="Freq_val" id="Freq_B"><%=Freq_B%></label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_u:<label class="P_val" id="P_u">48.0</label>
+                        <td class="col_02">P_u:<label class="P_val" id="P_u"><%=P_u%></label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_C:<label class="Freq_val" id="Freq_C">59.98</label>
+                        <td class="col_01">Freq_C:<label class="Freq_val" id="Freq_C"><%=Freq_C%></label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_v:<label class="P_val" id="P_v">9.0</label>
+                        <td class="col_02">P_v:<label class="P_val" id="P_v"><%=P_v%></label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_D:<label class="Freq_val" id="Freq_D">60.02</label>
+                        <td class="col_01">Freq_D:<label class="Freq_val" id="Freq_D"><%=Freq_D%></label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_w:<label class="P_val" id="P_w">-9.0</label>
+                        <td class="col_02">P_w:<label class="P_val" id="P_w"><%=P_w%></label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_E:<label class="Freq_val" id="Freq_E">60.25</label>
+                        <td class="col_01">Freq_E:<label class="Freq_val" id="Freq_E"><%=Freq_E%></label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_x:<label class="P_val" id="P_x">-48.0</label>
+                        <td class="col_02">P_x:<label class="P_val" id="P_x"><%=P_x%></label>
                             <p>%</p>
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">Freq_F:<label class="Freq_val" id="Freq_F">60.50</label>
+                        <td class="col_01">Freq_F:<label class="Freq_val" id="Freq_F"><%=Freq_F%></label>
                             <p>Hz</p>
                         </td>
-                        <td class="col_02">P_y:<label class="P_val" id="P_y">-100.0</label>
+                        <td class="col_02">P_y:<label class="P_val" id="P_y"><%=P_y%></label>
                             <p>%</p>
                         </td>
                     </tr>
@@ -196,44 +196,44 @@
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">實功基準值&nbsp(kW)</td>
-                        <td class="col_other"><label class="data_val" id="P_base_SS1">2857</label></td>
-                        <td class="col_other"><label class="data_val" id="P_base_SS2">2857</label></td>
-                        <td class="col_other"><label class="data_val" id="P_base_SS3">2857</label></td>
-                        <td class="col_other"><label class="data_val" id="P_base_SS4">1429</label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS1"><%=P_base_SS1%></label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS2"><%=P_base_SS2%></label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS3"><%=P_base_SS3%></label></td>
+                        <td class="col_other"><label class="data_val" id="P_base_SS4"><%=P_base_SS4%></label></td>
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">虛功基準值&nbsp(kVar)</td>
-                        <td class="col_other"><label class="data_val" id="Q_base_SS1">2857</label></td>
-                        <td class="col_other"><label class="data_val" id="Q_base_SS2">2857</label></td>
-                        <td class="col_other"><label class="data_val" id="Q_base_SS3">2857</label></td>
-                        <td class="col_other"><label class="data_val" id="Q_base_SS4">1429</label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS1"><%=Q_base_SS1%></label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS2"><%=Q_base_SS2%></label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS3"><%=Q_base_SS3%></label></td>
+                        <td class="col_other"><label class="data_val" id="Q_base_SS4"><%=Q_base_SS4%></label></td>
                     </tr>
                     <tr class="row_other row_relative">
                         <td class="col_01">子系統運作模式</td>
                         <td class="col_other">
                             <label class="data_light" id="AutoMan_SS1_Light"></label>
-                            <label class="data_status" id="AutoMan_SS1">投入</label>
+                            <label class="data_status" id="AutoMan_SS1"><%=AutoMan_SS1%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS1_set">Set</button>
                             <% } %>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="AutoMan_SS2_Light"></label>
-                            <label class="data_status" id="AutoMan_SS2">切離</label>
+                            <label class="data_status" id="AutoMan_SS2"><%=AutoMan_SS2%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS2_set">Set</button>
                             <% } %>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="AutoMan_SS3_Light"></label>
-                            <label class="data_status" id="AutoMan_SS3">投入</label>
+                            <label class="data_status" id="AutoMan_SS3"><%=AutoMan_SS3%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS3_set">Set</button>
                             <% } %>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="AutoMan_SS4_Light"></label>
-                            <label class="data_status" id="AutoMan_SS4">切離</label>
+                            <label class="data_status" id="AutoMan_SS4"><%=AutoMan_SS4%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS4_set">Set</button>
                             <% } %>
@@ -243,57 +243,57 @@
                         <td class="col_01">電池與PCS狀態</td>
                         <td class="col_other">
                             <label class="data_light" id="BMSPCSstatus_SS1_Light"></label>
-                            <label class="data_status" id="BMSPCSstatus_SS1">正常</label>
+                            <label class="data_status" id="BMSPCSstatus_SS1"><%=BMSPCSstatus_SS1%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="BMSPCSstatus_SS2_Light"></label>
-                            <label class="data_status" id="BMSPCSstatus_SS2">異常</label>
+                            <label class="data_status" id="BMSPCSstatus_SS2"><%=BMSPCSstatus_SS2%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="BMSPCSstatus_SS3_Light"></label>
-                            <label class="data_status" id="BMSPCSstatus_SS3">正常</label>
+                            <label class="data_status" id="BMSPCSstatus_SS3"><%=BMSPCSstatus_SS3%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="BMSPCSstatus_SS4_Light"></label>
-                            <label class="data_status" id="BMSPCSstatus_SS4">異常</label>
+                            <label class="data_status" id="BMSPCSstatus_SS4"><%=BMSPCSstatus_SS4%></label>
                         </td>
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">子系統可用性</td>
                         <td class="col_other">
                             <label class="data_light" id="Avail_SS1_Light"></label>
-                            <label class="data_status" id="Avail_SS1">正常</label>
+                            <label class="data_status" id="Avail_SS1"><%=Avail_SS1%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="Avail_SS2_Light"></label>
-                            <label class="data_status" id="Avail_SS2">異常</label>
+                            <label class="data_status" id="Avail_SS2"><%=Avail_SS2%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="Avail_SS3_Light"></label>
-                            <label class="data_status" id="Avail_SS3">正常</label>
+                            <label class="data_status" id="Avail_SS3"><%=Avail_SS3%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="Avail_SS4_Light"></label>
-                            <label class="data_status" id="Avail_SS4">異常</label>
+                            <label class="data_status" id="Avail_SS4"><%=Avail_SS4%></label>
                         </td>
                     </tr>
                     <tr class="row_other row_last">
                         <td class="col_01">E-dReg服務狀態</td>
                         <td class="col_other">
                             <label class="data_light" id="EdReg_SS1_Light"></label>
-                            <label class="data_status" id="EdReg_SS1">服務</label>
+                            <label class="data_status" id="EdReg_SS1"><%=EdReg_SS1%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="EdReg_SS2_Light"></label>
-                            <label class="data_status" id="EdReg_SS2">停止</label>
+                            <label class="data_status" id="EdReg_SS2"><%=EdReg_SS1%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="EdReg_SS3_Light"></label>
-                            <label class="data_status" id="EdReg_SS3">服務</label>
+                            <label class="data_status" id="EdReg_SS3"><%=EdReg_SS1%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="EdReg_SS4_Light"></label>
-                            <label class="data_status" id="EdReg_SS4">停止</label>
+                            <label class="data_status" id="EdReg_SS4"><%=EdReg_SS1%></label>
                         </td>
                     </tr>
                 </table>
@@ -302,7 +302,7 @@
             <div class="popUpWindow dataValue_Set">
                 <h2 class="titlePUW">負載轉移功率設定</h2>
 
-                <div class="valOrigin">原數值:<label class="data_val" id="valueOrigin">2357</label>
+                <div class="valOrigin">原數值:<label class="data_val" id="valueOrigin">123456</label>
                     <p class="data_unit">g/ml</p>
                 </div>
                 <div class="valNew">新數值:<input type="text" class="data_input" id="valueNew">
@@ -319,7 +319,7 @@
             <div class="popUpWindow dataStatus_Set">
                 <h2 class="titlePUW">子系統運作設定</h2>
 
-                <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">系統運作設作設作</label>
+                <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">系統運作設定</label>
                     <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
                     <div class="checkBox" id="checkBoxOpt_1"></div>
                 </div>
