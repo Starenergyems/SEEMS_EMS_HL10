@@ -1765,7 +1765,7 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
             let value = item[key][tag];
             let device = `${key}`;
             // console.log(key_error, tag, value, device)
-            if (typeof value !== "undefined") {
+            if (value) {
               LC_error_result_unit(
                 time,
                 occurrence_time,
