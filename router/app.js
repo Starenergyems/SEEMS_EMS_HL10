@@ -14,7 +14,12 @@ const io = socketIO(server);
 require("dotenv").config();
 const { submit } = require("./rLogin");
 
-const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
+const config = require("./config");
+//如果要換資料庫的host 改掉".database"
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 

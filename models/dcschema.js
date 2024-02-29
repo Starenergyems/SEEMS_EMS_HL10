@@ -1,4 +1,8 @@
-const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
+const config = require("./config");
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 const dcDBName = "dc"; // 替換成你的 CouchDB 數據庫名稱
 const DBdc = nano.use(dcDBName);
 

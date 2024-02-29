@@ -7,7 +7,11 @@ const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http");
 const e = require("connect-flash");
-const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
+const config = require("./config");
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 const axios = require("axios");
 const moment = require("moment");
 

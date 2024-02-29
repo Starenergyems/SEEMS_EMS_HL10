@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
+const config = require("./config");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(methodOverride("_method"));
@@ -16,17 +17,18 @@ app.use(cors());
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Need change.
-
-const db_USERNAME = "admin"; // Couchdb username use for login db.
-const db_PASSWORD = "ems45877096"; // Couchdb password use for login db.
-const db_IP = "192.168.8.101"; // Couchdb IPv4 address.
-const db_PORT = "5984"; // Couchdb service use port.
-
-const db_account = "account"; // The account database name.
-const doc_CONFIG = "CONFIG"; // The account setting doc id.
+//如果要換資料庫的host 改掉".database"
+const couchdbConfig = config.database;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
+const db_USERNAME = couchdbConfig.username; // Couchdb username use for login db.
+const db_PASSWORD = couchdbConfig.password; // Couchdb password use for login db.
+const db_IP = couchdbConfig.host; // Couchdb IPv4 address.
+const db_PORT = couchdbConfig.port; // Couchdb service use port.
+
+const db_account = "account"; // The account database name.
+const doc_CONFIG = "CONFIG"; // The account setting doc id.
 
 const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
 // const db_URL = couchDBUrl; // Use for fetch database function.
@@ -55,19 +57,36 @@ async function getconfig() {
       headers: { Authorization: AUTHORIZATION },
       credentials: "include",
     });
-    if (!response.ok) {throw new Error(`Request failed with status ${response.status}`)}
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
     const data = await response.json();
-    data.atleast === undefined ? (atleast = 5) : (atleast = parseInt(data.atleast));
-    data.atmost === undefined ? (atmost = 10) : (atmost = parseInt(data.atmost));
+    data.atleast === undefined
+      ? (atleast = 5)
+      : (atleast = parseInt(data.atleast));
+    data.atmost === undefined
+      ? (atmost = 10)
+      : (atmost = parseInt(data.atmost));
     data.upper === undefined ? (upper = 1) : (upper = parseInt(data.upper));
     data.lower === undefined ? (lower = 1) : (lower = parseInt(data.lower));
-    data.special === undefined ? (special = 1) : (special = parseInt(data.special));
+    data.special === undefined
+      ? (special = 1)
+      : (special = parseInt(data.special));
     data.num === undefined ? (num = 1) : (num = parseInt(data.num));
-    data.locktimes === undefined ? (locktimes = 3) : (locktimes = parseInt(data.locktimes));
-    data.suspendtime === undefined ? (suspendtime = "永久") : (suspendtime = data.suspendtime);
-    data.logintext === undefined ? (logintext = "登入頁面提示字元") : (logintext = data.logintext);
+    data.locktimes === undefined
+      ? (locktimes = 3)
+      : (locktimes = parseInt(data.locktimes));
+    data.suspendtime === undefined
+      ? (suspendtime = "永久")
+      : (suspendtime = data.suspendtime);
+    data.logintext === undefined
+      ? (logintext = "登入頁面提示字元")
+      : (logintext = data.logintext);
     data.duration === undefined ? (duration = "") : (duration = data.duration);
-    } catch (error) {console.error("config Error:", error.message)}}
+  } catch (error) {
+    console.error("config Error:", error.message);
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare to store data in the account doc.
@@ -90,17 +109,27 @@ var bantill; // New var, use for record if user is locked when to unlock.
 var token; // New var, when user login success, system will random generate for validation.
 var validtime; // New var, the token will be validate to validtime.
 
-async function findaccount(inmail="", intoken="") {
+async function findaccount(inmail = "", intoken = "") {
   // use login page submit email or token to search account db.
   const URL = `${db_URL}/${db_account}/_find`;
-  let mangoQuery = "", response = "", data = ""
-  if (inmail !== "" && intoken === "") {mangoQuery = {selector:{"user.mail":{$eq:inmail}}}}
-  else if (inmail === "" && intoken !== "") {mangoQuery = {selector:{"user.token":{$eq:intoken}}}}
-  try {data = await fetch(URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json", Authorization: AUTHORIZATION},
-    credentials: "include",
-    body: JSON.stringify(mangoQuery)})
+  let mangoQuery = "",
+    response = "",
+    data = "";
+  if (inmail !== "" && intoken === "") {
+    mangoQuery = { selector: { "user.mail": { $eq: inmail } } };
+  } else if (inmail === "" && intoken !== "") {
+    mangoQuery = { selector: { "user.token": { $eq: intoken } } };
+  }
+  try {
+    data = await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: AUTHORIZATION,
+      },
+      credentials: "include",
+      body: JSON.stringify(mangoQuery),
+    });
     data = await data.json();
     if (data.docs.length === 1) {
       id = data.docs[0]._id; // Impossible  undefined.
@@ -111,21 +140,35 @@ async function findaccount(inmail="", intoken="") {
       mail = user.mail; // Impossible  undefined.
       user.name === undefined ? (namee = "") : (namee = user.name);
       user.comapny === undefined ? (company = "") : (company = user.comapny);
-      user.department === undefined ? (department = "") : (department = user.department);
+      user.department === undefined
+        ? (department = "")
+        : (department = user.department);
       user.level === undefined ? (level = "general") : (level = user.level);
       user.state === undefined ? (state = "deactivate") : (state = user.state);
-      user.errcount === undefined ? (errcount = 0) : (errcount = parseInt(user.errcount));
+      user.errcount === undefined
+        ? (errcount = 0)
+        : (errcount = parseInt(user.errcount));
       user.note === undefined ? (note = "") : (note = user.note);
-      user.last_time === undefined ? (last_time = "") : (last_time = user.last_time);
-      user.password === undefined ? (password = id) : (password = user.password); // default password is employeenum.
+      user.last_time === undefined
+        ? (last_time = "")
+        : (last_time = user.last_time);
+      user.password === undefined
+        ? (password = id)
+        : (password = user.password); // default password is employeenum.
       user.bantill === undefined ? (bantill = "") : (bantill = user.bantill);
       user.token === undefined ? (token = "") : (token = user.token);
-      user.validtime === undefined ? (validtime = "") : (validtime = user.validtime);
+      user.validtime === undefined
+        ? (validtime = "")
+        : (validtime = user.validtime);
     }
-    if (inmail !== "" && intoken === "" && data.docs.length !== 1) {response = `Keyin user mail or password is incorrect.`}
+    if (inmail !== "" && intoken === "" && data.docs.length !== 1) {
+      response = `Keyin user mail or password is incorrect.`;
+    }
     if (inmail === "" && intoken !== "" && data.docs.length === 1) {
-      response = {"id": id, "token": token, "level": level}
-    } else {response = `Error findaccount token.`}
+      response = { id: id, token: token, level: level };
+    } else {
+      response = `Error findaccount token.`;
+    }
     return response;
   } catch (error) {
     console.error(`Execute mango query occur error : ${error}`);
@@ -157,17 +200,25 @@ async function updateaccount(id) {
       password: `${password}`,
       bantill: `${bantill}`,
       token: `${token}`,
-      validtime: `${validtime}`
+      validtime: `${validtime}`,
     },
   };
   await fetch(URL, {
     method: "PUT",
-    headers: {"Content-Type": "application/json", Authorization: AUTHORIZATION},
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: AUTHORIZATION,
+    },
     credentials: "include",
     body: JSON.stringify(updatedDoc),
-  }).then((response) => response.json())
-    .then((result) => {console.log("Document updated successfully:", result)})
-    .catch((error) => {console.error("Error updating document:", error)});
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("Document updated successfully:", result);
+    })
+    .catch((error) => {
+      console.error("Error updating document:", error);
+    });
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -185,14 +236,21 @@ Date.prototype.toISOString = function () {
   let symbol = hours_offset >= 0 ? "-" : "+";
   let time_zone = symbol + pad(Math.abs(hours_offset)) + ":00";
   return (
-    this.getUTCFullYear() + "-" + 
-    pad(this.getUTCMonth() + 1) + "-" + 
-    pad(this.getUTCDate()) + "T" + 
-    pad(this.getUTCHours()) + ":" + 
-    pad(this.getUTCMinutes()) + ":" + 
-    pad(this.getUTCSeconds()) + "." + 
-    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + time_zone
-    );
+    this.getUTCFullYear() +
+    "-" +
+    pad(this.getUTCMonth() + 1) +
+    "-" +
+    pad(this.getUTCDate()) +
+    "T" +
+    pad(this.getUTCHours()) +
+    ":" +
+    pad(this.getUTCMinutes()) +
+    ":" +
+    pad(this.getUTCSeconds()) +
+    "." +
+    (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+    time_zone
+  );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +259,7 @@ Date.prototype.toISOString = function () {
 async function uuid() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     var r = (Math.random() * 16) | 0,
-    v = c == "x" ? r : (r & 0x3) | 0x8;
+      v = c == "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -210,27 +268,51 @@ async function uuid() {
 // The function for login page submit.
 
 async function submit(EMAIL, PASSWORD) {
-  let response = {"result":"", "text":"", "mail":"", "token":"", "validtime":"", "permission":""};
+  let response = {
+    result: "",
+    text: "",
+    mail: "",
+    token: "",
+    validtime: "",
+    permission: "",
+  };
   await getconfig();
-  await findaccount(maill = EMAIL).then(temp => {console.log(temp)})
+  await findaccount((maill = EMAIL)).then((temp) => {
+    console.log(temp);
+  });
   // According login page submit mail to select account data
   // console.log(response)
 
-  if (errcount === "NaN" || errcount === ""){errcount = 0}
-  if (Date.parse(bantill) > Date.parse(time) || state === "lock" && suspendtime !== "永久") {
-    console.log(`bantill：${bantill}, state:${state}`)
+  if (errcount === "NaN" || errcount === "") {
+    errcount = 0;
+  }
+  if (
+    Date.parse(bantill) > Date.parse(time) ||
+    (state === "lock" && suspendtime !== "永久")
+  ) {
+    console.log(`bantill：${bantill}, state:${state}`);
     errcount = 0;
     bantill = "";
     state = "activate";
   }
-  if (errcount >= locktimes || Date.parse(bantill) > Date.parse(time) || state === "lock") {
-    console.log(`errcount:${errcount}, locktimes:${locktimes}, bantill：${bantill}, state:${state}`)
-    token = ""
+  if (
+    errcount >= locktimes ||
+    Date.parse(bantill) > Date.parse(time) ||
+    state === "lock"
+  ) {
+    console.log(
+      `errcount:${errcount}, locktimes:${locktimes}, bantill：${bantill}, state:${state}`
+    );
+    token = "";
     validtime = "";
     state = "lock";
   }
-  if (state === "activate" && (errcount === "" || errcount < locktimes) && (bantill === "" || Date.parse(bantill) < Date.parse(time))) {
-    console.log(`User ${mail} is loginable.`)
+  if (
+    state === "activate" &&
+    (errcount === "" || errcount < locktimes) &&
+    (bantill === "" || Date.parse(bantill) < Date.parse(time))
+  ) {
+    console.log(`User ${mail} is loginable.`);
     if (password === PASSWORD) {
       errcount = 0;
       bantill = "";
@@ -244,31 +326,46 @@ async function submit(EMAIL, PASSWORD) {
       response["token"] = token;
       response["validtime"] = validtime;
       response["permission"] = level;
-    } else if (errcount < locktimes-1) {
+    } else if (errcount < locktimes - 1) {
       // keyin password is incorrect.
       errcount += 1;
       response["result"] = false;
-      response["text"] = `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
-      if (suspendtime !== "永久") { response["text"] += `"${suspendtime}" hours.` } else {response["text"] += "."}}
-      else if (errcount === locktimes-1) {
-        errcount +=1 ;
-        token = ""
-        validtime = "";
-        state = "lock";
-        response["text"] = `Continuous loginfail up to ${locktimes} times, the user locked`;
-        if (suspendtime !== "永久") {
+      response["text"] =
+        `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
+      if (suspendtime !== "永久") {
+        response["text"] += `"${suspendtime}" hours.`;
+      } else {
+        response["text"] += ".";
+      }
+    } else if (errcount === locktimes - 1) {
+      errcount += 1;
+      token = "";
+      validtime = "";
+      state = "lock";
+      response["text"] =
+        `Continuous loginfail up to ${locktimes} times, the user locked`;
+      if (suspendtime !== "永久") {
         bantill = datetime(parseFloat(suspendtime));
         response["text"] += `untill${bantill}.`;
-        } else {suspendtime === "永久"
+      } else {
+        suspendtime === "永久";
         bantill = "";
         response["text"] += ".";
-        }}
+      }
+    }
   }
   updateaccount(id);
-  console.log(response["text"])
-  return response
+  console.log(response["text"]);
+  return response;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = {submit, getconfig, findaccount, updateaccount, datetime, uuid}
+module.exports = {
+  submit,
+  getconfig,
+  findaccount,
+  updateaccount,
+  datetime,
+  uuid,
+};

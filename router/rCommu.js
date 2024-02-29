@@ -4,10 +4,13 @@ const methodOverride = require("method-override");
 const path = require("path");
 
 const nano = require("nano");
-//const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
 const { Console } = require("console");
 const { ok } = require("assert");
-const couchDBUrl = "http://admin:ems45877096@couchdb:5984";
+const config = require("./config");
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 //const nanoDb = nano(couchDBUrl);
 
 const router = express.Router();

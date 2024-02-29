@@ -1,4 +1,8 @@
-const nano = require("nano")("http://admin:ems45877096@couchdb:5984"); // 替換成你的CouchDB連線URL
+const config = require("./config");
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 //const other_rf01 = other_rf01; // 替換成你的CouchDB數據庫名稱
 const gc_rf10 = "gc_rf10"; // 替換成你的CouchDB數據庫名稱
 const nanoDb = nano.use("gc_rf10");

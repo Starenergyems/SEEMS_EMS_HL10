@@ -4,7 +4,11 @@ const path = require("path");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
+const config = require("./config");
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 const port = 3005;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));

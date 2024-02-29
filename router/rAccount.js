@@ -9,6 +9,11 @@ const User = require("../models/userschema");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
+const config = require("./config");
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 
 // mongoose
 //   .connect("mongodb://localhost:27017/ems")
@@ -43,7 +48,8 @@ app.use(cors());
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
-app.get("/account", (req, res) => { //最後都要改回router.get
+app.get("/account", (req, res) => {
+  //最後都要改回router.get
   // num與fun
   res.render("PersonalInfo");
 });
@@ -63,27 +69,31 @@ app.get("/account/system", (req, res) => {
   res.render("SysManage");
 });
 
-app.get("/account/system/accounts", (req, res) => { //讀所有帳戶資料
+app.get("/account/system/accounts", (req, res) => {
+  //讀所有帳戶資料
   // num與fun
-  var account = [{
-                    "employeeno":"SE0001",
-                    "name":"YC",
-                    "company":"星佑",
-                    "department":"EMS",
-                    "email":"123@hdrenewables.com",
-                    "permission":"admin",
-                    "status":"normal",
-                    "note":"",},
-                  {
-                    "employeeno":"SE0001",
-                    "name":"ZG",
-                    "company":"星佑",
-                    "department":"EMS",
-                    "email":"123@hdrenewables.com",
-                    "permission":"manager",
-                    "status":"lock",
-                    "note":"",}
-                  ];
+  var account = [
+    {
+      employeeno: "SE0001",
+      name: "YC",
+      company: "星佑",
+      department: "EMS",
+      email: "123@hdrenewables.com",
+      permission: "admin",
+      status: "normal",
+      note: "",
+    },
+    {
+      employeeno: "SE0001",
+      name: "ZG",
+      company: "星佑",
+      department: "EMS",
+      email: "123@hdrenewables.com",
+      permission: "manager",
+      status: "lock",
+      note: "",
+    },
+  ];
   res.json(account);
 });
 
@@ -92,15 +102,18 @@ app.post("/account/system/accounts", (req, res) => {
   res.status(200);
 });
 
-app.get("/account/system/passwordsetting", (req, res) => { //讀密碼設定
+app.get("/account/system/passwordsetting", (req, res) => {
+  //讀密碼設定
   // num與fun
-  var passwordSet = [{
-    "minTotal":"5",
-    "maxTotal":"12",
-    "minNum":"1",
-    "minUpper":"1",
-    "minLower":"1",
-    "minSpe":"1"}
+  var passwordSet = [
+    {
+      minTotal: "5",
+      maxTotal: "12",
+      minNum: "1",
+      minUpper: "1",
+      minLower: "1",
+      minSpe: "1",
+    },
   ];
   res.json(passwordSet);
 });
@@ -110,11 +123,14 @@ app.post("/account/system/passwordsetting", (req, res) => {
   res.status(200);
 });
 
-app.get("/account/system/banrule", (req, res) => { //讀停用設定
+app.get("/account/system/banrule", (req, res) => {
+  //讀停用設定
   // num與fun
-  var ban = [{
-    "wrongNum":"1",
-    "forbidTime":"1"}
+  var ban = [
+    {
+      wrongNum: "1",
+      forbidTime: "1",
+    },
   ];
   res.json(ban);
 });
@@ -124,10 +140,13 @@ app.post("/account/system/banrule", (req, res) => {
   res.status(200);
 });
 
-app.get("/account/system/logintext", (req, res) => { //讀登入畫面警告標語
+app.get("/account/system/logintext", (req, res) => {
+  //讀登入畫面警告標語
   // num與fun
-  var logintext = [{
-    "logintext":"禁止非授權操作"}
+  var logintext = [
+    {
+      logintext: "禁止非授權操作",
+    },
   ];
   res.json(logintext);
 });
@@ -136,7 +155,6 @@ app.post("/account/system/logintext", (req, res) => {
   //設定登入畫面標語
   res.status(200);
 });
-
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 

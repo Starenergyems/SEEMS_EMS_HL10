@@ -1,6 +1,10 @@
 const express = require("express");
 const path = require("path");
-const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
+const config = require("./config");
+const couchdbConfig = config.database;
+const nano = require("nano")(
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+);
 const other_rf01 = "other_rf01";
 const other_rf10 = "other_rf10";
 const rf01Db = nano.use(other_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
