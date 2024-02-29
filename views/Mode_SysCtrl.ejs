@@ -67,7 +67,7 @@
                     </tr>
                     <tr>
                         <td class="col_01"><span>負載移轉功率</span></td>
-                        <td class="col_02 data_R_align"><label class="data_val" id="P_LoadShift">-10000</label>kW
+                        <td class="col_02 data_R_align"><label class="data_val" id="P_LoadShift"><%P_LoadShift%></label>kW
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
                                 <button id="P_LoadShift_set">Set</button>
@@ -285,15 +285,15 @@
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="EdReg_SS2_Light"></label>
-                            <label class="data_status" id="EdReg_SS2"><%=EdReg_SS1%></label>
+                            <label class="data_status" id="EdReg_SS2"><%=EdReg_SS2%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="EdReg_SS3_Light"></label>
-                            <label class="data_status" id="EdReg_SS3"><%=EdReg_SS1%></label>
+                            <label class="data_status" id="EdReg_SS3"><%=EdReg_SS3%></label>
                         </td>
                         <td class="col_other">
                             <label class="data_light" id="EdReg_SS4_Light"></label>
-                            <label class="data_status" id="EdReg_SS4"><%=EdReg_SS1%></label>
+                            <label class="data_status" id="EdReg_SS4"><%=EdReg_SS4%></label>
                         </td>
                     </tr>
                 </table>
@@ -476,6 +476,7 @@
         </div>
     </div>
 
+    <script src="../public/scripts/jquery-3.6.0.js"></script>
     <script src="../public/scripts/chart.js"></script>
     <script src="../public/scripts/script_template.js"></script>
     <script src="../public/scripts/Mode_SysCtrl.js"></script>

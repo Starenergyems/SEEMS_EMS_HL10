@@ -15,6 +15,15 @@
 //     }
 // }
 
+//var permission="viewer"; //需讀權限
+var permission = "manager";
+$(document).ready(function () {
+  console.log("start reading js");
+  classAdd("#nB_Mode","default_nB");
+  updateData();
+});
+
+setInterval(updateData, 5000);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 let minLimit;
@@ -793,4 +802,66 @@ const button_11 = document.querySelector(".block_temp #button_11");
 button_11.addEventListener("click", Set_SOC_Ref);
 function Set_SOC_Ref() {
     window.open('../Set_SOC_ref/Set_SOC_ref.html', 'SOC參考值設定', 'width=500, height=300, left=600, top=650, location=no, menubar=no, resizable=no, scrollbars=yes, status=no, toolbar=no, directories=no');
+}
+
+async function updateData(){   //更新資料
+  var router = window.location.href + "/data";
+  console.log(router);
+  var data = await getData(router);
+  console.log(data);
+  $("#sysAvailability").text(data.sysAvailability);
+  $("#SOC").text(data.SOC);
+  $("#SBSPM").text(data.SBSPM);
+
+  $("#sysMode").text(data.sysMode);
+  $("#P_Project").text(data.P_Project);
+  $("#P_LoadShift").text(data.P_LoadShift);
+  $("#statusAllPCS").text(data.statusAllPCS);
+  $("#statusAllBMS").text(data.statusAllBMS);
+  $("#stopCHGsched").text(data.stopCHGsched);
+
+  //E-dReg/////////////////////////////////////////////////////
+  $("#Freq_A").text(data.Freq_A);
+  $("#P_t").text(data.P_t);
+  $("#Freq_B").text(data.Freq_B);
+  $("#P_u").text(data.P_u);
+  $("#Freq_C").text(data.Freq_C);
+  $("#P_v").text(data.P_v);
+  $("#Freq_D").text(data.Freq_D);
+  $("#P_w").text(data.P_w);
+  $("#Freq_E").text(data.Freq_E);
+  $("#P_x").text(data.P_x);
+  $("#Freq_F").text(data.Freq_F);
+  $("#P_y").text(data.P_y);
+
+  //子系統資訊/////////////////////////////////////////
+  $("#P_base_SS1").text(data.P_base_SS1);
+  $("#P_base_SS2").text(data.P_base_SS2);
+  $("#P_base_SS3").text(data.P_base_SS3);
+  $("#P_base_SS4").text(data.P_base_SS4);
+
+  $("#Q_base_SS1").text(data.Q_base_SS1);
+  $("#Q_base_SS2").text(data.Q_base_SS2);
+  $("#Q_base_SS3").text(data.Q_base_SS3);
+  $("#Q_base_SS4").text(data.Q_base_SS4);
+
+  $("#AutoMan_SS1").text(data.AutoMan_SS1);
+  $("#AutoMan_SS2").text(data.AutoMan_SS2);
+  $("#AutoMan_SS3").text(data.AutoMan_SS3);
+  $("#AutoMan_SS4").text(data.AutoMan_SS4);
+
+  $("#BMSPCSstatus_SS1").text(data.BMSPCSstatus_SS1);
+  $("#BMSPCSstatus_SS2").text(data.BMSPCSstatus_SS2);
+  $("#BMSPCSstatus_SS3").text(data.BMSPCSstatus_SS3);
+  $("#BMSPCSstatus_SS4").text(data.BMSPCSstatus_SS4);
+
+  $("#Avail_SS1").text(data.Avail_SS1);
+  $("#Avail_SS2").text(data.Avail_SS2);
+  $("#Avail_SS3").text(data.Avail_SS3);
+  $("#Avail_SS4").text(data.Avail_SS4);
+  
+  $("#EdReg_SS1").text(data.EdReg_SS1);
+  $("#EdReg_SS2").text(data.EdReg_SS2);
+  $("#EdReg_SS3").text(data.EdReg_SS3);
+  $("#EdReg_SS4").text(data.EdReg_SS4);
 }
