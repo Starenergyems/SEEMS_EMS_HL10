@@ -23,7 +23,7 @@ const {
 const { Console } = require("console");
 const { ok } = require("assert");
 
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
 
 // Middleware
 app.set("view engine", "ejs");

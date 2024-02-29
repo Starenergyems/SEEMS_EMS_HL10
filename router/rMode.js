@@ -4,7 +4,7 @@ const path = require("path");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
 const port = 3005;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -46,7 +46,7 @@ const { authentication } = require("./authMiddleware");
 //app=router要記得改
 //導向童話面作法同於METER
 var sysctrl_variables;
-async function query_Syscrtl_variables(){
+async function query_Syscrtl_variables() {
   const indexDef = {
     index: { fields: ["time"] },
     name: "time_index",
@@ -164,11 +164,10 @@ async function query_Syscrtl_variables(){
   });
 }
 
-
 app.get("/mode", (req, res) => {
-// 在這裡修改重定向的方式，可以直接將 URL 修改為 "/mode/sysctrl"
-// 如果需要傳遞額外資訊，可以使用查詢字串或 session 等機制
-res.redirect("/mode/sysctrl");
+  // 在這裡修改重定向的方式，可以直接將 URL 修改為 "/mode/sysctrl"
+  // 如果需要傳遞額外資訊，可以使用查詢字串或 session 等機制
+  res.redirect("/mode/sysctrl");
 });
 
 //系統模式控制頁面切換

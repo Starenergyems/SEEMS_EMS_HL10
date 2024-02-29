@@ -14,7 +14,7 @@ const io = socketIO(server);
 require("dotenv").config();
 const { submit } = require("./rLogin");
 
-const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
+const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 

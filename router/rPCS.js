@@ -10,7 +10,7 @@ const router = express.Router();
 const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
-const couchDBUrl = "http://admin:ems45877096@192.168.8.101:5984";
+const couchDBUrl = "http://admin:ems45877096@couchdb:5984";
 const nanoDb = nano(couchDBUrl);
 
 const {
