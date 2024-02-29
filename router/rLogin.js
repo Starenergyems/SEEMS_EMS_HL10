@@ -23,7 +23,7 @@ const db_IP = "192.168.8.101"; // Couchdb IPv4 address.
 const db_PORT = "5984"; // Couchdb service use port.
 
 const db_account = "account"; // The account database name.
-const doc_CONFIG = "config"; // The account setting doc id.
+const doc_CONFIG = "CONFIG"; // The account setting doc id.
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
@@ -67,7 +67,7 @@ async function getconfig() {
     data.suspendtime === undefined ? (suspendtime = "永久") : (suspendtime = data.suspendtime);
     data.logintext === undefined ? (logintext = "登入頁面提示字元") : (logintext = data.logintext);
     data.duration === undefined ? (duration = "") : (duration = data.duration);
-  } catch (error) {console.error("Error:", error.message)}}
+    } catch (error) {console.error("config Error:", error.message)}}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare to store data in the account doc.

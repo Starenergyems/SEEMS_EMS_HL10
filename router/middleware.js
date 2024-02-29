@@ -44,6 +44,7 @@ const lc1nanoDb = nano.use("lc1_rf10");
 const lc2nanoDb = nano.use("lc2_rf10");
 const lc3nanoDb = nano.use("lc3_rf10");
 const lc4nanoDb = nano.use("lc4_rf10");
+const alarmnanoDb = nano.use("alarm");
 
 const indexDef = {
   index: { fields: ["time"] },
@@ -59,6 +60,7 @@ await lc1nanoDb.createIndex(indexDef);
 await lc2nanoDb.createIndex(indexDef);
 await lc3nanoDb.createIndex(indexDef);
 await lc4nanoDb.createIndex(indexDef);
+await alarmnanoDb.createIndex(indexDef);
 
 const mangoQuery = {
   selector: {
@@ -96,6 +98,9 @@ app.use(async (req, res, next) => {
       lc2nanoDb.createIndex(indexDef).then(() => lc2nanoDb.find(mangoQuery)),
       lc3nanoDb.createIndex(indexDef).then(() => lc3nanoDb.find(mangoQuery)),
       lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery)),
+      alarmnanoDb
+        .createIndex(indexDef)
+        .then(() => alarmnanoDb.find(mangoQuery)),
     ])
       .then(
         ([
@@ -107,6 +112,7 @@ app.use(async (req, res, next) => {
           lc2Body,
           lc3Body,
           lc4Body,
+          alarmbody,
         ]) => {
           const gcData = gcBody.docs[0];
           const DCData = dcBody.docs[0];
@@ -116,6 +122,7 @@ app.use(async (req, res, next) => {
           const lc2Data = lc2Body.docs[0];
           const lc3Data = lc3Body.docs[0];
           const lc4Data = lc4Body.docs[0];
+          const alarmData = alarmbody.docs[0];
 
           // 在這裡將數據返回給前端或進行其他處理
           res.locals.navbarData = {
@@ -125,6 +132,7 @@ app.use(async (req, res, next) => {
               "../public/styles/Mode_SysCtrl.css",
             ],
             permission: "admin",
+
             //******************************************************************************* */
             //綠黃紅 調頻服務中、部分運轉、暫停服務 bit4+bit5
             L_M_systemMode: mapL_M_systemMode(
@@ -133,22 +141,17 @@ app.use(async (req, res, next) => {
               gcData.System["400080"],
               gcData.System["400081"]
             ),
+
             //右邊******************************************************************************* */
             //Warning 警告 右邊 黃色
             //計算*告警*總數
-            totalWarningNum: 99999,
-            //totalWarningNum: counttotalWarningNum(0),
-            WarningNum_Meter: 99999,
-            //WarningNum_Meter: countWarningNum_Meter(otherrf01Data),
-            // 408181:Oil temperature/408205: VCB Status(1、2)/408206:ACB Status(bit1 3 5)/Relay 408201-408203
-            //PCS
-            WarningNum_PCS: 99999,
-            //電池
-            WarningNum_Bat: 99999,
-            //環境
-            WarningNum_Env: 99999,
-
-            WarningNum_FF: 99999,
+            //列出條件
+            totalWarningNum: 99999, //計算目前alarm資料庫內有多少個錯誤 #"level": "Warning",
+            WarningNum_Meter: 99999, //計算目前alarm資料庫內有多少個meter #"content": & index =
+            WarningNum_PCS: 99999, //計算目前alarm資料庫內有多少個電表與盤體告警 #"content":pcs  & index =
+            WarningNum_Bat: 99999, //計算目前alarm資料庫內有多少個電池告警 #"content":pcs  & index =
+            WarningNum_Env: 99999, //計算目前alarm資料庫內有多少個環境告警 #"content":pcs  & index =
+            WarningNum_FF: 99999, //計算有多少個消防告警
 
             //左邊******************************************************************************* */
             //計算*錯誤*總數 Alarm (紅色 左邊 錯誤)
@@ -158,9 +161,10 @@ app.use(async (req, res, next) => {
             AlarmNum_Bat: 99999,
             AlarmNum_Env: 99999,
             AlarmNum_FF: 99999,
+
             //*********************************************************************************** */
             //下方******************************************************************************* */
-            //系統資訊
+            //系統資訊(純數值顯示)
 
             L_M_freq: scaleProcess(otherrf01Data.Freq[408026], 1, 3),
             L_M_activeP: scaleProcess(otherrf01Data.Freq[408019], 1, 1),

@@ -130,6 +130,7 @@ async function fetchDataFromCouchDB() {
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     console.log("Yesterday Start Time:", yesterdayStart);
     console.log("Yesterday End Time:", yesterdayEnd);
+    const time = 0; //定義目前搜尋時間
 
     // 定義篩選器條件
     const filter = {
@@ -143,7 +144,7 @@ async function fetchDataFromCouchDB() {
           },
         ],
       },
-      limit: 60000, // 限制返回的文檔數量為 24 小時的秒數
+      limit: 3600, // 限制返回的文檔數量為 24 小時的秒數 時間有限制
     };
 
     // 初始化存儲數值的陣列

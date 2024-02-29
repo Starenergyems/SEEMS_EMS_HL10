@@ -6,6 +6,16 @@ const router = express.Router();
 const app = express();
 const cors = require("cors");
 
+//確認回傳的內容有那些
+// freq
+// active prower
+// execute rate
+// soc
+// 時間長度(即時圖)
+// 搜尋時間:起始/結束/時間長度/時間間隔(歷史圖)
+
+//****額外最後再加新增搜尋點位
+
 //set
 app.set("view engine", "ejs");
 // 設定視圖目錄為 C:\Test\SEEMS_EMS\views
@@ -29,9 +39,9 @@ router.get("/chart/realtime", (req, res) => {
 
 router.post("/chart/realtime", (req, res) => {
   // num與fun
-  const { input1, input2} = req.body;
-  console.log("num: "+input1);
-  console.log("unit:" +input2);
+  const { input1, input2 } = req.body;
+  console.log("num: " + input1);
+  console.log("unit:" + input2);
 });
 
 router.get("/chart/history", (req, res) => {
@@ -41,10 +51,10 @@ router.get("/chart/history", (req, res) => {
 
 router.post("/chart/history", (req, res) => {
   // num與fun
-  const { input1, input2, input3} = req.body;
-  console.log("start: "+input1);
-  console.log("end:" +input2);
-  console.log("unit(ms):" +input3);
+  const { input1, input2, input3 } = req.body;
+  console.log("start: " + input1);
+  console.log("end:" + input2);
+  console.log("unit(ms):" + input3);
 });
 
 module.exports = router;

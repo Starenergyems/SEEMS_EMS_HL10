@@ -78,18 +78,19 @@ const batteryRouter = require("./rBattery");
 // app.use(authMiddleware);
 
 const { authentication } = require("./authMiddleware");
+//身分驗證 暫時關閉
 
-app.use("*", async (req, res, next) => {
-  try {
-    const authenticated = await authentication(req);
-    if (authenticated === false) {return res.status(401).send("Unauthorized")}
-    else {req.body = authenticated}
-    next();
-  } catch (error) {
-    console.error("Authentication error:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+// app.use("*", async (req, res, next) => {
+//   try {
+//     const authenticated = await authentication(req);
+//     if (authenticated === false) {return res.status(401).send("Unauthorized")}
+//     else {req.body = authenticated}
+//     next();
+//   } catch (error) {
+//     console.error("Authentication error:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 
 //***************************************************************************************************************** */
 // 使用這些路由
