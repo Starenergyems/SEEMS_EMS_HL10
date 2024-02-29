@@ -2347,9 +2347,11 @@ function sendLineNotify(error_result_item) {
 
 function current_locale_time() {
   const date = new Date();
+  // console.log(date)
 
   const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSSZ");
 
+  // console.log(formattedString);
   return formattedString;
 }
 

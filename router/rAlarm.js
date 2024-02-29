@@ -58,6 +58,11 @@ const alarmDB_db_name_index = {
 // alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
 alarmnanoDb.createIndex(alarmDB_db_name_index);
 
+const indexDef_occurrence_time = {
+  index: { fields: ["occurrence_time"] },
+  name: "occurrence_time_index",
+};
+alarmnanoDb.createIndex(indexDef_occurrence_time);
 // alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
 // alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
 
