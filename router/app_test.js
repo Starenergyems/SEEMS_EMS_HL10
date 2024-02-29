@@ -14,7 +14,14 @@ const io = socketIO(server);
 const dataUpdateEmitter = new EventEmitter();
 require("dotenv").config();
 const { calculateAverage, calculateAdd } = require("./function");
-const { getconfig, findaccount, updateaccount, datetime, uuid, submit} =  require("./rLogin");
+const {
+  getconfig,
+  findaccount,
+  updateaccount,
+  datetime,
+  uuid,
+  submit,
+} = require("./rLogin");
 
 const nano = require("nano");
 const { Console } = require("console");
@@ -217,23 +224,23 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res) => {
   // The submit data from loginpage, input by user.
-  const email = req.body['username']; 
-  const password = req.body['password'];
+  const email = req.body["username"];
+  const password = req.body["password"];
   console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
-  
+
   try {
     const response = await submit(email, password);
     console.log(response);
     if (response["result"] === true) {
-      console.log(response["text"])
-      res.cookie('token', response['token']); // Setting the cookie
+      console.log(response["text"]);
+      res.cookie("token", response["token"]); // Setting the cookie
       // res.render("main"); // Sending the response
       // res.redirect("Mode_SysCtrl", { permission: "manager" });
-    // } else {
-    //   // Handle unsuccessful login
+      // } else {
+      //   // Handle unsuccessful login
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     // Handle error
   }
 });

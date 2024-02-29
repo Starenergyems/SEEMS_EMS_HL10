@@ -73,8 +73,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.get("/", (req, res) => {
-    res.render("Login");
-  });
+  res.render("Login");
+});
 //告警紀錄
 app.get("/alarm", (req, res) => {
   // num與fun
@@ -88,14 +88,13 @@ app.get("/alarm", (req, res) => {
       }
       // console.dir(body)
       // const doc = body.docs[0]; // 取得數據的第一個元素
-      const db_name = lc1nanoDb["config"]["db"]
+      const db_name = lc1nanoDb["config"]["db"];
       for (let item of body.docs) {
         // console.log(item);
         const error_result = LC_error_result_gen(item, db_name);
         for (let i of error_result) {
           // console.log(i.value, i.content)
           // sendLineNotify(i);
-
           // alarmnanoDb
           //   .insert(i)
           //   .then((body) => {
@@ -104,12 +103,10 @@ app.get("/alarm", (req, res) => {
           //   .catch((err) => {
           //     console.error("Error inserting user document:", err.message, alarmnanoDb["config"]["db"]);
           //   });
-
           // // Specify the keys you want to remove
           // ['read', 'recover', 'recover_time'].forEach(key => {
           //   delete i[key];
           // });
-          
           // hisalarmnanoDb
           //   .insert(i)
           //   .then((body) => {
@@ -150,7 +147,7 @@ app.get("/alarm", (req, res) => {
     //       ['read', 'recover', 'recover_time'].forEach(key => {
     //         delete i[key];
     //       });
-          
+
     //       hisalarmnanoDb
     //         .insert(i)
     //         .then((body) => {
@@ -192,7 +189,7 @@ app.get("/alarm", (req, res) => {
     //       ['read', 'recover', 'recover_time'].forEach(key => {
     //         delete i[key];
     //       });
-          
+
     //       hisalarmnanoDb
     //         .insert(i)
     //         .then((body) => {
@@ -204,7 +201,6 @@ app.get("/alarm", (req, res) => {
     //     }
     //   }
     // });
-
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -236,11 +232,11 @@ app.get("/alarm/realtime", (req, res) => {
 app.post("/alarm/realtime/edit", (req, res) => {
   try {
     const { ID, Checked } = req.body;
-    console.log('Received ID:', ID);
-    console.log('Received Checked:', Checked);
+    console.log("Received ID:", ID);
+    console.log("Received Checked:", Checked);
 
-    res.status(200).send("資料庫已更新");//資料庫修改刪除完後再執行這行
-  }catch (error) {
+    res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
+  } catch (error) {
     console.error(error);
     res.status(500).send("伺服器錯誤");
   }
@@ -260,28 +256,28 @@ app.get("/alarm/realtime/edit", (req, res) => {
       console.error("Error:", err);
       res.status(500).send("Internal Server Error");
       return;
-    };
-    
+    }
+
     const alarm_db_array = [];
     for (const item of body.docs) {
       // console.log(item);
-      ['_rev', 'time', 'value'].forEach(key => {
+      ["_rev", "time", "value"].forEach((key) => {
         delete item[key];
       });
-      item['index'] = '';
-      item['content'] = item['content'][1]
-      if (Array.isArray(item['content'])) {
-        for (let i of item['content']) {
+      item["index"] = "";
+      item["content"] = item["content"][1];
+      if (Array.isArray(item["content"])) {
+        for (let i of item["content"]) {
           let new_item = {
             ...item,
-            content: i
+            content: i,
           };
           alarm_db_array.push(new_item);
         }
       } else {
         alarm_db_array.push(item);
       }
-    } 
+    }
     res.json(alarm_db_array);
   });
 });

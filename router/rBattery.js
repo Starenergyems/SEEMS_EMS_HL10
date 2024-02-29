@@ -1,6 +1,5 @@
 //const port=3005;
 
-
 const express = require("express");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
@@ -628,7 +627,6 @@ async function queryDetailData() {
     // 8: "Lc04", // 如果需要處理 8，可以取消註解
   };
 
-
   // 根據 pageNumber 選擇不同的集合名稱
   const selectedCollection = collectionMap[pageNumber];
   // 根據 pageNumber 選擇不同的集合名稱
@@ -652,7 +650,6 @@ async function queryDetailData() {
     const nanoDb = createNanoInstance(dbName);
     return getLatestDocument(nanoDb);
   });
- 
 
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
   // const lc1Data = allData[0];
@@ -784,7 +781,7 @@ async function queryDetailData() {
   }
 
   //let processedPageNumber;
- /*if (pageNumber % 2 === 0) {
+  /*if (pageNumber % 2 === 0) {
     // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
     batteryDetail_variables = {
       permission: "manager",
@@ -896,9 +893,7 @@ async function queryDetailData() {
       alarm: Convert_UInt_to_revBitString(lcData.BMS1[404044], 32),
       fault: Convert_UInt_to_revBitString(lcData.BMS1[404046], 32),
     };*/
-  }
-
-
+}
 
 router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   try {
@@ -1531,6 +1526,6 @@ router.post("/getData", async (req, res) => {
 //***************************************************************************************** */
 module.exports = router;
 
- /*app.listen(port, () => {
+/*app.listen(port, () => {
    console.log(`應用程式正在監聽端口 ${port}`);
  });*/

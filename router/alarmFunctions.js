@@ -9,7 +9,7 @@ const http = require("http");
 const e = require("connect-flash");
 const nano = require("nano")("http://admin:ems45877096@192.168.8.101:5984");
 const axios = require("axios");
-const moment = require('moment');
+const moment = require("moment");
 
 const lc1_rf01 = "lc1_rf01";
 const lc1nanoDb = nano.use(lc1_rf01);
@@ -82,8 +82,8 @@ router.use(cors());
 
 // Alarm //--------------------------------------------------------------------------------
 const LC_System_402013 = {
-  0: "Charging", 
-  1: "Discharging", 
+  0: "Charging",
+  1: "Discharging",
   2: "Non-operating mode",
 };
 
@@ -152,16 +152,63 @@ const LC_System_402100 = {
 };
 
 const LC_System_error_table = {
-  402013: { name: "System CHG/DCG status", status: LC_System_402013, type: "int", location: "ESS?x-1", line: false},
-  402019: { name: "Running mode", status: LC_System_402019, type: "int", location: "ESS?x-1", line: false },
-  402020: { name: "Grid status", status: LC_System_402020, type: "int", location: "ESS?x-1", line: false },
-  402021: { name: "System status", status: LC_System_402021, type: "bit", location: "ESS?x-1", line: true },
-  402048: { name: "PCS communication status", status: LC_System_402048, type: "bit_abnormal", location: "ESS?x-1", line: false },
-  402050: { name: "BMS communication status", status: LC_System_402050, type: "bit_abnormal", location: "ESS?x-1", line: false },
-  402099: { name: "Fault status", status: LC_System_402099, type: "bit", location: "ESS?x-1", line: true },
-  402100: { name: "Alarm status", status: LC_System_402100, type: "bit", location: "ESS?x-1", line: true },
+  402013: {
+    name: "System CHG/DCG status",
+    status: LC_System_402013,
+    type: "int",
+    location: "ESS?x-1",
+    line: false,
+  },
+  402019: {
+    name: "Running mode",
+    status: LC_System_402019,
+    type: "int",
+    location: "ESS?x-1",
+    line: false,
+  },
+  402020: {
+    name: "Grid status",
+    status: LC_System_402020,
+    type: "int",
+    location: "ESS?x-1",
+    line: false,
+  },
+  402021: {
+    name: "System status",
+    status: LC_System_402021,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  402048: {
+    name: "PCS communication status",
+    status: LC_System_402048,
+    type: "bit_abnormal",
+    location: "ESS?x-1",
+    line: false,
+  },
+  402050: {
+    name: "BMS communication status",
+    status: LC_System_402050,
+    type: "bit_abnormal",
+    location: "ESS?x-1",
+    line: false,
+  },
+  402099: {
+    name: "Fault status",
+    status: LC_System_402099,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  402100: {
+    name: "Alarm status",
+    status: LC_System_402100,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
 };
-
 
 const LC_PCS_403063 = {
   0: "Temperature exception alarm",
@@ -298,12 +345,48 @@ const LC_PCS_error_table = {
   // 403049: { name: "LC_PCS_Working status", status: LC_PCS_403049, type: "bit", location: "ESS?x-1", line: true },
   // 403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int", location: "ESS?x-1", line: false },
   // 403058: { name: "LC_PCS_Node status", status: LC_PCS_403058, type: "bit", location: "ESS?x-1", line: true },
-  403063: { name: "Unit 1_Alarm status1", status: LC_PCS_403063, type: "bit", location: "ESS?x-1", line: true },
-  403067: { name: "Unit 1_Fault status2", status: LC_PCS_403067, type: "bit", location: "ESS?x-1", line: true },
-  403102: { name: "Unit 2_Alarm status1", status: LC_PCS_403102, type: "bit", location: "ESS?x-1", line: true },
-  403106: { name: "Unit 2_Fault status2", status: LC_PCS_403106, type: "bit", location: "ESS?x-1", line: true },
-  403534: { name: "Alarm status1", status: LC_PCS_403534, type: "bit", location: "ESS?x-1", line: true },
-  403538: { name: "Fault status2", status: LC_PCS_403538, type: "bit", location: "ESS?x-1", line: true },
+  403063: {
+    name: "Unit 1_Alarm status1",
+    status: LC_PCS_403063,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  403067: {
+    name: "Unit 1_Fault status2",
+    status: LC_PCS_403067,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  403102: {
+    name: "Unit 2_Alarm status1",
+    status: LC_PCS_403102,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  403106: {
+    name: "Unit 2_Fault status2",
+    status: LC_PCS_403106,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  403534: {
+    name: "Alarm status1",
+    status: LC_PCS_403534,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  403538: {
+    name: "Fault status2",
+    status: LC_PCS_403538,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
 };
 
 const LC_BMS_404011 = {
@@ -373,11 +456,41 @@ const LC_BMS_404061 = {
 };
 
 const LC_BMS_error_table = {
-  404011: { name: "System mode", status: LC_BMS_404011, type: "bit", location: "ESS?x-1", line: true },
-  404044: { name: "CMU alarm word", status: LC_BMS_404044, type: "bit", location: "ESS?x-1", line: true },
-  404046: { name: "CMU fault word", status: LC_BMS_404046, type: "bit", location: "ESS?x-1", line: true },
-  404048: { name: "Hardware fault word", status: LC_BMS_404048, type: "bit", location: "ESS?x-1", line: true },
-  404061: { name: "SMU fault status", status: LC_BMS_404061, type: "bit", location: "ESS?x-1", line: true },
+  404011: {
+    name: "System mode",
+    status: LC_BMS_404011,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  404044: {
+    name: "CMU alarm word",
+    status: LC_BMS_404044,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  404046: {
+    name: "CMU fault word",
+    status: LC_BMS_404046,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  404048: {
+    name: "Hardware fault word",
+    status: LC_BMS_404048,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  404061: {
+    name: "SMU fault status",
+    status: LC_BMS_404061,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
 };
 
 const LC_Rack_405028 = {
@@ -419,8 +532,20 @@ const LC_Rack_405030 = {
 };
 
 const LC_Rack_error_table = {
-  405028: { name: "CMU alarm word", status: LC_Rack_405028, type: "bit", location: "ESS?x-1", line: true },
-  405030: { name: "CMU fault word", status: LC_Rack_405030, type: "bit", location: "ESS?x-1", line: true },
+  405028: {
+    name: "CMU alarm word",
+    status: LC_Rack_405028,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  405030: {
+    name: "CMU fault word",
+    status: LC_Rack_405030,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
 };
 
 const LC_BSC_406001 = {
@@ -476,217 +601,379 @@ const LC_BSC_406005 = {
 };
 
 const LC_BSC_406007 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406009 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406011 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406013 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406015 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406017 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406019 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406021 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406023 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406025 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406027 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406029 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406031 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406033 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406035 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406037 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406039 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406041 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406043 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406045 = {
-  0: 'Comm error',
-  1: 'Stop',
-  2: 'Running',
-  3: 'Fault',
-  85: 'Not configured',
+  0: "Comm error",
+  1: "Stop",
+  2: "Running",
+  3: "Fault",
+  85: "Not configured",
 };
 
 const LC_BSC_406047 = {
   min: -100,
   max: 200,
-  scale: 0.1,  
+  scale: 0.1,
 };
 
 const LC_BSC_406048 = {
   min: 0,
   max: 100,
-  scale: 0.1,  
+  scale: 0.1,
 };
 
 const LC_BSC_406049 = {
   min: -100,
   max: 200,
-  scale: 0.1,  
+  scale: 0.1,
 };
 
 const LC_BSC_406050 = {
   min: 0,
   max: 100,
-  scale: 0.1,  
+  scale: 0.1,
 };
 
 const LC_BSC_error_table = {
-  406001: { name: "Fault status", status: LC_BSC_406001, type: "bit", location: "ESS?x-1", line: true },
-  406003: { name: "Alarm status", status: LC_BSC_406003, type: "bit", location: "ESS?x-1", line: true },
-  406005: { name: "FFS status", status: LC_BSC_406005, type: "bit", location: "ESS?x-1", line: false },
-  406007: { name: 'HVAC_1 running status', status: LC_BSC_406007, type: "int", location: "ESS?x-1", line: true },
-  406009: { name: 'HVAC_2 running status', status: LC_BSC_406009, type: "int", location: "ESS?x-1", line: true },
-  406011: { name: 'HVAC_3 running status', status: LC_BSC_406011, type: "int", location: "ESS?x-1", line: true },
-  406013: { name: 'HVAC_4 running status', status: LC_BSC_406013, type: "int", location: "ESS?x-1", line: true },
-  406015: { name: 'HVAC_5 running status', status: LC_BSC_406015, type: "int", location: "ESS?x-1", line: true },
-  406017: { name: 'HVAC_6 running status', status: LC_BSC_406017, type: "int", location: "ESS?x-1", line: true },
-  406019: { name: 'HVAC_7 running status', status: LC_BSC_406019, type: "int", location: "ESS?x-1", line: true },
-  406021: { name: 'HVAC_8 running status', status: LC_BSC_406021, type: "int", location: "ESS?x-1", line: true },
-  406023: { name: 'HVAC_9 running status', status: LC_BSC_406023, type: "int", location: "ESS?x-1", line: true },
-  406025: { name: 'HVAC_10 running status', status: LC_BSC_406025, type: "int", location: "ESS?x-1", line: true },
-  406027: { name: 'HVAC_11 running status', status: LC_BSC_406027, type: "int", location: "ESS?x-1", line: true },
-  406029: { name: 'HVAC_12 running status', status: LC_BSC_406029, type: "int", location: "ESS?x-1", line: true },
-  406031: { name: 'HVAC_13 running status', status: LC_BSC_406031, type: "int", location: "ESS?x-1", line: true },
-  406033: { name: 'HVAC_14 running status', status: LC_BSC_406033, type: "int", location: "ESS?x-1", line: true },
-  406035: { name: 'HVAC_15 running status', status: LC_BSC_406035, type: "int", location: "ESS?x-1", line: true },
-  406037: { name: 'HVAC_16 running status', status: LC_BSC_406037, type: "int", location: "ESS?x-1", line: true },
-  406039: { name: 'HVAC_17 running status', status: LC_BSC_406039, type: "int", location: "ESS?x-1", line: true },
-  406041: { name: 'HVAC_18 running status', status: LC_BSC_406041, type: "int", location: "ESS?x-1", line: true },
-  406043: { name: 'HVAC_19 running status', status: LC_BSC_406043, type: "int", location: "ESS?x-1", line: true },
-  406045: { name: 'HVAC_20 running status', status: LC_BSC_406045, type: "int", location: "ESS?x-1", line: true },
-  406047: { name: 'TH_1 Temperature', status: LC_BSC_406047, type: "valve", location: "ESS?x-1", line: false },
-  406048: { name: 'TH_1 Humidity', status: LC_BSC_406048, type: "valve", location: "ESS?x-1", line: false },
-  406049: { name: 'TH_2 Temperature', status: LC_BSC_406049, type: "valve", location: "ESS?x-1", line: false },
-  406050: { name: 'TH_2 Humidity', status: LC_BSC_406050, type: "valve", location: "ESS?x-1", line: false },
+  406001: {
+    name: "Fault status",
+    status: LC_BSC_406001,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406003: {
+    name: "Alarm status",
+    status: LC_BSC_406003,
+    type: "bit",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406005: {
+    name: "FFS status",
+    status: LC_BSC_406005,
+    type: "bit",
+    location: "ESS?x-1",
+    line: false,
+  },
+  406007: {
+    name: "HVAC_1 running status",
+    status: LC_BSC_406007,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406009: {
+    name: "HVAC_2 running status",
+    status: LC_BSC_406009,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406011: {
+    name: "HVAC_3 running status",
+    status: LC_BSC_406011,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406013: {
+    name: "HVAC_4 running status",
+    status: LC_BSC_406013,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406015: {
+    name: "HVAC_5 running status",
+    status: LC_BSC_406015,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406017: {
+    name: "HVAC_6 running status",
+    status: LC_BSC_406017,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406019: {
+    name: "HVAC_7 running status",
+    status: LC_BSC_406019,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406021: {
+    name: "HVAC_8 running status",
+    status: LC_BSC_406021,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406023: {
+    name: "HVAC_9 running status",
+    status: LC_BSC_406023,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406025: {
+    name: "HVAC_10 running status",
+    status: LC_BSC_406025,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406027: {
+    name: "HVAC_11 running status",
+    status: LC_BSC_406027,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406029: {
+    name: "HVAC_12 running status",
+    status: LC_BSC_406029,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406031: {
+    name: "HVAC_13 running status",
+    status: LC_BSC_406031,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406033: {
+    name: "HVAC_14 running status",
+    status: LC_BSC_406033,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406035: {
+    name: "HVAC_15 running status",
+    status: LC_BSC_406035,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406037: {
+    name: "HVAC_16 running status",
+    status: LC_BSC_406037,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406039: {
+    name: "HVAC_17 running status",
+    status: LC_BSC_406039,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406041: {
+    name: "HVAC_18 running status",
+    status: LC_BSC_406041,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406043: {
+    name: "HVAC_19 running status",
+    status: LC_BSC_406043,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406045: {
+    name: "HVAC_20 running status",
+    status: LC_BSC_406045,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+  },
+  406047: {
+    name: "TH_1 Temperature",
+    status: LC_BSC_406047,
+    type: "valve",
+    location: "ESS?x-1",
+    line: false,
+  },
+  406048: {
+    name: "TH_1 Humidity",
+    status: LC_BSC_406048,
+    type: "valve",
+    location: "ESS?x-1",
+    line: false,
+  },
+  406049: {
+    name: "TH_2 Temperature",
+    status: LC_BSC_406049,
+    type: "valve",
+    location: "ESS?x-1",
+    line: false,
+  },
+  406050: {
+    name: "TH_2 Humidity",
+    status: LC_BSC_406050,
+    type: "valve",
+    location: "ESS?x-1",
+    line: false,
+  },
 };
 
 const LC_error_table = {
@@ -815,35 +1102,191 @@ const Other_408207 = {
 };
 
 const Other_error_table = {
-  408154: { name: "UPS status", status: Other_408154, type: "bit", location: "device", line: true },
-  408186: { name: "Temperature", status: Other_408186, type: "valve", location: "Control Room", line: true },
-  408187: { name: "Humidity", status: Other_408187, type: "valve", location: "Control Room", line: true },
-  408201: { name: "Relay_MVCB-1", status: Other_408201, type: "bit", location: "MVCB", line: true },
-  408202: { name: "Relay_MVCB-2", status: Other_408202, type: "bit", location: "MVCB", line: true },
-  408203: { name: "Relay_VCB", status: Other_408203, type: "bit", location: "device", line: true },
-  408204: { name: "FFS Fault", status: Other_408204, type: "bit", location: "FFS Control Room", line: true },
-  408205: { name: "VCB Status", status: Other_408205, type: "bit", location: "device", line: true },
-  408206: { name: "ACB Status", status: Other_408206, type: "bit", location: "device", line: true },
-  408207: { name: "ACB Control", status: Other_408207, type: "bit", location: "device", line: true },
+  408154: {
+    name: "UPS status",
+    status: Other_408154,
+    type: "bit",
+    location: "device",
+    line: true,
+  },
+  408186: {
+    name: "Temperature",
+    status: Other_408186,
+    type: "valve",
+    location: "Control Room",
+    line: true,
+  },
+  408187: {
+    name: "Humidity",
+    status: Other_408187,
+    type: "valve",
+    location: "Control Room",
+    line: true,
+  },
+  408201: {
+    name: "Relay_MVCB-1",
+    status: Other_408201,
+    type: "bit",
+    location: "MVCB",
+    line: true,
+  },
+  408202: {
+    name: "Relay_MVCB-2",
+    status: Other_408202,
+    type: "bit",
+    location: "MVCB",
+    line: true,
+  },
+  408203: {
+    name: "Relay_VCB",
+    status: Other_408203,
+    type: "bit",
+    location: "device",
+    line: true,
+  },
+  408204: {
+    name: "FFS Fault",
+    status: Other_408204,
+    type: "bit",
+    location: "FFS Control Room",
+    line: true,
+  },
+  408205: {
+    name: "VCB Status",
+    status: Other_408205,
+    type: "bit",
+    location: "device",
+    line: true,
+  },
+  408206: {
+    name: "ACB Status",
+    status: Other_408206,
+    type: "bit",
+    location: "device",
+    line: true,
+  },
+  408207: {
+    name: "ACB Control",
+    status: Other_408207,
+    type: "bit",
+    location: "device",
+    line: true,
+  },
 };
 
 const DC_error_table = {
-  409101: { name: "LC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409103: { name: "Freq-M_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409105: { name: "ACPM_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409107: { name: "AuxMtot_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409109: { name: "AuxM_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409111: { name: "UPS_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409113: { name: "TR_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409115: { name: "TH_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409117: { name: "RelayMVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409119: { name: "RelayVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409121: { name: "RIO_CtrlRoom_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409123: { name: "RIO_MVCB_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409125: { name: "RIO_ACP_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409127: { name: "GC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409129: { name: "HVAC_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
-  409131: { name: "Recloser_Comm_Error", status: 1, type: "int", location: "Control Room", line: true },
+  409101: {
+    name: "LC_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409103: {
+    name: "Freq-M_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409105: {
+    name: "ACPM_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409107: {
+    name: "AuxMtot_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409109: {
+    name: "AuxM_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409111: {
+    name: "UPS_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409113: {
+    name: "TR_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409115: {
+    name: "TH_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409117: {
+    name: "RelayMVCB_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409119: {
+    name: "RelayVCB_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409121: {
+    name: "RIO_CtrlRoom_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409123: {
+    name: "RIO_MVCB_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409125: {
+    name: "RIO_ACP_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409127: {
+    name: "GC_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409129: {
+    name: "HVAC_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
+  409131: {
+    name: "Recloser_Comm_Error",
+    status: 1,
+    type: "int",
+    location: "Control Room",
+    line: true,
+  },
 };
 
 const GC_400033 = {
@@ -858,12 +1301,24 @@ const GC_400129 = {
 };
 
 const GC_error_table = {
-  400033: { name: "SBSPM", status: GC_400033, type: "threshold", location: "Control Room", line: true },
-  400129: { name: "SOC", status: GC_400129, type: "valve", location: "Control Room", line: true },
+  400033: {
+    name: "SBSPM",
+    status: GC_400033,
+    type: "threshold",
+    location: "Control Room",
+    line: true,
+  },
+  400129: {
+    name: "SOC",
+    status: GC_400129,
+    type: "valve",
+    location: "Control Room",
+    line: true,
+  },
 };
 
 // Alarm DB //--------------------------------------------------------------------------------
-const Alarm_DB_config = { 
+const Alarm_DB_config = {
   lc1_rf10_System: LC_System_error_table,
   lc1_rf10_BMS1: LC_BMS_error_table,
   lc1_rf10_PCS1: LC_PCS_error_table,
@@ -993,12 +1448,12 @@ const Alarm_DB_config = {
   gc_rf10: GC_error_table,
 };
 
-function creat_Alarm_DB_docs(nanoDB,) {
-  let alarm_doc_array = []
+function creat_Alarm_DB_docs(nanoDB) {
+  let alarm_doc_array = [];
   for (let [key, value] of Object.entries(Alarm_DB_config)) {
     for (let [k, v] of Object.entries(value)) {
       let alarm_doc = {};
-      if (v["type"] !== 'valve') {
+      if (v["type"] !== "valve") {
         for (let [_k, _v] of Object.entries(v["status"])) {
           alarm_doc = {
             _id: `${key}:${k}:${_k}`,
@@ -1006,11 +1461,7 @@ function creat_Alarm_DB_docs(nanoDB,) {
             device: key,
             location: v["location"],
             level: `${
-              v["name"]
-                .toLowerCase()
-                .includes("fault")
-                ? "Fault"
-                : "Alarm"
+              v["name"].toLowerCase().includes("fault") ? "Fault" : "Alarm"
             }`,
             content: `${v["name"]}:${_v}`,
             value: "value",
@@ -1034,13 +1485,9 @@ function creat_Alarm_DB_docs(nanoDB,) {
             device: key,
             location: v["location"],
             level: `${
-              v["name"]
-                .toLowerCase()
-                .includes("fault")
-                ? "Fault"
-                : "Alarm"
+              v["name"].toLowerCase().includes("fault") ? "Fault" : "Alarm"
             }`,
-            content:`${v["name"]}:${_v}`,
+            content: `${v["name"]}:${_v}`,
             value: "value",
             trigger: false,
             read: false,
@@ -1053,26 +1500,27 @@ function creat_Alarm_DB_docs(nanoDB,) {
       }
     }
   }
-  return alarm_doc_array
+  return alarm_doc_array;
 }
 
 // Function to initialize the database
-function init_Alarm_DB(nanoDB,) {
-  const alarm_doc_array = creat_Alarm_DB_docs(nanoDB,)
+function init_Alarm_DB(nanoDB) {
+  const alarm_doc_array = creat_Alarm_DB_docs(nanoDB);
 
   // Bulk insert initial documents
-  nanoDB.bulk({ docs: alarm_doc_array })
-    .then(response => {
-      console.log('Database initialized successfully.');
+  nanoDB
+    .bulk({ docs: alarm_doc_array })
+    .then((response) => {
+      console.log("Database initialized successfully.");
 
       // Create the initialization flag document
-      return nanoDB.insert({ _id: 'init_flag', initialized: true });
+      return nanoDB.insert({ _id: "init_flag", initialized: true });
     })
     .then(() => {
-      console.log('Initialization flag created.');
+      console.log("Initialization flag created.");
     })
-    .catch(err => {
-      console.error('Error initializing database:', err);
+    .catch((err) => {
+      console.error("Error initializing database:", err);
     });
 }
 
@@ -1112,7 +1560,7 @@ function mapBitToStatus(rawData, statusDict, error_arr, bit_arr, bit_status) {
       // error_arr.push(matchedValue !== undefined ? matchedValue : "Unknown");
       if (matchedValue !== undefined) {
         error_arr.push(matchedValue);
-        bit_arr.push(i)
+        bit_arr.push(i);
       }
     }
   }
@@ -1134,23 +1582,41 @@ function checkPartialMatch(k, array) {
   return null; // Return null if no match is found
 }
 
-function createErrorRecord(_id, db_name, time, error_table_tag, device, content, value, occurrence_time, line, ) {
+function createErrorRecord(
+  _id,
+  db_name,
+  time,
+  error_table_tag,
+  device,
+  content,
+  value,
+  occurrence_time,
+  line
+) {
   let location = error_table_tag["location"];
-  if (db_name.includes("lc") && error_table_tag["location"].includes("ESS?x-1")) {
+  if (
+    db_name.includes("lc") &&
+    error_table_tag["location"].includes("ESS?x-1")
+  ) {
     const x = db_name.match(/lc(\d+)_rf10/)[1];
     location = error_table_tag["location"].replace("?x", x);
-  } else if (db_name.includes("other") && error_table_tag["location"].includes("device")) {
+  } else if (
+    db_name.includes("other") &&
+    error_table_tag["location"].includes("device")
+  ) {
     if (error_table_tag["name"].includes("UPS")) {
       location = device;
     } else if (error_table_tag["name"].includes("VCB")) {
       location = device.replace("Status", "");
-      if (location === "VCB5") {location = "AUX-VCB"};
+      if (location === "VCB5") {
+        location = "AUX-VCB";
+      }
     } else if (error_table_tag["name"].includes("ACB Status")) {
       location = "ACP-A" + device.replace("ACBStatus", "");
     } else if (error_table_tag["name"].includes("ACB Control")) {
       location = "ACP-A" + device.replace("ACBControl", "");
     }
-  };
+  }
   // console.log(location);
   // console.log(error_table_tag["location"]);
   return {
@@ -1170,7 +1636,17 @@ function createErrorRecord(_id, db_name, time, error_table_tag, device, content,
   };
 }
 
-function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,) {  
+function LC_error_result_unit(
+  time,
+  occurrence_time,
+  db_name,
+  error_table,
+  key_error,
+  tag,
+  value,
+  device,
+  error_result
+) {
   let error_type = error_table[key_error][tag]["type"];
 
   if (error_type.includes("bit")) {
@@ -1184,7 +1660,7 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
         error_table[key_error][tag]["status"],
         error_arr,
         bit_arr,
-        bit_status,
+        bit_status
       );
     } else if (error_type === "bit_abnormal") {
       bit_status = "0";
@@ -1193,47 +1669,45 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
         error_table[key_error][tag]["status"],
         error_arr,
         bit_arr,
-        bit_status,
+        bit_status
       );
     }
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${bit_arr[i]}`;
         const line = error_table[key_error][tag]["line"];
-        error_result[_id] = 
-          createErrorRecord(
-            _id,
-            db_name,
-            time,
-            error_table[key_error][tag],
-            device,
-            error_table[key_error][tag]["name"] + ":" + error_arr[i],
-            bit_status,
-            occurrence_time,
-            line
-          );
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[key_error][tag],
+          device,
+          error_table[key_error][tag]["name"] + ":" + error_arr[i],
+          bit_status,
+          occurrence_time,
+          line
+        );
         // console.log(error_result[_id])
       }
-    };
+    }
   } else {
     if (error_type === "int") {
       const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${value}`;
       const content = error_table[key_error][tag]["status"][value];
       const line = error_table[key_error][tag]["line"];
       if (content) {
-        error_result[_id] = 
-          createErrorRecord(
-            _id,
-            db_name,
-            time,
-            error_table[key_error][tag],
-            device,
-            error_table[key_error][tag]["name"] + ":" + content,
-            value,
-            occurrence_time,
-            line
-          );
-      };
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[key_error][tag],
+          device,
+          error_table[key_error][tag]["name"] + ":" + content,
+          value,
+          occurrence_time,
+          line
+        );
+      }
     } else if (error_type === "valve") {
       value = value * error_table[key_error][tag]["status"]["scale"];
       let min = error_table[key_error][tag]["status"]["min"];
@@ -1241,28 +1715,33 @@ function LC_error_result_unit(time, occurrence_time, db_name, error_table, key_e
       // console.log(v)
       let valve_status = "";
       let content = "";
-      if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
+      if (value < min) {
+        valve_status = "0";
+        content = "Lower valve";
+      } else if (value > max) {
+        valve_status = "1";
+        content = "Greater valve";
+      }
       if (valve_status && content) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${valve_status}`;
         const line = error_table[key_error][tag]["line"];
-        error_result[_id] = 
-          createErrorRecord(
-            _id,
-            db_name,
-            time,
-            error_table[key_error][tag],
-            device,
-            error_table[key_error][tag]["name"] + ":" + content,
-            value,
-            occurrence_time,
-            line
-          );
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[key_error][tag],
+          device,
+          error_table[key_error][tag]["name"] + ":" + content,
+          value,
+          occurrence_time,
+          line
+        );
       }
     }
   }
 }
 
-function LC_error_result_gen(item, db_name, error_table=LC_error_table, ) {
+function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
   //console.dir(item)
   //console.log(Object.keys(item._doc)) //mongodb obj, data is under the _doc key
   //console.log(Object.keys(error_table))
@@ -1286,8 +1765,18 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table, ) {
             let value = item[key][tag];
             let device = `${key}`;
             // console.log(key_error, tag, value, device)
-            if (typeof value !== 'undefined') {
-              LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
+            if (typeof value !== "undefined") {
+              LC_error_result_unit(
+                time,
+                occurrence_time,
+                db_name,
+                error_table,
+                key_error,
+                tag,
+                value,
+                device,
+                error_result
+              );
             }
           }
         } else {
@@ -1300,8 +1789,18 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table, ) {
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
               let value = inner_item[inner_key][tag];
               let device = `${key}_${inner_key}`;
-              if (typeof value !== 'undefined') {
-                LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
+              if (typeof value !== "undefined") {
+                LC_error_result_unit(
+                  time,
+                  occurrence_time,
+                  db_name,
+                  error_table,
+                  key_error,
+                  tag,
+                  value,
+                  device,
+                  error_result
+                );
               }
             }
           }
@@ -1312,7 +1811,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table, ) {
   return error_result;
 }
 
-function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
+function DC_error_result_gen(item, db_name, error_table = DC_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
   let error_result = {};
@@ -1328,18 +1827,17 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
           const content = error_table[tag]["name"];
           const line = error_table[tag]["line"];
           if (value === error_table[tag]["status"]) {
-            error_result[_id] = 
-              createErrorRecord(
-                _id,
-                db_name,
-                time,
-                error_table[tag],
-                device,
-                error_table[tag]["name"] + ":" + content,
-                value,
-                occurrence_time,
-                line
-              );
+            error_result[_id] = createErrorRecord(
+              _id,
+              db_name,
+              time,
+              error_table[tag],
+              device,
+              error_table[tag]["name"] + ":" + content,
+              value,
+              occurrence_time,
+              line
+            );
           }
         }
       }
@@ -1348,7 +1846,16 @@ function DC_error_result_gen(item, db_name, error_table=DC_error_table) {
   return error_result;
 }
 
-function Other_error_result_unit(time, occurrence_time, db_name, error_table, tag, value, device, error_result,) {  
+function Other_error_result_unit(
+  time,
+  occurrence_time,
+  db_name,
+  error_table,
+  tag,
+  value,
+  device,
+  error_result
+) {
   let error_type = error_table[tag]["type"];
 
   if (error_type.includes("bit")) {
@@ -1362,7 +1869,7 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
         error_table[tag]["status"],
         error_arr,
         bit_arr,
-        bit_status,
+        bit_status
       );
     } else if (error_type === "bit_abnormal") {
       bit_status = "0";
@@ -1371,46 +1878,44 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
         error_table[tag]["status"],
         error_arr,
         bit_arr,
-        bit_status,
+        bit_status
       );
     }
     if (bit_arr.length > 0) {
       for (let i = 0; i < bit_arr.length; i++) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${bit_arr[i]}`;
         const line = error_table[tag]["line"];
-        error_result[_id] = 
-          createErrorRecord(
-            _id,
-            db_name,
-            time,
-            error_table[tag],
-            device,
-            error_table[tag]["name"] + ":" + error_arr[i],
-            bit_status,
-            occurrence_time,
-            line
-          );
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          error_table[tag]["name"] + ":" + error_arr[i],
+          bit_status,
+          occurrence_time,
+          line
+        );
       }
-    };
+    }
   } else {
     if (error_type === "int") {
       const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${value}`;
       const content = error_table[tag]["status"][value];
       const line = error_table[tag]["line"];
       if (content) {
-        error_result[_id] = 
-          createErrorRecord(
-            _id,
-            db_name,
-            time,
-            error_table[tag],
-            device,
-            error_table[tag]["name"] + ":" + content,
-            value,
-            occurrence_time,
-            line
-          );
-      };
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          error_table[tag]["name"] + ":" + content,
+          value,
+          occurrence_time,
+          line
+        );
+      }
     } else if (error_type === "valve") {
       value = value * error_table[tag]["status"]["scale"];
       let min = error_table[tag]["status"]["min"];
@@ -1418,28 +1923,37 @@ function Other_error_result_unit(time, occurrence_time, db_name, error_table, ta
       // console.log(v)
       let valve_status = "";
       let content = "";
-      if (value < min) {valve_status = "0"; content = "Lower valve"; } else if (value > max) {valve_status = "1"; content = "Greater valve"; };
+      if (value < min) {
+        valve_status = "0";
+        content = "Lower valve";
+      } else if (value > max) {
+        valve_status = "1";
+        content = "Greater valve";
+      }
       if (valve_status && content) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${valve_status}`;
         const line = error_table[tag]["line"];
-        error_result[_id] = 
-          createErrorRecord(
-            _id,
-            db_name,
-            time,
-            error_table[tag],
-            device,
-            error_table[tag]["name"] + ":" + content,
-            value,
-            occurrence_time,
-            line
-          );
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          error_table[tag]["name"] + ":" + content,
+          value,
+          occurrence_time,
+          line
+        );
       }
     }
   }
 }
 
-function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
+function Other_error_result_gen(
+  item,
+  db_name,
+  error_table = Other_error_table
+) {
   const time = current_locale_time();
   const occurrence_time = item.time;
   let error_result = {};
@@ -1449,9 +1963,20 @@ function Other_error_result_gen(item, db_name, error_table=Other_error_table) {
       //console.log(Object.keys(v))
       for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
-          console.log(key, tag, value)
-          let device = `${key}`;
-          Other_error_result_unit(time, occurrence_time, db_name, error_table, tag, value, device, error_result,)
+          // console.log(key, tag, value)
+          if (value) {
+            let device = `${key}`;
+            Other_error_result_unit(
+              time,
+              occurrence_time,
+              db_name,
+              error_table,
+              tag,
+              value,
+              device,
+              error_result
+            );
+          }
         }
       }
     }
@@ -1463,138 +1988,168 @@ function compare_trigger_alarms(error_result, response) {
   // console.log(error_result)
   // console.log(response)
   let triggering_alarm_array = [];
-  Object.keys(error_result).forEach(key => {
+  Object.keys(error_result).forEach((key) => {
     triggering_alarm_array.push(key);
   });
   // console.log(triggering_alarm_array);
 
   let triggered_alarm_array = [];
-  response.docs.forEach(element => triggered_alarm_array.push(element._id));
+  response.docs.forEach((element) => triggered_alarm_array.push(element._id));
   // console.log(triggered_alarm_array);
 
-  const remain = triggering_alarm_array.filter(element => triggered_alarm_array.includes(element));
-  const income = triggering_alarm_array.filter(element => !triggered_alarm_array.includes(element));
-  const recover = triggered_alarm_array.filter(element => !triggering_alarm_array.includes(element));
+  const remain = triggering_alarm_array.filter((element) =>
+    triggered_alarm_array.includes(element)
+  );
+  const income = triggering_alarm_array.filter(
+    (element) => !triggered_alarm_array.includes(element)
+  );
+  const recover = triggered_alarm_array.filter(
+    (element) => !triggering_alarm_array.includes(element)
+  );
 
   return {
     remain,
     income,
     recover,
-  }
+  };
 }
 
 function update_trigger_alarms_atomic(error_result, compare_result, nanoDB) {
   // update for the remain alarms
   // console.log("remain_promises");
-  const remain_promises = compare_result.remain.map(_id => {
-    return nanoDB.get(_id)
-        .then(doc => {
-            doc.recover = false;
-            doc.time = error_result[_id]["time"];
-            doc.value = error_result[_id]["value"];
-            // console.log(doc);
-            return nanoDB.insert(doc);
-        })
-        .catch(err => {
-            if (err.statusCode === 404) {
-                console.error('Data not found in update_trigger_alarms:', err.request.data);
-            } else if (err.statusCode === 409) {
-                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
-            } else {
-                console.error('Error checking update_trigger_alarms flag:', err);
-            }
-        });
+  const remain_promises = compare_result.remain.map((_id) => {
+    return nanoDB
+      .get(_id)
+      .then((doc) => {
+        doc.recover = false;
+        doc.time = error_result[_id]["time"];
+        doc.value = error_result[_id]["value"];
+        // console.log(doc);
+        return nanoDB.insert(doc);
+      })
+      .catch((err) => {
+        if (err.statusCode === 404) {
+          console.error(
+            "Data not found in update_trigger_alarms:",
+            err.request.data
+          );
+        } else if (err.statusCode === 409) {
+          console.error(
+            "Error update conflict update_trigger_alarms flag:",
+            err.request.data
+          );
+        } else {
+          console.error("Error checking update_trigger_alarms flag:", err);
+        }
+      });
   });
   // update for the new income alarms
   // console.log("income_promises");
-  const income_promises = compare_result.income.map(_id => {
-      return nanoDB.get(_id)
-          .then(doc => {
-            console.error('Data existed in update_trigger_alarms:', doc._id);
-          }) 
-          .catch(err => {
-              if (err.statusCode === 404) {
-                  nanoDB.insert(error_result[_id]);
-              } else if (err.statusCode === 409) {
-                  console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
-              } else {
-                  console.error('Error checking update_trigger_alarms flag:', err);
-              }
-          });
+  const income_promises = compare_result.income.map((_id) => {
+    return nanoDB
+      .get(_id)
+      .then((doc) => {
+        console.error("Data existed in update_trigger_alarms:", doc._id);
+      })
+      .catch((err) => {
+        if (err.statusCode === 404) {
+          nanoDB.insert(error_result[_id]);
+        } else if (err.statusCode === 409) {
+          console.error(
+            "Error update conflict update_trigger_alarms flag:",
+            err.request.data
+          );
+        } else {
+          console.error("Error checking update_trigger_alarms flag:", err);
+        }
+      });
   });
 
   // update for the recover alarms
   // console.log("recover_promises");
-  const recover_promises = compare_result.recover.map(_id => {
-    return nanoDB.get(_id)
-        .then(doc => {
-            doc.recover = true;
-            doc.recover_time = current_locale_time(); 
-            // console.log(doc);
-            return nanoDB.insert(doc);
-        })
-        .catch(err => {
-            if (err.statusCode === 404) {
-                console.error('Data not found in update_trigger_alarms:', err.request.data);
-            } else if (err.statusCode === 409) {
-                console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
-            } else {
-                console.error('Error checking update_trigger_alarms flag:', err);
-            }
-        });
+  const recover_promises = compare_result.recover.map((_id) => {
+    return nanoDB
+      .get(_id)
+      .then((doc) => {
+        doc.recover = true;
+        doc.recover_time = current_locale_time();
+        // console.log(doc);
+        return nanoDB.insert(doc);
+      })
+      .catch((err) => {
+        if (err.statusCode === 404) {
+          console.error(
+            "Data not found in update_trigger_alarms:",
+            err.request.data
+          );
+        } else if (err.statusCode === 409) {
+          console.error(
+            "Error update conflict update_trigger_alarms flag:",
+            err.request.data
+          );
+        } else {
+          console.error("Error checking update_trigger_alarms flag:", err);
+        }
+      });
   });
 
   const promises = [
-    ...remain_promises, 
-    ...income_promises, 
-    ...recover_promises
+    ...remain_promises,
+    ...income_promises,
+    ...recover_promises,
   ];
   // Use Promise.all to wait for all promises to resolve
   Promise.all(promises)
-      .then(() => {
-          console.log("Promise.all in update_trigger_alarms: Suc!");
-      })
-      .catch(err => {
-          console.error('Error in Promise.all in update_trigger_alarms:', err);
-      });
+    .then(() => {
+      console.log("Promise.all in update_trigger_alarms: Suc!");
+    })
+    .catch((err) => {
+      console.error("Error in Promise.all in update_trigger_alarms:", err);
+    });
 }
 
-function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_flag=false) {
+function update_trigger_alarms_batch(
+  error_result,
+  compare_result,
+  nanoDB,
+  line_flag = false
+) {
   return new Promise((resolve, reject) => {
     let remain_result = [];
     let income_result = [];
     let recover_result = [];
-  
-    Promise.resolve('Initial data')
+
+    Promise.resolve("Initial data")
       .then(() => {
         // update for the remain alarms (Recongnized as an error from the filter func which also is the error remian in the AlarmDB)
         // console.log("remain_promises");
         if (compare_result.remain.length > 0) {
           // fetch an array of _id from the AlarmDB
-          remain_result = nanoDB.fetch({keys: compare_result.remain})
+          remain_result = nanoDB
+            .fetch({ keys: compare_result.remain })
             .then((resp) => {
               let docs_batch = [];
               try {
                 resp.rows.forEach((element) => {
                   // In case, the _id has not yet inserted in the DB
-                    // then line notify + insert to DB
+                  // then line notify + insert to DB
                   if (element.hasOwnProperty("error")) {
                     const _id = element.key;
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
                     if (line_flag && line) {
                       sendLineNotify(error_result[_id]);
-                    };
+                    }
                     docs_batch.push(error_result[_id]);
-                  
-                  // The cases which the _id has been inserted into the DB once
+
+                    // The cases which the _id has been inserted into the DB once
                   } else if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
                     // Case 1: it remains in the DB correctly
-                      // Then, update the doc with current status and values
-                      // the read boolean should follow the current setting from the DB
+                    // Then, update the doc with current status and values
+                    // the read boolean should follow the current setting from the DB
                     if (element.doc) {
                       let doc = element.doc;
                       let error_element = error_result[_id];
@@ -1603,56 +2158,57 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                         error_element["read"] = doc.read;
                         docs_batch.push(error_element);
                       }
-        
-                    // Case 2: it has been deleted before and not existed in the db currently
+
+                      // Case 2: it has been deleted before and not existed in the db currently
                       // then line notify + insert to DB
                     } else {
                       if (line_flag && line) {
                         sendLineNotify(error_result[_id]);
-                      };
+                      }
                       docs_batch.push(error_result[_id]);
                     }
                   }
-                })
+                });
               } catch (error) {
                 console.log(error);
               }
               // console.log(docs_batch)
-              return nanoDB.bulk({docs: docs_batch});
+              return nanoDB.bulk({ docs: docs_batch });
             });
           // console.log("remain_result");
-        };
+        }
       })
       .then(() => {
         // update for the new income alarms (Recongnized as an error from the filter func which also is not yet an error in the AlarmDB)
         // console.log("income_promises");
         if (compare_result.income.length > 0) {
           // fetch an array of _id from the AlarmDB
-          income_result = nanoDB.fetch({keys: compare_result.income})
+          income_result = nanoDB
+            .fetch({ keys: compare_result.income })
             .then((resp) => {
               // console.log(resp.rows)
               let docs_batch = [];
               try {
                 resp.rows.forEach((element) => {
                   // In case, the _id has not yet inserted in the DB
-                    // then line notify + insert to DB
+                  // then line notify + insert to DB
                   if (element.hasOwnProperty("error")) {
                     const _id = element.key;
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
                     if (line_flag && line) {
                       sendLineNotify(error_result[_id]);
-                    };
+                    }
                     docs_batch.push(error_result[_id]);
-                  
-                  // The cases which the _id has been inserted into the DB once 
+
+                    // The cases which the _id has been inserted into the DB once
                   } else if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
                     // Case 1: it is somehow remain in the DB although it should be a newcomer
-                      // Then, update the doc with current status and values
-                      // the read boolean should follow the current setting from the DB
+                    // Then, update the doc with current status and values
+                    // the read boolean should follow the current setting from the DB
                     if (element.doc) {
                       // console.log(element.doc);
                       let doc = element.doc;
@@ -1662,38 +2218,39 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                         error_element["read"] = doc.read;
                         docs_batch.push(error_element);
                       }
-        
-                    // Case 2: it has been deleted before and not existed in the db currently
+
+                      // Case 2: it has been deleted before and not existed in the db currently
                       // then line notify + insert to DB
                     } else {
                       if (line_flag && line) {
                         sendLineNotify(error_result[_id]);
-                      };
+                      }
                       docs_batch.push(error_result[_id]);
                     }
                   }
-                })
+                });
               } catch (error) {
                 console.log(error);
               }
               // console.log(docs_batch)
-              return nanoDB.bulk({docs: docs_batch});
+              return nanoDB.bulk({ docs: docs_batch });
             });
           // console.log("income_result");
-        };
+        }
       })
       .then(() => {
         // update for the recover alarms (Not recongnized as an error from the filter func which also is currently an error in the AlarmDB)
         // console.log("recover_promises");
         if (compare_result.recover.length > 0) {
           // fetch an array of _id from the AlarmDB
-          recover_result = nanoDB.fetch({keys: compare_result.recover})
+          recover_result = nanoDB
+            .fetch({ keys: compare_result.recover })
             .then((resp) => {
               let docs_batch = [];
               try {
                 resp.rows.forEach((element) => {
                   // As the _id is fetched in the DB
-                    // Do nothing if _id is not found in the DB
+                  // Do nothing if _id is not found in the DB
                   if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     let doc = element.doc;
@@ -1707,38 +2264,38 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
                       // if the recover and read boolean are both true: del the doc
                       if (doc.recover && doc.read) {
                         doc._deleted = true;
-                      }; 
-                    };
+                      }
+                    }
                     docs_batch.push(doc);
                   }
-                })
+                });
               } catch (error) {
                 console.log(error);
               }
               // console.log(docs_batch)
-              return nanoDB.bulk({docs: docs_batch});
-            })
+              return nanoDB.bulk({ docs: docs_batch });
+            });
           // console.log("recover_result");
-        };
+        }
       })
       .then(() => {
         // console.log({
-        //   remain_result, 
+        //   remain_result,
         //   income_result,
         //   recover_result,
         // });
         resolve({
-          remain_result, 
+          remain_result,
           income_result,
           recover_result,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
-      })
+      });
     // const promises = [
-    //   remain_promises, 
-    //   income_promises, 
+    //   remain_promises,
+    //   income_promises,
     //   recover_promises,
     // ];
     // console.log(promises);
@@ -1750,7 +2307,7 @@ function update_trigger_alarms_batch(error_result, compare_result, nanoDB, line_
     //     .catch(err => {
     //         console.error('Error in Promise.all in update_trigger_alarms:', err);
     //     });
-  })
+  });
 }
 
 function sendLineNotify(error_result_item) {
@@ -1760,7 +2317,7 @@ function sendLineNotify(error_result_item) {
     Device:   ${error_result_item["device"]}
     Value:   ${error_result_item["value"]}
     Warning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
-  `
+  `;
   const accessToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
   const request = {
     method: "post",
@@ -1780,67 +2337,97 @@ function sendLineNotify(error_result_item) {
       console.log(resp.data);
     })
     .catch((err) => {
-      console.error("Line Notify Error", err.response.data ,err.response.request.path);
+      console.error(
+        "Line Notify Error",
+        err.response.data,
+        err.response.request.path
+      );
     });
 }
 
 function current_locale_time() {
   const date = new Date();
 
-  const formattedString = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSSSSZ');
+  const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSSZ");
 
   return formattedString;
 }
 
-function alarm_processor(original_nanoDB, mangoQuery, error_result_gen_func, alarm_nanoDB, hisalarm_nanoDB ) {
+function alarm_processor(
+  original_nanoDB,
+  mangoQuery,
+  error_result_gen_func,
+  alarm_nanoDB,
+  hisalarm_nanoDB
+) {
   return new Promise((resolve, reject) => {
-    original_nanoDB.find(mangoQuery)
+    original_nanoDB
+      .find(mangoQuery)
       .then((response) => {
         const db_name = original_nanoDB["config"]["db"];
         const item = response.docs[0];
         // console.log(item);
         const error_result = error_result_gen_func(item, db_name);
         // console.log(error_result);
-  
-        alarm_nanoDB.list()
+
+        alarm_nanoDB
+          .list()
           .then((body) => {
-            return alarm_nanoDB.find({ selector: {db_name: db_name, recover: { $exists: true, $eq: false }, }, limit: body.total_rows })
+            return alarm_nanoDB.find({
+              selector: {
+                db_name: db_name,
+                recover: { $exists: true, $eq: false },
+              },
+              limit: body.total_rows,
+            });
           })
           .then((response) => {
-
-            const compare_result = compare_trigger_alarms(error_result, response);
+            const compare_result = compare_trigger_alarms(
+              error_result,
+              response
+            );
             // console.log(compare_result);
-            const alarm_db_promise = update_trigger_alarms_batch(error_result, compare_result, alarm_nanoDB, line_flag=true);
-            
-            const hisAlarm_batch = Object.values(error_result).map(obj => {
+            const alarm_db_promise = update_trigger_alarms_batch(
+              error_result,
+              compare_result,
+              alarm_nanoDB,
+              (line_flag = true)
+            );
+
+            const hisAlarm_batch = Object.values(error_result).map((obj) => {
               // Create a shallow copy of the object and modify the copy
               const newObj = { ...obj };
               delete newObj["_id"];
               return newObj;
             });
-            const hisalarm_db_promise = hisalarm_nanoDB.bulk({docs: hisAlarm_batch})
-            
+            const hisalarm_db_promise = hisalarm_nanoDB.bulk({
+              docs: hisAlarm_batch,
+            });
+
             // console.log([alarm_db_promise, hisalarm_db_promise]);
             Promise.all([alarm_db_promise, hisalarm_db_promise])
               .then(() => {
-                  resolve("alarm_db_promise and hisalarm_db_promise: Suc!");
+                resolve("alarm_db_promise and hisalarm_db_promise: Suc!");
               })
-              .catch(err => {
-                  reject('Error in alarm_db_promise and hisalarm_db_promise:', err);
+              .catch((err) => {
+                reject(
+                  "Error in alarm_db_promise and hisalarm_db_promise:",
+                  err
+                );
               });
-          })
-        })
-      .catch(err => {
+          });
+      })
+      .catch((err) => {
         if (err.statusCode === 404) {
-          reject('Data not found in alarm_promise:', err.request.data);
+          reject("Data not found in alarm_promise:", err.request.data);
         } else if (err.statusCode === 409) {
-          reject('Error update conflict alarm_promise:', err.request.data)
+          reject("Error update conflict alarm_promise:", err.request.data);
         } else {
           console.log(err);
-          reject('Error checking alarm_promise:', err);
+          reject("Error checking alarm_promise:", err);
         }
-      })
-  })
+      });
+  });
 }
 //************************************************************* */
 router.use(async (req, res, next) => {

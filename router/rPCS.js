@@ -121,7 +121,7 @@ const getLatestDocument = async (nanoDb) => {
 
 //pcs主頁
 var pcs_summary_variables;
-async function queryPcsSum(){
+async function queryPcsSum() {
   const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
     return getLatestDocument(nanoDb);
@@ -134,7 +134,7 @@ async function queryPcsSum(){
   lc4Data = allData[3];
   gcData = allData[6];
 
- pcs_summary_variables = {
+  pcs_summary_variables = {
     //id,
     permission: "manager",
     workStatus: mapPCSworkStatus(
@@ -309,7 +309,7 @@ async function queryPcsSum(){
   };
 }
 app.get("/operateinfo/pcs", async (req, res) => {
- /* const dataPromises = databases.map(async (dbName) => {
+  /* const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
     return getLatestDocument(nanoDb);
   });
@@ -357,8 +357,8 @@ app.get("/operateinfo/pcs", async (req, res) => {
     tot_E_chg: scaleProcess(lc1Data.System[402060], 0.01, 1),
     tot_E_dcg: scaleProcess(lc1Data.System[402062], 0.01, 1),
     //******************************************************************** */
-    //lc1
-    /*onlineNum_LC1: lc1Data.System[402052],
+  //lc1
+  /*onlineNum_LC1: lc1Data.System[402052],
     ratedP_LC1: 3450, //這個數值是固定的 1725*2
     activePower_LC1: scaleProcess(lc1Data.System[402055], 0.01, 1),
     reactivePower_LC1: scaleProcess(lc1Data.System[402057], 0.01, 1),
@@ -722,22 +722,19 @@ app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
-app.get(
-  "/operateinfo/pcs/infodetail/:pageNumber/:data",
-  async (req, res) => {
-    try {
-      //獲取目前切換的頁數
-      pageNumber = parseInt(req.params.pageNumber);
-      await queryPcsDetail();
-      const responseData = pcsDetail_variables;
-      //console.log(responseData);
-      res.json(responseData);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
+app.get("/operateinfo/pcs/infodetail/:pageNumber/:data", async (req, res) => {
+  try {
+    //獲取目前切換的頁數
+    pageNumber = parseInt(req.params.pageNumber);
+    await queryPcsDetail();
+    const responseData = pcsDetail_variables;
+    //console.log(responseData);
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
-);
+});
 
 //************************************************************************************************************************************************ */
 //alarm告警換頁
@@ -1309,9 +1306,9 @@ app.post("/set_dSS_Data", async (req, res) => {
 });
 
 module.exports = router;
- app.listen(port, () => {
-   console.log(`應用程式正在監聽端口 ${port}`);
- });
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});
 //************************************************************************************************************** */
 
 // app.listen(port, () => {

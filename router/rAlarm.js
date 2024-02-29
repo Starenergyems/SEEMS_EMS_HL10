@@ -52,7 +52,7 @@ const indexDef_time = {
 ].forEach((element) => element.createIndex(indexDef_time));
 
 const alarmDB_db_name_index = {
-  index: { fields: ["db_name", "time", "read", "recover",] },
+  index: { fields: ["db_name", "time", "read", "recover", "occurrence_time"] },
   name: "alarmDB_db_name_index",
 };
 // alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
@@ -98,7 +98,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 
-
 //////////////////////////////////////
 //告警紀錄
 router.get("/alarm", (req, res) => {
@@ -123,9 +122,13 @@ router.post("/alarm/realtime/edit", (req, res) => {
     // console.log(read)
 
     if (ID === "all") {
-      promise = alarmnanoDb.list()
+      promise = alarmnanoDb
+        .list()
         .then((body) => {
-          return alarmnanoDb.find({ selector: { read: { $exists: true, $eq: false }, }, limit: body.total_rows })
+          return alarmnanoDb.find({
+            selector: { read: { $exists: true, $eq: false } },
+            limit: body.total_rows,
+          });
         })
         .then((resp) => {
           // console.log(resp.docs);
@@ -136,19 +139,26 @@ router.post("/alarm/realtime/edit", (req, res) => {
             }
             return element;
           });
-          return alarmnanoDb.bulk({docs: docs_batch});
+          return alarmnanoDb.bulk({ docs: docs_batch });
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.statusCode === 404) {
-              console.error('Data not found in update_trigger_alarms:', err.request.data);
+            console.error(
+              "Data not found in update_trigger_alarms:",
+              err.request.data
+            );
           } else if (err.statusCode === 409) {
-              console.error('Error update conflict update_trigger_alarms flag:', err.request.data)
+            console.error(
+              "Error update conflict update_trigger_alarms flag:",
+              err.request.data
+            );
           } else {
-              console.error('Error checking update_trigger_alarms flag:', err);
+            console.error("Error checking update_trigger_alarms flag:", err);
           }
-        })
+        });
     } else {
-      promise = alarmnanoDb.get(ID)
+      promise = alarmnanoDb
+        .get(ID)
         .then((resp) => {
           resp.read = read;
           // console.log(resp);
@@ -159,15 +169,17 @@ router.post("/alarm/realtime/edit", (req, res) => {
             return alarmnanoDb.insert(resp);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.statusCode === 404) {
-              console.error('Data not found in /alarm/realtime/edit:', err.request.data);
+            console.error(
+              "Data not found in /alarm/realtime/edit:",
+              err.request.data
+            );
           } else {
-              console.error('Error checking /alarm/realtime/edit:', err);
+            console.error("Error checking /alarm/realtime/edit:", err);
           }
-        })
+        });
     }
-
   } catch (error) {
     console.error(error);
     res.status(500).send("伺服器錯誤");
@@ -179,20 +191,21 @@ router.post("/alarm/realtime/edit", (req, res) => {
         // setTimeout(() => {
         //   alarm_db_event_lock = false;
         // }, 1000);
-        console.log("/alarm/realtime/edit post: Suc!")
+        console.log("/alarm/realtime/edit post: Suc!");
         res.status(200).send("資料庫已更新"); //資料庫修改刪除完後再執行這行
       })
       .catch((error) => {
-        console.error('Promise rejected:', error);
+        console.error("Promise rejected:", error);
       });
   }
-  });
+});
 
 //傳數值到前端的表格中
 router.get("/alarm/realtime/edit", (req, res) => {
-  Promise.resolve('Init')
+  Promise.resolve("Init")
     .then(() => {
-      alarmnanoDb.list()
+      alarmnanoDb
+        .list()
         .then((body) => {
           // console.log(body);
           return alarmnanoDb.find({
@@ -200,13 +213,25 @@ router.get("/alarm/realtime/edit", (req, res) => {
               time: { $exists: true },
               $or: [
                 { read: { $exists: true, $eq: false } },
-                { recover: { $exists: true, $eq: false } }
-              ]
+                { recover: { $exists: true, $eq: false } },
+              ],
             },
-            fields: ["_id", "time", "location", "device", "level", "content", "value", "read", "recover", "recover_time", "occurrence_time"],
-            sort: [{ time: "desc" }],
+            fields: [
+              "_id",
+              "time",
+              "location",
+              "device",
+              "level",
+              "content",
+              "value",
+              "read",
+              "recover",
+              "recover_time",
+              "occurrence_time",
+            ],
+            sort: [{ occurrence_time: "desc" }],
             limit: body.total_rows,
-          })
+          });
         })
         .then((resp) => {
           let alarm_db_array = [];
@@ -227,20 +252,23 @@ router.get("/alarm/realtime/edit", (req, res) => {
           // console.log("alarm_db_array");
           // console.log(alarm_db_array);
           res.send([...alarm_db_array, ...alarm_db_array_read]);
-        })
+        });
     })
-    .catch(err => {
+    .catch((err) => {
       if (err.statusCode === 404) {
-          console.error('Data not found in /alarm/realtime/edit:', err.request.data);
+        console.error(
+          "Data not found in /alarm/realtime/edit:",
+          err.request.data
+        );
       } else {
-          console.error('Error checking /alarm/realtime/edit:', err);
+        console.error("Error checking /alarm/realtime/edit:", err);
       }
-    })
+    });
   // } catch (error) {
   //   console.error(error);
   //   res.status(500).send("Internal Server Error");
   // }
-  });
+});
 
 router.get("/alarm/history", (req, res) => {
   // num與fun
@@ -258,8 +286,8 @@ function alarm_processor_call() {
   //   // console.log('b')
   // }
   // console.log("alarm_processor_call", alarm_db_event_lock)
-  
-  if (! alarm_db_event_lock) {
+
+  if (!alarm_db_event_lock) {
     const mangoQuery_latest_rawdata = {
       selector: {
         time: { $exists: true },
@@ -267,35 +295,65 @@ function alarm_processor_call() {
       sort: [{ time: "desc" }],
       limit: 1,
     };
-  
-    const lc1_alarm_promise = alarm_processor(lc1nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-    const lc2_alarm_promise = alarm_processor(lc2nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-    const lc3_alarm_promise = alarm_processor(lc3nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-    const lc4_alarm_promise = alarm_processor(lc4nanoDb, mangoQuery_latest_rawdata, LC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-    
+
+    const lc1_alarm_promise = alarm_processor(
+      lc1nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
+    const lc2_alarm_promise = alarm_processor(
+      lc2nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
+    const lc3_alarm_promise = alarm_processor(
+      lc3nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
+    const lc4_alarm_promise = alarm_processor(
+      lc4nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
+
     // console.log(lc_alarm_promise)
     // Promise.race([lc_alarm_promise]).then(() => {
     //   console.log(lc_alarm_promise)
     //   console.log("done");
     //   })
-  
-    const dc_alarm_promise = alarm_processor(dcnanoDb, mangoQuery_latest_rawdata, DC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+
+    const dc_alarm_promise = alarm_processor(
+      dcnanoDb,
+      mangoQuery_latest_rawdata,
+      DC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
     // const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
-    
+
     Promise.all([
-      lc1_alarm_promise, 
-      lc2_alarm_promise, 
-      lc3_alarm_promise, 
-      lc4_alarm_promise, 
-      dc_alarm_promise, 
+      lc1_alarm_promise,
+      lc2_alarm_promise,
+      lc3_alarm_promise,
+      lc4_alarm_promise,
+      dc_alarm_promise,
       // other_alarm_promise
     ])
-    .then(() => {
-      console.log("All alarm_processor: Suc!");
-    })
-    .catch(error => {
-      console.log(error)
-    })
+      .then(() => {
+        console.log("All alarm_processor: Suc!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
 // Set up the interval to make the API call regularly
