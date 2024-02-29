@@ -22,7 +22,7 @@ const {
   db_USERNAME,
 } = require("./rLogin");
 
-const nano = require("nano")("http://admin:ems45877096@192.168.1.10:5984");
+const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 

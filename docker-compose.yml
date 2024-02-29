@@ -2,6 +2,28 @@ version: '3.8'
 
 services:
 
+  couchdb:
+    image: couchdb
+    ports:
+      - "5984:5984"
+      - "9100:9100"
+      - "4369:4369"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=ems45877096
+    volumes:
+      - /media/seems/database:/opt/couchdb/data
+      - ./local.ini:/opt/couchdb/etc/local.d/local.ini
+    deploy:
+      replicas: 1  # Set the desired number of replicas
+      restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
+    networks:
+      - service-network
+
   ems-service:
     # restart: always
     image: ems-service_v6
@@ -9,8 +31,10 @@ services:
       context: .
       dockerfile: Dockerfile
     # container_name: ems-service
-    # volumes:
-    #   - ./backend/Test:/app
+    environment:
+      - TZ=Asia/Taipei
+    volumes:
+      - ./router:/usr/src/app/router  # Mount the <local directory>:<container directory>
     ports:
       - "3000:3000"
     # environment:
@@ -24,14 +48,16 @@ services:
           delay: 5s
           max_attempts: 3
           window: 120s
-    # healthcheck:
-    #     test: ["CMD", "curl", "-fs", "http://localhost:3001/health"]
-    #     interval: 30s
-    #     timeout: 10s
-    #     retries: 3
-    #     start_period: 5s
+    healthcheck:
+        test: ["CMD", "curl", "-fs", "http://localhost:3000/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 5s
     networks:
       - service-network
+    depends_on:
+      - couchdb
 
 networks:
   service-network:

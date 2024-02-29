@@ -7,7 +7,7 @@ const cors = require("cors");
 const socket = require("socket.io");
 const http = require("http");
 const e = require("connect-flash");
-const nano = require("nano")("http://admin:ems45877096@192.168.1.10:5984");
+const nano = require("nano")("http://admin:ems45877096@couchdb:5984");
 const axios = require("axios");
 const moment = require('moment');
 
@@ -1300,7 +1300,7 @@ function LC_error_result_gen(item, db_name, error_table=LC_error_table, ) {
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
               let value = inner_item[inner_key][tag];
               let device = `${key}_${inner_key}`;
-              if (typeof value !== 'undefined') {
+              if (value) {
                 LC_error_result_unit(time, occurrence_time, db_name, error_table, key_error, tag, value, device, error_result,);
               }
             }
@@ -1788,9 +1788,11 @@ function sendLineNotify(error_result_item) {
 
 function current_locale_time() {
   const date = new Date();
+  // console.log(date)
 
   const formattedString = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSSSSZ');
 
+  // console.log(formattedString);
   return formattedString;
 }
 

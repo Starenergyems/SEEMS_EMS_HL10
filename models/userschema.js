@@ -1,4 +1,4 @@
-const nano = require("nano")("http://admin:ems45877096@192.168.1.10:5984"); // 替換成你的CouchDB連線URL
+const nano = require("nano")("http://admin:ems45877096@couchdb:5984"); // 替換成你的CouchDB連線URL
 const account = "account"; // 替換成你的CouchDB數據庫名稱
 const DBaccount = nano.use(account);
 
