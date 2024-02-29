@@ -111,13 +111,55 @@ async function fetchDataFromCouchDB() {
     const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
     console.log("Current Time:", currentTime);
 
-    // 計算今天的時間範圍
-    const todayStart = moment()
-      .startOf("day")
+    // 計算大前天的時間範圍
+    const dayBeforeYesterdayStart = moment()
+      .subtract(2, "days")
+      .endOf("day")
+      .subtract(2, "seconds") // 減去2秒到23:59:57
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    const todayEnd = moment().endOf("day").format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    console.log("todayStart Time:", todayStart);
-    console.log("todayEnd Time:", todayEnd);
+    const dayBeforeYesterdayEnd = moment()
+      .subtract(1, "days")
+      .endOf("day")
+      .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    console.log("Day Before Yesterday Start Time:", dayBeforeYesterdayStart);
+    console.log("Day Before Yesterday End Time:", dayBeforeYesterdayEnd);
+
+    // 定義篩選器條件，查詢大前天的數據
+    const filterDayBeforeYesterday = {
+      selector: {
+        $and: [
+          {
+            time: {
+              $gte: dayBeforeYesterdayStart, // 開始時間為大前天的 23:59:57
+              $lte: dayBeforeYesterdayEnd, // 結束時間為昨天的 23:59:59
+            },
+          },
+        ],
+      },
+      limit: 3600, // 限制返回的文檔數量為 24 小時的秒數，時間有限制
+    };
+
+    // 初始化存儲數值的陣列
+    let dayBeforeYesterdaySBSPM = [];
+
+    // 使用篩選器查詢大前天的數據
+    await gcDb
+      .find(filterDayBeforeYesterday)
+      .then((body) => {
+        // 提取查詢結果的文檔
+        const docs = body.docs;
+        // 提取數值並存儲到 dayBeforeYesterdaySBSPM 陣列中
+        docs.forEach((doc) => {
+          // 檢查文檔中是否存在 System 屬性和其嵌套屬性 400037
+          if (doc.System && doc.System["400037"]) {
+            dayBeforeYesterdaySBSPM.push(doc.System["400037"]); // 將嵌套屬性 400037 的值推入陣列
+          }
+        });
+        console.log("Day Before Yesterday SBSPM:", dayBeforeYesterdaySBSPM); // 輸出存儲的數值陣列
+      })
+      .catch((error) => {
+        console.log("Error fetching data for day before yesterday:", error);
+      });
 
     // 計算昨天的時間範圍
     const yesterdayStart = moment()
@@ -130,10 +172,9 @@ async function fetchDataFromCouchDB() {
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     console.log("Yesterday Start Time:", yesterdayStart);
     console.log("Yesterday End Time:", yesterdayEnd);
-    const time = 0; //定義目前搜尋時間
 
-    // 定義篩選器條件
-    const filter = {
+    // 定義篩選器條件，查詢昨天的數據
+    const filterYesterday = {
       selector: {
         $and: [
           {
@@ -144,32 +185,30 @@ async function fetchDataFromCouchDB() {
           },
         ],
       },
-      limit: 3600, // 限制返回的文檔數量為 24 小時的秒數 時間有限制
+      limit: 3600, // 限制返回的文檔數量為 24 小時的秒數，時間有限制
     };
 
     // 初始化存儲數值的陣列
-    let daySBSPM = [];
-    // 使用篩選器查詢資料庫
-    gcDb
-      .find(filter)
+    let yesterdaySBSPM = [];
+
+    // 使用篩選器查詢昨天的數據
+    await gcDb
+      .find(filterYesterday)
       .then((body) => {
         // 提取查詢結果的文檔
         const docs = body.docs;
-        //console.log(body.docs);
-        // 提取數值並存儲到 daySBSPM 陣列中
+        // 提取數值並存儲到 yesterdaySBSPM 陣列中
         docs.forEach((doc) => {
           // 檢查文檔中是否存在 System 屬性和其嵌套屬性 400037
           if (doc.System && doc.System["400037"]) {
-            daySBSPM.push(doc.System["400037"]); // 將嵌套屬性 400037 的值推入陣列
+            yesterdaySBSPM.push(doc.System["400037"]); // 將嵌套屬性 400037 的值推入陣列
           }
         });
-        console.log("daySBSPM:", daySBSPM); // 輸出存儲的數值陣列
+        console.log("Yesterday SBSPM:", yesterdaySBSPM); // 輸出存儲的數值陣列
       })
       .catch((error) => {
-        console.log("Error:", error);
+        console.log("Error fetching data for yesterday:", error);
       });
-
-    //return [];
   } catch (error) {
     console.error("Error fetching data from CouchDB:", error);
   }

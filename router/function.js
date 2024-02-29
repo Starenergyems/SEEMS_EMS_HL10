@@ -805,15 +805,15 @@ module.exports = {
   // cal_UPS_2,
   // calculateWarningNum_Env,
   //****************** */
-  // mapSysMode,
-  // mapStatusAllBMS,
-  // mapStatusAllPCS,
-  // mapSysAvailability,
-  // mapStopCHGsched,
-  // mapAutoMan,
-  // mapBMSPCSstatus,
-  // mapAvail_SS,
-  // mapEdReg_SS,
+   mapSysMode,
+   mapStatusAllBMS,
+   mapStatusAllPCS,
+   mapSysAvailability,
+   mapStopCHGsched,
+   mapAutoMan,
+   mapBMSPCSstatus,
+   mapAvail_SS,
+   mapEdReg_SS,
 };
 
 // //***************************************************************************** */
