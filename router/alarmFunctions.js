@@ -2452,7 +2452,7 @@ function alarm_processor(
             // });
 
             // console.log([alarm_db_promise, hisalarm_db_promise]);
-            Promise.all([alarm_db_promise, hisalarm_db_promise])
+            Promise.all([alarm_db_promise,])
               .then(() => {
                 resolve("alarm_db_promise and hisalarm_db_promise: Suc!");
               })
