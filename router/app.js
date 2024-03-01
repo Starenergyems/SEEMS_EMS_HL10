@@ -76,7 +76,7 @@ const batteryRouter = require("./rBattery");
 // const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
-//  const alarmRouter = require("./rAlarm");
+ const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
 // const middleware = require("./middleware");
 // const login = require("./rLogin")
@@ -112,7 +112,7 @@ app.use(batteryRouter);
 // app.use(reportRouter);
 // app.use(chartRouter);
 // app.use(testRouter);
-// app.use(alarmRouter);
+app.use(alarmRouter);
 // app.use(middleware);
 
 //***************************************************************************************************************** */

@@ -23,7 +23,6 @@ const {
   workStatuschange,
 } = require("./function");
 
-const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -31,7 +30,6 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-const nanoDb = nano(couchDBUrl);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
