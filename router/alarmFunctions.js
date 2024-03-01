@@ -2116,6 +2116,7 @@ function update_trigger_alarms_batch(
   error_result,
   compare_result,
   nanoDB,
+  hisnanoDB,
   line_flag = false
 ) {
   return new Promise((resolve, reject) => {
@@ -2133,6 +2134,7 @@ function update_trigger_alarms_batch(
             .fetch({ keys: compare_result.remain })
             .then((resp) => {
               let docs_batch = [];
+              let hisAlarm_batch = [];
               try {
                 resp.rows.forEach((element) => {
                   // In case, the _id has not yet inserted in the DB
@@ -2145,6 +2147,11 @@ function update_trigger_alarms_batch(
                       sendLineNotify(error_result[_id]);
                     }
                     docs_batch.push(error_result[_id]);
+
+                    const obj = error_result[_id]
+                    const newObj = { ...obj };
+                    delete newObj["_id"];
+                    hisAlarm_batch.push(newObj);
 
                     // The cases which the _id has been inserted into the DB once
                   } else if (element.hasOwnProperty("doc")) {
@@ -2161,6 +2168,11 @@ function update_trigger_alarms_batch(
                         error_element["_rev"] = doc._rev;
                         error_element["read"] = doc.read;
                         docs_batch.push(error_element);
+
+                        const obj = error_element[_id]
+                        const newObj = { ...obj };
+                        delete newObj["_id"];
+                        hisAlarm_batch.push(newObj);
                       }
 
                       // Case 2: it has been deleted before and not existed in the db currently
@@ -2170,6 +2182,11 @@ function update_trigger_alarms_batch(
                         sendLineNotify(error_result[_id]);
                       }
                       docs_batch.push(error_result[_id]);
+
+                      const obj = error_result[_id]
+                      const newObj = { ...obj };
+                      delete newObj["_id"];
+                      hisAlarm_batch.push(newObj);
                     }
                   }
                 });
@@ -2177,7 +2194,10 @@ function update_trigger_alarms_batch(
                 console.log(error);
               }
               // console.log(docs_batch)
-              return nanoDB.bulk({ docs: docs_batch });
+              return Promise.all([
+                nanoDB.bulk({ docs: docs_batch }),
+                hisnanoDB.bulk({ docs: hisAlarm_batch }),
+              ]);
             });
           // console.log("remain_result");
         }
@@ -2192,6 +2212,7 @@ function update_trigger_alarms_batch(
             .then((resp) => {
               // console.log(resp.rows)
               let docs_batch = [];
+              let hisAlarm_batch = [];
               try {
                 resp.rows.forEach((element) => {
                   // In case, the _id has not yet inserted in the DB
@@ -2204,6 +2225,11 @@ function update_trigger_alarms_batch(
                       sendLineNotify(error_result[_id]);
                     }
                     docs_batch.push(error_result[_id]);
+                    
+                    const obj = error_result[_id]
+                    const newObj = { ...obj };
+                    delete newObj["_id"];
+                    hisAlarm_batch.push(newObj);
 
                     // The cases which the _id has been inserted into the DB once
                   } else if (element.hasOwnProperty("doc")) {
@@ -2221,6 +2247,11 @@ function update_trigger_alarms_batch(
                         error_element["_rev"] = doc._rev;
                         error_element["read"] = doc.read;
                         docs_batch.push(error_element);
+
+                        const obj = error_element[_id]
+                        const newObj = { ...obj };
+                        delete newObj["_id"];
+                        hisAlarm_batch.push(newObj)
                       }
 
                       // Case 2: it has been deleted before and not existed in the db currently
@@ -2230,6 +2261,11 @@ function update_trigger_alarms_batch(
                         sendLineNotify(error_result[_id]);
                       }
                       docs_batch.push(error_result[_id]);
+
+                      const obj = error_result[_id]
+                      const newObj = { ...obj };
+                      delete newObj["_id"];
+                      hisAlarm_batch.push(newObj);
                     }
                   }
                 });
@@ -2237,7 +2273,10 @@ function update_trigger_alarms_batch(
                 console.log(error);
               }
               // console.log(docs_batch)
-              return nanoDB.bulk({ docs: docs_batch });
+              return Promise.all([
+                nanoDB.bulk({ docs: docs_batch }),
+                hisnanoDB.bulk({ docs: hisAlarm_batch }),
+              ]);
             });
           // console.log("income_result");
         }
@@ -2397,18 +2436,20 @@ function alarm_processor(
               error_result,
               compare_result,
               alarm_nanoDB,
-              (line_flag = true)
+              hisalarm_nanoDB,
+              true
             );
-
-            const hisAlarm_batch = Object.values(error_result).map((obj) => {
-              // Create a shallow copy of the object and modify the copy
-              const newObj = { ...obj };
-              delete newObj["_id"];
-              return newObj;
-            });
-            const hisalarm_db_promise = hisalarm_nanoDB.bulk({
-              docs: hisAlarm_batch,
-            });
+            
+            // Move this functionality to func: update_trigger_alarms_batch
+            // const hisAlarm_batch = Object.values(error_result).map((obj) => {
+            //   // Create a shallow copy of the object and modify the copy
+            //   const newObj = { ...obj };
+            //   delete newObj["_id"];
+            //   return newObj;
+            // });
+            // const hisalarm_db_promise = hisalarm_nanoDB.bulk({
+            //   docs: hisAlarm_batch,
+            // });
 
             // console.log([alarm_db_promise, hisalarm_db_promise]);
             Promise.all([alarm_db_promise, hisalarm_db_promise])
