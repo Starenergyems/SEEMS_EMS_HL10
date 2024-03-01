@@ -11,17 +11,19 @@ const gcDb = nanoClient.use(gc_rf10);
 async function generateAndInsertData(startTime, endTime) {
   const documents = [];
   let currentTime = new Date(startTime);
+  let ENDTime = new Date(endTime);
 
-  while (currentTime <= endTime) {
+  console.log(currentTime);
+  console.log(ENDTime);
+  while (currentTime <= ENDTime) {
     const document = {
-      time: new Date(currentTime), // 使用新的日期物件以避免參考問題
+      time: currentTime, // 使用新的日期物件以避免參考問題
       System: {
         400001: 0,
         400002: 0,
         400037: Math.floor(Math.random() * (10000 - 9000 + 1)) + 9000, // 產生隨機數值範圍在 9000 到 10000 之間
       },
     };
-    //documents.push(document);
     gcDb
       .insert(document)
       .then((body) => {
@@ -38,8 +40,7 @@ async function generateAndInsertData(startTime, endTime) {
 }
 
 // 指定開始和結束時間
-const startTime = "2024-02-28T23:59:50.000Z";
-const endTime = "2024-02-28T23:59:59.999Z";
-
+const startTime = "2024-03-01T00:00:00.000Z";
+const endTime = "2024-03-01T23:59:59.999Z";
 // 呼叫函數生成和插入資料
 generateAndInsertData(startTime, endTime);

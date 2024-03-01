@@ -115,10 +115,11 @@ async function fetchDataFromCouchDB() {
     // 計算大前天的時間範圍
     const dayBeforeYesterdayStart = moment()
       .subtract(2, "days")
-      .endOf("day")
-      .subtract(2, "seconds") // 減去2秒到23:59:57
+      .startOf("day")
+      .subtract(3, "seconds") // 減去2秒到23:59:57
       .utcOffset("+0800")
-      .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+      .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+
     const dayBeforeYesterdayEnd = moment()
       .subtract(2, "days")
       .endOf("day")
@@ -139,6 +140,7 @@ async function fetchDataFromCouchDB() {
           $lte: dayBeforeYesterdayEnd, // 結束時間為大前天的 23:59:59
         },
       },
+      limit: 3, //只讀取最後三秒
     };
 
     // 使用篩選器查詢大前天的數據
@@ -201,9 +203,105 @@ async function fetchDataFromCouchDB() {
         intervalEnd + "+08:00"
       );
     }
-    //for (i = 0; i <= 86402; i++) {}
     console.log("Total data fetched:", data.length);
     console.log("Data :", data);
+    const maxData = [];
+    let globalMax = Number.NEGATIVE_INFINITY; // 初始化全局最大值為負無窮大
+    let globalMin = Number.POSITIVE_INFINITY; // 初始化全局最小值為正無窮大
+
+    for (let j = 0; j <= 86400; j++) {
+      // 確保 data[j] 到 data[j+3] 有足夠的元素
+      if (j + 3 < data.length) {
+        const sliceOfData = data.slice(j, j + 4); // 取出 data[j] 到 data[j+3]
+        const max = Math.max(...sliceOfData); // 找出最大值
+        const min = Math.min(...sliceOfData); // 找出最小值
+        maxData.push(max); // 將最大值存入 maxData 陣列中
+        globalMax = Math.max(globalMax, max); // 更新全局最大值
+        globalMin = Math.min(globalMin, min); // 更新全局最小值
+      } else {
+        // 如果 data[j] 到 data[j+3] 超出了陣列範圍，可進行適當的處理，例如跳出迴圈或者填入預設值
+        break; // 在這裡我們直接跳出迴圈
+      }
+    }
+    console.log("MaxData Total data fetched:", maxData.length);
+    console.log("maxData :", maxData);
+    console.log("globalMax :", globalMax);
+    console.log("globalMin :", globalMin);
+
+    let sum = 0;
+
+    for (let k = 0; k < maxData.length; k++) {
+      sum += maxData[k]; // 將 maxData 陣列中的數值加總
+    }
+
+    //獲得平均值
+    const averageoriginal = sum / maxData.length; // 計算平均值並四捨五入到整數 eg94.99
+    const average45 = Math.round(sum / maxData.length); // 計算平均值並四捨五入到整數 eg94.99
+    const averagefloor = Math.floor(sum / maxData.length); // 計算平均值且捨去小數部分
+
+    console.log("averageoriginal :", averageoriginal);
+    console.log("average45 :", average45);
+    console.log("averagefloor :", averagefloor);
+
+    //取得每小時的最小SBSPM
+    const minValues = []; // 存儲每個分組中的最小值
+    const maxValues = []; // 存儲每個分組中的最大值
+    const averageValues = []; // 存儲每個分組中的平均值
+
+    for (let l = 0; l < maxData.length; l += 3600) {
+      const group = maxData.slice(l, l + 3600); // 取出每個分組的數據
+
+      // 找出每個分組中的最小值
+      const min = Math.min(...group);
+
+      // 找出每個分組中的最大值
+      const max = Math.max(...group);
+
+      // 計算每個分組中的平均值
+      const sum = group.reduce((acc, val) => acc + val, 0);
+      const average = sum / group.length;
+
+      // 將計算結果存入相應的陣列中
+      minValues.push(min);
+      maxValues.push(max);
+      averageValues.push(average);
+    }
+    console.log("minValues :", minValues);
+
+    console.log("maxValues :", minValues);
+    console.log("averageValues :", minValues);
+
+    //換算獲得服務品質指標
+    const quality = [];
+    let quality_val = 0;
+    for (let m = 0; m < minValues.length; m++) {
+      const hour_min = minValues[m];
+      // const hour_min = minValues[m] / 100;
+      if (hour_min >= 9500) {
+        quality_val = 1;
+        quality.push(quality_val);
+      } else if (hour_min < 9500 && hour_min >= 9400) {
+        quality_val = 0.8;
+        quality.push(quality_val);
+      } else if (hour_min < 9400 && hour_min >= 9300) {
+        quality_val = 0.6;
+        quality.push(quality_val);
+      } else if (hour_min < 9300 && hour_min >= 9200) {
+        quality_val = 0.4;
+        quality.push(quality_val);
+      } else if (hour_min < 9200 && hour_min >= 9100) {
+        quality_val = 0.2;
+        quality.push(quality_val);
+      } else if (hour_min < 9100 && hour_min >= 7000) {
+        quality_val = 0;
+        quality.push(quality_val);
+      } else if (hour_min < 7000) {
+        quality_val = 999;
+        quality.push(quality_val);
+      }
+      console.log("quality_val :", quality_val);
+    }
+    console.log(" quality:", quality);
   } catch (error) {
     console.error("Error fetching data from CouchDB:", error);
   }
