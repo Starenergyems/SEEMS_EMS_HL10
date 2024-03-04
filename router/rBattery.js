@@ -76,7 +76,8 @@ const databases = [
   "log", //5
 ];
 // 創建 Nano 實例的函式
-const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+//const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+const createNanoInstance = (dbName) => nano.db.use(dbName);
 
 // 設定index
 const getLatestDocument = async (nanoDb) => {
@@ -457,7 +458,7 @@ router.get("/operateinfo/battery", async (req, res) => {
     await querySumData();
     res.render("Op_Bat_InfoSummary", batterySum_variables);
   } catch (error) {
-    console.error(errsendDataToBackendor);
+    console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });

@@ -66,7 +66,7 @@ app.post("/login", async (req, res) => {
 
 // const accountRouter = require("./rAccount");
 // const modeRouter = require("./rMode");
-// const meterRouter = require("./rMeter");
+const meterRouter = require("./rMeter");
 // const pcsRouter = require("./rPCS");
 const batteryRouter = require("./rBattery");
 //  const commuRouter = require("./rCommu");
@@ -76,7 +76,7 @@ const batteryRouter = require("./rBattery");
 // const reportRouter = require("./rReport");
 // const chartRouter = require("./rChart");
 // const testRouter = require("./test");
- const alarmRouter = require("./rAlarm");
+const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
 // const middleware = require("./middleware");
 // const login = require("./rLogin")
@@ -102,7 +102,7 @@ const { authentication } = require("./authMiddleware");
 // app.use(authentication)
 // app.use(accountRouter);
 // app.use(modeRouter);
-// app.use(meterRouter);
+app.use(meterRouter);
 // app.use(pcsRouter);
 app.use(batteryRouter);
 // app.use(commuRouter);

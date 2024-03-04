@@ -9,11 +9,16 @@ const other_rf01 = "other_rf01";
 const other_rf10 = "other_rf10";
 const rf01Db = nano.use(other_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
 const rf10Db = nano.use(other_rf10); // 請注意這裡使用 nano.use() 來設定數據庫
-const { scaleProcess, Calculate_CPM10_energy } = require("./function");
 const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
+
+const {
+  scaleProcess,
+  Calculate_Tr_oilTemp,
+  Calculate_CPM10_energy,
+} = require("./function");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -27,100 +32,118 @@ router.get("/operateinfo", (req, res) => {
   res.redirect("/operateinfo/singlelinediagram");
 });
 
+var sld_KeyValuePairs;
+var sld_KeyValuePairs_1;
+var sld_KeyValuePairs_2;
+
+async function query_sld_KeyValuePairs() {
+
+
+  // sld_KeyValuePairs = Object.assign(sld_KeyValuePairs_1, sld_KeyValuePairs_2);
+  // return "執行完了";
+}
+
+
+
+
 router.get("/operateinfo/singlelinediagram", async (req, res) => {
   // num與fun
-  const mangoQuery = {
-    selector: {
-      time: { $exists: true },
-    },
-    sort: [{ time: "desc" }],
-    limit: 1,
-  };
-  rf10Db.find(mangoQuery, async (err, body) => {
-    try {
-      const indexDef = {
-        index: { fields: ["time"] },
-        name: "time_index",
+  // const mangoQuery = {
+  //   selector: {
+  //     time: { $exists: true },
+  //   },
+  //   sort: [{ time: "desc" }],
+  //   limit: 1,
+  // };
+  // rf10Db.find(mangoQuery, async (err, body) => {
+  try {
+    // await query_sld_KeyValuePairs();
+
+    const indexDef = {
+      index: { fields: ["time"] },
+      name: "time_index",
+    };
+
+    await rf10Db.createIndex(indexDef);
+    await rf01Db.createIndex(indexDef);
+
+    const mangoQuery = {
+      selector: {
+        time: { $exists: true },
+      },
+      sort: [{ time: "desc" }],
+      limit: 1,
+    };
+
+    await rf10Db.find(mangoQuery, async (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const other10Data = body.docs[0]; // 取得數據的第一個元素
+      console.log(other10Data.AuxM1[408077] + "__!@#__" + other10Data.AuxM1[408079]);
+
+      sld_KeyValuePairs_1 = {
+        //layout: false,
+        permission: "manager",
+
+        temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
+        temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
+        temp_TR3: Calculate_Tr_oilTemp(other10Data.TR3[408181]),
+        temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
+        temp_TR_aux: Calculate_Tr_oilTemp(other10Data.TR5[408181]),
+
       };
+      console.log(sld_KeyValuePairs_1);
 
-      await rf10Db.createIndex(indexDef);
+      res.render("Op_Meter_SLD", sld_KeyValuePairs_1);
+    });
 
-      const mangoQuery = {
-        selector: {
-          time: { $exists: true },
-        },
-        sort: [{ time: "desc" }],
-        limit: 1,
+    await rf01Db.find(mangoQuery, async (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const other01Data = body.docs[0]; // 取得數據的第一個元素
+      console.log(other01Data.Freq[408026] + "__$%^&*()");
+
+      sld_KeyValuePairs_2 = {
+        Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
+
+
+
+
+
+
+
+
+
+
       };
+      console.log(sld_KeyValuePairs_2);
+      // res.render("Op_Meter_SLD", {
+      //   Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
+      // });
+    });
 
-      rf10Db.find(mangoQuery, async (err, body) => {
-        if (err) {
-          console.error("Error:", err);
-          res.status(500).send("Internal Server Error");
-          return;
-        }
+    // console.log(sld_KeyValuePairs + "@@");
+    // console.log(abc);
+    console.log(sld_KeyValuePairs_1 + "@@");
+    console.log(sld_KeyValuePairs_2 + "@@");
+    // res.render("Op_Meter_SLD", sld_KeyValuePairs_1);
 
-        const other10Data = body.docs[0]; // 取得數據的第一個元素
 
-        res.render("Op_Meter_SLD", {
-          //layout: false,
-          permission: "manager",
-          MVCB: other10Data.VCBStatus1[408205] || 0,
-          VCB_1: other10Data.VCBStatus2[408205] || 0,
-          VCB_2: other10Data.VCBStatus3[408205] || 0,
-          VCB_3: other10Data.VCBStatus4[408205] || 0,
-          VCB_4: other10Data.VCBStatus5[408205] || 0,
 
-          ACB_1_1: other10Data.ACBStatus1[408206] || 0,
-          ACB_1_2: other10Data.ACBStatus1[408206] || 0,
-          ACB_1_3: other10Data.ACBStatus1[408206] || 0,
-          ACB_2_1: other10Data.ACBStatus2[408206] || 0,
-          ACB_2_2: other10Data.ACBStatus2[408206] || 0,
-          ACB_2_3: other10Data.ACBStatus2[408206] || 0,
-          ACB_3_1: other10Data.ACBStatus3[408206] || 0,
-          ACB_3_2: other10Data.ACBStatus3[408206] || 0,
-          ACB_3_3: other10Data.ACBStatus3[408206] || 0,
-          ACB_4_1: other10Data.ACBStatus4[408206] || 0,
 
-          ACB_1_1v: other10Data.ACBStatus1[408206] || 0,
-          ACB_1_2v: other10Data.ACBStatus1[408206] || 0,
-          ACB_1_3v: other10Data.ACBStatus1[408206] || 0,
-          ACB_2_1v: other10Data.ACBStatus2[408206] || 0,
-          ACB_2_2v: other10Data.ACBStatus2[408206] || 0,
-          ACB_2_3v: other10Data.ACBStatus2[408206] || 0,
-          ACB_3_1v: other10Data.ACBStatus3[408206] || 0,
-          ACB_3_2v: other10Data.ACBStatus3[408206] || 0,
-          ACB_3_3v: other10Data.ACBStatus3[408206] || 0,
-          ACB_4_1v: other10Data.ACBStatus4[408206] || 0,
-
-          //VCB_aux,
-          // Rly_MVCB: scaleProcess(other10Data.RelayMVCB[408181], 0.1, 1) || 0,
-          // Recloser_MVCB:
-          //   scaleProcess(other10Data.Recloser[408210], 0.1, 1) || 0,
-          // Rly_VCB_1: other10Data.RelayVCB1[408203] || 0,
-          // Rly_VCB_2: other10Data.RelayVCB2[408203] || 0,
-          // Rly_VCB_3: other10Data.RelayVCB3[408203] || 0,
-          // Rly_VCB_4: other10Data.RelayVCB4[408203] || 0,
-          // Rly_VCB_aux: other10Data.RelayVCB5[408203] || 0,
-
-          temp_TR1: scaleProcess(other10Data.TR1[408181], 0.1, 1) || 0,
-          temp_TR2: scaleProcess(other10Data.TR2[408181], 0.1, 1) || 0,
-          temp_TR3: scaleProcess(other10Data.TR3[408181], 0.1, 1) || 0,
-          temp_TR4: scaleProcess(other10Data.TR4[408181], 0.1, 1) || 0,
-          temp_TR_aux: scaleProcess(other10Data.TR5[408181], 0.1, 1) || 0,
-
-          // thermoBot_TR1: other10Data.TR3[408181] || 0,
-          // thermoBot_TR2: other10Data.TR3[408181] || 0,
-          // thermoBot_TR3: other10Data.TR3[408181] || 0,
-          // thermoBot_TR4: other10Data.TR3[408181] || 0,
-          // thermoBot_TR_aux: other10Data.TR3[408181] || 0,
-        });
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    }
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+  // });
 });
 
 router.get("/operateinfo/mainmeter", async (req, res) => {

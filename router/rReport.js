@@ -110,19 +110,21 @@ app.get("/report/report", (req, res) => {
 //   }
 // });
 
-async function fetchDataFromCouchDB() {
+//日報讀值
+async function getDayReportData() {
   try {
     // 計算大前天的時間範圍
     const dayBeforeYesterdayStart = moment()
       .subtract(2, "days")
-      .startOf("day")
-      .subtract(3, "seconds") // 減去2秒到23:59:57
+      .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間為 23:59:59.999
+      .subtract(2, "seconds") // 減去2秒到23:59:57
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
     const dayBeforeYesterdayEnd = moment()
       .subtract(2, "days")
-      .endOf("day")
+      .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間為 23:59:59.999
+      //.endOf("day")
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
@@ -299,15 +301,42 @@ async function fetchDataFromCouchDB() {
         quality_val = 999;
         quality.push(quality_val);
       }
-      console.log("quality_val :", quality_val);
+      console.log("Time:" + m + " / quality_val :", quality_val);
     }
-    console.log(" quality:", quality);
+    console.log("the qualityis :", quality);
   } catch (error) {
     console.error("Error fetching data from CouchDB:", error);
   }
+  //   return [
+  //     //回傳執行率 一天24小時
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+  //   ];
 }
 
-fetchDataFromCouchDB();
+getDayReportData();
 
 // 計算服務品質指標
 // async function fetchDataFromMongoDB() {

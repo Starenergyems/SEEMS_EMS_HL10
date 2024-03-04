@@ -6,23 +6,31 @@
     background-color: #F2F8E6;
 }
 
-.singleLineD {
+.singleLineD_oilTemp {
+    /* background-color: #afffff; */
     display: inline-block;
+    margin: 0px 0.2976% 10px 1.488%;
+}
+
+.singleLineD {
     background-color: #FFFFFF;
-    padding: 24px 0px 11px;
-    margin: 10px 0.416% 7px 1.488%;
+    padding: 15px 0px 13px;
+    margin-bottom: 10px;
     border-radius: 5px;
     position: relative;
 }
 
 .singleLineD h2 {
-    display: inline-block;
     background-color: #CBE198;
     box-sizing: border-box;
-    padding: 5px 20px;
+    width: 270px;
+    /* padding: 5px 20px; */
     font-size: 36px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 25px;
     position: absolute;
-    top: 5px;
+    top: 8px;
     left: 10px;
 }
 
@@ -40,6 +48,10 @@
     background-color: #FF0000;
 }
 
+.singleLineD .status_CB.Err {
+    background-color: #FFFF00;
+}
+
 .singleLineD .ctrlable {
     box-sizing: border-box;
     height: 14px;
@@ -51,133 +63,83 @@
 }
 
 .singleLineD #MVCB {
-    left: 709px;
-    top: 168px;
+    left: 131px;
+    top: 209px;
 }
 
 .singleLineD #VCB_1 {
-    left: 140px;
-    top: 307px;
+    left: 131px;
+    top: 339px;
 }
 
 .singleLineD #VCB_2 {
-    left: 424px;
-    top: 307px;
+    left: 364px;
+    top: 339px;
 }
 
 .singleLineD #VCB_3 {
-    left: 708px;
-    top: 307px;
+    left: 597px;
+    top: 339px;
 }
 
 .singleLineD #VCB_4 {
-    left: 994px;
-    top: 307px;
+    left: 815px;
+    top: 339px;
 }
 
 .singleLineD #VCB_aux {
-    left: 1278px;
-    top: 307px;
+    left: 1032px;
+    top: 339px;
 }
 
 .singleLineD #ACB_1_1 {
-    left: 140px;
-    top: 394px;
+    left: 131px;
+    top: 419px;
 }
 
 .singleLineD #ACB_1_2 {
-    left: 73px;
-    top: 484px;
+    left: 69px;
+    top: 503px;
 }
 
 .singleLineD #ACB_1_3 {
-    left: 207px;
-    top: 484px;
+    left: 193px;
+    top: 503px;
 }
 
 .singleLineD #ACB_2_1 {
-    left: 424px;
-    top: 394px;
+    left: 364px;
+    top: 419px;
 }
 
 .singleLineD #ACB_2_2 {
-    left: 357px;
-    top: 484px;
+    left: 302px;
+    top: 503px;
 }
 
 .singleLineD #ACB_2_3 {
-    left: 491px;
-    top: 484px;
+    left: 426px;
+    top: 503px;
 }
 
 .singleLineD #ACB_3_1 {
-    left: 708px;
-    top: 394px;
+    left: 597px;
+    top: 419px;
 }
 
 .singleLineD #ACB_3_2 {
-    left: 641px;
-    top: 484px;
+    left: 535px;
+    top: 503px;
 }
 
 .singleLineD #ACB_3_3 {
-    left: 775px;
-    top: 484px;
+    left: 659px;
+    top: 503px;
 }
 
 .singleLineD #ACB_4_1 {
-    left: 994px;
-    top: 394px;
-}
-
-.singleLineD #ACB_1_1v {
-    left: 140px;
-    top: 394px;
-}
-
-.singleLineD #ACB_1_2v {
-    left: 73px;
-    top: 484px;
-}
-
-.singleLineD #ACB_1_3v {
-    left: 207px;
-    top: 484px;
-}
-
-.singleLineD #ACB_2_1v {
-    left: 424px;
-    top: 394px;
-}
-
-.singleLineD #ACB_2_2v {
-    left: 357px;
-    top: 484px;
-}
-
-.singleLineD #ACB_2_3v {
-    left: 491px;
-    top: 484px;
-}
-
-.singleLineD #ACB_3_1v {
-    left: 708px;
-    top: 394px;
-}
-
-.singleLineD #ACB_3_2v {
-    left: 641px;
-    top: 484px;
-}
-
-.singleLineD #ACB_3_3v {
-    left: 775px;
-    top: 484px;
-}
-
-.singleLineD #ACB_4_1v {
-    left: 994px;
-    top: 394px;
+    left: 815px;
+    top: 419px;
 }
 
 .singleLineD .status_Rly,
@@ -192,74 +154,110 @@
     position: absolute;
 }
 
+.singleLineD .status_Rly.setToClose,
+.singleLineD .status_Recloser.setToClose {
+    background-color: #FF0000;
+}
+
 .singleLineD #Rly_MVCB {
-    left: 560px;
-    top: 155px;
+    left: 70px;
+    top: 176px;
 }
 
 .singleLineD #Recloser_MVCB {
-    left: 560px;
-    top: 178px;
+    left: 70px;
+    top: 241px;
 }
 
 .singleLineD #Rly_VCB_1 {
-    left: 15px;
-    top: 307px;
+    left: 70px;
+    top: 363px;
 }
 
 .singleLineD #Rly_VCB_2 {
-    left: 299px;
-    top: 307px;
+    left: 303px;
+    top: 363px;
 }
 
 .singleLineD #Rly_VCB_3 {
-    left: 583px;
-    top: 307px;
+    left: 536px;
+    top: 363px;
 }
 
 .singleLineD #Rly_VCB_4 {
-    left: 869px;
-    top: 307px;
+    left: 754px;
+    top: 363px;
 }
 
 .singleLineD #Rly_VCB_aux {
-    left: 1138px;
-    top: 307px;
+    left: 971px;
+    top: 363px;
 }
 
-.oilTemp_legend {
+.legend {
+    /* box-sizing: border-box; */
+    /* border-radius: 5px; */
+    position: absolute;
+    right:0px;
+    top:20px;
+}
+
+.legend p {
+    font-size: 28px;
+    line-height: 35px;
+}
+
+.legend .legendLine {
     display: inline-block;
-    width: 12.767%;
-    margin: 10px 0.357%;
-    vertical-align: top;
-    min-width: 200px;
-    /* background-color: #fa0; */
+    width: 140px;
+    font-size: 28px;
+    line-height: 35px;
+}
+
+.legend .status_CB {
+    margin-top: 7px;
+}
+
+.legend .status_CB.noBG {
+    background-color: #FFFFFF;
+}
+
+.legend .legendLine p {
+    margin-left: 25px;
 }
 
 .oilTemp {
     background-color: #FFFFFF;
     box-sizing: border-box;
-    padding: 5px 0px;
-    margin-bottom: 10px;
+    padding: 5px;
+    margin-top: 10px;
     border-radius: 5px;
-
 }
 
 .oilTemp h3 {
     background-color: #CBE198;
-    margin: 5px 4.65%;
-    font-size: 32px;
+    box-sizing: border-box;
+    width: 270px;
+    margin: 5px;
+    font-size: 36px;
     line-height: 50px;
     text-align: center;
     border-radius: 25px;
 }
 
+.oilTemp .infoTR {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 20%;
+    padding: 5px;
+}
+
 .oilTemp .no_of_TR {
     background-color: #CBE19880;
     box-sizing: border-box;
-    width: calc(90.7% - 38px);
-    padding: 0px 0px 0px 4.65%;
-    margin: 5px 4.65%;
+    width: calc(100% - 38px);
+    padding: 0px 0px 0px 10px;
+    margin-bottom: 5px;
     font-size: 24px;
     line-height: 35px;
     position: relative;
@@ -326,7 +324,7 @@
     background-color: #CBE19880;
     box-sizing: border-box;
     padding: 0px 80px 0px 0px;
-    margin: 5px 4.65%;
+    margin-top: 5px;
     font-size: 24px;
     line-height: 35px;
     text-align: right;
@@ -339,131 +337,144 @@
     font-size: 24px;
 }
 
-.legend {
-    background-color: #FFFFFF;
-    box-sizing: border-box;
-    padding: 0px 4.65%;
-    margin-top: 10px;
-    font-size: 28px;
-    line-height: 40px;
-    border-radius: 5px;
-}
-
-.legend .legendLine {
-    display: inline-block;
-    width: 47%;
-    font-size: 28px;
-    line-height: 40px;
-}
-
-.legend .status_CB {
-    display: inline-block;
-    background-color: #FF0000;
-    box-sizing: border-box;
-    height: 20px;
-    width: 20px;
-    border: 1px solid #000000;
-    position: relative;
-}
-
-.legend .status_CB.open {
-    background-color: #236E37;
-}
-
-.legend .status_CB.noBG {
-    background-color: transparent;
-}
-
-.legend .ctrlable {
-    box-sizing: border-box;
-    height: 14px;
-    width: 14px;
-    border: 3px solid #000000;
-    position: absolute;
-    left: 2px;
-    top: 2px;
-}
-
 .Meter {
+    display: inline-block;
     background-color: #FFFFFF;
-    width: 97.024%;
-    margin: 8px 0.595% 10px 1.488%;
-    border-radius: 5px;
-}
-
-.Meter table {
     box-sizing: border-box;
-    /* border-collapse: collapse; */
-    padding: 7px 14px;
-    border-spacing: 0px 3px;
+    width: calc(100% - 1.488% - 1.488% - 1150px - 10px);
+    padding: 5px;
+    margin: 0px 1.488% 10px 0.2976%;
+    border-radius: 5px;
+    vertical-align: top;
+    min-width: 400px;
 }
 
-.Meter table tr td {
+.Meter .table_M {
+    /* border-collapse: collapse; */
+    border-spacing: 5px;
+}
+
+.table_M tr td {
+    background-color: #F2F8E6;
     box-sizing: border-box;
     height: 35px;
-    border: 1px solid #FFFFFF;
     font-size: 24px;
 }
 
-.Meter table .col_01 {
-    width: 175px;
-    padding: 0px 0px 0px 10px;
-}
-
-.Meter table .col_other {
-    text-align: right;
-    width: 285px;
-    padding: 0px 90px 0px 0px;
-}
-
-.Meter table .row_01 td {
+.table_M .row_01 td {
+    background-color: #CBE198;
     height: 50px;
-    padding: 0px;
-    font-size: 32px;
+    font-size: 36px;
+    font-weight: bold;
     text-align: center;
     border-radius: 25px;
 }
 
-.Meter table .row_01 .col_other {
-    background-color: #CBE198;
+.table_M .row_02 td {
+    background-color: #CBE198C0;
 }
 
-/* .Meter table .row_01 td {
-    border-radius: 25px;
-    font-size: 32px;
-} */
-
-.Meter table .row_other {
-    background-color: #CBE19880;
+.Meter .table_sub {
+    border-spacing: 5px;
 }
 
-.Meter label {
+.Meter .table_sub tr td {
+    background-color: #FFFFFF;
+    height: 105px;
+    width: 220px;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.Meter .table_sub .BG_2 {
+    background-color: #FAFEF3CC;
+}
+
+.Meter .table_sub .dataName {
+    padding: 8px 0px 0px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.Meter .table_sub label {
+    display: block;
+    box-sizing: border-box;
+    padding: 5px 0px 0px;
+    text-decoration: underline;
+    font-size: 28px;
+    line-height: 35px;
+    text-align: center;
+}
+
+.Meter .table_sub .dataUnit {
+    padding: 5px 10px 0px 0px;
+    font-size: 24px;
+    text-align: right;
+}
+
+.table_M .col_01 {
+    width: 220px;
+    padding-left: 6px;
+}
+
+.table_M .col_other {
+    width: 225px;
+    text-align: right;
+}
+
+.table_M .row_other label {
     font-size: 24px;
 }
 
+.table_M .row_other p {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 65px;
+    margin-left: 0px;
+    font-size: 24px;
+    text-align: left;
+}
+
 .popUpWindow.info_Recloser {
-    height: calc(165px + 35px*4);
-    top: 225px;
-    /* left: -100px; */
+    height: calc(165px + 35px*6);
+    width: 850px;
+    left: 295px;
+    top: 190px;
+}
+
+.info_Recloser .titlePUW {
+    display: inline-block;
+    width: 240px;
+    /* margin: 25px 20px 0px; */
+}
+
+.info_Recloser .columnDLL {
+    display: inline-block;
+    width: 280px;
+    margin-top: 20px;
+    vertical-align: top;
 }
 
 .popUpWindow .DL_Line {
     margin: 0px 10px;
 }
 
-.popUpWindow .DL_Line.firstLine {
-    margin-top: 20px;
+.info_Recloser .DL_Line {
+    padding-left: 5px;
+}
+
+.info_Recloser .DL_Line .dataLight {
+    right: 5px;
 }
 
 .info_Recloser .closeWindowButton {
-    margin: 20px 0px 0px 130px;
+    margin: 20px 0px 0px 395px;
 }
 
 .popUpWindow.info_RelayMVCB {
-    height: calc(165px + 35px*10);
+    height: calc(165px + 35px*12);
     width: 850px;
     left: 295px;
-    top: 120px;
+    top: 85px;
 }
 
 .info_RelayMVCB .titlePUW {
@@ -490,10 +501,10 @@
 }
 
 .popUpWindow.info_RelayVCB {
-    height: calc(165px + 35px*8);
+    height: calc(165px + 35px*6);
     width: 570px;
     left: 435px;
-    top: 155px;
+    top: 190px;
 }
 
 .info_RelayVCB .titlePUW {

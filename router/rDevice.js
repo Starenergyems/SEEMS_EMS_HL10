@@ -26,8 +26,8 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 //app.use(myMiddleware);
 
-const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
-
+// const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+const createNanoInstance = (dbName) => nano.db.use(dbName);
 router.get("/systeminfo/device", (req, res) => {
   //以下app要改回router
   res.render("Sys_Device");

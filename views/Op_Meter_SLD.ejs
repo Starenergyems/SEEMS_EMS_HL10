@@ -48,15 +48,16 @@
         </div>
 
         <div class="M_Page">
-            <div class="singleLineD">
-                <img src="../public/images/SingleLineDiagram.png" alt="案場單線圖">
-                <h2>【單線圖】</h2>
-                <label class="status_CB" id="MVCB"></label>
-                <label class="status_CB" id="VCB_1"></label>
-                <label class="status_CB" id="VCB_2"></label>
-                <label class="status_CB" id="VCB_3"></label>
-                <label class="status_CB" id="VCB_4"></label>
-                <% if (permission === "manager"){ %>
+            <div class="singleLineD_oilTemp">
+                <div class="singleLineD">
+                    <img src="../public/images/SingleLineDiagram.png" alt="案場單線圖" width="1150px">
+                    <!-- <img src="../public/images/SingleLineDiagram.jpg" alt="案場單線圖" width="1150px"> -->
+                    <h2>單線圖</h2>
+                    <label class="status_CB" id="MVCB"></label>
+                    <label class="status_CB" id="VCB_1"></label>
+                    <label class="status_CB" id="VCB_2"></label>
+                    <label class="status_CB" id="VCB_3"></label>
+                    <label class="status_CB" id="VCB_4"></label>
                     <label class="status_CB" id="ACB_1_1"><span class="ctrlable"></span></label>
                     <label class="status_CB" id="ACB_1_2"><span class="ctrlable"></span></label>
                     <label class="status_CB" id="ACB_1_3"><span class="ctrlable"></span></label>
@@ -67,145 +68,244 @@
                     <label class="status_CB" id="ACB_3_2"><span class="ctrlable"></span></label>
                     <label class="status_CB" id="ACB_3_3"><span class="ctrlable"></span></label>
                     <label class="status_CB" id="ACB_4_1"><span class="ctrlable"></span></label>
-                <% }else{ %>
-                    <label class="status_CB" id="ACB_1_1v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_1_2v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_1_3v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_2_1v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_2_1v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_2_3v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_3_1v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_3_2v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_3_3v"><span class="ctrlable"></span></label>
-                    <label class="status_CB" id="ACB_4_1v"><span class="ctrlable"></span></label>
-                <% } %>
-                <label class="status_CB" id="VCB_aux"></label>
-                <label class="status_Rly" id="Rly_MVCB"></label>
-                <label class="status_Recloser" id="Recloser_MVCB"></label>
-                <label class="status_Rly" id="Rly_VCB_1"></label>
-                <label class="status_Rly" id="Rly_VCB_2"></label>
-                <label class="status_Rly" id="Rly_VCB_3"></label>
-                <label class="status_Rly" id="Rly_VCB_4"></label>
-                <label class="status_Rly" id="Rly_VCB_aux"></label>
-            </div>
+                    <label class="status_CB" id="VCB_aux"></label>
+                    <label class="status_Rly" id="Rly_MVCB"></label>
+                    <label class="status_Recloser" id="Recloser_MVCB"></label>
+                    <label class="status_Rly" id="Rly_VCB_1"></label>
+                    <label class="status_Rly" id="Rly_VCB_2"></label>
+                    <label class="status_Rly" id="Rly_VCB_3"></label>
+                    <label class="status_Rly" id="Rly_VCB_4"></label>
+                    <label class="status_Rly" id="Rly_VCB_aux"></label>
 
-            <div class="oilTemp_legend">
-                <div class="oilTemp">
-                    <h3>變壓器油溫</h3>
-                    <div class="no_of_TR">A1-TR
-                        <div class="BG_thermo">
-                            <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
-                            <div class="thermoBar" id="thermoBar_TR1"></div>
-                            <div class="thermoBottom" id="thermoBot_TR1"></div>
-                        </div>
-                    </div>
-                    <div class="temp_of_TR">
-                        <label id="temp_TR1"><%=temp_TR1%></label>&#176C
-                    </div>
-                    <div class="no_of_TR">A2-TR
-                        <div class="BG_thermo">
-                            <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
-                            <div class="thermoBar" id="thermoBar_TR2"></div>
-                            <div class="thermoBottom" id="thermoBot_TR2"></div>
-                        </div>
-                    </div>
-                    <div class="temp_of_TR">
-                        <label id="temp_TR2"><%=temp_TR2%></label>&#176C
-                    </div>
-                    <div class="no_of_TR">A3-TR
-                        <div class="BG_thermo">
-                            <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
-                            <div class="thermoBar" id="thermoBar_TR3"></div>
-                            <div class="thermoBottom" id="thermoBot_TR3"></div>
-                        </div>
-                    </div>
-                    <div class="temp_of_TR">
-                        <label id="temp_TR3"><%=temp_TR3%></label>&#176C
-                    </div>
-                    <div class="no_of_TR">A4-TR
-                        <div class="BG_thermo">
-                            <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
-                            <div class="thermoBar" id="thermoBar_TR4"></div>
-                            <div class="thermoBottom" id="thermoBot_TR4"></div>
-                        </div>
-                    </div>
-                    <div class="temp_of_TR">
-                        <label id="temp_TR4"><%=temp_TR4%></label>&#176C
-                    </div>
-                    <div class="no_of_TR">Aux-TR
-                        <div class="BG_thermo">
-                            <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
-                            <div class="thermoBar" id="thermoBar_TR_aux"></div>
-                            <div class="thermoBottom" id="thermoBot_TR_aux"></div>
-                        </div>
-                    </div>
-                    <div class="temp_of_TR">
-                        <label id="temp_TR_aux">59.9</label>&#176C
+                    <div class="legend"><p>圖例：</p>
+                        <div class="legendLine"><label class="status_CB setToClose"></label><p>投入</p></div>
+                        <div class="legendLine"><label class="status_CB"></label><p>切離</p></div><br>
+                        <div class="legendLine"><label class="status_CB Err"></label><p>異常</p></div>
+                        <div class="legendLine"><label class="status_CB noBG"><span class="ctrlable"></span></label><p>可控</p></div>
                     </div>
                 </div>
 
-                <div class="legend">圖例：<br>
-                    <div class="legendLine"><label class="status_CB close"></label>&nbsp投入</div>
-                    <div class="legendLine"><label class="status_CB open"></label>&nbsp切離</div>
-                    <div class="legendLine"><label class="status_CB noBG"><span
-                                class="ctrlable"></span></label>&nbsp可控
+                <div class="oilTemp">
+                    <h3>變壓器油溫</h3>
+
+                    <div class="infoTR">
+                        <div class="no_of_TR">A1-TR
+                            <div class="BG_thermo">
+                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <div class="thermoBar" id="thermoBar_TR1"></div>
+                                <div class="thermoBottom" id="thermoBot_TR1"></div>
+                            </div>
+                        </div>
+                        <div class="temp_of_TR">
+                            <label id="temp_TR1"><%=temp_TR1%></label>&#176C
+                        </div>
+                    </div>
+
+                    <div class="infoTR">
+                        <div class="no_of_TR">A2-TR
+                            <div class="BG_thermo">
+                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <div class="thermoBar" id="thermoBar_TR2"></div>
+                                <div class="thermoBottom" id="thermoBot_TR2"></div>
+                            </div>
+                        </div>
+                        <div class="temp_of_TR">
+                            <label id="temp_TR2"><%=temp_TR2%></label>&#176C
+                        </div>
+                    </div>
+
+                    <div class="infoTR">
+                        <div class="no_of_TR">A3-TR
+                            <div class="BG_thermo">
+                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <div class="thermoBar" id="thermoBar_TR3"></div>
+                                <div class="thermoBottom" id="thermoBot_TR3"></div>
+                            </div>
+                        </div>
+                        <div class="temp_of_TR">
+                            <label id="temp_TR3"><%=temp_TR3%></label>&#176C
+                        </div>
+                    </div>
+                    
+                    <div class="infoTR">
+                        <div class="no_of_TR">A4-TR
+                            <div class="BG_thermo">
+                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <div class="thermoBar" id="thermoBar_TR4"></div>
+                                <div class="thermoBottom" id="thermoBot_TR4"></div>
+                            </div>
+                        </div>
+                        <div class="temp_of_TR">
+                            <label id="temp_TR4"><%=temp_TR4%></label>&#176C
+                        </div>
+                    </div>
+                    
+                    <div class="infoTR">
+                        <div class="no_of_TR">Aux-TR
+                            <div class="BG_thermo">
+                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">                                
+                                <div class="thermoBar" id="thermoBar_TR_aux"></div>
+                                <div class="thermoBottom" id="thermoBot_TR_aux"></div>
+                            </div>
+                        </div>
+                        <div class="temp_of_TR">
+                            <label id="temp_TR_aux"><%=temp_TR_aux%></label>&#176C
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="Meter">
-                <table>
+                <table class="table_M">
                     <tr class="row_01">
-                        <td class="col_01"></td>
-                        <td class="col_other">頻率表</td>
-                        <td class="col_other">ACB表1</td>
-                        <td class="col_other">ACB表2</td>
-                        <td class="col_other">ACB表3</td>
-                        <td class="col_other">ACB表4</td>
+                        <td colspan="2">頻率表</td>                        
+                    </tr>
+                    <tr class="row_02">
+                        <td colspan="2">
+                            <table class="table_sub">
+                                <tr>
+                                    <td>
+                                        <p class="dataName">電壓</p>
+                                        <label id="V_Freq">11.455</label>
+                                        <p class="dataUnit">kV</p>
+                                    </td>
+                                    <td class="BG_2">
+                                        <p class="dataName">電流</p>
+                                        <label id="I_Freq">238.42</label>
+                                        <p class="dataUnit">A</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="BG_2">
+                                        <p class="dataName">實功</p>
+                                        <label id="P_Freq">-10000.1</label>
+                                        <p class="dataUnit">kW</p>
+                                    </td>
+                                    <td>
+                                        <p class="dataName">虛功</p>
+                                        <label id="Q_Freq">200.1</label>
+                                        <p class="dataUnit">kVar</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">電壓&nbsp(kV/V)</td>
-                        <td class="col_other"><label id="V_Freq">11.456</label></td>
-                        <td class="col_other"><label id="V_ACB1">601.2</label></td>
-                        <td class="col_other"><label id="V_ACB2">602.3</label></td>
-                        <td class="col_other"><label id="V_ACB3">603.4</label></td>
-                        <td class="col_other"><label id="V_ACB4">604.5</label></td>
+                        <td class="col_01">電壓_ab</td>
+                        <td class="col_other"><label id="V_ab_Freq">11.411</label>
+                            <P>kV</P>
+                        </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">電流&nbsp(A)</td>
-                        <td class="col_other"><label id="I_Freq">503.97</label></td>
-                        <td class="col_other"><label id="I_ACB1">2743.80</label></td>
-                        <td class="col_other"><label id="I_ACB2">2743.79</label></td>
-                        <td class="col_other"><label id="I_ACB3">2743.81</label></td>
-                        <td class="col_other"><label id="I_ACB4">1364.41</label></td>
+                        <td class="col_01">電壓_bc</td>
+                        <td class="col_other"><label id="V_bc_Freq">11.489</label>
+                            <P>kV</P>
+                        </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">實功&nbsp(kW)</td>
-                        <td class="col_other"><label id="P_Freq">10002.3</label></td>
-                        <td class="col_other"><label id="P_ACB1">2857.8</label></td>
-                        <td class="col_other"><label id="P_ACB2">2857.9</label></td>
-                        <td class="col_other"><label id="P_ACB3">2857.7</label></td>
-                        <td class="col_other"><label id="P_ACB4">1428.9</label></td>
+                        <td class="col_01">電壓_ca</td>
+                        <td class="col_other"><label id="V_ca_Freq">11.457</label>
+                            <P>kV</P>
+                        </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">虛功&nbsp(kVar)</td>
-                        <td class="col_other"><label id="Q_Freq">-220.2</label></td>
-                        <td class="col_other"><label id="Q_ACB1">-8.2</label></td>
-                        <td class="col_other"><label id="Q_ACB2">-5.1</label></td>
-                        <td class="col_other"><label id="Q_ACB3">-4.7</label></td>
-                        <td class="col_other"><label id="Q_ACB4">-5.4</label></td>
+                        <td class="col_01">電流_a</td>
+                        <td class="col_other"><label id="I_a_Freq">238.40</label>
+                            <P>A</P>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電流_b</td>
+                        <td class="col_other"><label id="I_b_Freq">238.41</label>
+                            <P>A</P>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">電流_c</td>
+                        <td class="col_other"><label id="I_c_Freq">238.39</label>
+                            <P>A</P>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">視在功率</td>
+                        <td class="col_other"><label id="S_Freq">4730.1</label>
+                            <p>kVA</p>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">功率因數</td>
+                        <td class="col_other"><label id="PF_Freq">0.995</label>
+                            <p></p>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">頻率</td>
+                        <td class="col_other"><label id="Freq_Freq">59.453</label>
+                            <p>Hz</p>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">總輸入有效電能</td>
+                        <td class="col_other"><label id="AE_imp_Freq">87654321.0</label>
+                            <p>kWh</p>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">總輸出有效電能</td>
+                        <td class="col_other"><label id="AE_exp_Freq">87654320.9</label>
+                            <p>kWh</p>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">總輸入無效電能</td>
+                        <td class="col_other"><label id="AE_imp_Freq">234567.8</label>
+                            <p>kVarh</p>
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">總輸出無效電能</td>
+                        <td class="col_other"><label id="AE_exp_Freq">234567.9</label>
+                            <p>kVarh</p>
+                        </td>
                     </tr>
                 </table>
             </div>
 
             <div class="popUpWindow info_Recloser">
-                <h2 class="titlePUW">自動復閉器</h2>
-
-                <div class="DL_Line firstLine">自動Status1<label class="dataLight RB_L"
-                        id="recloser_bit_9"></label></div>
-                <div class="DL_Line">自動Status1<label class="dataLight RB_L" id="recloser_bit_9"></label></div>
-                <div class="DL_Line">自動Status1<label class="dataLight RB_L" id="recloser_bit_9"></label></div>
-                <div class="DL_Line">自動Status1<label class="dataLight RB_L" id="recloser_bit_9"></label></div>
+                <h2 class="titlePUW">自動復閉器模式</h2>
+                <h2 class="titlePUW">自動復閉器狀態</h2>
+                <h2 class="titlePUW">繼電器狀態</h2>
+                
+                <div class="columnDLL">
+                    <div class="DL_Line">自動<label class="dataLight GB_L" id="recloserMode_bit_0"></label>
+                    </div>
+                    <div class="DL_Line">手動<label class="dataLight GB_L" id="recloserMode_bit_1"></label>
+                    </div>
+                    <div class="DL_Line">關閉<label class="dataLight GB_L" id="recloserMode_bit_2"></label>
+                    </div>
+                </div>
+                <div class="columnDLL">
+                    <div class="DL_Line">投入失敗<label class="dataLight RB_L" id="recloserStatus_bit_0"></label>
+                    </div>
+                    <div class="DL_Line">復閉動作<label class="dataLight OB_L" id="recloserStatus_bit_1"></label>
+                    </div>
+                    <div class="DL_Line">蜂鳴器動作<label class="dataLight OB_L" id="recloserStatus_bit_2"></label>
+                    </div>
+                    <div class="DL_Line">外部互鎖<label class="dataLight RB_L" id="recloserStatus_bit_3"></label>
+                    </div>
+                    <div class="DL_Line">異常跳脫<label class="dataLight RB_L" id="recloserStatus_bit_4"></label>
+                    </div>
+                    <div class="DL_Line">待機<label class="dataLight GB_L" id="recloserStatus_bit_5"></label>
+                    </div>
+                </div>
+                <div class="columnDLL">
+                    <div class="DL_Line">Buzzer繼電器<label class="dataLight OB_L" id="recloserRelay_bit_4"></label>
+                    </div>
+                    <div class="DL_Line">On繼電器<label class="dataLight OB_L" id="recloserRelay_bit_5"></label>
+                    </div>
+                    <div class="DL_Line">Off繼電器<label class="dataLight OB_L" id="recloserRelay_bit_6"></label>
+                    </div>
+                </div>
 
                 <button class="closeWindowButton" id="closeWB_No">取消</button>
             </div>
@@ -214,39 +314,55 @@
                 <h2 class="titlePUW">MVCB盤保護電驛</h2>
 
                 <div class="columnDLL">
-                    <div class="DL_Line">51-1<label class="dataLight RB_L" id="relayMVCB_S1_bit_0"></label>
+                    <div class="DL_Line">51-1<label class="dataLight RB_L" id="relayMVCB_S0_bit_0"></label>
                     </div>
-                    <div class="DL_Line">50-1<label class="dataLight RB_L" id="relayMVCB_S1_bit_1"></label>
+                    <div class="DL_Line">50-1<label class="dataLight RB_L" id="relayMVCB_S0_bit_1"></label>
                     </div>
-                    <div class="DL_Line">51N-1<label class="dataLight RB_L" id="relayMVCB_S1_bit_2"></label>
+                    <div class="DL_Line">51N-1<label class="dataLight RB_L" id="relayMVCB_S0_bit_2"></label>
                     </div>
-                    <div class="DL_Line">50N-1<label class="dataLight RB_L" id="relayMVCB_S1_bit_3"></label>
+                    <div class="DL_Line">50N-1<label class="dataLight RB_L" id="relayMVCB_S0_bit_3"></label>
                     </div>
-                    <div class="DL_Line">51-2<label class="dataLight RB_L" id="relayMVCB_S1_bit_4"></label>
+                    <div class="DL_Line">51G-1<label class="dataLight RB_L" id="relayMVCB_S0_bit_4"></label>
                     </div>
-                    <div class="DL_Line">50-2<label class="dataLight RB_L" id="relayMVCB_S1_bit_5"></label>
+                    <div class="DL_Line">50G-1<label class="dataLight RB_L" id="relayMVCB_S0_bit_5"></label>
                     </div>
-                    <div class="DL_Line">51N-2<label class="dataLight RB_L" id="relayMVCB_S1_bit_6"></label>
+                    <div class="DL_Line">51-2<label class="dataLight RB_L" id="relayMVCB_S0_bit_6"></label>
                     </div>
-                    <div class="DL_Line">50N-2<label class="dataLight RB_L" id="relayMVCB_S1_bit_7"></label>
+                    <div class="DL_Line">50-2<label class="dataLight RB_L" id="relayMVCB_S0_bit_7"></label>
+                    </div>
+                    <div class="DL_Line">51N-2<label class="dataLight RB_L" id="relayMVCB_S0_bit_8"></label>
+                    </div>
+                    <div class="DL_Line">50N-2<label class="dataLight RB_L" id="relayMVCB_S0_bit_9"></label>
+                    </div>
+                    <div class="DL_Line">51G-2<label class="dataLight RB_L" id="relayMVCB_S0_bit_10"></label>
+                    </div>
+                    <div class="DL_Line">50G-2<label class="dataLight RB_L" id="relayMVCB_S0_bit_11"></label>
                     </div>
                 </div>
                 <div class="columnDLL">
-                    <div class="DL_Line">51-3<label class="dataLight RB_L" id="relayMVCB_S1_bit_8"></label>
+                    <div class="DL_Line">51-3<label class="dataLight RB_L" id="relayMVCB_S0_bit_12"></label>
                     </div>
-                    <div class="DL_Line">50-3<label class="dataLight RB_L" id="relayMVCB_S1_bit_9"></label>
+                    <div class="DL_Line">50-3<label class="dataLight RB_L" id="relayMVCB_S0_bit_13"></label>
                     </div>
-                    <div class="DL_Line">51N-3<label class="dataLight RB_L" id="relayMVCB_S1_bit_10"></label>
+                    <div class="DL_Line">51N-3<label class="dataLight RB_L" id="relayMVCB_S0_bit_14"></label>
                     </div>
-                    <div class="DL_Line">50N-3<label class="dataLight RB_L" id="relayMVCB_S1_bit_11"></label>
+                    <div class="DL_Line">50N-3<label class="dataLight RB_L" id="relayMVCB_S0_bit_15"></label>
                     </div>
-                    <div class="DL_Line">51-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_12"></label>
+                    <div class="DL_Line">51G-3<label class="dataLight RB_L" id="relayMVCB_S1_bit_0"></label>
                     </div>
-                    <div class="DL_Line">50-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_13"></label>
+                    <div class="DL_Line">50G-3<label class="dataLight RB_L" id="relayMVCB_S1_bit_1"></label>
                     </div>
-                    <div class="DL_Line">51N-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_14"></label>
+                    <div class="DL_Line">51-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_2"></label>
                     </div>
-                    <div class="DL_Line">50N-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_15"></label>
+                    <div class="DL_Line">50-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_3"></label>
+                    </div>
+                    <div class="DL_Line">51N-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_4"></label>
+                    </div>
+                    <div class="DL_Line">50N-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_5"></label>
+                    </div>
+                    <div class="DL_Line">51G-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_6"></label>
+                    </div>
+                    <div class="DL_Line">50G-4<label class="dataLight RB_L" id="relayMVCB_S1_bit_7"></label>
                     </div>
                 </div>
                 <div class="columnDLL">
@@ -287,31 +403,23 @@
                     </div>
                     <div class="DL_Line">50N-1<label class="dataLight RB_L" id="relayVCB_bit_3"></label>
                     </div>
-                    <div class="DL_Line">51-2<label class="dataLight RB_L" id="relayVCB_bit_4"></label>
+                    <div class="DL_Line">51G-1<label class="dataLight RB_L" id="relayVCB_bit_4"></label>
                     </div>
-                    <div class="DL_Line">50-2<label class="dataLight RB_L" id="relayVCB_bit_5"></label>
-                    </div>
-                    <div class="DL_Line">51N-2<label class="dataLight RB_L" id="relayVCB_bit_6"></label>
-                    </div>
-                    <div class="DL_Line">50N-2<label class="dataLight RB_L" id="relayVCB_bit_7"></label>
+                    <div class="DL_Line">50G-1<label class="dataLight RB_L" id="relayVCB_bit_5"></label>
                     </div>
                 </div>
                 <div class="columnDLL">
-                    <div class="DL_Line">51-3<label class="dataLight RB_L" id="relayVCB_bit_8"></label>
+                    <div class="DL_Line">51-2<label class="dataLight RB_L" id="relayVCB_bit_6"></label>
                     </div>
-                    <div class="DL_Line">50-3<label class="dataLight RB_L" id="relayVCB_bit_9"></label>
+                    <div class="DL_Line">50-2<label class="dataLight RB_L" id="relayVCB_bit_7"></label>
                     </div>
-                    <div class="DL_Line">51N-3<label class="dataLight RB_L" id="relayVCB_bit_10"></label>
+                    <div class="DL_Line">51N-2<label class="dataLight RB_L" id="relayVCB_bit_8"></label>
                     </div>
-                    <div class="DL_Line">50N-3<label class="dataLight RB_L" id="relayVCB_bit_11"></label>
+                    <div class="DL_Line">50N-2<label class="dataLight RB_L" id="relayVCB_bit_9"></label>
                     </div>
-                    <div class="DL_Line">51-4<label class="dataLight RB_L" id="relayVCB_bit_12"></label>
+                    <div class="DL_Line">51G-2<label class="dataLight RB_L" id="relayVCB_bit_10"></label>
                     </div>
-                    <div class="DL_Line">50-4<label class="dataLight RB_L" id="relayVCB_bit_13"></label>
-                    </div>
-                    <div class="DL_Line">51N-4<label class="dataLight RB_L" id="relayVCB_bit_14"></label>
-                    </div>
-                    <div class="DL_Line">50N-4<label class="dataLight RB_L" id="relayVCB_bit_15"></label>
+                    <div class="DL_Line">50G-2<label class="dataLight RB_L" id="relayVCB_bit_11"></label>
                     </div>
                 </div>
 
