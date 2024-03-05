@@ -37,29 +37,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-app.use("/public", express.static(path.join(__dirname, "../public"))); //app要改回router
-app.use(
+router.use("/public", express.static(path.join(__dirname, "../public"))); //app要改回router
+router.use(
   "/operateinfo",
   express.static(path.join(__dirname, "../public/operateinfo"))
 );
-app.use(
+router.use(
   "/operateinfo/battery",
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
-app.use(
+router.use(
   "/operateinfo/battery/infodetail",
   express.static(path.join(__dirname, "../public"))
 );
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-app.use(
+router.use(
   "/operateinfo/battery/infodetail/:id",
   express.static(path.join(__dirname, "../public"))
 );
-app.use(
+router.use(
   "/operateinfo/battery/rack",
   express.static(path.join(__dirname, "../public"))
 );
-app.use(
+router.use(
   "/operateinfo/battery/rack/:id",
   express.static(path.join(__dirname, "../public"))
 );

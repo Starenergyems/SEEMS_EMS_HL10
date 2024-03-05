@@ -16,134 +16,147 @@ const cors = require("cors");
 
 const {
   scaleProcess,
+  Convert_UInt_to_revBitString,
   Calculate_Tr_oilTemp,
   Calculate_CPM10_energy,
+  Calculate_N1450_PF,
 } = require("./function");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../public")));    // "/public", 
 app.use(cors());
+
+
+// 定義 CouchDB 資料庫名稱
+const databases = [
+  "other_rf10", //0
+  "other_rf01", //1
+];
+
+// 創建 Nano 實例的函式
+// const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+const createNanoInstance = (dbName) => nano.db.use(dbName);
+// 設定index
+const getLatestDocument = async (nanoDb) => {
+  const indexDef = {
+    index: { fields: ["time"] },
+    name: "time_index",
+  };
+
+  //建立index
+  await nanoDb.createIndex(indexDef);
+
+  //利用mango作為篩選器
+  const mangoQuery = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+
+  return new Promise((resolve, reject) => {
+    nanoDb.find(mangoQuery, (err, body) => {
+      if (err) {
+        console.error("Error:", err);
+        reject(err);
+        return;
+      }
+
+      const latestData = body.docs[0]; //把資料存到latestData裡面
+      //console.log(`Latest data from ${nanoDb.config.db}:`, latestData);
+      resolve(latestData);
+    });
+  });
+};
+/************************************************************************************ */
+let SLD_KeyValuePairs;
+let num_RelayVCB = "RelayVCB1";
+
+async function query_SLD_KeyValuePairs() {
+  // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+  const dataPromises = databases.map(async (dbName) => {
+    const nanoDb = createNanoInstance(dbName);
+    return getLatestDocument(nanoDb);
+  });
+
+  const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+  const other10Data = allData[0];
+  const other01Data = allData[1];
+
+  SLD_KeyValuePairs = {
+
+    relayMVCB_sumRawD: other10Data.RelayMVCB[408200] + other10Data.RelayMVCB[408201] + other10Data.RelayMVCB[408202],
+    relayMVCB_S0: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408200], 16),
+    relayMVCB_S1: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408201], 16),
+    relayMVCB_S2: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408202], 16),
+
+    relayVCB1_rawD: other10Data.RelayVCB1[408203],
+    relayVCB2_rawD: other10Data.RelayVCB2[408203],
+    relayVCB3_rawD: other10Data.RelayVCB3[408203],
+    relayVCB4_rawD: other10Data.RelayVCB4[408203],
+    relayVCB_aux_rawD: other10Data.RelayVCB5[408203],
+    relayVCB: Convert_UInt_to_revBitString(other10Data[num_RelayVCB][408203], 16),
+
+
+    temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
+    temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
+    temp_TR3: Calculate_Tr_oilTemp(other10Data.TR3[408181]),
+    temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
+    temp_TR_aux: Calculate_Tr_oilTemp(other10Data.TR5[408181]),
+
+
+
+
+    V_Freq: scaleProcess(other01Data.Freq[408007], 1 / 65536 * 100 / 1000, 3),
+    I_Freq: scaleProcess(other01Data.Freq[408017], 1 / 65536 * 200, 2),
+    P_Freq: scaleProcess(other01Data.Freq[408019], 1 / 65536 * 100 * 200 / 1000, 1),
+    Q_Freq: scaleProcess(other01Data.Freq[408021], 1 / 65536 * 100 * 200 / 1000, 1),
+    V_ab_Freq: scaleProcess(other01Data.Freq[408001], 1 / 65536 * 100 / 1000, 3),
+    V_bc_Freq: scaleProcess(other01Data.Freq[408003], 1 / 65536 * 100 / 1000, 3),
+    V_ca_Freq: scaleProcess(other01Data.Freq[408005], 1 / 65536 * 100 / 1000, 3),
+    I_a_Freq: scaleProcess(other01Data.Freq[408009], 1 / 65536 * 200, 2),
+    I_b_Freq: scaleProcess(other01Data.Freq[408011], 1 / 65536 * 200, 2),
+    I_c_Freq: scaleProcess(other01Data.Freq[408013], 1 / 65536 * 200, 2),
+    S_Freq: scaleProcess(other01Data.Freq[408023], 1 / 65536 * 100 * 200 / 1000, 1),
+    PF_Freq: Calculate_N1450_PF(other01Data.Freq[408025]),
+    Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
+    AE_imp_Freq: scaleProcess(other01Data.Freq[408028], 0.1, 1),
+    AE_exp_Freq: scaleProcess(other01Data.Freq[408030], 0.1, 1),
+    RE_imp_Freq: scaleProcess(other01Data.Freq[408032], 0.1, 1),
+    RE_exp_Freq: scaleProcess(other01Data.Freq[408034], 0.1, 1),
+  };
+}
 
 router.get("/operateinfo", (req, res) => {
   // num與fun
   res.redirect("/operateinfo/singlelinediagram");
 });
 
-var sld_KeyValuePairs;
-var sld_KeyValuePairs_1;
-var sld_KeyValuePairs_2;
-
-async function query_sld_KeyValuePairs() {
-
-
-  // sld_KeyValuePairs = Object.assign(sld_KeyValuePairs_1, sld_KeyValuePairs_2);
-  // return "執行完了";
-}
-
-
-
-
 router.get("/operateinfo/singlelinediagram", async (req, res) => {
-  // num與fun
-  // const mangoQuery = {
-  //   selector: {
-  //     time: { $exists: true },
-  //   },
-  //   sort: [{ time: "desc" }],
-  //   limit: 1,
-  // };
-  // rf10Db.find(mangoQuery, async (err, body) => {
   try {
-    // await query_sld_KeyValuePairs();
+    await query_SLD_KeyValuePairs();
+    console.log(SLD_KeyValuePairs);
 
-    const indexDef = {
-      index: { fields: ["time"] },
-      name: "time_index",
-    };
-
-    await rf10Db.createIndex(indexDef);
-    await rf01Db.createIndex(indexDef);
-
-    const mangoQuery = {
-      selector: {
-        time: { $exists: true },
-      },
-      sort: [{ time: "desc" }],
-      limit: 1,
-    };
-
-    await rf10Db.find(mangoQuery, async (err, body) => {
-      if (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
-      const other10Data = body.docs[0]; // 取得數據的第一個元素
-      console.log(other10Data.AuxM1[408077] + "__!@#__" + other10Data.AuxM1[408079]);
-
-      sld_KeyValuePairs_1 = {
-        //layout: false,
-        permission: "manager",
-
-        temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
-        temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
-        temp_TR3: Calculate_Tr_oilTemp(other10Data.TR3[408181]),
-        temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
-        temp_TR_aux: Calculate_Tr_oilTemp(other10Data.TR5[408181]),
-
-      };
-      console.log(sld_KeyValuePairs_1);
-
-      res.render("Op_Meter_SLD", sld_KeyValuePairs_1);
-    });
-
-    await rf01Db.find(mangoQuery, async (err, body) => {
-      if (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
-      const other01Data = body.docs[0]; // 取得數據的第一個元素
-      console.log(other01Data.Freq[408026] + "__$%^&*()");
-
-      sld_KeyValuePairs_2 = {
-        Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
-
-
-
-
-
-
-
-
-
-
-      };
-      console.log(sld_KeyValuePairs_2);
-      // res.render("Op_Meter_SLD", {
-      //   Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
-      // });
-    });
-
-    // console.log(sld_KeyValuePairs + "@@");
-    // console.log(abc);
-    console.log(sld_KeyValuePairs_1 + "@@");
-    console.log(sld_KeyValuePairs_2 + "@@");
-    // res.render("Op_Meter_SLD", sld_KeyValuePairs_1);
-
-
-
-
+    res.render("Op_Meter_SLD", SLD_KeyValuePairs);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
-  // });
+});
+
+router.get("/operateinfo/singlelinediagram/:data", async (req, res) => {
+  try {
+    await query_SLD_KeyValuePairs();
+
+    res.json(SLD_KeyValuePairs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/operateinfo/mainmeter", async (req, res) => {

@@ -38,9 +38,9 @@ async function generateAndInsertData(startTime, endTime) {
 
   // 將生成的文檔插入數據庫
 }
-//3/4 3/3 3/2 3/1 2/29 2/28
+//3/5 3/4 3/3 3/2 3/1 2/29 2/28
 // 指定開始和結束時間
-const startTime = "2024-03-04T00:00:00.000Z";
-const endTime = "2024-03-04T23:59:59.999Z";
+const startTime = "2024-03-05T00:00:00.000Z";
+const endTime = "2024-03-05T23:59:59.999Z";
 // 呼叫函數生成和插入資料
 generateAndInsertData(startTime, endTime);

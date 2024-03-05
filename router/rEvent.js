@@ -6,7 +6,7 @@ const path = require("path");
 const cors = require("cors");
 const router = express.Router();
 const app = express();
-const nano = require("nano");
+// const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -26,8 +26,14 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 
+const log = "log";
+const logDb = nano.use(log); // 請注意這裡使用 nano.use() 來設定數據庫
+
+const dc_rf10 = "dc_rf10";
+const dcDb = nano.use(dc_rf10); // 請注意這裡使用 nano.use() 來設定數據庫
 // 創建 Nano 實例的函式
-const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
+const log_door = "log_door";
+const logdoorDb = nano.use(log_door); // 請注意這裡使用 nano.use() 來設定數據庫
 
 // 設定index
 const indexDef = {
@@ -69,8 +75,6 @@ router.post("/event/operation/edit", async (req, res) => {
       },
       sort: [{ time: "desc" }],
     };
-    const logDb = createNanoInstance("log");
-    await logDb.createIndex(indexDef);
 
     // 使用logDb對CouchDB執行Mango查詢
     logDb.find(mangoQuery, (err, body) => {
@@ -111,10 +115,6 @@ router.get("/event/operation/edit", async (req, res) => {
     },
     sort: [{ time: "desc" }],
   };
-  const logDb = createNanoInstance("log");
-  const dcDb = createNanoInstance("dc_rf10");
-  await logDb.createIndex(indexDef);
-  await dcDb.createIndex(indexDef);
 
   // 使用logDb對CouchDB執行Mango查詢
   logDb.find(mangoQuery, (err, body) => {
@@ -171,9 +171,6 @@ router.post("/event/door/edit", async (req, res) => {
       },
       sort: [{ time: "desc" }],
     };
-
-    const logdoorDb = createNanoInstance("log_door");
-    await logdoorDb.createIndex(indexDef);
 
     // 使用logDb對CouchDB執行Mango查詢
     logdoorDb.find(mangoQuery, (err, body) => {

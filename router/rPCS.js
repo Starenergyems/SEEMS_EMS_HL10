@@ -7,7 +7,7 @@ const app = express(); // Create an Express application instance
 const cors = require("cors");
 const router = express.Router();
 
-const nano = require("nano");
+// const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -15,7 +15,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-const nanoDb = nano(couchDBUrl);
+// const nano = nano(couchDBUrl);
 
 const {
   scaleProcess,
@@ -90,14 +90,14 @@ const databases = [
 // const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
 const createNanoInstance = (dbName) => nano.db.use(dbName);
 // 設定index
-const getLatestDocument = async (nanoDb) => {
+const getLatestDocument = async (nano) => {
   const indexDef = {
     index: { fields: ["time"] },
     name: "time_index",
   };
 
   //建立index
-  await nanoDb.createIndex(indexDef);
+  await nano.createIndex(indexDef);
 
   //利用mango作為篩選器
   const mangoQuery = {
@@ -109,7 +109,7 @@ const getLatestDocument = async (nanoDb) => {
   };
 
   return new Promise((resolve, reject) => {
-    nanoDb.find(mangoQuery, (err, body) => {
+    nano.find(mangoQuery, (err, body) => {
       if (err) {
         console.error("Error:", err);
         reject(err);
@@ -117,7 +117,7 @@ const getLatestDocument = async (nanoDb) => {
       }
 
       const latestData = body.docs[0]; //把資料存到latestData裡面
-      //console.log(`Latest data from ${nanoDb.config.db}:`, latestData);
+      //console.log(`Latest data from ${nano.config.db}:`, latestData);
       resolve(latestData);
     });
   });
@@ -127,8 +127,8 @@ const getLatestDocument = async (nanoDb) => {
 var pcs_summary_variables;
 async function queryPcsSum() {
   const dataPromises = databases.map(async (dbName) => {
-    const nanoDb = createNanoInstance(dbName);
-    return getLatestDocument(nanoDb);
+    const nano = createNanoInstance(dbName);
+    return getLatestDocument(nano);
   });
 
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
@@ -314,8 +314,8 @@ async function queryPcsSum() {
 }
 app.get("/operateinfo/pcs", async (req, res) => {
   /* const dataPromises = databases.map(async (dbName) => {
-    const nanoDb = createNanoInstance(dbName);
-    return getLatestDocument(nanoDb);
+    const nano = createNanoInstance(dbName);
+    return getLatestDocument(nano);
   });
 
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
@@ -531,8 +531,8 @@ var pageNumber;
 async function queryPcsDetail() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
-    const nanoDb = createNanoInstance(dbName);
-    return getLatestDocument(nanoDb);
+    const nano = createNanoInstance(dbName);
+    return getLatestDocument(nano);
   });
 
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
@@ -746,8 +746,8 @@ var pcsAlarm_variables;
 async function queryPcsAlarm() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
-    const nanoDb = createNanoInstance(dbName);
-    return getLatestDocument(nanoDb);
+    const nano = createNanoInstance(dbName);
+    return getLatestDocument(nano);
   });
 
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
@@ -965,8 +965,8 @@ app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
     console.log(data_AfM.dbName_gD);
 
     const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
+      const nano = createNanoInstance(dbName);
+      return getLatestDocument(nano);
     });
 
     const allData = await Promise.all(dataPromises);
@@ -1032,8 +1032,8 @@ app.post("/set_dVS_Data", async (req, res) => {
 
       if (setValue >= dVS_Data_minLimit && setValue <= dVS_Data_maxLimit) {
         const dataPromises = databases.map(async (dbName) => {
-          const nanoDb = createNanoInstance(dbName);
-          return getLatestDocument(nanoDb);
+          const nano = createNanoInstance(dbName);
+          return getLatestDocument(nano);
         });
 
         const allData = await Promise.all(dataPromises);
@@ -1053,7 +1053,7 @@ app.post("/set_dVS_Data", async (req, res) => {
         newdwctrlData.time = isoString;
         delete newdwctrlData._id;
         delete newdwctrlData._rev;
-        await nanoDb.use("dwctrl").insert(newdwctrlData);
+        await nano.use("dwctrl").insert(newdwctrlData);
         // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
 
         //log紀錄
@@ -1102,7 +1102,7 @@ let dSS_Data_numInDataGroup;
 let dSS_Data_bitNum;
 let dSS_Data_status_MT;
 
-app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
+router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dSS_Data_dataName = req.body.dataName;
@@ -1158,8 +1158,8 @@ app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
     // console.log(data_AfM.dbName_gD);
 
     const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
+      const nano = createNanoInstance(dbName);
+      return getLatestDocument(nano);
     });
 
     const allData = await Promise.all(dataPromises);
@@ -1188,7 +1188,7 @@ app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-app.post("/set_dSS_Data", async (req, res) => {
+router.post("/set_dSS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -1235,8 +1235,8 @@ app.post("/set_dSS_Data", async (req, res) => {
     const data_AfM = data_MT[dSS_Data_dataName];
 
     const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
+      const nano = createNanoInstance(dbName);
+      return getLatestDocument(nano);
     });
 
     const allData = await Promise.all(dataPromises);
@@ -1274,7 +1274,7 @@ app.post("/set_dSS_Data", async (req, res) => {
     newdwctrlData.time = isoString;
     delete newdwctrlData._id;
     delete newdwctrlData._rev;
-    await nanoDb.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+    await nano.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
 
     //log紀錄
     const logDb = createNanoInstance("log");

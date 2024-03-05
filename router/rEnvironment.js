@@ -6,7 +6,7 @@ const router = express.Router();
 const app = express();
 const cors = require("cors");
 
-const nano = require("nano");
+//const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -14,7 +14,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-const nanoDb = nano(couchDBUrl);
+//const nano = nano(couchDBUrl);
 
 const {
   scaleProcess,
@@ -64,14 +64,14 @@ const databases = [
 // const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
 const createNanoInstance = (dbName) => nano.db.use(dbName);
 // 設定index
-const getLatestDocument = async (nanoDb) => {
+const getLatestDocument = async (nano) => {
   const indexDef = {
     index: { fields: ["time"] },
     name: "time_index",
   };
 
   //建立index
-  await nanoDb.createIndex(indexDef);
+  await nano.createIndex(indexDef);
 
   //利用mango作為篩選器
   const mangoQuery = {
@@ -83,7 +83,7 @@ const getLatestDocument = async (nanoDb) => {
   };
 
   return new Promise((resolve, reject) => {
-    nanoDb.find(mangoQuery, (err, body) => {
+    nano.find(mangoQuery, (err, body) => {
       if (err) {
         console.error("Error:", err);
         reject(err);
@@ -91,7 +91,7 @@ const getLatestDocument = async (nanoDb) => {
       }
 
       const latestData = body.docs[0]; //把資料存到latestData裡面
-      //console.log(`Latest data from ${nanoDb.config.db}:`, latestData);
+      //console.log(`Latest data from ${nano.config.db}:`, latestData);
       resolve(latestData);
     });
   });
@@ -101,8 +101,8 @@ var Env_variables;
 async function queryEnv_variables() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
-    const nanoDb = createNanoInstance(dbName);
-    return getLatestDocument(nanoDb);
+    const nano = createNanoInstance(dbName);
+    return getLatestDocument(nano);
   });
 
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
@@ -299,7 +299,15 @@ async function queryEnv_variables() {
     ffsStatus_4_1_rawD: lc4Data.BSC1[406005],
   };
 }
-
+router.get("/systeminfo", async (req, res) => {
+  try {
+    await queryEnv_variables();
+    res.render("Sys_Environment", Env_variables);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 router.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables();
@@ -329,8 +337,8 @@ router.post("/getDataforenv", async (req, res) => {
     console.log("blockId:" + blockId); //回傳1-7 代表1-1~4-4
 
     const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
+      const nano = createNanoInstance(dbName);
+      return getLatestDocument(nano);
     });
     const BSCName = blockId % 2 === 1 ? "BSC1" : "BSC2";
     const allData = await Promise.all(dataPromises); //獲得所有LC01-4的數值

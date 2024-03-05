@@ -11,7 +11,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-//const nanoDb = nano(couchDBUrl);
+//const nano = nano(couchDBUrl);
 
 const router = express.Router();
 const app = express();
@@ -40,14 +40,14 @@ const databases = ["lc1_rf10", "lc2_rf10", "lc3_rf10", "lc4_rf10", "dc_rf10"];
 const createNanoInstance = (dbName) => nano.db.use(dbName);
 
 // 設定index
-const getLatestDocument = async (nanoDb) => {
+const getLatestDocument = async (nano) => {
   const indexDef = {
     index: { fields: ["time"] },
     name: "time_index",
   };
 
   //建立index
-  await nanoDb.createIndex(indexDef);
+  await nano.createIndex(indexDef);
 
   //利用mango作為篩選器
   const mangoQuery = {
@@ -59,7 +59,7 @@ const getLatestDocument = async (nanoDb) => {
   };
 
   return new Promise((resolve, reject) => {
-    nanoDb.find(mangoQuery, (err, body) => {
+    nano.find(mangoQuery, (err, body) => {
       if (err) {
         console.error("Error:", err);
         reject(err);
@@ -67,7 +67,7 @@ const getLatestDocument = async (nanoDb) => {
       }
 
       const latestData = body.docs[0]; //把資料存到latestData裡面
-      //console.log(`Latest data from ${nanoDb.config.db}:`, latestData);
+      //console.log(`Latest data from ${nano.config.db}:`, latestData);
       resolve(latestData);
     });
   });
@@ -78,8 +78,8 @@ var systeminfo_variables;
 async function querySysteminfo() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
-    const nanoDb = createNanoInstance(dbName);
-    return getLatestDocument(nanoDb);
+    const nano = createNanoInstance(dbName);
+    return getLatestDocument(nano);
   });
 
   // 使用 Promise.all 等待所有 promise 完成，獲取"所有資料庫"中的最新數據

@@ -11,6 +11,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
+
 //確認回傳的內容有那些
 // freq
 // active prower
