@@ -133,7 +133,6 @@ app.get("/report/download-excel", async (req, res) => {
       //可正確執行
       // specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss");
       couchData = await getDayData();
-      console.log("couch data:" + couchData.hour_final);
     } else {
       console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
     }
@@ -145,7 +144,7 @@ app.get("/report/download-excel", async (req, res) => {
     updateExcelWithMongoData(workbook, couchData.hour_final, "D6");
     updateExcelWithMongoData(workbook, couchData.elsedata1, "F33");
     updateExcelWithMongoData(workbook, couchData.elsedata2, "J33");
-    updateExcelWithMongoData(workbook, couchData.Date, "C2");
+    updateExcelWithMongoData(workbook, couchData.Date, "H3");
     // Save the modified workbook to a temporary file 存儲修改後的工作簿到臨時文件
     const tempFilePath = path.join(__dirname, "temp.xlsx");
     await workbook.toFileAsync(tempFilePath);
@@ -1336,7 +1335,7 @@ function updateExcelWithMongoData(workbook, mongoData, excelStart) { //(範本�
            // Write the value to the target cell
            sheet.cell(targetCell).value(cellValue);
          });
-       } else if (data.length === 1){ //判斷是否為一維陣列
+       } else{ //判斷是否為一維陣列
          // Convert the column index to the corresponding letter (D, E, F, ...)
          const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
          // Calculate the target cell based on the starting cell and indices
@@ -1344,8 +1343,6 @@ function updateExcelWithMongoData(workbook, mongoData, excelStart) { //(範本�
          console.log("targetCell:" + targetCell);
          // Write the value to the target cell
          sheet.cell(targetCell).value(data);
-       } else {
-         console.log("要新增於excel檔的數值異常");
        };
      });
   }
