@@ -8,7 +8,7 @@ const path = require("path");
 const cors = require("cors");
 const http = require("http");
 const socketIO = require("socket.io");
-const port = 3000;
+// port = 3000;
 const app = express();
 
 app.set("view engine", "ejs");

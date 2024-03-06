@@ -11,7 +11,7 @@ const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const EventEmitter = require("events"); // 引入事件發布/訂閱模塊
 const dataUpdateEmitter = new EventEmitter(); // 創建事件發布/訂閱實例
-const port = 3000;
+//const port = 3000;
 const methodOverride = require("method-override");
 
 app.set("view engine", "ejs");

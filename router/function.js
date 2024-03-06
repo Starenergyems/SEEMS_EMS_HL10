@@ -22,12 +22,16 @@ function calculateAdd(...numbers) {
 
 //-------------------------------------------------------------------------------------------------
 
+function innerFunction() {
+  console.log(arguments.callee.caller); // 獲取呼叫 innerFunction 的函式
+}
+
 function scaleProcess(decimalValue, scale, point) {
   // 檢查輸入是否合法
   if (typeof decimalValue !== "number" || isNaN(decimalValue)) {
     if (decimalValue === null) {
       decimalValue = 0;
-      console.log("decimalValue=null");
+      console.log("decimalValue = null");
     } else if (typeof decimalValue === "string") {
       decimalValue = 0;
       console.log("decimalValue=" + decimalValue);
@@ -52,6 +56,7 @@ function scaleProcess(decimalValue, scale, point) {
 
   // 限制小數點位數
   result = result.toFixed(point);
+  innerFunction();
   return result;
 }
 
@@ -542,44 +547,44 @@ function mapL_M_systemMode(var1, var2, var3, var4) {
 //mapL_M_systemMode(32895, 127, 0, 127);
 //******************************************************************************* */
 // 告警總數量(右邊/黃色)
-function counttotalWarningNum() { }
+function counttotalWarningNum() {}
 //******************************************************************************* */
 // 電表總告警數量
-function countWarningNum_Meter() { }
+function countWarningNum_Meter() {}
 //******************************************************************************* */
 // PCS總告警數量
-function calculateWarningNum_PCS() { }
+function calculateWarningNum_PCS() {}
 
 //******************************************************************************* */
 // 電池告警數量
-function calculateWarningNum_Bat(...args) { }
+function calculateWarningNum_Bat(...args) {}
 //******************************************************************************* */
 // 環境告警數量
 // BSC告警數量
-function calculateWarningNum_Env() { }
+function calculateWarningNum_Env() {}
 //******************************************************************************* */
 // FF(消防)總告警數量
-function calculateWarningNum_FF(...args) { }
+function calculateWarningNum_FF(...args) {}
 //******************************************************************************* */
 //******************************************************************************* */
 //******************************************************************************* */
 // 錯誤總數量(左邊/紅色)
-function calculatetotalAlarmNum() { }
+function calculatetotalAlarmNum() {}
 //******************************************************************************* */
 // 電表總錯誤數量
-function calculateAlarmNum_Meter() { }
+function calculateAlarmNum_Meter() {}
 //******************************************************************************* */
 // PCS總錯誤數量
-function calculatetAlarmNum_PCS() { }
+function calculatetAlarmNum_PCS() {}
 //******************************************************************************* */
 // 電池總錯誤數量
-function calculatetAlarmNum_Bat() { }
+function calculatetAlarmNum_Bat() {}
 //******************************************************************************* */
 // 環境總錯誤數量
-function calculatetAlarmNum_Env() { }
+function calculatetAlarmNum_Env() {}
 //******************************************************************************* */
 // 消防總錯誤數量
-function calculatetAlarmNum_FF() { }
+function calculatetAlarmNum_FF() {}
 //******************************************************************************* */
 //******************************************************************************* */
 
