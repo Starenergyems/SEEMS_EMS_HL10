@@ -1007,7 +1007,7 @@ function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
   const totalDiff2 = end_H * 1000000 + end_M * 1000 + end_L * 0.1;
 
   // 計算兩個時間的差值
-  const totalDifference = Math.abs(totalDiff1 - totalDiff2);
+  const totalDifference = totalDiff2 - totalDiff1;
 
   return totalDifference;
 }
