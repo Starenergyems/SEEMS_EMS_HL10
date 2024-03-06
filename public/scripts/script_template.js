@@ -200,6 +200,20 @@ function classRemove(element, className) {
     $(element).removeClass(className);
 }
 
+function assign_TextContent_To_SpID(SpID, assignContent) {
+    const element = document.querySelector(SpID);
+    element.textContent = assignContent;
+}
+
+function assign_StatusOfDL_with_SpID(SpID, condition) {
+    const element = document.querySelector(SpID);
+
+    if (condition) {
+        element.classList.add("setToClose");
+    } else {
+        element.classList.remove("setToClose");
+    }
+}
 
 
 
