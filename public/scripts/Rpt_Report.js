@@ -58,13 +58,13 @@ function monthlyDataset(selectedYear, currentMonth) { //產出年報 月報畫�
         dynamicDataset.push({
             "index": dynamicDataset.length + 1,
             "reportType": "年報",
-            "reportName": selectedYear + "y",
+            "reportName": selectedYear + "年",
         });
         for (var month = 1; month <= 12; month++){
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "月報",
-                "reportName": selectedYear + "y" + month + "m",
+                "reportName": selectedYear + "年" + month + "月",
             });
         }
     } else {
@@ -72,7 +72,7 @@ function monthlyDataset(selectedYear, currentMonth) { //產出年報 月報畫�
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "月報",
-                "reportName": selectedYear + "y" + month + "m",
+                "reportName": selectedYear + "年" + month + "月",
             });
         }
     }
@@ -88,13 +88,13 @@ function dailyDataset(selectedYear, selectedMonth, currentMonth) { //產出日�
         dynamicDataset.push({
             "index": dynamicDataset.length + 1,
             "reportType": "月報",
-            "reportName": selectedYear + "y" + selectedMonth + "m",
+            "reportName": selectedYear + "年" + selectedMonth + "月",
         });
         for (var day = 1; day <= days; day++){
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "日報",
-                "reportName": selectedYear + "y" + selectedMonth + "m" + day + "d",
+                "reportName": selectedYear + "年" + selectedMonth + "月" + day + "日",
             });
         }
     } else if(selectedYear === currentYear && selectedMonth === currentMonth){
@@ -104,7 +104,7 @@ function dailyDataset(selectedYear, selectedMonth, currentMonth) { //產出日�
             dynamicDataset.push({
                 "index": dynamicDataset.length + 1,
                 "reportType":  "日報",
-                "reportName": selectedYear + "y" + selectedMonth + "m" + day + "d",
+                "reportName": selectedYear + "年" + selectedMonth + "月" + day + "日",
             });
     }
     console.log(dynamicDataset);
@@ -178,9 +178,9 @@ function updateTable(){
                 render: function (data, type, row) { 
                     if (row.reportType === "年報" || row.reportType === "月報"){
                         //return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\'alreadyPrepared.xlsx\', \'C:/EMS/Report\')">下載</button>';  
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'\', \''+row.reportType+'\)">下載</button>';  
                     } else if (row.reportType === "日報"){
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'/'+ selectedMonth + '\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'/'+ selectedMonth + '\', \''+row.reportType+'\')">下載</button>';  
                     }
                     return ''; // Ensure a default value is returned for other cases
                 } 
@@ -254,9 +254,15 @@ function hideFiltOptions(clickItem) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+function convertDate(inputDate) { //檔名轉換
+    // Replace 年 with y, 月 with m, and 日 with d
+    var convertedDate = inputDate.replace(/年/g, 'y').replace(/月/g, 'm').replace(/日/g, 'd');
+    console.log(convertedDate);
+    return convertedDate;
+  }
 
 
-function downloadExcel(fileName, folderPath) { //尋找對應的檔案
+function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔案
     //看報表是否已存在
     //const fileName = 'alreadyPrepared.xlsx';//要找的檔案
     //const folderPath = 'C:\\EMS\\Report' ; //要去哪找檔案 (要兩個斜線\\)
@@ -275,13 +281,27 @@ function downloadExcel(fileName, folderPath) { //尋找對應的檔案
       if (data.status === 'error'){
         console.error(data.message);                   
         console.log('報表不存在地端') // 若不存在就自行撈自料再下載
-        fetch('/report/download-excel?templatePath=../public/report/Report.xlsx')
+
+        //判斷是日報 月報 還是年報
+        var templateUrl
+        if (reportType === "年報"){
+            templateUrl =  '/report/download-excel?templatePath=../public/report/YearReport.xlsx&reportType=年報'
+        } else if (reportType === "月報"){
+            templateUrl = '/report/download-excel?templatePath=../public/report/MonthReport.xlsx&reportType=月報'
+        } else if (reportType === "日報"){
+            templateUrl = '/report/download-excel?templatePath=../public/report/DayReport.xlsx&reportType=日報'
+        } else {
+            console.error("報表類型錯誤: 應為年報/月報/日報");
+            return
+        };
+
+        fetch(templateUrl)
           .then(response => response.blob())
           .then(blob => {
             const url = window.URL.createObjectURL(new Blob([blob]));
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'test2.xlsx';
+            a.download = convertDate(fileName);//'test2.xlsx';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
