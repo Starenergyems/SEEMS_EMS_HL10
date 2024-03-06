@@ -136,7 +136,7 @@ app.use(async (req, res, next) => {
               "../public/styles/Mode_SysCtrl.css",
             ],
             permission: "admin",
-
+            ////////
             //******************************************************************************* */
             //綠黃紅 調頻服務中、部分運轉、暫停服務 bit4+bit5
             L_M_systemMode: mapL_M_systemMode(

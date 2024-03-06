@@ -26,9 +26,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../public")));    // "/public", 
+app.use(express.static(path.join(__dirname, "../public"))); // "/public",
 app.use(cors());
-
 
 // 定義 CouchDB 資料庫名稱
 const databases = [
@@ -88,19 +87,32 @@ async function query_SLD_KeyValuePairs() {
   const other01Data = allData[1];
 
   SLD_KeyValuePairs = {
-
-    relayMVCB_sumRawD: other10Data.RelayMVCB[408200] + other10Data.RelayMVCB[408201] + other10Data.RelayMVCB[408202],
-    relayMVCB_S0: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408200], 16),
-    relayMVCB_S1: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408201], 16),
-    relayMVCB_S2: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408202], 16),
+    relayMVCB_sumRawD:
+      other10Data.RelayMVCB[408200] +
+      other10Data.RelayMVCB[408201] +
+      other10Data.RelayMVCB[408202],
+    relayMVCB_S0: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408200],
+      16
+    ),
+    relayMVCB_S1: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408201],
+      16
+    ),
+    relayMVCB_S2: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408202],
+      16
+    ),
 
     relayVCB1_rawD: other10Data.RelayVCB1[408203],
     relayVCB2_rawD: other10Data.RelayVCB2[408203],
     relayVCB3_rawD: other10Data.RelayVCB3[408203],
     relayVCB4_rawD: other10Data.RelayVCB4[408203],
     relayVCB_aux_rawD: other10Data.RelayVCB5[408203],
-    relayVCB: Convert_UInt_to_revBitString(other10Data[num_RelayVCB][408203], 16),
-
+    relayVCB: Convert_UInt_to_revBitString(
+      other10Data[num_RelayVCB][408203],
+      16
+    ),
 
     temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
     temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
@@ -108,20 +120,45 @@ async function query_SLD_KeyValuePairs() {
     temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
     temp_TR_aux: Calculate_Tr_oilTemp(other10Data.TR5[408181]),
 
-
-
-
-    V_Freq: scaleProcess(other01Data.Freq[408007], 1 / 65536 * 100 / 1000, 3),
-    I_Freq: scaleProcess(other01Data.Freq[408017], 1 / 65536 * 200, 2),
-    P_Freq: scaleProcess(other01Data.Freq[408019], 1 / 65536 * 100 * 200 / 1000, 1),
-    Q_Freq: scaleProcess(other01Data.Freq[408021], 1 / 65536 * 100 * 200 / 1000, 1),
-    V_ab_Freq: scaleProcess(other01Data.Freq[408001], 1 / 65536 * 100 / 1000, 3),
-    V_bc_Freq: scaleProcess(other01Data.Freq[408003], 1 / 65536 * 100 / 1000, 3),
-    V_ca_Freq: scaleProcess(other01Data.Freq[408005], 1 / 65536 * 100 / 1000, 3),
-    I_a_Freq: scaleProcess(other01Data.Freq[408009], 1 / 65536 * 200, 2),
-    I_b_Freq: scaleProcess(other01Data.Freq[408011], 1 / 65536 * 200, 2),
-    I_c_Freq: scaleProcess(other01Data.Freq[408013], 1 / 65536 * 200, 2),
-    S_Freq: scaleProcess(other01Data.Freq[408023], 1 / 65536 * 100 * 200 / 1000, 1),
+    V_Freq: scaleProcess(
+      other01Data.Freq[408007],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    I_Freq: scaleProcess(other01Data.Freq[408017], (1 / 65536) * 200, 2),
+    P_Freq: scaleProcess(
+      other01Data.Freq[408019],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
+    Q_Freq: scaleProcess(
+      other01Data.Freq[408021],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
+    V_ab_Freq: scaleProcess(
+      other01Data.Freq[408001],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    V_bc_Freq: scaleProcess(
+      other01Data.Freq[408003],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    V_ca_Freq: scaleProcess(
+      other01Data.Freq[408005],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    I_a_Freq: scaleProcess(other01Data.Freq[408009], (1 / 65536) * 200, 2),
+    I_b_Freq: scaleProcess(other01Data.Freq[408011], (1 / 65536) * 200, 2),
+    I_c_Freq: scaleProcess(other01Data.Freq[408013], (1 / 65536) * 200, 2),
+    S_Freq: scaleProcess(
+      other01Data.Freq[408023],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
     PF_Freq: Calculate_N1450_PF(other01Data.Freq[408025]),
     Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
     AE_imp_Freq: scaleProcess(other01Data.Freq[408028], 0.1, 1),
