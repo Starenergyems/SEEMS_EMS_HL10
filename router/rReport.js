@@ -82,12 +82,33 @@ app.get("/report/report", (req, res) => {
 //const specified_date = moment("2023-01-01", "YYYY-MM-DD"); // 指定為 2023 年 1 月 1 日
 // const input_dateandtime = "2023-01-01 00:00:00";
 
-const specified_date = moment(
-  "2024-03-01 00:00:00",
-  "YYYY-MM-DD HH:mm:ss"
-).format("YYYY-MM-DD HH:mm:ss"); // 指定為 2024 年 3 月 1 日的凌晨 12 點
+const specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss"); // 指定為 2024 年 3 月 1 日的凌晨 12 點
 
-console.log("specified_date: " + specified_date);
+// console.log("specified_date: " + specified_date.format("YYYY-MM-DD HH:mm:ss"));
+
+const specified_date_clone1 = specified_date.clone();
+const specified_date_clone2 = specified_date.clone();
+const specified_date_clone3 = specified_date.clone();
+const specified_date_clone4 = specified_date.clone();
+const specified_date_clone5 = specified_date.clone();
+const specified_date_clone6 = specified_date.clone();
+const specified_date_clone7 = specified_date.clone();
+const specified_date_clone8 = specified_date.clone();
+const specified_date_clone9 = specified_date.clone();
+const specified_date_clone10 = specified_date.clone();
+const specified_date_clone11 = specified_date.clone();
+const specified_date_clone12 = specified_date.clone();
+const specified_date_clone13 = specified_date.clone();
+const specified_date_clone14 = specified_date.clone();
+const specified_date_clone15 = specified_date.clone();
+const specified_date_clone16 = specified_date.clone();
+const specified_date_clone17 = specified_date.clone();
+const specified_date_clone18 = specified_date.clone();
+const specified_date_clone19 = specified_date.clone();
+const specified_date_clone20 = specified_date.clone();
+// console.log(
+//   "specified_date_clone: " + specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
+// );
 
 app.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
@@ -112,14 +133,19 @@ app.get("/report/download-excel", async (req, res) => {
       //可正確執行
       // specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss");
       couchData = await getDayData();
+      console.log("couch data:" + couchData.hour_final);
     } else {
       console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
     }
     // const mongoData = await fetchDataFromMongoDB();
 
+    console.log("Date:"+couchData.Date);
+    console.log(typeof couchData.Date);
     // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
-    updateExcelWithMongoData(workbook, couchData);
-
+    updateExcelWithMongoData(workbook, couchData.hour_final, "D6");
+    updateExcelWithMongoData(workbook, couchData.elsedata1, "F33");
+    updateExcelWithMongoData(workbook, couchData.elsedata2, "J33");
+    updateExcelWithMongoData(workbook, couchData.Date, "C2");
     // Save the modified workbook to a temporary file 存儲修改後的工作簿到臨時文件
     const tempFilePath = path.join(__dirname, "temp.xlsx");
     await workbook.toFileAsync(tempFilePath);
@@ -156,14 +182,19 @@ function Conversionpercentage(randomNumber) {
 async function getDayData() {
   try {
     // 計算大前天的時間範圍
-    const dayBeforeYesterdayStart = specified_date
+    // console.log("in getDayData specified_date_clone" + specified_date_clone);
+    // console.log(
+    //   "in getDayData specified_date_clone" +
+    //     specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
+    // );
+    const dayBeforeYesterdayStart = specified_date_clone1
       .subtract(2, "days") //改時間 原本是2
       .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間為 23:59:59.999
       .subtract(2, "seconds") // 減去2秒到23:59:57
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
-    const dayBeforeYesterdayEnd = specified_date
+    const dayBeforeYesterdayEnd = specified_date_clone2
       .subtract(2, "days") //改時間 原本是2
       .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間為 23:59:59.999
       //.endOf("day")
@@ -198,13 +229,13 @@ async function getDayData() {
     console.log("********************************************");
 
     // 計算昨天的時間範圍
-    const yesterdayStart = specified_date
+    const yesterdayStart = specified_date_clone3
       .subtract(1, "days") //改時間 原本是1
       .startOf("day")
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-    const yesterdayEnd = specified_date
+    const yesterdayEnd = specified_date_clone4
       .subtract(1, "days") //改時間 原本是1
       .startOf("day")
       .subtract(1, "seconds") // 減去1秒到昨天的 23:59:59
@@ -399,17 +430,17 @@ async function getDayData() {
 
     console.log("the hour_final :", hour_final);
 
-    const yesterdaystart = specified_date
+    const yesterdaystart = specified_date_clone5
       .subtract(1, "days")
       .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    const yesterdayend1 = specified_date
+    const yesterdayend1 = specified_date_clone6
       .subtract(1, "days")
       .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間需大於 23:59:58.999
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    const yesterdayend2 = specified_date
+    const yesterdayend2 = specified_date_clone7
       .subtract(0, "days")
       .set({ hour: 0, minute: 0, second: 0, millisecond: 999 }) // 設置結束時間需大於 23:59:58.999 //00
       .utcOffset("+0800")
@@ -457,21 +488,26 @@ async function getDayData() {
     console.log("YesterdayStart_kWh_Export: " + YesterdayStart_kWh_Export);
     console.log("YesterdayEnd_kWh_Import: " + YesterdayEnd_kWh_Import);
     console.log("YesterdayEnd_kWh_Export: " + YesterdayEnd_kWh_Export);
-    const elsedata = [];
+    const elsedata1 = [];
+    const elsedata2 = [];
+    let elsedata = [];
 
     const kWh_Import = YesterdayEnd_kWh_Import - YesterdayStart_kWh_Import;
     const kWh_Export = YesterdayEnd_kWh_Export - YesterdayStart_kWh_Export;
     const net = kWh_Import - kWh_Export;
+
     const stopminutes = 0;
     const capacity = 0;
     const RTE = ((kWh_Export / kWh_Import) * 100).toFixed(1);
 
-    elsedata[0] = kWh_Import / 10;
-    elsedata[1] = kWh_Export / 10;
-    elsedata[2] = net / 10;
-    elsedata[3] = stopminutes;
-    elsedata[4] = capacity;
-    elsedata[5] = parseFloat(RTE);
+    elsedata1[0] = kWh_Import / 10;
+    elsedata1[1] = kWh_Export / 10;
+    elsedata1[2] = net / 10;
+    elsedata2[0] = stopminutes;
+    elsedata2[1] = capacity;
+    elsedata2[2] = parseFloat(RTE);
+
+    elsedata = elsedata.concat(elsedata1, elsedata2);
 
     console.log("kWh_Import: ", kWh_Import);
     console.log("kWh_Export: ", kWh_Export);
@@ -479,10 +515,11 @@ async function getDayData() {
     console.log("stop_Minutes: ", stopminutes);
     console.log("capacity: ", capacity);
     console.log("RTE: ", RTE);
-    console.log("elsedata: ", elsedata);
+    console.log("elsedata1: ", elsedata1);
+    console.log("elsedata2: ", elsedata2);
 
     // 昨天的日期
-    const yesterdayDate = specified_date
+    const yesterdayDate = specified_date_clone8
       .subtract(1, "days")
       .format("YYYY-MM-DD");
     // 定義要存資料庫的時間
@@ -501,9 +538,16 @@ async function getDayData() {
       }
     });
     // 獲取系統當前時間的前一天日期
-    const Date = specified_date.subtract(1, "days").format("YYYY-MM-DD");
+    const Date = specified_date_clone9.subtract(1, "days").format("YYYY-MM-DD");
 
-    return Date, hour_final, elsedata; //回傳時間、整天的資料、下面統計完的資料
+    return {
+      Date: Date,
+      hour_final: hour_final,
+      elsedata1: elsedata1,
+      elsedata2: elsedata2,
+    };
+
+    //return Date, hour_final, elsedata; //回傳時間、整天的資料、下面統計完的資料
   } catch (error) {
     console.error("Error fetching data from CouchDB:", error);
   }
@@ -513,13 +557,13 @@ async function getDayData() {
 
 async function getMonthData() {
   // 獲取系統當前時間的前一個月的第一天
-  const MonthsStartStr = specified_date
+  const MonthsStartStr = specified_date_clone10
     .subtract(1, "month")
     .startOf("month")
     .format("YYYY-MM-DD");
 
   // 獲取系統當前時間的前一個月的最後一天
-  const MonthsEndStr = specified_date
+  const MonthsEndStr = specified_date_clone11
     .subtract(1, "month")
     .endOf("month")
     .format("YYYY-MM-DD");
@@ -635,14 +679,14 @@ async function getMonthData() {
   // console.log("executiveRates:", executiveRates);
   // console.log("otherInfo:", otherInfo);
 
-  const lastMonthstart = specified_date
+  const lastMonthstart = specified_date_clone12
     .subtract(1, "month")
     .startOf("month")
     .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
     .utcOffset("+0800")
     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-  const thisMonthstart = specified_date
+  const thisMonthstart = specified_date_clone13
     .subtract(0, "month")
     .startOf("month")
     .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) //00
@@ -931,7 +975,7 @@ async function getMonthData() {
   power[8] = powerFor_ESS4_1;
 
   // 取得上個月的日期物件
-  const lastMonth = specified_date.subtract(1, "months");
+  const lastMonth = specified_date_clone14.subtract(1, "months");
 
   // 取得上個月的年份及月份
   const lastMonthYearMonth = lastMonth.format("YYYY-MM");
@@ -963,11 +1007,11 @@ async function getMonthData() {
   });
 
   //撈出上期及去年同期資料
-  const last_month = specified_date
+  const last_month = specified_date_clone15
     .subtract(2, "months") // 減去兩個月
     .format("YYYY-MM");
 
-  const last_year = specified_date
+  const last_year = specified_date_clone16
     .subtract(1, "year") // 減去一年
     .subtract(1, "months") // 再減去一個月
     .format("YYYY-MM");
@@ -1040,19 +1084,19 @@ function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
 }
 
 async function getYearData() {
-  const last_year = specified_date
+  const last_year = specified_date_clone17
     .subtract(1, "year") // 減去一年
     .startOf("year") // 獲取一年中的開始時間
     .format("YYYY");
 
-  const last_year_start = specified_date
+  const last_year_start = specified_date_clone18
     .subtract(1, "year") // 減去一年
     .startOf("year") // 獲取一年中的開始時間
     .format("YYYY-MM");
 
   console.log("last_year_start:", last_year_start);
 
-  const last_year_end = specified_date
+  const last_year_end = specified_date_clone19
     .subtract(1, "year") // 減去一年
     .endOf("year") // 獲取去年的最後一天的結束時間
     .format("YYYY-MM");
@@ -1171,7 +1215,7 @@ async function getYearData() {
   });
 
   //撈出前年
-  const the_year_before_last = specified_date
+  const the_year_before_last = specified_date_clone20
     .subtract(2, "Month") // 減去兩年
     .format("YYYY-MM");
 
@@ -1225,20 +1269,108 @@ async function getYearData() {
 //     [800, 20, 30, 40, 50, 20, 100],
 //   ];
 // }
+// var dayReport = [
+//   //回傳執行率 一天24小時
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
+// ];
 
 // Update Excel file with MongoDB data
-function updateExcelWithMongoData(workbook, mongoData) {
+function updateExcelWithMongoData(workbook, mongoData, excelStart) { //(範本位置，插入資料，插入位址)
   // Get the first sheet (modify as needed)
   const sheet = workbook.sheet(0); //第一個分頁
-
+  console.log("insert:" + mongoData);
+  console.log("length:" + mongoData.length);
+  //var array = chunkArray(mongoData.hour_final, 10);
+  //console.log("array:"+array);
   // Example: Write MongoDB data starting from cell A2
-  mongoData.forEach((data, index) => {
-    for (let i = 0; i < 7; i++) {
-      // Loop through columns D to J (7 columns)
-      sheet.cell(String.fromCharCode(68 + i) + (index + 6)).value(data[i]);
-    }
-  });
+  // mongoData.forEach((data, index) => {
+  //   for (let i = 0; i < 24; i++) {
+  //     // Loop through columns D to J (7 columns)
+  //     sheet.cell(String.fromCharCode(68 + i) + (index + 6)).value(data[i]);
+  //   }
+  // });
+  // Example: Write MongoDB data starting from cell D6
+  // Define the starting cell (D6)
+
+  const startCell = excelStart; //塞在excel哪裡
+
+  if(mongoData.includes("-")){ //判斷是否為日期(2024-01-01)
+    // Convert the column index to the corresponding letter (D, E, F, ...)
+    const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+    // Calculate the target cell based on the starting cell and indices
+    const targetCell = colLetter + (parseInt(startCell.slice(1)));
+    // Write the value to the target cell
+    sheet.cell(targetCell).value(mongoData);
+  } else {
+    mongoData.forEach((data, rowIndex) => {
+      if (data.length > 1) { //判斷是否為二維陣列
+         data.forEach((cellValue, colIndex) => {
+           // Convert the column index to the corresponding letter (D, E, F, ...)
+           const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)) + colIndex);
+           // Calculate the target cell based on the starting cell and indices
+           const targetCell =
+             colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+           // Write the value to the target cell
+           sheet.cell(targetCell).value(cellValue);
+         });
+       } else if (data.length === 1){ //判斷是否為一維陣列
+         // Convert the column index to the corresponding letter (D, E, F, ...)
+         const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+         // Calculate the target cell based on the starting cell and indices
+         const targetCell = colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+         console.log("targetCell:" + targetCell);
+         // Write the value to the target cell
+         sheet.cell(targetCell).value(data);
+       } else {
+         console.log("要新增於excel檔的數值異常");
+       };
+     });
+  }
+
+
 }
+function charToAscii(char) { //字母轉成ASCII code
+  if (char.length === 1) {
+    return char.charCodeAt(0);
+  } else {
+    console.error('Input must be a single character.');
+    return null;
+  }
+}
+
+// function chunkArray(array, chunkSize) {
+//   //將array轉成arrays in array
+//   const result = [];
+//   console.log("array length:" + array.length);
+//   for (let i = 0; i < array.length; i += chunkSize) {
+//     result.push(array.slice(i, i + chunkSize));
+//     console.log("i:" + i);
+//   }
+//   return result;
+// }
 
 app.get("/report/getFile", (req, res) => {
   //點擊尋找已存好的檔案

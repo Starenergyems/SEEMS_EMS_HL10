@@ -1,7 +1,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
-//const port = 3005;
+const port = 3010;
 const router = express.Router();
 const app = express();
 const cors = require("cors");
@@ -299,7 +299,8 @@ async function queryEnv_variables() {
     ffsStatus_4_1_rawD: lc4Data.BSC1[406005],
   };
 }
-router.get("/systeminfo", async (req, res) => {
+app.get("/systeminfo", async (req, res) => {
+  //以下app要改回router
   try {
     await queryEnv_variables();
     res.render("Sys_Environment", Env_variables);
@@ -308,7 +309,7 @@ router.get("/systeminfo", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-router.get("/systeminfo/environment", async (req, res) => {
+app.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables();
     res.render("Sys_Environment", Env_variables);
@@ -318,7 +319,7 @@ router.get("/systeminfo/environment", async (req, res) => {
   }
 });
 
-router.get("/systeminfo/environment/:data", async (req, res) => {
+app.get("/systeminfo/environment/:data", async (req, res) => {
   try {
     await queryEnv_variables();
     res.json(Env_variables);
@@ -330,7 +331,7 @@ router.get("/systeminfo/environment/:data", async (req, res) => {
 
 //******************************************************************** */
 //環境控制下方彈出視窗
-router.post("/getDataforenv", async (req, res) => {
+app.post("/getDataforenv", async (req, res) => {
   try {
     console.log("接收到環境監控的前端請求");
     const blockId = req.body.blockId;
@@ -395,6 +396,6 @@ router.post("/getDataforenv", async (req, res) => {
 });
 
 module.exports = router;
-// app.listen(port, () => {
-//   console.log(`應用程式正在監聽端口 ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});
