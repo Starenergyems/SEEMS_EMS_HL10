@@ -162,6 +162,7 @@ const LC_System_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: false,
+    category: "system",
   },
   402019: {
     name: "Running mode",
@@ -169,6 +170,7 @@ const LC_System_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: false,
+    category: "system",
   },
   402020: {
     name: "Grid status",
@@ -176,6 +178,7 @@ const LC_System_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: false,
+    category: "system",
   },
   402021: {
     name: "System status",
@@ -183,6 +186,7 @@ const LC_System_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "system",
   },
   402048: {
     name: "PCS communication status",
@@ -190,6 +194,7 @@ const LC_System_error_table = {
     type: "bit_abnormal",
     location: "ESS?x-1",
     line: false,
+    category: "pcs",
   },
   402050: {
     name: "BMS communication status",
@@ -197,6 +202,7 @@ const LC_System_error_table = {
     type: "bit_abnormal",
     location: "ESS?x-1",
     line: false,
+    category: "battery",
   },
   402099: {
     name: "Fault status",
@@ -204,6 +210,7 @@ const LC_System_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "system",
   },
   402100: {
     name: "Alarm status",
@@ -211,6 +218,7 @@ const LC_System_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "system",
   },
 };
 
@@ -355,6 +363,7 @@ const LC_PCS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "pcs",
   },
   403067: {
     name: "Unit 1_Fault status2",
@@ -362,6 +371,7 @@ const LC_PCS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "pcs",
   },
   403102: {
     name: "Unit 2_Alarm status1",
@@ -369,6 +379,7 @@ const LC_PCS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "pcs",
   },
   403106: {
     name: "Unit 2_Fault status2",
@@ -376,6 +387,7 @@ const LC_PCS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "pcs",
   },
   403534: {
     name: "Alarm status1",
@@ -383,6 +395,7 @@ const LC_PCS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "pcs",
   },
   403538: {
     name: "Fault status2",
@@ -390,6 +403,7 @@ const LC_PCS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "pcs",
   },
 };
 
@@ -466,6 +480,7 @@ const LC_BMS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "battery",
   },
   404044: {
     name: "CMU alarm word",
@@ -473,6 +488,7 @@ const LC_BMS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "battery",
   },
   404046: {
     name: "CMU fault word",
@@ -480,6 +496,7 @@ const LC_BMS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "battery",
   },
   404048: {
     name: "Hardware fault word",
@@ -487,6 +504,7 @@ const LC_BMS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "battery",
   },
   404061: {
     name: "SMU fault status",
@@ -494,6 +512,7 @@ const LC_BMS_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "battery",
   },
 };
 
@@ -542,6 +561,7 @@ const LC_Rack_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "battery",
   },
   405030: {
     name: "CMU fault word",
@@ -549,6 +569,7 @@ const LC_Rack_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "battery",
   },
 };
 
@@ -795,6 +816,7 @@ const LC_BSC_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "FFS",
   },
   406003: {
     name: "Alarm status",
@@ -802,6 +824,7 @@ const LC_BSC_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
+    category: "special", //ENV?
   },
   406005: {
     name: "FFS status",
@@ -809,6 +832,7 @@ const LC_BSC_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: false,
+    category: "special",
   },
   406007: {
     name: "HVAC_1 running status",
@@ -816,6 +840,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406009: {
     name: "HVAC_2 running status",
@@ -823,6 +848,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406011: {
     name: "HVAC_3 running status",
@@ -830,6 +856,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406013: {
     name: "HVAC_4 running status",
@@ -837,6 +864,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406015: {
     name: "HVAC_5 running status",
@@ -844,6 +872,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406017: {
     name: "HVAC_6 running status",
@@ -851,6 +880,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406019: {
     name: "HVAC_7 running status",
@@ -858,6 +888,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406021: {
     name: "HVAC_8 running status",
@@ -865,6 +896,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406023: {
     name: "HVAC_9 running status",
@@ -872,6 +904,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406025: {
     name: "HVAC_10 running status",
@@ -879,6 +912,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406027: {
     name: "HVAC_11 running status",
@@ -886,6 +920,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406029: {
     name: "HVAC_12 running status",
@@ -893,6 +928,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406031: {
     name: "HVAC_13 running status",
@@ -900,6 +936,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406033: {
     name: "HVAC_14 running status",
@@ -907,6 +944,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406035: {
     name: "HVAC_15 running status",
@@ -914,6 +952,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406037: {
     name: "HVAC_16 running status",
@@ -921,6 +960,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406039: {
     name: "HVAC_17 running status",
@@ -928,6 +968,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406041: {
     name: "HVAC_18 running status",
@@ -935,6 +976,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406043: {
     name: "HVAC_19 running status",
@@ -942,6 +984,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406045: {
     name: "HVAC_20 running status",
@@ -949,6 +992,7 @@ const LC_BSC_error_table = {
     type: "int",
     location: "ESS?x-1",
     line: true,
+    category: "ENV",
   },
   406047: {
     name: "TH_1 Temperature",
@@ -956,6 +1000,7 @@ const LC_BSC_error_table = {
     type: "valve",
     location: "ESS?x-1",
     line: false,
+    category: "ENV",
   },
   406048: {
     name: "TH_1 Humidity",
@@ -963,6 +1008,7 @@ const LC_BSC_error_table = {
     type: "valve",
     location: "ESS?x-1",
     line: false,
+    category: "ENV",
   },
   406049: {
     name: "TH_2 Temperature",
@@ -970,6 +1016,7 @@ const LC_BSC_error_table = {
     type: "valve",
     location: "ESS?x-1",
     line: false,
+    category: "ENV",
   },
   406050: {
     name: "TH_2 Humidity",
@@ -977,6 +1024,7 @@ const LC_BSC_error_table = {
     type: "valve",
     location: "ESS?x-1",
     line: false,
+    category: "ENV",
   },
 };
 
@@ -1112,6 +1160,7 @@ const Other_error_table = {
     type: "bit",
     location: "device",
     line: true,
+    category: "meter",
   },
   408186: {
     name: "Temperature",
@@ -1119,6 +1168,7 @@ const Other_error_table = {
     type: "valve",
     location: "Control Room",
     line: true,
+    category: "ENV",
   },
   408187: {
     name: "Humidity",
@@ -1126,6 +1176,7 @@ const Other_error_table = {
     type: "valve",
     location: "Control Room",
     line: true,
+    category: "ENV",
   },
   408201: {
     name: "Relay_MVCB-1",
@@ -1133,6 +1184,7 @@ const Other_error_table = {
     type: "bit",
     location: "MVCB",
     line: true,
+    category: "meter",
   },
   408202: {
     name: "Relay_MVCB-2",
@@ -1140,6 +1192,7 @@ const Other_error_table = {
     type: "bit",
     location: "MVCB",
     line: true,
+    category: "meter",
   },
   408203: {
     name: "Relay_VCB",
@@ -1147,6 +1200,7 @@ const Other_error_table = {
     type: "bit",
     location: "device",
     line: true,
+    category: "meter",
   },
   408204: {
     name: "FFS Fault",
@@ -1154,6 +1208,7 @@ const Other_error_table = {
     type: "bit",
     location: "FFS Control Room",
     line: true,
+    category: "meter",
   },
   408205: {
     name: "VCB Status",
@@ -1161,6 +1216,7 @@ const Other_error_table = {
     type: "bit",
     location: "device",
     line: true,
+    category: "meter",
   },
   408206: {
     name: "ACB Status",
@@ -1168,6 +1224,7 @@ const Other_error_table = {
     type: "bit",
     location: "device",
     line: true,
+    category: "meter",
   },
   408207: {
     name: "ACB Control",
@@ -1175,6 +1232,7 @@ const Other_error_table = {
     type: "bit",
     location: "device",
     line: true,
+    category: "meter",
   },
 };
 
@@ -1185,6 +1243,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "system",
   },
   409103: {
     name: "Freq-M_Comm_Error",
@@ -1192,6 +1251,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409105: {
     name: "ACPM_Comm_Error",
@@ -1199,6 +1259,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409107: {
     name: "AuxMtot_Comm_Error",
@@ -1206,6 +1267,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409109: {
     name: "AuxM_Comm_Error",
@@ -1213,6 +1275,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409111: {
     name: "UPS_Comm_Error",
@@ -1220,6 +1283,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409113: {
     name: "TR_Comm_Error",
@@ -1227,6 +1291,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409115: {
     name: "TH_Comm_Error",
@@ -1234,6 +1299,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409117: {
     name: "RelayMVCB_Comm_Error",
@@ -1241,6 +1307,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409119: {
     name: "RelayVCB_Comm_Error",
@@ -1248,6 +1315,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409121: {
     name: "RIO_CtrlRoom_Comm_Error",
@@ -1255,6 +1323,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409123: {
     name: "RIO_MVCB_Comm_Error",
@@ -1262,6 +1331,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409125: {
     name: "RIO_ACP_Comm_Error",
@@ -1269,6 +1339,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
   409127: {
     name: "GC_Comm_Error",
@@ -1276,6 +1347,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "system",
   },
   409129: {
     name: "HVAC_Comm_Error",
@@ -1283,6 +1355,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "ENV",
   },
   409131: {
     name: "Recloser_Comm_Error",
@@ -1290,6 +1363,7 @@ const DC_error_table = {
     type: "int",
     location: "Control Room",
     line: true,
+    category: "meter",
   },
 };
 
@@ -1311,6 +1385,7 @@ const GC_error_table = {
     type: "threshold",
     location: "Control Room",
     line: true,
+    category: "system",
   },
   400129: {
     name: "SOC",
@@ -1318,6 +1393,7 @@ const GC_error_table = {
     type: "valve",
     location: "Control Room",
     line: true,
+    category: "system",
   },
 };
 
@@ -1595,7 +1671,8 @@ function createErrorRecord(
   content,
   value,
   occurrence_time,
-  line
+  line,
+  category
 ) {
   let location = error_table_tag["location"];
   if (
@@ -1637,6 +1714,7 @@ function createErrorRecord(
     recover_time: "",
     occurrence_time: occurrence_time,
     line: line,
+    category: category,
   };
 }
 
@@ -1680,6 +1758,7 @@ function LC_error_result_unit(
       for (let i = 0; i < bit_arr.length; i++) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${bit_arr[i]}`;
         const line = error_table[key_error][tag]["line"];
+        const category = error_table[key_error][tag]["category"];
         error_result[_id] = createErrorRecord(
           _id,
           db_name,
@@ -1689,7 +1768,8 @@ function LC_error_result_unit(
           error_table[key_error][tag]["name"] + ":" + error_arr[i],
           bit_status,
           occurrence_time,
-          line
+          line,
+          category
         );
         // console.log(error_result[_id])
       }
@@ -1699,6 +1779,7 @@ function LC_error_result_unit(
       const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${value}`;
       const content = error_table[key_error][tag]["status"][value];
       const line = error_table[key_error][tag]["line"];
+      const category = error_table[key_error][tag]["category"];
       if (content) {
         error_result[_id] = createErrorRecord(
           _id,
@@ -1709,7 +1790,8 @@ function LC_error_result_unit(
           error_table[key_error][tag]["name"] + ":" + content,
           value,
           occurrence_time,
-          line
+          line,
+          category
         );
       }
     } else if (error_type === "valve") {
@@ -1729,6 +1811,7 @@ function LC_error_result_unit(
       if (valve_status && content) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${valve_status}`;
         const line = error_table[key_error][tag]["line"];
+        const category = error_table[key_error][tag]["category"];
         error_result[_id] = createErrorRecord(
           _id,
           db_name,
@@ -1738,7 +1821,8 @@ function LC_error_result_unit(
           error_table[key_error][tag]["name"] + ":" + content,
           value,
           occurrence_time,
-          line
+          line,
+          category
         );
       }
     }
@@ -1830,6 +1914,7 @@ function DC_error_result_gen(item, db_name, error_table = DC_error_table) {
           const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
           const content = error_table[tag]["name"];
           const line = error_table[tag]["line"];
+          const category = error_table[tag]["category"];
           if (value === error_table[tag]["status"]) {
             error_result[_id] = createErrorRecord(
               _id,
@@ -1840,7 +1925,8 @@ function DC_error_result_gen(item, db_name, error_table = DC_error_table) {
               error_table[tag]["name"] + ":" + content,
               value,
               occurrence_time,
-              line
+              line,
+              category
             );
           }
         }
@@ -1889,6 +1975,7 @@ function Other_error_result_unit(
       for (let i = 0; i < bit_arr.length; i++) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${bit_arr[i]}`;
         const line = error_table[tag]["line"];
+        const category = error_table[tag]["category"];
         error_result[_id] = createErrorRecord(
           _id,
           db_name,
@@ -1898,7 +1985,8 @@ function Other_error_result_unit(
           error_table[tag]["name"] + ":" + error_arr[i],
           bit_status,
           occurrence_time,
-          line
+          line,
+          category
         );
       }
     }
@@ -1907,6 +1995,7 @@ function Other_error_result_unit(
       const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${value}`;
       const content = error_table[tag]["status"][value];
       const line = error_table[tag]["line"];
+      const category = error_table[tag]["category"];
       if (content) {
         error_result[_id] = createErrorRecord(
           _id,
@@ -1917,7 +2006,8 @@ function Other_error_result_unit(
           error_table[tag]["name"] + ":" + content,
           value,
           occurrence_time,
-          line
+          line,
+          category
         );
       }
     } else if (error_type === "valve") {
@@ -1937,6 +2027,7 @@ function Other_error_result_unit(
       if (valve_status && content) {
         const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${valve_status}`;
         const line = error_table[tag]["line"];
+        const category = error_table[tag]["category"];
         error_result[_id] = createErrorRecord(
           _id,
           db_name,
@@ -1946,7 +2037,8 @@ function Other_error_result_unit(
           error_table[tag]["name"] + ":" + content,
           value,
           occurrence_time,
-          line
+          line,
+          category
         );
       }
     }
@@ -2148,7 +2240,7 @@ function update_trigger_alarms_batch(
                     }
                     docs_batch.push(error_result[_id]);
 
-                    const obj = error_result[_id]
+                    const obj = error_result[_id];
                     const newObj = { ...obj };
                     delete newObj["_id"];
                     hisAlarm_batch.push(newObj);
@@ -2169,7 +2261,7 @@ function update_trigger_alarms_batch(
                         error_element["read"] = doc.read;
                         docs_batch.push(error_element);
 
-                        const obj = error_element[_id]
+                        const obj = error_element[_id];
                         const newObj = { ...obj };
                         delete newObj["_id"];
                         hisAlarm_batch.push(newObj);
@@ -2183,7 +2275,7 @@ function update_trigger_alarms_batch(
                       }
                       docs_batch.push(error_result[_id]);
 
-                      const obj = error_result[_id]
+                      const obj = error_result[_id];
                       const newObj = { ...obj };
                       delete newObj["_id"];
                       hisAlarm_batch.push(newObj);
@@ -2225,8 +2317,8 @@ function update_trigger_alarms_batch(
                       sendLineNotify(error_result[_id]);
                     }
                     docs_batch.push(error_result[_id]);
-                    
-                    const obj = error_result[_id]
+
+                    const obj = error_result[_id];
                     const newObj = { ...obj };
                     delete newObj["_id"];
                     hisAlarm_batch.push(newObj);
@@ -2248,10 +2340,10 @@ function update_trigger_alarms_batch(
                         error_element["read"] = doc.read;
                         docs_batch.push(error_element);
 
-                        const obj = error_element[_id]
+                        const obj = error_element[_id];
                         const newObj = { ...obj };
                         delete newObj["_id"];
-                        hisAlarm_batch.push(newObj)
+                        hisAlarm_batch.push(newObj);
                       }
 
                       // Case 2: it has been deleted before and not existed in the db currently
@@ -2262,7 +2354,7 @@ function update_trigger_alarms_batch(
                       }
                       docs_batch.push(error_result[_id]);
 
-                      const obj = error_result[_id]
+                      const obj = error_result[_id];
                       const newObj = { ...obj };
                       delete newObj["_id"];
                       hisAlarm_batch.push(newObj);
@@ -2439,7 +2531,7 @@ function alarm_processor(
               hisalarm_nanoDB,
               true
             );
-            
+
             // Move this functionality to func: update_trigger_alarms_batch
             // const hisAlarm_batch = Object.values(error_result).map((obj) => {
             //   // Create a shallow copy of the object and modify the copy
@@ -2452,7 +2544,7 @@ function alarm_processor(
             // });
 
             // console.log([alarm_db_promise, hisalarm_db_promise]);
-            Promise.all([alarm_db_promise,])
+            Promise.all([alarm_db_promise])
               .then(() => {
                 resolve("alarm_db_promise and hisalarm_db_promise: Suc!");
               })
