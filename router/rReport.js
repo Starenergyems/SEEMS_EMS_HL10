@@ -376,7 +376,7 @@ async function getDayData() {
 
     const yesterdaystart = moment()
       .subtract(1, "days")
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     const yesterdayend1 = moment()
@@ -386,7 +386,7 @@ async function getDayData() {
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     const yesterdayend2 = moment()
       .subtract(0, "days")
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 999 }) // 設置結束時間需大於 23:59:58.999
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 999 }) // 設置結束時間需大於 23:59:58.999 //00
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     const filteryesterdaystart = {
@@ -611,14 +611,14 @@ async function getMonthData() {
   const lastMonthstart = moment()
     .subtract(1, "month")
     .startOf("month")
-    .set({ hour: 00, minute: 00, second: 00, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
     .utcOffset("+0800")
     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
   const thisMonthstart = moment()
     .subtract(0, "month")
     .startOf("month")
-    .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) //00
     .utcOffset("+0800")
     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
