@@ -10,6 +10,7 @@ const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
+const NavbarData = require("./middleware");
 const {
   LC_error_result_gen,
   DC_error_result_gen,
@@ -41,7 +42,7 @@ let alarm_db_event_lock = false;
 
 const indexDef_time = {
   index: { fields: ["time"] },
-  name: "time_index",
+  ddoc: "time_index",
 };
 [
   lc1nanoDb,
@@ -51,22 +52,26 @@ const indexDef_time = {
   dcnanoDb,
   gcnanoDb,
   otherrf10nanoDb,
-  // alarm_test_nanoDb,
-  alarmnanoDb,
 ].forEach((element) => element.createIndex(indexDef_time));
 
-const alarmDB_db_name_index = {
-  index: { fields: ["db_name", "time", "read", "recover", "occurrence_time"] },
-  name: "alarmDB_db_name_index",
+const indexDef_read = {
+  index: { fields: ["read"] },
+  ddoc: "read_index",
 };
-// alarm_test_nanoDb.createIndex(alarmDB_db_name_index);
-alarmnanoDb.createIndex(alarmDB_db_name_index);
+alarmnanoDb.createIndex(indexDef_read);
+
+const indexDef_db_name_recover = {
+  index: { fields: ["db_name", "recover"] },
+  ddoc: "db_name_recover_index",
+};
+alarmnanoDb.createIndex(indexDef_db_name_recover);
 
 const indexDef_occurrence_time = {
   index: { fields: ["occurrence_time"] },
-  name: "occurrence_time_index",
+  ddoc: "occurrence_time_index",
 };
 alarmnanoDb.createIndex(indexDef_occurrence_time);
+hisalarmnanoDb.createIndex(indexDef_occurrence_time);
 // alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
 // alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
 
@@ -110,12 +115,14 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //////////////////////////////////////
 //告警紀錄
 router.get("/alarm", (req, res) => {
-  res.render("Alm_RealTime");
+  console.log(NavbarData);
+  res.render("Alm_RealTime", NavbarData);
 });
 
 router.get("/alarm/realtime", (req, res) => {
   // num與fun
-  res.render("Alm_RealTime");
+  console.log(NavbarData);
+  res.render("Alm_RealTime", NavbarData);
 });
 
 router.post("/alarm/realtime/edit", (req, res) => {
@@ -137,6 +144,7 @@ router.post("/alarm/realtime/edit", (req, res) => {
           return alarmnanoDb.find({
             selector: { read: { $exists: true, $eq: false } },
             limit: body.total_rows,
+            use_index: "read_index",
           });
         })
         .then((resp) => {
@@ -219,7 +227,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
           // console.log(body);
           return alarmnanoDb.find({
             selector: {
-              time: { $exists: true },
+              occurrence_time: { $exists: true },
               $or: [
                 { read: { $exists: true, $eq: false } },
                 { recover: { $exists: true, $eq: false } },
@@ -240,6 +248,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
             ],
             sort: [{ occurrence_time: "desc" }],
             limit: body.total_rows,
+            use_index: 'occurrence_time_index'
           });
         })
         .then((resp) => {
@@ -281,7 +290,66 @@ router.get("/alarm/realtime/edit", (req, res) => {
 
 router.get("/alarm/history", (req, res) => {
   // num與fun
-  res.render("Alm_History");
+  console.log(NavbarData);
+  res.render("Alm_History", { NavbarData });
+});
+
+router.get("/alarm/history/edit", (req, res) => {
+  const From_date = "2024-02-22";
+  const From_time = "00:00:00";
+  const To_date = "2024-03-07";
+  const To_time = "23:59:59";
+  const From_datetime = From_date + "T" + From_time + "+08:00";
+  const To_datetime = To_date + "T" + To_time + "+08:00";
+
+  Promise.resolve("Init")
+    .then(() => {
+      return alarmnanoDb.find({
+        selector: {
+          occurrence_time: {
+            $exists: true,
+            $gte: From_datetime,
+            $lte: To_datetime,
+          },
+        },
+        fields: [
+          "location",
+          "device",
+          "level",
+          "content",
+          "value",
+          "read",
+          "recover",
+          "recover_time",
+          "occurrence_time",
+        ],
+        sort: [{ occurrence_time: "desc" }],
+        limit: 1000,
+        use_index: "occurrence_time_index",
+      });
+    })
+    .then((resp) => {
+      // console.log(resp);
+      let hisalarm_db_array = [];
+
+      for (const item of resp.docs) {
+        item["index"] = "";
+        hisalarm_db_array.push(item);
+      }
+      // console.log("alarm_db_array");
+      console.log(hisalarm_db_array);
+      res.send(hisalarm_db_array);
+    })
+    .catch((err) => {
+      if (err.statusCode === 404) {
+        console.error(
+          "Data not found in /alarm/history/edit:",
+          err.request.data
+        );
+      } else {
+        console.error("Error checking /alarm/history/edit:", err);
+      }
+    });
 });
 
 function alarm_processor_call() {
@@ -303,6 +371,7 @@ function alarm_processor_call() {
       },
       sort: [{ time: "desc" }],
       limit: 1,
+      use_index: 'time_index'
     };
 
     const lc1_alarm_promise = alarm_processor(
