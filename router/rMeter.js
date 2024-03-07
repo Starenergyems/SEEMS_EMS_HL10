@@ -77,7 +77,6 @@ const getLatestDocument = async (nanoDb) => {
 };
 /************************************************************************************ */
 let SLD_KeyValuePairs;
-// let num_RelayVCB = ;
 let num_RelayVCB = 1;
 const relayVCB_MT = {
   1: { dicName: "RelayVCB1", pUW_title: "VCB盤1保護電驛" },
@@ -216,6 +215,8 @@ router.post("/change_num_of_RelayVCB", async (req, res) => {
   }
 });
 
+/************************************************************************************ */
+
 router.get("/operateinfo/mainmeter", async (req, res) => {
   try {
     const indexDef = {
@@ -308,123 +309,212 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
   }
 });
 
+/************************************************************************************ */
+
+const databases_AuxM = [
+  "other_rf10", //0
+];
+
+let AuxM_KeyValuePairs;
+
+async function query_AuxM_KeyValuePairs() {
+  // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
+  const dataPromises = databases_AuxM.map(async (dbName) => {
+    const nanoDb = createNanoInstance(dbName);
+    return getLatestDocument(nanoDb);
+  });
+
+  const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
+  const other10Data = allData[0];
+
+  AuxM_KeyValuePairs = {
+    permission: "manager",
+
+    V_Aux_total: scaleProcess(other10Data.AuxMtot1[408069], 0.1, 1),
+    I_Aux_total: scaleProcess(other10Data.AuxMtot1[408071], 0.001, 2),
+    P_Aux_total: scaleProcess(other10Data.AuxMtot1[408073], 0.001, 1),
+    E_Aux_total: scaleProcess(other10Data.AuxMtot1[408075], 0.1, 1),
+
+    V_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408077], 0.1, 1),
+    I_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408078], 0.01, 2),
+    P_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408079], 0.1, 1),
+    E_Aux_ESS1_1: Calculate_CPM10_energy(other10Data.AuxM1[408080], other10Data.AuxM1[408081], other10Data.AuxM1[408082]),
+
+    V_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408077], 0.1, 1),
+    I_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408078], 0.01, 2),
+    P_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408079], 0.1, 1),
+    E_Aux_ESS1_2: Calculate_CPM10_energy(other10Data.AuxM2[408080], other10Data.AuxM2[408081], other10Data.AuxM2[408082]),
+
+    V_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408077], 0.1, 1),
+    I_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408078], 0.01, 2),
+    P_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408079], 0.1, 1),
+    E_Aux_ESS2_1: Calculate_CPM10_energy(other10Data.AuxM3[408080], other10Data.AuxM3[408081], other10Data.AuxM3[408082]),
+
+    V_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408077], 0.1, 1),
+    I_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408078], 0.01, 2),
+    P_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408079], 0.1, 1),
+    E_Aux_ESS2_2: Calculate_CPM10_energy(other10Data.AuxM4[408080], other10Data.AuxM4[408081], other10Data.AuxM4[408082]),
+
+    V_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408077], 0.1, 1),
+    I_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408078], 0.01, 2),
+    P_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408079], 0.1, 1),
+    E_Aux_ESS3_1: Calculate_CPM10_energy(other10Data.AuxM5[408080], other10Data.AuxM5[408081], other10Data.AuxM5[408082]),
+
+    V_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408077], 0.1, 1),
+    I_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408078], 0.01, 2),
+    P_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408079], 0.1, 1),
+    E_Aux_ESS3_2: Calculate_CPM10_energy(other10Data.AuxM6[408080], other10Data.AuxM6[408081], other10Data.AuxM6[408082]),
+
+    V_Aux_ESS4: scaleProcess(other10Data.AuxM7[408077], 0.1, 1),
+    I_Aux_ESS4: scaleProcess(other10Data.AuxM7[408078], 0.01, 2),
+    P_Aux_ESS4: scaleProcess(other10Data.AuxM7[408079], 0.1, 1),
+    E_Aux_ESS4: Calculate_CPM10_energy(other10Data.AuxM7[408080], other10Data.AuxM7[408081], other10Data.AuxM7[408082]),
+
+    V_Aux_HV: scaleProcess(other10Data.AuxM9[408077], 0.1, 1),
+    I_Aux_HV: scaleProcess(other10Data.AuxM9[408078], 0.01, 2),
+    P_Aux_HV: scaleProcess(other10Data.AuxM9[408079], 0.1, 1),
+    E_Aux_HV: Calculate_CPM10_energy(other10Data.AuxM9[408080], other10Data.AuxM9[408081], other10Data.AuxM9[408082]),
+
+    V_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408077], 0.1, 1),
+    I_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408078], 0.01, 2),
+    P_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408079], 0.1, 1),
+    E_Aux_CtrlRoom: Calculate_CPM10_energy(other10Data.AuxM8[408080], other10Data.AuxM8[408081], other10Data.AuxM8[408082]),
+  };
+}
+
 router.get("/operateinfo/auxmeter", async (req, res) => {
   try {
-    const indexDef = {
-      index: { fields: ["time"] },
-      name: "time_index",
-    };
-    await rf10Db.createIndex(indexDef);
+    await query_AuxM_KeyValuePairs();
+    console.log(AuxM_KeyValuePairs);
 
-    const mangoQuery = {
-      selector: {
-        time: { $exists: true },
-      },
-      sort: [{ time: "desc" }],
-      limit: 1,
-    };
+    res.render("Op_Meter_AuxMeter", AuxM_KeyValuePairs);
 
-    rf10Db.find(mangoQuery, async (err, body) => {
-      if (err) {
-        console.error("Error:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
+    // const indexDef = {
+    //   index: { fields: ["time"] },
+    //   name: "time_index",
+    // };
+    // await rf10Db.createIndex(indexDef);
 
-      const other10Data = body.docs[0]; // 取得數據的第一個元素
+    // const mangoQuery = {
+    //   selector: {
+    //     time: { $exists: true },
+    //   },
+    //   sort: [{ time: "desc" }],
+    //   limit: 1,
+    // };
 
-      res.render("Op_Meter_AuxMeter", {
-        permission: "manager",
-        //MVCB = AuxM2
-        V_Aux_HV: scaleProcess(other10Data.AuxM2[408077], 0.1, 1) || 0,
-        I_Aux_HV: scaleProcess(other10Data.AuxM2[408078], 0.01, 2) || 0,
-        P_Aux_HV: scaleProcess(other10Data.AuxM2[408079], 0.1, 1) || 0,
-        E_Aux_HV:
-          Calculate_CPM10_energy(
-            other10Data.AuxM2[408080],
-            other10Data.AuxM2[408081],
-            other10Data.AuxM2[408082]
-          ) || 0,
+    // rf10Db.find(mangoQuery, async (err, body) => {
+    //   if (err) {
+    //     console.error("Error:", err);
+    //     res.status(500).send("Internal Server Error");
+    //     return;
+    //   }
 
-        V_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408077], 0.1, 1) || 0,
-        I_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408078], 0.01, 2) || 0,
-        P_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408079], 0.1, 1) || 0,
-        E_Aux_ESS1_1:
-          Calculate_CPM10_energy(
-            other10Data.AuxM3[408080],
-            other10Data.AuxM3[408081],
-            other10Data.AuxM3[408082]
-          ) || 0,
+    //   const other10Data = body.docs[0]; // 取得數據的第一個元素
 
-        V_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408077], 0.1, 1),
-        I_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408078], 0.01, 2),
-        P_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408079], 0.1, 1),
-        E_Aux_ESS2_1: Calculate_CPM10_energy(
-          other10Data.AuxM5[408080],
-          other10Data.AuxM5[408081],
-          other10Data.AuxM5[408082]
-        ),
+    //   res.render("Op_Meter_AuxMeter", {
+    //     permission: "manager",
+    //     //MVCB = AuxM2
+    //     V_Aux_HV: scaleProcess(other10Data.AuxM2[408077], 0.1, 1) || 0,
+    //     I_Aux_HV: scaleProcess(other10Data.AuxM2[408078], 0.01, 2) || 0,
+    //     P_Aux_HV: scaleProcess(other10Data.AuxM2[408079], 0.1, 1) || 0,
+    //     E_Aux_HV:
+    //       Calculate_CPM10_energy(
+    //         other10Data.AuxM2[408080],
+    //         other10Data.AuxM2[408081],
+    //         other10Data.AuxM2[408082]
+    //       ) || 0,
 
-        V_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408077], 0.1, 1),
-        I_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408078], 0.01, 2),
-        P_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408079], 0.1, 1),
-        E_Aux_ESS3_1: Calculate_CPM10_energy(
-          other10Data.AuxM7[408080],
-          other10Data.AuxM7[408081],
-          other10Data.AuxM7[408082]
-        ),
+    //     V_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408077], 0.1, 1) || 0,
+    //     I_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408078], 0.01, 2) || 0,
+    //     P_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408079], 0.1, 1) || 0,
+    //     E_Aux_ESS1_1:
+    //       Calculate_CPM10_energy(
+    //         other10Data.AuxM3[408080],
+    //         other10Data.AuxM3[408081],
+    //         other10Data.AuxM3[408082]
+    //       ) || 0,
 
-        V_Aux_ESS4: scaleProcess(other10Data.AuxM9[408077], 0.1, 1),
-        I_Aux_ESS4: scaleProcess(other10Data.AuxM9[408078], 0.01, 2),
-        P_Aux_ESS4: scaleProcess(other10Data.AuxM9[408079], 0.1, 1),
-        E_Aux_ESS4: Calculate_CPM10_energy(
-          other10Data.AuxM9[408080],
-          other10Data.AuxM9[408081],
-          other10Data.AuxM9[408082]
-        ),
+    //     V_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408077], 0.1, 1),
+    //     I_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408078], 0.01, 2),
+    //     P_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408079], 0.1, 1),
+    //     E_Aux_ESS2_1: Calculate_CPM10_energy(
+    //       other10Data.AuxM5[408080],
+    //       other10Data.AuxM5[408081],
+    //       other10Data.AuxM5[408082]
+    //     ),
 
-        V_Aux_total: scaleProcess(other10Data.AuxMtot1[408069], 0.1, 1),
-        I_Aux_total: scaleProcess(other10Data.AuxMtot1[408071], 0.001, 2),
-        P_Aux_total: scaleProcess(other10Data.AuxMtot1[408073], 0.001, 1),
-        E_Aux_total: scaleProcess(other10Data.AuxMtot1[408075], 0.1, 1),
+    //     V_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408077], 0.1, 1),
+    //     I_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408078], 0.01, 2),
+    //     P_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408079], 0.1, 1),
+    //     E_Aux_ESS3_1: Calculate_CPM10_energy(
+    //       other10Data.AuxM7[408080],
+    //       other10Data.AuxM7[408081],
+    //       other10Data.AuxM7[408082]
+    //     ),
 
-        V_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408077], 0.1, 1),
-        I_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408078], 0.01, 2),
-        P_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408079], 0.1, 1),
-        E_Aux_ESS1_2: Calculate_CPM10_energy(
-          other10Data.AuxM4[408080],
-          other10Data.AuxM4[408081],
-          other10Data.AuxM4[408082]
-        ),
+    //     V_Aux_ESS4: scaleProcess(other10Data.AuxM9[408077], 0.1, 1),
+    //     I_Aux_ESS4: scaleProcess(other10Data.AuxM9[408078], 0.01, 2),
+    //     P_Aux_ESS4: scaleProcess(other10Data.AuxM9[408079], 0.1, 1),
+    //     E_Aux_ESS4: Calculate_CPM10_energy(
+    //       other10Data.AuxM9[408080],
+    //       other10Data.AuxM9[408081],
+    //       other10Data.AuxM9[408082]
+    //     ),
 
-        V_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408077], 0.1, 1),
-        I_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408078], 0.01, 2),
-        P_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408079], 0.1, 1),
-        E_Aux_ESS2_2: Calculate_CPM10_energy(
-          other10Data.AuxM6[408080],
-          other10Data.AuxM6[408081],
-          other10Data.AuxM6[408082]
-        ),
+    //     V_Aux_total: scaleProcess(other10Data.AuxMtot1[408069], 0.1, 1),
+    //     I_Aux_total: scaleProcess(other10Data.AuxMtot1[408071], 0.001, 2),
+    //     P_Aux_total: scaleProcess(other10Data.AuxMtot1[408073], 0.001, 1),
+    //     E_Aux_total: scaleProcess(other10Data.AuxMtot1[408075], 0.1, 1),
 
-        V_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408077], 0.1, 1),
-        I_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408078], 0.01, 2),
-        P_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408079], 0.1, 1),
-        E_Aux_ESS3_2: Calculate_CPM10_energy(
-          other10Data.AuxM8[408080],
-          other10Data.AuxM8[408081],
-          other10Data.AuxM8[408082]
-        ),
+    //     V_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408077], 0.1, 1),
+    //     I_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408078], 0.01, 2),
+    //     P_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408079], 0.1, 1),
+    //     E_Aux_ESS1_2: Calculate_CPM10_energy(
+    //       other10Data.AuxM4[408080],
+    //       other10Data.AuxM4[408081],
+    //       other10Data.AuxM4[408082]
+    //     ),
 
-        V_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408077], 0.1, 1),
-        I_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408078], 0.01, 2),
-        P_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408079], 0.1, 1),
-        E_Aux_CtrlRoom: Calculate_CPM10_energy(
-          other10Data.AuxM1[408080],
-          other10Data.AuxM1[408081],
-          other10Data.AuxM1[408082]
-        ),
-      });
-    });
+    //     V_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408077], 0.1, 1),
+    //     I_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408078], 0.01, 2),
+    //     P_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408079], 0.1, 1),
+    //     E_Aux_ESS2_2: Calculate_CPM10_energy(
+    //       other10Data.AuxM6[408080],
+    //       other10Data.AuxM6[408081],
+    //       other10Data.AuxM6[408082]
+    //     ),
+
+    //     V_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408077], 0.1, 1),
+    //     I_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408078], 0.01, 2),
+    //     P_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408079], 0.1, 1),
+    //     E_Aux_ESS3_2: Calculate_CPM10_energy(
+    //       other10Data.AuxM8[408080],
+    //       other10Data.AuxM8[408081],
+    //       other10Data.AuxM8[408082]
+    //     ),
+
+    //     V_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408077], 0.1, 1),
+    //     I_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408078], 0.01, 2),
+    //     P_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408079], 0.1, 1),
+    //     E_Aux_CtrlRoom: Calculate_CPM10_energy(
+    //       other10Data.AuxM1[408080],
+    //       other10Data.AuxM1[408081],
+    //       other10Data.AuxM1[408082]
+    //     ),
+    //   });
+    // });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/operateinfo/auxmeter/:data", async (req, res) => {
+  try {
+    await query_AuxM_KeyValuePairs();
+
+    res.json(AuxM_KeyValuePairs);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
