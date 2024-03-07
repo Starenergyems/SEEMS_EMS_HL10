@@ -9,7 +9,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-const port = 3005;
+// const port = 3005;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(express.urlencoded({ extended: true }));
@@ -31,11 +31,12 @@ const {
 
 // const otherrf01nanoDb = nano.use("other_rf01");
 // const otherrf10nanoDb = nano.use("other_rf10");
-const GCnanoDb = nano.use("gc_rf10");
+const gc_rf10 = "gc_rf10";
+const GCnanoDb = nano.use(gc_rf10);
 
 //app.use(myMiddleware);
 
-const { authentication } = require("./authMiddleware");
+//const { authentication } = require("./authMiddleware");
 
 // app.get('*', (req, res, next) => {
 //   // Assuming `authentication` returns true if authenticated, false otherwise
@@ -49,6 +50,7 @@ const { authentication } = require("./authMiddleware");
 
 //app=router要記得改
 //導向童話面作法同於METER
+
 var sysctrl_variables;
 async function query_Syscrtl_variables() {
   const indexDef = {
@@ -65,14 +67,12 @@ async function query_Syscrtl_variables() {
     limit: 1,
   };
 
-  GCnanoDb.find(mangoQuery, async (err, body) => {
-    if (err) {
-      console.error("Error:", err);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
+  try {
+    const result = await GCnanoDb.find(mangoQuery);
 
-    const GCData = body.docs[0]; // 取得數據的第一個元素
+    const GCData = result.docs[0];
+    const value = GCData.System[400078];
+    console.log("Value:", value);
 
     sysctrl_variables = {
       permission: "manager",
@@ -165,28 +165,61 @@ async function query_Syscrtl_variables() {
       EdReg_SS4_Light: mapEdReg_SS(GCData.System[400081]), //bit5
       EdReg_SS4: mapEdReg_SS(GCData.System[400081]), //bit5
     };
-  });
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
 }
 
-app.get("/mode", (req, res) => {
+// async function query_Syscrtl_variables() {
+//   const indexDef = {
+//     index: { fields: ["time"] },
+//     name: "time_index",
+//   };
+//   await GCnanoDb.createIndex(indexDef);
+
+//   const mangoQuery = {
+//     selector: {
+//       time: { $exists: true },
+//     },
+//     sort: [{ time: "desc" }],
+//     limit: 1,
+//   };
+
+//   await GCnanoDb.find(mangoQuery, async (err, body) => {
+//     if (err) {
+//       console.error("Error:", err);
+//       res.status(500).send("Internal Server Error");
+//       return;
+//     }
+
+//     const GCData = body.docs[0]; // 取得數據的第一個元素
+//     console.log("test" + GCData.System[400078]);
+
+//   });
+// }
+
+router.get("/mode", (req, res) => {
   // 在這裡修改重定向的方式，可以直接將 URL 修改為 "/mode/sysctrl"
   // 如果需要傳遞額外資訊，可以使用查詢字串或 session 等機制
   res.redirect("/mode/sysctrl");
 });
 
 //系統模式控制頁面切換
-app.get("/mode/sysctrl", async (req, res) => {
+router.get("/mode/sysctrl", async (req, res) => {
   await query_Syscrtl_variables();
+  console.log(sysctrl_variables);
   res.render("Mode_SysCtrl", sysctrl_variables);
 });
 
-app.get("/mode/sysctrl/:data", async (req, res) => {
+router.get("/mode/sysctrl/:data", async (req, res) => {
   await query_Syscrtl_variables();
+  console.log(sysctrl_variables);
   res.json(sysctrl_variables);
 });
 
 /******排程**************************************************************/
-app.get("/mode/schedule", (req, res) => {
+router.get("/mode/schedule", (req, res) => {
   res.render("Mode_Schedule", { permission: "manager" });
 });
 
@@ -197,6 +230,6 @@ app.get("/mode/schedule", (req, res) => {
 // });
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`mode.js 應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`mode.js 應用程式正在監聽端口 ${port}`);
+// });
