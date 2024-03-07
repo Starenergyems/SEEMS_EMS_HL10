@@ -18,7 +18,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-
+const NavbarData = require("./middleware");
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 const other_rf01 = "other_rf01";
@@ -45,14 +45,14 @@ app.use(cors());
 //報表
 app.get("/report", (req, res) => {
   // num與fun
-  res.render("Rpt_Report");
+  res.render("Rpt_Report", NavbarData);
 });
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
 app.get("/report/report", (req, res) => {
   // num與fun
-  res.render("Rpt_Report");
+  res.render("Rpt_Report", NavbarData);
 });
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
@@ -77,78 +77,132 @@ app.get("/report/report", (req, res) => {
 // );
 
 //路由定義
-//var specified_date; // 指定要撈哪天 / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
+var specified_date; // 指定要撈哪天(會撈前一天) / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
+var specified_date_clone1;
+var specified_date_clone2;
+var specified_date_clone3;
+var specified_date_clone4;
+var specified_date_clone5;
+var specified_date_clone6;
+var specified_date_clone7;
+var specified_date_clone8;
+var specified_date_clone9;
+var specified_date_clone10;
+var specified_date_clone11;
+var specified_date_clone12;
+var specified_date_clone13;
+var specified_date_clone14;
+var specified_date_clone15;
+var specified_date_clone16;
+var specified_date_clone17;
+var specified_date_clone18;
+var specified_date_clone19;
+var specified_date_clone20;
+
 //const specified_date = moment();
 //const specified_date = moment("2023-01-01", "YYYY-MM-DD"); // 指定為 2023 年 1 月 1 日
 // const input_dateandtime = "2023-01-01 00:00:00";
 
-const specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss"); // 指定為 2024 年 3 月 1 日的凌晨 12 點
+//var specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss"); // 指定為 2024 年 3 月 1 日的凌晨 12 點
 
 // console.log("specified_date: " + specified_date.format("YYYY-MM-DD HH:mm:ss"));
 
-const specified_date_clone1 = specified_date.clone();
-const specified_date_clone2 = specified_date.clone();
-const specified_date_clone3 = specified_date.clone();
-const specified_date_clone4 = specified_date.clone();
-const specified_date_clone5 = specified_date.clone();
-const specified_date_clone6 = specified_date.clone();
-const specified_date_clone7 = specified_date.clone();
-const specified_date_clone8 = specified_date.clone();
-const specified_date_clone9 = specified_date.clone();
-const specified_date_clone10 = specified_date.clone();
-const specified_date_clone11 = specified_date.clone();
-const specified_date_clone12 = specified_date.clone();
-const specified_date_clone13 = specified_date.clone();
-const specified_date_clone14 = specified_date.clone();
-const specified_date_clone15 = specified_date.clone();
-const specified_date_clone16 = specified_date.clone();
-const specified_date_clone17 = specified_date.clone();
-const specified_date_clone18 = specified_date.clone();
-const specified_date_clone19 = specified_date.clone();
-const specified_date_clone20 = specified_date.clone();
+// const specified_date_clone1 = specified_date.clone();
+// const specified_date_clone2 = specified_date.clone();
+// const specified_date_clone3 = specified_date.clone();
+// const specified_date_clone4 = specified_date.clone();
+// const specified_date_clone5 = specified_date.clone();
+// const specified_date_clone6 = specified_date.clone();
+// const specified_date_clone7 = specified_date.clone();
+// const specified_date_clone8 = specified_date.clone();
+// const specified_date_clone9 = specified_date.clone();
+// const specified_date_clone10 = specified_date.clone();
+// const specified_date_clone11 = specified_date.clone();
+// const specified_date_clone12 = specified_date.clone();
+// const specified_date_clone13 = specified_date.clone();
+// const specified_date_clone14 = specified_date.clone();
+// const specified_date_clone15 = specified_date.clone();
+// const specified_date_clone16 = specified_date.clone();
+// const specified_date_clone17 = specified_date.clone();
+// const specified_date_clone18 = specified_date.clone();
+// const specified_date_clone19 = specified_date.clone();
+// const specified_date_clone20 = specified_date.clone();
 // console.log(
 //   "specified_date_clone: " + specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
 // );
-
+/*************************************************************************************************** */
 app.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
     //查詢參數中取得templatePath
-    const { templatePath, reportType } = req.query; //url要帶參數
+    const { templatePath, reportType, fileName } = req.query; //url要帶參數
     if (!templatePath) {
       return res.status(400).send("Missing templatePath parameter");
     }
+
+    console.log("fileName:" + fileName);
+    var queryDate = convertFileNameToDate(fileName);
+    console.log("queryDate:" + queryDate);
+    specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
+
+    specified_date_clone1 = specified_date.clone();
+    specified_date_clone2 = specified_date.clone();
+    specified_date_clone3 = specified_date.clone();
+    specified_date_clone4 = specified_date.clone();
+    specified_date_clone5 = specified_date.clone();
+    specified_date_clone6 = specified_date.clone();
+    specified_date_clone7 = specified_date.clone();
+    specified_date_clone8 = specified_date.clone();
+    specified_date_clone9 = specified_date.clone();
+    specified_date_clone10 = specified_date.clone();
+    specified_date_clone11 = specified_date.clone();
+    specified_date_clone12 = specified_date.clone();
+    specified_date_clone13 = specified_date.clone();
+    specified_date_clone14 = specified_date.clone();
+    specified_date_clone15 = specified_date.clone();
+    specified_date_clone16 = specified_date.clone();
+    specified_date_clone17 = specified_date.clone();
+    specified_date_clone18 = specified_date.clone();
+    specified_date_clone19 = specified_date.clone();
+    specified_date_clone20 = specified_date.clone();
+
+    var tempFilePath; //暫存的excel資料
 
     //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
     const workbook = await xlsx.fromFileAsync(templatePath);
     var couchData; //插入excel的數值
     // Fetch data from MongoDB
     if (reportType === "年報") {
-      // specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss"); //還要改成真正要下載的日期
       couchData = await getYearData();
     } else if (reportType === "月報") {
-      // specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss");
       couchData = await getMonthData();
+      updateExcelWithMongoData(workbook, couchData.lastMonthYearMonth, "K3"); //K3
+      updateExcelWithMongoData(workbook, couchData.data_exacutive_rate, "D6");
+      updateExcelWithMongoData(workbook, couchData.data_other_info, "N6");
+      updateExcel1DHorizon(workbook, couchData.other_sum, "N37");
+      updateExcel1DHorizon(workbook, couchData.sumArray, "D37");
+      updateExcel1DHorizon(workbook, couchData.averageArray, "K37");
+      updateExcel1DHorizon(workbook, couchData.power, "U6");
+      updateExcel1DHorizon(workbook, couchData.last_month, "D38");
+      updateExcel1DHorizon(workbook, couchData.last_year, "D39");
+      updateExcel1DHorizon(workbook, couchData.last_month_power, "U7");
+      updateExcel1DHorizon(workbook, couchData.last_year_power, "U8");
+      tempFilePath = path.join(__dirname, "temp.xlsx");
+      await workbook.toFileAsync(tempFilePath);
+
     } else if (reportType === "日報") {
-      //可正確執行
-      // specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss");
       couchData = await getDayData();
+
+      // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
+      updateExcelWithMongoData(workbook, couchData.hour_final, "D6");
+      updateExcelWithMongoData(workbook, couchData.elsedata1, "F33");
+      updateExcelWithMongoData(workbook, couchData.elsedata2, "J33");
+      updateExcelWithMongoData(workbook, couchData.Date, "H3");
+      tempFilePath = path.join(__dirname, "temp.xlsx");
+      await workbook.toFileAsync(tempFilePath);
     } else {
       console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
     }
-    // const mongoData = await fetchDataFromMongoDB();
-
-    console.log("Date:"+couchData.Date);
-    console.log(typeof couchData.Date);
-    // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
-    updateExcelWithMongoData(workbook, couchData.hour_final, "D6");
-    updateExcelWithMongoData(workbook, couchData.elsedata1, "F33");
-    updateExcelWithMongoData(workbook, couchData.elsedata2, "J33");
-    updateExcelWithMongoData(workbook, couchData.Date, "H3");
-    // Save the modified workbook to a temporary file 存儲修改後的工作簿到臨時文件
-    const tempFilePath = path.join(__dirname, "temp.xlsx");
-    await workbook.toFileAsync(tempFilePath);
-
     // Set up response headers for Excel file download
     res.setHeader(
       "Content-Type",
@@ -170,7 +224,7 @@ app.get("/report/download-excel", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
+/***************************************************************************************************** */
 //百分比對照
 function Conversionpercentage(randomNumber) {
   let result = (randomNumber / 100).toFixed(1);
@@ -1029,7 +1083,7 @@ async function getMonthData() {
   const filterlast_year = {
     selector: {
       time: {
-        $eq: last_year, // 時間等於 last_month
+        $eq: last_year, // 時間等於 去年
       },
     },
     limit: 1, // 只讀取一個文檔
@@ -1038,33 +1092,79 @@ async function getMonthData() {
   const lastYearDoc = await monthly_reportDb.find(filterlast_year);
 
   // 將符合條件的資料存入陣列
-  const data = [];
+  const data1 = [];
+  const data2 = [];
+  const data3 = [];
+  const data4 = [];
+
   // 提取所需屬性並存入陣列
   if (lastMonthDoc.docs.length > 0) {
-    const { time, sumArray, other_sum, averageArray, totMWH } =
-      lastMonthDoc.docs[0];
-    data.push({ time, sumArray, other_sum, averageArray, totMWH });
-  }
-  if (lastYearDoc.docs.length > 0) {
-    const { time, sumArray, other_sum, averageArray, totMWH } =
-      lastYearDoc.docs[0];
-    data.push({ time, sumArray, other_sum, averageArray, totMWH });
-  }
+    const { sumArray, other_sum, averageArray } = lastMonthDoc.docs[0];
 
-  // 輸出結果
-  console.log("符合上個月條件的資料:", data[0]);
-  console.log("符合去年同期條件的資料:", data[1]);
-  return (
-    lastMonthYearMonth, //年-月
-    data_exacutive_rate, //每月的服務品質指標加總結果 SPM最大最小 31筆
-    data_other_info, //每月的總用電量統計 終止服務 充放電效率
-    other_sum, //表格中統計總用電量以及終止服務時數
-    sumArray, // 表格服務品質指標的TOTAL欄位
-    averageArray, //表格SPM的TOTAL
-    power, //輔助用電分析
-    data[0], //前期
-    data[1] //去年同期
-  );
+    // 直接將數值合併到一個新的陣列中
+    const extractedData1 = [
+      ...sumArray,
+      ...other_sum.map((value) => parseFloat(value)),
+      ...averageArray,
+    ];
+    data1.push(extractedData1);
+  }
+  console.log("符合上個月條件的資料:", data1[0]);
+
+  if (lastMonthDoc.docs.length > 0) {
+    const { power } = lastMonthDoc.docs[0];
+    // 直接將數值合併到一個新的陣列中
+    const extractedData = [...power];
+    data3.push(extractedData);
+  }
+  console.log("我是power 1:", data3[0]);
+
+  if (lastYearDoc.docs.length > 0) {
+    const { sumArray, other_sum, averageArray } = lastYearDoc.docs[0];
+
+    // 直接將數值合併到一個新的陣列中
+    const extractedData2 = [
+      ...sumArray,
+      ...other_sum.map((value) => parseFloat(value)),
+      ...averageArray,
+    ];
+    data2.push(extractedData2);
+  }
+  console.log("符合去年同期條件的資料:", data2[0]);
+
+  if (lastYearDoc.docs.length > 0) {
+    const { power } = lastYearDoc.docs[0];
+
+    // 直接將數值合併到一個新的陣列中
+    const extractedData = [...power];
+    data4.push(extractedData);
+  }
+  console.log("我是power 2:", data4[0]);
+
+  return {
+    lastMonthYearMonth: lastMonthYearMonth, //年-月
+    data_exacutive_rate: data_exacutive_rate, //每月的服務品質指標加總結果 SPM最大最小 31筆
+    data_other_info: data_other_info, //每月的總用電量統計 終止服務 充放電效率
+    other_sum: other_sum, //表格中統計總用電量以及終止服務時數
+    sumArray: sumArray, // 表格服務品質指標的TOTAL欄位
+    averageArray: averageArray, //表格SPM的TOTAL
+    power: power, //輔助用電分析
+    last_month: data1[0], //前期
+    last_month_power: data3[0], //前期power
+    last_year: data2[0], //去年同期
+    last_year_power: data4[0], //去年同期power
+  };
+  // return (
+  //   lastMonthYearMonth, //年-月
+  //   data_exacutive_rate, //每月的服務品質指標加總結果 SPM最大最小 31筆
+  //   data_other_info, //每月的總用電量統計 終止服務 充放電效率
+  //   other_sum, //表格中統計總用電量以及終止服務時數
+  //   sumArray, // 表格服務品質指標的TOTAL欄位
+  //   averageArray, //表格SPM的TOTAL
+  //   power, //輔助用電分析
+  //   data[0], //前期
+  //   data[1] //去年同期
+  // );
 }
 
 //getMonthData();
@@ -1296,64 +1396,177 @@ async function getYearData() {
 //   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
 // ];
 
+function convertFileNameToDate(inputFileName) {
+  //將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
+  // Extract the date parts from the filename using a regular expression
+  const regex = /(\d{4})年(?:(\d{1,2})月?(?:(\d{1,2})日)?)?\.xlsx/;
+  const match = inputFileName.match(regex);
+  if (!match) {
+    throw new Error("Invalid filename format");
+  }
+  // Extracted date parts
+  const year = match[1];
+  const month = match[2] || "01";
+  const day = match[3] || "01"; // Default to '01' if day is not present
+
+  // Create a Date object using the extracted parts
+  const parsedDate = new Date(`${year}-${month}-${day}`);
+
+  // if (day) { //如果是日報，日期+1
+  //   parsedDate.setDate(parsedDate.getDate() + 1);
+  // } else if (month){ //如果是月報，月份+1
+  //   parsedDate.setMonth(parsedDate.getMonth() + 1);
+  // } else { //如果是年報，年份+1
+  //   parsedDate.setMonth(parsedDate.getYear() + 1);
+  // }
+
+  if (match[3]) {
+    //如果有日期就是日報，日期+1
+    console.log("日+1");
+    parsedDate.setDate(parsedDate.getDate() + 1);
+  } else if (match[2]) {
+    //如果無日期有月份。就是月報，月份+1
+    console.log("月+1");
+    parsedDate.setMonth(parsedDate.getMonth() + 1);
+    parsedDate.setDate(1);
+  } else {
+    //如果是年報，年份+1
+    parsedDate.setFullYear(parsedDate.getFullYear() + 1);
+  }
+
+  // Adjust day, month, and year values for the formatted date
+  const formattedYear = parsedDate.getFullYear();
+  const formattedMonth = (parsedDate.getMonth() + 1)
+    .toString()
+    .padStart(2, "0");
+  const formattedDay = parsedDate.getDate().toString().padStart(2, "0");
+
+  // Format the date as "yyyy-MM-dd 00:00:00"
+  const formattedDate = `${formattedYear}-${formattedMonth}-${formattedDay} 00:00:00`;
+  return formattedDate;
+}
+
 // Update Excel file with MongoDB data
-function updateExcelWithMongoData(workbook, mongoData, excelStart) { //(範本位置，插入資料，插入位址)
+function updateExcelWithMongoData(workbook, mongoData, excelStart) {
+  //(範本位置，插入資料，插入位址)
   // Get the first sheet (modify as needed)
   const sheet = workbook.sheet(0); //第一個分頁
-  console.log("insert:" + mongoData);
-  console.log("length:" + mongoData.length);
-  //var array = chunkArray(mongoData.hour_final, 10);
-  //console.log("array:"+array);
-  // Example: Write MongoDB data starting from cell A2
-  // mongoData.forEach((data, index) => {
-  //   for (let i = 0; i < 24; i++) {
-  //     // Loop through columns D to J (7 columns)
-  //     sheet.cell(String.fromCharCode(68 + i) + (index + 6)).value(data[i]);
-  //   }
-  // });
-  // Example: Write MongoDB data starting from cell D6
-  // Define the starting cell (D6)
+  console.log("insert:", mongoData);
+  console.log("mongoData length:", mongoData.length);
 
   const startCell = excelStart; //塞在excel哪裡
 
-  if(mongoData.includes("-")){ //判斷是否為日期(2024-01-01)
-    // Convert the column index to the corresponding letter (D, E, F, ...)
-    const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
-    // Calculate the target cell based on the starting cell and indices
-    const targetCell = colLetter + (parseInt(startCell.slice(1)));
-    // Write the value to the target cell
-    sheet.cell(targetCell).value(mongoData);
+  if (mongoData.includes("-")) {
+          //判斷是否為日期(2024-01-01)
+          // Convert the column index to the corresponding letter (D, E, F, ...)
+          const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+          // Calculate the target cell based on the starting cell and indices
+          const targetCell = colLetter + parseInt(startCell.slice(1));
+          // Write the value to the target cell
+          sheet.cell(targetCell).value(mongoData);
   } else {
-    mongoData.forEach((data, rowIndex) => {
-      if (data.length > 1) { //判斷是否為二維陣列
-         data.forEach((cellValue, colIndex) => {
-           // Convert the column index to the corresponding letter (D, E, F, ...)
-           const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)) + colIndex);
-           // Calculate the target cell based on the starting cell and indices
-           const targetCell =
-             colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-           // Write the value to the target cell
-           sheet.cell(targetCell).value(cellValue);
-         });
-       } else{ //判斷是否為一維陣列
-         // Convert the column index to the corresponding letter (D, E, F, ...)
-         const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
-         // Calculate the target cell based on the starting cell and indices
-         const targetCell = colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-         console.log("targetCell:" + targetCell);
-         // Write the value to the target cell
-         sheet.cell(targetCell).value(data);
-       };
-     });
+          mongoData.forEach((data, rowIndex) => {
+            console.log("data length:", data.length);
+            if (data.length > 1) {
+                                    //判斷是否為二維陣列
+                                      console.log("mongoData",mongoData);
+                                      console.log("mongoData[0]",mongoData[0]);
+                                      console.log("data",data);
+                                      console.log("data[0]",data[0]);
+                                      console.log(data[0].length);
+                                      data.forEach((cellValue, colIndex) => {
+                                        // Convert the column index to the corresponding letter (D, E, F, ...)
+                                        const colLetter = String.fromCharCode(
+                                          charToAscii(startCell.charAt(0)) + colIndex
+                                        );
+                                        // Calculate the target cell based on the starting cell and indices
+                                        const targetCell =
+                                          colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+                                        console.log("targetCell:" + targetCell);
+                                        // Write the value to the target cell
+                                        sheet.cell(targetCell).value(cellValue);
+                                      });
+
+                      
+                      // //判斷是否為二維陣列
+                      // if (mongoData[0].length > 1) {
+                      //           data.forEach((cellValue, colIndex) => {
+                      //             // Convert the column index to the corresponding letter (D, E, F, ...)
+                      //             const colLetter = String.fromCharCode(
+                      //               charToAscii(startCell.charAt(0)) + colIndex
+                      //             );
+                      //             // Calculate the target cell based on the starting cell and indices
+                      //             const targetCell =
+                      //               colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+                      //             console.log("targetCell:" + targetCell);
+                      //             // Write the value to the target cell
+                      //             sheet.cell(targetCell).value(cellValue);
+                      //           });
+                      // } else {
+                      //           // Convert the column index to the corresponding letter (D, E, F, ...)
+                      //           const colLetter = String.fromCharCode(
+                      //             charToAscii(startCell.charAt(0))
+                      //           );
+                      //           // Calculate the target cell based on the starting cell and indices
+                      //           const targetCell =
+                      //             colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+                      //           // Write the value to the target cell
+                      //           console.log("targetCell:" + targetCell);
+                      //           sheet.cell(targetCell).value(data);
+                      // }
+            } else {
+                      //判斷是否為一維陣列
+                      // Convert the column index to the corresponding letter (D, E, F, ...)
+                      const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+                      // Calculate the target cell based on the starting cell and indices
+                      const targetCell =
+                        colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+                      console.log("targetCell:" + targetCell);
+                      // Write the value to the target cell
+                      sheet.cell(targetCell).value(data);
+            }
+          });
   }
-
-
 }
-function charToAscii(char) { //字母轉成ASCII code
+
+// 一維矩陣更新excel，橫放
+function updateExcel1DHorizon(workbook, mongoData, excelStart) {//(範本位置，插入資料，插入位址)
+  const sheet = workbook.sheet(0); //第一個分頁
+  console.log("insert:", mongoData);
+  console.log("mongoData length:", mongoData.length);
+  console.log("一維矩陣橫向新增");
+  const startCell = excelStart; //塞在excel哪裡
+
+  if (mongoData.includes("-")) {
+          //判斷是否為日期(2024-01-01)
+          // Convert the column index to the corresponding letter (D, E, F, ...)
+          const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+          // Calculate the target cell based on the starting cell and indices
+          const targetCell = colLetter + parseInt(startCell.slice(1));
+          // Write the value to the target cell
+          sheet.cell(targetCell).value(mongoData);
+  } else {
+          mongoData.forEach((data, rowIndex) => {
+              // Convert the column index to the corresponding letter (D, E, F, ...)
+              const colLetter = String.fromCharCode(
+                charToAscii(startCell.charAt(0)) + rowIndex
+              );
+              // Calculate the target cell based on the starting cell and indices
+              const targetCell =
+                colLetter + (parseInt(startCell.slice(1)));
+              console.log("targetCell:" + targetCell);
+              // Write the value to the target cell
+              sheet.cell(targetCell).value(data);
+          });
+  }
+}
+
+function charToAscii(char) {
+  //字母轉成ASCII code
   if (char.length === 1) {
     return char.charCodeAt(0);
   } else {
-    console.error('Input must be a single character.');
+    console.error("Input must be a single character.");
     return null;
   }
 }
