@@ -210,7 +210,7 @@ router.get("/mode", (req, res) => {
 router.get("/mode/sysctrl", async (req, res) => {
   await query_Syscrtl_variables();
   console.log(sysctrl_variables);
-  res.render("Mode_SysCtrl", { sysctrl_variables, NavbarData });
+  res.render("Mode_SysCtrl", sysctrl_variables);
 });
 
 router.get("/mode/sysctrl/:data", async (req, res) => {
@@ -221,7 +221,7 @@ router.get("/mode/sysctrl/:data", async (req, res) => {
 
 /******排程**************************************************************/
 router.get("/mode/schedule", (req, res) => {
-  res.render("Mode_Schedule", { permission: "manager", NavbarData });
+  res.render("Mode_Schedule", { permission: "manager" });
 });
 
 //運轉資訊+單線圖

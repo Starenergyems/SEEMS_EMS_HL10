@@ -96,13 +96,22 @@ app.use("*", async (req, res, next) => {
     if (authenticated === false) {
       return res.status(401).send("Unauthorized");
     } else {
-      req.body = authenticated;
+      req.customData = authenticated;
     }
     next();
   } catch (error) {
     console.error("Authentication error:", error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+app.post("test", (req, res) => {
+  const token = req.customData.token;
+  const id = req.customData.id;
+  const level = req.customData.level;
+  console.log(`id = ${id}, permission = ${level}, token = ${token}`);
+  const body = req.body;
+  console.log(`body = ${body}`);
 });
 
 //***************************************************************************************************************** */
@@ -164,6 +173,12 @@ const mangoQuery = {
   limit: 1,
 };
 
+// 呼叫函式並取得最新數值
+const latestValues = getLatestValuesFromDatabase();
+
+// 透過迴圈遍歷陣列或物件，取出每個數值
+console.log(latestValues); // 或者你可以做任何你需要的處理
+
 //let navbarData = null; // 定義一個全局變數用於存儲 navbarData
 app.use(async (req, res, next) => {
   //console.log("navbarDataObject", navbarDataObject);
@@ -172,183 +187,41 @@ app.use(async (req, res, next) => {
   const number = 99998888;
   res.locals.number = number;
   console.log("****res.locals", res.locals);
-  // try {
-  //   //req.locals = {};
-  //   // 為每個資料庫創建索引並發送查詢
-  //   const latestData = await getLatestValuesFromDatabase();
-  //   console.log("latestData 輸出輸出輸出:" + latestData);
-  //   Promise.all([
-  //     GCnanoDb.createIndex(indexDef).then(() => GCnanoDb.find(mangoQuery)),
-  //     otherrf01nanoDb
-  //       .createIndex(indexDef)
-  //       .then(() => otherrf01nanoDb.find(mangoQuery)),
-  //     lc1nanoDb.createIndex(indexDef).then(() => lc1nanoDb.find(mangoQuery)),
-  //     lc2nanoDb.createIndex(indexDef).then(() => lc2nanoDb.find(mangoQuery)),
-  //     lc3nanoDb.createIndex(indexDef).then(() => lc3nanoDb.find(mangoQuery)),
-  //     lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery)),
-  //   ])
-  //     .then(([gcBody, rf01Body, lc1Body, lc2Body, lc3Body, lc4Body]) => {
-  //       const gcData = gcBody.docs[0];
-  //       const otherrf01Data = rf01Body.docs[0];
-  //       const lc1Data = lc1Body.docs[0];
-  //       const lc2Data = lc2Body.docs[0];
-  //       const lc3Data = lc3Body.docs[0];
-  //       const lc4Data = lc4Body.docs[0];
 
-  //       // 在這裡將數據返回給前端或進行其他處理
-  //       //req.body = { hello: "dsdjhsfjsfbjsb" };
+  // 呼叫函式並取得最新數值
+  const latestValues = await getLatestValuesFromDatabase();
+  // 獲取總數 這裡用的是FAULT是錯誤
+  res.locals.totalAlarmNum = latestValues[0];
+  res.locals.Fault_system_num = latestValues[1]; //新增
+  res.locals.AlarmNum_Bat = latestValues[2];
+  res.locals.AlarmNum_PCS = latestValues[3];
+  res.locals.AlarmNum_FF = latestValues[4];
+  res.locals.AlarmNum_Env = latestValues[5];
+  res.locals.AlarmNum_Meter = latestValues[6];
+  //
+  res.locals.totalWarningNum = latestValues[7];
+  res.locals.Alarm_system_num = latestValues[8]; //新增
+  res.locals.WarningNum_Bat = latestValues[9];
+  res.locals.WarningNum_PCS = latestValues[10];
+  res.locals.WarningNum_FF = latestValues[11];
+  res.locals.WarningNum_Env = latestValues[12];
+  res.locals.WarningNum_Meter = latestValues[13];
 
-  //       // 在 middleware 中設置全域變數
-  //       app.use(async (req, res, next) => {
-  //         try {
-  //           req.locals = {};
-  //           // 為每個資料庫創建索引並發送查詢
-  //           const latestData = await getLatestValuesFromDatabase();
-  //           console.log("輸出輸出輸出:" + latestData);
-  //           Promise.all([
-  //             GCnanoDb.createIndex(indexDef).then(() =>
-  //               GCnanoDb.find(mangoQuery)
-  //             ),
-  //             otherrf01nanoDb
-  //               .createIndex(indexDef)
-  //               .then(() => otherrf01nanoDb.find(mangoQuery)),
-  //             lc1nanoDb
-  //               .createIndex(indexDef)
-  //               .then(() => lc1nanoDb.find(mangoQuery)),
-  //             lc2nanoDb
-  //               .createIndex(indexDef)
-  //               .then(() => lc2nanoDb.find(mangoQuery)),
-  //             lc3nanoDb
-  //               .createIndex(indexDef)
-  //               .then(() => lc3nanoDb.find(mangoQuery)),
-  //             lc4nanoDb
-  //               .createIndex(indexDef)
-  //               .then(() => lc4nanoDb.find(mangoQuery)),
-  //           ])
-  //             .then(
-  //               ([gcBody, rf01Body, lc1Body, lc2Body, lc3Body, lc4Body]) => {
-  //                 const gcData = gcBody.docs[0];
-  //                 const otherrf01Data = rf01Body.docs[0];
-  //                 const lc1Data = lc1Body.docs[0];
-  //                 const lc2Data = lc2Body.docs[0];
-  //                 const lc3Data = lc3Body.docs[0];
-  //                 const lc4Data = lc4Body.docs[0];
-
-  //                 // 將所有資料轉換為鍵值對形式
-  //                 const navbarData = {
-  //                   title: "模式控制",
-  //                   stylesheets: [
-  //                     "../public/styles/style_template.css",
-  //                     "../public/styles/Mode_SysCtrl.css",
-  //                   ],
-  //                   permission: "admin",
-  //                   //******************************************************************************* */
-  //                   //綠黃紅 調頻服務中、部分運轉、暫停服務 bit4+bit5
-  //                   L_M_systemMode: mapL_M_systemMode(
-  //                     gcData.System["400078"],
-  //                     gcData.System["400079"],
-  //                     gcData.System["400080"],
-  //                     gcData.System["400081"]
-  //                   ),
-
-  //                   //右邊******************************************************************************* */
-  //                   //Warning 警告 右邊 黃色
-  //                   //計算*告警*總數
-  //                   //列出條件
-
-  //                   totalWarningNum: latestData[7],
-  //                   WarningNum_Meter: latestData[13],
-  //                   WarningNum_PCS: latestData[10],
-  //                   WarningNum_Bat: latestData[9],
-  //                   WarningNum_Env: latestData[12],
-  //                   WarningNum_FF: latestData[11],
-  //                   //AlarmNum_sys: latestData[8],
-
-  //                   //左邊******************************************************************************* */
-  //                   //計算*錯誤*總數 Alarm (紅色 左邊 錯誤)
-  //                   totalAlarmNum: latestData[0],
-  //                   AlarmNum_Meter: latestData[6],
-  //                   AlarmNum_PCS: latestData[3],
-  //                   AlarmNum_Bat: latestData[2],
-  //                   AlarmNum_Env: latestData[5],
-  //                   AlarmNum_FF: latestData[4],
-  //                   //WarningNum_System: latestData[1],
-
-  //                   //*********************************************************************************** */
-  //                   //下方******************************************************************************* */
-  //                   //系統資訊(純數值顯示)
-
-  //                   L_M_freq: scaleProcess(otherrf01Data.Freq[408026], 1, 3),
-  //                   L_M_activeP: scaleProcess(otherrf01Data.Freq[408019], 1, 1),
-  //                   L_M_reactiveP: scaleProcess(
-  //                     otherrf01Data.Freq[408021],
-  //                     1,
-  //                     1
-  //                   ),
-  //                   L_M_voltage: scaleProcess(otherrf01Data.Freq[408007], 1, 3),
-  //                   L_M_current: scaleProcess(otherrf01Data.Freq[408017], 1, 2),
-  //                   L_M_powerFactor: scaleProcess(
-  //                     otherrf01Data.Freq[408025],
-  //                     1,
-  //                     3
-  //                   ),
-  //                   L_M_avgSOC: scaleProcess(gcData.IEC61850[400129], 1, 3),
-  //                   L_M_minSOH: mapminSOH(
-  //                     lc1Data.BMS1[404005],
-  //                     lc1Data.BMS2[404005],
-  //                     lc2Data.BMS1[404005],
-  //                     lc2Data.BMS2[404005],
-  //                     lc3Data.BMS1[404005],
-  //                     lc3Data.BMS2[404005],
-  //                     lc4Data.BMS1[404005],
-  //                     lc4Data.BMS2[404005]
-  //                   ),
-  //                   L_M_SBSPM: scaleProcess(gcData.System[400037], 1, 0),
-  //                   L_M_chgEtoday: otherrf01Data.Freq[408028] - ChgEtoday0, //408028 kWh_Import
-  //                   L_M_dcgEtoday: otherrf01Data.Freq[408030] - DcgEtoday0, //408030 kWh_Export
-  //                 };
-
-  //                 // 將所有資料轉換為鍵值對形式
-  //                 const navbarDataEntries = Object.entries(navbarData);
-
-  //                 // 將鍵值對數組轉換為物件
-  //                 const navbarDataObject = navbarDataEntries.reduce(
-  //                   (acc, [key, value]) => {
-  //                     acc[key] = value;
-  //                     return acc;
-  //                   },
-  //                   {}
-  //                 );
-
-  //                 // 將轉換後的資料放入 res.locals 中
-  //                 res.locals.navbarData = navbarDataObject;
-  //               }
-  //             )
-  //             .catch((err) => {
-  //               console.error("Error:", err);
-  //               res.status(500).send("Internal Server Error");
-  //             });
-
-  //           next();
-  //         } catch (error) {
-  //           // 處理錯誤
-  //           console.error("無法執行 Mango 查詢：", error);
-  //           res.status(500).send("Internal Server Error");
-  //         }
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.error("Error:", err);
-  //       res.status(500).send("Internal Server Error");
-  //     });
-
-  //   //NavbarData = res.locals.navbarData;
-  //   next();
-  // } catch (error) {
-  //   // 處理錯誤
-  //   console.error("無法執行 Mango 查詢：", error);
-  //   res.status(500).send("Internal Server Error");
-  // }
+  //沒有計算 純粹讀取+換算
+  const latestValues2 = await getLatestValuesFromDatabaseforother();
+  res.locals.L_M_systemMode = latestValues2[0];
+  res.locals.L_M_freq = latestValues2[1];
+  res.locals.L_M_activeP = latestValues2[2];
+  res.locals.L_M_reactiveP = latestValues2[3];
+  res.locals.L_M_voltage = latestValues2[4];
+  res.locals.L_M_current = latestValues2[5];
+  res.locals.L_M_powerFactor = latestValues2[6];
+  res.locals.L_M_avgSOC = latestValues2[7];
+  res.locals.L_M_minSOH = latestValues2[8];
+  res.locals.L_M_SBSPM = latestValues2[9];
+  res.locals.L_M_chgEtoday = latestValues2[10];
+  res.locals.L_M_dcgEtoday = latestValues2[11];
+  console.log("****res.locals", res.locals);
   next();
 });
 
@@ -493,9 +366,9 @@ async function getLatestValuesFromDatabase() {
       Alarm_FFS_num +
       Alarm_ENV_num +
       Alarm_meter_num;
-    console.log(
-      "*************************統計********************************"
-    );
+    // console.log(
+    //   "*************************統計********************************"
+    // );
     // console.log("Fault_system_num: " + Fault_system_num);
     // console.log("Fault_battery_num: " + Fault_battery_num);
     // console.log("Fault_FFS_num: " + Fault_FFS_num);
@@ -529,7 +402,80 @@ async function getLatestValuesFromDatabase() {
       Alarm_battery_num,
       Alarm_pcs_num,
       Alarm_FFS_num,
-      Alarm_ENV_num.Alarm_meter_num,
+      Alarm_ENV_num,
+      Alarm_meter_num,
+    ];
+  } catch (error) {
+    console.error("Error fetching latest values from alarm database:", error);
+    throw error; // 把錯誤向外傳遞
+  }
+}
+
+// 創建一個函數來從資料庫中獲取最新的數值
+async function getLatestValuesFromDatabaseforother() {
+  try {
+    const [gcBody, rf01Body, lc1Body, lc2Body, lc3Body, lc4Body] =
+      await Promise.all([
+        GCnanoDb.createIndex(indexDef).then(() => GCnanoDb.find(mangoQuery)),
+        otherrf01nanoDb
+          .createIndex(indexDef)
+          .then(() => otherrf01nanoDb.find(mangoQuery)),
+        lc1nanoDb.createIndex(indexDef).then(() => lc1nanoDb.find(mangoQuery)),
+        lc2nanoDb.createIndex(indexDef).then(() => lc2nanoDb.find(mangoQuery)),
+        lc3nanoDb.createIndex(indexDef).then(() => lc3nanoDb.find(mangoQuery)),
+        lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery)),
+      ]);
+
+    // 取得每個資料庫的第一條資料
+    const gcData = gcBody.docs[0];
+    const otherrf01Data = rf01Body.docs[0];
+    const lc1Data = lc1Body.docs[0];
+    const lc2Data = lc2Body.docs[0];
+    const lc3Data = lc3Body.docs[0];
+    const lc4Data = lc4Body.docs[0];
+
+    const L_M_systemMode = mapL_M_systemMode(
+      gcData.System["400078"],
+      gcData.System["400079"],
+      gcData.System["400080"],
+      gcData.System["400081"]
+    );
+
+    //系統資訊(純數值顯示)
+
+    const L_M_freq = scaleProcess(otherrf01Data.Freq[408026], 1, 3);
+    const L_M_activeP = scaleProcess(otherrf01Data.Freq[408019], 1, 1);
+    const L_M_reactiveP = scaleProcess(otherrf01Data.Freq[408021], 1, 1);
+    const L_M_voltage = scaleProcess(otherrf01Data.Freq[408007], 1, 3);
+    const L_M_curren = scaleProcess(otherrf01Data.Freq[408017], 1, 2);
+    const L_M_powerFactor = scaleProcess(otherrf01Data.Freq[408025], 1, 3);
+    const L_M_avgSOC = scaleProcess(gcData.IEC61850[400129], 1, 3);
+    const L_M_minSOH = mapminSOH(
+      lc1Data.BMS1[404005],
+      lc1Data.BMS2[404005],
+      lc2Data.BMS1[404005],
+      lc2Data.BMS2[404005],
+      lc3Data.BMS1[404005],
+      lc3Data.BMS2[404005],
+      lc4Data.BMS1[404005],
+      lc4Data.BMS2[404005]
+    );
+    const L_M_SBSPM = scaleProcess(gcData.System[400037], 1, 0);
+    const L_M_chgEtoday = otherrf01Data.Freq[408028] - ChgEtoday0; //408028 kWh_Import
+    const L_M_dcgEtoday = otherrf01Data.Freq[408030] - DcgEtoday0; //408030 kWh_Export
+    return [
+      L_M_systemMode,
+      L_M_freq,
+      L_M_activeP,
+      L_M_reactiveP,
+      L_M_voltage,
+      L_M_curren,
+      L_M_powerFactor,
+      L_M_avgSOC,
+      L_M_minSOH,
+      L_M_SBSPM,
+      L_M_chgEtoday,
+      L_M_dcgEtoday,
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
@@ -547,7 +493,7 @@ const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
 const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
-// reportRouter = require("./rReport");
+const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 // const testRouter = require("./test");
 const alarmRouter = require("./rAlarm");
@@ -569,7 +515,7 @@ app.use(commuRouter);
 app.use(deviceRouter);
 app.use(environmentRouter);
 app.use(eventRouter);
-//app.use(reportRouter);
+app.use(reportRouter);
 app.use(chartRouter);
 //app.use(testRouter);
 app.use(alarmRouter);

@@ -51,22 +51,22 @@ app.use(cors());
 app.get("/account", (req, res) => {
   //最後都要改回router.get
   // num與fun
-  res.render("PersonalInfo", NavbarData);
+  res.render("PersonalInfo");
 });
 
 app.get("/account/personalinfo", (req, res) => {
   // num與fun
-  res.render("PersonalInfo", NavbarData);
+  res.render("PersonalInfo");
 });
 
 app.get("/account/manage", (req, res) => {
   // num與fun
-  res.render("AccountManage", NavbarData);
+  res.render("AccountManage");
 });
 
 app.get("/account/system", (req, res) => {
   // num與fun
-  res.render("SysManage", NavbarData);
+  res.render("SysManage");
 });
 
 app.get("/account/system/accounts", (req, res) => {

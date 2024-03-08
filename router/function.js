@@ -6,7 +6,6 @@ function calculateAverage(...numbers) {
   if (numbers.length === 0) {
     return 0; // 避免除以零的情況
   }
-  countWarningNum_Meter;
   const sum = numbers.reduce((acc, num) => acc + num, 0);
   return sum / numbers.length;
 }
@@ -157,6 +156,10 @@ function mapModeLR(input) {
 //***************************************************************************** */
 //PCSWorkingMode
 function mapPCSWorkingstatus(input1, input2) {
+  // 檢查參數是否為 undefined
+  if (input1 === undefined || input2 === undefined) {
+  }
+
   // 將參數轉換為二進制並填補為固定長度為32
   const binary1 = input1.toString(2).padStart(32, "0");
   const binary2 = input2.toString(2).padStart(32, "0");
@@ -209,6 +212,11 @@ function mapPCSWorkingstatus(input1, input2) {
 
 //計算pcs告警和錯誤的總數
 function countPCSAlarmAndFault(input1, input2, input3) {
+  // 檢查參數是否為 undefined
+  if (input1 === undefined || input2 === undefined || input3 === undefined) {
+    return 0; // 或者返回其他預設值，具體取決於你的需求
+  }
+
   // 將參數轉換為二進制並填補為固定長度為32
   const binary1 = input1.toString(2).padStart(32, "0");
   const binary2 = input2.toString(2).padStart(32, "0");
@@ -777,6 +785,7 @@ module.exports = {
   mapchargeStatus,
   scaleProcess,
   //mapPCSWorkingMode,
+  countPCSAlarmAndFault,
   mapgridStatus,
   Convert_UInt_to_revBitString,
   Convert_UInt_to_BitString,
@@ -803,13 +812,18 @@ module.exports = {
   //****************** */
   mapL_M_systemMode,
   mapminSOH,
-  // counttotalWarningNum,
-  // countWarningNum_Meter,
-  // calculateWarningNum_PCS,
-  // calculateWarningNum_Bat,
-  // calculateWarningNum_FF,
-  // cal_BSC,
-  // cal_HVAC,
+  mapModeActPas,
+  mapModeQctrl,
+  mapStandbyCmd,
+  mapModeLR,
+  mapPCSWorkingstatus,
+  //counttotalWarningNum,
+  //countWarningNum_Meter,
+  //calculateWarningNum_PCS,
+  //calculateWarningNum_Bat,
+  //calculateWarningNum_FF,
+  //cal_BSC,
+  //cal_HVAC,
   // cal_Temperature,
   // cal_Humidity,
   // cal_UPS_1,
