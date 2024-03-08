@@ -138,12 +138,11 @@ async function query_SLD_KeyValuePairs() {
   );
 
   SLD_KeyValuePairs = {
-    statusL_of_MVCB: 0,
-    // statusL_of_MVCB: Determine_statusL_of_VCB(
-    //   MVCB_rBitS[0],
-    //   MVCB_rBitS[1],
-    //   MVCB_rBitS[2]
-    // ),
+    statusL_of_MVCB: Determine_statusL_of_VCB(
+      MVCB_rBitS[0],
+      MVCB_rBitS[1],
+      MVCB_rBitS[2]
+    ),
     statusL_of_VCB1: Determine_statusL_of_VCB(
       VCB1_rBitS[0],
       VCB1_rBitS[1],
@@ -318,7 +317,7 @@ router.post("/change_num_of_RelayVCB", async (req, res) => {
 
     const response = {
       title_of_pUW: relayVCB_MT[num_RelayVCB].pUW_title,
-      relayVCB_revBitString: SLD_KeyValuePairs.relayVCB,
+      relayVCB_revBitString: SLD_KeyValuePairs.relayVCB
     };
 
     res.json(response);
@@ -538,122 +537,6 @@ router.get("/operateinfo/auxmeter", async (req, res) => {
     console.log(AuxM_KeyValuePairs);
 
     res.render("Op_Meter_AuxMeter", AuxM_KeyValuePairs);
-
-    // const indexDef = {
-    //   index: { fields: ["time"] },
-    //   name: "time_index",
-    // };
-    // await rf10Db.createIndex(indexDef);
-
-    // const mangoQuery = {
-    //   selector: {
-    //     time: { $exists: true },
-    //   },
-    //   sort: [{ time: "desc" }],
-    //   limit: 1,
-    // };
-
-    // rf10Db.find(mangoQuery, async (err, body) => {
-    //   if (err) {
-    //     console.error("Error:", err);
-    //     res.status(500).send("Internal Server Error");
-    //     return;
-    //   }
-
-    //   const other10Data = body.docs[0]; // 取得數據的第一個元素
-
-    //   res.render("Op_Meter_AuxMeter", {
-    //     permission: "manager",
-    //     //MVCB = AuxM2
-    //     V_Aux_HV: scaleProcess(other10Data.AuxM2[408077], 0.1, 1) || 0,
-    //     I_Aux_HV: scaleProcess(other10Data.AuxM2[408078], 0.01, 2) || 0,
-    //     P_Aux_HV: scaleProcess(other10Data.AuxM2[408079], 0.1, 1) || 0,
-    //     E_Aux_HV:
-    //       Calculate_CPM10_energy(
-    //         other10Data.AuxM2[408080],
-    //         other10Data.AuxM2[408081],
-    //         other10Data.AuxM2[408082]
-    //       ) || 0,
-
-    //     V_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408077], 0.1, 1) || 0,
-    //     I_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408078], 0.01, 2) || 0,
-    //     P_Aux_ESS1_1: scaleProcess(other10Data.AuxM3[408079], 0.1, 1) || 0,
-    //     E_Aux_ESS1_1:
-    //       Calculate_CPM10_energy(
-    //         other10Data.AuxM3[408080],
-    //         other10Data.AuxM3[408081],
-    //         other10Data.AuxM3[408082]
-    //       ) || 0,
-
-    //     V_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408077], 0.1, 1),
-    //     I_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408078], 0.01, 2),
-    //     P_Aux_ESS2_1: scaleProcess(other10Data.AuxM5[408079], 0.1, 1),
-    //     E_Aux_ESS2_1: Calculate_CPM10_energy(
-    //       other10Data.AuxM5[408080],
-    //       other10Data.AuxM5[408081],
-    //       other10Data.AuxM5[408082]
-    //     ),
-
-    //     V_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408077], 0.1, 1),
-    //     I_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408078], 0.01, 2),
-    //     P_Aux_ESS3_1: scaleProcess(other10Data.AuxM7[408079], 0.1, 1),
-    //     E_Aux_ESS3_1: Calculate_CPM10_energy(
-    //       other10Data.AuxM7[408080],
-    //       other10Data.AuxM7[408081],
-    //       other10Data.AuxM7[408082]
-    //     ),
-
-    //     V_Aux_ESS4: scaleProcess(other10Data.AuxM9[408077], 0.1, 1),
-    //     I_Aux_ESS4: scaleProcess(other10Data.AuxM9[408078], 0.01, 2),
-    //     P_Aux_ESS4: scaleProcess(other10Data.AuxM9[408079], 0.1, 1),
-    //     E_Aux_ESS4: Calculate_CPM10_energy(
-    //       other10Data.AuxM9[408080],
-    //       other10Data.AuxM9[408081],
-    //       other10Data.AuxM9[408082]
-    //     ),
-
-    //     V_Aux_total: scaleProcess(other10Data.AuxMtot1[408069], 0.1, 1),
-    //     I_Aux_total: scaleProcess(other10Data.AuxMtot1[408071], 0.001, 2),
-    //     P_Aux_total: scaleProcess(other10Data.AuxMtot1[408073], 0.001, 1),
-    //     E_Aux_total: scaleProcess(other10Data.AuxMtot1[408075], 0.1, 1),
-
-    //     V_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408077], 0.1, 1),
-    //     I_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408078], 0.01, 2),
-    //     P_Aux_ESS1_2: scaleProcess(other10Data.AuxM4[408079], 0.1, 1),
-    //     E_Aux_ESS1_2: Calculate_CPM10_energy(
-    //       other10Data.AuxM4[408080],
-    //       other10Data.AuxM4[408081],
-    //       other10Data.AuxM4[408082]
-    //     ),
-
-    //     V_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408077], 0.1, 1),
-    //     I_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408078], 0.01, 2),
-    //     P_Aux_ESS2_2: scaleProcess(other10Data.AuxM6[408079], 0.1, 1),
-    //     E_Aux_ESS2_2: Calculate_CPM10_energy(
-    //       other10Data.AuxM6[408080],
-    //       other10Data.AuxM6[408081],
-    //       other10Data.AuxM6[408082]
-    //     ),
-
-    //     V_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408077], 0.1, 1),
-    //     I_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408078], 0.01, 2),
-    //     P_Aux_ESS3_2: scaleProcess(other10Data.AuxM8[408079], 0.1, 1),
-    //     E_Aux_ESS3_2: Calculate_CPM10_energy(
-    //       other10Data.AuxM8[408080],
-    //       other10Data.AuxM8[408081],
-    //       other10Data.AuxM8[408082]
-    //     ),
-
-    //     V_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408077], 0.1, 1),
-    //     I_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408078], 0.01, 2),
-    //     P_Aux_CtrlRoom: scaleProcess(other10Data.AuxM1[408079], 0.1, 1),
-    //     E_Aux_CtrlRoom: Calculate_CPM10_energy(
-    //       other10Data.AuxM1[408080],
-    //       other10Data.AuxM1[408081],
-    //       other10Data.AuxM1[408082]
-    //     ),
-    //   });
-    // });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

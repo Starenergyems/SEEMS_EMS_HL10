@@ -1,4 +1,4 @@
-const port = 3006;
+// const port = 3006;
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -182,7 +182,7 @@ async function querySysteminfo() {
 router.get("/systeminfo", async (req, res) => {
   try {
     await querySysteminfo();
-    res.render("Sys_Comm", { systeminfo_variables, NavbarData });
+    res.render("Sys_Comm", systeminfo_variables);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -202,6 +202,6 @@ router.get("/systeminfo/:data", async (req, res) => {
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

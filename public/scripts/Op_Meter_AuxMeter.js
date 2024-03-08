@@ -49,6 +49,9 @@ function afterLoadDCM() {
   asdfg = "DOM加载了! 哈哈\n阿哈哈~";
   console.log(asdfg);
 
+  const defaultBut_navBar = document.querySelector("#nB_Operation");
+  defaultBut_navBar.classList.add("default_nB");
+
   updateData();
 }
 
