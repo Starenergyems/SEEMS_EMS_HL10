@@ -1,4 +1,4 @@
-const port = 3005;
+//const port = 3005;
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -43,14 +43,14 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(cors());
 
 //報表
-app.get("/report", (req, res) => {
+router.get("/report", (req, res) => {
   // num與fun
-  res.render("Rpt_Report", NavbarData);
+  res.render("Rpt_Report");
 });
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
-app.get("/report/report", (req, res) => {
+router.get("/report/report", (req, res) => {
   // num與fun
   res.render("Rpt_Report", NavbarData);
 });
@@ -131,7 +131,7 @@ var specified_date_clone20;
 //   "specified_date_clone: " + specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
 // );
 /*************************************************************************************************** */
-app.get("/report/download-excel", async (req, res) => {
+router.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
     //查詢參數中取得templatePath
@@ -174,29 +174,40 @@ app.get("/report/download-excel", async (req, res) => {
     // Fetch data from MongoDB
     if (reportType === "年報") {
       couchData = await getYearData();
+
+      updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
+      updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33");//總用電量
+      updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33");//中止服務
+      updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
+      tempFilePath = path.join(__dirname, "temp.xlsx");
+      await workbook.toFileAsync(tempFilePath);
+
     } else if (reportType === "月報") {
       couchData = await getMonthData();
-      updateExcelWithMongoData(workbook, couchData.lastMonthYearMonth, "K3"); //K3
-      updateExcelWithMongoData(workbook, couchData.data_exacutive_rate, "D6");
-      updateExcelWithMongoData(workbook, couchData.data_other_info, "N6");
-      updateExcel1DHorizon(workbook, couchData.other_sum, "N37");
-      updateExcel1DHorizon(workbook, couchData.sumArray, "D37");
-      updateExcel1DHorizon(workbook, couchData.averageArray, "K37");
-      updateExcel1DHorizon(workbook, couchData.power, "U6");
-      updateExcel1DHorizon(workbook, couchData.last_month, "D38");
-      updateExcel1DHorizon(workbook, couchData.last_year, "D39");
-      updateExcel1DHorizon(workbook, couchData.last_month_power, "U7");
-      updateExcel1DHorizon(workbook, couchData.last_year_power, "U8");
+      updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
+      updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 1, "K3"); //日期
+      updateExcel2DHorizon(workbook, couchData.data_exacutive_rate, 1, "D6"); //服務品質指標+SPM
+      updateExcel2DHorizon(workbook, couchData.data_other_info, 1, "N6");//總用電+中止+充放電效率
+      updateExcel1DHorizon(workbook, couchData.other_sum, 1, "N37");//total總用電+中止+充放電效率
+      updateExcel1DHorizon(workbook, couchData.sumArray, 1, "D37");//total服務品質指標
+      updateExcel1DHorizon(workbook, couchData.averageArray, 1, "K37");//total SPM
+      updateExcel1DHorizon(workbook, couchData.last_month, 1, "D38");//上期
+      updateExcel1DHorizon(workbook, couchData.last_year, 1, "D39");//去年同期
+
+      updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
+      updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
+      updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
+
       tempFilePath = path.join(__dirname, "temp.xlsx");
       await workbook.toFileAsync(tempFilePath);
     } else if (reportType === "日報") {
       couchData = await getDayData();
 
       // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
-      updateExcelWithMongoData(workbook, couchData.hour_final, "D6");
-      updateExcelWithMongoData(workbook, couchData.elsedata1, "F33");
-      updateExcelWithMongoData(workbook, couchData.elsedata2, "J33");
-      updateExcelWithMongoData(workbook, couchData.Date, "H3");
+      updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
+      updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33");//總用電量
+      updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33");//中止服務
+      updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
       tempFilePath = path.join(__dirname, "temp.xlsx");
       await workbook.toFileAsync(tempFilePath);
     } else {
@@ -1153,20 +1164,7 @@ async function getMonthData() {
     last_year: data2[0], //去年同期
     last_year_power: data4[0], //去年同期power
   };
-  // return (
-  //   lastMonthYearMonth, //年-月
-  //   data_exacutive_rate, //每月的服務品質指標加總結果 SPM最大最小 31筆
-  //   data_other_info, //每月的總用電量統計 終止服務 充放電效率
-  //   other_sum, //表格中統計總用電量以及終止服務時數
-  //   sumArray, // 表格服務品質指標的TOTAL欄位
-  //   averageArray, //表格SPM的TOTAL
-  //   power, //輔助用電分析
-  //   data[0], //前期
-  //   data[1] //去年同期
-  // );
 }
-
-//getMonthData();
 
 function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
   // 計算時間1的總共差值
@@ -1337,6 +1335,19 @@ async function getYearData() {
   }
 
   console.log("datayear_before_last:", datayear_before_last);
+  // return {
+  //   lastMonthYearMonth: lastMonthYearMonth, //年-月
+  //   data_exacutive_rate: data_exacutive_rate, //每月的服務品質指標加總結果 SPM最大最小 31筆
+  //   data_other_info: data_other_info, //每月的總用電量統計 終止服務 充放電效率
+  //   other_sum: other_sum, //表格中統計總用電量以及終止服務時數
+  //   sumArray: sumArray, // 表格服務品質指標的TOTAL欄位
+  //   averageArray: averageArray, //表格SPM的TOTAL
+  //   power: power, //輔助用電分析
+  //   last_month: data1[0], //前期
+  //   last_month_power: data3[0], //前期power
+  //   last_year: data2[0], //去年同期
+  //   last_year_power: data4[0], //去年同期power
+  // };
   return (
     sumArrayTotal,
     otherSumTotal,
@@ -1346,54 +1357,6 @@ async function getYearData() {
   );
 }
 
-// getYearData();
-
-// 計算服務品質指標
-// async function fetchDataFromMongoDB() {
-//   //讀取DB資料+計算執行率+換算服務品質指標
-//   return [
-//     //回傳執行率 年報1個月1筆 共12筆
-//     [611, 222, 33, 44, 55, 366, 177],
-//     [711, 22, 33, 44, 55, 266, 277],
-//     [911, 22, 33, 44, 55, 166, 177],
-//     [600, 20, 30, 40, 50, 20, 100],
-//     [511, 222, 33, 44, 55, 266, 277],
-//     [811, 222, 33, 44, 55, 166, 177],
-//     [911, 22, 33, 44, 55, 66, 177],
-//     [800, 200, 30, 40, 50, 60, 300],
-//     [711, 222, 33, 44, 55, 66, 177],
-//     [711, 22, 33, 44, 55, 66, 177],
-//     [711, 222, 33, 44, 55, 26, 177],
-//     [800, 20, 30, 40, 50, 20, 100],
-//   ];
-// }
-// var dayReport = [
-//   //回傳執行率 一天24小時
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-// ];
 
 function convertFileNameToDate(inputFileName) {
   //將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
@@ -1430,6 +1393,7 @@ function convertFileNameToDate(inputFileName) {
     parsedDate.setDate(1);
   } else {
     //如果是年報，年份+1
+    console.log("年+1");
     parsedDate.setFullYear(parsedDate.getFullYear() + 1);
   }
 
@@ -1446,17 +1410,13 @@ function convertFileNameToDate(inputFileName) {
 }
 
 // Update Excel file with MongoDB data
-function updateExcelWithMongoData(workbook, mongoData, excelStart) {
-  //(範本位置，插入資料，插入位址)
-  // Get the first sheet (modify as needed)
-  const sheet = workbook.sheet(0); //第一個分頁
+function updateExcel2DHorizon(workbook, mongoData, sheetNum, excelStart) {//(範本位置，插入資料，第幾個分頁，插入位址)
+  const sheet = workbook.sheet(sheetNum); //第幾個分頁(第一頁是0)
   console.log("insert:", mongoData);
   console.log("mongoData length:", mongoData.length);
-
   const startCell = excelStart; //塞在excel哪裡
 
-  if (mongoData.includes("-")) {
-    //判斷是否為日期(2024-01-01)
+  if (mongoData.includes("-")) {//判斷是否為日期(2024-01-01)
     // Convert the column index to the corresponding letter (D, E, F, ...)
     const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
     // Calculate the target cell based on the starting cell and indices
@@ -1466,59 +1426,29 @@ function updateExcelWithMongoData(workbook, mongoData, excelStart) {
   } else {
     mongoData.forEach((data, rowIndex) => {
       console.log("data length:", data.length);
-      if (data.length > 1) {
-        //判斷是否為二維陣列
-        console.log("mongoData", mongoData);
-        console.log("mongoData[0]", mongoData[0]);
-        console.log("data", data);
-        console.log("data[0]", data[0]);
-        console.log(data[0].length);
+      if (data.length > 1) {//判斷是否為二維陣列
+        // console.log("mongoData", mongoData);
+        // console.log("mongoData[0]", mongoData[0]);
+        // console.log("data", data);
+        // console.log("data[0]", data[0]);
+        // console.log(data[0].length);
+        // console.log("charAT:", startCell.charAt(0), startCell.slice(1));
         data.forEach((cellValue, colIndex) => {
           // Convert the column index to the corresponding letter (D, E, F, ...)
           const colLetter = String.fromCharCode(
             charToAscii(startCell.charAt(0)) + colIndex
           );
           // Calculate the target cell based on the starting cell and indices
-          const targetCell =
-            colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+          const targetCell = colLetter + (parseInt(startCell.slice(1)) + rowIndex);
           console.log("targetCell:" + targetCell);
           // Write the value to the target cell
           sheet.cell(targetCell).value(cellValue);
         });
-
-        // //判斷是否為二維陣列
-        // if (mongoData[0].length > 1) {
-        //           data.forEach((cellValue, colIndex) => {
-        //             // Convert the column index to the corresponding letter (D, E, F, ...)
-        //             const colLetter = String.fromCharCode(
-        //               charToAscii(startCell.charAt(0)) + colIndex
-        //             );
-        //             // Calculate the target cell based on the starting cell and indices
-        //             const targetCell =
-        //               colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-        //             console.log("targetCell:" + targetCell);
-        //             // Write the value to the target cell
-        //             sheet.cell(targetCell).value(cellValue);
-        //           });
-        // } else {
-        //           // Convert the column index to the corresponding letter (D, E, F, ...)
-        //           const colLetter = String.fromCharCode(
-        //             charToAscii(startCell.charAt(0))
-        //           );
-        //           // Calculate the target cell based on the starting cell and indices
-        //           const targetCell =
-        //             colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-        //           // Write the value to the target cell
-        //           console.log("targetCell:" + targetCell);
-        //           sheet.cell(targetCell).value(data);
-        // }
-      } else {
-        //判斷是否為一維陣列
+      } else { //一維陣列垂直新增
         // Convert the column index to the corresponding letter (D, E, F, ...)
         const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
         // Calculate the target cell based on the starting cell and indices
-        const targetCell =
-          colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+        const targetCell = colLetter + (parseInt(startCell.slice(1)) + rowIndex);
         console.log("targetCell:" + targetCell);
         // Write the value to the target cell
         sheet.cell(targetCell).value(data);
@@ -1527,10 +1457,28 @@ function updateExcelWithMongoData(workbook, mongoData, excelStart) {
   }
 }
 
+//一維陣列垂直新增於表格
+function updateExcel1DVertical(workbook, mongoData, sheetNum, excelStart) {//(範本位置，插入資料，第幾個分頁，插入位址)
+  const sheet = workbook.sheet(sheetNum); //第幾個分頁(第一頁是0)
+  console.log("insert:", mongoData);
+  console.log("mongoData length:", mongoData.length);
+  const startCell = excelStart; //塞在excel哪裡
+
+  mongoData.forEach((data, rowIndex) => {
+      // Convert the column index to the corresponding letter (D, E, F, ...)
+      const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+      // Calculate the target cell based on the starting cell and indices
+      const targetCell = colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+      console.log("targetCell:" + targetCell);
+      // Write the value to the target cell
+      sheet.cell(targetCell).value(data);
+    });
+}
+
 // 一維矩陣更新excel，橫放
-function updateExcel1DHorizon(workbook, mongoData, excelStart) {
+function updateExcel1DHorizon(workbook, mongoData, sheetNum, excelStart) {
   //(範本位置，插入資料，插入位址)
-  const sheet = workbook.sheet(0); //第一個分頁
+  const sheet = workbook.sheet(sheetNum); //第幾個分頁(第一個為0)
   console.log("insert:", mongoData);
   console.log("mongoData length:", mongoData.length);
   console.log("一維矩陣橫向新增");
@@ -1580,7 +1528,7 @@ function charToAscii(char) {
 //   return result;
 // }
 
-app.get("/report/getFile", (req, res) => {
+router.get("/report/getFile", (req, res) => {
   //點擊尋找已存好的檔案
   //const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
   const fileName = req.query.fileName; //要找哪個檔案
@@ -1750,113 +1698,10 @@ cron.schedule("0 1 * * *", async () => {
   }
 });
 
-// async function getDayData() {
-//   //讀取DB資料+計算執行率+換算服務品質指標
-//   const mangoQuery = {
-//     selector: {
-//       time: { $exists: true },
-//     },
-//     sort: [{ time: "desc" }],
-//     limit: 1,
-//   };
 
-//   const dcDb = createNanoInstance("dc_rf10");
-//   await dcDb.createIndex(indexDef);
-//   // const response = dcDb.createIndex(indexDef);
-//   // console.log(response);
-
-//   dcDb.find(mangoQuery, (err, body) => {
-//     if (err) {
-//       // 如果發生錯誤，印出錯誤信息並回應500 Internal Server Error
-//       console.error("Error:", err);
-//       res.status(500).send("Internal Server Error");
-//       return;
-//     }
-
-//     const db_array = [];
-//     // 遍歷查詢結果的每一個文檔
-//     for (const item of body.docs) {
-//       // 刪除文檔中的'_rev'
-//       ["_rev"].forEach((key) => {
-//         delete item[key];
-//       });
-
-//       item["index"] = "";
-//       db_array.push(item);
-//     }
-//     console.log(db_array);
-//     // 將處理過的文檔陣列回應給前端
-//     res.send(db_array);
-//   });
-//   return [
-//     //回傳執行率 一天24小時
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//     [1, 0, 0, 0, 0, 0, 0, 100, 99.5, 99],
-//   ];
-// }
-
-// function getMonthData() {
-//   //讀取DB資料+計算執行率+換算服務品質指標
-//   return [
-//     //回傳執行率 月報 共12筆
-//     [611, 222, 33, 44, 55, 366, 177],
-//     [711, 22, 33, 44, 55, 266, 277],
-//     [911, 22, 33, 44, 55, 166, 177],
-//     [600, 20, 30, 40, 50, 20, 100],
-//     [511, 222, 33, 44, 55, 266, 277],
-//     [811, 222, 33, 44, 55, 166, 177],
-//     [911, 22, 33, 44, 55, 66, 177],
-//     [800, 200, 30, 40, 50, 60, 300],
-//     [711, 222, 33, 44, 55, 66, 177],
-//     [711, 22, 33, 44, 55, 66, 177],
-//     [711, 222, 33, 44, 55, 26, 177],
-//     [800, 20, 30, 40, 50, 20, 100],
-//   ];
-// }
-
-// function getYearData() {
-//   //讀取DB資料+計算執行率+換算服務品質指標
-//   return [
-//     //回傳執行率 年報1個月1筆 共12筆
-//     [611, 222, 33, 44, 55, 366, 177],
-//     [711, 22, 33, 44, 55, 266, 277],
-//     [911, 22, 33, 44, 55, 166, 177],
-//     [600, 20, 30, 40, 50, 20, 100],
-//     [511, 222, 33, 44, 55, 266, 277],
-//     [811, 222, 33, 44, 55, 166, 177],
-//     [911, 22, 33, 44, 55, 66, 177],
-//     [800, 200, 30, 40, 50, 60, 300],
-//     [711, 222, 33, 44, 55, 66, 177],
-//     [711, 22, 33, 44, 55, 66, 177],
-//     [711, 222, 33, 44, 55, 26, 177],
-//     [800, 20, 30, 40, 50, 20, 100],
-//   ];
-// }
 
 module.exports = router;
 
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

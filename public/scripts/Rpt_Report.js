@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    classAdd('#nB_Report', 'default_nB');
     generateYearOptions();
 
     // Attach an event listener to the dropdown change event
