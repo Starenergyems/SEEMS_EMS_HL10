@@ -23,7 +23,7 @@ function calculateAdd(...numbers) {
 //-------------------------------------------------------------------------------------------------
 
 function innerFunction() {
-  console.log(arguments.callee.caller); // 獲取呼叫 innerFunction 的函式
+  //console.log(arguments.callee.caller); // 獲取呼叫 innerFunction 的函式
 }
 
 function scaleProcess(decimalValue, scale, point) {
@@ -31,23 +31,23 @@ function scaleProcess(decimalValue, scale, point) {
   if (typeof decimalValue !== "number" || isNaN(decimalValue)) {
     if (decimalValue === null) {
       decimalValue = 0;
-      console.log("decimalValue = null");
+      //console.log("decimalValue = null");
     } else if (typeof decimalValue === "string") {
       decimalValue = 0;
-      console.log("decimalValue=" + decimalValue);
+      //console.log("decimalValue=" + decimalValue);
     } else {
-      console.log("decimalValue must be a number.");
+      //console.log("decimalValue must be a number.");
       return;
     }
   }
 
   if (typeof scale !== "number" || isNaN(scale)) {
-    console.log("scale must be a number.");
+    //console.log("scale must be a number.");
     return;
   }
 
   if (typeof point !== "number" || isNaN(point)) {
-    console.log("point must be a number.");
+    //console.log("point must be a number.");
     return;
   }
 
@@ -61,11 +61,11 @@ function scaleProcess(decimalValue, scale, point) {
 }
 
 // 測試
-console.log(scaleProcess(5, 2, 2)); // 10.00
-console.log(scaleProcess(null, 2, 2)); // decimalValue=null
-console.log(scaleProcess("test", 2, 2)); // decimalValue=test
-console.log(scaleProcess(5, "test", 2)); // scale must be a number.
-console.log(scaleProcess(5, 2, "test")); // point must be a number.
+// console.log(scaleProcess(5, 2, 2)); // 10.00
+// console.log(scaleProcess(null, 2, 2)); // decimalValue=null
+// console.log(scaleProcess("test", 2, 2)); // decimalValue=test
+// console.log(scaleProcess(5, "test", 2)); // scale must be a number.
+// console.log(scaleProcess(5, 2, "test")); // point must be a number.
 
 //-------------------------------------------------------------------------------------------------
 //chargeStatus pcs充放電狀態
@@ -75,7 +75,7 @@ function mapchargeStatus(decimalValue) {
       ? `0${decimalValue.toString(2)}`
       : decimalValue.toString(2);
   //const binaryString = decimalValue.toString(2);
-  console.log(decimalValue);
+  // console.log(decimalValue);
   // 檢查位元為1的數量，如果超過兩個以上，返回 "Error"
   if (decimalValue >= 3) {
     console.log(decimalValue);
@@ -419,7 +419,7 @@ function Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS) {
 }
 
 function Determine_statusL_of_recloser(recloserStatus, recloserRelay) {
-  if ((recloserStatus % 32) > 0 || recloserRelay > 0) {
+  if (recloserStatus % 32 > 0 || recloserRelay > 0) {
     return "setToClose";
   } else {
     return "";
@@ -574,48 +574,22 @@ function mapL_M_systemMode(var1, var2, var3, var4) {
 }
 //mapL_M_systemMode(32895, 127, 0, 127);
 //******************************************************************************* */
-// 告警總數量(右邊/黃色)
-function counttotalWarningNum() { }
-//******************************************************************************* */
-// 電表總告警數量
-function countWarningNum_Meter() { }
-//******************************************************************************* */
-// PCS總告警數量
-function calculateWarningNum_PCS() { }
+function mapminSOH(...input) {
+  if (input.length === 0) {
+    throw new Error("至少需要提供一個數值作為參數");
+  }
 
-//******************************************************************************* */
-// 電池告警數量
-function calculateWarningNum_Bat(...args) { }
-//******************************************************************************* */
-// 環境告警數量
-// BSC告警數量
-function calculateWarningNum_Env() { }
-//******************************************************************************* */
-// FF(消防)總告警數量
-function calculateWarningNum_FF(...args) { }
-//******************************************************************************* */
-//******************************************************************************* */
-//******************************************************************************* */
-// 錯誤總數量(左邊/紅色)
-function calculatetotalAlarmNum() { }
-//******************************************************************************* */
-// 電表總錯誤數量
-function calculateAlarmNum_Meter() { }
-//******************************************************************************* */
-// PCS總錯誤數量
-function calculatetAlarmNum_PCS() { }
-//******************************************************************************* */
-// 電池總錯誤數量
-function calculatetAlarmNum_Bat() { }
-//******************************************************************************* */
-// 環境總錯誤數量
-function calculatetAlarmNum_Env() { }
-//******************************************************************************* */
-// 消防總錯誤數量
-function calculatetAlarmNum_FF() { }
-//******************************************************************************* */
-//******************************************************************************* */
+  let min = input[0]; // 將第一個數值視為最小值
 
+  // 遍歷所有傳入的數值，找到最小值
+  for (let i = 1; i < input.length; i++) {
+    if (input[i] < min) {
+      min = input[i];
+    }
+  }
+
+  return min;
+}
 //@*******************************************************************************@ */
 //模式控制頁面相關
 //對照系統可用性
@@ -827,7 +801,8 @@ module.exports = {
   workStatuschange,
   calculateAdd,
   //****************** */
-  // mapL_M_systemMode,
+  mapL_M_systemMode,
+  mapminSOH,
   // counttotalWarningNum,
   // countWarningNum_Meter,
   // calculateWarningNum_PCS,

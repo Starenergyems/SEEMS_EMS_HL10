@@ -5,7 +5,8 @@ const path = require("path");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-const nano = require("nano");
+
+//const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -30,7 +31,7 @@ app.use(cors());
 const createNanoInstance = (dbName) => nano.db.use(dbName);
 router.get("/systeminfo/device", (req, res) => {
   //以下app要改回router
-  res.render("Sys_Device");
+  res.render("Sys_Device", NavbarData);
 });
 
 router.get("/systeminfo/device/edit", (req, res) => {

@@ -29,9 +29,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../public")));    // "/public", 
+app.use(express.static(path.join(__dirname, "../public"))); // "/public",
 app.use(cors());
-
 
 // 定義 CouchDB 資料庫名稱
 const databases = [
@@ -84,7 +83,7 @@ const relayVCB_MT = {
   3: { dicName: "RelayVCB3", pUW_title: "VCB盤3保護電驛" },
   4: { dicName: "RelayVCB4", pUW_title: "VCB盤4保護電驛" },
   5: { dicName: "RelayVCB5", pUW_title: "輔電VCB盤保護電驛" },
-}
+};
 
 async function query_SLD_KeyValuePairs() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
@@ -97,24 +96,79 @@ async function query_SLD_KeyValuePairs() {
   const other10Data = allData[0];
   const other01Data = allData[1];
 
-  const MVCB_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus0[408205], 16);
-  const VCB1_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus1[408205], 16);
-  const VCB2_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus2[408205], 16);
-  const VCB3_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus3[408205], 16);
-  const VCB4_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus4[408205], 16);
-  const VCB_aux_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus5[408205], 16);
-  const ACB1_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus1[408206], 16);
-  const ACB2_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus2[408206], 16);
-  const ACB3_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus3[408206], 16);
-  const ACB4_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus4[408206], 16);
+  const MVCB_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus0[408205],
+    16
+  );
+  const VCB1_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus1[408205],
+    16
+  );
+  const VCB2_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus2[408205],
+    16
+  );
+  const VCB3_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus3[408205],
+    16
+  );
+  const VCB4_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus4[408205],
+    16
+  );
+  const VCB_aux_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus5[408205],
+    16
+  );
+  const ACB1_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus1[408206],
+    16
+  );
+  const ACB2_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus2[408206],
+    16
+  );
+  const ACB3_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus3[408206],
+    16
+  );
+  const ACB4_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus4[408206],
+    16
+  );
 
   SLD_KeyValuePairs = {
-    statusL_of_MVCB: Determine_statusL_of_VCB(MVCB_rBitS[0], MVCB_rBitS[1], MVCB_rBitS[2]),
-    statusL_of_VCB1: Determine_statusL_of_VCB(VCB1_rBitS[0], VCB1_rBitS[1], VCB1_rBitS[2]),
-    statusL_of_VCB2: Determine_statusL_of_VCB(VCB2_rBitS[0], VCB2_rBitS[1], VCB2_rBitS[2]),
-    statusL_of_VCB3: Determine_statusL_of_VCB(VCB3_rBitS[0], VCB3_rBitS[1], VCB3_rBitS[2]),
-    statusL_of_VCB4: Determine_statusL_of_VCB(VCB4_rBitS[0], VCB4_rBitS[1], VCB4_rBitS[2]),
-    statusL_of_VCB_aux: Determine_statusL_of_VCB(VCB_aux_rBitS[0], VCB_aux_rBitS[1], VCB_aux_rBitS[2]),
+    statusL_of_MVCB: 0,
+    // statusL_of_MVCB: Determine_statusL_of_VCB(
+    //   MVCB_rBitS[0],
+    //   MVCB_rBitS[1],
+    //   MVCB_rBitS[2]
+    // ),
+    statusL_of_VCB1: Determine_statusL_of_VCB(
+      VCB1_rBitS[0],
+      VCB1_rBitS[1],
+      VCB1_rBitS[2]
+    ),
+    statusL_of_VCB2: Determine_statusL_of_VCB(
+      VCB2_rBitS[0],
+      VCB2_rBitS[1],
+      VCB2_rBitS[2]
+    ),
+    statusL_of_VCB3: Determine_statusL_of_VCB(
+      VCB3_rBitS[0],
+      VCB3_rBitS[1],
+      VCB3_rBitS[2]
+    ),
+    statusL_of_VCB4: Determine_statusL_of_VCB(
+      VCB4_rBitS[0],
+      VCB4_rBitS[1],
+      VCB4_rBitS[2]
+    ),
+    statusL_of_VCB_aux: Determine_statusL_of_VCB(
+      VCB_aux_rBitS[0],
+      VCB_aux_rBitS[1],
+      VCB_aux_rBitS[2]
+    ),
 
     statusL_of_ACB1_1: Determine_statusL_of_ACB(ACB1_rBitS[0], ACB1_rBitS[1]),
     statusL_of_ACB1_2: Determine_statusL_of_ACB(ACB1_rBitS[2], ACB1_rBitS[3]),
@@ -127,22 +181,49 @@ async function query_SLD_KeyValuePairs() {
     statusL_of_ACB3_3: Determine_statusL_of_ACB(ACB3_rBitS[4], ACB3_rBitS[5]),
     statusL_of_ACB4_1: Determine_statusL_of_ACB(ACB4_rBitS[0], ACB4_rBitS[1]),
 
-    relayMVCB_sumRawD: other10Data.RelayMVCB[408200] + other10Data.RelayMVCB[408201] + other10Data.RelayMVCB[408202],
-    relayMVCB_S0: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408200], 16),
-    relayMVCB_S1: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408201], 16),
-    relayMVCB_S2: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408202], 16),
+    relayMVCB_sumRawD:
+      other10Data.RelayMVCB[408200] +
+      other10Data.RelayMVCB[408201] +
+      other10Data.RelayMVCB[408202],
+    relayMVCB_S0: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408200],
+      16
+    ),
+    relayMVCB_S1: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408201],
+      16
+    ),
+    relayMVCB_S2: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408202],
+      16
+    ),
 
     relayVCB1_rawD: other10Data.RelayVCB1[408203],
     relayVCB2_rawD: other10Data.RelayVCB2[408203],
     relayVCB3_rawD: other10Data.RelayVCB3[408203],
     relayVCB4_rawD: other10Data.RelayVCB4[408203],
     relayVCB_aux_rawD: other10Data.RelayVCB5[408203],
-    relayVCB: Convert_UInt_to_revBitString(other10Data[relayVCB_MT[num_RelayVCB].dicName][408203], 16),
+    relayVCB: Convert_UInt_to_revBitString(
+      other10Data[relayVCB_MT[num_RelayVCB].dicName][408203],
+      16
+    ),
 
-    statusL_of_recloser: Determine_statusL_of_recloser(other10Data.Recloser[408210], other10Data.Recloser[408209]),
-    recloserMode: Convert_UInt_to_revBitString(other10Data.Recloser[408208], 16),
-    recloserStatus: Convert_UInt_to_revBitString(other10Data.Recloser[408210], 16),
-    recloserRelay: Convert_UInt_to_revBitString(other10Data.Recloser[408209], 16),
+    statusL_of_recloser: Determine_statusL_of_recloser(
+      other10Data.Recloser[408210],
+      other10Data.Recloser[408209]
+    ),
+    recloserMode: Convert_UInt_to_revBitString(
+      other10Data.Recloser[408208],
+      16
+    ),
+    recloserStatus: Convert_UInt_to_revBitString(
+      other10Data.Recloser[408210],
+      16
+    ),
+    recloserRelay: Convert_UInt_to_revBitString(
+      other10Data.Recloser[408209],
+      16
+    ),
 
     temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
     temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
@@ -150,17 +231,45 @@ async function query_SLD_KeyValuePairs() {
     temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
     temp_TR_aux: Calculate_Tr_oilTemp(other10Data.TR5[408181]),
 
-    V_Freq: scaleProcess(other01Data.Freq[408007], 1 / 65536 * 100 / 1000, 3),
-    I_Freq: scaleProcess(other01Data.Freq[408017], 1 / 65536 * 200, 2),
-    P_Freq: scaleProcess(other01Data.Freq[408019], 1 / 65536 * 100 * 200 / 1000, 1),
-    Q_Freq: scaleProcess(other01Data.Freq[408021], 1 / 65536 * 100 * 200 / 1000, 1),
-    V_ab_Freq: scaleProcess(other01Data.Freq[408001], 1 / 65536 * 100 / 1000, 3),
-    V_bc_Freq: scaleProcess(other01Data.Freq[408003], 1 / 65536 * 100 / 1000, 3),
-    V_ca_Freq: scaleProcess(other01Data.Freq[408005], 1 / 65536 * 100 / 1000, 3),
-    I_a_Freq: scaleProcess(other01Data.Freq[408009], 1 / 65536 * 200, 2),
-    I_b_Freq: scaleProcess(other01Data.Freq[408011], 1 / 65536 * 200, 2),
-    I_c_Freq: scaleProcess(other01Data.Freq[408013], 1 / 65536 * 200, 2),
-    S_Freq: scaleProcess(other01Data.Freq[408023], 1 / 65536 * 100 * 200 / 1000, 1),
+    V_Freq: scaleProcess(
+      other01Data.Freq[408007],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    I_Freq: scaleProcess(other01Data.Freq[408017], (1 / 65536) * 200, 2),
+    P_Freq: scaleProcess(
+      other01Data.Freq[408019],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
+    Q_Freq: scaleProcess(
+      other01Data.Freq[408021],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
+    V_ab_Freq: scaleProcess(
+      other01Data.Freq[408001],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    V_bc_Freq: scaleProcess(
+      other01Data.Freq[408003],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    V_ca_Freq: scaleProcess(
+      other01Data.Freq[408005],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    I_a_Freq: scaleProcess(other01Data.Freq[408009], (1 / 65536) * 200, 2),
+    I_b_Freq: scaleProcess(other01Data.Freq[408011], (1 / 65536) * 200, 2),
+    I_c_Freq: scaleProcess(other01Data.Freq[408013], (1 / 65536) * 200, 2),
+    S_Freq: scaleProcess(
+      other01Data.Freq[408023],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
     PF_Freq: Calculate_N1450_PF(other01Data.Freq[408025]),
     Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
     AE_imp_Freq: scaleProcess(other01Data.Freq[408028], 0.1, 1),
@@ -179,6 +288,7 @@ router.get("/operateinfo/singlelinediagram", async (req, res) => {
   try {
     await query_SLD_KeyValuePairs();
     console.log(SLD_KeyValuePairs);
+    //console.log(req.locals.navbarData);
 
     res.render("Op_Meter_SLD", SLD_KeyValuePairs);
   } catch (error) {
@@ -206,7 +316,10 @@ router.post("/change_num_of_RelayVCB", async (req, res) => {
 
     await query_SLD_KeyValuePairs();
 
-    const response = { title_of_pUW: relayVCB_MT[num_RelayVCB].pUW_title, relayVCB_revBitString: SLD_KeyValuePairs.relayVCB };
+    const response = {
+      title_of_pUW: relayVCB_MT[num_RelayVCB].pUW_title,
+      relayVCB_revBitString: SLD_KeyValuePairs.relayVCB,
+    };
 
     res.json(response);
   } catch (error) {
@@ -301,6 +414,7 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
         permission: "manager",
         // ... 其他屬性的渲染可以類似地添加
         //permission: "manager",
+        NavbarData,
       });
     });
   } catch (error) {
@@ -338,47 +452,83 @@ async function query_AuxM_KeyValuePairs() {
     V_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408077], 0.1, 1),
     I_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408078], 0.01, 2),
     P_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408079], 0.1, 1),
-    E_Aux_ESS1_1: Calculate_CPM10_energy(other10Data.AuxM1[408080], other10Data.AuxM1[408081], other10Data.AuxM1[408082]),
+    E_Aux_ESS1_1: Calculate_CPM10_energy(
+      other10Data.AuxM1[408080],
+      other10Data.AuxM1[408081],
+      other10Data.AuxM1[408082]
+    ),
 
     V_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408077], 0.1, 1),
     I_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408078], 0.01, 2),
     P_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408079], 0.1, 1),
-    E_Aux_ESS1_2: Calculate_CPM10_energy(other10Data.AuxM2[408080], other10Data.AuxM2[408081], other10Data.AuxM2[408082]),
+    E_Aux_ESS1_2: Calculate_CPM10_energy(
+      other10Data.AuxM2[408080],
+      other10Data.AuxM2[408081],
+      other10Data.AuxM2[408082]
+    ),
 
     V_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408077], 0.1, 1),
     I_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408078], 0.01, 2),
     P_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408079], 0.1, 1),
-    E_Aux_ESS2_1: Calculate_CPM10_energy(other10Data.AuxM3[408080], other10Data.AuxM3[408081], other10Data.AuxM3[408082]),
+    E_Aux_ESS2_1: Calculate_CPM10_energy(
+      other10Data.AuxM3[408080],
+      other10Data.AuxM3[408081],
+      other10Data.AuxM3[408082]
+    ),
 
     V_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408077], 0.1, 1),
     I_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408078], 0.01, 2),
     P_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408079], 0.1, 1),
-    E_Aux_ESS2_2: Calculate_CPM10_energy(other10Data.AuxM4[408080], other10Data.AuxM4[408081], other10Data.AuxM4[408082]),
+    E_Aux_ESS2_2: Calculate_CPM10_energy(
+      other10Data.AuxM4[408080],
+      other10Data.AuxM4[408081],
+      other10Data.AuxM4[408082]
+    ),
 
     V_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408077], 0.1, 1),
     I_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408078], 0.01, 2),
     P_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408079], 0.1, 1),
-    E_Aux_ESS3_1: Calculate_CPM10_energy(other10Data.AuxM5[408080], other10Data.AuxM5[408081], other10Data.AuxM5[408082]),
+    E_Aux_ESS3_1: Calculate_CPM10_energy(
+      other10Data.AuxM5[408080],
+      other10Data.AuxM5[408081],
+      other10Data.AuxM5[408082]
+    ),
 
     V_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408077], 0.1, 1),
     I_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408078], 0.01, 2),
     P_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408079], 0.1, 1),
-    E_Aux_ESS3_2: Calculate_CPM10_energy(other10Data.AuxM6[408080], other10Data.AuxM6[408081], other10Data.AuxM6[408082]),
+    E_Aux_ESS3_2: Calculate_CPM10_energy(
+      other10Data.AuxM6[408080],
+      other10Data.AuxM6[408081],
+      other10Data.AuxM6[408082]
+    ),
 
     V_Aux_ESS4: scaleProcess(other10Data.AuxM7[408077], 0.1, 1),
     I_Aux_ESS4: scaleProcess(other10Data.AuxM7[408078], 0.01, 2),
     P_Aux_ESS4: scaleProcess(other10Data.AuxM7[408079], 0.1, 1),
-    E_Aux_ESS4: Calculate_CPM10_energy(other10Data.AuxM7[408080], other10Data.AuxM7[408081], other10Data.AuxM7[408082]),
+    E_Aux_ESS4: Calculate_CPM10_energy(
+      other10Data.AuxM7[408080],
+      other10Data.AuxM7[408081],
+      other10Data.AuxM7[408082]
+    ),
 
     V_Aux_HV: scaleProcess(other10Data.AuxM9[408077], 0.1, 1),
     I_Aux_HV: scaleProcess(other10Data.AuxM9[408078], 0.01, 2),
     P_Aux_HV: scaleProcess(other10Data.AuxM9[408079], 0.1, 1),
-    E_Aux_HV: Calculate_CPM10_energy(other10Data.AuxM9[408080], other10Data.AuxM9[408081], other10Data.AuxM9[408082]),
+    E_Aux_HV: Calculate_CPM10_energy(
+      other10Data.AuxM9[408080],
+      other10Data.AuxM9[408081],
+      other10Data.AuxM9[408082]
+    ),
 
     V_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408077], 0.1, 1),
     I_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408078], 0.01, 2),
     P_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408079], 0.1, 1),
-    E_Aux_CtrlRoom: Calculate_CPM10_energy(other10Data.AuxM8[408080], other10Data.AuxM8[408081], other10Data.AuxM8[408082]),
+    E_Aux_CtrlRoom: Calculate_CPM10_energy(
+      other10Data.AuxM8[408080],
+      other10Data.AuxM8[408081],
+      other10Data.AuxM8[408082]
+    ),
   };
 }
 

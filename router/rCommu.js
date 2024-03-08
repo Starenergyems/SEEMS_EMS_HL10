@@ -3,7 +3,7 @@ const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
 
-const nano = require("nano");
+//const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -179,17 +179,17 @@ async function querySysteminfo() {
   };
 }
 
-app.get("/systeminfo", async (req, res) => {
+router.get("/systeminfo", async (req, res) => {
   try {
     await querySysteminfo();
-    res.render("Sys_Comm", systeminfo_variables);
+    res.render("Sys_Comm", { systeminfo_variables, NavbarData });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-app.get("/systeminfo/:data", async (req, res) => {
+router.get("/systeminfo/:data", async (req, res) => {
   try {
     await querySysteminfo();
     res.json(systeminfo_variables);

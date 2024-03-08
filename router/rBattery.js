@@ -456,7 +456,7 @@ async function querySumData() {
 router.get("/operateinfo/battery", async (req, res) => {
   try {
     await querySumData();
-    res.render("Op_Bat_InfoSummary", batterySum_variables);
+    res.render("Op_Bat_InfoSummary", batterySum_variables, NavbarData);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -904,7 +904,7 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     globalPageNumber = parseInt(req.params.pageNumber);
     console.log(pageNumber);
     await queryDetailData();
-    res.render("Op_Bat_InfoDetail", batteryDetail_variables);
+    res.render("Op_Bat_InfoDetail", batteryDetail_variables, NavbarData);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -1436,7 +1436,7 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
     pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
     await queryRackData();
-    res.render("Op_Bat_Rack", batteryRack_variables);
+    res.render("Op_Bat_Rack", batteryRack_variables, NavbarData);
   } catch (error) {
     console.error(error);
     res.status(500).send("rack : Internal Server Error");

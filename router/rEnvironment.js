@@ -299,27 +299,27 @@ async function queryEnv_variables() {
     ffsStatus_4_1_rawD: lc4Data.BSC1[406005],
   };
 }
-app.get("/systeminfo", async (req, res) => {
+router.get("/systeminfo", async (req, res) => {
   //以下app要改回router
   try {
     await queryEnv_variables();
-    res.render("Sys_Environment", Env_variables);
+    res.render("Sys_Environment", { Env_variables, NavbarData });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
-app.get("/systeminfo/environment", async (req, res) => {
+router.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables();
-    res.render("Sys_Environment", Env_variables);
+    res.render("Sys_Environment", { Env_variables, NavbarData });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-app.get("/systeminfo/environment/:data", async (req, res) => {
+router.get("/systeminfo/environment/:data", async (req, res) => {
   try {
     await queryEnv_variables();
     res.json(Env_variables);
@@ -331,7 +331,7 @@ app.get("/systeminfo/environment/:data", async (req, res) => {
 
 //******************************************************************** */
 //環境控制下方彈出視窗
-app.post("/getDataforenv", async (req, res) => {
+router.post("/getDataforenv", async (req, res) => {
   try {
     console.log("接收到環境監控的前端請求");
     const blockId = req.body.blockId;
@@ -396,6 +396,6 @@ app.post("/getDataforenv", async (req, res) => {
 });
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

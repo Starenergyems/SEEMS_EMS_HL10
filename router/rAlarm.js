@@ -10,7 +10,7 @@ const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-const NavbarData = require("./middleware");
+
 const {
   LC_error_result_gen,
   DC_error_result_gen,
@@ -115,14 +115,12 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //////////////////////////////////////
 //告警紀錄
 router.get("/alarm", (req, res) => {
-  console.log(NavbarData);
-  res.render("Alm_RealTime", NavbarData);
+  res.render("Alm_RealTime");
 });
 
 router.get("/alarm/realtime", (req, res) => {
   // num與fun
-  console.log(NavbarData);
-  res.render("Alm_RealTime", NavbarData);
+  res.render("Alm_RealTime");
 });
 
 router.post("/alarm/realtime/edit", (req, res) => {
@@ -248,7 +246,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
             ],
             sort: [{ occurrence_time: "desc" }],
             limit: body.total_rows,
-            use_index: 'occurrence_time_index'
+            use_index: "occurrence_time_index",
           });
         })
         .then((resp) => {
@@ -290,8 +288,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
 
 router.get("/alarm/history", (req, res) => {
   // num與fun
-  console.log(NavbarData);
-  res.render("Alm_History", { NavbarData });
+  res.render("Alm_History");
 });
 
 router.get("/alarm/history/edit", (req, res) => {
@@ -371,7 +368,7 @@ function alarm_processor_call() {
       },
       sort: [{ time: "desc" }],
       limit: 1,
-      use_index: 'time_index'
+      use_index: "time_index",
     };
 
     const lc1_alarm_promise = alarm_processor(

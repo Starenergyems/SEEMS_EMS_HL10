@@ -502,7 +502,7 @@ app.get("/operateinfo/pcs", async (req, res) => {
   console.log();*/
   try {
     await queryPcsSum();
-    res.render("Op_PCS_InfoSummary", pcs_summary_variables);
+    res.render("Op_PCS_InfoSummary", { pcs_summary_variables, NavbarData });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -716,9 +716,12 @@ app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
     await queryPcsDetail();
 
     if (pageNumber === 7) {
-      res.render("Op_PCS_InfoDetail", pcsDetail_variables);
+      res.render("Op_PCS_InfoDetail", { pcsDetail_variables, NavbarData });
     } else {
-      res.render("Op_PCS_InfoDetail_LC1_3", pcsDetail_variables);
+      res.render("Op_PCS_InfoDetail_LC1_3", {
+        pcsDetail_variables,
+        NavbarData,
+      });
     }
   } catch (error) {
     console.error(error);
@@ -862,9 +865,9 @@ app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
     await queryPcsAlarm();
 
     if (pageNumber == 7) {
-      res.render("Op_PCS_Alarm", pcsAlarm_variables);
+      res.render("Op_PCS_Alarm", { pcsAlarm_variables, NavbarData });
     } else {
-      res.render("Op_PCS_Alarm_LC1_3", pcsAlarm_variables);
+      res.render("Op_PCS_Alarm_LC1_3", { pcsAlarm_variables, NavbarData });
     }
   } catch (error) {
     console.error(error);

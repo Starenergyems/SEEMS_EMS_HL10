@@ -178,7 +178,7 @@ function updateTable(){
                 render: function (data, type, row) { 
                     if (row.reportType === "年報" || row.reportType === "月報"){
                         //return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\'alreadyPrepared.xlsx\', \'C:/EMS/Report\')">下載</button>';  
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'\', \''+row.reportType+'\)">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'\', \''+row.reportType+'\')">下載</button>';  
                     } else if (row.reportType === "日報"){
                         return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'/'+ selectedMonth + '\', \''+row.reportType+'\')">下載</button>';  
                     }
@@ -285,11 +285,11 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
         //判斷是日報 月報 還是年報
         var templateUrl
         if (reportType === "年報"){
-            templateUrl =  '/report/download-excel?templatePath=../public/report/YearReport.xlsx&reportType=年報'
+            templateUrl =  '/report/download-excel?templatePath=../public/report/YearReport.xlsx&reportType=年報&fileName='+fileName;
         } else if (reportType === "月報"){
-            templateUrl = '/report/download-excel?templatePath=../public/report/MonthReport.xlsx&reportType=月報'
+            templateUrl = '/report/download-excel?templatePath=../public/report/MonthReport.xlsx&reportType=月報&fileName='+fileName;
         } else if (reportType === "日報"){
-            templateUrl = '/report/download-excel?templatePath=../public/report/DayReport.xlsx&reportType=日報'
+            templateUrl = '/report/download-excel?templatePath=../public/report/DayReport.xlsx&reportType=日報&fileName='+fileName;
         } else {
             console.error("報表類型錯誤: 應為年報/月報/日報");
             return

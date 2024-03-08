@@ -18,7 +18,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-const NavbarData = require("./middleware");
+
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
 const other_rf01 = "other_rf01";
@@ -189,7 +189,6 @@ app.get("/report/download-excel", async (req, res) => {
       updateExcel1DHorizon(workbook, couchData.last_year_power, "U8");
       tempFilePath = path.join(__dirname, "temp.xlsx");
       await workbook.toFileAsync(tempFilePath);
-
     } else if (reportType === "日報") {
       couchData = await getDayData();
 
@@ -1457,80 +1456,80 @@ function updateExcelWithMongoData(workbook, mongoData, excelStart) {
   const startCell = excelStart; //塞在excel哪裡
 
   if (mongoData.includes("-")) {
-          //判斷是否為日期(2024-01-01)
-          // Convert the column index to the corresponding letter (D, E, F, ...)
-          const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
-          // Calculate the target cell based on the starting cell and indices
-          const targetCell = colLetter + parseInt(startCell.slice(1));
-          // Write the value to the target cell
-          sheet.cell(targetCell).value(mongoData);
+    //判斷是否為日期(2024-01-01)
+    // Convert the column index to the corresponding letter (D, E, F, ...)
+    const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+    // Calculate the target cell based on the starting cell and indices
+    const targetCell = colLetter + parseInt(startCell.slice(1));
+    // Write the value to the target cell
+    sheet.cell(targetCell).value(mongoData);
   } else {
-          mongoData.forEach((data, rowIndex) => {
-            console.log("data length:", data.length);
-            if (data.length > 1) {
-                                    //判斷是否為二維陣列
-                                      console.log("mongoData",mongoData);
-                                      console.log("mongoData[0]",mongoData[0]);
-                                      console.log("data",data);
-                                      console.log("data[0]",data[0]);
-                                      console.log(data[0].length);
-                                      data.forEach((cellValue, colIndex) => {
-                                        // Convert the column index to the corresponding letter (D, E, F, ...)
-                                        const colLetter = String.fromCharCode(
-                                          charToAscii(startCell.charAt(0)) + colIndex
-                                        );
-                                        // Calculate the target cell based on the starting cell and indices
-                                        const targetCell =
-                                          colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-                                        console.log("targetCell:" + targetCell);
-                                        // Write the value to the target cell
-                                        sheet.cell(targetCell).value(cellValue);
-                                      });
+    mongoData.forEach((data, rowIndex) => {
+      console.log("data length:", data.length);
+      if (data.length > 1) {
+        //判斷是否為二維陣列
+        console.log("mongoData", mongoData);
+        console.log("mongoData[0]", mongoData[0]);
+        console.log("data", data);
+        console.log("data[0]", data[0]);
+        console.log(data[0].length);
+        data.forEach((cellValue, colIndex) => {
+          // Convert the column index to the corresponding letter (D, E, F, ...)
+          const colLetter = String.fromCharCode(
+            charToAscii(startCell.charAt(0)) + colIndex
+          );
+          // Calculate the target cell based on the starting cell and indices
+          const targetCell =
+            colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+          console.log("targetCell:" + targetCell);
+          // Write the value to the target cell
+          sheet.cell(targetCell).value(cellValue);
+        });
 
-                      
-                      // //判斷是否為二維陣列
-                      // if (mongoData[0].length > 1) {
-                      //           data.forEach((cellValue, colIndex) => {
-                      //             // Convert the column index to the corresponding letter (D, E, F, ...)
-                      //             const colLetter = String.fromCharCode(
-                      //               charToAscii(startCell.charAt(0)) + colIndex
-                      //             );
-                      //             // Calculate the target cell based on the starting cell and indices
-                      //             const targetCell =
-                      //               colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-                      //             console.log("targetCell:" + targetCell);
-                      //             // Write the value to the target cell
-                      //             sheet.cell(targetCell).value(cellValue);
-                      //           });
-                      // } else {
-                      //           // Convert the column index to the corresponding letter (D, E, F, ...)
-                      //           const colLetter = String.fromCharCode(
-                      //             charToAscii(startCell.charAt(0))
-                      //           );
-                      //           // Calculate the target cell based on the starting cell and indices
-                      //           const targetCell =
-                      //             colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-                      //           // Write the value to the target cell
-                      //           console.log("targetCell:" + targetCell);
-                      //           sheet.cell(targetCell).value(data);
-                      // }
-            } else {
-                      //判斷是否為一維陣列
-                      // Convert the column index to the corresponding letter (D, E, F, ...)
-                      const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
-                      // Calculate the target cell based on the starting cell and indices
-                      const targetCell =
-                        colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-                      console.log("targetCell:" + targetCell);
-                      // Write the value to the target cell
-                      sheet.cell(targetCell).value(data);
-            }
-          });
+        // //判斷是否為二維陣列
+        // if (mongoData[0].length > 1) {
+        //           data.forEach((cellValue, colIndex) => {
+        //             // Convert the column index to the corresponding letter (D, E, F, ...)
+        //             const colLetter = String.fromCharCode(
+        //               charToAscii(startCell.charAt(0)) + colIndex
+        //             );
+        //             // Calculate the target cell based on the starting cell and indices
+        //             const targetCell =
+        //               colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+        //             console.log("targetCell:" + targetCell);
+        //             // Write the value to the target cell
+        //             sheet.cell(targetCell).value(cellValue);
+        //           });
+        // } else {
+        //           // Convert the column index to the corresponding letter (D, E, F, ...)
+        //           const colLetter = String.fromCharCode(
+        //             charToAscii(startCell.charAt(0))
+        //           );
+        //           // Calculate the target cell based on the starting cell and indices
+        //           const targetCell =
+        //             colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+        //           // Write the value to the target cell
+        //           console.log("targetCell:" + targetCell);
+        //           sheet.cell(targetCell).value(data);
+        // }
+      } else {
+        //判斷是否為一維陣列
+        // Convert the column index to the corresponding letter (D, E, F, ...)
+        const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+        // Calculate the target cell based on the starting cell and indices
+        const targetCell =
+          colLetter + (parseInt(startCell.slice(1)) + rowIndex);
+        console.log("targetCell:" + targetCell);
+        // Write the value to the target cell
+        sheet.cell(targetCell).value(data);
+      }
+    });
   }
 }
 
 // 一維矩陣更新excel，橫放
-function updateExcel1DHorizon(workbook, mongoData, excelStart) {//(範本位置，插入資料，插入位址)
+function updateExcel1DHorizon(workbook, mongoData, excelStart) {
+  //(範本位置，插入資料，插入位址)
   const sheet = workbook.sheet(0); //第一個分頁
   console.log("insert:", mongoData);
   console.log("mongoData length:", mongoData.length);
@@ -1538,26 +1537,25 @@ function updateExcel1DHorizon(workbook, mongoData, excelStart) {//(範本位置�
   const startCell = excelStart; //塞在excel哪裡
 
   if (mongoData.includes("-")) {
-          //判斷是否為日期(2024-01-01)
-          // Convert the column index to the corresponding letter (D, E, F, ...)
-          const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
-          // Calculate the target cell based on the starting cell and indices
-          const targetCell = colLetter + parseInt(startCell.slice(1));
-          // Write the value to the target cell
-          sheet.cell(targetCell).value(mongoData);
+    //判斷是否為日期(2024-01-01)
+    // Convert the column index to the corresponding letter (D, E, F, ...)
+    const colLetter = String.fromCharCode(charToAscii(startCell.charAt(0)));
+    // Calculate the target cell based on the starting cell and indices
+    const targetCell = colLetter + parseInt(startCell.slice(1));
+    // Write the value to the target cell
+    sheet.cell(targetCell).value(mongoData);
   } else {
-          mongoData.forEach((data, rowIndex) => {
-              // Convert the column index to the corresponding letter (D, E, F, ...)
-              const colLetter = String.fromCharCode(
-                charToAscii(startCell.charAt(0)) + rowIndex
-              );
-              // Calculate the target cell based on the starting cell and indices
-              const targetCell =
-                colLetter + (parseInt(startCell.slice(1)));
-              console.log("targetCell:" + targetCell);
-              // Write the value to the target cell
-              sheet.cell(targetCell).value(data);
-          });
+    mongoData.forEach((data, rowIndex) => {
+      // Convert the column index to the corresponding letter (D, E, F, ...)
+      const colLetter = String.fromCharCode(
+        charToAscii(startCell.charAt(0)) + rowIndex
+      );
+      // Calculate the target cell based on the starting cell and indices
+      const targetCell = colLetter + parseInt(startCell.slice(1));
+      console.log("targetCell:" + targetCell);
+      // Write the value to the target cell
+      sheet.cell(targetCell).value(data);
+    });
   }
 }
 

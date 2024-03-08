@@ -5,7 +5,7 @@ const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
 //const port = 3000;
-const User = require("../models/userschema");
+//const User = require("../models/userschema");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
@@ -51,22 +51,22 @@ app.use(cors());
 app.get("/account", (req, res) => {
   //最後都要改回router.get
   // num與fun
-  res.render("PersonalInfo");
+  res.render("PersonalInfo", NavbarData);
 });
 
 app.get("/account/personalinfo", (req, res) => {
   // num與fun
-  res.render("PersonalInfo");
+  res.render("PersonalInfo", NavbarData);
 });
 
 app.get("/account/manage", (req, res) => {
   // num與fun
-  res.render("AccountManage");
+  res.render("AccountManage", NavbarData);
 });
 
 app.get("/account/system", (req, res) => {
   // num與fun
-  res.render("SysManage");
+  res.render("SysManage", NavbarData);
 });
 
 app.get("/account/system/accounts", (req, res) => {

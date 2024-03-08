@@ -9,6 +9,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
+
 // const port = 3005;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -209,7 +210,7 @@ router.get("/mode", (req, res) => {
 router.get("/mode/sysctrl", async (req, res) => {
   await query_Syscrtl_variables();
   console.log(sysctrl_variables);
-  res.render("Mode_SysCtrl", sysctrl_variables);
+  res.render("Mode_SysCtrl", { sysctrl_variables, NavbarData });
 });
 
 router.get("/mode/sysctrl/:data", async (req, res) => {
@@ -220,7 +221,7 @@ router.get("/mode/sysctrl/:data", async (req, res) => {
 
 /******排程**************************************************************/
 router.get("/mode/schedule", (req, res) => {
-  res.render("Mode_Schedule", { permission: "manager" });
+  res.render("Mode_Schedule", { permission: "manager", NavbarData });
 });
 
 //運轉資訊+單線圖
