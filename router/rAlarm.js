@@ -142,7 +142,7 @@ router.post("/alarm/realtime/edit", (req, res) => {
           return alarmnanoDb.find({
             selector: { read: { $exists: true, $eq: false } },
             limit: body.total_rows,
-            use_index: "read_index",
+            // use_index: "read_index",
           });
         })
         .then((resp) => {
@@ -246,7 +246,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
             ],
             sort: [{ occurrence_time: "desc" }],
             limit: body.total_rows,
-            use_index: "occurrence_time_index",
+            // use_index: "occurrence_time_index",
           });
         })
         .then((resp) => {
@@ -322,7 +322,7 @@ router.get("/alarm/history/edit", (req, res) => {
         ],
         sort: [{ occurrence_time: "desc" }],
         limit: 1000,
-        use_index: "occurrence_time_index",
+        // use_index: "occurrence_time_index",
       });
     })
     .then((resp) => {
@@ -368,7 +368,7 @@ function alarm_processor_call() {
       },
       sort: [{ time: "desc" }],
       limit: 1,
-      use_index: "time_index",
+      // use_index: "time_index",
     };
 
     const lc1_alarm_promise = alarm_processor(

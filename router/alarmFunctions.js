@@ -2522,7 +2522,7 @@ function alarm_processor(
                 recover: { $exists: true, $eq: false },
               },
               limit: body.total_rows,
-              use_index: "db_name_recover_index",
+              // use_index: "db_name_recover_index",
             });
           })
           .then((response) => {

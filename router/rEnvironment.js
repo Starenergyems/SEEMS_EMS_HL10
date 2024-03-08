@@ -303,7 +303,7 @@ router.get("/systeminfo", async (req, res) => {
   //以下app要改回router
   try {
     await queryEnv_variables();
-    res.render("Sys_Environment", { Env_variables, NavbarData });
+    res.render("Sys_Environment",  Env_variables);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -312,7 +312,7 @@ router.get("/systeminfo", async (req, res) => {
 router.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables();
-    res.render("Sys_Environment", { Env_variables, NavbarData });
+    res.render("Sys_Environment",  Env_variables, );
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

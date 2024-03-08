@@ -67,43 +67,44 @@ app.get("/", (req, res) => {
   res.render("Login");
 });
 
-app.post("/login", async (req, res) => {
-  try {
-    const email = req.body["username"];
-    const password = req.body["password"];
-    console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
+// app.post("/login", async (req, res) => {
+//   try {
+//     const email = req.body["username"];
+//     const password = req.body["password"];
+//     console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
 
-    const response = await submit(email, password);
-    if (response["result"] === true) {
-      console.log(response["text"]);
-      res.cookie("token", response["token"]);
-      //, { maxAge: 10, httpOnly: true });
-      // if cookies add this the cookies will live 10s, and will not abandon after close browser.
-      res.json({ redirect: "http://localhost:3000/operateinfo" });
-    } else {
-      res.status(401).send(response["text"]);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+//     const response = await submit(email, password);
+//     if (response["result"] === true) {
+//       console.log(response["text"]);
+//       res.cookie("token", response["token"]);
+//       //, { maxAge: 10, httpOnly: true });
+//       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
+//       res.json({ redirect: "http://localhost:3000/operateinfo" });
+//     } else {
+//       res.status(401).send(response["text"]);
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 
-//身分驗證 暫時關閉
-app.use("*", async (req, res, next) => {
-  try {
-    const authenticated = await authentication(req);
-    if (authenticated === false) {
-      return res.status(401).send("Unauthorized");
-    } else {
-      req.customData = authenticated;
-    }
-    next();
-  } catch (error) {
-    console.error("Authentication error:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+// //身分驗證 暫時關閉
+// app.use("*", async (req, res, next) => {
+//   try {
+//     const authenticated = await authentication(req);
+//     if (authenticated === false) {
+//       return res.status(401).send("Unauthorized");
+//       //req.customData = authenticated;
+//     } else {
+//       req.customData = authenticated;
+//     }
+//     next();
+//   } catch (error) {
+//     console.error("Authentication error:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
 
 app.post("test", (req, res) => {
   const token = req.customData.token;
@@ -192,7 +193,7 @@ app.use(async (req, res, next) => {
   const latestValues = await getLatestValuesFromDatabase();
   // 獲取總數 這裡用的是FAULT是錯誤
   res.locals.totalAlarmNum = latestValues[0];
-  res.locals.Fault_system_num = latestValues[1]; //新增
+  res.locals.AlarmNum_Sys = latestValues[1]; //新增
   res.locals.AlarmNum_Bat = latestValues[2];
   res.locals.AlarmNum_PCS = latestValues[3];
   res.locals.AlarmNum_FF = latestValues[4];
@@ -200,7 +201,7 @@ app.use(async (req, res, next) => {
   res.locals.AlarmNum_Meter = latestValues[6];
   //
   res.locals.totalWarningNum = latestValues[7];
-  res.locals.Alarm_system_num = latestValues[8]; //新增
+  res.locals.WarningNum_Sys = latestValues[8]; //新增
   res.locals.WarningNum_Bat = latestValues[9];
   res.locals.WarningNum_PCS = latestValues[10];
   res.locals.WarningNum_FF = latestValues[11];
@@ -458,7 +459,6 @@ async function getLatestValuesFromDatabaseforother() {
       lc3Data.BMS1[404005],
       lc3Data.BMS2[404005],
       lc4Data.BMS1[404005],
-      lc4Data.BMS2[404005]
     );
     const L_M_SBSPM = scaleProcess(gcData.System[400037], 1, 0);
     const L_M_chgEtoday = otherrf01Data.Freq[408028] - ChgEtoday0; //408028 kWh_Import
@@ -499,10 +499,9 @@ const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
 // const middleware = require("./middleware");
-// const login = require("./rLogin")
+//const login = require("./rLogin")
+//const { authentication } = require("./authMiddleware");
 //app.use(authMiddleware);
-const { authentication } = require("./authMiddleware");
-
 //***************************************************************************************************************** */
 // 使用這些路由
 // app.use(authentication)

@@ -1,27 +1,27 @@
 version: "3.8"
 
 services:
-  # couchdb:
-  #   image: couchdb
-  #   ports:
-  #     - "5984:5984"
-  #     - "9100:9100"
-  #     - "4369:4369"
-  #   environment:
-  #     - COUCHDB_USER=admin
-  #     - COUCHDB_PASSWORD=ems45877096
-  #   volumes:
-  #     - /media/seems/database:/opt/couchdb/data
-  #     - ./local.ini:/opt/couchdb/etc/local.d/local.ini
-  #   deploy:
-  #     replicas: 1  # Set the desired number of replicas
-  #     restart_policy:
-  #         condition: on-failure
-  #         delay: 5s
-  #         max_attempts: 3
-  #         window: 120s
-  #   networks:
-  #     - service-network
+  couchdb:
+    image: couchdb
+    ports:
+      - "5984:5984"
+      - "9100:9100"
+      - "4369:4369"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=ems45877096
+    volumes:
+      - /media/seems/database:/opt/couchdb/data
+      - ./local.ini:/opt/couchdb/etc/local.d/local.ini
+    deploy:
+      replicas: 1  # Set the desired number of replicas
+      restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
+    networks:
+      - service-network
 
   ems-service:
     # restart: always

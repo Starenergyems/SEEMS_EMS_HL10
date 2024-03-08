@@ -76,7 +76,7 @@ const getLatestDocument = async (nanoDb) => {
 };
 /************************************************************************************ */
 let SLD_KeyValuePairs;
-let num_RelayVCB = 1;
+let num_RelayVCB = 2;//
 const relayVCB_MT = {
   1: { dicName: "RelayVCB1", pUW_title: "VCB盤1保護電驛" },
   2: { dicName: "RelayVCB2", pUW_title: "VCB盤2保護電驛" },
@@ -97,7 +97,7 @@ async function query_SLD_KeyValuePairs() {
   const other01Data = allData[1];
 
   const MVCB_rBitS = Convert_UInt_to_revBitString(
-    other10Data.VCBStatus0[408205],
+    other10Data.VCBStatus1[408205], //要改回VCBStatus0
     16
   );
   const VCB1_rBitS = Convert_UInt_to_revBitString(
@@ -121,7 +121,7 @@ async function query_SLD_KeyValuePairs() {
     16
   );
   const ACB1_rBitS = Convert_UInt_to_revBitString(
-    other10Data.ACBStatus1[408206],
+    other10Data.ACBStatus2[408206], //記得改回ACBStatus2
     16
   );
   const ACB2_rBitS = Convert_UInt_to_revBitString(
@@ -224,7 +224,7 @@ async function query_SLD_KeyValuePairs() {
       16
     ),
 
-    temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
+    temp_TR1: Calculate_Tr_oilTemp(other10Data.TR2[408181]),  //2
     temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
     temp_TR3: Calculate_Tr_oilTemp(other10Data.TR3[408181]),
     temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
@@ -287,7 +287,7 @@ router.get("/operateinfo/singlelinediagram", async (req, res) => {
   try {
     await query_SLD_KeyValuePairs();
     console.log(SLD_KeyValuePairs);
-    //console.log(req.locals.navbarData);
+
 
     res.render("Op_Meter_SLD", SLD_KeyValuePairs);
   } catch (error) {
@@ -413,7 +413,6 @@ router.get("/operateinfo/mainmeter", async (req, res) => {
         permission: "manager",
         // ... 其他屬性的渲染可以類似地添加
         //permission: "manager",
-        NavbarData,
       });
     });
   } catch (error) {

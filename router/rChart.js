@@ -35,12 +35,12 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //以下app要改回router
 router.get("/chart", (req, res) => {
   // num與fun
-  res.render("Cht_RealTime", NavbarData);
+  res.render("Cht_RealTime");
 });
 
 router.get("/chart/realtime", (req, res) => {
   // num與fun
-  res.render("Cht_RealTime", NavbarData);
+  res.render("Cht_RealTime");
 });
 
 router.post("/chart/realtime", (req, res) => {
@@ -52,7 +52,7 @@ router.post("/chart/realtime", (req, res) => {
 
 router.get("/chart/history", (req, res) => {
   // num與fun
-  res.render("Cht_History", NavbarData);
+  res.render("Cht_History");
 });
 
 router.post("/chart/history", (req, res) => {

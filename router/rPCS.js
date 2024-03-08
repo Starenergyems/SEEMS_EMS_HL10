@@ -561,7 +561,7 @@ async function queryPcsDetail() {
     pcsDetail_variables = {
       permission: "manager",
       pageNumber,
-      No_of_PCS,
+      No_of_PCS:No_of_PCS,
       Workingstatus: mapPCSWorkingstatus(
         lcData.PCS[403078],
         lcData.PCS[403080]
@@ -718,9 +718,9 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
     if (pageNumber === 7) {
       res.render("Op_PCS_InfoDetail", pcsDetail_variables);
     } else {
-      res.render("Op_PCS_InfoDetail_LC1_3", {
+      res.render("Op_PCS_InfoDetail_LC1_3", 
         pcsDetail_variables,
-      });
+      );
     }
   } catch (error) {
     console.error(error);

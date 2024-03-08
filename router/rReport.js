@@ -52,7 +52,7 @@ router.get("/report", (req, res) => {
 
 router.get("/report/report", (req, res) => {
   // num與fun
-  res.render("Rpt_Report", NavbarData);
+  res.render("Rpt_Report");
 });
 
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */

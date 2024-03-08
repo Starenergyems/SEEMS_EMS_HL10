@@ -229,7 +229,7 @@ const NavbarData = app.use("*", async (req, res, next) => {
         res.status(500).send("Internal Server Error");
       });
 
-    //NavbarData = res.locals.navbarData;
+
     next();
   } catch (error) {
     // 處理錯誤
@@ -445,5 +445,5 @@ async function getLatestValuesFromDatabase() {
 //緊急停止按紐也要做
 
 // module.exports = {
-//   NavbarData,
+
 // };

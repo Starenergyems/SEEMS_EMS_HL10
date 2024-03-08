@@ -31,7 +31,7 @@ app.use(cors());
 const createNanoInstance = (dbName) => nano.db.use(dbName);
 router.get("/systeminfo/device", (req, res) => {
   //以下app要改回router
-  res.render("Sys_Device", NavbarData);
+  res.render("Sys_Device");
 });
 
 router.get("/systeminfo/device/edit", (req, res) => {
