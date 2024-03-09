@@ -299,20 +299,11 @@ async function queryEnv_variables() {
     ffsStatus_4_1_rawD: lc4Data.BSC1[406005],
   };
 }
-router.get("/systeminfo", async (req, res) => {
-  //以下app要改回router
-  try {
-    await queryEnv_variables();
-    res.render("Sys_Environment",  Env_variables);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+
 router.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables();
-    res.render("Sys_Environment",  Env_variables, );
+    res.render("Sys_Environment", Env_variables);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

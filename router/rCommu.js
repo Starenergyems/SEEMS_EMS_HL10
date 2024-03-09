@@ -74,8 +74,16 @@ const getLatestDocument = async (nano) => {
 };
 
 //***************************************************************************************************************** */
-var systeminfo_variables;
-async function querySysteminfo() {
+
+router.get("/systeminfo", (req, res) => {
+  res.redirect("/systeminfo/comm");
+});
+
+//***************************************************************************************************************** */
+
+let Comm_KeyValuePairs;
+
+async function query_Comm_KeyValuePairs() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nano = createNanoInstance(dbName);
@@ -106,7 +114,7 @@ async function querySysteminfo() {
   // Comm_GC_2: dcData.GC2[409127],
   // Comm_HVAC_1: dcData.HVAC1[409129],
   // Comm_HVAC_2: dcData.HVAC2[409129],
-  systeminfo_variables = {
+  Comm_KeyValuePairs = {
     Comm_GC_1: 1,
     Comm_GC_2: 0,
     Comm_HVAC_1: 1,
@@ -179,20 +187,20 @@ async function querySysteminfo() {
   };
 }
 
-router.get("/systeminfo", async (req, res) => {
+router.get("/systeminfo/comm", async (req, res) => {
   try {
-    await querySysteminfo();
-    res.render("Sys_Comm", systeminfo_variables);
+    await query_Comm_KeyValuePairs();
+    res.render("Sys_Comm", Comm_KeyValuePairs);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-router.get("/systeminfo/:data", async (req, res) => {
+router.get("/systeminfo/comm/:data", async (req, res) => {
   try {
-    await querySysteminfo();
-    res.json(systeminfo_variables);
+    await query_Comm_KeyValuePairs();
+    res.json(Comm_KeyValuePairs);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
