@@ -261,6 +261,20 @@ function mapgridStatus(decimalValue) {
 let i;
 let j;
 
+function Scale_Data(rawData, scale, decPlace) {
+  if (rawData === undefined) {
+    return "@#@";
+  }
+
+  if (rawData === null) {
+    return "#@#";
+  }
+
+  let scaledData = rawData * scale;
+
+  return scaledData.toFixed(decPlace);
+}
+
 function Convert_UInt_to_revBitString(rawData, NumberOfDigit) {
   let rawBitString = rawData.toString(2);
   let BitString = rawBitString
@@ -454,23 +468,7 @@ function Determine_statusL_of_ACB(closeStatus, openStatus) {
   }
 }
 
-const rawData = 49152;
-const NumberOfDigit = 16;
-const pcsCHGStatus_MT = {
-  17: "Charging",
-  55: "Discharging",
-  98: "Non-working state",
-};
-const sysCtrl_2_MT = {
-  0: { 0: "否", 1: "是" },
-  3: { 0: "禁用", 1: "啟用" },
-  5: { 0: "頻率表", 1: "測試頻率" },
-  6: { 0: "手動", 1: "自動" },
-  9: { 0: "正常", 1: "異常" },
-  10: { 0: "正常", 1: "通訊異常" },
-  13: { 0: "SOC", 1: "Volt" },
-};
-const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
+//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
 function checkValues(value1, value2, value3) {
   // 判斷是否有任一數值不為零
@@ -787,6 +785,7 @@ module.exports = {
   //mapPCSWorkingMode,
   countPCSAlarmAndFault,
   mapgridStatus,
+  Scale_Data,
   Convert_UInt_to_revBitString,
   Convert_UInt_to_BitString,
   mapWordStatus,
@@ -881,6 +880,27 @@ module.exports = {
 // // };
 
 // //********************************************************************************************************** */
+
+const rawData = 9453;
+const NumberOfDigit = 16;
+const pcsCHGStatus_MT = {
+  17: "Charging",
+  55: "Discharging",
+  98: "Non-working state",
+};
+const sysCtrl_2_MT = {
+  0: { 0: "否", 1: "是" },
+  3: { 0: "禁用", 1: "啟用" },
+  5: { 0: "頻率表", 1: "測試頻率" },
+  6: { 0: "手動", 1: "自動" },
+  9: { 0: "正常", 1: "異常" },
+  10: { 0: "正常", 1: "通訊異常" },
+  13: { 0: "SOC", 1: "Volt" },
+};
+const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
+
+// let ab = Scale_Data(rawData, 0.01, 1);
+// console.log(ab);
 
 // let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
 // for (i = 0; i < cd_BitString.length; i++) {

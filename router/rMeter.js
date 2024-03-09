@@ -16,6 +16,7 @@ const cors = require("cors");
 
 const {
   scaleProcess,
+  Scale_Data,
   Determine_statusL_of_VCB,
   Determine_statusL_of_ACB,
   Determine_statusL_of_recloser,
@@ -230,51 +231,51 @@ async function query_SLD_KeyValuePairs() {
     temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
     temp_TR_aux: Calculate_Tr_oilTemp(other10Data.TR5[408181]),
 
-    V_Freq: scaleProcess(
+    V_Freq: Scale_Data(
       other01Data.Freq[408007],
       ((1 / 65536) * 100) / 1000,
       3
     ),
-    I_Freq: scaleProcess(other01Data.Freq[408017], (1 / 65536) * 200, 2),
-    P_Freq: scaleProcess(
+    I_Freq: Scale_Data(other01Data.Freq[408017], (1 / 65536) * 200, 2),
+    P_Freq: Scale_Data(
       other01Data.Freq[408019],
       ((1 / 65536) * 100 * 200) / 1000,
       1
     ),
-    Q_Freq: scaleProcess(
+    Q_Freq: Scale_Data(
       other01Data.Freq[408021],
       ((1 / 65536) * 100 * 200) / 1000,
       1
     ),
-    V_ab_Freq: scaleProcess(
+    V_ab_Freq: Scale_Data(
       other01Data.Freq[408001],
       ((1 / 65536) * 100) / 1000,
       3
     ),
-    V_bc_Freq: scaleProcess(
+    V_bc_Freq: Scale_Data(
       other01Data.Freq[408003],
       ((1 / 65536) * 100) / 1000,
       3
     ),
-    V_ca_Freq: scaleProcess(
+    V_ca_Freq: Scale_Data(
       other01Data.Freq[408005],
       ((1 / 65536) * 100) / 1000,
       3
     ),
-    I_a_Freq: scaleProcess(other01Data.Freq[408009], (1 / 65536) * 200, 2),
-    I_b_Freq: scaleProcess(other01Data.Freq[408011], (1 / 65536) * 200, 2),
-    I_c_Freq: scaleProcess(other01Data.Freq[408013], (1 / 65536) * 200, 2),
-    S_Freq: scaleProcess(
+    I_a_Freq: Scale_Data(other01Data.Freq[408009], (1 / 65536) * 200, 2),
+    I_b_Freq: Scale_Data(other01Data.Freq[408011], (1 / 65536) * 200, 2),
+    I_c_Freq: Scale_Data(other01Data.Freq[408013], (1 / 65536) * 200, 2),
+    S_Freq: Scale_Data(
       other01Data.Freq[408023],
       ((1 / 65536) * 100 * 200) / 1000,
       1
     ),
     PF_Freq: Calculate_N1450_PF(other01Data.Freq[408025]),
-    Freq_Freq: scaleProcess(other01Data.Freq[408026], 1 / 65536, 3),
-    AE_imp_Freq: scaleProcess(other01Data.Freq[408028], 0.1, 1),
-    AE_exp_Freq: scaleProcess(other01Data.Freq[408030], 0.1, 1),
-    RE_imp_Freq: scaleProcess(other01Data.Freq[408032], 0.1, 1),
-    RE_exp_Freq: scaleProcess(other01Data.Freq[408034], 0.1, 1),
+    Freq_Freq: Scale_Data(other01Data.Freq[408026], 1 / 65536, 3),
+    AE_imp_Freq: Scale_Data(other01Data.Freq[408028], 0.1, 1),
+    AE_exp_Freq: Scale_Data(other01Data.Freq[408030], 0.1, 1),
+    RE_imp_Freq: Scale_Data(other01Data.Freq[408032], 0.1, 1),
+    RE_exp_Freq: Scale_Data(other01Data.Freq[408034], 0.1, 1),
   };
 }
 
@@ -442,86 +443,86 @@ async function query_AuxM_KeyValuePairs() {
   AuxM_KeyValuePairs = {
     permission: "manager",
 
-    V_Aux_total: scaleProcess(other10Data.AuxMtot1[408069], 0.1, 1),
-    I_Aux_total: scaleProcess(other10Data.AuxMtot1[408071], 0.001, 2),
-    P_Aux_total: scaleProcess(other10Data.AuxMtot1[408073], 0.001, 1),
-    E_Aux_total: scaleProcess(other10Data.AuxMtot1[408075], 0.1, 1),
+    V_Aux_total: Scale_Data(other10Data.AuxMtot1[408069], 0.1, 1),
+    I_Aux_total: Scale_Data(other10Data.AuxMtot1[408071], 0.001, 2),
+    P_Aux_total: Scale_Data(other10Data.AuxMtot1[408073], 0.001, 1),
+    E_Aux_total: Scale_Data(other10Data.AuxMtot1[408075], 0.1, 1),
 
-    V_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408077], 0.1, 1),
-    I_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408078], 0.01, 2),
-    P_Aux_ESS1_1: scaleProcess(other10Data.AuxM1[408079], 0.1, 1),
+    V_Aux_ESS1_1: Scale_Data(other10Data.AuxM1[408077], 0.1, 1),
+    I_Aux_ESS1_1: Scale_Data(other10Data.AuxM1[408078], 0.01, 2),
+    P_Aux_ESS1_1: Scale_Data(other10Data.AuxM1[408079], 0.1, 1),
     E_Aux_ESS1_1: Calculate_CPM10_energy(
       other10Data.AuxM1[408080],
       other10Data.AuxM1[408081],
       other10Data.AuxM1[408082]
     ),
 
-    V_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408077], 0.1, 1),
-    I_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408078], 0.01, 2),
-    P_Aux_ESS1_2: scaleProcess(other10Data.AuxM2[408079], 0.1, 1),
+    V_Aux_ESS1_2: Scale_Data(other10Data.AuxM2[408077], 0.1, 1),
+    I_Aux_ESS1_2: Scale_Data(other10Data.AuxM2[408078], 0.01, 2),
+    P_Aux_ESS1_2: Scale_Data(other10Data.AuxM2[408079], 0.1, 1),
     E_Aux_ESS1_2: Calculate_CPM10_energy(
       other10Data.AuxM2[408080],
       other10Data.AuxM2[408081],
       other10Data.AuxM2[408082]
     ),
 
-    V_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408077], 0.1, 1),
-    I_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408078], 0.01, 2),
-    P_Aux_ESS2_1: scaleProcess(other10Data.AuxM3[408079], 0.1, 1),
+    V_Aux_ESS2_1: Scale_Data(other10Data.AuxM3[408077], 0.1, 1),
+    I_Aux_ESS2_1: Scale_Data(other10Data.AuxM3[408078], 0.01, 2),
+    P_Aux_ESS2_1: Scale_Data(other10Data.AuxM3[408079], 0.1, 1),
     E_Aux_ESS2_1: Calculate_CPM10_energy(
       other10Data.AuxM3[408080],
       other10Data.AuxM3[408081],
       other10Data.AuxM3[408082]
     ),
 
-    V_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408077], 0.1, 1),
-    I_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408078], 0.01, 2),
-    P_Aux_ESS2_2: scaleProcess(other10Data.AuxM4[408079], 0.1, 1),
+    V_Aux_ESS2_2: Scale_Data(other10Data.AuxM4[408077], 0.1, 1),
+    I_Aux_ESS2_2: Scale_Data(other10Data.AuxM4[408078], 0.01, 2),
+    P_Aux_ESS2_2: Scale_Data(other10Data.AuxM4[408079], 0.1, 1),
     E_Aux_ESS2_2: Calculate_CPM10_energy(
       other10Data.AuxM4[408080],
       other10Data.AuxM4[408081],
       other10Data.AuxM4[408082]
     ),
 
-    V_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408077], 0.1, 1),
-    I_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408078], 0.01, 2),
-    P_Aux_ESS3_1: scaleProcess(other10Data.AuxM5[408079], 0.1, 1),
+    V_Aux_ESS3_1: Scale_Data(other10Data.AuxM5[408077], 0.1, 1),
+    I_Aux_ESS3_1: Scale_Data(other10Data.AuxM5[408078], 0.01, 2),
+    P_Aux_ESS3_1: Scale_Data(other10Data.AuxM5[408079], 0.1, 1),
     E_Aux_ESS3_1: Calculate_CPM10_energy(
       other10Data.AuxM5[408080],
       other10Data.AuxM5[408081],
       other10Data.AuxM5[408082]
     ),
 
-    V_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408077], 0.1, 1),
-    I_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408078], 0.01, 2),
-    P_Aux_ESS3_2: scaleProcess(other10Data.AuxM6[408079], 0.1, 1),
+    V_Aux_ESS3_2: Scale_Data(other10Data.AuxM6[408077], 0.1, 1),
+    I_Aux_ESS3_2: Scale_Data(other10Data.AuxM6[408078], 0.01, 2),
+    P_Aux_ESS3_2: Scale_Data(other10Data.AuxM6[408079], 0.1, 1),
     E_Aux_ESS3_2: Calculate_CPM10_energy(
       other10Data.AuxM6[408080],
       other10Data.AuxM6[408081],
       other10Data.AuxM6[408082]
     ),
 
-    V_Aux_ESS4: scaleProcess(other10Data.AuxM7[408077], 0.1, 1),
-    I_Aux_ESS4: scaleProcess(other10Data.AuxM7[408078], 0.01, 2),
-    P_Aux_ESS4: scaleProcess(other10Data.AuxM7[408079], 0.1, 1),
+    V_Aux_ESS4: Scale_Data(other10Data.AuxM7[408077], 0.1, 1),
+    I_Aux_ESS4: Scale_Data(other10Data.AuxM7[408078], 0.01, 2),
+    P_Aux_ESS4: Scale_Data(other10Data.AuxM7[408079], 0.1, 1),
     E_Aux_ESS4: Calculate_CPM10_energy(
       other10Data.AuxM7[408080],
       other10Data.AuxM7[408081],
       other10Data.AuxM7[408082]
     ),
 
-    V_Aux_HV: scaleProcess(other10Data.AuxM9[408077], 0.1, 1),
-    I_Aux_HV: scaleProcess(other10Data.AuxM9[408078], 0.01, 2),
-    P_Aux_HV: scaleProcess(other10Data.AuxM9[408079], 0.1, 1),
+    V_Aux_HV: Scale_Data(other10Data.AuxM9[408077], 0.1, 1),
+    I_Aux_HV: Scale_Data(other10Data.AuxM9[408078], 0.01, 2),
+    P_Aux_HV: Scale_Data(other10Data.AuxM9[408079], 0.1, 1),
     E_Aux_HV: Calculate_CPM10_energy(
       other10Data.AuxM9[408080],
       other10Data.AuxM9[408081],
       other10Data.AuxM9[408082]
     ),
 
-    V_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408077], 0.1, 1),
-    I_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408078], 0.01, 2),
-    P_Aux_CtrlRoom: scaleProcess(other10Data.AuxM8[408079], 0.1, 1),
+    V_Aux_CtrlRoom: Scale_Data(other10Data.AuxM8[408077], 0.1, 1),
+    I_Aux_CtrlRoom: Scale_Data(other10Data.AuxM8[408078], 0.01, 2),
+    P_Aux_CtrlRoom: Scale_Data(other10Data.AuxM8[408079], 0.1, 1),
     E_Aux_CtrlRoom: Calculate_CPM10_energy(
       other10Data.AuxM8[408080],
       other10Data.AuxM8[408081],
