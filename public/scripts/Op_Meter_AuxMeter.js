@@ -57,8 +57,7 @@ function afterLoadDCM() {
 
 setInterval(updateData, 5000);
 
-async function updateData() {
-  // 更新資料 ajax
+async function updateData() {                                   // 更新資料 ajax
   var router = window.location.href + "/data";
   var data = await getData(router);
   console.log(data);

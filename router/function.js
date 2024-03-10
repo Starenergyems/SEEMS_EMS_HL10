@@ -263,11 +263,11 @@ let j;
 
 function Scale_Data(rawData, scale, decPlace) {
   if (rawData === undefined) {
-    return "@#@";
+    return "*#*";
   }
 
   if (rawData === null) {
-    return "#@#";
+    return "#*#";
   }
 
   let scaledData = rawData * scale;
@@ -296,17 +296,24 @@ function Convert_UInt_to_revBitString(rawData, NumberOfDigit) {
 }
 
 function Convert_UInt_to_BitString(rawData, NumberOfDigit) {
+  let BitString = "";
+
+  if (rawData === null) {
+    for (i = 0; i < NumberOfDigit; i++) {
+      BitString += "#";
+    }
+    return { bitString: BitString, num_ClosedBit: "#*#" };
+  }
+
   let rawBitString = rawData.toString(2);
-  let BitString = rawBitString
-    .padStart(NumberOfDigit, "0")
-    .slice(-NumberOfDigit);
+  BitString = rawBitString.padStart(NumberOfDigit, "0").slice(-NumberOfDigit);
 
   let NumberOfClosedBit = BitString.split("1").length - 1;
 
   return { bitString: BitString, num_ClosedBit: NumberOfClosedBit };
 }
 
-function mapWordStatus(rawData, mapTable) {
+function mapWordStatus(rawData, mapTable) {                          // 待優化
   let keysArray_MT = Object.keys(mapTable);
 
   for (i = 0; i < keysArray_MT.length; i++) {
@@ -318,7 +325,7 @@ function mapWordStatus(rawData, mapTable) {
   return "Not found(" + rawData + ")";
 }
 
-function mapBitStatus(bitString, mapTable, NumberOfBit) {
+function mapBitStatus(bitString, mapTable, NumberOfBit) {            // 待優化
   if (NumberOfBit > bitString.length - 1) {
     return "bitNumber out of range";
   }
@@ -335,6 +342,10 @@ function mapBitStatus(bitString, mapTable, NumberOfBit) {
 }
 
 function getHighLowByte(rawData) {
+  if (rawData === null) {
+    return { hiByte: "#*#", loByte: "#*#" };
+  }
+
   let LowByte = rawData % 256;
   let HighByte = (rawData - LowByte) / 256;
 
@@ -342,6 +353,10 @@ function getHighLowByte(rawData) {
 }
 
 function Convert_unixTime_to_dateTime(rawData) {
+  if (rawData === null) {
+    return "####/##/## ##:##:##";
+  }
+
   let raw_DT = new Date(rawData * 1000);
   let yy = String(raw_DT.getFullYear()).padStart(4, "0");
   let mm = String(raw_DT.getMonth() + 1).padStart(2, "0");
@@ -350,22 +365,26 @@ function Convert_unixTime_to_dateTime(rawData) {
   let m = String(raw_DT.getMinutes()).padStart(2, "0");
   let ss = String(raw_DT.getSeconds()).padStart(2, "0");
 
-  return yy + "/" + mm + "/" + dd + " " + hh + ":" + m + ":" + ss;
+  return `${yy}/${mm}/${dd} ${hh}:${m}:${ss}`;
 }
 
-function Calculate_BMS_energy(E_GWh, E_MWh, E_kWh) {
+function Calculate_BMS_energy(E_GWh, E_MWh, E_kWh) {                 // 待優化
   let Energy = (E_GWh * 1000000 + E_MWh * 1000 + E_kWh) / 1000;
 
   return Energy.toFixed(1);
 }
 
 function Calculate_CPM10_energy(E_GWh, E_MWh, E_kWh) {
+  if (E_GWh === null || E_MWh === null || E_kWh === null) {
+    return "#*#*#";
+  }
+
   let Energy = E_GWh * 1000000 + E_MWh * 1000 + E_kWh * 0.1;
 
   return Energy.toFixed(1);
 }
 
-function Calculate_N1450_PF(rawData) {
+function Calculate_N1450_PF(rawData) {                               // 待優化
   if (rawData <= 1000) {
     return (rawData / 1000).toFixed(3);
   } else if (rawData <= 3000) {
@@ -375,11 +394,11 @@ function Calculate_N1450_PF(rawData) {
   }
 }
 
-function Calculate_Tr_oilTemp(rawData) {
+function Calculate_Tr_oilTemp(rawData) {                             // 待優化
   return ((rawData - 19999) / 10).toFixed(1);
 }
 
-function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {
+function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {  // 待優化
   let revBitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
 
   let NumberOfSpClosedBit = 0;
@@ -392,7 +411,7 @@ function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {
   return NumberOfSpClosedBit;
 }
 
-function Determine_BGC_of_VcMaxDiff(rawData) {
+function Determine_BGC_of_VcMaxDiff(rawData) {                       // 待優化
   if (rawData >= 500) {
     return "bgc_Red";
   } else if (rawData >= 400) {
@@ -404,7 +423,7 @@ function Determine_BGC_of_VcMaxDiff(rawData) {
   }
 }
 
-function Determine_BGC_of_TcMaxDiff(rawData) {
+function Determine_BGC_of_TcMaxDiff(rawData) {                       // 待優化
   if (rawData >= 60) {
     return "bgc_Red";
   } else if (rawData >= 40) {
@@ -416,7 +435,7 @@ function Determine_BGC_of_TcMaxDiff(rawData) {
   }
 }
 
-function Determine_DL_of_RackHWStatus(rawData) {
+function Determine_DL_of_RackHWStatus(rawData) {                     // 待優化
   let NumOfErr = Count_SpecificClosedBit(rawData, 16, [2, 3, 6, 7]);
 
   if (NumOfErr > 0) {
@@ -426,7 +445,7 @@ function Determine_DL_of_RackHWStatus(rawData) {
   }
 }
 
-function Determine_DL_of_upsStatus2(rawData) {
+function Determine_DL_of_upsStatus2(rawData) {                       // 待優化
   let revBitString = Convert_UInt_to_revBitString(rawData, 16);
 
   if (revBitString[15] === "1") {
@@ -462,7 +481,7 @@ function Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS) {
   }
 }
 
-function Determine_statusL_of_recloser(recloserStatus, recloserRelay) {
+function Determine_statusL_of_recloser(recloserStatus, recloserRelay) {   // 待優化
   if (recloserStatus % 32 > 0 || recloserRelay > 0) {
     return "setToClose";
   } else {
@@ -470,7 +489,7 @@ function Determine_statusL_of_recloser(recloserStatus, recloserRelay) {
   }
 }
 
-function Determine_statusL_of_VCB(closeStatus, openStatus, tripStatus) {
+function Determine_statusL_of_VCB(closeStatus, openStatus, tripStatus) {   // 待優化
   if (tripStatus === "1" || closeStatus === openStatus) {
     return "Err";
   } else if (closeStatus === "1") {
@@ -480,7 +499,7 @@ function Determine_statusL_of_VCB(closeStatus, openStatus, tripStatus) {
   }
 }
 
-function Determine_statusL_of_ACB(closeStatus, openStatus) {
+function Determine_statusL_of_ACB(closeStatus, openStatus) {   // 待優化
   if (closeStatus === openStatus) {
     return "Err";
   } else if (closeStatus === "1") {
@@ -951,7 +970,7 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 
 // const E_G = 123;
 // const E_M = 987;
-// const E_k = 1357;
+// const E_k = 456;
 // const op = Calculate_BMS_energy(E_G, E_M, E_k);
 // console.log(op);
 

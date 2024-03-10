@@ -451,83 +451,47 @@ async function query_AuxM_KeyValuePairs() {
     V_Aux_ESS1_1: Scale_Data(other10Data.AuxM1[408077], 0.1, 1),
     I_Aux_ESS1_1: Scale_Data(other10Data.AuxM1[408078], 0.01, 2),
     P_Aux_ESS1_1: Scale_Data(other10Data.AuxM1[408079], 0.1, 1),
-    E_Aux_ESS1_1: Calculate_CPM10_energy(
-      other10Data.AuxM1[408080],
-      other10Data.AuxM1[408081],
-      other10Data.AuxM1[408082]
-    ),
+    E_Aux_ESS1_1: Calculate_CPM10_energy(other10Data.AuxM1[408080], other10Data.AuxM1[408081], other10Data.AuxM1[408082]),
 
     V_Aux_ESS1_2: Scale_Data(other10Data.AuxM2[408077], 0.1, 1),
     I_Aux_ESS1_2: Scale_Data(other10Data.AuxM2[408078], 0.01, 2),
     P_Aux_ESS1_2: Scale_Data(other10Data.AuxM2[408079], 0.1, 1),
-    E_Aux_ESS1_2: Calculate_CPM10_energy(
-      other10Data.AuxM2[408080],
-      other10Data.AuxM2[408081],
-      other10Data.AuxM2[408082]
-    ),
+    E_Aux_ESS1_2: Calculate_CPM10_energy(other10Data.AuxM2[408080], other10Data.AuxM2[408081], other10Data.AuxM2[408082]),
 
     V_Aux_ESS2_1: Scale_Data(other10Data.AuxM3[408077], 0.1, 1),
     I_Aux_ESS2_1: Scale_Data(other10Data.AuxM3[408078], 0.01, 2),
     P_Aux_ESS2_1: Scale_Data(other10Data.AuxM3[408079], 0.1, 1),
-    E_Aux_ESS2_1: Calculate_CPM10_energy(
-      other10Data.AuxM3[408080],
-      other10Data.AuxM3[408081],
-      other10Data.AuxM3[408082]
-    ),
+    E_Aux_ESS2_1: Calculate_CPM10_energy(other10Data.AuxM3[408080], other10Data.AuxM3[408081], other10Data.AuxM3[408082]),
 
     V_Aux_ESS2_2: Scale_Data(other10Data.AuxM4[408077], 0.1, 1),
     I_Aux_ESS2_2: Scale_Data(other10Data.AuxM4[408078], 0.01, 2),
     P_Aux_ESS2_2: Scale_Data(other10Data.AuxM4[408079], 0.1, 1),
-    E_Aux_ESS2_2: Calculate_CPM10_energy(
-      other10Data.AuxM4[408080],
-      other10Data.AuxM4[408081],
-      other10Data.AuxM4[408082]
-    ),
+    E_Aux_ESS2_2: Calculate_CPM10_energy(other10Data.AuxM4[408080], other10Data.AuxM4[408081], other10Data.AuxM4[408082]),
 
     V_Aux_ESS3_1: Scale_Data(other10Data.AuxM5[408077], 0.1, 1),
     I_Aux_ESS3_1: Scale_Data(other10Data.AuxM5[408078], 0.01, 2),
     P_Aux_ESS3_1: Scale_Data(other10Data.AuxM5[408079], 0.1, 1),
-    E_Aux_ESS3_1: Calculate_CPM10_energy(
-      other10Data.AuxM5[408080],
-      other10Data.AuxM5[408081],
-      other10Data.AuxM5[408082]
-    ),
+    E_Aux_ESS3_1: Calculate_CPM10_energy(other10Data.AuxM5[408080], other10Data.AuxM5[408081], other10Data.AuxM5[408082]),
 
     V_Aux_ESS3_2: Scale_Data(other10Data.AuxM6[408077], 0.1, 1),
     I_Aux_ESS3_2: Scale_Data(other10Data.AuxM6[408078], 0.01, 2),
     P_Aux_ESS3_2: Scale_Data(other10Data.AuxM6[408079], 0.1, 1),
-    E_Aux_ESS3_2: Calculate_CPM10_energy(
-      other10Data.AuxM6[408080],
-      other10Data.AuxM6[408081],
-      other10Data.AuxM6[408082]
-    ),
+    E_Aux_ESS3_2: Calculate_CPM10_energy(other10Data.AuxM6[408080], other10Data.AuxM6[408081], other10Data.AuxM6[408082]),
 
     V_Aux_ESS4: Scale_Data(other10Data.AuxM7[408077], 0.1, 1),
     I_Aux_ESS4: Scale_Data(other10Data.AuxM7[408078], 0.01, 2),
     P_Aux_ESS4: Scale_Data(other10Data.AuxM7[408079], 0.1, 1),
-    E_Aux_ESS4: Calculate_CPM10_energy(
-      other10Data.AuxM7[408080],
-      other10Data.AuxM7[408081],
-      other10Data.AuxM7[408082]
-    ),
+    E_Aux_ESS4: Calculate_CPM10_energy(other10Data.AuxM7[408080], other10Data.AuxM7[408081], other10Data.AuxM7[408082]),
 
     V_Aux_HV: Scale_Data(other10Data.AuxM9[408077], 0.1, 1),
     I_Aux_HV: Scale_Data(other10Data.AuxM9[408078], 0.01, 2),
     P_Aux_HV: Scale_Data(other10Data.AuxM9[408079], 0.1, 1),
-    E_Aux_HV: Calculate_CPM10_energy(
-      other10Data.AuxM9[408080],
-      other10Data.AuxM9[408081],
-      other10Data.AuxM9[408082]
-    ),
+    E_Aux_HV: Calculate_CPM10_energy(other10Data.AuxM9[408080], other10Data.AuxM9[408081], other10Data.AuxM9[408082]),
 
     V_Aux_CtrlRoom: Scale_Data(other10Data.AuxM8[408077], 0.1, 1),
     I_Aux_CtrlRoom: Scale_Data(other10Data.AuxM8[408078], 0.01, 2),
     P_Aux_CtrlRoom: Scale_Data(other10Data.AuxM8[408079], 0.1, 1),
-    E_Aux_CtrlRoom: Calculate_CPM10_energy(
-      other10Data.AuxM8[408080],
-      other10Data.AuxM8[408081],
-      other10Data.AuxM8[408082]
-    ),
+    E_Aux_CtrlRoom: Calculate_CPM10_energy(other10Data.AuxM8[408080], other10Data.AuxM8[408081], other10Data.AuxM8[408082]),
   };
 }
 

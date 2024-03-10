@@ -92,9 +92,6 @@ async function query_Comm_KeyValuePairs() {
   });
 
   // 使用 Promise.all 等待所有 promise 完成，獲取"所有資料庫"中的最新數據
-  //並利用陣列不同列數儲存不同資料庫
-  // 在這裡處理 allData，它是一個包含所有資料庫最新數據的陣列
-
   const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
   const lc1Data = allData[0];
   const lc2Data = allData[1];
@@ -102,8 +99,7 @@ async function query_Comm_KeyValuePairs() {
   const lc4Data = allData[3];
   const dcData = allData[4];
 
-  // let PCScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402048], 32);
-  let PCScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402007], 32);
+  let PCScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402048], 32);
   let BMScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402050], 32);
   let PCScomm_LC2 = Convert_UInt_to_revBitString(lc2Data.System[402048], 32);
   let BMScomm_LC2 = Convert_UInt_to_revBitString(lc2Data.System[402050], 32);
@@ -112,66 +108,55 @@ async function query_Comm_KeyValuePairs() {
   let PCScomm_LC4 = Convert_UInt_to_revBitString(lc4Data.System[402048], 32);
   let BMScomm_LC4 = Convert_UInt_to_revBitString(lc4Data.System[402050], 32);
 
-  // Comm_HVAC_1: dcData.HVAC1[409129],
-  // Comm_HVAC_2: dcData.HVAC2[409129],
+
   Comm_KeyValuePairs = {
-    // Comm_GC_1: Determine_DL_of_CommDevice(dcData.GC1[409127]),
-    // Comm_GC_2: Determine_DL_of_CommDevice(dcData.GC2[409127]),
-    Comm_GC_1: Determine_DL_of_CommDevice(lc1Data.System[402003]),    //dc的存活要利用心跳去判斷
-    Comm_GC_2: Determine_DL_of_CommPCSBMS(lc1Data.System[402005], PCScomm_LC1[2]),
-    Comm_HVAC_1: 1,
-    Comm_HVAC_2: 0,
-    Comm_UPS_EMS: dcData.UPS1[409111],
-    Comm_UPS_CCTV: dcData.UPS2[409111],
-    //Comm_RIO_CtrlRoom: dcData.RIO_CtrlRoom[409121],
-    Comm_RIO_CtrlRoom: 1,
-    Comm_FreqMeter: dcData.Freq[409103],
-    Comm_AuxM_MVCB: dcData.AuxM2[409109],
-    Comm_Relay_MVCB: dcData.RelayMVCB[409117],
-    Comm_UPS_MVCB: dcData.UPS3[409111],
-    //Comm_Recloser: dcData.Recloser[409131],
-    Comm_Recloser: 0,
-    // Comm_RIO_MVCB_1: dcData.RIO_MVCB_1[409123],
-    // Comm_RIO_MVCB_2: dcData.RIO_MVCB_2[409123],
-    Comm_RIO_MVCB_1: 0,
-    Comm_RIO_MVCB_2: 1,
-    Comm_TH_MVCB: dcData.TH1[409115],
-    Comm_Relay_VCB1: dcData.RelayVCB1[409119],
-    Comm_Relay_VCB2: dcData.RelayVCB2[409119],
-    Comm_Relay_VCB3: dcData.RelayVCB3[409119],
-    Comm_Relay_VCB4: dcData.RelayVCB4[409119],
-    Comm_Relay_VCB_Aux: dcData.RelayVCB5[409119],
-    Comm_TR_Aux: dcData.TR5[409113],
-    Comm_AuxM_total: 1,
-    //Comm_AuxM_total: dcData.AuxMtot1[409107],
-    Comm_AuxM_ESS1_1: dcData.AuxM3[409109],
-    Comm_AuxM_ESS1_2: dcData.AuxM4[409109],
-    Comm_AuxM_ESS2_1: dcData.AuxM5[409109],
-    Comm_AuxM_ESS2_2: dcData.AuxM6[409109],
-    Comm_AuxM_ESS3_1: dcData.AuxM7[409109],
-    Comm_AuxM_ESS3_2: dcData.AuxM8[409109],
-    Comm_AuxM_ESS4: dcData.AuxM9[409109],
-    Comm_AuxM_CtrlRoom: dcData.AuxM1[409109],
-    Comm_TR_1: dcData.TR1[409113],
-    Comm_TR_2: dcData.TR2[409113],
-    Comm_TR_3: dcData.TR3[409113],
-    Comm_TR_4: dcData.TR4[409113],
-    Comm_RIO_ACP_1: 0,
-    Comm_RIO_ACP_2: 1,
-    Comm_RIO_ACP_3: 0,
-    Comm_RIO_ACP_4: 1,
-
-    // Comm_RIO_ACP_1: dcData.RIO_ACP1[409125],
-    // Comm_RIO_ACP_2: dcData.RIO_ACP2[409125],
-    // Comm_RIO_ACP_3: dcData.RIO_ACP3[409125],
-    // Comm_RIO_ACP_4: dcData.RIO_ACP4[409125],
-
-    Comm_UPS_ACP: dcData.UPS4[409111],
-    Comm_LC_1: dcData.LC1[409101],
-    Comm_LC_2: dcData.LC2[409101],
-    Comm_LC_3: dcData.LC3[409101],
-    Comm_LC_4: dcData.LC4[409101],
-
+    Comm_EMS_1: "setToClose",
+    Comm_EMS_2: "setToClose",
+    Comm_DC: "setToClose",        //dc的存活要利用心跳去判斷
+    Comm_HMI: "setToClose",
+    Comm_GC_1: Determine_DL_of_CommDevice(dcData.GC1[409127]),
+    Comm_GC_2: Determine_DL_of_CommDevice(dcData.GC2[409127]),
+    Comm_HVAC_1: Determine_DL_of_CommDevice(dcData.HVAC1[409129]),
+    Comm_HVAC_2: Determine_DL_of_CommDevice(dcData.HVAC2[409129]),
+    Comm_UPS_EMS: Determine_DL_of_CommDevice(dcData.UPS1[409111]),
+    Comm_UPS_CCTV: Determine_DL_of_CommDevice(dcData.UPS2[409111]),
+    Comm_RIO_CtrlRoom: Determine_DL_of_CommDevice(dcData.RIO_CtrlRoom[409121]),
+    Comm_FreqMeter: Determine_DL_of_CommDevice(dcData.Freq[409103]),
+    Comm_AuxM_MVCB: Determine_DL_of_CommDevice(dcData.AuxM2[409109]),               // 看能否換個順序
+    Comm_Relay_MVCB: Determine_DL_of_CommDevice(dcData.RelayMVCB[409117]),
+    Comm_UPS_MVCB: Determine_DL_of_CommDevice(dcData.UPS3[409111]),
+    Comm_Recloser: Determine_DL_of_CommDevice(dcData.Recloser[409131]),
+    Comm_RIO_MVCB_1: Determine_DL_of_CommDevice(dcData.RIO_MVCB_1[409123]),
+    Comm_RIO_MVCB_2: Determine_DL_of_CommDevice(dcData.RIO_MVCB_2[409123]),
+    Comm_TH_MVCB: Determine_DL_of_CommDevice(dcData.TH1[409115]),
+    Comm_Relay_VCB1: Determine_DL_of_CommDevice(dcData.RelayVCB1[409119]),
+    Comm_Relay_VCB2: Determine_DL_of_CommDevice(dcData.RelayVCB2[409119]),
+    Comm_Relay_VCB3: Determine_DL_of_CommDevice(dcData.RelayVCB3[409119]),
+    Comm_Relay_VCB4: Determine_DL_of_CommDevice(dcData.RelayVCB4[409119]),
+    Comm_Relay_VCB_Aux: Determine_DL_of_CommDevice(dcData.RelayVCB5[409119]),
+    Comm_TR_Aux: Determine_DL_of_CommDevice(dcData.TR5[409113]),
+    Comm_AuxM_total: Determine_DL_of_CommDevice(dcData.AuxMtot1[409107]),
+    Comm_AuxM_ESS1_1: Determine_DL_of_CommDevice(dcData.AuxM3[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS1_2: Determine_DL_of_CommDevice(dcData.AuxM4[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS2_1: Determine_DL_of_CommDevice(dcData.AuxM5[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS2_2: Determine_DL_of_CommDevice(dcData.AuxM6[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS3_1: Determine_DL_of_CommDevice(dcData.AuxM7[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS3_2: Determine_DL_of_CommDevice(dcData.AuxM8[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS4: Determine_DL_of_CommDevice(dcData.AuxM9[409109]),               // 看能否換個順序
+    Comm_AuxM_CtrlRoom: Determine_DL_of_CommDevice(dcData.AuxM1[409109]),           // 看能否換個順序
+    Comm_TR_1: Determine_DL_of_CommDevice(dcData.TR1[409113]),
+    Comm_TR_2: Determine_DL_of_CommDevice(dcData.TR2[409113]),
+    Comm_TR_3: Determine_DL_of_CommDevice(dcData.TR3[409113]),
+    Comm_TR_4: Determine_DL_of_CommDevice(dcData.TR4[409113]),
+    Comm_RIO_ACP_1: Determine_DL_of_CommDevice(dcData.RIO_ACP1[409125]),
+    Comm_RIO_ACP_2: Determine_DL_of_CommDevice(dcData.RIO_ACP2[409125]),
+    Comm_RIO_ACP_3: Determine_DL_of_CommDevice(dcData.RIO_ACP3[409125]),
+    Comm_RIO_ACP_4: Determine_DL_of_CommDevice(dcData.RIO_ACP4[409125]),
+    Comm_UPS_ACP: Determine_DL_of_CommDevice(dcData.UPS4[409111]),
+    Comm_LC_1: Determine_DL_of_CommDevice(dcData.LC1[409101]),
+    Comm_LC_2: Determine_DL_of_CommDevice(dcData.LC2[409101]),
+    Comm_LC_3: Determine_DL_of_CommDevice(dcData.LC3[409101]),
+    Comm_LC_4: Determine_DL_of_CommDevice(dcData.LC4[409101]),
     Comm_PCS1_1: Determine_DL_of_CommPCSBMS(dcData.LC1[409101], PCScomm_LC1[0]),
     Comm_PCS1_2: Determine_DL_of_CommPCSBMS(dcData.LC1[409101], PCScomm_LC1[1]),
     Comm_BMS1_1: Determine_DL_of_CommPCSBMS(dcData.LC1[409101], BMScomm_LC1[0]),
