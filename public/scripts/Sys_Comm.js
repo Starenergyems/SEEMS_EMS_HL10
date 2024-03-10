@@ -2,18 +2,18 @@
 var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
-  classAdd("#nB_System","default_nB");
+  classAdd("#nB_System", "default_nB");
   updateData();
 });
 
 setInterval(updateData, 5000);
 
-async function updateData(){
-      //更新資料
+async function updateData() {
+  //更新資料
   var router = window.location.href + "/data";
   var data = await getData(router);
   console.log(data);
-/*AUX Meter************************************************* */
+  /*AUX Meter************************************************* */
   if (data.Comm_AuxM_MVCB === 0) {
     classAdd("#AuxM_MVCB", "setToClose");
   } else {
@@ -85,7 +85,7 @@ async function updateData(){
   } else {
     classRemove("#BMS1_2", "setToClose");
   }
-  
+
   if (data.Comm_BMS2_1 === 0) {
     classAdd("#BMS2_1", "setToClose");
   } else {
@@ -122,17 +122,22 @@ async function updateData(){
     classRemove("#FreqMeter", "setToClose");
   }
 
-  if (data.Comm_GC_1 === 0) {
-    classAdd("#GC_1", "setToClose");
-  } else {
-    classRemove("#GC_1", "setToClose");
-  }
+  const classCollection_DL = ["setToClose", "ErrData"];
 
-  if (data.Comm_GC_2 === 0) {
-    classAdd("#GC_2", "setToClose");
-  } else {
-    classRemove("#GC_2", "setToClose");
-  }
+
+  assign_ClassD_to_StatusOfDL_with_SpID("#GC_1", data.Comm_GC_1, classCollection_DL);    // ~~~~~!!!!@@@@@@@########$$$$$$$%%%^^^^^^^&&&&&&&
+  assign_ClassD_to_StatusOfDL_with_SpID("#GC_2", data.Comm_GC_2, classCollection_DL);    // ~~~~~!!!!@@@@@@@########$$$$$$$%%%^^^^^^^&&&&&&&
+  // if (data.Comm_GC_1 === 0) {
+  //   classAdd("#GC_1", "setToClose");
+  // } else {
+  //   classRemove("#GC_1", "setToClose");
+  // }
+
+  // if (data.Comm_GC_2 === 0) {
+  //   classAdd("#GC_2", "setToClose");
+  // } else {
+  //   classRemove("#GC_2", "setToClose");
+  // }
 
   if (data.Comm_HVAC_1 === 0) {
     classAdd("#HVAC_1", "setToClose");
@@ -193,7 +198,7 @@ async function updateData(){
   } else {
     classRemove("#PCS2_2", "setToClose");
   }
-  
+
   if (data.Comm_PCS3_1 === 0) {
     classAdd("#PCS3_1", "setToClose");
   } else {
@@ -211,7 +216,7 @@ async function updateData(){
   } else {
     classRemove("#PCS3_2", "setToClose");
   }
-/*Remote IO************************************************ */
+  /*Remote IO************************************************ */
   if (data.Comm_RIO_CtrlRoom === 0) {
     classAdd("#RIO_CtrlRoom", "setToClose");
   } else {
@@ -253,7 +258,7 @@ async function updateData(){
   } else {
     classRemove("#RIO_ACP_4", "setToClose");
   }
-/*Relay**************************************************** */
+  /*Relay**************************************************** */
   if (data.Comm_Relay_MVCB === 0) {
     classAdd("#Relay_MVCB", "setToClose");
   } else {
@@ -283,7 +288,7 @@ async function updateData(){
   } else {
     classRemove("#Relay_VCB4", "setToClose");
   }
-  
+
   if (data.Comm_Relay_VCB_Aux === 0) {
     classAdd("#Relay_VCB_Aux", "setToClose");
   } else {
@@ -325,8 +330,8 @@ async function updateData(){
   } else {
     classRemove("#TH_MVCB", "setToClose");
   }
-  
-/*TR***************************************************************/
+
+  /*TR***************************************************************/
   if (data.Comm_TR_Aux === 0) {
     classAdd("#TR_Aux", "setToClose");
   } else {
@@ -358,7 +363,7 @@ async function updateData(){
   }
 
 
- 
+
 
 
 

@@ -215,5 +215,17 @@ function assign_StatusOfDL_with_SpID(SpID, condition) {
     }
 }
 
+let i;
 
+function assign_ClassD_to_StatusOfDL_with_SpID(SpID, classData, classCollection) {
+    const element = document.querySelector(SpID);
+
+    for (i = 0; i < classCollection.length; i++) {
+        if (classCollection[i] === classData) {
+            element.classList.add(classData);
+        } else {
+            element.classList.remove(classCollection[i]);
+        }
+    }
+}
 

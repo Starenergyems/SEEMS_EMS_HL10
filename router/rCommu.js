@@ -18,6 +18,7 @@ const app = express();
 const cors = require("cors");
 const {
   Convert_UInt_to_revBitString,
+  Determine_DL_of_CommDevice,
   Determine_DL_of_CommPCSBMS,
 } = require("./function");
 
@@ -101,7 +102,8 @@ async function query_Comm_KeyValuePairs() {
   const lc4Data = allData[3];
   const dcData = allData[4];
 
-  let PCScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402048], 32);
+  // let PCScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402048], 32);
+  let PCScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402007], 32);
   let BMScomm_LC1 = Convert_UInt_to_revBitString(lc1Data.System[402050], 32);
   let PCScomm_LC2 = Convert_UInt_to_revBitString(lc2Data.System[402048], 32);
   let BMScomm_LC2 = Convert_UInt_to_revBitString(lc2Data.System[402050], 32);
@@ -110,13 +112,13 @@ async function query_Comm_KeyValuePairs() {
   let PCScomm_LC4 = Convert_UInt_to_revBitString(lc4Data.System[402048], 32);
   let BMScomm_LC4 = Convert_UInt_to_revBitString(lc4Data.System[402050], 32);
 
-  // Comm_GC_1: dcData.GC1[409127], //dc的存活要利用心跳去判斷
-  // Comm_GC_2: dcData.GC2[409127],
   // Comm_HVAC_1: dcData.HVAC1[409129],
   // Comm_HVAC_2: dcData.HVAC2[409129],
   Comm_KeyValuePairs = {
-    Comm_GC_1: 1,
-    Comm_GC_2: 0,
+    // Comm_GC_1: Determine_DL_of_CommDevice(dcData.GC1[409127]),
+    // Comm_GC_2: Determine_DL_of_CommDevice(dcData.GC2[409127]),
+    Comm_GC_1: Determine_DL_of_CommDevice(lc1Data.System[402003]),    //dc的存活要利用心跳去判斷
+    Comm_GC_2: Determine_DL_of_CommPCSBMS(lc1Data.System[402005], PCScomm_LC1[2]),
     Comm_HVAC_1: 1,
     Comm_HVAC_2: 0,
     Comm_UPS_EMS: dcData.UPS1[409111],

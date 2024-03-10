@@ -276,13 +276,19 @@ function Scale_Data(rawData, scale, decPlace) {
 }
 
 function Convert_UInt_to_revBitString(rawData, NumberOfDigit) {
-  let rawBitString = rawData.toString(2);
-  let BitString = rawBitString
-    .padStart(NumberOfDigit, "0")
-    .slice(-NumberOfDigit);
-
   let revBitString = "";
-  for (i = 0; i < BitString.length; i++) {
+
+  if (rawData === null) {
+    for (i = 0; i < NumberOfDigit; i++) {
+      revBitString += "#";
+    }
+    return revBitString;
+  }
+
+  let rawBitString = rawData.toString(2);
+  let BitString = rawBitString.padStart(NumberOfDigit, "0").slice(-NumberOfDigit);
+
+  for (i = 0; i < NumberOfDigit; i++) {
     revBitString += BitString[NumberOfDigit - 1 - i];
   }
 
@@ -432,11 +438,27 @@ function Determine_DL_of_upsStatus2(rawData) {
   }
 }
 
-function Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS) {
-  if (CommLC === 0 && CommPCSBMS === "1") {
-    return 0;
+function Determine_DL_of_CommDevice(rawData) {
+  if (rawData === null) {
+    return "ErrData";
+  }
+
+  if (rawData === 0) {
+    return "setToClose";
   } else {
-    return 1;
+    return "";
+  }
+}
+
+function Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS) {
+  if (CommLC === null || CommPCSBMS === "#") {
+    return "ErrData";
+  }
+
+  if (CommLC === 0 && CommPCSBMS === "1") {
+    return "setToClose";
+  } else {
+    return "";
   }
 }
 
@@ -801,6 +823,7 @@ module.exports = {
   Determine_BGC_of_TcMaxDiff,
   Determine_DL_of_RackHWStatus,
   Determine_DL_of_upsStatus2,
+  Determine_DL_of_CommDevice,
   Determine_DL_of_CommPCSBMS,
   Determine_statusL_of_recloser,
   Determine_statusL_of_VCB,
@@ -881,7 +904,7 @@ module.exports = {
 
 // //********************************************************************************************************** */
 
-const rawData = 9453;
+const rawData = 0;
 const NumberOfDigit = 16;
 const pcsCHGStatus_MT = {
   17: "Charging",
@@ -903,9 +926,7 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 // console.log(ab);
 
 // let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
-// for (i = 0; i < cd_BitString.length; i++) {
-//   console.log(cd_BitString[i]);
-// }
+// console.log(cd_BitString);
 
 // let ef = Convert_UInt_to_BitString(rawData, NumberOfDigit);
 // console.log(ef);
@@ -954,6 +975,9 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 
 // const cd_2 = Determine_DL_of_upsStatus2(rawData);
 // console.log(cd_2);
+
+// const ef_2 = Determine_DL_of_CommDevice(rawData);
+// console.log(ef_2);
 
 // let CommLC = 0;
 // let CommPCSBMS = "1";
