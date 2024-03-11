@@ -39,10 +39,6 @@ const hisalarmnanoDb = nano.use("hisalarm");
 let alarm_db_event_lock = false;
 // const alarm_test_nanoDb = nano.use("alarm_test");
 
-const indexDef_time = {
-  index: { fields: ["time"] },
-  ddoc: "time_index",
-};
 [
   lc1nanoDb,
   lc2nanoDb,
@@ -51,29 +47,79 @@ const indexDef_time = {
   dcnanoDb,
   gcnanoDb,
   otherrf10nanoDb,
-].forEach((element) => element.createIndex(indexDef_time));
+].forEach(
+  (element) => {
+    element.get('_design/' + "rAlarm_ddoc", (err, body) => {
+      if (err) {
+        if (err.statusCode === 404) {
+          console.log('Design document does not exist. Creating...');
+          const indexDef_time = {
+            index: { fields: ["time"] },
+            ddoc: "rAlarm_ddoc",
+            name: "time_index"
+          };
+          element.createIndex(indexDef_time);
+        } else {
+          console.error('Error:', err);
+        }
+      } else {
+        console.log('Design document exists:', body);
+      }
+    });
+  }
+)
 
-const indexDef_read = {
-  index: { fields: ["read"] },
-  ddoc: "rAlarm_ddoc",
-  name: "read_index"
-};
-alarmnanoDb.createIndex(indexDef_read);
 
-const indexDef_db_name_recover = {
-  index: { fields: ["db_name"] },
-  ddoc: "rAlarm_ddoc",
-  name: "db_name_recover_index"
-};
-alarmnanoDb.createIndex(indexDef_db_name_recover);
+alarmnanoDb.get('_design/' + "rAlarm_ddoc", (err, body) => {
+  if (err) {
+    if (err.statusCode === 404) {
+      console.log('Design document does not exist. Creating...');
+      const indexDef_read = {
+        index: { fields: ["read"] },
+        ddoc: "rAlarm_ddoc",
+        name: "read_index"
+      };
+      alarmnanoDb.createIndex(indexDef_read);
+      
+      const indexDef_db_name_recover = {
+        index: { fields: ["db_name"] },
+        ddoc: "rAlarm_ddoc",
+        name: "db_name_recover_index"
+      };
+      alarmnanoDb.createIndex(indexDef_db_name_recover);
+      
+      const indexDef_occurrence_time = {
+        index: { fields: ["occurrence_time"] },
+        ddoc: "rAlarm_ddoc",
+        name: "occurrence_time_index"
+      };
+      alarmnanoDb.createIndex(indexDef_occurrence_time);
+    } else {
+      console.error('Error:', err);
+    }
+  } else {
+    console.log('Design document exists:', body);
+  }
+});
 
-const indexDef_occurrence_time = {
-  index: { fields: ["occurrence_time"] },
-  ddoc: "rAlarm_ddoc",
-  name: "occurrence_time_index"
-};
-alarmnanoDb.createIndex(indexDef_occurrence_time);
-hisalarmnanoDb.createIndex(indexDef_occurrence_time);
+hisalarmnanoDb.get('_design/' + "rAlarm_ddoc", (err, body) => {
+  if (err) {
+    if (err.statusCode === 404) {
+      console.log('Design document does not exist. Creating...');
+      const indexDef_occurrence_time = {
+        index: { fields: ["occurrence_time"] },
+        ddoc: "rAlarm_ddoc",
+        name: "occurrence_time_index"
+      };
+      hisalarmnanoDb.createIndex(indexDef_occurrence_time);
+    } else {
+      console.error('Error:', err);
+    }
+  } else {
+    console.log('Design document exists:', body);
+  }
+});
+
 // alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
 // alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
 
@@ -370,7 +416,7 @@ function alarm_processor_call() {
       },
       sort: [{ time: "desc" }],
       limit: 1,
-      // use_index: "time_index",
+      use_index: ["rAlarm_ddoc", "time_index"],
     };
 
     const lc1_alarm_promise = alarm_processor(
