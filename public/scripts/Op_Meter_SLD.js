@@ -308,6 +308,8 @@ async function updateData() {                                   // 更新資料 
   var data = await getData(router);
   console.log(data);
 
+  const classCollection_SL_of_CB = ["setToClose", "Err", "ErrData"];
+
   assign_StatusLight_of_CB("#MVCB", data.statusL_of_MVCB);
   assign_StatusLight_of_CB("#VCB_1", data.statusL_of_VCB1);
   assign_StatusLight_of_CB("#VCB_2", data.statusL_of_VCB2);
@@ -325,6 +327,8 @@ async function updateData() {                                   // 更新資料 
   assign_StatusLight_of_CB("#ACB_3_2", data.statusL_of_ACB3_2);
   assign_StatusLight_of_CB("#ACB_3_3", data.statusL_of_ACB3_3);
   assign_StatusLight_of_CB("#ACB_4_1", data.statusL_of_ACB4_1);
+
+  const classCollection_DL = ["setToClose", "ErrData"];
 
   assign_StatusOfDL_with_SpID("#Rly_MVCB", data.relayMVCB_sumRawD > 0);
   assign_StatusOfDL_with_SpID("#Rly_VCB_1", data.relayVCB1_rawD > 0);

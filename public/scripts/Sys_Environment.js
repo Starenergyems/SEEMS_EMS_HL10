@@ -42,7 +42,7 @@ function clearCheckedRadioOption() {
 
 let qSelectAll_option = document.querySelectorAll(".dataStatus_Set .option");
 let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set .radioOpt");
-// let i;
+let i;
 
 async function Set_acuOnOff(numInDataGroup) {
   dataName = "setBut_acuOnOff";

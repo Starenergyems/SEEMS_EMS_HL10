@@ -161,6 +161,11 @@
     background-color: #FFFF00;
 }
 
+.row_voltDiff .dataValue.bgc_ErrData,
+.row_tempDiff .dataValue.bgc_ErrData {
+    background-color: #9D653D;
+}
+
 .Rack .row_dataLight .col_other {
     padding: 0px;
     text-align: center;

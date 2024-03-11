@@ -18,36 +18,33 @@ function calculateAdd(...numbers) {
   const sum = numbers.reduce((acc, num) => acc + num, 0);
   return sum;
 }
-
 //-------------------------------------------------------------------------------------------------
-
-function innerFunction() {
-  //console.log(arguments.callee.caller); // 獲取呼叫 innerFunction 的函式
-}
-
+//單位轉換
 function scaleProcess(decimalValue, scale, point) {
   // 檢查輸入是否合法
   if (typeof decimalValue !== "number" || isNaN(decimalValue)) {
     if (decimalValue === null) {
+      return "NAN//";
       decimalValue = 0;
       //console.log("decimalValue = null");
     } else if (typeof decimalValue === "string") {
       decimalValue = 0;
+      return "string//";
       //console.log("decimalValue=" + decimalValue);
     } else {
       //console.log("decimalValue must be a number.");
-      return;
+      return "OXO//";
     }
   }
 
   if (typeof scale !== "number" || isNaN(scale)) {
     //console.log("scale must be a number.");
-    return;
+    return "scale NAN//";
   }
 
   if (typeof point !== "number" || isNaN(point)) {
     //console.log("point must be a number.");
-    return;
+    return "number NAN//";
   }
 
   // 將 decimalValue 乘上 scale
@@ -55,16 +52,8 @@ function scaleProcess(decimalValue, scale, point) {
 
   // 限制小數點位數
   result = result.toFixed(point);
-  innerFunction();
   return result;
 }
-
-// 測試
-// console.log(scaleProcess(5, 2, 2)); // 10.00
-// console.log(scaleProcess(null, 2, 2)); // decimalValue=null
-// console.log(scaleProcess("test", 2, 2)); // decimalValue=test
-// console.log(scaleProcess(5, "test", 2)); // scale must be a number.
-// console.log(scaleProcess(5, 2, "test")); // point must be a number.
 
 //-------------------------------------------------------------------------------------------------
 //chargeStatus pcs充放電狀態
@@ -101,10 +90,6 @@ function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
   }
 }
 
-// console.log("pcs測試結果1:" + mapPCSworkStatus(2, 2, 2, 1));
-// console.log("pcs測試結果2:" + mapPCSworkStatus(1, 1, 1, 1));
-// console.log("pcs測試結果3:" + mapPCSworkStatus(0, 0, 0, 0));
-
 function mapPCSonlineNum(lc1, lc2, lc3, lc4) {
   if (lc1 < 3 && lc2 < 3 && lc3 < 3 && lc4 < 3) {
     const sum = lc1 + lc2 + lc3 + lc4;
@@ -113,7 +98,6 @@ function mapPCSonlineNum(lc1, lc2, lc3, lc4) {
     return "err?";
   }
 }
-//console.log("pcs加總測試結果1:" + mapPCSonlineNum(1, 2, 0, 1));
 
 function mapModeActPas(input) {
   if (input === 0) {
@@ -368,7 +352,11 @@ function Convert_unixTime_to_dateTime(rawData) {
   return `${yy}/${mm}/${dd} ${hh}:${m}:${ss}`;
 }
 
-function Calculate_BMS_energy(E_GWh, E_MWh, E_kWh) {                 // 待優化
+function Calculate_BMS_energy(E_GWh, E_MWh, E_kWh) {
+  if (E_GWh === null || E_MWh === null || E_kWh === null) {
+    return "#*#*#";
+  }
+
   let Energy = (E_GWh * 1000000 + E_MWh * 1000 + E_kWh) / 1000;
 
   return Energy.toFixed(1);
@@ -384,7 +372,11 @@ function Calculate_CPM10_energy(E_GWh, E_MWh, E_kWh) {
   return Energy.toFixed(1);
 }
 
-function Calculate_N1450_PF(rawData) {                               // 待優化
+function Calculate_N1450_PF(rawData) {
+  if (rawData === null) {
+    return "#*#";
+  }
+
   if (rawData <= 1000) {
     return (rawData / 1000).toFixed(3);
   } else if (rawData <= 3000) {
@@ -394,11 +386,19 @@ function Calculate_N1450_PF(rawData) {                               // 待優�
   }
 }
 
-function Calculate_Tr_oilTemp(rawData) {                             // 待優化
+function Calculate_Tr_oilTemp(rawData) {
+  if (rawData === null) {
+    return "#*#";
+  }
+
   return ((rawData - 19999) / 10).toFixed(1);
 }
 
-function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {  // 待優化
+function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {
+  if (rawData === null) {
+    return "#*#";
+  }
+
   let revBitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
 
   let NumberOfSpClosedBit = 0;
@@ -411,31 +411,45 @@ function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {  // 
   return NumberOfSpClosedBit;
 }
 
-function Determine_BGC_of_VcMaxDiff(rawData) {                       // 待優化
-  if (rawData >= 500) {
+function Determine_BGC_of_VcMaxDiff(data_maxV, data_minV) {
+  if (data_maxV === null || data_minV === null) {
+    return "bgc_ErrData";
+  }
+
+  let maxDiff = data_maxV - data_minV;
+  if (maxDiff >= 500) {
     return "bgc_Red";
-  } else if (rawData >= 400) {
+  } else if (maxDiff >= 400) {
     return "bgc_Orange";
-  } else if (rawData >= 300) {
+  } else if (maxDiff >= 300) {
     return "bgc_Yellow";
   } else {
     return "";
   }
 }
 
-function Determine_BGC_of_TcMaxDiff(rawData) {                       // 待優化
-  if (rawData >= 60) {
+function Determine_BGC_of_TcMaxDiff(data_maxV, data_minV) {
+  if (data_maxV === null || data_minV === null) {
+    return "bgc_ErrData";
+  }
+
+  let maxDiff = data_maxV - data_minV;
+  if (maxDiff >= 60) {
     return "bgc_Red";
-  } else if (rawData >= 40) {
+  } else if (maxDiff >= 40) {
     return "bgc_Orange";
-  } else if (rawData >= 20) {
+  } else if (maxDiff >= 20) {
     return "bgc_Yellow";
   } else {
     return "";
   }
 }
 
-function Determine_DL_of_RackHWStatus(rawData) {                     // 待優化
+function Determine_DL_of_RackHWStatus(rawData) {
+  if (rawData === null) {
+    return "ErrData";
+  }
+
   let NumOfErr = Count_SpecificClosedBit(rawData, 16, [2, 3, 6, 7]);
 
   if (NumOfErr > 0) {
@@ -445,7 +459,11 @@ function Determine_DL_of_RackHWStatus(rawData) {                     // 待優�
   }
 }
 
-function Determine_DL_of_upsStatus2(rawData) {                       // 待優化
+function Determine_DL_of_upsStatus2(rawData) {
+  if (rawData === null) {
+    return "ErrData";
+  }
+
   let revBitString = Convert_UInt_to_revBitString(rawData, 16);
 
   if (revBitString[15] === "1") {
@@ -481,7 +499,11 @@ function Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS) {
   }
 }
 
-function Determine_statusL_of_recloser(recloserStatus, recloserRelay) {   // 待優化
+function Determine_statusL_of_recloser(recloserStatus, recloserRelay) {
+  if (recloserStatus === null || recloserRelay === null) {
+    return "ErrData";
+  }
+
   if (recloserStatus % 32 > 0 || recloserRelay > 0) {
     return "setToClose";
   } else {
@@ -489,7 +511,11 @@ function Determine_statusL_of_recloser(recloserStatus, recloserRelay) {   // 待
   }
 }
 
-function Determine_statusL_of_VCB(closeStatus, openStatus, tripStatus) {   // 待優化
+function Determine_statusL_of_VCB(closeStatus, openStatus, tripStatus) {
+  if (closeStatus === "#" || openStatus === "#" || tripStatus === "#") {
+    return "ErrData";
+  }
+
   if (tripStatus === "1" || closeStatus === openStatus) {
     return "Err";
   } else if (closeStatus === "1") {
@@ -499,7 +525,11 @@ function Determine_statusL_of_VCB(closeStatus, openStatus, tripStatus) {   // �
   }
 }
 
-function Determine_statusL_of_ACB(closeStatus, openStatus) {   // 待優化
+function Determine_statusL_of_ACB(closeStatus, openStatus) {
+  if (closeStatus === "#" || openStatus === "#") {
+    return "ErrData";
+  }
+
   if (closeStatus === openStatus) {
     return "Err";
   } else if (closeStatus === "1") {
@@ -730,10 +760,10 @@ function mapSysAvailability(SysAvailability) {
   //console.log("bit15:" + bit15);
   if (SysAvailability_binary[bit15] === "0") {
     //console.log("Not Available");
-    return "Not Available";
+    return "異常";
   } else if (SysAvailability_binary[bit15] === "1") {
     //console.log("Available");
-    return "Available";
+    return "正常";
   }
 }
 
@@ -745,10 +775,10 @@ function mapStopCHGsched(StopCHGsched) {
   //console.log("bit14:" + bit14);
   if (StopCHGsched_binary[bit14] === "0") {
     //console.log("Not Available");
-    return "No";
+    return "停止排程";
   } else if (StopCHGsched_binary[bit14] === "1") {
     //console.log("Available");
-    return "Yes";
+    return "執行排程";
   }
 }
 
@@ -759,10 +789,10 @@ function mapAutoMan(input, bit) {
   const bits = 31 - bit;
   if (input_binary[bits] === "0") {
     //console.log("Manual");
-    return "Manual";
+    return "手動";
   } else if (input_binary[bits] === "1") {
     //console.log("Auto");
-    return "Auto";
+    return "自動";
   }
 }
 //******************************************************************************* *///******************************************************************************* */
@@ -772,10 +802,10 @@ function mapBMSPCSstatus(input) {
   const bits3 = 31 - 3;
   if (input_binary[bits3] === "0") {
     //console.log("Not Available");
-    return "Not Available";
+    return "異常";
   } else if (input_binary[bits3] === "1") {
     //console.log("Available");
-    return "Available";
+    return "正常";
   }
 }
 //******************************************************************************* *///******************************************************************************* */
@@ -784,10 +814,10 @@ function mapAvail_SS(input) {
   const bits4 = 31 - 4;
   if (input_binary[bits4] === "0") {
     //console.log("Not Available");
-    return "Not Available";
+    return "異常";
   } else if (input_binary[bits4] === "1") {
     //console.log("Available");
-    return "Available";
+    return "正常";
   }
 }
 //******************************************************************************* *///******************************************************************************* */
@@ -796,10 +826,10 @@ function mapAvail_SS(input) {
   const bits4 = 31 - 4;
   if (input_binary[bits4] === "0") {
     //console.log("Not Available");
-    return "Not Available";
+    return "異常";
   } else if (input_binary[bits4] === "1") {
     //console.log("Available");
-    return "Available";
+    return "正常";
   }
 }
 //******************************************************************************* *///******************************************************************************* */
@@ -809,10 +839,10 @@ function mapEdReg_SS(input) {
   const bits5 = 31 - 5;
   if (input_binary[bits5] === "0") {
     //console.log("Not Available");
-    return "Not Available";
+    return "異常";
   } else if (input_binary[bits5] === "1") {
     //console.log("Available");
-    return "Available";
+    return "正常";
   }
 }
 //******************************************************************************* *///******************************************************************************* */
@@ -923,7 +953,7 @@ module.exports = {
 
 // //********************************************************************************************************** */
 
-const rawData = 0;
+const rawData = 57913;
 const NumberOfDigit = 16;
 const pcsCHGStatus_MT = {
   17: "Charging",
@@ -939,7 +969,7 @@ const sysCtrl_2_MT = {
   10: { 0: "正常", 1: "通訊異常" },
   13: { 0: "SOC", 1: "Volt" },
 };
-const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
+const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 
 // let ab = Scale_Data(rawData, 0.01, 1);
 // console.log(ab);
@@ -986,7 +1016,9 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14];
 // const wx = Count_SpecificClosedBit(rawData, NumberOfDigit, pcsWorkStatus_spBitList);
 // console.log(wx);
 
-// const yz = Determine_BGC_of_VcMaxDiff(rawData);
+// const maxData = 276;
+// const minData = 256;
+// const yz = Determine_BGC_of_TcMaxDiff(maxData, minData);
 // console.log(yz);
 
 // const ab_2 = Determine_DL_of_RackHWStatus(rawData);
