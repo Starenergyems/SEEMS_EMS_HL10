@@ -106,13 +106,13 @@ app.get("/", (req, res) => {
 //   }
 // });
 
-app.post("test", (req, res) => {
-  const token = req.customData.token;
-  const id = req.customData.id;
-  const level = req.customData.level;
-  console.log(`id = ${id}, permission = ${level}, token = ${token}`);
+app.post("/test", (req, res) => {
+  // const token = req.customData.token;
+  // const id = req.customData.id;
+  // const level = req.customData.level;
+  // console.log(`id = ${id}, permission = ${level}, token = ${token}`);
   const body = req.body;
-  console.log(`body = ${body}`);
+  console.log(`body = ${body}, ${body.a}`);
 });
 
 //***************************************************************************************************************** */
