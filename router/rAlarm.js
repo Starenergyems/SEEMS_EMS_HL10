@@ -26,7 +26,6 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(cors());
 //************************************************************* */
 const lc1nanoDb = nano.use("lc1_rf10");
-// console.log(lc1nanoDb["config"]["db"])
 const lc2nanoDb = nano.use("lc2_rf10");
 const lc3nanoDb = nano.use("lc3_rf10");
 const lc4nanoDb = nano.use("lc4_rf10");

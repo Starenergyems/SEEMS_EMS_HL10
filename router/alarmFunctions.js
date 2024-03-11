@@ -2211,6 +2211,8 @@ function update_trigger_alarms_batch(
   hisnanoDB,
   line_flag = false
 ) {
+  // console.log(error_result)
+  // console.log(compare_result)
   return new Promise((resolve, reject) => {
     let remain_result = [];
     let income_result = [];
@@ -2256,9 +2258,11 @@ function update_trigger_alarms_batch(
                     if (element.doc) {
                       let doc = element.doc;
                       let error_element = error_result[_id];
+                      // console.log(error_result[_id]["_id"])
                       if (doc.value !== error_element["value"]) {
                         error_element["_rev"] = doc._rev;
                         error_element["read"] = doc.read;
+                        // error_element["recover"] = false;
                         if (line_flag && line) {
                           sendLineNotify(error_element);
                         }
@@ -2399,15 +2403,21 @@ function update_trigger_alarms_batch(
                     // delete error_result[_id]["line"];
                     if (!doc.recover) {
                       // Set the recover boolean as true and the time to the current time as it is not an error now
-                      // doc.value = "Normal";
+                      doc.value = "Normal";
                       doc.recover = true;
                       doc.recover_time = current_locale_time();
                       // if the recover and read boolean are both true: del the doc
+                      if (line_flag) {
+                        sendLineNotify(doc);
+                      }
                       if (doc.recover && doc.read) {
                         doc._deleted = true;
                       }
+                      docs_batch.push(doc);
                     }
-                    docs_batch.push(doc);
+                    else {
+                      // do nothing
+                    };
                   }
                 });
               } catch (error) {
@@ -2453,6 +2463,7 @@ function update_trigger_alarms_batch(
 
 function sendLineNotify(error_result_item) {
   const message = `
+    ID:   ${error_result_item["_id"]} 
     Level:   ${error_result_item["level"]} 
     Location:   ${error_result_item["location"]}
     Device:   ${error_result_item["device"]}
@@ -2519,7 +2530,7 @@ function alarm_processor(
             return alarm_nanoDB.find({
               selector: {
                 db_name: db_name,
-                recover: { $exists: true, $eq: false },
+                // recover: { $exists: true, $eq: false },
               },
               limit: body.total_rows,
               // use_index: "db_name_recover_index",
