@@ -1,17 +1,50 @@
-const { get } = require("./router/rMode")
-
-const require()
-
-app.set
-app.use
+// Method URI Note
 
 
-middle
+// Login page.
+
+// get
+// ./login
+// render "login.ejs"
+
+// post
+// ./login
+// submit username & password to login func
 
 
-render("Login")
-"./" "get"
+// Mode page
 
-render("")
-./ post
+// get 
+// 
+// render "Mode_SysCtrl.ejs"
 
+// post
+// ./login
+// submit username & password to login func
+
+mode 
+
+// get 
+// ./mode & ./mode/sysctrl
+// render "Mode_SysCtrl"
+
+// get 
+// ./mode/sysctrl:data
+// subsysinfo
+
+
+// post
+// ./mode & ./mode/sysctrl
+// update Sub-System data
+
+// post
+// ./mode & ./mode/sysctrl
+// update System data
+
+// post
+// ./mode/ & ./mode/sysctrl
+// update frequency data
+
+// get 
+// ./mode/schedule
+render Mode_Schedule

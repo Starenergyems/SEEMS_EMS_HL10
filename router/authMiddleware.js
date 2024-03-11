@@ -39,7 +39,7 @@ async function authentication(req) {
         const res = `\ncookie's token is ${browser_token}\naccount token is ${token}`
         if (token === browser_token) {
             console.log("Authentication is OK.", res)
-            return {"id": id, "level": level}
+            return {"id": id, "permission": level}
         } else {
             console.log("Authentication is not OK.", res)
             return false

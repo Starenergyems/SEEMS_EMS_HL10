@@ -67,52 +67,57 @@ app.get("/", (req, res) => {
   res.render("Login");
 });
 
-// app.post("/login", async (req, res) => {
-//   try {
-//     const email = req.body["username"];
-//     const password = req.body["password"];
-//     console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
+app.post("/login", async (req, res) => {
+  try {
+    const email = req.body["username"];
+    const password = req.body["password"];
+    console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
 
-//     const response = await submit(email, password);
-//     if (response["result"] === true) {
-//       console.log(response["text"]);
-//       res.cookie("token", response["token"]);
-//       //, { maxAge: 10, httpOnly: true });
-//       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
-//       res.json({ redirect: "http://localhost:3000/operateinfo" });
-//     } else {
-//       res.status(401).send(response["text"]);
-//     }
-//   } catch (error) {
-//     console.error("Error:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
+    const response = await submit(email, password);
+    if (response["result"] === true) {
+      console.log(response["text"]);
+      res.cookie("token", response["token"]);
+      //, { maxAge: 10, httpOnly: true });
+      // if cookies add this the cookies will live 10s, and will not abandon after close browser.
+      // res.json({ redirect: "http://localhost:3000/operateinfo" });
+      res.redirect("./operateinfo");
+    } else {
+      res.status(401).send(response["text"]);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
-// //身分驗證 暫時關閉
-// app.use("*", async (req, res, next) => {
-//   try {
-//     const authenticated = await authentication(req);
-//     if (authenticated === false) {
-//       return res.status(401).send("Unauthorized");
-//       //req.customData = authenticated;
-//     } else {
-//       req.customData = authenticated;
-//     }
-//     next();
-//   } catch (error) {
-//     console.error("Authentication error:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
+//身分驗證 暫時關閉
+app.use("*", async (req, res, next) => {
+  try {
+    const authenticated = await authentication(req);
+    if (authenticated === false) {
+      // console.log(1)
+      // res.redirect('./')
+      // console.log(2)
+      // return res.redirect('./')
+      return res.status(401).send("Unauthorized");
+      //req.customData = authenticated;
+    } else {
+      req.customData = authenticated;
+    }
+    next();
+  } catch (error) {
+    console.error("Authentication error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 app.post("/test", (req, res) => {
-  // const token = req.customData.token;
-  // const id = req.customData.id;
+  const token = req.customData.token;
+  const id = req.customData.id;
   // const level = req.customData.level;
   // console.log(`id = ${id}, permission = ${level}, token = ${token}`);
   const body = req.body;
-  console.log(`body = ${body}, ${body.a}`);
+  // console.log(`body = ${body}, ${body.a}`);
 });
 
 //***************************************************************************************************************** */
@@ -458,7 +463,7 @@ async function getLatestValuesFromDatabaseforother() {
       lc2Data.BMS2[404005],
       lc3Data.BMS1[404005],
       lc3Data.BMS2[404005],
-      lc4Data.BMS1[404005],
+      lc4Data.BMS1[404005]
     );
     const L_M_SBSPM = scaleProcess(gcData.System[400037], 1, 0);
     const L_M_chgEtoday = otherrf01Data.Freq[408028] - ChgEtoday0; //408028 kWh_Import
@@ -491,17 +496,14 @@ const pcsRouter = require("./rPCS");
 const batteryRouter = require("./rBattery");
 const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
-const environmentRouter = require("./rEnvironment");
+// const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
 const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
-// const testRouter = require("./test");
 const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
-// const middleware = require("./middleware");
-//const login = require("./rLogin")
-//const { authentication } = require("./authMiddleware");
-//app.use(authMiddleware);
+const login = require("./rLogin");
+const { authentication } = require("./authMiddleware");
 //***************************************************************************************************************** */
 // 使用這些路由
 // app.use(authentication)
@@ -512,13 +514,11 @@ app.use(pcsRouter);
 app.use(batteryRouter);
 app.use(commuRouter);
 app.use(deviceRouter);
-app.use(environmentRouter);
+// app.use(environmentRouter);
 app.use(eventRouter);
 app.use(reportRouter);
 app.use(chartRouter);
-//app.use(testRouter);
 app.use(alarmRouter);
-// app.use(middleware);
 
 //***************************************************************************************************************** */
 
@@ -551,9 +551,7 @@ process.on("SIGINT", () => {
   });
 });
 
-// 新增定期更新函數，你需要根據實際需求實現這個函數
 function updateDataPeriodically() {
-  // 實現你的定期更新邏輯
   console.log("app.js : Data updated periodically...");
 }
 
