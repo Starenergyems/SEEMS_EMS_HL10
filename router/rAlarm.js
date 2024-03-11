@@ -55,19 +55,22 @@ const indexDef_time = {
 
 const indexDef_read = {
   index: { fields: ["read"] },
-  ddoc: "read_index",
+  ddoc: "rAlarm_ddoc",
+  name: "read_index"
 };
 alarmnanoDb.createIndex(indexDef_read);
 
 const indexDef_db_name_recover = {
-  index: { fields: ["db_name", "recover"] },
-  ddoc: "db_name_recover_index",
+  index: { fields: ["db_name"] },
+  ddoc: "rAlarm_ddoc",
+  name: "db_name_recover_index"
 };
 alarmnanoDb.createIndex(indexDef_db_name_recover);
 
 const indexDef_occurrence_time = {
   index: { fields: ["occurrence_time"] },
-  ddoc: "occurrence_time_index",
+  ddoc: "rAlarm_ddoc",
+  name: "occurrence_time_index"
 };
 alarmnanoDb.createIndex(indexDef_occurrence_time);
 hisalarmnanoDb.createIndex(indexDef_occurrence_time);
@@ -141,7 +144,7 @@ router.post("/alarm/realtime/edit", (req, res) => {
           return alarmnanoDb.find({
             selector: { read: { $exists: true, $eq: false } },
             limit: body.total_rows,
-            // use_index: "read_index",
+            use_index: ["rAlarm_ddoc", "read_index"],
           });
         })
         .then((resp) => {
@@ -245,7 +248,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
             ],
             sort: [{ occurrence_time: "desc" }],
             limit: body.total_rows,
-            // use_index: "occurrence_time_index",
+            use_index: ["rAlarm_ddoc", "occurrence_time_index"],
           });
         })
         .then((resp) => {
@@ -321,7 +324,7 @@ router.get("/alarm/history/edit", (req, res) => {
         ],
         sort: [{ occurrence_time: "desc" }],
         limit: 1000,
-        // use_index: "occurrence_time_index",
+        use_index: ["rAlarm_ddoc", "occurrence_time_index"],
       });
     })
     .then((resp) => {
@@ -412,7 +415,7 @@ function alarm_processor_call() {
       alarmnanoDb,
       hisalarmnanoDb
     );
-    // const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
 
     Promise.all([
       lc1_alarm_promise,
@@ -420,7 +423,7 @@ function alarm_processor_call() {
       lc3_alarm_promise,
       lc4_alarm_promise,
       dc_alarm_promise,
-      // other_alarm_promise
+      other_alarm_promise
     ])
       .then(() => {
         console.log("All alarm_processor: Suc!");
