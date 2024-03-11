@@ -26,6 +26,18 @@
     line-height: 50px;
 }
 
+.subtitle {
+    background-color: #F9E06CB3;
+    height: 50px;
+    border-radius: 25px;
+    margin-top: 5px;
+}
+
+.subtitle h2 {
+    font-size: 36px;
+    line-height: 50px;
+}
+
 .environSC {
     background-color: #FFFFFF80;
     margin: 5px 1.488% 10px;
@@ -53,7 +65,8 @@
 }
 
 .environSC .col_other {
-    width: 12.27%;
+    /* width: 12.27%; */
+    width: 198px;
 }
 
 .environSC .row_head td {
@@ -141,6 +154,11 @@
 .environSC .dataLight {
     margin: 3px 0px;
     vertical-align: top;
+    margin:0 8%;
+}
+
+.dataLight.spareL{
+    background-color: transparent;
 }
 
 .dataLight.RGB_L.setToRed {
@@ -149,6 +167,10 @@
   
 .dataLight.RGB_L.setToGreen {
     background-color: #00FF75;
+}
+
+.dataLight.setToGreen {
+    background-color: #236E37;
 }
 
 .environSC .openEnvironAlm {
