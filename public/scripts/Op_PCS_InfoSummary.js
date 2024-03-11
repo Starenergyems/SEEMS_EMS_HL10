@@ -2,7 +2,7 @@
 var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
-  classAdd("#nB_Operation","default_nB");
+  classAdd("#nB_Operation", "default_nB");
   updateData();
 });
 
@@ -221,7 +221,7 @@ function clearCheckedRadioOption() {
 
 let qSelectAll_option = document.querySelectorAll(".dataStatus_Set .option");
 let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set .radioOpt");
-let i;
+// let i;
 
 async function Set_modeActPas_LC(numInDataGroup) {
   dataName = "setBut_modeAP";
@@ -542,43 +542,43 @@ async function updateData() {
   $("#standbyCmd_LC2").text(data.standbyCmd_LC2);
   $("#modeLR_LC2").text(data.modeLR_LC2);
 
-   /*LC3************************************************* */
-   $("#onlineNum_LC3").text(data.onlineNum_LC3);
-   $("#ratedP_LC3").text(data.ratedP_LC3);
-   $("#activePower_LC3").text(data.activePower_LC3);
-   $("#reactivePower_LC3").text(data.reactivePower_LC3);
-   $("#today_E_chg_LC3").text(data.today_E_chg_LC3);
-   $("#today_E_dcg_LC3").text(data.today_E_dcg_LC3);
-   $("#tot_E_chg_LC3").text(data.tot_E_chg_LC3);
-   $("#tot_E_dcg_LC3").text(data.tot_E_dcg_LC3);
-   /*告警/故障********************************************** */
-   if (data.alarm_PCS3_1 > 0) {
-     classAdd("#alarm_PCS3-1", "setToClose");
-   } else {
-     classRemove("#alarm_PCS3-1", "setToClose");
-   }
-   if (data.alarm_PCS3_2 > 0) {
-     classAdd("#alarm_PCS3-2", "setToClose");
-   } else {
-     classRemove("#alarm_PCS3-2", "setToClose");
-   }
-   if (data.fault_PCS3_1 > 0) {
-     classAdd("#fault_PCS3-1", "setToClose");
-   } else {
-     classRemove("#fault_PCS3-1", "setToClose");
-   }
-   if (data.fault_PCS3_2 > 0) {
-     classAdd("#fault_PCS3-2", "setToClose");
-   } else {
-     classRemove("#fault_PCS3-2", "setToClose");
-   }
- 
-   $("#modeActPas_LC3").text(data.modeActPas_LC3);
-   $("#modeQctrl_LC3").text(data.modeQctrl_LC3);
-   $("#standbyCmd_LC3").text(data.standbyCmd_LC3);
-   $("#modeLR_LC3").text(data.modeLR_LC3);
+  /*LC3************************************************* */
+  $("#onlineNum_LC3").text(data.onlineNum_LC3);
+  $("#ratedP_LC3").text(data.ratedP_LC3);
+  $("#activePower_LC3").text(data.activePower_LC3);
+  $("#reactivePower_LC3").text(data.reactivePower_LC3);
+  $("#today_E_chg_LC3").text(data.today_E_chg_LC3);
+  $("#today_E_dcg_LC3").text(data.today_E_dcg_LC3);
+  $("#tot_E_chg_LC3").text(data.tot_E_chg_LC3);
+  $("#tot_E_dcg_LC3").text(data.tot_E_dcg_LC3);
+  /*告警/故障********************************************** */
+  if (data.alarm_PCS3_1 > 0) {
+    classAdd("#alarm_PCS3-1", "setToClose");
+  } else {
+    classRemove("#alarm_PCS3-1", "setToClose");
+  }
+  if (data.alarm_PCS3_2 > 0) {
+    classAdd("#alarm_PCS3-2", "setToClose");
+  } else {
+    classRemove("#alarm_PCS3-2", "setToClose");
+  }
+  if (data.fault_PCS3_1 > 0) {
+    classAdd("#fault_PCS3-1", "setToClose");
+  } else {
+    classRemove("#fault_PCS3-1", "setToClose");
+  }
+  if (data.fault_PCS3_2 > 0) {
+    classAdd("#fault_PCS3-2", "setToClose");
+  } else {
+    classRemove("#fault_PCS3-2", "setToClose");
+  }
 
-    /*LC4************************************************* */
+  $("#modeActPas_LC3").text(data.modeActPas_LC3);
+  $("#modeQctrl_LC3").text(data.modeQctrl_LC3);
+  $("#standbyCmd_LC3").text(data.standbyCmd_LC3);
+  $("#modeLR_LC3").text(data.modeLR_LC3);
+
+  /*LC4************************************************* */
   $("#onlineNum_LC4").text(data.onlineNum_LC4);
   $("#ratedP_LC4").text(data.ratedP_LC4);
   $("#activePower_LC4").text(data.activePower_LC4);
