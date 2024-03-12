@@ -155,7 +155,7 @@ var dataset = [];
 
 async function updateTable() {
   
-
+  console.log(window.location.href+"/edit");
   dataset = await dataGet(window.location.href+"/edit"); //port改端口要改
   console.log(dataset);
 

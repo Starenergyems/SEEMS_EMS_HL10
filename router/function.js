@@ -142,6 +142,7 @@ function mapModeLR(input) {
 function mapPCSWorkingstatus(input1, input2) {
   // 檢查參數是否為 undefined
   if (input1 === undefined || input2 === undefined) {
+    return "undefined";
   }
 
   // 將參數轉換為二進制並填補為固定長度為32
@@ -262,7 +263,7 @@ function Scale_Data(rawData, scale, decPlace) {
 function Convert_UInt_to_revBitString(rawData, NumberOfDigit) {
   let revBitString = "";
 
-  if (rawData === null) {
+  if (rawData === null ) {
     for (i = 0; i < NumberOfDigit; i++) {
       revBitString += "#";
     }
@@ -270,7 +271,9 @@ function Convert_UInt_to_revBitString(rawData, NumberOfDigit) {
   }
 
   let rawBitString = rawData.toString(2);
-  let BitString = rawBitString.padStart(NumberOfDigit, "0").slice(-NumberOfDigit);
+  let BitString = rawBitString
+    .padStart(NumberOfDigit, "0")
+    .slice(-NumberOfDigit);
 
   for (i = 0; i < NumberOfDigit; i++) {
     revBitString += BitString[NumberOfDigit - 1 - i];
@@ -297,7 +300,8 @@ function Convert_UInt_to_BitString(rawData, NumberOfDigit) {
   return { bitString: BitString, num_ClosedBit: NumberOfClosedBit };
 }
 
-function mapWordStatus(rawData, mapTable) {                          // 待優化
+function mapWordStatus(rawData, mapTable) {
+  // 待優化
   let keysArray_MT = Object.keys(mapTable);
 
   for (i = 0; i < keysArray_MT.length; i++) {
@@ -309,7 +313,8 @@ function mapWordStatus(rawData, mapTable) {                          // 待優�
   return "Not found(" + rawData + ")";
 }
 
-function mapBitStatus(bitString, mapTable, NumberOfBit) {            // 待優化
+function mapBitStatus(bitString, mapTable, NumberOfBit) {
+  // 待優化
   if (NumberOfBit > bitString.length - 1) {
     return "bitNumber out of range";
   }
@@ -549,50 +554,70 @@ function checkValues(value1, value2, value3) {
     return 0;
   }
 }
+//電池總攬下的電池狀態
+// bit 0: First SOC calibrate tip clear[CMD]
+// bit 1: Second SOC calibrate tip clear[CMD]
+// bit 2: First SOC calibrate tip clear cancel[CMD]
+// bit 3: Second SOC calibrate tip clear cancel[CMD]
+// bit 8: Ready
+// bit 9: Idle
+// bit 10: Off-line
+// bit 12: Main switch off[CMD]
+// bit 13: Main switch on[CMD]
+// bit 14: Discharge mode
+// bit 15: Charge mode
 
-function workStatuschange(var1, var2, var3, var4) {
-  // 將每個變數轉換為固定16位的二進制字串
-  const binaryVar1 = var1.toString(2).padStart(16, "0");
-  const binaryVar2 = var2.toString(2).padStart(16, "0");
-  const binaryVar3 = var3.toString(2).padStart(16, "0");
-  const binaryVar4 = var4.toString(2).padStart(16, "0");
+function workStatuschange(var1, var2, var3, var4, var5, var6, var7) {
+  // 將變數轉換為二進制並固定長度為32
+  const binaryInputs = [
+    var1 != null
+      ? var1.toString(2).padStart(32, "0")
+      : "00000000000000000000000000000000",
+    var2 != null
+      ? var2.toString(2).padStart(32, "0")
+      : "00000000000000000000000000000000",
+    var3 != null
+      ? var3.toString(2).padStart(32, "0")
+      : "00000000000000000000000000000000",
+    var4 != null
+      ? var4.toString(2).padStart(32, "0")
+      : "00000000000000000000000000000000",
+    var5 != null
+      ? var5.toString(2).padStart(32, "0")
+      : "00000000000000000000000000000000",
+    var6 != null
+      ? var6.toString(2).padStart(32, "0")
+      : "00000000000000000000000000000000",
+    var7 != null
+      ? var7.toString(2).padStart(32, "0")
+      : "00000000000000000000000000000000",
+  ];
 
-  // 檢查每個位置上的位元是否只有一個1
-  const isValid =
-    countOnes(var1) === 1 &&
-    countOnes(var2) === 1 &&
-    countOnes(var3) === 1 &&
-    countOnes(var4) === 1;
+  // 初始化總和為0
+  let sum = 0;
 
-  if (isValid) {
-    // 檢查位置是否一致
-    const arePositionsEqual =
-      binaryVar1 === binaryVar2 &&
-      binaryVar1 === binaryVar3 &&
-      binaryVar1 === binaryVar4;
-
-    // 如果位置一致，返回位置號碼
-    if (arePositionsEqual) {
-      return parseInt(binaryVar1, 2);
+  // 檢查每個二進制輸入的第8和第13位是否為1
+  for (let i = 0; i < binaryInputs.length; i++) {
+    if (binaryInputs[i][31 - 8] === "1" && binaryInputs[i][31 - 13] === "1") {
+      sum += 1;
     }
   }
 
-  // 如果位置不一致或條件不滿足，返回 0
-  return "0";
-}
-
-// Example Usage:
-//const result = workStatuschange(1, 1, 1, 1);
-//console.log(result);
-
-function countOnes(value) {
-  let count = 0;
-  while (value) {
-    count += value & 1;
-    value >>= 1;
+  if (sum === 0) {
+    console.log("0");
+    return "停機";
+  } else if (sum === 7) {
+    console.log("7");
+    return "正常";
+  } else {
+    console.log("");
+    return "部分運作";
   }
-  return count;
 }
+
+// 測試函數
+// const result = workStatuschange(8448, 8448, 8448, 8448, 8448, 8448, 8448);
+// console.log(result); // 這將輸出符合條件的總和
 
 //******************************************************************************* */
 //側邊欄位
@@ -845,6 +870,44 @@ function mapEdReg_SS(input) {
     return "正常";
   }
 }
+
+//******************************************************************************* *///******************************************************************************* */
+
+function mapUPSwarning(inputs, checkbit) {
+  if (inputs === "" || inputs === null) {
+    return "inputisnull";
+  } else {
+    // 將 inputs 轉換為二進制
+    let binaryInput = "";
+    if (typeof inputs === "number") {
+      binaryInput = inputs.toString(2).padStart(32, "0"); // 將數字轉換為固定長度的二進制字符串
+    } else if (typeof inputs === "string") {
+      // 如果 inputs 是字符串，則將每個字符轉換為二進制
+      for (let i = 0; i < inputs.length; i++) {
+        const charCode = inputs.charCodeAt(i);
+        const binaryCharCode = charCode.toString(2);
+        binaryInput += binaryCharCode.padStart(32, "0"); // 補齊為8位二進制
+      }
+    } else {
+      //console.log("invalidinput");
+      return "invalidinput"; // 如果 inputs 不是字符串也不是數字，則返回無效輸入
+    }
+
+    //console.log("binaryInput:" + binaryInput);
+
+    // 檢查二進制轉換後的 inputs 中，與 checkbit 位置對應的數字是否為 1
+    let result = binaryInput[31 - checkbit] === "1" ? "1" : "0";
+
+    //console.log(result);
+    return result;
+  }
+}
+
+// mapUPSwarning(512, 9);
+// mapUPSwarning(1024, 10);
+// mapUPSwarning(10, 1);
+// mapUPSwarning(2, 1);
+
 //******************************************************************************* *///******************************************************************************* */
 
 module.exports = {
@@ -910,6 +973,8 @@ module.exports = {
   mapBMSPCSstatus,
   mapAvail_SS,
   mapEdReg_SS,
+  //****************** */
+  mapUPSwarning,
 };
 
 // //***************************************************************************** */
@@ -970,82 +1035,3 @@ const sysCtrl_2_MT = {
   13: { 0: "SOC", 1: "Volt" },
 };
 const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
-
-// let ab = Scale_Data(rawData, 0.01, 1);
-// console.log(ab);
-
-// let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
-// console.log(cd_BitString);
-
-// let ef = Convert_UInt_to_BitString(rawData, NumberOfDigit);
-// console.log(ef);
-// console.log(ef.bitString);
-// console.log(typeof ef.bitString);
-// console.log(ef.num_ClosedBit);
-// console.log(typeof ef.num_ClosedBit);
-
-// let gh = mapWordStatus(rawData, pcsCHGStatus_MT);
-// console.log(gh);
-
-// const ij = mapBitStatus(cd_BitString, sysCtrl_2_MT, 1);
-// console.log(ij);
-
-// const kl = getHighLowByte(rawData);
-// console.log(kl);
-// console.log(kl["hiByte"]);
-// console.log(kl.loByte);
-
-// const mn = Convert_unixTime_to_dateTime(rawData);
-// console.log(mn);
-
-// const E_G = 123;
-// const E_M = 987;
-// const E_k = 456;
-// const op = Calculate_BMS_energy(E_G, E_M, E_k);
-// console.log(op);
-
-// const qr = Calculate_CPM10_energy(E_G, E_M, E_k);
-// console.log(qr);
-
-// const st = Calculate_N1450_PF(rawData);
-// console.log(st);
-
-// const uv = Calculate_Tr_oilTemp(rawData);
-// console.log(uv);
-
-// const wx = Count_SpecificClosedBit(rawData, NumberOfDigit, pcsWorkStatus_spBitList);
-// console.log(wx);
-
-// const maxData = 276;
-// const minData = 256;
-// const yz = Determine_BGC_of_TcMaxDiff(maxData, minData);
-// console.log(yz);
-
-// const ab_2 = Determine_DL_of_RackHWStatus(rawData);
-// console.log(ab_2);
-
-// const cd_2 = Determine_DL_of_upsStatus2(rawData);
-// console.log(cd_2);
-
-// const ef_2 = Determine_DL_of_CommDevice(rawData);
-// console.log(ef_2);
-
-// let CommLC = 0;
-// let CommPCSBMS = "1";
-// const ef_2 = Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS);
-// console.log(ef_2);
-
-// const rawData1 = 65;
-// const rawData2 = 0;
-// const gh_2 = Determine_statusL_of_recloser(rawData1, rawData2);
-// console.log(gh_2);
-
-// const data3 = "10011";
-// const ij_2 = Determine_statusL_of_VCB(data3[0], data3[1], data3[2]);
-// console.log(ij_2);
-// const kl_2 = Determine_statusL_of_ACB(data3[3], data3[4]);
-// console.log(kl_2);
-
-// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
-
-//-------------------------------------------------------------------------------------------------

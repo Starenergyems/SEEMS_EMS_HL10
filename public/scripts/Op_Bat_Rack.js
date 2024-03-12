@@ -8,7 +8,7 @@ $(document).ready(function () {
   updateData();
 });
 
-setInterval(updateData, 5000);
+setInterval(updateData, 1000);
 
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";

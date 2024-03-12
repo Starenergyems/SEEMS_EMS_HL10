@@ -9,7 +9,7 @@ $(document).ready(function () {
   updateData();
 });
 
-setInterval(updateData, 5000);//5秒刷新一次
+setInterval(updateData, 1000);//5秒刷新一次
 
 
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");

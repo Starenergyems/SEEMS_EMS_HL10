@@ -23,7 +23,7 @@ $(document).ready(function () {
   updateData();
 });
 
-setInterval(updateData, 5000);
+setInterval(updateData, 1000);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 let minLimit;

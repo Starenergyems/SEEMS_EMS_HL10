@@ -1,5 +1,10 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
+var permission = "manager";
+$(document).ready(function () {
+  console.log("start reading js");
+  classAdd("#nB_Mode","default_nB");
+});
 
 
 const scheduleSW = document.querySelector(".scheduleSwitch #switch_SchdOnOff");

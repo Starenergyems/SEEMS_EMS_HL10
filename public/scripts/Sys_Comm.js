@@ -6,7 +6,7 @@ $(document).ready(function () {
   updateData();
 });
 
-setInterval(updateData, 5000);
+setInterval(updateData, 1000);
 
 async function updateData() {                                   // 更新資料 ajax
   var router = window.location.href + "/data";

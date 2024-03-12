@@ -7,8 +7,8 @@ $(document).ready(function () {
   updateData();
 });
 
-// 5秒更新一次
-setInterval(updateData, 5000);
+// 1秒更新一次
+setInterval(updateData, 1000);
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 

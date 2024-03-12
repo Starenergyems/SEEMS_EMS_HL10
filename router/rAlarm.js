@@ -1,5 +1,5 @@
 // testforalarm.js
-const port = 3005;
+//const port = 3005;
 const express = require("express");
 const path = require("path");
 const config = require("./config");
@@ -163,16 +163,16 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 
 //////////////////////////////////////
 //即時告警
-app.get("/alarm", (req, res) => {
-  res.render("Alm_RealTime");
+router.get("/alarm", (req, res) => {
+  res.redirect("/alarm/realtime");
 });
 
-app.get("/alarm/realtime", (req, res) => {
+router.get("/alarm/realtime", (req, res) => {
   // num與fun
   res.render("Alm_RealTime");
 });
 
-app.post("/alarm/realtime/edit", (req, res) => {
+router.post("/alarm/realtime/edit", (req, res) => {
   alarm_db_event_lock = true;
 
   let promise = true;
@@ -265,7 +265,7 @@ app.post("/alarm/realtime/edit", (req, res) => {
 });
 
 //傳數值到前端的表格中
-app.get("/alarm/realtime/edit", (req, res) => {
+router.get("/alarm/realtime/edit", (req, res) => {
   Promise.resolve("Init")
     .then(() => {
       alarmnanoDb
@@ -336,17 +336,17 @@ app.get("/alarm/realtime/edit", (req, res) => {
 });
 /********************************************************** */
 //歷史告警
-app.get("/alarm/history", (req, res) => {
+router.get("/alarm/history", (req, res) => {
   // num與fun
   res.render("Alm_History");
 });
 
 var hisalarm_db_array = [];
-app.get("/alarm/history/edit", (req, res) => {
+router.get("/alarm/history/edit", (req, res) => {
     res.send(hisalarm_db_array);
 });
 
-app.post("/alarm/history/edit", (req, res) => {
+router.post("/alarm/history/edit", (req, res) => {
   const { input1, input2, input3, input4} = req.body;
   const From_date = input1;
   const From_time = input2;
@@ -494,8 +494,8 @@ setInterval(alarm_processor_call, 3000);
 
 module.exports = router;
 
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });
 
 //************************************* */
