@@ -320,47 +320,47 @@ function show_info_EnvironAlm(abc) {
   window_info_EnvironAlm.classList.add("appear");
 }
 
-const OpenEnvironAlm_1_1 = document.querySelector("#openEnvironAlm_1-1");
-OpenEnvironAlm_1_1.addEventListener("click", function () {
-  show_info_EnvironAlm("1-1");
-  getDataenv(1);
-});
+// const OpenEnvironAlm_1_1 = document.querySelector("#openEnvironAlm_1-1");
+// OpenEnvironAlm_1_1.addEventListener("click", function () {
+//   show_info_EnvironAlm("1-1");
+//   getDataenv(1);
+// });
 
-const OpenEnvironAlm_1_2 = document.querySelector("#openEnvironAlm_1-2");
-OpenEnvironAlm_1_2.addEventListener("click", function () {
-  show_info_EnvironAlm("1-2");
-  getDataenv(2);
-});
+// const OpenEnvironAlm_1_2 = document.querySelector("#openEnvironAlm_1-2");
+// OpenEnvironAlm_1_2.addEventListener("click", function () {
+//   show_info_EnvironAlm("1-2");
+//   getDataenv(2);
+// });
 
-const OpenEnvironAlm_2_1 = document.querySelector("#openEnvironAlm_2-1");
-OpenEnvironAlm_2_1.addEventListener("click", function () {
-  show_info_EnvironAlm("2-1");
-  getDataenv(3);
-});
+// const OpenEnvironAlm_2_1 = document.querySelector("#openEnvironAlm_2-1");
+// OpenEnvironAlm_2_1.addEventListener("click", function () {
+//   show_info_EnvironAlm("2-1");
+//   getDataenv(3);
+// });
 
-const OpenEnvironAlm_2_2 = document.querySelector("#openEnvironAlm_2-2");
-OpenEnvironAlm_2_2.addEventListener("click", function () {
-  show_info_EnvironAlm("2-2");
-  getDataenv(4);
-});
+// const OpenEnvironAlm_2_2 = document.querySelector("#openEnvironAlm_2-2");
+// OpenEnvironAlm_2_2.addEventListener("click", function () {
+//   show_info_EnvironAlm("2-2");
+//   getDataenv(4);
+// });
 
-const OpenEnvironAlm_3_1 = document.querySelector("#openEnvironAlm_3-1");
-OpenEnvironAlm_3_1.addEventListener("click", function () {
-  show_info_EnvironAlm("3-1");
-  getDataenv(5);
-});
+// const OpenEnvironAlm_3_1 = document.querySelector("#openEnvironAlm_3-1");
+// OpenEnvironAlm_3_1.addEventListener("click", function () {
+//   show_info_EnvironAlm("3-1");
+//   getDataenv(5);
+// });
 
-const OpenEnvironAlm_3_2 = document.querySelector("#openEnvironAlm_3-2");
-OpenEnvironAlm_3_2.addEventListener("click", function () {
-  show_info_EnvironAlm("3-2");
-  getDataenv(6);
-});
+// const OpenEnvironAlm_3_2 = document.querySelector("#openEnvironAlm_3-2");
+// OpenEnvironAlm_3_2.addEventListener("click", function () {
+//   show_info_EnvironAlm("3-2");
+//   getDataenv(6);
+// });
 
-const OpenEnvironAlm_4_1 = document.querySelector("#openEnvironAlm_4-1");
-OpenEnvironAlm_4_1.addEventListener("click", function () {
-  show_info_EnvironAlm("4-1");
-  getDataenv(7);
-});
+// const OpenEnvironAlm_4_1 = document.querySelector("#openEnvironAlm_4-1");
+// OpenEnvironAlm_4_1.addEventListener("click", function () {
+//   show_info_EnvironAlm("4-1");
+//   getDataenv(7);
+// });
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -457,361 +457,577 @@ async function updateData() { //更新資料ajax
   $('#acu_2_Status_4-1').text(data.acu_2_Status_4_1);
   $('#acu_2_Temp_4-1').text(data.acu_2_Temp_4_1);
 
+  /*控制式空調#1******************************************************** */
+  $('#ctrl_hvac_1_open').text(data.ctrl_hvac_1_open);
+  $('#ctrl_hvac_1_mode').text(data.ctrl_hvac_1_mode);
+  $('#ctrl_hvac_1_fanSpd').text(data.ctrl_hvac_1_fanSpd);
+  $('#ctrl_hvac_1_tempSet').text(data.ctrl_hvac_1_tempSet);
+  $('#ctrl_hvac_1_temp').text(data.ctrl_hvac_1_temp);
+  $('#ctrl_hvac_1_humid').text(data.ctrl_hvac_1_humid);
+  $('#ctrl_hvac_1_error').text(data.ctrl_hvac_1_error);
+
+    /*控制式空調#2******************************************************** */
+    $('#ctrl_hvac_2_open').text(data.ctrl_hvac_2_open);
+    $('#ctrl_hvac_2_mode').text(data.ctrl_hvac_2_mode);
+    $('#ctrl_hvac_2_fanSpd').text(data.ctrl_hvac_2_fanSpd);
+    $('#ctrl_hvac_2_tempSet').text(data.ctrl_hvac_2_tempSet);
+    $('#ctrl_hvac_2_temp').text(data.ctrl_hvac_2_temp);
+    $('#ctrl_hvac_2_humid').text(data.ctrl_hvac_2_humid);
+    $('#ctrl_hvac_2_error').text(data.ctrl_hvac_2_error);
+
+    /*UPS_MVCB****************************************************************** */
+    $('#ups_MVCB_volt').text(data.ups_MVCB_volt);
+    $('#ups_MVCB_temp').text(data.ups_MVCB_temp);
+    $('#ups_MVCB_status').text(data.ups_MVCB_status);
+    $('#ups_MVCB_power').text(data.ups_MVCB_power);
+
+    /*UPS_ACP****************************************************************** */
+    $('#ups_ACP_volt').text(data.ups_ACP_volt);
+    $('#ups_ACP_temp').text(data.ups_ACP_temp);
+    $('#ups_ACP_status').text(data.ups_ACP_status);
+    $('#ups_ACP_power').text(data.ups_ACP_power);
+
+    /*UPS_EMS************************************************************************ */
+    $('#ups_EMS_SOC').text(data.ups_EMS_SOC);
+    $('#ups_EMS_timeLeft').text(data.ups_EMS_timeLeft);
+    $('#ups_EMS_mode').text(data.ups_EMS_mode);
+    $('#ups_EMS_error').text(data.ups_EMS_error);
+
+    if (data.ups_EMS_408161_bit9 > 0) {
+      classAdd("#ups_EMS_408161_bit9", "setToClose");
+      classRemove("#ups_EMS_408161_bit9", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408161_bit9", "setToGreen");
+      classRemove("#ups_EMS_408161_bit9", "setToClose");
+    }
+
+    if (data.ups_EMS_408161_bit11 > 0) {
+      classAdd("#ups_EMS_408161_bit11", "setToClose");
+      classRemove("#ups_EMS_408161_bit11", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408161_bit11", "setToGreen");
+      classRemove("#ups_EMS_408161_bit11", "setToClose");
+    }
+
+    if (data.ups_EMS_408161_bit12 > 0) {
+      classAdd("#ups_EMS_408161_bit12", "setToClose");
+      classRemove("#ups_EMS_408161_bit12", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408161_bit12", "setToGreen");
+      classRemove("#ups_EMS_408161_bit12", "setToClose");
+    }
+
+    if (data.ups_EMS_408162_bit6 > 0) {
+      classAdd("#ups_EMS_408162_bit6", "setToClose");
+      classRemove("#ups_EMS_408162_bit6", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit6", "setToGreen");
+      classRemove("#ups_EMS_408162_bit6", "setToClose");
+    }
+    
+    if (data.ups_EMS_408162_bit8 > 0) {
+      classAdd("#ups_EMS_408162_bit8", "setToClose");
+      classRemove("#ups_EMS_408162_bit8", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit8", "setToGreen");
+      classRemove("#ups_EMS_408162_bit8", "setToClose");
+    }
+
+    if (data.ups_EMS_408162_bit10 > 0) {
+      classAdd("#ups_EMS_408162_bit10", "setToClose");
+      classRemove("#ups_EMS_408162_bit10", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit10", "setToGreen");
+      classRemove("#ups_EMS_408162_bit10", "setToClose");
+    }
+
+    if (data.ups_EMS_408162_bit11 > 0) {
+      classAdd("#ups_EMS_408162_bit11", "setToClose");
+      classRemove("#ups_EMS_408162_bit11", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit11", "setToGreen");
+      classRemove("#ups_EMS_408162_bit11", "setToClose");
+    }
+
+    if (data.ups_EMS_408162_bit12 > 0) {
+      classAdd("#ups_EMS_408162_bit12", "setToClose");
+      classRemove("#ups_EMS_408162_bit12", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit12", "setToGreen");
+      classRemove("#ups_EMS_408162_bit12", "setToClose");
+    }
+
+    if (data.ups_EMS_408162_bit13 > 0) {
+      classAdd("#ups_EMS_408162_bit13", "setToClose");
+      classRemove("#ups_EMS_408162_bit13", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit13", "setToGreen");
+      classRemove("#ups_EMS_408162_bit13", "setToClose");
+    }
+
+    if (data.ups_EMS_408162_bit14 > 0) {
+      classAdd("#ups_EMS_408162_bit14", "setToClose");
+      classRemove("#ups_EMS_408162_bit14", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit14", "setToGreen");
+      classRemove("#ups_EMS_408162_bit14", "setToClose");
+    }
+
+    if (data.ups_EMS_408162_bit15 > 0) {
+      classAdd("#ups_EMS_408162_bit15", "setToClose");
+      classRemove("#ups_EMS_408162_bit15", "setToGreen");
+    } else {
+      classAdd("#ups_EMS_408162_bit15", "setToGreen");
+      classRemove("#ups_EMS_408162_bit15", "setToClose");
+    }
+  /*UPS_CMS********************************************************* */
+  $('#ups_CMS_SOC').text(data.ups_CMS_SOC);
+  $('#ups_CMS_timeLeft').text(data.ups_CMS_timeLeft);
+  $('#ups_CMS_mode').text(data.ups_CMS_mode);
+  $('#ups_CMS_error').text(data.ups_CMS_error);
+
+  if (data.ups_CMS_408161_bit9 > 0) {
+    classAdd("#ups_CMS_408161_bit9", "setToClose");
+    classRemove("#ups_CMS_408161_bit9", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408161_bit9", "setToGreen");
+    classRemove("#ups_CMS_408161_bit9", "setToClose");
+  }
+
+  if (data.ups_CMS_408161_bit11 > 0) {
+    classAdd("#ups_CMS_408161_bit11", "setToClose");
+    classRemove("#ups_CMS_408161_bit11", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408161_bit11", "setToGreen");
+    classRemove("#ups_CMS_408161_bit11", "setToClose");
+  }
+
+  if (data.ups_CMS_408161_bit12 > 0) {
+    classAdd("#ups_CMS_408161_bit12", "setToClose");
+    classRemove("#ups_CMS_408161_bit12", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408161_bit12", "setToGreen");
+    classRemove("#ups_CMS_408161_bit12", "setToClose");
+  }
+
+  if (data.ups_CMS_408162_bit6 > 0) {
+    classAdd("#ups_CMS_408162_bit6", "setToClose");
+    classRemove("#ups_CMS_408162_bit6", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit6", "setToGreen");
+    classRemove("#ups_CMS_408162_bit6", "setToClose");
+  }
+  
+  if (data.ups_CMS_408162_bit8 > 0) {
+    classAdd("#ups_CMS_408162_bit8", "setToClose");
+    classRemove("#ups_CMS_408162_bit8", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit8", "setToGreen");
+    classRemove("#ups_CMS_408162_bit8", "setToClose");
+  }
+
+  if (data.ups_CMS_408162_bit10 > 0) {
+    classAdd("#ups_CMS_408162_bit10", "setToClose");
+    classRemove("#ups_CMS_408162_bit10", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit10", "setToGreen");
+    classRemove("#ups_CMS_408162_bit10", "setToClose");
+  }
+
+  if (data.ups_CMS_408162_bit11 > 0) {
+    classAdd("#ups_CMS_408162_bit11", "setToClose");
+    classRemove("#ups_CMS_408162_bit11", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit11", "setToGreen");
+    classRemove("#ups_CMS_408162_bit11", "setToClose");
+  }
+
+  if (data.ups_CMS_408162_bit12 > 0) {
+    classAdd("#ups_CMS_408162_bit12", "setToClose");
+    classRemove("#ups_CMS_408162_bit12", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit12", "setToGreen");
+    classRemove("#ups_CMS_408162_bit12", "setToClose");
+  }
+
+  if (data.ups_CMS_408162_bit13 > 0) {
+    classAdd("#ups_CMS_408162_bit13", "setToClose");
+    classRemove("#ups_CMS_408162_bit13", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit13", "setToGreen");
+    classRemove("#ups_CMS_408162_bit13", "setToClose");
+  }
+
+  if (data.ups_CMS_408162_bit14 > 0) {
+    classAdd("#ups_CMS_408162_bit14", "setToClose");
+    classRemove("#ups_CMS_408162_bit14", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit14", "setToGreen");
+    classRemove("#ups_CMS_408162_bit14", "setToClose");
+  }
+
+  if (data.ups_CMS_408162_bit15 > 0) {
+    classAdd("#ups_CMS_408162_bit15", "setToClose");
+    classRemove("#ups_CMS_408162_bit15", "setToGreen");
+  } else {
+    classAdd("#ups_CMS_408162_bit15", "setToGreen");
+    classRemove("#ups_CMS_408162_bit15", "setToClose");
+  }
   /*空調#3************************************************* */
-  $('#acu_3_Status_1-1').text(data.acu_3_Status_1_1);
-  $('#acu_3_Temp_1-1').text(data.acu_3_Temp_1_1);
+//   $('#acu_3_Status_1-1').text(data.acu_3_Status_1_1);
+//   $('#acu_3_Temp_1-1').text(data.acu_3_Temp_1_1);
 
-  $('#acu_3_Status_1-2').text(data.acu_3_Status_1_2);
-  $('#acu_3_Temp_1-2').text(data.acu_3_Temp_1_2);
+//   $('#acu_3_Status_1-2').text(data.acu_3_Status_1_2);
+//   $('#acu_3_Temp_1-2').text(data.acu_3_Temp_1_2);
 
-  $('#acu_3_Status_2-1').text(data.acu_3_Status_2_1);
-  $('#acu_3_Temp_2-1').text(data.acu_3_Temp_2_1);
+//   $('#acu_3_Status_2-1').text(data.acu_3_Status_2_1);
+//   $('#acu_3_Temp_2-1').text(data.acu_3_Temp_2_1);
 
-  $('#acu_3_Status_2-2').text(data.acu_3_Status_2_2);
-  $('#acu_3_Temp_2-2').text(data.acu_3_Temp_2_2);
+//   $('#acu_3_Status_2-2').text(data.acu_3_Status_2_2);
+//   $('#acu_3_Temp_2-2').text(data.acu_3_Temp_2_2);
 
-  $('#acu_3_Status_3-1').text(data.acu_3_Status_3_1);
-  $('#acu_3_Temp_3-1').text(data.acu_3_Temp_3_1);
+//   $('#acu_3_Status_3-1').text(data.acu_3_Status_3_1);
+//   $('#acu_3_Temp_3-1').text(data.acu_3_Temp_3_1);
 
-  $('#acu_3_Status_3-2').text(data.acu_3_Status_3_2);
-  $('#acu_3_Temp_3-2').text(data.acu_3_Temp_3_2);
+//   $('#acu_3_Status_3-2').text(data.acu_3_Status_3_2);
+//   $('#acu_3_Temp_3-2').text(data.acu_3_Temp_3_2);
 
-  $('#acu_3_Status_4-1').text(data.acu_3_Status_4_1);
-  $('#acu_3_Temp_4-1').text(data.acu_3_Temp_4_1);
+//   $('#acu_3_Status_4-1').text(data.acu_3_Status_4_1);
+//   $('#acu_3_Temp_4-1').text(data.acu_3_Temp_4_1);
 
-  /*空調#4************************************************* */
-  $('#acu_4_Status_1-1').text(data.acu_4_Status_1_1);
-  $('#acu_4_Temp_1-1').text(data.acu_4_Temp_1_1);
+//   /*空調#4************************************************* */
+//   $('#acu_4_Status_1-1').text(data.acu_4_Status_1_1);
+//   $('#acu_4_Temp_1-1').text(data.acu_4_Temp_1_1);
 
-  $('#acu_4_Status_1-2').text(data.acu_4_Status_1_2);
-  $('#acu_4_Temp_1-2').text(data.acu_4_Temp_1_2);
+//   $('#acu_4_Status_1-2').text(data.acu_4_Status_1_2);
+//   $('#acu_4_Temp_1-2').text(data.acu_4_Temp_1_2);
 
-  $('#acu_4_Status_2-1').text(data.acu_4_Status_2_1);
-  $('#acu_4_Temp_2-1').text(data.acu_4_Temp_2_1);
-
-  $('#acu_4_Status_2-2').text(data.acu_4_Status_2_2);
-  $('#acu_4_Temp_2-2').text(data.acu_4_Temp_2_2);
-
-  $('#acu_4_Status_3-1').text(data.acu_4_Status_3_1);
-  $('#acu_4_Temp_3-1').text(data.acu_4_Temp_3_1);
-
-  $('#acu_4_Status_3-2').text(data.acu_4_Status_3_2);
-  $('#acu_4_Temp_3-2').text(data.acu_4_Temp_3_2);
-
-  $('#acu_4_Status_4-1').text(data.acu_4_Status_4_1);
-  $('#acu_4_Temp_4-1').text(data.acu_4_Temp_4_1);
-
-  /*溫溼度計#1************************************************************* */
-  $('#th_1_Temp_1-1').text(data.th_1_Temp_1_1);
-  $('#th_1_Humidity_1-1').text(data.th_1_Humidity_1_1);
-
-  $('#th_1_Temp_1-2').text(data.th_1_Temp_1_2);
-  $('#th_1_Humidity_1-2').text(data.th_1_Humidity_1_2);
-
-  $('#th_1_Temp_2-1').text(data.th_1_Temp_2_1);
-  $('#th_1_Humidity_2-1').text(data.th_1_Humidity_2_1);
-
-  $('#th_1_Temp_2-2').text(data.th_1_Temp_2_2);
-  $('#th_1_Humidity_2-2').text(data.th_1_Humidity_2_2);
-
-  $('#th_1_Temp_3-1').text(data.th_1_Temp_3_1);
-  $('#th_1_Humidity_3-1').text(data.th_1_Humidity_3_1);
-
-  $('#th_1_Temp_3-2').text(data.th_1_Temp_3_2);
-  $('#th_1_Humidity_3-2').text(data.th_1_Humidity_3_2);
-
-  $('#th_1_Temp_4-1').text(data.th_1_Temp_4_1);
-  $('#th_1_Humidity_4-1').text(data.th_1_Humidity_4_1);
-
-  /*溫溼度計#2************************************************************* */
-  $('#th_2_Temp_1-1').text(data.th_2_Temp_1_1);
-  $('#th_2_Humidity_1-1').text(data.th_2_Humidity_1_1);
-
-  $('#th_2_Temp_1-2').text(data.th_2_Temp_1_2);
-  $('#th_2_Humidity_1-2').text(data.th_2_Humidity_1_2);
-
-  $('#th_2_Temp_2-1').text(data.th_2_Temp_2_1);
-  $('#th_2_Humidity_2-1').text(data.th_2_Humidity_2_1);
-
-  $('#th_2_Temp_2-2').text(data.th_2_Temp_2_2);
-  $('#th_2_Humidity_2-2').text(data.th_2_Humidity_2_2);
-
-  $('#th_2_Temp_3-1').text(data.th_2_Temp_3_1);
-  $('#th_2_Humidity_3-1').text(data.th_2_Humidity_3_1);
-
-  $('#th_2_Temp_3-2').text(data.th_2_Temp_3_2);
-  $('#th_2_Humidity_3-2').text(data.th_2_Humidity_3_2);
-
-  $('#th_2_Temp_4-1').text(data.th_2_Temp_4_1);
-  $('#th_2_Humidity_4-1').text(data.th_2_Humidity_4_1);
-
-  /*UPS模式*********************************************************** */
-  $('#upsMode_1-1').text(data.upsMode_1_1);
-  $('#upsMode_1-2').text(data.upsMode_1_2);
-  $('#upsMode_2-1').text(data.upsMode_2_1);
-  $('#upsMode_2-2').text(data.upsMode_2_2);
-  $('#upsMode_3-1').text(data.upsMode_3_1);
-  $('#upsMode_3-2').text(data.upsMode_3_2);
-  $('#upsMode_4-1').text(data.upsMode_4_1);
-
-  /*UPS輸出負載*********************************************************** */
-  $('#upsLoad_1-1').text(data.upsLoad_1_1);
-  $('#upsLoad_1-2').text(data.upsLoad_1_2);
-  $('#upsLoad_2-1').text(data.upsLoad_2_1);
-  $('#upsLoad_2-2').text(data.upsLoad_2_2);
-  $('#upsLoad_3-1').text(data.upsLoad_3_1);
-  $('#upsLoad_3-2').text(data.upsLoad_3_2);
-  $('#upsLoad_4-1').text(data.upsLoad_4_1);
-
-  /*UPS輸出電壓*********************************************************** */
-  $('#upsVout_1-1').text(data.upsVout_1_1);
-  $('#upsVout_1-2').text(data.upsVout_1_2);
-  $('#upsVout_2-1').text(data.upsVout_2_1);
-  $('#upsVout_2-2').text(data.upsVout_2_2);
-  $('#upsVout_3-1').text(data.upsVout_3_1);
-  $('#upsVout_3-2').text(data.upsVout_3_2);
-  $('#upsVout_4-1').text(data.upsVout_4_1);
-
-  /*UPS輸出電流*********************************************************** */
-  $('#upsIout_1-1').text(data.upsIout_1_1);
-  $('#upsIout_1-2').text(data.upsIout_1_2);
-  $('#upsIout_2-1').text(data.upsIout_2_1);
-  $('#upsIout_2-2').text(data.upsIout_2_2);
-  $('#upsIout_3-1').text(data.upsIout_3_1);
-  $('#upsIout_3-2').text(data.upsIout_3_2);
-  $('#upsIout_4-1').text(data.upsIout_4_1);
-
-  /*UPS電池溫度*********************************************************** */
-  $('#upsTemp_1-1').text(data.upsTemp_1_1);
-  $('#upsTemp_1-2').text(data.upsTemp_1_2);
-  $('#upsTemp_2-1').text(data.upsTemp_2_1);
-  $('#upsTemp_2-2').text(data.upsTemp_2_2);
-  $('#upsTemp_3-1').text(data.upsTemp_3_1);
-  $('#upsTemp_3-2').text(data.upsTemp_3_2);
-  $('#upsTemp_4-1').text(data.upsTemp_4_1);
-
-  /*UPS SOC*********************************************************** */
-  $('#upsSOC_1-1').text(data.upsSOC_1_1);
-  $('#upsSOC_1-2').text(data.upsSOC_1_2);
-  $('#upsSOC_2-1').text(data.upsSOC_2_1);
-  $('#upsSOC_2-2').text(data.upsSOC_2_2);
-  $('#upsSOC_3-1').text(data.upsSOC_3_1);
-  $('#upsSOC_3-2').text(data.upsSOC_3_2);
-  $('#upsSOC_4-1').text(data.upsSOC_4_1);
-
-  /*UPS狀態1***************************************************************** */
-  if (data.upsStatus1_1_1_rawD > 0) {
-    classAdd("#upsStatus1_1-1", "setToClose");
-  } else {
-    classRemove("#upsStatus1_1-1", "setToClose");
-  }
-
-  if (data.upsStatus1_1_2_rawD > 0) {
-    classAdd("#upsStatus1_1-2", "setToClose");
-  } else {
-    classRemove("#upsStatus1_1-2", "setToClose");
-  }
-
-  if (data.upsStatus1_2_1_rawD > 0) {
-    classAdd("#upsStatus1_2-1", "setToClose");
-  } else {
-    classRemove("#upsStatus1_2-1", "setToClose");
-  }
-
-  if (data.upsStatus1_2_2_rawD > 0) {
-    classAdd("#upsStatus1_2-2", "setToClose");
-  } else {
-    classRemove("#upsStatus1_2-2", "setToClose");
-  }
-
-  if (data.upsStatus1_3_1_rawD > 0) {
-    classAdd("#upsStatus1_3-1", "setToClose");
-  } else {
-    classRemove("#upsStatus1_3-1", "setToClose");
-  }
-
-  if (data.upsStatus1_3_2_rawD > 0) {
-    classAdd("#upsStatus1_3-2", "setToClose");
-  } else {
-    classRemove("#upsStatus1_3-2", "setToClose");
-  }
-
-  if (data.upsStatus1_4_1_rawD > 0) {
-    classAdd("#upsStatus1_4-1", "setToClose");
-  } else {
-    classRemove("#upsStatus1_4-1", "setToClose");
-  }
-
-  /*UPS狀態2***************************************************************** */
-  //ejs沒有class????????
-  if (data.upsStatus2_1_1_rawD > 0) {
-    classAdd("#upsStatus2_1-1", "setToClose");
-  } else {
-    classRemove("#upsStatus2_1-1", "setToClose");
-  }
-
-  if (data.upsStatus2_1_2_rawD > 0) {
-    classAdd("#upsStatus2_1-2", "setToClose");
-  } else {
-    classRemove("#upsStatus2_1-2", "setToClose");
-  }
-
-  if (data.upsStatus2_2_1_rawD > 0) {
-    classAdd("#upsStatus2_2-1", "setToClose");
-  } else {
-    classRemove("#upsStatus2_2-1", "setToClose");
-  }
-
-  if (data.upsStatus2_2_2_rawD > 0) {
-    classAdd("#upsStatus2_2-2", "setToClose");
-  } else {
-    classRemove("#upsStatus2_2-2", "setToClose");
-  }
-
-  if (data.upsStatus2_3_1_rawD > 0) {
-    classAdd("#upsStatus2_3-1", "setToClose");
-  } else {
-    classRemove("#upsStatus2_3-1", "setToClose");
-  }
-
-  if (data.upsStatus2_3_2_rawD > 0) {
-    classAdd("#upsStatus2_3-2", "setToClose");
-  } else {
-    classRemove("#upsStatus2_3-2", "setToClose");
-  }
-
-  if (data.upsStatus2_4_1_rawD > 0) {
-    classAdd("#upsStatus2_4-1", "setToClose");
-  } else {
-    classRemove("#upsStatus2_4-1", "setToClose");
-  }
-
-  /*BSC告警******************************************************* */
-  if (data.bscAlarm_1_1_rawD > 0) {
-    classAdd("#bscAlarm_1-1", "setToClose");
-  } else {
-    classRemove("#bscAlarm_1-1", "setToClose");
-  }
-
-  if (data.bscAlarm_1_2_rawD > 0) {
-    classAdd("#bscAlarm_1-2", "setToClose");
-  } else {
-    classRemove("#bscAlarm_1-2", "setToClose");
-  }
-
-  if (data.bscAlarm_2_1_rawD > 0) {
-    classAdd("#bscAlarm_2-1", "setToClose");
-  } else {
-    classRemove("#bscAlarm_2-1", "setToClose");
-  }
-
-  if (data.bscAlarm_2_2_rawD > 0) {
-    classAdd("#bscAlarm_2-2", "setToClose");
-  } else {
-    classRemove("#bscAlarm_2-2", "setToClose");
-  }
-
-  if (data.bscAlarm_3_1_rawD > 0) {
-    classAdd("#bscAlarm_3-1", "setToClose");
-  } else {
-    classRemove("#bscAlarm_3-1", "setToClose");
-  }
-
-  if (data.bscAlarm_3_2_rawD > 0) {
-    classAdd("#bscAlarm_3-2", "setToClose");
-  } else {
-    classRemove("#bscAlarm_3-2", "setToClose");
-  }
-
-  if (data.bscAlarm_4_1_rawD > 0) {
-    classAdd("#bscAlarm_4-1", "setToClose");
-  } else {
-    classRemove("#bscAlarm_4-1", "setToClose");
-  }
-
-  /*BSC故障******************************************************* */
-  if (data.bscFault_1_1_rawD > 0) {
-    classAdd("#bscFault_1-1", "setToClose");
-  } else {
-    classRemove("#bscFault_1-1", "setToClose");
-  }
-
-  if (data.bscFault_1_2_rawD > 0) {
-    classAdd("#bscFault_1-2", "setToClose");
-  } else {
-    classRemove("#bscFault_1-2", "setToClose");
-  }
-
-  if (data.bscFault_2_1_rawD > 0) {
-    classAdd("#bscFault_2-1", "setToClose");
-  } else {
-    classRemove("#bscFault_2-1", "setToClose");
-  }
-
-  if (data.bscFault_2_2_rawD > 0) {
-    classAdd("#bscFault_2-2", "setToClose");
-  } else {
-    classRemove("#bscFault_2-2", "setToClose");
-  }
-
-  if (data.bscFault_3_1_rawD > 0) {
-    classAdd("#bscFault_3-1", "setToClose");
-  } else {
-    classRemove("#bscFault_3-1", "setToClose");
-  }
-
-  if (data.bscFault_3_2_rawD > 0) {
-    classAdd("#bscFault_3-2", "setToClose");
-  } else {
-    classRemove("#bscFault_3-2", "setToClose");
-  }
-
-  if (data.bscFault_4_1_rawD > 0) {
-    classAdd("#bscFault_4-1", "setToClose");
-  } else {
-    classRemove("#bscFault_4-1", "setToClose");
-  }
-
-  /*消防狀態******************************************************* */
-  if (data.ffsStatus_1_1_rawD > 0) {
-    classAdd("#ffsStatus_1-1", "setToClose");
-  } else {
-    classRemove("#ffsStatus_1-1", "setToClose");
-  }
-
-  if (data.ffsStatus_1_2_rawD > 0) {
-    classAdd("#ffsStatus_1-2", "setToClose");
-  } else {
-    classRemove("#ffsStatus_1-2", "setToClose");
-  }
-
-  if (data.ffsStatus_2_1_rawD > 0) {
-    classAdd("#ffsStatus_2-1", "setToClose");
-  } else {
-    classRemove("#ffsStatus_2-1", "setToClose");
-  }
-
-  if (data.ffsStatus_2_2_rawD > 0) {
-    classAdd("#ffsStatus_2-2", "setToClose");
-  } else {
-    classRemove("#ffsStatus_2-2", "setToClose");
-  }
-
-  if (data.ffsStatus_3_1_rawD > 0) {
-    classAdd("#ffsStatus_3-1", "setToClose");
-  } else {
-    classRemove("#ffsStatus_3-1", "setToClose");
-  }
-
-  if (data.ffsStatus_3_2_rawD > 0) {
-    classAdd("#ffsStatus_3-2", "setToClose");
-  } else {
-    classRemove("#ffsStatus_3-2", "setToClose");
-  }
-
-  if (data.ffsStatus_4_1_rawD > 0) {
-    classAdd("#ffsStatus_4-1", "setToClose");
-  } else {
-    classRemove("#ffsStatus_4-1", "setToClose");
-  }
-}
+//   $('#acu_4_Status_2-1').text(data.acu_4_Status_2_1);
+//   $('#acu_4_Temp_2-1').text(data.acu_4_Temp_2_1);
+
+//   $('#acu_4_Status_2-2').text(data.acu_4_Status_2_2);
+//   $('#acu_4_Temp_2-2').text(data.acu_4_Temp_2_2);
+
+//   $('#acu_4_Status_3-1').text(data.acu_4_Status_3_1);
+//   $('#acu_4_Temp_3-1').text(data.acu_4_Temp_3_1);
+
+//   $('#acu_4_Status_3-2').text(data.acu_4_Status_3_2);
+//   $('#acu_4_Temp_3-2').text(data.acu_4_Temp_3_2);
+
+//   $('#acu_4_Status_4-1').text(data.acu_4_Status_4_1);
+//   $('#acu_4_Temp_4-1').text(data.acu_4_Temp_4_1);
+
+//   /*溫溼度計#1************************************************************* */
+//   $('#th_1_Temp_1-1').text(data.th_1_Temp_1_1);
+//   $('#th_1_Humidity_1-1').text(data.th_1_Humidity_1_1);
+
+//   $('#th_1_Temp_1-2').text(data.th_1_Temp_1_2);
+//   $('#th_1_Humidity_1-2').text(data.th_1_Humidity_1_2);
+
+//   $('#th_1_Temp_2-1').text(data.th_1_Temp_2_1);
+//   $('#th_1_Humidity_2-1').text(data.th_1_Humidity_2_1);
+
+//   $('#th_1_Temp_2-2').text(data.th_1_Temp_2_2);
+//   $('#th_1_Humidity_2-2').text(data.th_1_Humidity_2_2);
+
+//   $('#th_1_Temp_3-1').text(data.th_1_Temp_3_1);
+//   $('#th_1_Humidity_3-1').text(data.th_1_Humidity_3_1);
+
+//   $('#th_1_Temp_3-2').text(data.th_1_Temp_3_2);
+//   $('#th_1_Humidity_3-2').text(data.th_1_Humidity_3_2);
+
+//   $('#th_1_Temp_4-1').text(data.th_1_Temp_4_1);
+//   $('#th_1_Humidity_4-1').text(data.th_1_Humidity_4_1);
+
+//   /*溫溼度計#2************************************************************* */
+//   $('#th_2_Temp_1-1').text(data.th_2_Temp_1_1);
+//   $('#th_2_Humidity_1-1').text(data.th_2_Humidity_1_1);
+
+//   $('#th_2_Temp_1-2').text(data.th_2_Temp_1_2);
+//   $('#th_2_Humidity_1-2').text(data.th_2_Humidity_1_2);
+
+//   $('#th_2_Temp_2-1').text(data.th_2_Temp_2_1);
+//   $('#th_2_Humidity_2-1').text(data.th_2_Humidity_2_1);
+
+//   $('#th_2_Temp_2-2').text(data.th_2_Temp_2_2);
+//   $('#th_2_Humidity_2-2').text(data.th_2_Humidity_2_2);
+
+//   $('#th_2_Temp_3-1').text(data.th_2_Temp_3_1);
+//   $('#th_2_Humidity_3-1').text(data.th_2_Humidity_3_1);
+
+//   $('#th_2_Temp_3-2').text(data.th_2_Temp_3_2);
+//   $('#th_2_Humidity_3-2').text(data.th_2_Humidity_3_2);
+
+//   $('#th_2_Temp_4-1').text(data.th_2_Temp_4_1);
+//   $('#th_2_Humidity_4-1').text(data.th_2_Humidity_4_1);
+
+//   /*UPS模式*********************************************************** */
+//   $('#upsMode_1-1').text(data.upsMode_1_1);
+//   $('#upsMode_1-2').text(data.upsMode_1_2);
+//   $('#upsMode_2-1').text(data.upsMode_2_1);
+//   $('#upsMode_2-2').text(data.upsMode_2_2);
+//   $('#upsMode_3-1').text(data.upsMode_3_1);
+//   $('#upsMode_3-2').text(data.upsMode_3_2);
+//   $('#upsMode_4-1').text(data.upsMode_4_1);
+
+//   /*UPS輸出負載*********************************************************** */
+//   $('#upsLoad_1-1').text(data.upsLoad_1_1);
+//   $('#upsLoad_1-2').text(data.upsLoad_1_2);
+//   $('#upsLoad_2-1').text(data.upsLoad_2_1);
+//   $('#upsLoad_2-2').text(data.upsLoad_2_2);
+//   $('#upsLoad_3-1').text(data.upsLoad_3_1);
+//   $('#upsLoad_3-2').text(data.upsLoad_3_2);
+//   $('#upsLoad_4-1').text(data.upsLoad_4_1);
+
+//   /*UPS輸出電壓*********************************************************** */
+//   $('#upsVout_1-1').text(data.upsVout_1_1);
+//   $('#upsVout_1-2').text(data.upsVout_1_2);
+//   $('#upsVout_2-1').text(data.upsVout_2_1);
+//   $('#upsVout_2-2').text(data.upsVout_2_2);
+//   $('#upsVout_3-1').text(data.upsVout_3_1);
+//   $('#upsVout_3-2').text(data.upsVout_3_2);
+//   $('#upsVout_4-1').text(data.upsVout_4_1);
+
+//   /*UPS輸出電流*********************************************************** */
+//   $('#upsIout_1-1').text(data.upsIout_1_1);
+//   $('#upsIout_1-2').text(data.upsIout_1_2);
+//   $('#upsIout_2-1').text(data.upsIout_2_1);
+//   $('#upsIout_2-2').text(data.upsIout_2_2);
+//   $('#upsIout_3-1').text(data.upsIout_3_1);
+//   $('#upsIout_3-2').text(data.upsIout_3_2);
+//   $('#upsIout_4-1').text(data.upsIout_4_1);
+
+//   /*UPS電池溫度*********************************************************** */
+//   $('#upsTemp_1-1').text(data.upsTemp_1_1);
+//   $('#upsTemp_1-2').text(data.upsTemp_1_2);
+//   $('#upsTemp_2-1').text(data.upsTemp_2_1);
+//   $('#upsTemp_2-2').text(data.upsTemp_2_2);
+//   $('#upsTemp_3-1').text(data.upsTemp_3_1);
+//   $('#upsTemp_3-2').text(data.upsTemp_3_2);
+//   $('#upsTemp_4-1').text(data.upsTemp_4_1);
+
+//   /*UPS SOC*********************************************************** */
+//   $('#upsSOC_1-1').text(data.upsSOC_1_1);
+//   $('#upsSOC_1-2').text(data.upsSOC_1_2);
+//   $('#upsSOC_2-1').text(data.upsSOC_2_1);
+//   $('#upsSOC_2-2').text(data.upsSOC_2_2);
+//   $('#upsSOC_3-1').text(data.upsSOC_3_1);
+//   $('#upsSOC_3-2').text(data.upsSOC_3_2);
+//   $('#upsSOC_4-1').text(data.upsSOC_4_1);
+
+//   /*UPS狀態1***************************************************************** */
+//   if (data.upsStatus1_1_1_rawD > 0) {
+//     classAdd("#upsStatus1_1-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus1_1-1", "setToClose");
+//   }
+
+//   if (data.upsStatus1_1_2_rawD > 0) {
+//     classAdd("#upsStatus1_1-2", "setToClose");
+//   } else {
+//     classRemove("#upsStatus1_1-2", "setToClose");
+//   }
+
+//   if (data.upsStatus1_2_1_rawD > 0) {
+//     classAdd("#upsStatus1_2-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus1_2-1", "setToClose");
+//   }
+
+//   if (data.upsStatus1_2_2_rawD > 0) {
+//     classAdd("#upsStatus1_2-2", "setToClose");
+//   } else {
+//     classRemove("#upsStatus1_2-2", "setToClose");
+//   }
+
+//   if (data.upsStatus1_3_1_rawD > 0) {
+//     classAdd("#upsStatus1_3-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus1_3-1", "setToClose");
+//   }
+
+//   if (data.upsStatus1_3_2_rawD > 0) {
+//     classAdd("#upsStatus1_3-2", "setToClose");
+//   } else {
+//     classRemove("#upsStatus1_3-2", "setToClose");
+//   }
+
+//   if (data.upsStatus1_4_1_rawD > 0) {
+//     classAdd("#upsStatus1_4-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus1_4-1", "setToClose");
+//   }
+
+//   /*UPS狀態2***************************************************************** */
+//   //ejs沒有class????????
+//   if (data.upsStatus2_1_1_rawD > 0) {
+//     classAdd("#upsStatus2_1-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus2_1-1", "setToClose");
+//   }
+
+//   if (data.upsStatus2_1_2_rawD > 0) {
+//     classAdd("#upsStatus2_1-2", "setToClose");
+//   } else {
+//     classRemove("#upsStatus2_1-2", "setToClose");
+//   }
+
+//   if (data.upsStatus2_2_1_rawD > 0) {
+//     classAdd("#upsStatus2_2-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus2_2-1", "setToClose");
+//   }
+
+//   if (data.upsStatus2_2_2_rawD > 0) {
+//     classAdd("#upsStatus2_2-2", "setToClose");
+//   } else {
+//     classRemove("#upsStatus2_2-2", "setToClose");
+//   }
+
+//   if (data.upsStatus2_3_1_rawD > 0) {
+//     classAdd("#upsStatus2_3-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus2_3-1", "setToClose");
+//   }
+
+//   if (data.upsStatus2_3_2_rawD > 0) {
+//     classAdd("#upsStatus2_3-2", "setToClose");
+//   } else {
+//     classRemove("#upsStatus2_3-2", "setToClose");
+//   }
+
+//   if (data.upsStatus2_4_1_rawD > 0) {
+//     classAdd("#upsStatus2_4-1", "setToClose");
+//   } else {
+//     classRemove("#upsStatus2_4-1", "setToClose");
+//   }
+
+//   /*BSC告警******************************************************* */
+//   if (data.bscAlarm_1_1_rawD > 0) {
+//     classAdd("#bscAlarm_1-1", "setToClose");
+//   } else {
+//     classRemove("#bscAlarm_1-1", "setToClose");
+//   }
+
+//   if (data.bscAlarm_1_2_rawD > 0) {
+//     classAdd("#bscAlarm_1-2", "setToClose");
+//   } else {
+//     classRemove("#bscAlarm_1-2", "setToClose");
+//   }
+
+//   if (data.bscAlarm_2_1_rawD > 0) {
+//     classAdd("#bscAlarm_2-1", "setToClose");
+//   } else {
+//     classRemove("#bscAlarm_2-1", "setToClose");
+//   }
+
+//   if (data.bscAlarm_2_2_rawD > 0) {
+//     classAdd("#bscAlarm_2-2", "setToClose");
+//   } else {
+//     classRemove("#bscAlarm_2-2", "setToClose");
+//   }
+
+//   if (data.bscAlarm_3_1_rawD > 0) {
+//     classAdd("#bscAlarm_3-1", "setToClose");
+//   } else {
+//     classRemove("#bscAlarm_3-1", "setToClose");
+//   }
+
+//   if (data.bscAlarm_3_2_rawD > 0) {
+//     classAdd("#bscAlarm_3-2", "setToClose");
+//   } else {
+//     classRemove("#bscAlarm_3-2", "setToClose");
+//   }
+
+//   if (data.bscAlarm_4_1_rawD > 0) {
+//     classAdd("#bscAlarm_4-1", "setToClose");
+//   } else {
+//     classRemove("#bscAlarm_4-1", "setToClose");
+//   }
+
+//   /*BSC故障******************************************************* */
+//   if (data.bscFault_1_1_rawD > 0) {
+//     classAdd("#bscFault_1-1", "setToClose");
+//   } else {
+//     classRemove("#bscFault_1-1", "setToClose");
+//   }
+
+//   if (data.bscFault_1_2_rawD > 0) {
+//     classAdd("#bscFault_1-2", "setToClose");
+//   } else {
+//     classRemove("#bscFault_1-2", "setToClose");
+//   }
+
+//   if (data.bscFault_2_1_rawD > 0) {
+//     classAdd("#bscFault_2-1", "setToClose");
+//   } else {
+//     classRemove("#bscFault_2-1", "setToClose");
+//   }
+
+//   if (data.bscFault_2_2_rawD > 0) {
+//     classAdd("#bscFault_2-2", "setToClose");
+//   } else {
+//     classRemove("#bscFault_2-2", "setToClose");
+//   }
+
+//   if (data.bscFault_3_1_rawD > 0) {
+//     classAdd("#bscFault_3-1", "setToClose");
+//   } else {
+//     classRemove("#bscFault_3-1", "setToClose");
+//   }
+
+//   if (data.bscFault_3_2_rawD > 0) {
+//     classAdd("#bscFault_3-2", "setToClose");
+//   } else {
+//     classRemove("#bscFault_3-2", "setToClose");
+//   }
+
+//   if (data.bscFault_4_1_rawD > 0) {
+//     classAdd("#bscFault_4-1", "setToClose");
+//   } else {
+//     classRemove("#bscFault_4-1", "setToClose");
+//   }
+
+//   /*消防狀態******************************************************* */
+//   if (data.ffsStatus_1_1_rawD > 0) {
+//     classAdd("#ffsStatus_1-1", "setToClose");
+//   } else {
+//     classRemove("#ffsStatus_1-1", "setToClose");
+//   }
+
+//   if (data.ffsStatus_1_2_rawD > 0) {
+//     classAdd("#ffsStatus_1-2", "setToClose");
+//   } else {
+//     classRemove("#ffsStatus_1-2", "setToClose");
+//   }
+
+//   if (data.ffsStatus_2_1_rawD > 0) {
+//     classAdd("#ffsStatus_2-1", "setToClose");
+//   } else {
+//     classRemove("#ffsStatus_2-1", "setToClose");
+//   }
+
+//   if (data.ffsStatus_2_2_rawD > 0) {
+//     classAdd("#ffsStatus_2-2", "setToClose");
+//   } else {
+//     classRemove("#ffsStatus_2-2", "setToClose");
+//   }
+
+//   if (data.ffsStatus_3_1_rawD > 0) {
+//     classAdd("#ffsStatus_3-1", "setToClose");
+//   } else {
+//     classRemove("#ffsStatus_3-1", "setToClose");
+//   }
+
+//   if (data.ffsStatus_3_2_rawD > 0) {
+//     classAdd("#ffsStatus_3-2", "setToClose");
+//   } else {
+//     classRemove("#ffsStatus_3-2", "setToClose");
+//   }
+
+//   if (data.ffsStatus_4_1_rawD > 0) {
+//     classAdd("#ffsStatus_4-1", "setToClose");
+//   } else {
+//     classRemove("#ffsStatus_4-1", "setToClose");
+//   }
+ }
