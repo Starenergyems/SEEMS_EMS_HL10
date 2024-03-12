@@ -330,7 +330,7 @@ function assignBit(index) {
 }
 
 async function updateTable() {
-  const dataset = await getData("http://localhost:3000/systeminfo/device/edit");
+  const dataset = await getData(window.location.href+"/edit");
   extractTable();
 
   // Combine fixed values with dynamic data

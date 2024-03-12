@@ -1,6 +1,65 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
+$(document).ready(function () {
+
+    classAdd('#nB_Alarm', "default_nB");
+
+    // block_temp
+    // btn_test_01
+    // inText_test_01
+
+    // const inText_test_01 = document.querySelector(".block_temp #inText_test_01");
+    // const inText_test_02 = document.querySelector(".block_temp #inText_test_02");
+    // const inText_test_03 = document.querySelector(".block_temp #inText_test_03");
+    // const inText_test_04 = document.querySelector(".block_temp #inText_test_04");
+    // const inText_test_05 = document.querySelector(".block_temp #inText_test_05");
+    // const inText_test_06 = document.querySelector(".block_temp #inText_test_06");
+    // const inText_test_07 = document.querySelector(".block_temp #inText_test_07");
+    // const inText_test_08 = document.querySelector(".block_temp #inText_test_08");
+
+    // const btn_test_01 = document.querySelector(".block_temp #btn_test_01");
+    // btn_test_01.addEventListener("click", function () { addOneLog(dataset); });
+    // function addOneLog(tableDataset) {
+    //     // inText_test_03.value = inText_test_01.value + inText_test_02.value;
+
+    //     let newLog = {
+    //         "index": "12",
+    //         "startTime": "2023/11/21 01:23:45.123",
+    //         "place": "控制室qaz",
+    //         "deviceName": "HVAC-1_wsx",
+    //         "almLevel": "警告_rfv",
+    //         "description": "HVAC-1通訊異常_tgb",
+    //         "value": "Comm error_ujm",
+    //         "endTime": "2023/11/21 21:32:54.321",
+    //     };
+
+    //     let i = 2;
+    //     console.log(tableDataset[i]["index"] + "_~_" + tableDataset[i]["place"] + "_~_" + tableDataset[i]["deviceName"] + "_~_" + tableDataset[i]["value"]);
+
+    // }
+
+    // const btn_test_02 = document.querySelector(".block_temp #btn_test_02");
+    // btn_test_02.addEventListener("click", b_test_02);
+    // function b_test_02() {
+    //     console.log("qaz123w");
+    // }
+
+    // const btn_test_03 = document.querySelector(".block_temp #btn_test_03");
+    // btn_test_03.addEventListener("click", b_test_03);
+    // function b_test_03() {
+    //     console.log("qaz456");
+    // }
+
+    // const btn_test_04 = document.querySelector(".block_temp #btn_test_04");
+    // btn_test_04.addEventListener("click", b_test_04);
+    // function b_test_04() {
+    //     console.log("qaz789");
+    // }
+
+});
+
+/****************************************************************************************** */
 
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
 const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
@@ -439,7 +498,7 @@ const alertMessage = document.querySelector(".alert_WrongDataSet p");
 
 const btn_Query = document.querySelector(".timeRangeQuery #btn_Query");
 btn_Query.addEventListener("click", QueryLog);
-function QueryLog() {
+async function QueryLog() {
     if (dateStart.value === "") {
         alertMessage.textContent = "開始日期設定有誤！";
         window_WrongDataSet.classList.add("appear");
@@ -454,9 +513,7 @@ function QueryLog() {
         window_WrongDataSet.classList.add("appear");
     } else {
         console.log("Query from '" + dateStart.value + " " + timeStart.value + "' to '" + dateEnd.value + " " + timeEnd.value + "'.")
-
-
-
+        await dataPost(window.location.href+"/edit", dateStart.value, timeStart.value, dateEnd.value, timeEnd.value)//時間區間查詢
 
     }
 }
@@ -467,10 +524,14 @@ function close_WrongDataSet_No() {
     window_WrongDataSet.classList.remove("appear");
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+//get / post功能 ////////////////////////////////////////////////////////////////////////////////////////////
 
-$(document).ready(function () {
 
+var dataset=[];
+
+async function updateTable(){
+    dataset = await getData(window.location.href+"/edit");
+    console.log(dataset);
     let lang = {
         sProcessing: "處理中...",
         sLengthMenu: "每頁 _MENU_ 項",
@@ -496,43 +557,6 @@ $(document).ready(function () {
             sSortDescending: ": 以降序排列此列",
         },
     };
-    var dataset = [{
-        "index": "1",
-        "startTime": "2023/09/01 15:23:10.123",
-        "place": "控制室",
-        "deviceName": "HVAC-1",
-        "almLevel": "警告",
-        "description": "HVAC-1通訊異常",
-        "value": "Comm error",
-        "endTime": ""
-    }, {
-        "index": "2",
-        "startTime": "2023/09/01 15:22:10.123",
-        "place": "ESS3-2",
-        "deviceName": "BMS3-2",
-        "almLevel": "錯誤",
-        "description": "電芯過溫保護",
-        "value": "Normal",
-        "endTime": "2023/09/01 15:22:50.123"
-    }, {
-        "index": "3",
-        "startTime": "2023/09/01 15:13:10.123",
-        "place": "戶外",
-        "deviceName": "變壓器2",
-        "almLevel": "警告",
-        "description": "變壓器2油溫過高",
-        "value": "67",
-        "endTime": ""
-    }, {
-        "index": "4",
-        "startTime": "2023/09/01 13:23:10.123",
-        "place": "MVCB",
-        "deviceName": "保護電驛",
-        "almLevel": "錯誤",
-        "description": "MVCB保護電驛_51-1",
-        "value": "Normal",
-        "endTime": "2023/09/01 14:43:10.123"
-    }];
 
     $('#almTable').DataTable({
 
@@ -550,86 +574,46 @@ $(document).ready(function () {
         ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
         //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
         pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
+        pageLength: 15, // 預設為'10'，若需更改初始每頁顯示筆數，才需設定
         responsive: true,
 
         "data": dataset,
         "columns": [
             { data: "index" },
-            { data: "startTime" },
-            { data: "place" },
-            { data: "deviceName" },
-            { data: "almLevel" },
-            { data: "description" },
-            { data: "value" },
-            { data: "endTime" },
-        ]
+            { data: "occurrence_time" },
+            { data: "location" },
+            { data: "device" },
+            { data: "level" },
+            { data: "content" },
+            {
+              data: "read",
+              render: function (data, type, row) {
+                var rowIndex = row.index; // Get the index from the row object
+                //var checkboxId = "chb_Ack_" + rowIndex;
+                  if (data === true) {
+                    return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                  } else {
+                    return "";
+                  }
+              },
+            },
+            {
+              data: "recover",
+              render: function (data, type, row) {
+                if (data === true) {
+                  return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                } else {
+                  return "";
+                }
+              },
+            },
+            { data: "recover_time" },
+          ],
 
     })
+    createIndex('#almTable');
+}
 
-    // block_temp
-    // btn_test_01
-    // inText_test_01
 
-    const inText_test_01 = document.querySelector(".block_temp #inText_test_01");
-    const inText_test_02 = document.querySelector(".block_temp #inText_test_02");
-    const inText_test_03 = document.querySelector(".block_temp #inText_test_03");
-    const inText_test_04 = document.querySelector(".block_temp #inText_test_04");
-    const inText_test_05 = document.querySelector(".block_temp #inText_test_05");
-    const inText_test_06 = document.querySelector(".block_temp #inText_test_06");
-    const inText_test_07 = document.querySelector(".block_temp #inText_test_07");
-    const inText_test_08 = document.querySelector(".block_temp #inText_test_08");
 
-    const btn_test_01 = document.querySelector(".block_temp #btn_test_01");
-    btn_test_01.addEventListener("click", function () { addOneLog(dataset); });
-    function addOneLog(tableDataset) {
-        // inText_test_03.value = inText_test_01.value + inText_test_02.value;
-
-        let newLog = {
-            "index": "12",
-            "startTime": "2023/11/21 01:23:45.123",
-            "place": "控制室qaz",
-            "deviceName": "HVAC-1_wsx",
-            "almLevel": "警告_rfv",
-            "description": "HVAC-1通訊異常_tgb",
-            "value": "Comm error_ujm",
-            "endTime": "2023/11/21 21:32:54.321",
-        };
-
-        let i = 2;
-        console.log(tableDataset[i]["index"] + "_~_" + tableDataset[i]["place"] + "_~_" + tableDataset[i]["deviceName"] + "_~_" + tableDataset[i]["value"]);
-        // console.log(tableDataset);
-        // tableDataset.push(newLog);
-        // console.log(tableDataset);
-
-        // var dataset = [{
-        //     "index": "1",
-        //     "startTime": "2023/09/01 15:23:10.123",
-        //     "place": "控制室",
-        //     "deviceName": "HVAC-1",
-        //     "almLevel": "警告",
-        //     "description": "HVAC-1通訊異常",
-        //     "value": "Comm error",
-        //     "endTime": ""
-        // }],
-    }
-
-    const btn_test_02 = document.querySelector(".block_temp #btn_test_02");
-    btn_test_02.addEventListener("click", b_test_02);
-    function b_test_02() {
-        console.log("qaz123w");
-    }
-
-    const btn_test_03 = document.querySelector(".block_temp #btn_test_03");
-    btn_test_03.addEventListener("click", b_test_03);
-    function b_test_03() {
-        console.log("qaz456");
-    }
-
-    const btn_test_04 = document.querySelector(".block_temp #btn_test_04");
-    btn_test_04.addEventListener("click", b_test_04);
-    function b_test_04() {
-        console.log("qaz789");
-    }
-
-});
 

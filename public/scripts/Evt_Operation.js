@@ -35,7 +35,7 @@ let lang = {
 };
 
 async function updateTable() {
-  var dataset = await getData("http://localhost:3000/event/operation/edit");
+  var dataset = await getData(window.location.href+"/edit");
 
   $("#evtTable").DataTable({
     lengthMenu: [10, 20, 25, 50, 100],
@@ -569,7 +569,7 @@ function QueryLog() {
         "'."
     );
     dataPost(
-      "http://localhost:3000/event/operation/edit",
+      window.location.href+"/edit",
       dateStart.value,
       timeStart.value,
       dateEnd.value,

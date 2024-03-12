@@ -1,6 +1,19 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
-
+//var permission="viewer"; //需讀權限
+var permission = "manager";
+$(document).ready(function () {
+  console.log("start reading js");
+  classAdd("#nB_Alarm", "default_nB");
+  updateTable();
+  // 彈出視窗確定全選
+  $("#chb_AckAll")
+    .off("change")
+    .on("change", function () {
+      appear();
+    });
+});
+/********************************************************************* */
 //const { check } = require("prettier");
 
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
@@ -141,62 +154,9 @@ let lang = {
 var dataset = [];
 
 async function updateTable() {
-  /*var dataset = [
-    {
-      index: "1",
-      startTime: "2023/09/01 15:23:10.123",
-      place: "控制室",
-      deviceName: "HVAC-1",
-      almLevel: "警告",
-      description: "HVAC-1通訊異常",
-      value: "Comm error",
-      acked: "",
-      ended: "0",
-      endTime: "",
-      checked: "1",
-    },
-    {
-      index: "2",
-      startTime: "2023/09/01 15:22:10.123",
-      place: "ESS3-2",
-      deviceName: "BMS3-2",
-      almLevel: "錯誤",
-      description: "電芯過溫保護",
-      value: "Normal",
-      acked: "",
-      ended: "1",
-      endTime: "2023/09/01 15:22:50.123",
-      checked: "0",
-    },
-    {
-      index: "3",
-      startTime: "2023/09/01 15:13:10.123",
-      place: "戶外",
-      deviceName: "變壓器2",
-      almLevel: "警告",
-      description: "變壓器2油溫過高",
-      value: "67",
-      acked: "",
-      ended: "0",
-      endTime: "",
-      checked: "1",
-    },
-    {
-      index: "4",
-      startTime: "2023/09/01 13:23:10.123",
-      place: "MVCB",
-      deviceName: "保護電驛",
-      almLevel: "錯誤",
-      description: "MVCB保護電驛_51-1",
-      value: "Normal",
-      acked: "",
-      ended: "1",
-      endTime: "2023/09/01 14:43:10.123",
-      checked: "0",
-    },
-  ];*/
+  
 
-  dataset = await dataGet("http://localhost:3000/alarm/realtime/edit"); //port改端口要改
+  dataset = await dataGet(window.location.href+"/edit"); //port改端口要改
   console.log(dataset);
 
   var table = $("#almTable").DataTable({
@@ -278,19 +238,7 @@ async function updateTable() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-//var permission="viewer"; //需讀權限
-var permission = "manager";
-$(document).ready(function () {
-  console.log("start reading js");
-  classAdd("#nB_Alarm", "default_nB");
-  updateTable();
-  // 彈出視窗確定全選
-  $("#chb_AckAll")
-    .off("change")
-    .on("change", function () {
-      appear();
-    });
-});
+
 /*async function waitTable(){
     await updateTable();//更新表格
     //checkAllStatus(dataset);//判斷已讀全選是否該勾
@@ -315,7 +263,7 @@ function allCheck() {
   remove();
   let isChecked = $("#chb_AckAll").prop("checked");
   console.log("id" + isChecked);
-  dataPost("http://localhost:3000/alarm/realtime/edit", "all", isChecked);
+  dataPost(window.location.href+"/edit", "all", isChecked);
 
   //$(".chb_Ack").prop("checked", isChecked); //所有告警皆已讀
   $("#chb_AckAll").prop("checked", !isChecked); // 全選欄復歸
@@ -352,6 +300,6 @@ function readCheck() {
       console.log("已讀框偵測:", rowChecked);
       currentPageIndex = $("#almTable").DataTable().page.info().page; // Get the current page index again after updating the table
       console.log("點擊頁碼:" + currentPageIndex);
-      dataPost("http://localhost:3000/alarm/realtime/edit", rowId, rowChecked); // Send an AJAX request to update the row in the database
+      dataPost(window.location.href+"/edit", rowId, rowChecked); // Send an AJAX request to update the row in the database
     });
 }

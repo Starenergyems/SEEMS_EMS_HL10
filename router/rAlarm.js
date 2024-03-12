@@ -1,4 +1,5 @@
 // testforalarm.js
+const port = 3005;
 const express = require("express");
 const path = require("path");
 const config = require("./config");
@@ -161,17 +162,17 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 
 //////////////////////////////////////
-//告警紀錄
-router.get("/alarm", (req, res) => {
+//即時告警
+app.get("/alarm", (req, res) => {
   res.render("Alm_RealTime");
 });
 
-router.get("/alarm/realtime", (req, res) => {
+app.get("/alarm/realtime", (req, res) => {
   // num與fun
   res.render("Alm_RealTime");
 });
 
-router.post("/alarm/realtime/edit", (req, res) => {
+app.post("/alarm/realtime/edit", (req, res) => {
   alarm_db_event_lock = true;
 
   let promise = true;
@@ -264,7 +265,7 @@ router.post("/alarm/realtime/edit", (req, res) => {
 });
 
 //傳數值到前端的表格中
-router.get("/alarm/realtime/edit", (req, res) => {
+app.get("/alarm/realtime/edit", (req, res) => {
   Promise.resolve("Init")
     .then(() => {
       alarmnanoDb
@@ -333,19 +334,28 @@ router.get("/alarm/realtime/edit", (req, res) => {
   //   res.status(500).send("Internal Server Error");
   // }
 });
-
-router.get("/alarm/history", (req, res) => {
+/********************************************************** */
+//歷史告警
+app.get("/alarm/history", (req, res) => {
   // num與fun
   res.render("Alm_History");
 });
 
-router.get("/alarm/history/edit", (req, res) => {
-  const From_date = "2024-02-22";
-  const From_time = "00:00:00";
-  const To_date = "2024-03-07";
-  const To_time = "23:59:59";
+var hisalarm_db_array = [];
+app.get("/alarm/history/edit", (req, res) => {
+    res.send(hisalarm_db_array);
+});
+
+app.post("/alarm/history/edit", (req, res) => {
+  const { input1, input2, input3, input4} = req.body;
+  const From_date = input1;
+  const From_time = input2;
+  const To_date = input3;
+  const To_time = input4;
+
   const From_datetime = From_date + "T" + From_time + "+08:00";
   const To_datetime = To_date + "T" + To_time + "+08:00";
+  console.log(From_datetime, To_datetime);
 
   Promise.resolve("Init")
     .then(() => {
@@ -375,7 +385,7 @@ router.get("/alarm/history/edit", (req, res) => {
     })
     .then((resp) => {
       // console.log(resp);
-      let hisalarm_db_array = [];
+      hisalarm_db_array = [];//清空
 
       for (const item of resp.docs) {
         item["index"] = "";
@@ -484,8 +494,8 @@ setInterval(alarm_processor_call, 3000);
 
 module.exports = router;
 
-// app.listen(port, () => {
-//   console.log(`應用程式正在監聽端口 ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});
 
 //************************************* */
