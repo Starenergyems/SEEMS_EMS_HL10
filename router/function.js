@@ -263,7 +263,7 @@ function Scale_Data(rawData, scale, decPlace) {
 function Convert_UInt_to_revBitString(rawData, NumberOfDigit) {
   let revBitString = "";
 
-  if (rawData === null ) {
+  if (rawData === null) {
     for (i = 0; i < NumberOfDigit; i++) {
       revBitString += "#";
     }
@@ -301,7 +301,10 @@ function Convert_UInt_to_BitString(rawData, NumberOfDigit) {
 }
 
 function mapWordStatus(rawData, mapTable) {
-  // 待優化
+  if (rawData === null) {
+    return "#*#";
+  }
+
   let keysArray_MT = Object.keys(mapTable);
 
   for (i = 0; i < keysArray_MT.length; i++) {
@@ -310,11 +313,14 @@ function mapWordStatus(rawData, mapTable) {
     }
   }
 
-  return "Not found(" + rawData + ")";
+  return `Not found(${rawData})`;
 }
 
 function mapBitStatus(bitString, mapTable, NumberOfBit) {
-  // 待優化
+  if (bitString[0] === "#") {
+    return "#*#";
+  }
+
   if (NumberOfBit > bitString.length - 1) {
     return "bitNumber out of range";
   }
@@ -327,7 +333,7 @@ function mapBitStatus(bitString, mapTable, NumberOfBit) {
     }
   }
 
-  return "Not found(bit" + NumberOfBit + " = " + bitString[NumberOfBit] + ")";
+  return `Not found(bit${NumberOfBit} = ${bitString[NumberOfBit]})`;
 }
 
 function getHighLowByte(rawData) {
@@ -475,6 +481,36 @@ function Determine_DL_of_upsStatus2(rawData) {
     return "setToRed";
   } else if (revBitString[14] === "1") {
     return "setToGreen";
+  } else {
+    return "";
+  }
+}
+
+function Determine_DL_of_AlarmWord(rawData) {
+  if (rawData === null) {
+    return "ErrData";
+  }
+
+  if (rawData > 0) {
+    return "setToClose";
+  } else {
+    return "";
+  }
+}
+
+function Determine_DL_of_AlarmWords(alarmDataArray) {
+  let sum = 0;
+
+  for (i = 0; i < alarmDataArray.length; i++) {
+    if (alarmDataArray[i] === null) {
+      return "ErrData";
+    } else {
+      sum += alarmDataArray[i];
+    }
+  }
+
+  if (sum > 0) {
+    return "setToClose";
   } else {
     return "";
   }
@@ -935,6 +971,8 @@ module.exports = {
   Determine_BGC_of_TcMaxDiff,
   Determine_DL_of_RackHWStatus,
   Determine_DL_of_upsStatus2,
+  Determine_DL_of_AlarmWord,
+  Determine_DL_of_AlarmWords,
   Determine_DL_of_CommDevice,
   Determine_DL_of_CommPCSBMS,
   Determine_statusL_of_recloser,
@@ -1018,7 +1056,7 @@ module.exports = {
 
 // //********************************************************************************************************** */
 
-const rawData = 57913;
+const rawData = 27182;
 const NumberOfDigit = 16;
 const pcsCHGStatus_MT = {
   17: "Charging",
@@ -1035,3 +1073,87 @@ const sysCtrl_2_MT = {
   13: { 0: "SOC", 1: "Volt" },
 };
 const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
+
+// let ab = Scale_Data(rawData, 0.01, 1);
+// console.log(ab);
+
+// let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
+// console.log(cd_BitString);
+
+// let ef = Convert_UInt_to_BitString(rawData, NumberOfDigit);
+// console.log(ef);
+// console.log(ef.bitString);
+// console.log(typeof ef.bitString);
+// console.log(ef.num_ClosedBit);
+// console.log(typeof ef.num_ClosedBit);
+
+// let gh = mapWordStatus(rawData, pcsCHGStatus_MT);
+// console.log(gh);
+
+// const ij = mapBitStatus(cd_BitString, sysCtrl_2_MT, 6);
+// console.log(ij);
+
+// const kl = getHighLowByte(rawData);
+// console.log(kl);
+// console.log(kl["hiByte"]);
+// console.log(kl.loByte);
+
+// const mn = Convert_unixTime_to_dateTime(rawData);
+// console.log(mn);
+
+// const E_G = 123;
+// const E_M = 987;
+// const E_k = 456;
+// const op = Calculate_BMS_energy(E_G, E_M, E_k);
+// console.log(op);
+
+// const qr = Calculate_CPM10_energy(E_G, E_M, E_k);
+// console.log(qr);
+
+// const st = Calculate_N1450_PF(rawData);
+// console.log(st);
+
+// const uv = Calculate_Tr_oilTemp(rawData);
+// console.log(uv);
+
+// const wx = Count_SpecificClosedBit(rawData, NumberOfDigit, pcsWorkStatus_spBitList);
+// console.log(wx);
+
+// const maxData = 276;
+// const minData = 256;
+// const yz = Determine_BGC_of_TcMaxDiff(maxData, minData);
+// console.log(yz);
+
+// const ab_2 = Determine_DL_of_RackHWStatus(rawData);
+// console.log(ab_2);
+
+// const cd_2 = Determine_DL_of_upsStatus2(rawData);
+// console.log(cd_2);
+
+// const ef_2 = Determine_DL_of_CommDevice(rawData);
+// console.log(ef_2);
+
+// let CommLC = 0;
+// let CommPCSBMS = "1";
+// const ef_2 = Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS);
+// console.log(ef_2);
+
+// const rawData1 = 1;
+// const rawData2 = 1;
+// const rawData3 = 0;
+// const rawData4 = 0;
+// const rawData5 = 0;
+// const gh_2 = Determine_statusL_of_recloser(rawData1, rawData2);
+// console.log(gh_2);
+
+// const data3 = "10011";
+// const ij_2 = Determine_statusL_of_VCB(data3[0], data3[1], data3[2]);
+// console.log(ij_2);
+// const kl_2 = Determine_statusL_of_ACB(data3[3], data3[4]);
+// console.log(kl_2);
+
+// const mn_2 = Determine_DL_of_AlarmWord(rawData1);
+// console.log(mn_2);
+// const op_2 = Determine_DL_of_AlarmWords([rawData1, rawData2, rawData3, rawData4]);
+// console.log(op_2);
+

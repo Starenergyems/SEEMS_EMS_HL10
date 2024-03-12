@@ -52,6 +52,10 @@
     background-color: #FFFF00;
 }
 
+.singleLineD .status_CB.ErrData {
+    background-color: #9D653D;
+}
+
 .singleLineD .ctrlable {
     box-sizing: border-box;
     height: 14px;

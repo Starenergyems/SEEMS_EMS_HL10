@@ -19,6 +19,8 @@ const {
   Scale_Data,
   Determine_statusL_of_VCB,
   Determine_statusL_of_ACB,
+  Determine_DL_of_AlarmWord,
+  Determine_DL_of_AlarmWords,
   Determine_statusL_of_recloser,
   Calculate_Tr_oilTemp,
   Calculate_N1450_PF,
@@ -127,51 +129,24 @@ async function query_SLD_KeyValuePairs() {
     statusL_of_ACB3_3: Determine_statusL_of_ACB(ACB3_rBitS[4], ACB3_rBitS[5]),
     statusL_of_ACB4_1: Determine_statusL_of_ACB(ACB4_rBitS[0], ACB4_rBitS[1]),
 
-    relayMVCB_sumRawD:
-      other10Data.RelayMVCB[408200] +
-      other10Data.RelayMVCB[408201] +
-      other10Data.RelayMVCB[408202],
-    relayMVCB_S0: Convert_UInt_to_revBitString(
-      other10Data.RelayMVCB[408200],
-      16
-    ),
-    relayMVCB_S1: Convert_UInt_to_revBitString(
-      other10Data.RelayMVCB[408201],
-      16
-    ),
-    relayMVCB_S2: Convert_UInt_to_revBitString(
-      other10Data.RelayMVCB[408202],
-      16
-    ),
+    statusL_of_relayMVCB: Determine_DL_of_AlarmWords([other10Data.RelayMVCB[408200], other10Data.RelayMVCB[408201], other10Data.RelayMVCB[408202]]),
+    relayMVCB_S0: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408200], 16),
+    relayMVCB_S1: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408201], 16),
+    relayMVCB_S2: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408202], 16),
 
-    relayVCB1_rawD: other10Data.RelayVCB1[408203],
-    relayVCB2_rawD: other10Data.RelayVCB2[408203],
-    relayVCB3_rawD: other10Data.RelayVCB3[408203],
-    relayVCB4_rawD: other10Data.RelayVCB4[408203],
-    relayVCB_aux_rawD: other10Data.RelayVCB5[408203],
-    relayVCB: Convert_UInt_to_revBitString(
-      other10Data[relayVCB_MT[num_RelayVCB].dicName][408203],
-      16
-    ),
+    statusL_of_relayVCB1: Determine_DL_of_AlarmWord(other10Data.RelayVCB1[408203]),
+    statusL_of_relayVCB2: Determine_DL_of_AlarmWord(other10Data.RelayVCB2[408203]),
+    statusL_of_relayVCB3: Determine_DL_of_AlarmWord(other10Data.RelayVCB3[408203]),
+    statusL_of_relayVCB4: Determine_DL_of_AlarmWord(other10Data.RelayVCB4[408203]),
+    statusL_of_relayVCB_aux: Determine_DL_of_AlarmWord(other10Data.RelayVCB5[408203]),
+    relayVCB: Convert_UInt_to_revBitString(other10Data[relayVCB_MT[num_RelayVCB].dicName][408203], 16),
 
-    statusL_of_recloser: Determine_statusL_of_recloser(
-      other10Data.Recloser[408210],
-      other10Data.Recloser[408209]
-    ),
-    recloserMode: Convert_UInt_to_revBitString(
-      other10Data.Recloser[408208],
-      16
-    ),
-    recloserStatus: Convert_UInt_to_revBitString(
-      other10Data.Recloser[408210],
-      16
-    ),
-    recloserRelay: Convert_UInt_to_revBitString(
-      other10Data.Recloser[408209],
-      16
-    ),
+    statusL_of_recloser: Determine_statusL_of_recloser(other10Data.Recloser[408210], other10Data.Recloser[408209]),
+    recloserMode: Convert_UInt_to_revBitString(other10Data.Recloser[408208], 16),
+    recloserStatus: Convert_UInt_to_revBitString(other10Data.Recloser[408210], 16),
+    recloserRelay: Convert_UInt_to_revBitString(other10Data.Recloser[408209], 16),
 
-    temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]), //1
+    temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
     temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
     temp_TR3: Calculate_Tr_oilTemp(other10Data.TR3[408181]),
     temp_TR4: Calculate_Tr_oilTemp(other10Data.TR4[408181]),
@@ -179,39 +154,15 @@ async function query_SLD_KeyValuePairs() {
 
     V_Freq: Scale_Data(other01Data.Freq[408007], ((1 / 65536) * 100) / 1000, 3),
     I_Freq: Scale_Data(other01Data.Freq[408017], (1 / 65536) * 200, 2),
-    P_Freq: Scale_Data(
-      other01Data.Freq[408019],
-      ((1 / 65536) * 100 * 200) / 1000,
-      1
-    ),
-    Q_Freq: Scale_Data(
-      other01Data.Freq[408021],
-      ((1 / 65536) * 100 * 200) / 1000,
-      1
-    ),
-    V_ab_Freq: Scale_Data(
-      other01Data.Freq[408001],
-      ((1 / 65536) * 100) / 1000,
-      3
-    ),
-    V_bc_Freq: Scale_Data(
-      other01Data.Freq[408003],
-      ((1 / 65536) * 100) / 1000,
-      3
-    ),
-    V_ca_Freq: Scale_Data(
-      other01Data.Freq[408005],
-      ((1 / 65536) * 100) / 1000,
-      3
-    ),
+    P_Freq: Scale_Data(other01Data.Freq[408019], ((1 / 65536) * 100 * 200) / 1000, 1),
+    Q_Freq: Scale_Data(other01Data.Freq[408021], ((1 / 65536) * 100 * 200) / 1000, 1),
+    V_ab_Freq: Scale_Data(other01Data.Freq[408001], ((1 / 65536) * 100) / 1000, 3),
+    V_bc_Freq: Scale_Data(other01Data.Freq[408003], ((1 / 65536) * 100) / 1000, 3),
+    V_ca_Freq: Scale_Data(other01Data.Freq[408005], ((1 / 65536) * 100) / 1000, 3),
     I_a_Freq: Scale_Data(other01Data.Freq[408009], (1 / 65536) * 200, 2),
     I_b_Freq: Scale_Data(other01Data.Freq[408011], (1 / 65536) * 200, 2),
     I_c_Freq: Scale_Data(other01Data.Freq[408013], (1 / 65536) * 200, 2),
-    S_Freq: Scale_Data(
-      other01Data.Freq[408023],
-      ((1 / 65536) * 100 * 200) / 1000,
-      1
-    ),
+    S_Freq: Scale_Data(other01Data.Freq[408023], ((1 / 65536) * 100 * 200) / 1000, 1),
     PF_Freq: Calculate_N1450_PF(other01Data.Freq[408025]),
     Freq_Freq: Scale_Data(other01Data.Freq[408026], 1 / 65536, 3),
     AE_imp_Freq: Scale_Data(other01Data.Freq[408028], 0.1, 1),
@@ -257,10 +208,7 @@ router.post("/change_num_of_RelayVCB", async (req, res) => {
 
     await query_SLD_KeyValuePairs();
 
-    const response = {
-      title_of_pUW: relayVCB_MT[num_RelayVCB].pUW_title,
-      relayVCB_revBitString: SLD_KeyValuePairs.relayVCB
-    };
+    const response = { title_of_pUW: relayVCB_MT[num_RelayVCB].pUW_title, relayVCB_revBitString: SLD_KeyValuePairs.relayVCB };
 
     res.json(response);
   } catch (error) {

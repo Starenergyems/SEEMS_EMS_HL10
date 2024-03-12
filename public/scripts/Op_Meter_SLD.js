@@ -310,34 +310,61 @@ async function updateData() {                                   // 更新資料 
 
   const classCollection_SL_of_CB = ["setToClose", "Err", "ErrData"];
 
-  assign_StatusLight_of_CB("#MVCB", data.statusL_of_MVCB);
-  assign_StatusLight_of_CB("#VCB_1", data.statusL_of_VCB1);
-  assign_StatusLight_of_CB("#VCB_2", data.statusL_of_VCB2);
-  assign_StatusLight_of_CB("#VCB_3", data.statusL_of_VCB3);
-  assign_StatusLight_of_CB("#VCB_4", data.statusL_of_VCB4);
-  assign_StatusLight_of_CB("#VCB_aux", data.statusL_of_VCB_aux);
+  assign_ClassD_to_StatusOfDL_with_SpID("#MVCB", data.statusL_of_MVCB, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#VCB_1", data.statusL_of_VCB1, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#VCB_2", data.statusL_of_VCB2, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#VCB_3", data.statusL_of_VCB3, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#VCB_4", data.statusL_of_VCB4, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#VCB_aux", data.statusL_of_VCB_aux, classCollection_SL_of_CB);
 
-  assign_StatusLight_of_CB("#ACB_1_1", data.statusL_of_ACB1_1);
-  assign_StatusLight_of_CB("#ACB_1_2", data.statusL_of_ACB1_2);
-  assign_StatusLight_of_CB("#ACB_1_3", data.statusL_of_ACB1_3);
-  assign_StatusLight_of_CB("#ACB_2_1", data.statusL_of_ACB2_1);
-  assign_StatusLight_of_CB("#ACB_2_2", data.statusL_of_ACB2_2);
-  assign_StatusLight_of_CB("#ACB_2_3", data.statusL_of_ACB2_3);
-  assign_StatusLight_of_CB("#ACB_3_1", data.statusL_of_ACB3_1);
-  assign_StatusLight_of_CB("#ACB_3_2", data.statusL_of_ACB3_2);
-  assign_StatusLight_of_CB("#ACB_3_3", data.statusL_of_ACB3_3);
-  assign_StatusLight_of_CB("#ACB_4_1", data.statusL_of_ACB4_1);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_1_1", data.statusL_of_ACB1_1, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_1_2", data.statusL_of_ACB1_2, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_1_3", data.statusL_of_ACB1_3, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_2_1", data.statusL_of_ACB2_1, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_2_2", data.statusL_of_ACB2_2, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_2_3", data.statusL_of_ACB2_3, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_3_1", data.statusL_of_ACB3_1, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_3_2", data.statusL_of_ACB3_2, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_3_3", data.statusL_of_ACB3_3, classCollection_SL_of_CB);
+  assign_ClassD_to_StatusOfDL_with_SpID("#ACB_4_1", data.statusL_of_ACB4_1, classCollection_SL_of_CB);
+
+  // assign_StatusLight_of_CB("#MVCB", data.statusL_of_MVCB);
+  // assign_StatusLight_of_CB("#VCB_1", data.statusL_of_VCB1);
+  // assign_StatusLight_of_CB("#VCB_2", data.statusL_of_VCB2);
+  // assign_StatusLight_of_CB("#VCB_3", data.statusL_of_VCB3);
+  // assign_StatusLight_of_CB("#VCB_4", data.statusL_of_VCB4);
+  // assign_StatusLight_of_CB("#VCB_aux", data.statusL_of_VCB_aux);
+
+  // assign_StatusLight_of_CB("#ACB_1_1", data.statusL_of_ACB1_1);
+  // assign_StatusLight_of_CB("#ACB_1_2", data.statusL_of_ACB1_2);
+  // assign_StatusLight_of_CB("#ACB_1_3", data.statusL_of_ACB1_3);
+  // assign_StatusLight_of_CB("#ACB_2_1", data.statusL_of_ACB2_1);
+  // assign_StatusLight_of_CB("#ACB_2_2", data.statusL_of_ACB2_2);
+  // assign_StatusLight_of_CB("#ACB_2_3", data.statusL_of_ACB2_3);
+  // assign_StatusLight_of_CB("#ACB_3_1", data.statusL_of_ACB3_1);
+  // assign_StatusLight_of_CB("#ACB_3_2", data.statusL_of_ACB3_2);
+  // assign_StatusLight_of_CB("#ACB_3_3", data.statusL_of_ACB3_3);
+  // assign_StatusLight_of_CB("#ACB_4_1", data.statusL_of_ACB4_1);
 
   const classCollection_DL = ["setToClose", "ErrData"];
 
-  assign_StatusOfDL_with_SpID("#Rly_MVCB", data.relayMVCB_sumRawD > 0);
-  assign_StatusOfDL_with_SpID("#Rly_VCB_1", data.relayVCB1_rawD > 0);
-  assign_StatusOfDL_with_SpID("#Rly_VCB_2", data.relayVCB2_rawD > 0);
-  assign_StatusOfDL_with_SpID("#Rly_VCB_3", data.relayVCB3_rawD > 0);
-  assign_StatusOfDL_with_SpID("#Rly_VCB_4", data.relayVCB4_rawD > 0);
-  assign_StatusOfDL_with_SpID("#Rly_VCB_aux", data.relayVCB_aux_rawD > 0);
+  assign_ClassD_to_StatusOfDL_with_SpID("#Rly_MVCB", data.statusL_of_relayMVCB, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#Rly_VCB_1", data.statusL_of_relayVCB1 > 0, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#Rly_VCB_2", data.statusL_of_relayVCB2 > 0, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#Rly_VCB_3", data.statusL_of_relayVCB3 > 0, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#Rly_VCB_4", data.statusL_of_relayVCB4 > 0, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#Rly_VCB_aux", data.statusL_of_relayVCB_aux > 0, classCollection_DL);
 
-  assign_StatusLight_of_recloser(data.statusL_of_recloser);
+  // assign_StatusOfDL_with_SpID("#Rly_MVCB", data.relayMVCB_sumRawD > 0);
+  // assign_StatusOfDL_with_SpID("#Rly_VCB_1", data.relayVCB1_rawD > 0);
+  // assign_StatusOfDL_with_SpID("#Rly_VCB_2", data.relayVCB2_rawD > 0);
+  // assign_StatusOfDL_with_SpID("#Rly_VCB_3", data.relayVCB3_rawD > 0);
+  // assign_StatusOfDL_with_SpID("#Rly_VCB_4", data.relayVCB4_rawD > 0);
+  // assign_StatusOfDL_with_SpID("#Rly_VCB_aux", data.relayVCB_aux_rawD > 0);
+
+  assign_ClassD_to_StatusOfDL_with_SpID("#Recloser_MVCB", data.statusL_of_recloser, classCollection_DL);
+
+  // assign_StatusLight_of_recloser(data.statusL_of_recloser);
 
   assign_TextContent_To_SpID("#temp_TR1", data.temp_TR1);
   assign_TextContent_To_SpID("#temp_TR2", data.temp_TR2);
@@ -369,128 +396,199 @@ async function updateData() {                                   // 更新資料 
   assign_TextContent_To_SpID("#RE_imp_Freq", data.RE_imp_Freq);
   assign_TextContent_To_SpID("#RE_exp_Freq", data.RE_exp_Freq);
 
-  assign_StatusOfDL_with_SpID("#recloserMode_bit_0", data.recloserMode[0] === "1");
-  assign_StatusOfDL_with_SpID("#recloserMode_bit_1", data.recloserMode[1] === "1");
-  assign_StatusOfDL_with_SpID("#recloserMode_bit_2", data.recloserMode[2] === "1");
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserMode_bit_0", data.recloserMode[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserMode_bit_1", data.recloserMode[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserMode_bit_2", data.recloserMode[2]);
 
-  assign_StatusOfDL_with_SpID("#recloserStatus_bit_0", data.recloserStatus[0] === "1");
-  assign_StatusOfDL_with_SpID("#recloserStatus_bit_1", data.recloserStatus[1] === "1");
-  assign_StatusOfDL_with_SpID("#recloserStatus_bit_2", data.recloserStatus[2] === "1");
-  assign_StatusOfDL_with_SpID("#recloserStatus_bit_3", data.recloserStatus[3] === "1");
-  assign_StatusOfDL_with_SpID("#recloserStatus_bit_4", data.recloserStatus[4] === "1");
-  assign_StatusOfDL_with_SpID("#recloserStatus_bit_5", data.recloserStatus[5] === "1");
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserStatus_bit_0", data.recloserStatus[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserStatus_bit_1", data.recloserStatus[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserStatus_bit_2", data.recloserStatus[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserStatus_bit_3", data.recloserStatus[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserStatus_bit_4", data.recloserStatus[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserStatus_bit_5", data.recloserStatus[5]);
 
-  assign_StatusOfDL_with_SpID("#recloserRelay_bit_4", data.recloserRelay[4] === "1");
-  assign_StatusOfDL_with_SpID("#recloserRelay_bit_5", data.recloserRelay[5] === "1");
-  assign_StatusOfDL_with_SpID("#recloserRelay_bit_6", data.recloserRelay[6] === "1");
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserRelay_bit_4", data.recloserRelay[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserRelay_bit_5", data.recloserRelay[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#recloserRelay_bit_6", data.recloserRelay[6]);
 
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_0", data.relayMVCB_S0[0] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_1", data.relayMVCB_S0[1] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_2", data.relayMVCB_S0[2] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_3", data.relayMVCB_S0[3] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_4", data.relayMVCB_S0[4] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_5", data.relayMVCB_S0[5] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_6", data.relayMVCB_S0[6] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_7", data.relayMVCB_S0[7] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_8", data.relayMVCB_S0[8] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_9", data.relayMVCB_S0[9] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_10", data.relayMVCB_S0[10] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_11", data.relayMVCB_S0[11] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_12", data.relayMVCB_S0[12] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_13", data.relayMVCB_S0[13] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_14", data.relayMVCB_S0[14] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_15", data.relayMVCB_S0[15] === "1");
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_0", data.relayMVCB_S0[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_1", data.relayMVCB_S0[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_2", data.relayMVCB_S0[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_3", data.relayMVCB_S0[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_4", data.relayMVCB_S0[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_5", data.relayMVCB_S0[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_6", data.relayMVCB_S0[6]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_7", data.relayMVCB_S0[7]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_8", data.relayMVCB_S0[8]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_9", data.relayMVCB_S0[9]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_10", data.relayMVCB_S0[10]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_11", data.relayMVCB_S0[11]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_12", data.relayMVCB_S0[12]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_13", data.relayMVCB_S0[13]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_14", data.relayMVCB_S0[14]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S0_bit_15", data.relayMVCB_S0[15]);
 
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_0", data.relayMVCB_S1[0] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_1", data.relayMVCB_S1[1] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_2", data.relayMVCB_S1[2] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_3", data.relayMVCB_S1[3] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_4", data.relayMVCB_S1[4] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_5", data.relayMVCB_S1[5] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_6", data.relayMVCB_S1[6] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_7", data.relayMVCB_S1[7] === "1");
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_0", data.relayMVCB_S1[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_1", data.relayMVCB_S1[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_2", data.relayMVCB_S1[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_3", data.relayMVCB_S1[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_4", data.relayMVCB_S1[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_5", data.relayMVCB_S1[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_6", data.relayMVCB_S1[6]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S1_bit_7", data.relayMVCB_S1[7]);
 
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_0", data.relayMVCB_S2[0] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_1", data.relayMVCB_S2[1] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_2", data.relayMVCB_S2[2] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_3", data.relayMVCB_S2[3] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_4", data.relayMVCB_S2[4] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_5", data.relayMVCB_S2[5] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_6", data.relayMVCB_S2[6] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_7", data.relayMVCB_S2[7] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_8", data.relayMVCB_S2[8] === "1");
-  assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_9", data.relayMVCB_S2[9] === "1");
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_0", data.relayMVCB_S2[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_1", data.relayMVCB_S2[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_2", data.relayMVCB_S2[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_3", data.relayMVCB_S2[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_4", data.relayMVCB_S2[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_5", data.relayMVCB_S2[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_6", data.relayMVCB_S2[6]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_7", data.relayMVCB_S2[7]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_8", data.relayMVCB_S2[8]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayMVCB_S2_bit_9", data.relayMVCB_S2[9]);
+
+  // assign_StatusOfDL_with_SpID("#recloserMode_bit_0", data.recloserMode[0] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserMode_bit_1", data.recloserMode[1] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserMode_bit_2", data.recloserMode[2] === "1");
+
+  // assign_StatusOfDL_with_SpID("#recloserStatus_bit_0", data.recloserStatus[0] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserStatus_bit_1", data.recloserStatus[1] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserStatus_bit_2", data.recloserStatus[2] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserStatus_bit_3", data.recloserStatus[3] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserStatus_bit_4", data.recloserStatus[4] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserStatus_bit_5", data.recloserStatus[5] === "1");
+
+  // assign_StatusOfDL_with_SpID("#recloserRelay_bit_4", data.recloserRelay[4] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserRelay_bit_5", data.recloserRelay[5] === "1");
+  // assign_StatusOfDL_with_SpID("#recloserRelay_bit_6", data.recloserRelay[6] === "1");
+
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_0", data.relayMVCB_S0[0] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_1", data.relayMVCB_S0[1] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_2", data.relayMVCB_S0[2] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_3", data.relayMVCB_S0[3] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_4", data.relayMVCB_S0[4] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_5", data.relayMVCB_S0[5] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_6", data.relayMVCB_S0[6] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_7", data.relayMVCB_S0[7] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_8", data.relayMVCB_S0[8] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_9", data.relayMVCB_S0[9] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_10", data.relayMVCB_S0[10] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_11", data.relayMVCB_S0[11] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_12", data.relayMVCB_S0[12] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_13", data.relayMVCB_S0[13] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_14", data.relayMVCB_S0[14] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S0_bit_15", data.relayMVCB_S0[15] === "1");
+
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_0", data.relayMVCB_S1[0] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_1", data.relayMVCB_S1[1] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_2", data.relayMVCB_S1[2] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_3", data.relayMVCB_S1[3] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_4", data.relayMVCB_S1[4] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_5", data.relayMVCB_S1[5] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_6", data.relayMVCB_S1[6] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S1_bit_7", data.relayMVCB_S1[7] === "1");
+
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_0", data.relayMVCB_S2[0] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_1", data.relayMVCB_S2[1] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_2", data.relayMVCB_S2[2] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_3", data.relayMVCB_S2[3] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_4", data.relayMVCB_S2[4] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_5", data.relayMVCB_S2[5] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_6", data.relayMVCB_S2[6] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_7", data.relayMVCB_S2[7] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_8", data.relayMVCB_S2[8] === "1");
+  // assign_StatusOfDL_with_SpID("#relayMVCB_S2_bit_9", data.relayMVCB_S2[9] === "1");
 
   updateData_relayVCB(data.relayVCB);
   // console.log("定時更新");
 }
 
 function updateData_relayVCB(revBitString) {
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_0", revBitString[0] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_1", revBitString[1] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_2", revBitString[2] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_3", revBitString[3] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_4", revBitString[4] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_5", revBitString[5] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_6", revBitString[6] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_7", revBitString[7] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_8", revBitString[8] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_9", revBitString[9] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_10", revBitString[10] === "1");
-  assign_StatusOfDL_with_SpID("#relayVCB_bit_11", revBitString[11] === "1");
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_0", revBitString[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_1", revBitString[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_2", revBitString[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_3", revBitString[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_4", revBitString[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_5", revBitString[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_6", revBitString[6]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_7", revBitString[7]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_8", revBitString[8]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_9", revBitString[9]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_10", revBitString[10]);
+  assign_BitD_to_StatusOfDL_with_SpID("#relayVCB_bit_11", revBitString[11]);
+
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_0", revBitString[0] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_1", revBitString[1] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_2", revBitString[2] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_3", revBitString[3] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_4", revBitString[4] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_5", revBitString[5] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_6", revBitString[6] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_7", revBitString[7] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_8", revBitString[8] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_9", revBitString[9] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_10", revBitString[10] === "1");
+  // assign_StatusOfDL_with_SpID("#relayVCB_bit_11", revBitString[11] === "1");
 }
 
-function assign_StatusLight_of_recloser(statusLight) {
-  const statusL_of_recloser = document.querySelector("#Recloser_MVCB");
+// function assign_StatusLight_of_recloser(statusLight) {
+//   const statusL_of_recloser = document.querySelector("#Recloser_MVCB");
 
-  if (statusLight === "setToClose") {
-    statusL_of_recloser.classList.add("setToClose");
-  } else {
-    statusL_of_recloser.classList.remove("setToClose");
-  }
-}
+//   if (statusLight === "setToClose") {
+//     statusL_of_recloser.classList.add("setToClose");
+//   } else {
+//     statusL_of_recloser.classList.remove("setToClose");
+//   }
+// }
 
-function assign_StatusLight_of_CB(SpID, statusLight) {
-  const element = document.querySelector(SpID);
+// function assign_StatusLight_of_CB(SpID, statusLight) {
+//   const element = document.querySelector(SpID);
 
-  if (statusLight === "setToClose") {
-    element.classList.add("setToClose");
-    element.classList.remove("Err");
-  } else if (statusLight === "Err") {
-    element.classList.add("Err");
-    element.classList.remove("setToClose");
-  } else {
-    element.classList.remove("setToClose");
-    element.classList.remove("Err");
-  }
-}
+//   if (statusLight === "setToClose") {
+//     element.classList.add("setToClose");
+//     element.classList.remove("Err");
+//   } else if (statusLight === "Err") {
+//     element.classList.add("Err");
+//     element.classList.remove("setToClose");
+//   } else {
+//     element.classList.remove("setToClose");
+//     element.classList.remove("Err");
+//   }
+// }
 
 function animation_of_Thermometer(transformerID, oilTemp) {
   const thermoBar = document.querySelector(`#thermoBar_${transformerID}`);
   const thermoBottom = document.querySelector(`#thermoBot_${transformerID}`);
 
-  const temp_min = 0;
-  const temp_max = 100;
-  const height_min = 7;
-  const height_max = 32;
-
-  if (oilTemp >= 70) {
-    thermoBar.style.background = "#E53935";
-    thermoBottom.style.background = "#E53935";
-  } else if (oilTemp < 35) {
-    thermoBar.style.background = "#236E37";
-    thermoBottom.style.background = "#236E37";
-  } else {
-    thermoBar.style.background = "#FE922D";
-    thermoBottom.style.background = "#FE922D";
-  }
-
-  if (oilTemp >= temp_max) {
+  if (oilTemp === "#*#") {
+    thermoBar.style.background = "#9D653D";
+    thermoBottom.style.background = "#9D653D";
     thermoBar.style.height = "32px";
-  } else if (oilTemp <= temp_min) {
-    thermoBar.style.height = "7px";
   } else {
-    let barHeight = height_min + (oilTemp - temp_min) / (temp_max - temp_min) * (height_max - height_min);
-    thermoBar.style.height = barHeight + "px";
+    const temp_min = 0;
+    const temp_max = 100;
+    const height_min = 7;
+    const height_max = 32;
+
+    if (oilTemp >= 70) {
+      thermoBar.style.background = "#E53935";
+      thermoBottom.style.background = "#E53935";
+    } else if (oilTemp < 35) {
+      thermoBar.style.background = "#236E37";
+      thermoBottom.style.background = "#236E37";
+    } else {
+      thermoBar.style.background = "#FE922D";
+      thermoBottom.style.background = "#FE922D";
+    }
+
+    if (oilTemp >= temp_max) {
+      thermoBar.style.height = "32px";
+    } else if (oilTemp <= temp_min) {
+      thermoBar.style.height = "7px";
+    } else {
+      let barHeight = height_min + (oilTemp - temp_min) / (temp_max - temp_min) * (height_max - height_min);
+      thermoBar.style.height = barHeight + "px";
+    }
   }
 }

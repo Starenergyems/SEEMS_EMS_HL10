@@ -229,3 +229,18 @@ function assign_ClassD_to_StatusOfDL_with_SpID(SpID, classData, classCollection)
     }
 }
 
+function assign_BitD_to_StatusOfDL_with_SpID(SpID, bitData) {
+    const element = document.querySelector(SpID);
+
+    if (bitData === "1") {
+        element.classList.add("setToClose");
+        element.classList.remove("ErrData");
+    } else if (bitData === "0") {
+        element.classList.remove("setToClose");
+        element.classList.remove("ErrData");
+    } else {
+        element.classList.remove("setToClose");
+        element.classList.add("ErrData");
+    }
+}
+
