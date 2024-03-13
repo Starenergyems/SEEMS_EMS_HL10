@@ -8,6 +8,8 @@ module.exports = {
     port: 5984,
     username: "admin",
     password: "ems45877096",
+    account: "account",
+    config: "CONFIG",
   },
   //改為案場電腦用
   // database: {

@@ -222,6 +222,7 @@ router.get("/mode/sysctrl/:data", async (req, res) => {
 /******排程**************************************************************/
 router.get("/mode/schedule", (req, res) => {
   res.render("Mode_Schedule", { permission: "manager" });
+  // console.log(`id：${req.body.id}, levle：${req.body.level}`)
 });
 
 //運轉資訊+單線圖

@@ -1,4 +1,4 @@
-<%- include('Navbar', { 
+<%- include('Navbar_copy', { 
     title: '系統設定', 
      stylesheets: [
         'https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css',
@@ -53,7 +53,7 @@
                                 <option value="5">5</option>
                                 <option value="6">6</option>
                                 <option value="7">7</option>
-                                <option value="8" selected>8</option>
+                                <option value="8">8</option>
                                 <option value="9">9</option>
                                 <option value="10">10</option>
                             </select>
@@ -61,7 +61,7 @@
                                 <select name="maxTotal" id="maxTotal">
                                     <option value="10">10</option>
                                     <option value="11">11</option>
-                                    <option value="12" selected>12</option>
+                                    <option value="12">12</option>
                                     <option value="13">13</option>
                                     <option value="14">14</option>
                                     <option value="15">15</option>
@@ -74,7 +74,7 @@
                             <td>
                                 <select name="minNum" id="minNum">
                                     <option value="0">0</option>
-                                    <option value="1" selected>1</option>
+                                    <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
@@ -88,7 +88,7 @@
                             <td>
                                 <select name="minUpper" id="minUpper">
                                     <option value="0">0</option>
-                                    <option value="1" selected>1</option>
+                                    <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
@@ -102,7 +102,7 @@
                             <td>
                                 <select name="minLower" id="minLower">
                                     <option value="0">0</option>
-                                    <option value="1" selected>1</option>
+                                    <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
@@ -116,7 +116,7 @@
                             <td>
                                 <select name="minSpe" id="minSpe">
                                     <option value="0">0</option>
-                                    <option value="1" selected>1</option>
+                                    <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
@@ -132,13 +132,10 @@
                             </tfoot>
                         </tbody>
                         </table>
-                    <input class="submit" type="submit" value="儲存" onclick="dataPost('#setPW', 'http://localhost:3005/account/system/passwordsetting/')">
+                    <input class="submit" type="submit" value="儲存" onclick="dataPost('#setPW', '/account/system/passwordsetting/')">
                 </form>
-            
-            
-
-            
                 </div>
+                
                 <div class="setPasswordBlock">
                     <div class="title">
                         <h1>帳戶停用準則</h1>
@@ -153,7 +150,7 @@
                                 <select name="wrongNum" id="wrongNum">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
-                                    <option value="3" selected>3</option>
+                                    <option value="3">3</option>
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
@@ -166,7 +163,7 @@
                             <td>
                                 <select name="forbidTime" id="forbidTime">
                                     <option value="1">1</option>
-                                    <option value="3" selected>3</option>
+                                    <option value="3">3</option>
                                     <option value="5">5</option>
                                     <option value="24">24</option>
                                     <option value="48">48</option>
@@ -177,10 +174,10 @@
                             </tr>
                         </tbody>
                         </table>
-                    <input class="submit" type="submit" value="儲存"  onclick="dataPost('#forbid', 'http://localhost:3005/account/system/banrule/')">
-                </form>
-        
+                    <input class="submit" type="submit" value="儲存"  onclick="dataPost('#forbid', '/account/system/banrule/')">
+                    </form>
                 </div>    
+
                 <div class="setPasswordBlock">
                     <div class="title">
                         <h1>登入畫面提示字元</h1>
@@ -197,9 +194,10 @@
                         </tr>
                         </tbody>
                     </table>
-                    <input class="submit" type="submit" value="儲存" onclick="dataPost('#text', 'http://localhost:3005/account/system/logintext/')">
+                    <input class="submit" type="submit" value="儲存" onclick="dataPost('#text', '/account/system/logintext/')">
                     </form>
                 </div>
+
                 <div id="edit" class="editBlock"><!--編輯框-->
                 <div class="editRegData appear">
                 <form id="accountForm">
@@ -227,8 +225,8 @@
                         <div class="infoPUW">修改密碼:
                         <input class="inputEditRD" id="eRDPass" onclick="" name="password"></div>
                         <div class="edit_button">
-                        <button class="btnCommon" id="btn_deleteEditRD" onclick="dataPost('#accountForm','http://localhost:3005/account/system/accounts/')">刪除帳號</button>
-                        <input value="確認修改" type='submit' class="btnCommon" id="btn_updateEditRD" onclick="dataPost('#accountForm', 'http://localhost:3005/account/system/accounts/')">
+                        <button class="btnCommon" id="btn_deleteEditRD" onclick="dataPost('#accountForm','/account/system/accounts')">刪除帳號</button>
+                        <input value="確認修改" type='submit' class="btnCommon" id="btn_updateEditRD" onclick="dataPost('#accountForm', '/account/system/accounts')">
                         <button class="btnCommon" id="btn_cancelEditRD" type="button" onclick="hideEdit()">取消</button>
                         </div>
                         
@@ -253,6 +251,7 @@ crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!--dataTable-->
 <script src="../public/scripts/script_template.js"></script>
 <script src="../public/scripts/SysManage.js"></script>
+
 </body>
 
 </html>

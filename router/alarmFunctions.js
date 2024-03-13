@@ -14,6 +14,7 @@ const nano = require("nano")(
 );
 const axios = require("axios");
 const moment = require("moment");
+require('dotenv').config();
 
 const lc1_rf01 = "lc1_rf01";
 const lc1nanoDb = nano.use(lc1_rf01);
@@ -2461,6 +2462,8 @@ function update_trigger_alarms_batch(
   });
 }
 
+const LineNotifyToken = process.env.LineNotifyToken;
+
 function sendLineNotify(error_result_item) {
   const message = `
     ID:   ${error_result_item["_id"]} 
@@ -2470,13 +2473,12 @@ function sendLineNotify(error_result_item) {
     Value:   ${error_result_item["value"]}
     Warning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
   `;
-  const accessToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
   const request = {
     method: "post",
     //url: 'http://192.168.8.112/line-notify',
     url: "https://notify-api.line.me/api/notify",
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${LineNotifyToken}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     params: {

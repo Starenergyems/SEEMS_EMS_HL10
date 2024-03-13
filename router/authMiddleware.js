@@ -26,7 +26,7 @@ async function authentication(req) {
     let token = ""
     let browser_token = ""
     req.cookies.token === undefined ? browser_token = "" : browser_token = req.cookies.token
-    if (browser_token === ""){
+    if (browser_token === "" || browser_token === undefined){
         console.log("The token is not exist in browser's cookie.")
         return false
     }

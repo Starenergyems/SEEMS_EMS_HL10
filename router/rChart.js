@@ -35,7 +35,7 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 //以下app要改回router
 router.get("/chart", (req, res) => {
   // num與fun
-  res.render("Cht_RealTime");
+  res.redirect("/chart/realtime");
 });
 
 router.get("/chart/realtime", (req, res) => {
@@ -68,3 +68,22 @@ module.exports = router;
 /*app.listen(port, () => {
   console.log(`應用程式正在監聽端口 ${port}`);
 });*/
+
+const input_time = 0;
+const input_interval = 0;
+
+function getDate_realtime() {
+  const last_year_start = moment
+    .subtract(1, "year") // 減去一年
+    .startOf("year") // 獲取一年中的開始時間
+    .format("YYYY-MM");
+  const filter_year = {
+    selector: {
+      time: {
+        $gte: last_year_start, // 時間大於或等於 last_year_start
+        $lte: last_year_end, // 時間小於或等於 last_year_end
+      },
+    },
+    limit: 12, // 12個月
+  };
+}

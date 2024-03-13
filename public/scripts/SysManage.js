@@ -108,8 +108,8 @@ async function dataPost(form, url) {//提交表單
   }*/
 
 async function readPass(){ //讀密碼限制
-	var setting = await dataGet('http://localhost:3005/account/system/passwordsetting/');
-    console.log(setting);
+	var setting = await dataGet('/account/system/passwordsetting/');
+    // console.log(setting);
 	$('#minTotal').val(setting[0].minTotal);
 	$('#maxTotal').val(setting[0].maxTotal);
 	$('#minNum').val(setting[0].minNum);
@@ -118,16 +118,15 @@ async function readPass(){ //讀密碼限制
 	$('#minSpe').val(setting[0].minSpe);
 }
 async function readForbid(){ //讀停權設置
-	var setting = await dataGet('http://localhost:3005/account/system/banrule/');
+	var setting = await dataGet('/account/system/banrule/');
+	// console.log(setting)
 	$('#wrongNum').val(setting[0].wrongNum);
 	$('#forbidTime').val(setting[0].forbidTime);
 }
 async function readText(){ //讀密碼限制
-	var setting = await dataGet('http://localhost:3005/account/system/logintext/');
+	var setting = await dataGet('/account/system/logintext/');
 	$('#logintext').val(setting[0].logintext);
 }
-
-
 
 
 async function dataTable(){
@@ -157,7 +156,7 @@ async function dataTable(){
 		},
 		};
 
-		var dataset = await dataGet('http://localhost:3005/account/system/accounts');//端口要改
+		var dataset = await dataGet('/account/system/accounts');//端口要改
         console.log(dataset);
 			
 			dataLength = dataset.length; 
@@ -231,18 +230,18 @@ var realtime;
 var realLength;
 
 
-function totalWarning(n){
-	$("#warningNumber").remove();
-	if(realLength>99){
-		$("#warningButton").append('<p class="warningNumber">99+</p>');
-	}
-	else if(realLength === undefined){
-		return;
-	}
-	else{
-		$("#warningButton").append('<p class="warningNumber">'+n+'</p>')
-	};	
-} 
+// function totalWarning(n){
+// 	$("#warningNumber").remove();
+// 	if(realLength>99){
+// 		$("#warningButton").append('<p class="warningNumber">99+</p>');
+// 	}
+// 	else if(realLength === undefined){
+// 		return;
+// 	}
+// 	else{
+// 		$("#warningButton").append('<p class="warningNumber">'+n+'</p>')
+// 	};	
+// } 
 
 /*編輯框*/
 function hideEdit(){

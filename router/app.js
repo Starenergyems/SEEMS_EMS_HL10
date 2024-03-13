@@ -63,8 +63,14 @@ lc3nanoDb.createIndex(indexDef);
 lc4nanoDb.createIndex(indexDef);
 alarmnanoDb.createIndex(indexDef);
 //***************************************************************************************************************** */
-app.get("/", (req, res) => {
+
+app.get("/login", (req, res) => {
+  res.clearCookie("token");
   res.render("Login");
+});
+
+app.get("/", (req, res) => {
+  res.redirect("/login");
 });
 
 app.post("/login", async (req, res) => {
@@ -79,8 +85,10 @@ app.post("/login", async (req, res) => {
       res.cookie("token", response["token"]);
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
-      // res.json({ redirect: "http://localhost:3000/operateinfo" });
-      res.redirect("./operateinfo");
+      // res.redirect(302, "/mode");
+      res.json({ redirect: "http://localhost:3000/mode" });
+      // res.redirect("/mode")
+      // res.redirect("./operateinfo");
     } else {
       res.status(401).send(response["text"]);
     }
@@ -90,19 +98,17 @@ app.post("/login", async (req, res) => {
   }
 });
 
-//身分驗證 暫時關閉
+//身分驗證
 app.use("*", async (req, res, next) => {
   try {
     const authenticated = await authentication(req);
     if (authenticated === false) {
-      // console.log(1)
-      // res.redirect('./')
-      // console.log(2)
-      // return res.redirect('./')
+      // return res.redirect(302,"/login")
       return res.status(401).send("Unauthorized");
-      //req.customData = authenticated;
     } else {
       req.customData = authenticated;
+      req.body.id = authenticated.id;
+      req.body.permission = authenticated.level;
     }
     next();
   } catch (error) {
@@ -111,18 +117,14 @@ app.use("*", async (req, res, next) => {
   }
 });
 
-app.post("/test", (req, res) => {
-  const token = req.customData.token;
-  const id = req.customData.id;
-  // const level = req.customData.level;
-  // console.log(`id = ${id}, permission = ${level}, token = ${token}`);
-  const body = req.body;
-  // console.log(`body = ${body}, ${body.a}`);
-});
+// app.get("/test", (req, res) => {
+//   const id = req.customData.id;
+//   const level = req.customData.permission;
+//   console.log(`authmiddle body:${req.body}, customDate: ${req.customDate}`);
+// });
 
 //***************************************************************************************************************** */
-//中介軟體 - 在每個請求上設置 navbarData 和其他變數
-// 創建資料庫實例
+//側欄用
 const today = new Date();
 const midnight = new Date(
   today.getFullYear(),
@@ -178,62 +180,80 @@ const mangoQuery = {
   sort: [{ time: "desc" }],
   limit: 1,
 };
+/******************************************************************************************* */
+// // 呼叫函式並取得最新數值
+// const latestValues = getLatestValuesFromDatabase();
 
-// 呼叫函式並取得最新數值
-const latestValues = getLatestValuesFromDatabase();
+// // 透過迴圈遍歷陣列或物件，取出每個數值
+// console.log(latestValues); // 或者你可以做任何你需要的處理
 
-// 透過迴圈遍歷陣列或物件，取出每個數值
-console.log(latestValues); // 或者你可以做任何你需要的處理
+// //let navbarData = null; // 定義一個全局變數用於存儲 navbarData
+// app.use(async (req, res, next) => {
+//   //console.log("navbarDataObject", navbarDataObject);
 
-//let navbarData = null; // 定義一個全局變數用於存儲 navbarData
-app.use(async (req, res, next) => {
-  //console.log("navbarDataObject", navbarDataObject);
+//   // console.log("****res.locals", res.locals);
+//   // const number = 99998888;
+//   // res.locals.number = number;
+//   // console.log("****res.locals", res.locals);
 
-  console.log("****res.locals", res.locals);
-  const number = 99998888;
-  res.locals.number = number;
-  console.log("****res.locals", res.locals);
+//   // 呼叫函式並取得最新數值
+//   const latestValues = await getLatestValuesFromDatabase();
+//   // 獲取總數 這裡用的是FAULT是錯誤
+//   res.locals.totalAlarmNum = latestValues[0];
+//   res.locals.AlarmNum_Sys = latestValues[1]; //新增
+//   res.locals.AlarmNum_Bat = latestValues[2];
+//   res.locals.AlarmNum_PCS = latestValues[3];
+//   res.locals.AlarmNum_FF = latestValues[4];
+//   res.locals.AlarmNum_Env = latestValues[5];
+//   res.locals.AlarmNum_Meter = latestValues[6];
+//   //
+//   res.locals.totalWarningNum = latestValues[7];
+//   res.locals.WarningNum_Sys = latestValues[8]; //新增
+//   res.locals.WarningNum_Bat = latestValues[9];
+//   res.locals.WarningNum_PCS = latestValues[10];
+//   res.locals.WarningNum_FF = latestValues[11];
+//   res.locals.WarningNum_Env = latestValues[12];
+//   res.locals.WarningNum_Meter = latestValues[13];
 
-  // 呼叫函式並取得最新數值
-  const latestValues = await getLatestValuesFromDatabase();
-  // 獲取總數 這裡用的是FAULT是錯誤
-  res.locals.totalAlarmNum = latestValues[0];
-  res.locals.AlarmNum_Sys = latestValues[1]; //新增
-  res.locals.AlarmNum_Bat = latestValues[2];
-  res.locals.AlarmNum_PCS = latestValues[3];
-  res.locals.AlarmNum_FF = latestValues[4];
-  res.locals.AlarmNum_Env = latestValues[5];
-  res.locals.AlarmNum_Meter = latestValues[6];
-  //
-  res.locals.totalWarningNum = latestValues[7];
-  res.locals.WarningNum_Sys = latestValues[8]; //新增
-  res.locals.WarningNum_Bat = latestValues[9];
-  res.locals.WarningNum_PCS = latestValues[10];
-  res.locals.WarningNum_FF = latestValues[11];
-  res.locals.WarningNum_Env = latestValues[12];
-  res.locals.WarningNum_Meter = latestValues[13];
+//   //沒有計算 純粹讀取+換算
+//   const latestValues2 = await getLatestValuesFromDatabaseforother();
+//   res.locals.L_M_systemMode = latestValues2[0];
+//   res.locals.L_M_freq = latestValues2[1];
+//   res.locals.L_M_activeP = latestValues2[2];
+//   res.locals.L_M_reactiveP = latestValues2[3];
+//   res.locals.L_M_voltage = latestValues2[4];
+//   res.locals.L_M_current = latestValues2[5];
+//   res.locals.L_M_powerFactor = latestValues2[6];
+//   res.locals.L_M_avgSOC = latestValues2[7];
+//   res.locals.L_M_minSOH = latestValues2[8];
+//   res.locals.L_M_SBSPM = latestValues2[9];
+//   res.locals.L_M_chgEtoday = latestValues2[10];
+//   res.locals.L_M_dcgEtoday = latestValues2[11];
+//   // console.log("****res.locals", res.locals);
+//   next();
+// });
+/************************************************************************* */
+//Navbar資料api
 
-  //沒有計算 純粹讀取+換算
-  const latestValues2 = await getLatestValuesFromDatabaseforother();
-  res.locals.L_M_systemMode = latestValues2[0];
-  res.locals.L_M_freq = latestValues2[1];
-  res.locals.L_M_activeP = latestValues2[2];
-  res.locals.L_M_reactiveP = latestValues2[3];
-  res.locals.L_M_voltage = latestValues2[4];
-  res.locals.L_M_current = latestValues2[5];
-  res.locals.L_M_powerFactor = latestValues2[6];
-  res.locals.L_M_avgSOC = latestValues2[7];
-  res.locals.L_M_minSOH = latestValues2[8];
-  res.locals.L_M_SBSPM = latestValues2[9];
-  res.locals.L_M_chgEtoday = latestValues2[10];
-  res.locals.L_M_dcgEtoday = latestValues2[11];
-  console.log("****res.locals", res.locals);
-  next();
+app.get("/navbar", async (req, res) => {
+  console.log("後端收到");
+  try {
+    // 呼叫函式並取得最新數值
+    const latestValues = await getLatestValuesFromDatabase();
+    //沒有計算 純粹讀取+換算
+     const latestValues2 = await getLatestValuesFromDatabaseforother();
+    res.send({latestValues, latestValues2});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
 
 // 創建一個函數來從資料庫中獲取最新的數值
 async function getLatestValuesFromDatabase() {
   try {
+    console.log('1');
     // 執行查詢操作以獲取最新的數值
     const alarmData = await alarmnanoDb.find({
       selector: { time: { $exists: true } },
@@ -496,9 +516,9 @@ const pcsRouter = require("./rPCS");
 const batteryRouter = require("./rBattery");
 const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
-// const environmentRouter = require("./rEnvironment");
+const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
-const reportRouter = require("./rReport");
+//const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
@@ -514,9 +534,9 @@ app.use(pcsRouter);
 app.use(batteryRouter);
 app.use(commuRouter);
 app.use(deviceRouter);
-// app.use(environmentRouter);
+app.use(environmentRouter);
 app.use(eventRouter);
-app.use(reportRouter);
+//app.use(reportRouter);
 app.use(chartRouter);
 app.use(alarmRouter);
 

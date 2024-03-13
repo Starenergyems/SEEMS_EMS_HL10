@@ -20,6 +20,7 @@ const {
   scaleProcess,
   mapWordStatus,
   Determine_DL_of_upsStatus2,
+  mapUPSwarning,
 } = require("./function");
 
 app.set("view engine", "ejs");
@@ -167,69 +168,94 @@ async function queryEnv_variables() {
     acu_2_Temp_4_1: scaleProcess(lc4Data.BSC1[406010], 0.1, 1),
 
     /***************************************** */
-    ctrl_hvac_1_open: scaleProcess(other10Data.HVAC[408101], 0.1, 1),
-    ctrl_hvac_1_mode: 0,
-    ctrl_hvac_1_fanSpd: 0,
-    ctrl_hvac_1_tempSet: 0,
-    ctrl_hvac_1_temp: 0,
-    ctrl_hvac_1_humid: 0,
-    ctrl_hvac_1_error: 0,
+    ctrl_hvac_1_open: scaleProcess(other10Data.HVAC1[408101], 1, 1),
+    ctrl_hvac_1_mode: scaleProcess(other10Data.HVAC1[408102], 1, 1),
+    ctrl_hvac_1_fanSpd: scaleProcess(other10Data.HVAC1[408103], 1, 1),
+    ctrl_hvac_1_tempSet: scaleProcess(other10Data.HVAC1[408104], 1, 1),
+    ctrl_hvac_1_temp: scaleProcess(other10Data.HVAC1[408105], 1, 1),
+    ctrl_hvac_1_humid: scaleProcess(other10Data.HVAC1[408106], 1, 1),
+    ctrl_hvac_1_error: scaleProcess(other10Data.HVAC1[408107], 1, 1),
 
-    ctrl_hvac_2_open: 0,
-    ctrl_hvac_2_mode: 0,
-    ctrl_hvac_2_fanSpd: 0,
-    ctrl_hvac_2_tempSet: 0,
-    ctrl_hvac_2_temp: 0,
-    ctrl_hvac_2_humid: 0,
-    ctrl_hvac_2_error: 0,
+    ctrl_hvac_2_open: scaleProcess(other10Data.HVAC2[408101], 1, 1),
+    ctrl_hvac_2_mode: scaleProcess(other10Data.HVAC2[408102], 1, 1),
+    ctrl_hvac_2_fanSpd: scaleProcess(other10Data.HVAC2[408103], 1, 1),
+    ctrl_hvac_2_tempSet: scaleProcess(other10Data.HVAC2[408104], 1, 1),
+    ctrl_hvac_2_temp: scaleProcess(other10Data.HVAC2[408105], 1, 1),
+    ctrl_hvac_2_humid: scaleProcess(other10Data.HVAC2[408106], 1, 1),
+    ctrl_hvac_2_error: scaleProcess(other10Data.HVAC2[408107], 1, 1),
 
-    ups_MVCB_volt: 0,
-    ups_MVCB_temp: 0,
-    ups_MVCB_status: 0,
-    ups_MVCB_power: 0,
+    ups_MVCB_volt: scaleProcess(other10Data.UPS3[408151], 0.1, 1),
+    ups_MVCB_temp: scaleProcess(other10Data.UPS3[408152], 0.1, 1),
+    ups_MVCB_status: scaleProcess(other10Data.UPS3[408153], 1, 1),
+    ups_MVCB_power: scaleProcess(other10Data.UPS3[408154], 1, 1),
 
-    ups_ACP_volt: 0,
-    ups_ACP_temp: 0,
-    ups_ACP_status: 0,
-    ups_ACP_power: 0,
+    ups_ACP_volt: scaleProcess(other10Data.UPS4[408151], 0.1, 1),
+    ups_ACP_temp: scaleProcess(other10Data.UPS4[408152], 0.1, 1),
+    ups_ACP_status: scaleProcess(other10Data.UPS4[408153], 1, 1),
+    ups_ACP_power: scaleProcess(other10Data.UPS4[408154], 1, 1),
 
-    ups_EMS_SOC: 0,
-    ups_EMS_timeLeft: 0,
-    ups_EMS_mode: 0,
-    ups_EMS_error: 0,
+    ups_EMS_SOC: scaleProcess(other10Data.UPS1[408163], 1, 1),
+    ups_EMS_timeLeft: scaleProcess(other10Data.UPS1[408164], 1, 1),
+    ups_EMS_mode: scaleProcess(other10Data.UPS1[408165], 1, 1),
+    ups_EMS_error: scaleProcess(other10Data.UPS1[408166], 1, 1),
 
-    ups_EMS_408161_bit9: 0,
-    ups_EMS_408161_bit11: 0,
-    ups_EMS_408161_bit12: 0,
-    ups_EMS_408162_bit6: 0,
-    ups_EMS_408162_bit8: 0,
-    ups_EMS_408162_bit10: 0,
-    ups_EMS_408162_bit11: 0,
-    ups_EMS_408162_bit12: 0,
-    ups_EMS_408162_bit13: 0,
-    ups_EMS_408162_bit14: 1,
-    ups_EMS_408162_bit15: 0,
+    ups_EMS_408161_bit9: mapUPSwarning(other10Data.UPS1[408161], 9),
+    ups_EMS_408161_bit11: mapUPSwarning(other10Data.UPS1[408161], 11),
+    ups_EMS_408161_bit12: mapUPSwarning(other10Data.UPS1[408161], 12),
+    ups_EMS_408162_bit6: mapUPSwarning(other10Data.UPS1[408162], 6),
+    ups_EMS_408162_bit8: mapUPSwarning(other10Data.UPS1[408162], 8),
+    ups_EMS_408162_bit10: mapUPSwarning(other10Data.UPS1[408162], 10),
+    ups_EMS_408162_bit11: mapUPSwarning(other10Data.UPS1[408162], 11),
+    ups_EMS_408162_bit12: mapUPSwarning(other10Data.UPS1[408162], 12),
+    ups_EMS_408162_bit13: mapUPSwarning(other10Data.UPS1[408162], 13),
+    ups_EMS_408162_bit14: mapUPSwarning(other10Data.UPS1[408162], 14),
+    ups_EMS_408162_bit15: mapUPSwarning(other10Data.UPS1[408162], 15),
 
-    ups_CMS_SOC: 0,
-    ups_CMS_timeLeft: 0,
-    ups_CMS_mode: 0,
-    ups_CMS_error: 0,
+    ups_CMS_SOC: scaleProcess(other10Data.UPS2[408163], 1, 1),
+    ups_CMS_timeLeft: scaleProcess(other10Data.UPS2[408164], 1, 1),
+    ups_CMS_mode: scaleProcess(other10Data.UPS2[408165], 1, 1),
+    ups_CMS_error: scaleProcess(other10Data.UPS2[408166], 1, 1),
 
-    ups_CMS_408161_bit9: 0,
-    ups_CMS_408161_bit11: 0,
-    ups_CMS_408161_bit12: 0,
-    ups_CMS_408162_bit6: 0,
-    ups_CMS_408162_bit8: 0,
-    ups_CMS_408162_bit10: 0,
-    ups_CMS_408162_bit11: 0,
-    ups_CMS_408162_bit12: 0,
-    ups_CMS_408162_bit13: 0,
-    ups_CMS_408162_bit14: 0,
-    ups_CMS_408162_bit15: 0,
+    ups_CMS_408161_bit9: mapUPSwarning(other10Data.UPS2[408161], 9),
+    ups_CMS_408161_bit11: mapUPSwarning(other10Data.UPS2[408161], 11),
+    ups_CMS_408161_bit12: mapUPSwarning(other10Data.UPS2[408161], 12),
+    ups_CMS_408162_bit6: mapUPSwarning(other10Data.UPS2[408162], 6),
+    ups_CMS_408162_bit8: mapUPSwarning(other10Data.UPS2[408162], 8),
+    ups_CMS_408162_bit10: mapUPSwarning(other10Data.UPS2[408162], 10),
+    ups_CMS_408162_bit11: mapUPSwarning(other10Data.UPS2[408162], 11),
+    ups_CMS_408162_bit12: mapUPSwarning(other10Data.UPS2[408162], 12),
+    ups_CMS_408162_bit13: mapUPSwarning(other10Data.UPS2[408162], 13),
+    ups_CMS_408162_bit14: mapUPSwarning(other10Data.UPS2[408162], 14),
+    ups_CMS_408162_bit15: mapUPSwarning(other10Data.UPS2[408162], 15),
+    //還要轉換
+    bscAlarm_1_1_rawD: lc1Data.BSC1[406003],
+    bscAlarm_1_2_rawD: lc1Data.BSC2[406003],
+    bscFault_1_1_rawD: lc1Data.BSC1[406001],
+    bscFault_1_2_rawD: lc1Data.BSC2[406001],
+    ffsStatus_1_1_rawD: lc1Data.BSC1[406005],
+    ffsStatus_1_2_rawD: lc1Data.BSC2[406005],
+
+    bscAlarm_2_1_rawD: lc2Data.BSC1[406003],
+    bscAlarm_2_2_rawD: lc2Data.BSC2[406003],
+    bscFault_2_1_rawD: lc2Data.BSC1[406001],
+    bscFault_2_2_rawD: lc2Data.BSC2[406001],
+    ffsStatus_2_1_rawD: lc2Data.BSC1[406005],
+    ffsStatus_2_2_rawD: lc2Data.BSC2[406005],
+
+    bscAlarm_3_1_rawD: lc3Data.BSC1[406003],
+    bscAlarm_3_2_rawD: lc3Data.BSC2[406003],
+    bscFault_3_1_rawD: lc3Data.BSC1[406001],
+    bscFault_3_2_rawD: lc3Data.BSC2[406001],
+    ffsStatus_3_1_rawD: lc3Data.BSC1[406005],
+    ffsStatus_3_2_rawD: lc3Data.BSC2[406005],
+
+    bscAlarm_4_1_rawD: lc4Data.BSC1[406003],
+    bscFault_4_1_rawD: lc4Data.BSC1[406001],
+    ffsStatus_4_1_rawD: lc4Data.BSC1[406005],
   };
 }
 
-app.get("/systeminfo/environment", async (req, res) => {
+router.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables();
     res.render("Sys_Environment", Env_variables);
@@ -239,7 +265,7 @@ app.get("/systeminfo/environment", async (req, res) => {
   }
 });
 
-app.get("/systeminfo/environment/:data", async (req, res) => {
+router.get("/systeminfo/environment/:data", async (req, res) => {
   try {
     await queryEnv_variables();
     res.json(Env_variables);
@@ -251,7 +277,7 @@ app.get("/systeminfo/environment/:data", async (req, res) => {
 
 //******************************************************************** */
 //環境控制下方彈出視窗
-app.post("/getDataforenv", async (req, res) => {
+router.post("/getDataforenv", async (req, res) => {
   try {
     console.log("接收到環境監控的前端請求");
     const blockId = req.body.blockId;
@@ -316,6 +342,6 @@ app.post("/getDataforenv", async (req, res) => {
 });
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

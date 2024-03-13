@@ -27,8 +27,8 @@ const db_PASSWORD = couchdbConfig.password; // Couchdb password use for login db
 const db_IP = couchdbConfig.host; // Couchdb IPv4 address.
 const db_PORT = couchdbConfig.port; // Couchdb service use port.
 
-const db_account = "account"; // The account database name.
-const doc_CONFIG = "CONFIG"; // The account setting doc id.
+const db_account = couchdbConfig.account; // The account database name.
+const doc_CONFIG = couchdbConfig.config; // The account setting doc id.
 
 const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
 // const db_URL = couchDBUrl; // Use for fetch database function.
@@ -61,6 +61,7 @@ async function getconfig() {
       throw new Error(`Request failed with status ${response.status}`);
     }
     const data = await response.json();
+    // console.log(data)
     data.atleast === undefined
       ? (atleast = 5)
       : (atleast = parseInt(data.atleast));
@@ -83,6 +84,22 @@ async function getconfig() {
       ? (logintext = "登入頁面提示字元")
       : (logintext = data.logintext);
     data.duration === undefined ? (duration = "") : (duration = data.duration);
+    const res = {
+      "id": data._id,
+      "rev": data._rev,
+      "atleast": atleast,
+      "atmost": atmost,
+      "upper": upper,
+      "lower": lower,
+      "special": special,
+      "number": num,
+      "locktimes": locktimes,
+      "suspendtime": suspendtime,
+      "logintext": logintext,
+      "duration": duration
+    }
+    // console.log("doc",res)
+    return res
   } catch (error) {
     console.error("config Error:", error.message);
   }
@@ -165,7 +182,19 @@ async function findaccount(inmail = "", intoken = "") {
       response = `Keyin user mail or password is incorrect.`;
     }
     if (inmail === "" && intoken !== "" && data.docs.length === 1) {
-      response = { id: id, token: token, level: level };
+      response = { 
+        id: id, 
+        token: token, 
+        level: level ,
+        num : employeenum,
+        name : namee,
+        comapny : company,
+        department : department,
+        state : state,
+        note : note,
+        last_time: last_time,
+        password: password
+      };
     } else {
       response = `Error findaccount token.`;
     }
@@ -179,9 +208,11 @@ async function findaccount(inmail = "", intoken = "") {
 ////////////////////////////////////////////////////////////////////////////////////////
 // Use _id updata account doc. put method need content, if not will be null.
 
-async function updateaccount(id) {
+async function updateaccount(id, configdata="", passwordd="", createdata="") {
   const URL = `${db_URL}/${db_account}/${id}`;
-
+  if (passwordd !== "") {
+    password = passwordd
+  }
   const updatedDoc = {
     _id: `${id}`,
     _rev: `${rev}`,
@@ -203,6 +234,15 @@ async function updateaccount(id) {
       validtime: `${validtime}`,
     },
   };
+  let bodyy 
+  if (id === doc_CONFIG) {
+    bodyy = JSON.stringify(configdata[0])
+    // console.log(bodyy)
+  } else if (createdata.length === 1) {
+    bodyy = JSON.stringify(createdata[0])
+  }else {
+  bodyy = JSON.stringify(updatedDoc)
+  }
   await fetch(URL, {
     method: "PUT",
     headers: {
@@ -210,7 +250,7 @@ async function updateaccount(id) {
       Authorization: AUTHORIZATION,
     },
     credentials: "include",
-    body: JSON.stringify(updatedDoc),
+    body: bodyy,
   })
     .then((response) => response.json())
     .then((result) => {
@@ -360,6 +400,38 @@ async function submit(EMAIL, PASSWORD) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+// The function for get all document in database.
+async function alldoc(database) {
+  const URL = `${db_URL}/${database}/_all_docs`
+  const response = await fetch(URL, {
+    method: "GET",
+    headers: { Authorization: AUTHORIZATION },
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+  return response
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Delete account specify user.
+async function deleteuser(doc_num) {
+  const URL = `${db_URL}/${db.account}/${doc_num}/`
+  fetch(URL, {
+    method: 'DELETE',
+    headers: { Authorization: AUTHORIZATION },
+    credentials: "include",
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+      console.log('User deleted successfully');
+    })
+  }
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   submit,
@@ -368,4 +440,6 @@ module.exports = {
   updateaccount,
   datetime,
   uuid,
+  alldoc,
+  deleteuser,
 };
