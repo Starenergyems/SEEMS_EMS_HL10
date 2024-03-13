@@ -1,4 +1,4 @@
-const port = 3005;
+// const port = 3005;
 
 const express = require("express");
 const methodOverride = require("method-override");
@@ -312,7 +312,7 @@ async function queryPcsSum() {
     modeLR_LC4: mapModeLR(lc4Data.Ctrl[407013]),
   };
 }
-app.get("/operateinfo/pcs", async (req, res) => {
+router.get("/operateinfo/pcs", async (req, res) => {
   try {
     await queryPcsSum();
     res.render("Op_PCS_InfoSummary", pcs_summary_variables);
@@ -322,7 +322,7 @@ app.get("/operateinfo/pcs", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/pcs/:data", async (req, res) => {
+router.get("/operateinfo/pcs/:data", async (req, res) => {
   try {
     await queryPcsSum();
     res.json(pcs_summary_variables);
@@ -522,7 +522,7 @@ async function queryPcsDetail() {
   }
 }
 /***************************************************************** */
-app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
+router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   try {
     //獲取目前切換的頁數
     pageNumber = parseInt(req.params.pageNumber);
@@ -541,7 +541,7 @@ app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
-app.get(
+router.get(
   "/operateinfo/pcs/infodetail/:pageNumber/:data",
   async (req, res) => {
     try {
@@ -673,7 +673,7 @@ async function queryPcsAlarm() {
   }
 }
 
-app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
+router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
     pageNumber = parseInt(req.params.pageNumber);
@@ -690,7 +690,7 @@ app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
+router.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm();
@@ -701,7 +701,7 @@ app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   }
 });
 
-/*app.get("/operateinfo/pcs/alarm_lc13/:pageNumber", async (req, res) => {
+/*router.get("/operateinfo/pcs/alarm_lc13/:pageNumber", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     console.log(pageNumber);
@@ -713,7 +713,7 @@ app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   }
 });
 
-app.get("/operateinfo/pcs/alarm_lc13/:pageNumber/:data", async (req, res) => {
+router.get("/operateinfo/pcs/alarm_lc13/:pageNumber/:data", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm();
@@ -732,7 +732,7 @@ let dVS_Data_minLimit;
 let dVS_Data_maxLimit;
 let dVS_Data_unit;
 
-app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
+router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dVS_Data_dataName = req.body.dataName;
@@ -809,7 +809,7 @@ app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-app.post("/set_dVS_Data", async (req, res) => {
+router.post("/set_dVS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -920,7 +920,7 @@ let dSS_Data_numInDataGroup;
 let dSS_Data_bitNum;
 let dSS_Data_status_MT;
 
-app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
+router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dSS_Data_dataName = req.body.dataName;
@@ -1006,7 +1006,7 @@ app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-app.post("/set_dSS_Data", async (req, res) => {
+router.post("/set_dSS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -1128,9 +1128,7 @@ app.post("/set_dSS_Data", async (req, res) => {
 });
 
 module.exports = router;
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+
 //************************************************************************************************************** */
 
 // app.listen(port, () => {
@@ -1139,7 +1137,7 @@ app.listen(port, () => {
 
 //************************************************************************************************************** */
 //點位顏色範例
-// app.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
+// router.get("/operateinfo/pcs/InfoDetail/100", async (req, res) => {
 //   try {
 //     // 獲取當前連接的所有 collection 名稱
 //     //const collections = mongoose.connection.collections;

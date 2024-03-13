@@ -1,4 +1,4 @@
-<%- include('Navbar_copy', { 
+<%- include('Navbar', { 
     title: 'PCS詳細資訊', 
      stylesheets: [
         '../public/styles/style_template.css',
@@ -66,14 +66,14 @@
                     <p>工作狀態</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workStatus">運行(假值)</label>
+                        <label class="data_val" id="workStatus"></label>
                     </div>
                 </div>
                 <div class="bigInfo bI_workMode">
                     <p>工作模式</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workMode">併網恆功率(AC)(假值)</label>
+                        <label class="data_val" id="workMode"></label>
                     </div>
                 </div>
                 <div class="bigInfo bI_chargeStatus">
@@ -133,7 +133,7 @@
             <div class="infoBlock ACside">
                 <h3>交流側</h3>
                 <div class="columnDVL">
-                    <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus">on 我是假值</label></div>
+                    <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus" style="right:0"></label></div>
                     <div class="DV_Line">實功<label class="dataValue" id="activePower"><%=activePower%></label>
                         <p class="dataUnit">kW</p>
                     </div>
