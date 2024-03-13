@@ -255,10 +255,27 @@ async function updateData(){
   $('#T_cell_Max_LC1').text(data.T_cell_Max_LC1);
   $('#T_cell_Min_LC1').text(data.T_cell_Min_LC1);
   $('#T_cell_MaxDiff_LC1').text(data.T_cell_MaxDiff_LC1);
-  $('#alarm_BMS1-1').text(data.alarm_BMS1_1);//燈號資料????
-  $('#alarm_BMS1-2').text(data.alarm_BMS1_2);//燈號資料????
-  $('#fault_BMS1-1').text(data.fault_BMS1_1);//燈號資料????
-  $('#fault_BMS1-2').text(data.fault_BMS1_2);//燈號資料????
+
+  if (data.alarm_BMS1_1 > 0){ 
+    classAdd('#alarm_BMS1-1', 'setToClose');
+  } else {
+    classRemove('#alarm_BMS1-1', 'setToClose');
+  }
+  if (data.alarm_BMS1_2 > 0){ 
+    classAdd('#alarm_BMS1-2', 'setToClose');
+  } else {
+    classRemove('#alarm_BMS1-2', 'setToClose');
+  }
+  if (data.fault_BMS1_1 > 0){ 
+    classAdd('#fault_BMS1-1', 'setToClose');
+  } else {
+    classRemove('#fault_BMS1-1', 'setToClose');
+  }
+  if (data.fault_BMS1_2 > 0){ 
+    classAdd('#fault_BMS1-2', 'setToClose');
+  } else {
+    classRemove('#fault_BMS1-2', 'setToClose');
+  }
 
   /*LC2*********************** */
   $('#onlineNum_LC2').text(data.onlineNum_LC2);
@@ -275,10 +292,27 @@ async function updateData(){
   $('#T_cell_Max_LC2').text(data.T_cell_Max_LC2);
   $('#T_cell_Min_LC2').text(data.T_cell_Min_LC2);
   $('#T_cell_MaxDiff_LC2').text(data.T_cell_MaxDiff_LC2);
-  $('#alarm_BMS2-1').text(data.alarm_BMS2_1);
-  $('#alarm_BMS2-2').text(data.alarm_BMS2_2);
-  $('#fault_BMS2-1').text(data.fault_BMS2_1);
-  $('#fault_BMS2-2').text(data.fault_BMS2_2);
+
+  if (data.alarm_BMS2_1 > 0){ 
+    classAdd('#alarm_BMS2-1', 'setToClose');
+  } else {
+    classRemove('#alarm_BMS2-1', 'setToClose');
+  }
+  if (data.alarm_BMS2_2 > 0){ 
+    classAdd('#alarm_BMS2-2', 'setToClose');
+  } else {
+    classRemove('#alarm_BMS2-2', 'setToClose');
+  }
+  if (data.fault_BMS2_1 > 0){ 
+    classAdd('#fault_BMS2-1', 'setToClose');
+  } else {
+    classRemove('#fault_BMS2-1', 'setToClose');
+  }
+  if (data.fault_BMS2_2 > 0){ 
+    classAdd('#fault_BMS2-2', 'setToClose');
+  } else {
+    classRemove('#fault_BMS2-2', 'setToClose');
+  }
 
   /*LC3*********************** */
   $('#onlineNum_LC3').text(data.onlineNum_LC3);
@@ -295,10 +329,27 @@ async function updateData(){
   $('#T_cell_Max_LC3').text(data.T_cell_Max_LC3);
   $('#T_cell_Min_LC3').text(data.T_cell_Min_LC3);
   $('#T_cell_MaxDiff_LC3').text(data.T_cell_MaxDiff_LC3);
-  $('#alarm_BMS3-1').text(data.alarm_BMS3_1);
-  $('#alarm_BMS3-2').text(data.alarm_BMS3_2);
-  $('#fault_BMS3-1').text(data.fault_BMS3_1);
-  $('#fault_BMS3-2').text(data.fault_BMS3_2);
+
+  if (data.alarm_BMS3_1 > 0){ 
+    classAdd('#alarm_BMS3-1', 'setToClose');
+  } else {
+    classRemove('#alarm_BMS3-1', 'setToClose');
+  }
+  if (data.alarm_BMS3_2 > 0){ 
+    classAdd('#alarm_BMS3-2', 'setToClose');
+  } else {
+    classRemove('#alarm_BMS3-2', 'setToClose');
+  }
+  if (data.fault_BMS3_1 > 0){ 
+    classAdd('#fault_BMS3-1', 'setToClose');
+  } else {
+    classRemove('#fault_BMS3-1', 'setToClose');
+  }
+  if (data.fault_BMS3_2 > 0){ 
+    classAdd('#fault_BMS3-2', 'setToClose');
+  } else {
+    classRemove('#fault_BMS3-2', 'setToClose');
+  }
 
   /*LC4*********************** */
   $('#onlineNum_LC4').text(data.onlineNum_LC4);
@@ -315,9 +366,17 @@ async function updateData(){
   $('#T_cell_Max_LC4').text(data.T_cell_Max_LC4);
   $('#T_cell_Min_LC4').text(data.T_cell_Min_LC4);
   $('#T_cell_MaxDiff_LC4').text(data.T_cell_MaxDiff_LC4);
-  $('#alarm_BMS4-1').text(data.alarm_BMS4_1);
-  $('#alarm_BMS4-2').text(data.alarm_BMS4_2);
-  $('#fault_BMS4-1').text(data.fault_BMS4_1);
-  $('#fault_BMS4-2').text(data.fault_BMS4_2);
+
+  if (data.alarm_BMS4_1 > 0){ 
+    classAdd('#alarm_BMS4-1', 'setToClose');
+  } else {
+    classRemove('#alarm_BMS4-1', 'setToClose');
+  }
+  if (data.fault_BMS4_1 > 0){ 
+    classAdd('#fault_BMS4-1', 'setToClose');
+  } else {
+    classRemove('#fault_BMS4-1', 'setToClose');
+  }
+
   console.log("data updated");
 }
