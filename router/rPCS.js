@@ -1,4 +1,4 @@
-//const port = 5050;
+const port = 3005;
 
 const express = require("express");
 const methodOverride = require("method-override");
@@ -48,18 +48,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 /*以下app要改回router*************************** */
-router.use(cors());
-router.use("/public", express.static(path.join(__dirname, "../public")));
-router.use(
+app.use(cors());
+app.use("/public", express.static(path.join(__dirname, "../public")));
+app.use(
   "/operateinfo",
   express.static(path.join(__dirname, "../public/operateinfo"))
 );
-router.use(
+app.use(
   "/operateinfo/pcs",
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
 
-router.use(
+app.use(
   "/operateinfo/pcs/alarm/:id",
   express.static(path.join(__dirname, "../public"))
 );
@@ -69,7 +69,7 @@ router.use(
   express.static(path.join(__dirname, "../public"))
 );*/
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-router.use(
+app.use(
   "/operateinfo/pcs/infodetail/:id",
   express.static(path.join(__dirname, "../public"))
 );
@@ -168,7 +168,7 @@ async function queryPcsSum() {
       lc4Data.System[402057]
     ),
 
-    totalRatedP: scaleProcess(gcData.System[400005], 0.01, 1),
+    totalRatedP: scaleProcess(gcData.System[400005], 0.1, 1),
     today_E_chg: scaleProcess(lc1Data.System[402064], 0.01, 1),
     today_E_dcg: scaleProcess(lc1Data.System[402066], 0.01, 1),
     tot_E_chg: scaleProcess(lc1Data.System[402060], 0.01, 1),
@@ -312,194 +312,7 @@ async function queryPcsSum() {
     modeLR_LC4: mapModeLR(lc4Data.Ctrl[407013]),
   };
 }
-router.get("/operateinfo/pcs", async (req, res) => {
-  /* const dataPromises = databases.map(async (dbName) => {
-    const nano = createNanoInstance(dbName);
-    return getLatestDocument(nano);
-  });
-
-  const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
-  lc1Data = allData[0];
-  lc2Data = allData[1];
-  lc3Data = allData[2];
-  lc4Data = allData[3];
-  gcData = allData[6];
-
-  res.render("Op_PCS_InfoSummary", {
-    //id,
-    permission: "manager",
-    workStatus: mapPCSworkStatus(
-      lc1Data.System[402052],
-      lc2Data.System[402052],
-      lc3Data.System[402052],
-      lc4Data.System[402052]
-    ),
-    onlineNum: mapPCSonlineNum(
-      lc1Data.System[402052],
-      lc2Data.System[402052],
-      lc3Data.System[402052],
-      lc4Data.System[402052]
-    ),
-
-    totalP: calculateAdd(
-      lc1Data.System[402055],
-      lc2Data.System[402055],
-      lc3Data.System[402055],
-      lc4Data.System[402055]
-    ),
-
-    totalQ: calculateAdd(
-      lc1Data.System[402057],
-      lc2Data.System[402057],
-      lc3Data.System[402057],
-      lc4Data.System[402057]
-    ),
-
-    totalRatedP: scaleProcess(gcData.System[400005], 0.01, 1),
-    today_E_chg: scaleProcess(lc1Data.System[402064], 0.01, 1),
-    today_E_dcg: scaleProcess(lc1Data.System[402066], 0.01, 1),
-    tot_E_chg: scaleProcess(lc1Data.System[402060], 0.01, 1),
-    tot_E_dcg: scaleProcess(lc1Data.System[402062], 0.01, 1),
-    //******************************************************************** */
-  //lc1
-  /*onlineNum_LC1: lc1Data.System[402052],
-    ratedP_LC1: 3450, //這個數值是固定的 1725*2
-    activePower_LC1: scaleProcess(lc1Data.System[402055], 0.01, 1),
-    reactivePower_LC1: scaleProcess(lc1Data.System[402057], 0.01, 1),
-    today_E_chg_LC1: scaleProcess(lc1Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC1: scaleProcess(lc1Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC1: scaleProcess(lc1Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC1: scaleProcess(lc1Data.System[402066], 0.01, 1),
-
-    alarm_PCS1_1: countPCSAlarmAndFault(
-      lc1Data.PCS[403063],
-      lc1Data.PCS[403064],
-      lc1Data.PCS[403144]
-    ),
-    fault_PCS1_1: countPCSAlarmAndFault(
-      lc1Data.PCS[403065],
-      lc1Data.PCS[403067],
-      lc1Data.PCS[403146]
-    ),
-
-    alarm_PCS1_2: countPCSAlarmAndFault(
-      lc1Data.PCS[403102],
-      lc1Data.PCS[403103],
-      lc1Data.PCS[403148]
-    ),
-    fault_PCS1_2: countPCSAlarmAndFault(
-      lc1Data.PCS[403104],
-      lc1Data.PCS[403106],
-      lc1Data.PCS[403150]
-    ),
-
-    modeActPas_LC1: mapModeActPas(lc1Data.Ctrl[407010]),
-    modeQctrl_LC1: mapModeQctrl(lc1Data.Ctrl[407011]),
-    standbyCmd_LC1: mapStandbyCmd(lc1Data.Ctrl[407012]),
-    modeLR_LC1: mapModeLR(lc1Data.Ctrl[407013]),
-
-    //lc2
-    onlineNum_LC2: lc2Data.System[402052],
-    ratedP_LC2: 3450, //這個數值是固定的 1725*2
-    activePower_LC2: scaleProcess(lc2Data.System[402055], 0.01, 1),
-    reactivePower_LC2: scaleProcess(lc2Data.System[402057], 0.01, 1),
-    today_E_chg_LC2: scaleProcess(lc2Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC2: scaleProcess(lc2Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC2: scaleProcess(lc2Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC2: scaleProcess(lc2Data.System[402066], 0.01, 1),
-
-    alarm_PCS2_1: countPCSAlarmAndFault(
-      lc2Data.PCS[403063],
-      lc2Data.PCS[403064],
-      lc2Data.PCS[403144]
-    ),
-    fault_PCS2_1: countPCSAlarmAndFault(
-      lc2Data.PCS[403065],
-      lc2Data.PCS[403067],
-      lc2Data.PCS[403146]
-    ),
-
-    alarm_PCS2_2: countPCSAlarmAndFault(
-      lc2Data.PCS[403102],
-      lc2Data.PCS[403103],
-      lc2Data.PCS[403148]
-    ),
-    fault_PCS2_2: countPCSAlarmAndFault(
-      lc2Data.PCS[403104],
-      lc2Data.PCS[403106],
-      lc2Data.PCS[403150]
-    ),
-
-    modeActPas_LC2: mapModeActPas(lc2Data.Ctrl[407010]),
-    modeQctrl_LC2: mapModeQctrl(lc2Data.Ctrl[407011]),
-    standbyCmd_LC2: mapStandbyCmd(lc2Data.Ctrl[407012]),
-    modeLR_LC2: mapModeLR(lc2Data.Ctrl[407013]),
-
-    //lc3
-    onlineNum_LC3: lc3Data.System[402052],
-    ratedP_LC3: 3450, //這個數值是固定的 1725*2
-    activePower_LC3: scaleProcess(lc3Data.System[402055], 0.01, 1),
-    reactivePower_LC3: scaleProcess(lc3Data.System[402057], 0.01, 1),
-    today_E_chg_LC3: scaleProcess(lc3Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC3: scaleProcess(lc3Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC3: scaleProcess(lc3Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC3: scaleProcess(lc3Data.System[402066], 0.01, 1),
-
-    alarm_PCS3_1: countPCSAlarmAndFault(
-      lc3Data.PCS[403063],
-      lc3Data.PCS[403064],
-      lc3Data.PCS[403144]
-    ),
-    fault_PCS3_1: countPCSAlarmAndFault(
-      lc3Data.PCS[403065],
-      lc3Data.PCS[403067],
-      lc3Data.PCS[403146]
-    ),
-
-    alarm_PCS3_2: countPCSAlarmAndFault(
-      lc3Data.PCS[403102],
-      lc3Data.PCS[403103],
-      lc3Data.PCS[403148]
-    ),
-    fault_PCS3_2: countPCSAlarmAndFault(
-      lc3Data.PCS[403104],
-      lc3Data.PCS[403106],
-      lc3Data.PCS[403150]
-    ),
-
-    modeActPas_LC3: mapModeActPas(lc3Data.Ctrl[407010]),
-    modeQctrl_LC3: mapModeQctrl(lc3Data.Ctrl[407011]),
-    standbyCmd_LC3: mapStandbyCmd(lc3Data.Ctrl[407012]),
-    modeLR_LC3: mapModeLR(lc3Data.Ctrl[407013]),
-
-    //lc4
-    onlineNum_LC4: lc4Data.System[402052],
-    ratedP_LC4: 1725, //這個數值是固定的 1725
-    activePower_LC4: scaleProcess(lc4Data.System[402055], 0.01, 1),
-    reactivePower_LC4: scaleProcess(lc4Data.System[402057], 0.01, 1),
-    today_E_chg_LC4: scaleProcess(lc4Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC4: scaleProcess(lc4Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC4: scaleProcess(lc4Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC4: scaleProcess(lc4Data.System[402066], 0.01, 1),
-
-    alarm_PCS4_1: countPCSAlarmAndFault(
-      lc4Data.PCS[403534],
-      lc4Data.PCS[403535],
-      0
-    ),
-    fault_PCS4_1: countPCSAlarmAndFault(
-      lc4Data.PCS[403536],
-      lc4Data.PCS[403538],
-      0
-    ),
-
-    modeActPas_LC4: mapModeActPas(lc4Data.Ctrl[407010]),
-    modeQctrl_LC4: mapModeQctrl(lc4Data.Ctrl[407011]),
-    standbyCmd_LC4: mapStandbyCmd(lc4Data.Ctrl[407012]),
-    modeLR_LC4: mapModeLR(lc4Data.Ctrl[407013]),
-  });
-
-  console.log();*/
+app.get("/operateinfo/pcs", async (req, res) => {
   try {
     await queryPcsSum();
     res.render("Op_PCS_InfoSummary", pcs_summary_variables);
@@ -509,7 +322,7 @@ router.get("/operateinfo/pcs", async (req, res) => {
   }
 });
 
-router.get("/operateinfo/pcs/:data", async (req, res) => {
+app.get("/operateinfo/pcs/:data", async (req, res) => {
   try {
     await queryPcsSum();
     res.json(pcs_summary_variables);
@@ -709,7 +522,7 @@ async function queryPcsDetail() {
   }
 }
 /***************************************************************** */
-router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
+app.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   try {
     //獲取目前切換的頁數
     pageNumber = parseInt(req.params.pageNumber);
@@ -728,7 +541,7 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   }
 });
 
-router.get(
+app.get(
   "/operateinfo/pcs/infodetail/:pageNumber/:data",
   async (req, res) => {
     try {
@@ -860,7 +673,7 @@ async function queryPcsAlarm() {
   }
 }
 
-router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
+app.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
     pageNumber = parseInt(req.params.pageNumber);
@@ -877,7 +690,7 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   }
 });
 
-router.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
+app.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm();
@@ -919,7 +732,7 @@ let dVS_Data_minLimit;
 let dVS_Data_maxLimit;
 let dVS_Data_unit;
 
-router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
+app.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dVS_Data_dataName = req.body.dataName;
@@ -996,7 +809,7 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-router.post("/set_dVS_Data", async (req, res) => {
+app.post("/set_dVS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -1107,7 +920,7 @@ let dSS_Data_numInDataGroup;
 let dSS_Data_bitNum;
 let dSS_Data_status_MT;
 
-router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
+app.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   try {
     console.log("接收到前端請求");
     dSS_Data_dataName = req.body.dataName;
@@ -1193,7 +1006,7 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
   }
 });
 
-router.post("/set_dSS_Data", async (req, res) => {
+app.post("/set_dSS_Data", async (req, res) => {
   try {
     const setValue_raw = req.body.setValue;
 
@@ -1315,9 +1128,9 @@ router.post("/set_dSS_Data", async (req, res) => {
 });
 
 module.exports = router;
-// app.listen(port, () => {
-//   console.log(`應用程式正在監聽端口 ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`應用程式正在監聽端口 ${port}`);
+});
 //************************************************************************************************************** */
 
 // app.listen(port, () => {

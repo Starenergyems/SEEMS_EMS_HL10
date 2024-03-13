@@ -1,4 +1,4 @@
-<%- include('Navbar', { 
+<%- include('Navbar_copy', { 
   title: 'PCS總資訊', 
    stylesheets: [
       '../public/styles/style_template.css',
@@ -13,7 +13,7 @@
         <!-- <h2>模式控制</h2> -->
         <div class="button_sNB" id="sNB_01">
           <a href="/operateinfo/singlelinediagram" class="name_button_sNB">單線圖</a>
-          <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01"/>
+          <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01"/>
           <div class="ssNavBar">
             <a href="/operateinfo/singlelinediagram" id="ssNB_01">電力單線圖</a>
             <a href="/operateinfo/mainmeter" id="ssNB_02">主電表</a>
@@ -22,7 +22,7 @@
         </div>
         <div class="button_sNB default_sNB" id="sNB_02">
           <a href="/operateinfo/pcs" class="name_button_sNB">PCS</a>
-          <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02"/>
+          <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02"/>
           <div class="ssNavBar">
             <a href="/operateinfo/pcs/infodetail/1" id="ssNB_01">PCS 1-1</a>
             <a href="/operateinfo/pcs/infodetail/2" id="ssNB_02">PCS 1-2</a>
@@ -35,7 +35,7 @@
         </div>
         <div class="button_sNB button_sNB_last" id="sNB_03">
           <a href="/operateinfo/battery" class="name_button_sNB">電池</a>
-          <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03"/>
+          <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03"/>
           <div class="ssNavBar">
             <a href="/operateinfo/battery/infodetail/1" id="ssNB_01">BMS 1-1</a>
             <a href="/operateinfo/battery/infodetail/2" id="ssNB_02">BMS 1-2</a>
@@ -71,7 +71,7 @@
           <div class="bigInfo bI_totalP">
             <div class="BG_bigInfo">
               <div class="subBG_bigInfo">kW</div>
-              <label class="data_val" id="totalP">10000.2</label>
+              <label class="data_val" id="totalP"></label>
             </div>
             <p>總輸出實功</p>
           </div>
@@ -85,35 +85,35 @@
           <div class="bigInfo bI_totalRatedP">
             <div class="BG_bigInfo">
               <div class="subBG_bigInfo">kVA</div>
-              <label class="data_val" id="totalRatedP">14000.5</label>
+              <label class="data_val" id="totalRatedP"></label>
             </div>
             <p>總額定功率</p>
           </div>
           <div class="bigInfo bI_today_E_chg">
             <div class="BG_bigInfo">
               <div class="subBG_bigInfo">kWh</div>
-              <label class="data_val" id="today_E_chg">32109.8</label>
+              <label class="data_val" id="today_E_chg"></label>
             </div>
             <p>今日充電量</p>
           </div>
           <div class="bigInfo bI_today_E_dcg">
             <div class="BG_bigInfo">
               <div class="subBG_bigInfo">kWh</div>
-              <label class="data_val" id="today_E_dcg">34567.8</label>
+              <label class="data_val" id="today_E_dcg"></label>
             </div>
             <p>今日放電量</p>
           </div>
           <div class="bigInfo bI_tot_E_chg">
             <div class="BG_bigInfo">
               <div class="subBG_bigInfo">MWh</div>
-              <label class="data_val" id="tot_E_chg">1234567</label>
+              <label class="data_val" id="tot_E_chg"></label>
             </div>
             <p>總充電量</p>
           </div>
           <div class="bigInfo bI_tot_E_dcg">
             <div class="BG_bigInfo">
               <div class="subBG_bigInfo">MWh</div>
-              <label class="data_val" id="tot_E_dcg">2345678</label>
+              <label class="data_val" id="tot_E_dcg"></label>
             </div>
             <p>總放電量</p>
           </div>
@@ -128,35 +128,35 @@
           </div>
 
           <div class="DV_Line DV_onlineNum">
-            PCS在線數<label class="dataValue" id="onlineNum_LC1">2</label>
+            PCS在線數<label class="dataValue" id="onlineNum_LC1"></label>
             <p class="dataUnit">/&nbsp2</p>
           </div>
           <div class="DV_Line">
-            額定功率<label class="dataValue" id="ratedP_LC1">4000.0</label>
+            額定功率<label class="dataValue" id="ratedP_LC1"></label>
             <p class="dataUnit">kVA</p>
           </div>
           <div class="DV_Line">
-            實功<label class="dataValue" id="activePower_LC1">4000.1</label>
+            實功<label class="dataValue" id="activePower_LC1"></label>
             <p class="dataUnit">kW</p>
           </div>
           <div class="DV_Line">
-            虛功<label class="dataValue" id="reactivePower_LC1">-4000.9</label>
+            虛功<label class="dataValue" id="reactivePower_LC1"></label>
             <p class="dataUnit">kVar</p>
           </div>
           <div class="DV_Line">
-            今日充電量<label class="dataValue" id="today_E_chg_LC1">9432.0</label>
+            今日充電量<label class="dataValue" id="today_E_chg_LC1"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            今日放電量<label class="dataValue" id="today_E_dcg_LC1">9432.1</label>
+            今日放電量<label class="dataValue" id="today_E_dcg_LC1"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            總充電量<label class="dataValue" id="tot_E_chg_LC1">123456.7</label>
+            總充電量<label class="dataValue" id="tot_E_chg_LC1"></label>
             <p class="dataUnit">MWh</p>
           </div>
           <div class="DV_Line">
-            總放電量<label class="dataValue" id="tot_E_dcg_LC1">234567.8</label>
+            總放電量<label class="dataValue" id="tot_E_dcg_LC1"></label>
             <p class="dataUnit">MWh</p>
           </div>
 
@@ -164,18 +164,18 @@
             <p class="titlePCS titlePCS_1st">PCS1-1</p>
             <p class="titlePCS titlePCS_2nd">PCS1-2</p>
           </div>
-
-          <div class="DL_Line">
-            告警
-            <label class="dataLight OG_L DL_1st" id="alarm_PCS1-1"></label>
-            <label class="dataLight OG_L DL_2nd" id="alarm_PCS1-2"></label>
+          <div id="LC1_alarm">
+            <div class="DL_Line">
+              告警
+              <label class="dataLight OG_L DL_1st" id="alarm_PCS1-1"></label>
+              <label class="dataLight OG_L DL_2nd" id="alarm_PCS1-2"></label>
+            </div>
+            <div class="DL_Line">
+              故障
+              <label class="dataLight RG_L DL_1st" id="fault_PCS1-1"></label>
+              <label class="dataLight RG_L DL_2nd" id="fault_PCS1-2"></label>
+            </div>
           </div>
-          <div class="DL_Line">
-            故障
-            <label class="dataLight RG_L DL_1st" id="fault_PCS1-1"></label>
-            <label class="dataLight RG_L DL_2nd" id="fault_PCS1-2"></label>
-          </div>
-
           <div class="titleModeCtrl">
             <p>模式控制</p>
           </div>
@@ -187,19 +187,19 @@
             <% } %>
           </div>
           <div class="DS_Line">
-            虛功模式<label class="dataStatus" id="modeQctrl_LC1">功率(kVar)模式</label>
+            虛功模式<label class="dataStatus" id="modeQctrl_LC1"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeQctrl_LC1">Set</button>
             <% } %>
           </div>
           <div class="DS_Line">
-            PCS待機指令<label class="dataStatus" id="standbyCmd_LC1">停止待機</label>
+            PCS待機指令<label class="dataStatus" id="standbyCmd_LC1"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_standbyCmd_LC1">Set</button>
             <% } %>
           </div>
           <div class="DS_Line lastLine">
-            本地/遠端模式<label class="dataStatus" id="modeLR_LC1">本地&nbsp&&nbsp遠端</label>
+            本地/遠端模式<label class="dataStatus" id="modeLR_LC1"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeLR_LC1">Set</button>
             <% } %>
@@ -215,35 +215,35 @@
           </div>
 
           <div class="DV_Line DV_onlineNum">
-            PCS在線數<label class="dataValue" id="onlineNum_LC2">1</label>
+            PCS在線數<label class="dataValue" id="onlineNum_LC2"></label>
             <p class="dataUnit">/&nbsp2</p>
           </div>
           <div class="DV_Line">
-            額定功率<label class="dataValue" id="ratedP_LC2">4000.2</label>
+            額定功率<label class="dataValue" id="ratedP_LC2"></label>
             <p class="dataUnit">kVA</p>
           </div>
           <div class="DV_Line">
-            實功<label class="dataValue" id="activePower_LC2">4000.3</label>
+            實功<label class="dataValue" id="activePower_LC2"></label>
             <p class="dataUnit">kW</p>
           </div>
           <div class="DV_Line">
-            虛功<label class="dataValue" id="reactivePower_LC2">-4001.9</label>
+            虛功<label class="dataValue" id="reactivePower_LC2"></label>
             <p class="dataUnit">kVar</p>
           </div>
           <div class="DV_Line">
-            今日充電量<label class="dataValue" id="today_E_chg_LC2">9432.2</label>
+            今日充電量<label class="dataValue" id="today_E_chg_LC2"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            今日放電量<label class="dataValue" id="today_E_dcg_LC2">9432.3</label>
+            今日放電量<label class="dataValue" id="today_E_dcg_LC2"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            總充電量<label class="dataValue" id="tot_E_chg_LC2">123456.9</label>
+            總充電量<label class="dataValue" id="tot_E_chg_LC2"></label>
             <p class="dataUnit">MWh</p>
           </div>
           <div class="DV_Line">
-            總放電量<label class="dataValue" id="tot_E_dcg_LC2">234567.0</label>
+            總放電量<label class="dataValue" id="tot_E_dcg_LC2"></label>
             <p class="dataUnit">MWh</p>
           </div>
 
@@ -268,25 +268,25 @@
           </div>
 
           <div class="DS_Line">
-            主/被動模式<label class="dataStatus" id="modeActPas_LC2">主動</label>
+            主/被動模式<label class="dataStatus" id="modeActPas_LC2"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeAP_LC2">Set</button>
              <% } %> 
           </div>
           <div class="DS_Line">
-            虛功模式<label class="dataStatus" id="modeQctrl_LC2">功因模式</label>
+            虛功模式<label class="dataStatus" id="modeQctrl_LC2"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeQctrl_LC2">Set</button>
             <% } %>  
           </div>
           <div class="DS_Line">
-            PCS待機指令<label class="dataStatus" id="standbyCmd_LC2">待機</label>
+            PCS待機指令<label class="dataStatus" id="standbyCmd_LC2"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_standbyCmd_LC2">Set</button>
             <% } %>  
           </div>
           <div class="DS_Line lastLine">
-            本地/遠端模式<label class="dataStatus" id="modeLR_LC2">本地</label>
+            本地/遠端模式<label class="dataStatus" id="modeLR_LC2"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeLR_LC2">Set</button>
             <% } %>  
@@ -302,35 +302,35 @@
           </div>
 
           <div class="DV_Line DV_onlineNum">
-            PCS在線數<label class="dataValue" id="onlineNum_LC3">0</label>
+            PCS在線數<label class="dataValue" id="onlineNum_LC3"></label>
             <p class="dataUnit">/&nbsp2</p>
           </div>
           <div class="DV_Line">
-            額定功率<label class="dataValue" id="ratedP_LC3">4000.4</label>
+            額定功率<label class="dataValue" id="ratedP_LC3"></label>
             <p class="dataUnit">kVA</p>
           </div>
           <div class="DV_Line">
-            實功<label class="dataValue" id="activePower_LC3">4000.5</label>
+            實功<label class="dataValue" id="activePower_LC3"></label>
             <p class="dataUnit">kW</p>
           </div>
           <div class="DV_Line">
-            虛功<label class="dataValue" id="reactivePower_LC3">-4002.9</label>
+            虛功<label class="dataValue" id="reactivePower_LC3"></label>
             <p class="dataUnit">kVar</p>
           </div>
           <div class="DV_Line">
-            今日充電量<label class="dataValue" id="today_E_chg_LC3">9432.4</label>
+            今日充電量<label class="dataValue" id="today_E_chg_LC3"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            今日放電量<label class="dataValue" id="today_E_dcg_LC3">9432.5</label>
+            今日放電量<label class="dataValue" id="today_E_dcg_LC3"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            總充電量<label class="dataValue" id="tot_E_chg_LC3">123456.1</label>
+            總充電量<label class="dataValue" id="tot_E_chg_LC3"></label>
             <p class="dataUnit">MWh</p>
           </div>
           <div class="DV_Line">
-            總放電量<label class="dataValue" id="tot_E_dcg_LC3">234567.2</label>
+            總放電量<label class="dataValue" id="tot_E_dcg_LC3"></label>
             <p class="dataUnit">MWh</p>
           </div>
 
@@ -355,25 +355,25 @@
           </div>
 
           <div class="DS_Line">
-            主/被動模式<label class="dataStatus" id="modeActPas_LC3">被動</label>
+            主/被動模式<label class="dataStatus" id="modeActPas_LC3"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeAP_LC3">Set</button>
             <% } %>  
           </div>
           <div class="DS_Line">
-            虛功模式<label class="dataStatus" id="modeQctrl_LC3">關閉</label>
+            虛功模式<label class="dataStatus" id="modeQctrl_LC3"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeQctrl_LC3">Set</button>
             <% } %>  
           </div>
           <div class="DS_Line">
-            PCS待機指令<label class="dataStatus" id="standbyCmd_LC3">停止待機</label>
+            PCS待機指令<label class="dataStatus" id="standbyCmd_LC3"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_standbyCmd_LC3">Set</button>
             <% } %>  
           </div>
           <div class="DS_Line lastLine">
-            本地/遠端模式<label class="dataStatus" id="modeLR_LC3">遠端</label>
+            本地/遠端模式<label class="dataStatus" id="modeLR_LC3"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeLR_LC3">Set</button>
             <% } %>  
@@ -389,35 +389,35 @@
           </div>
 
           <div class="DV_Line DV_onlineNum">
-            PCS在線數<label class="dataValue" id="onlineNum_LC4">1</label>
+            PCS在線數<label class="dataValue" id="onlineNum_LC4"></label>
             <p class="dataUnit">/&nbsp1</p>
           </div>
           <div class="DV_Line">
-            額定功率<label class="dataValue" id="ratedP_LC4">4000.6</label>
+            額定功率<label class="dataValue" id="ratedP_LC4"></label>
             <p class="dataUnit">kVA</p>
           </div>
           <div class="DV_Line">
-            實功<label class="dataValue" id="activePower_LC4">4000.7</label>
+            實功<label class="dataValue" id="activePower_LC4"></label>
             <p class="dataUnit">kW</p>
           </div>
           <div class="DV_Line">
-            虛功<label class="dataValue" id="reactivePower_LC4">-4003.9</label>
+            虛功<label class="dataValue" id="reactivePower_LC4"></label>
             <p class="dataUnit">kVar</p>
           </div>
           <div class="DV_Line">
-            今日充電量<label class="dataValue" id="today_E_chg_LC4">9432.6</label>
+            今日充電量<label class="dataValue" id="today_E_chg_LC4"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            今日放電量<label class="dataValue" id="today_E_dcg_LC4">9432.7</label>
+            今日放電量<label class="dataValue" id="today_E_dcg_LC4"></label>
             <p class="dataUnit">kWh</p>
           </div>
           <div class="DV_Line">
-            總充電量<label class="dataValue" id="tot_E_chg_LC4">123456.3</label>
+            總充電量<label class="dataValue" id="tot_E_chg_LC4"></label>
             <p class="dataUnit">MWh</p>
           </div>
           <div class="DV_Line">
-            總放電量<label class="dataValue" id="tot_E_dcg_LC4">234567.4</label>
+            總放電量<label class="dataValue" id="tot_E_dcg_LC4"></label>
             <p class="dataUnit">MWh</p>
           </div>
 
@@ -440,25 +440,25 @@
           </div>
 
           <div class="DS_Line">
-            主/被動模式<label class="dataStatus" id="modeActPas_LC4">主動</label>
+            主/被動模式<label class="dataStatus" id="modeActPas_LC4"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeAP_LC4">Set</button>
             <% } %>
           </div>
           <div class="DS_Line">
-            虛功模式<label class="dataStatus" id="modeQctrl_LC4">功率(kVar)模式</label>
+            虛功模式<label class="dataStatus" id="modeQctrl_LC4"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeQctrl_LC4">Set</button>
             <% } %>  
           </div>
           <div class="DS_Line">
-            PCS待機指令<label class="dataStatus" id="standbyCmd_LC4">待機</label>
+            PCS待機指令<label class="dataStatus" id="standbyCmd_LC4"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_standbyCmd_LC4">Set</button>
             <% } %>  
           </div>
           <div class="DS_Line lastLine">
-            本地/遠端模式<label class="dataStatus" id="modeLR_LC4">本地&nbsp&&nbsp遠端</label>
+            本地/遠端模式<label class="dataStatus" id="modeLR_LC4"></label>
             <% if(permission === "manager"){ %>
               <button class="setButton" id="setBut_modeLR_LC4">Set</button>
             <% } %>  
@@ -469,7 +469,7 @@
           <h2 class="titlePUW">LC_實功輸出設定</h2>
 
           <div class="valOrigin">
-            原數值:<label class="data_val" id="valueOrigin">2357</label>
+            原數值:<label class="data_val" id="valueOrigin"></label>
             <p class="data_unit">g/ml</p>
           </div>
           <div class="valNew">
@@ -510,16 +510,16 @@
         </div>
 
         <div class="block_temp">
-          <label class="data_val" id="spareVal_01">90.1</label><br />
-          <label class="data_val" id="spareVal_02">1234.5</label><br />
-          <label class="data_val" id="spareVal_03">76.5</label><br />
-          <label class="data_val" id="spareVal_04">1098.7</label>
+          <label class="data_val" id="spareVal_01"></label><br />
+          <label class="data_val" id="spareVal_02"></label><br />
+          <label class="data_val" id="spareVal_03"></label><br />
+          <label class="data_val" id="spareVal_04"></label>
         </div>
       </div>
     </div>
 
-    <script src="/public/scripts/jquery-3.6.0.js"></script>
-    <script src="/public/scripts/script_template.js"></script>
-    <script src="/public/scripts/Op_PCS_InfoSummary.js"></script>
+    <script src="../public/scripts/jquery-3.6.0.js"></script>
+    <script src="../public/scripts/script_template.js"></script>
+    <script src="../public/scripts/Op_PCS_InfoSummary.js"></script>
   </body>
 </html>

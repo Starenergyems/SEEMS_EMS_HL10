@@ -136,6 +136,9 @@ function mapModeLR(input) {
   if (input === 3) {
     return "local";
   }
+  else {
+    return "undefined";
+  }
 }
 //***************************************************************************** */
 //PCSWorkingMode

@@ -455,6 +455,30 @@ setBut_modeLR_LC3.addEventListener("click", function () { Set_modeLR_LC(3); });
 
 const setBut_modeLR_LC4 = document.querySelector(".infoLC #setBut_modeLR_LC4");
 setBut_modeLR_LC4.addEventListener("click", function () { Set_modeLR_LC(4); });
+/************************************************************************* */
+//燈號超連結
+const LC1_alarm = document.getElementById("LC1_alarm");
+LC1_alarm.onclick = function(){
+  hyperlink('/alarm/1/');
+}
+// const LC2_alarm = document.getElementById("LC2_alarm");
+// LC2_alarm.onclick = function(){
+//   hyperlink('/alarm/2/');
+// }
+// const LC1_alarm = document.getElementById("LC1_alarm");
+// LC1_alarm.onclick = function(){
+//   hyperlink('/alarm/1/');
+// }
+// const LC1_alarm = document.getElementById("LC1_alarm");
+// LC1_alarm.onclick = function(){
+//   hyperlink('/alarm/1/');
+// }
+
+function hyperlink(addUrl){
+  window.location.href= window.location.href+addUrl;
+}
+
+/*********************************************************************** */
 
 async function updateData() {
   //更新資料

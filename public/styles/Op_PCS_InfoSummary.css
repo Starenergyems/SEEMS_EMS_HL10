@@ -159,19 +159,19 @@
     line-height: 32px;
 }
 
-/*.infoLC .DL_Line .dataLight {
-    background-color: #236E37;
-    height: 26px;
-    width: 26px;
-    right: calc(20% - 13px);
-}*/
-
- .dataLight {
+.infoLC .DL_Line .dataLight {
     background-color: #236E37;
     height: 26px;
     width: 26px;
     right: calc(20% - 13px);
 }
+
+ /* .dataLight {
+    background-color: #236E37;
+    height: 26px;
+    width: 26px;
+    right: calc(20% - 13px);
+} */
 
 .infoLC .DL_Line .DL_1st {
     right: calc(60% - 13px);
