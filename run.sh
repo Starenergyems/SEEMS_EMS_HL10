@@ -1,9 +1,13 @@
 #!/bin/bash
+echo "Starting CouchDB Docker in a stand alone container"
+docker compose -f couchdb_docker/docker-compose_couchdb.yml up -d
 
-echo "Starting EMS docker replicas"
+
+sleep 3
+echo "Starting EMS in Docker Swarm mode"
 
 # docker-compose up -d --build
-docker stack deploy --compose-file docker-compose.yml ems-service
+docker stack deploy -f docker-compose.yml ems-service
 
 # sleep 3
 

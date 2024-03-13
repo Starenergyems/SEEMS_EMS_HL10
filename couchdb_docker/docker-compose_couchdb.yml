@@ -5,9 +5,9 @@ services:
     image: couchdb
     restart: always
     ports:
-      - "5985:5984"
-      - "9101:9100"
-      - "4370:4369"
+      - "5984:5984"
+      - "9100:9100"
+      - "4369:4369"
     env_file:
       - couchdb.env
     volumes:
