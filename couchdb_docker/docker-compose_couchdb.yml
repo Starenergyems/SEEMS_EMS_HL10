@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  couchdb:
+    image: couchdb
+    restart: always
+    ports:
+      - "5985:5984"
+      - "9101:9100"
+      - "4370:4369"
+    env_file:
+      - couchdb.env
+    volumes:
+      - /media/seems/database:/opt/couchdb/data
+      - ./local.ini:/opt/couchdb/etc/local.d/local.ini
+    networks:
+      - couchdb-service-network
+
+networks:
+  couchdb-service-network:
+    driver: bridge

@@ -1,3 +1,6 @@
 git.txt
 /Demo_1/
 /node_modules/
+/router/.env
+/couchdb_docker/couchdb.env
+/couchdb_docker/local.ini
