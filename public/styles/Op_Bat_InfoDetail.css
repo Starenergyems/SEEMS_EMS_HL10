@@ -232,6 +232,7 @@
 
 .cellInfo .dataUnit {
     width: 40px;
+    text-align: right;
 }
 
 .cellInfo .DP_Line {
