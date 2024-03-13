@@ -111,6 +111,9 @@ async function query_SLD_KeyValuePairs() {
   const ACB4_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus4[408206], 16);
 
   SLD_KeyValuePairs = {
+    permission: "manager",
+    // permission: other10Data.TH1[408187],
+
     statusL_of_MVCB: Determine_statusL_of_VCB(MVCB_rBitS[0], MVCB_rBitS[1], MVCB_rBitS[2]),
     statusL_of_VCB1: Determine_statusL_of_VCB(VCB1_rBitS[0], VCB1_rBitS[1], VCB1_rBitS[2]),
     statusL_of_VCB2: Determine_statusL_of_VCB(VCB2_rBitS[0], VCB2_rBitS[1], VCB2_rBitS[2]),

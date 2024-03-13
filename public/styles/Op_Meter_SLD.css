@@ -56,7 +56,7 @@
     background-color: #9D653D;
 }
 
-.singleLineD .ctrlable {
+.singleLineD .ctrlableSign {
     box-sizing: border-box;
     height: 14px;
     width: 14px;
@@ -161,6 +161,11 @@
 .singleLineD .status_Rly.setToClose,
 .singleLineD .status_Recloser.setToClose {
     background-color: #FF0000;
+}
+
+.singleLineD .status_Rly.ErrData,
+.singleLineD .status_Recloser.ErrData {
+    background-color: #9D653D;
 }
 
 .singleLineD #Rly_MVCB {
