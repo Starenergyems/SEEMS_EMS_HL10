@@ -457,22 +457,35 @@ const setBut_modeLR_LC4 = document.querySelector(".infoLC #setBut_modeLR_LC4");
 setBut_modeLR_LC4.addEventListener("click", function () { Set_modeLR_LC(4); });
 /************************************************************************* */
 //燈號超連結
-const LC1_alarm = document.getElementById("LC1_alarm");
-LC1_alarm.onclick = function(){
+const PCS1_1_alarm = document.getElementById("PCS1_1_alarm");
+PCS1_1_alarm.onclick = function(){
   hyperlink('/alarm/1/');
 }
-// const LC2_alarm = document.getElementById("LC2_alarm");
-// LC2_alarm.onclick = function(){
-//   hyperlink('/alarm/2/');
-// }
-// const LC1_alarm = document.getElementById("LC1_alarm");
-// LC1_alarm.onclick = function(){
-//   hyperlink('/alarm/1/');
-// }
-// const LC1_alarm = document.getElementById("LC1_alarm");
-// LC1_alarm.onclick = function(){
-//   hyperlink('/alarm/1/');
-// }
+const PCS1_2_alarm = document.getElementById("PCS1_2_alarm");
+PCS1_2_alarm.onclick = function(){
+  hyperlink('/alarm/2/');
+}
+const PCS2_1_alarm = document.getElementById("PCS2_1_alarm");
+PCS2_1_alarm.onclick = function(){
+  hyperlink('/alarm/3/');
+}
+const PCS2_2_alarm = document.getElementById("PCS2_2_alarm");
+PCS2_2_alarm.onclick = function(){
+  hyperlink('/alarm/4/');
+}
+
+const PCS3_1_alarm = document.getElementById("PCS3_1_alarm");
+PCS3_1_alarm.onclick = function(){
+  hyperlink('/alarm/5/');
+}
+const PCS3_2_alarm = document.getElementById("PCS3_2_alarm");
+PCS3_2_alarm.onclick = function(){
+  hyperlink('/alarm/6/');
+}
+const PCS4_1_alarm = document.getElementById("PCS4_1_alarm");
+PCS4_1_alarm.onclick = function(){
+  hyperlink('/alarm/7/');
+}
 
 function hyperlink(addUrl){
   window.location.href= window.location.href+addUrl;

@@ -48,18 +48,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 /*以下app要改回router*************************** */
-app.use(cors());
-app.use("/public", express.static(path.join(__dirname, "../public")));
-app.use(
+router.use(cors());
+router.use("/public", express.static(path.join(__dirname, "../public")));
+router.use(
   "/operateinfo",
   express.static(path.join(__dirname, "../public/operateinfo"))
 );
-app.use(
+router.use(
   "/operateinfo/pcs",
   express.static(path.join(__dirname, "../public/operateinfo/pcs"))
 );
 
-app.use(
+router.use(
   "/operateinfo/pcs/alarm/:id",
   express.static(path.join(__dirname, "../public"))
 );
@@ -69,7 +69,7 @@ app.use(
   express.static(path.join(__dirname, "../public"))
 );*/
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-app.use(
+router.use(
   "/operateinfo/pcs/infodetail/:id",
   express.static(path.join(__dirname, "../public"))
 );
@@ -1131,7 +1131,7 @@ module.exports = router;
 
 //************************************************************************************************************** */
 
-// app.listen(port, () => {
+// router.listen(port, () => {
 //   console.log(`應用程式正在監聽端口 ${port}`);
 // });
 
