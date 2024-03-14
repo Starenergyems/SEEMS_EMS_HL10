@@ -200,19 +200,50 @@ function classRemove(element, className) {
     $(element).removeClass(className);
 }
 
+async function updateNavbar(url='/navbar') { //刷新側欄
+    var data = await getData(url);
+    console.log('navbar:', data);
+    $('#totalAlarmNum').text(data.latestValues[0]);
+    $('#AlarmNum_Sys').text(data.latestValues[1]);
+    $('#AlarmNum_Bat').text(data.latestValues[2]);
+    $('#AlarmNum_PCS').text(data.latestValues[3]);
+    $('#AlarmNum_FF').text(data.latestValues[4]);
+    $('#AlarmNum_Env').text(data.latestValues[5]);
+    $('#AlarmNum_Meter').text(data.latestValues[6]);
+
+    $('#totalWarningNum').text(data.latestValues[7]);
+    $('#WarningNum_Sys').text(data.latestValues[8]);
+    $('#WarningNum_Bat').text(data.latestValues[9]);
+    $('#WarningNum_PCS').text(data.latestValues[10]);
+    $('#WarningNum_FF').text(data.latestValues[11]);
+    $('#WarningNum_Env').text(data.latestValues[12]);
+    $('#WarningNum_Meter').text(data.latestValues[13]);
+
+    /////////////////////////////////////////////////
+    $('#L_M_systemMode').text(data.latestValues2[0]);
+    $('#L_M_freq').text(data.latestValues2[1]);
+    $('#L_M_activeP').text(data.latestValues2[2]);
+    $('#L_M_reactiveP').text(data.latestValues2[3]);
+    $('#L_M_voltage').text(data.latestValues2[4]);
+    $('#L_M_current').text(data.latestValues2[5]);
+    $('#L_M_powerFactor').text(data.latestValues2[6]);
+
+    $('#L_M_avgSOC').text(data.latestValues2[7]);
+    $('#L_M_minSOH').text(data.latestValues2[8]);
+    $('#L_M_SBSPM').text(data.latestValues2[9]);
+    $('#L_M_chgEtoday').text(data.latestValues2[10]);
+    $('#L_M_dcgEtoday').text(data.latestValues2[11]);
+
+}
+
+function routineWork(url='/navbar'){ //持續刷新
+    updateData();
+    updateNavbar(url);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 function assign_TextContent_To_SpID(SpID, assignContent) {
     const element = document.querySelector(SpID);
     element.textContent = assignContent;
-}
-
-function assign_StatusOfDL_with_SpID(SpID, condition) {
-    const element = document.querySelector(SpID);
-
-    if (condition) {
-        element.classList.add("setToClose");
-    } else {
-        element.classList.remove("setToClose");
-    }
 }
 
 // let i;

@@ -8,6 +8,9 @@ $(document).ready(async function () {
 
 });
 
+setInterval(updateNavbar, 1000);
+////////////////////////////////////////////////////
+
 let lang = {
   sProcessing: "處理中...",
   sLengthMenu: "每頁 _MENU_ 項",

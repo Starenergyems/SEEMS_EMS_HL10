@@ -59,6 +59,7 @@ $(document).ready(function () {
 
 });
 
+setInterval(updateNavbar, 1000);
 /****************************************************************************************** */
 
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");

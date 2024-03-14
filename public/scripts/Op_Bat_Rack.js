@@ -5,10 +5,10 @@ $(document).ready(function () {
   console.log("start reading js");
   classAdd('#nB_Operation', 'default_nB');
   classAdd('#infoBMS', 'subTitle_unclick');
-  updateData();
+  routineWork();
 });
 
-setInterval(updateData, 1000);
+setInterval(routineWork, 1000);
 
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
@@ -115,7 +115,7 @@ function show_info_RackAlm_R01() {
   title_AlarmCMU.textContent = "Rack01 CMU告警";
   title_FaultCMU.textContent = "Rack01 CMU故障";
   title_StatusHW.textContent = "Rack01 硬體狀態";
-  getData(1);
+  block(1);
   show_info_RackAlm();
 }
 
@@ -125,7 +125,7 @@ function show_info_RackAlm_R02() {
   title_AlarmCMU.textContent = "Rack02 CMU告警";
   title_FaultCMU.textContent = "Rack02 CMU故障";
   title_StatusHW.textContent = "Rack02 硬體狀態";
-  getData(2);
+  block(2);
   show_info_RackAlm();
 }
 
@@ -135,7 +135,7 @@ function show_info_RackAlm_R03() {
   title_AlarmCMU.textContent = "Rack03 CMU告警";
   title_FaultCMU.textContent = "Rack03 CMU故障";
   title_StatusHW.textContent = "Rack03 硬體狀態";
-  getData(3);
+  block(3);
   show_info_RackAlm();
 }
 
@@ -145,7 +145,7 @@ function show_info_RackAlm_R04() {
   title_AlarmCMU.textContent = "Rack04 CMU告警";
   title_FaultCMU.textContent = "Rack04 CMU故障";
   title_StatusHW.textContent = "Rack04 硬體狀態";
-  getData(4);
+  block(4);
   show_info_RackAlm();
 }
 
@@ -155,7 +155,7 @@ function show_info_RackAlm_R05() {
   title_AlarmCMU.textContent = "Rack05 CMU告警";
   title_FaultCMU.textContent = "Rack05 CMU故障";
   title_StatusHW.textContent = "Rack05 硬體狀態";
-  getData(5);
+  block(5);
   show_info_RackAlm();
 }
 
@@ -165,7 +165,7 @@ function show_info_RackAlm_R06() {
   title_AlarmCMU.textContent = "Rack06 CMU告警";
   title_FaultCMU.textContent = "Rack06 CMU故障";
   title_StatusHW.textContent = "Rack06 硬體狀態";
-  getData(6);
+  block(6);
   show_info_RackAlm();
 }
 
@@ -175,7 +175,7 @@ function show_info_RackAlm_R07() {
   title_AlarmCMU.textContent = "Rack07 CMU告警";
   title_FaultCMU.textContent = "Rack07 CMU故障";
   title_StatusHW.textContent = "Rack07 硬體狀態";
-  getData(7);
+  block(7);
   show_info_RackAlm();
 }
 
@@ -185,7 +185,7 @@ function show_info_RackAlm_R08() {
   title_AlarmCMU.textContent = "Rack08 CMU告警";
   title_FaultCMU.textContent = "Rack08 CMU故障";
   title_StatusHW.textContent = "Rack08 硬體狀態";
-  getData(8);
+  block(8);
   show_info_RackAlm();
 }
 
@@ -195,7 +195,7 @@ function show_info_RackAlm_R09() {
   title_AlarmCMU.textContent = "Rack09 CMU告警";
   title_FaultCMU.textContent = "Rack09 CMU故障";
   title_StatusHW.textContent = "Rack09 硬體狀態";
-  getData(9);
+  block(9);
   show_info_RackAlm();
 }
 
@@ -205,7 +205,7 @@ function show_info_RackAlm_R10() {
   title_AlarmCMU.textContent = "Rack10 CMU告警";
   title_FaultCMU.textContent = "Rack10 CMU故障";
   title_StatusHW.textContent = "Rack10 硬體狀態";
-  getData(10);
+  block(10);
   show_info_RackAlm();
 }
 
@@ -215,7 +215,7 @@ function show_info_RackAlm_R11() {
   title_AlarmCMU.textContent = "Rack11 CMU告警";
   title_FaultCMU.textContent = "Rack11 CMU故障";
   title_StatusHW.textContent = "Rack11 硬體狀態";
-  getData(11);
+  block(11);
   show_info_RackAlm();
 }
 
@@ -225,13 +225,13 @@ function show_info_RackAlm_R12() {
   title_AlarmCMU.textContent = "Rack12 CMU告警";
   title_FaultCMU.textContent = "Rack12 CMU故障";
   title_StatusHW.textContent = "Rack12 硬體狀態";
-  getData(12);
+  block(12);
   show_info_RackAlm();
 }
 
 //獲取該區塊id rack彈跳視窗
 
-async function getData(blockId) {
+async function block(blockId) {
   try {
     console.log("嘗試向後端發出請求");
     const response = await fetch("/getData", {

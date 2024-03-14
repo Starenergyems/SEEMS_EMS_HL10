@@ -1,5 +1,18 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
+document.addEventListener("DOMContentLoaded", afterLoadDCM);
+function afterLoadDCM() {
+  asdfg = "DOM加载了! 哈哈\n阿哈哈~";
+  console.log(asdfg);
+
+  const defaultBut_navBar = document.querySelector("#nB_Operation");
+  defaultBut_navBar.classList.add("default_nB");
+
+  updateNavbar();
+}
+
+setInterval(updateNavbar, 1000);
+///////////////////////////////////////////////////////
 
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");
 const ssNavBar_sNB_02 = document.querySelector(".subNavBar #sNB_02 .ssNavBar");
@@ -44,20 +57,8 @@ function hide_ssNavBar(clickItem) {
 
 /////////////////////////////////////////////////////////////////////////
 
-document.addEventListener("DOMContentLoaded", afterLoadDCM);
-function afterLoadDCM() {
-  asdfg = "DOM加载了! 哈哈\n阿哈哈~";
-  console.log(asdfg);
 
-  const defaultBut_navBar = document.querySelector("#nB_Operation");
-  defaultBut_navBar.classList.add("default_nB");
-
-  updateData();
-}
-
-setInterval(updateData, 1000);
-
-async function updateData() {                                   // 更新資料 ajax
+async function updateData() {  // 更新資料 ajax
   var router = window.location.href + "/data";
   var data = await getData(router);
   console.log(data);

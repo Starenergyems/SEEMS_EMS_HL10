@@ -4,11 +4,11 @@ $(document).ready(function () {
 
   console.log("start reading js, update data every 5 sec");
   classAdd('#nB_Operation', 'default_nB')
-  updateData();
+  routineWork();//刷新畫面
 });
 
 // 1秒更新一次
-setInterval(updateData, 1000);
+setInterval(routineWork, 1000);
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 

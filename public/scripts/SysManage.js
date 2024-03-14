@@ -5,6 +5,10 @@ $(document).ready(function(){
 	readText();
 
 })
+
+setInterval(updateNavbar, 1000);
+
+
 //讓上方padding與navbar同高，這樣縮放時若navbar寬度有變不會擋住body
 function TopPadding(navbar=".navbar",body="#page"){
 	var navHeight=document.querySelector(navbar).clientHeight; 

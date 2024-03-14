@@ -6,6 +6,8 @@ $(document).ready(function () {
   classAdd("#nB_Mode","default_nB");
 });
 
+setInterval(updateNavbar, 1000);
+////////////////////////////////////////////////////
 
 const scheduleSW = document.querySelector(".scheduleSwitch #switch_SchdOnOff");
 scheduleSW.addEventListener("click", toggleScheduleSW);

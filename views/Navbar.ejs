@@ -22,7 +22,7 @@
             <div class="accountNavBar">
               <a href="/account/personalinfo" id="accNB_01">個人資料</a>
               <% if (permission === 'admin') { %>
-                <a href="/account/manage" id="accNB_02">人員管理</a>
+                <!-- <a href="/account/manage" id="accNB_02">人員管理</a> -->
                 <a href="/account/system" id="accNB_04">系統設定</a>
                 <% } %> 
               <a href="/login" id="accNB_03">登出</a>
@@ -32,31 +32,31 @@
 
     <div class="L_Main">
         <div class="systemStatus">
-            <label class="systemMode" id="L_M_systemMode"><%=L_M_systemMode %></label>
+            <label class="systemMode" id="L_M_systemMode"></label>
             <div class="sumAWNum sumAlarmNum">
                 <img src="../public/images/Alarm_Logo.png" alt="Alarm圖示" class="alert_Logo">
-                <label class="totalAWNum" id="totalAlarmNum"><%=totalAlarmNum %></label>
+                <label class="totalAWNum" id="totalAlarmNum"></label>
                 <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumAlarmNum">
                 <div class="sumAW_EachArea sumAlarm_EachArea">
-                    <div class="sumAW_Area sumAlarm_Meter">系統<label class="AWNum" id="AlarmNum_Sys"><%=AlarmNum_Sys %></label></div>
-                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter"><%=AlarmNum_Meter %></label></div>
-                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS"><%=AlarmNum_PCS %></label></div>
-                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat"><%=AlarmNum_Bat %></label></div>
-                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env"><%=AlarmNum_Env %></label></div>
-                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF"><%=AlarmNum_FF %></label></div>
+                    <div class="sumAW_Area sumAlarm_Meter">系統<label class="AWNum" id="AlarmNum_Sys"></label></div>
+                    <div class="sumAW_Area sumAlarm_Meter">電表<label class="AWNum" id="AlarmNum_Meter"></label></div>
+                    <div class="sumAW_Area sumAlarm_PCS">PCS<label class="AWNum" id="AlarmNum_PCS"></label></div>
+                    <div class="sumAW_Area sumAlarm_Bat">電池<label class="AWNum" id="AlarmNum_Bat"></label></div>
+                    <div class="sumAW_Area sumAlarm_Env">環境<label class="AWNum" id="AlarmNum_Env"></label></div>
+                    <div class="sumAW_Area sumAlarm_FF">消防<label class="AWNum" id="AlarmNum_FF"></label></div>
                 </div>
             </div>
             <div class="sumAWNum sumWarningNum">
                 <img src="../public/images/Warning_Logo.png" alt="Warning圖示" class="alert_Logo">
-                <label class="totalAWNum" id="totalWarningNum"><%=totalWarningNum%></label>
+                <label class="totalAWNum" id="totalWarningNum"></label>
                 <img src="../public/images/DropDown_Logo.png" alt="下拉式按鈕圖示" class="dropDown_Logo" id="dD_Logo_sumWarningNum">
                 <div class="sumAW_EachArea sumWarning_EachArea">
-                    <div class="sumAW_Area sumWarning_Meter">系統<label class="AWNum" id="WarningNum_Sys"><%=WarningNum_Sys %></label></div>
-                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter"><%=WarningNum_Meter %></label></div>
-                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS"><%=WarningNum_PCS %></label></div>
-                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat"><%=WarningNum_Bat %></label></div>
-                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env"><%=WarningNum_Env %></label></div>
-                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF"><%=WarningNum_FF %></label></div>
+                    <div class="sumAW_Area sumWarning_Meter">系統<label class="AWNum" id="WarningNum_Sys"></label></div>
+                    <div class="sumAW_Area sumWarning_Meter">電表<label class="AWNum" id="WarningNum_Meter"></label></div>
+                    <div class="sumAW_Area sumWarning_PCS">PCS<label class="AWNum" id="WarningNum_PCS"></label></div>
+                    <div class="sumAW_Area sumWarning_Bat">電池<label class="AWNum" id="WarningNum_Bat"></label></div>
+                    <div class="sumAW_Area sumWarning_Env">環境<label class="AWNum" id="WarningNum_Env"></label></div>
+                    <div class="sumAW_Area sumWarning_FF">消防<label class="AWNum" id="WarningNum_FF"></label></div>
                 </div>
             </div>
         </div>
@@ -72,40 +72,40 @@
         <div class="systemInfo">
             <p class="subTitle">|| 系統資訊 ||</p>
 
-            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq"><%=L_M_freq %></label>
+            <div class="DV_Line">頻率<label class="dataValue" id="L_M_freq"></label>
                 <p class="dataUnit">Hz</p>
             </div>
-            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP"><%=L_M_activeP %></label>
+            <div class="DV_Line">實功<label class="dataValue" id="L_M_activeP"></label>
                 <p class="dataUnit">kW</p>
             </div>
-            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP"><%=L_M_reactiveP %></label>
+            <div class="DV_Line">虛功<label class="dataValue" id="L_M_reactiveP"></label>
                 <p class="dataUnit">kVar</p>
             </div>
-            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage"><%=L_M_voltage %></label>
+            <div class="DV_Line">電壓<label class="dataValue" id="L_M_voltage"></label>
                 <p class="dataUnit">kV</p>
             </div>
-            <div class="DV_Line">電流<label class="dataValue" id="L_M_current"><%=L_M_current %></label>
+            <div class="DV_Line">電流<label class="dataValue" id="L_M_current"></label>
                 <p class="dataUnit">A</p>
             </div>
-            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor"><%=L_M_powerFactor %></label>
+            <div class="DV_Line">功因<label class="dataValue" id="L_M_powerFactor"></label>
                 <p class="dataUnit"></p>
             </div>
-            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC"><%=L_M_avgSOC %></label>
+            <div class="DV_Line">平均SOC<label class="dataValue" id="L_M_avgSOC"></label>
                 <p class="dataUnit">%</p>
             </div>
-            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH"><%=L_M_minSOH %></label>
+            <div class="DV_Line">最低SOH<label class="dataValue" id="L_M_minSOH"></label>
                 <p class="dataUnit">%</p>
             </div>
-            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM"><%=L_M_SBSPM %></label>
+            <div class="DV_Line">SBSPM<label class="dataValue" id="L_M_SBSPM"></label>
                 <p class="dataUnit">%</p>
             </div>
 
             <div class="DV_Line spareLine">當日充放電量</div>
 
-            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday"><%=L_M_chgEtoday %></label>
+            <div class="DV_Line">充電<label class="dataValue" id="L_M_chgEtoday"></label>
                 <p class="dataUnit">kWh</p>
             </div>
-            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday"><%=L_M_dcgEtoday %></label>
+            <div class="DV_Line lastLine">放電<label class="dataValue" id="L_M_dcgEtoday"></label>
                 <p class="dataUnit">kWh</p>
             </div>
         </div>

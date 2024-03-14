@@ -1,6 +1,15 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
+var permission = "manager";
+$(document).ready(function () {
+
+  console.log("start reading js");
+  routineWork();
+});
+
+setInterval(routineWork, 1000);
+//////////////////////////////////////////////////////////////////////////////
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");
 const ssNavBar_sNB_02 = document.querySelector(".subNavBar #sNB_02 .ssNavBar");
 const ssNavBar_sNB_03 = document.querySelector(".subNavBar #sNB_03 .ssNavBar");
@@ -300,7 +309,7 @@ function afterLoadDCM() {
   updateData();
 }
 
-setInterval(updateData, 5000);
+
 
 async function updateData() {                                   // 更新資料 ajax
   var router = window.location.href + "/data";

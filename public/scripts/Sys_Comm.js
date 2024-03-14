@@ -3,10 +3,10 @@ var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
   classAdd("#nB_System", "default_nB");
-  updateData();
+  routineWork();
 });
 
-setInterval(updateData, 1000);
+setInterval(routineWork, 1000);
 
 async function updateData() {                                   // 更新資料 ajax
   var router = window.location.href + "/data";

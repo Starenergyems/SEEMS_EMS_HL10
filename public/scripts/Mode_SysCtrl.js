@@ -20,10 +20,10 @@ var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
   classAdd("#nB_Mode","default_nB");
-  updateData();
+  routineWork();
 });
 
-//setInterval(updateData, 1000);
+setInterval(routineWork, 1000);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 let minLimit;

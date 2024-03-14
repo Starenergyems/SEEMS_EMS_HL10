@@ -241,19 +241,17 @@ app.get("/navbar", async (req, res) => {
     // 呼叫函式並取得最新數值
     const latestValues = await getLatestValuesFromDatabase();
     //沒有計算 純粹讀取+換算
-     const latestValues2 = await getLatestValuesFromDatabaseforother();
-    res.send({latestValues, latestValues2});
+    const latestValues2 = await getLatestValuesFromDatabaseforother();
+    res.send({ latestValues, latestValues2 });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-
 // 創建一個函數來從資料庫中獲取最新的數值
 async function getLatestValuesFromDatabase() {
   try {
-    console.log('1');
     // 執行查詢操作以獲取最新的數值
     const alarmData = await alarmnanoDb.find({
       selector: { time: { $exists: true } },

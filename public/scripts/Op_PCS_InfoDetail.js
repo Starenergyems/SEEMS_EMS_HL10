@@ -3,10 +3,10 @@ var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
   classAdd("#nB_Operation","default_nB");
-  updateData();
+  routineWork();//刷新數值側欄
 });
 
-setInterval(updateData, 1000);
+setInterval(routineWork, 1000);
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 

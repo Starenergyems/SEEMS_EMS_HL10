@@ -4,10 +4,10 @@ $(document).ready(function () {
 
   console.log("start reading js");
   classAdd('#nB_System', 'default_nB');
-  updateData();
+  routineWork();
 });
 
-setInterval(updateData, 1000);
+setInterval(routineWork, 1000);
 
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";

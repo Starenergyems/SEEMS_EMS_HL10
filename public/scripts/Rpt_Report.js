@@ -31,6 +31,9 @@ $(document).ready(function () {
     updateTable();
 });
 
+setInterval(updateNavbar, 1000);
+//////////////////////////////////////////////
+
 var currentYear = new Date().getFullYear();
 var currentMonth = new Date().getMonth() + 1;
 function generateYearOptions() { //動態生成年份下拉選單

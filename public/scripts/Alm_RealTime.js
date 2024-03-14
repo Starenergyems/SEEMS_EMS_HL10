@@ -13,6 +13,8 @@ $(document).ready(function () {
       appear();
     });
 });
+
+setInterval(updateNavbar,1000);
 /********************************************************************* */
 //const { check } = require("prettier");
 

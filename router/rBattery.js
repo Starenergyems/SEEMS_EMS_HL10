@@ -1464,11 +1464,11 @@ router.use(bodyParser.json());
 //各rack單獨彈出視窗
 router.post("/getData", async (req, res) => {
   try {
-    //console.log("接收到前端請求");
+    console.log("接收到前端請求");
     const blockId = req.body.blockId;
-    //console.log("blockId:" + blockId);
+    console.log("blockId:" + blockId);
 
-    //console.log("globalPageNumber:" + globalPageNumber);
+    console.log("globalPageNumber:" + globalPageNumber);
 
     const dataPromises = databases.map(async (dbName) => {
       const nanoDb = createNanoInstance(dbName);

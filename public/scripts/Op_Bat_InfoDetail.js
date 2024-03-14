@@ -6,11 +6,11 @@ $(document).ready(function () {
   classAdd('#nB_Operation', 'default_nB');
   classAdd('#infoRack', 'subTitle_unclick');
 
-  updateData();
+  routineWork();
 });
 
-setInterval(updateData, 1000);//5秒刷新一次
-
+setInterval(routineWork, 1000);//1秒刷新一次
+/////////////////////////////////////////////////////////////////////
 
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");
 const ssNavBar_sNB_02 = document.querySelector(".subNavBar #sNB_02 .ssNavBar");

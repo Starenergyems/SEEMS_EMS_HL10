@@ -1,6 +1,14 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
+var permission = "manager";
+$(document).ready(function () {
+  console.log("start reading js");
+  classAdd("#nB_Alarm", "default_nB");
+});
 
+setInterval(updateNavbar, 1000);
+
+//////////////////////////////////////////
 const dateStart = document.querySelector(".timeRangeQuery #dateStart");
 const timeStart = document.querySelector(".timeRangeQuery #timeStart");
 const duration = document.querySelector(".timeRangeQuery #duration");

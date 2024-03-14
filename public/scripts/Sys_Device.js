@@ -5,6 +5,8 @@ $(document).ready(function () {
   classAdd("#nB_System", "default_nB");
 });
 
+setInterval(updateNavbar, 1000);
+
 //設備地點篩選
 /*(function(document) {
 	'use strict';

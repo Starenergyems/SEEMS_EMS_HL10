@@ -3,6 +3,8 @@ $(document).ready(function () {
   updateTable();
 });
 
+setInterval(updateNavbar, 1000);
+///////////////////////////////////////
 var lang = {
   sProcessing: "處理中...",
   sLengthMenu: "每頁 _MENU_ 項",
