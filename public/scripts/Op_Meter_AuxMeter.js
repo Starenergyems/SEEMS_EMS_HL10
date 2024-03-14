@@ -8,10 +8,10 @@ function afterLoadDCM() {
   const defaultBut_navBar = document.querySelector("#nB_Operation");
   defaultBut_navBar.classList.add("default_nB");
 
-  updateNavbar();
+  routineWork();
 }
 
-setInterval(updateNavbar, 1000);
+setInterval(routineWork, 1000);
 ///////////////////////////////////////////////////////
 
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");

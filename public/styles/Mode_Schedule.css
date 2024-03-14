@@ -10,18 +10,96 @@
     left: 0px;
 }
 
+body {
+    min-width: 1740px;
+}  
+
+.logicCtrl_emerCmd {
+    display: inline-block;
+    /* background-color: #FFaFFF; */
+    width: 37.5%;
+    height: 850px;
+    margin: 0px 0.2976% 10px 1.19%;
+    vertical-align: top;
+}
+
+.logicCtrl {
+    background-color: #FFFFFF;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.logicCtrl h2 {
+    background-color: #F9E06C;
+    box-sizing: border-box;
+    height: 55px;
+    border: 5px solid #FFFFFF;
+    font-size: 36px;
+    line-height: 45px;
+    border-radius: 20px;
+}
+
+.logicCtrl .DS_Line {
+    margin: 0px 3.968%;
+    line-height: 40px;
+    /* min-width: 320px; */
+    /* background-color: #AAFF00; */
+}
+
+.logicCtrl .DS_Line .dataStatus {
+    width: calc(100% - 350px - 45px);
+    right: 45px;
+    top: 8px;
+    /* background-color: #FFAA00; */
+}
+
+.logicCtrl .DS_Line .setButton {
+    background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C);
+    box-sizing: border-box;
+    height: 36px;
+    width: 36px;
+    border: 2px solid #B6B6B6;
+    font-size: 16px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    top: 2px;
+}
+
+.logicCtrl .DV_Line {
+    margin: 0px 3.968%;
+    line-height: 40px;
+    /* min-width: 320px; */
+    /* background-color: #8080FF; */
+}
+
+.logicCtrl .DV_Line .dataValue {
+    /* width: 130px; */
+    right: 110px;
+    top: 8px;
+    /* background-color: #FF00AA; */
+}
+
+.logicCtrl .DV_Line .dataUnit {
+    width: 100px;
+    /* right: 0px; */
+    top: 8px;
+    /* background-color: #FFAA00; */
+
+}
+
 .emergencyCmd {
     background-color: #FFFFFF;
-    width: 97.619%;
-    padding-bottom: 5px;
-    margin: 10px 1.19% 0px;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
     border-radius: 10px;
 }
 
 .emergencyCmd .title {
     background-color: #F9E06C;
     box-sizing: border-box;
-    height: 50px;
+    height: 55px;
     border: 5px solid #FFFFFF;
     border-radius: 20px;
 }
@@ -29,8 +107,7 @@
 .emergencyCmd h2 {
     display: inline-block;
     font-size: 36px;
-    margin: 2px 0px 0px 0px;
-    vertical-align: top;
+    line-height: 45px;
 }
 
 .emergencyCmd table {
@@ -46,33 +123,21 @@
 }
 
 .emergencyCmd table .col_01 {
-    width: 14%;
+    width: 170px;
     text-align: center;
     border-left: none;
 }
 
 .emergencyCmd table .col_02 {
-    width: 18%;
+    width: 230px;
 }
 
 .emergencyCmd table .col_03 {
-    width: 25%;
-}
-
-.emergencyCmd table .col_04 {
-    width: 25%;
-}
-
-.emergencyCmd table .col_05 {
+    width: 230px;
     border-right: none;
 }
 
-.emergencyCmd .row_other .col_05 {
-    text-align: right;
-    padding-right: calc(9% - 50px);
-}
-
-.emergencyCmd table .row_01 {
+.emergencyCmd .row_01 {
     text-align: center;
 }
 
@@ -104,7 +169,7 @@
     vertical-align: top;
 }
 
-.emergencyCmd table .cmdDateTime {
+.emergencyCmd .cmdDateTime {
     margin-left: calc(50% - 90px);
     font-size: 20px;
 }
@@ -112,11 +177,17 @@
 .emergencyCmd .cmd_P {
     display: inline-block;
     box-sizing: border-box;
-    margin: 0px 10px 0px 0px;
+    width: 85px;
+    margin: 0px 10px 0px calc(50% - 80px);
+    font-size: 20px;
+    text-align: right;
+}
+
+.emergencyCmd .row_last span {
     font-size: 20px;
 }
 
-.scheduleSwitch {
+/* .scheduleSwitch {
     background-color: #F9E06C;
     box-sizing: border-box;
     height: 70px;
@@ -181,363 +252,210 @@
     font-size: 36px;
     margin: 12px 0px 0px 10px;
     vertical-align: top;
-}
+} */
 
 .schedule {
+    display: inline-block;
     background-color: #FFFFFF;
-    width: 97.619%;
-    margin: 10px 1.19% 10px;
+    width: 59.5238%;
+    padding-bottom: 5px;
+    margin: 0px 1.19% 10px 0.2976%;
     border-radius: 10px;
 }
 
 .schedule .title {
     background-color: #F9E06C;
     box-sizing: border-box;
-    height: 50px;
+    height: 55px;
     border: 5px solid #FFFFFF;
     border-radius: 20px;
 }
 
 .schedule h2 {
     display: inline-block;
-    margin: 2px 0px 0px 0px;
     font-size: 36px;
-    vertical-align: top;
-}
-
-.schdToday {
-    display: inline-block;
-    width: 49.39%;
-    margin: 0px 0.304% 5px;
-    min-width: 660px;
+    line-height: 45px;
 }
 
 .schedule .subTitle {
-    box-sizing: border-box;
-    height: 40px;
-    border: 1px solid #F9E06C;
-    border-radius: 20px;
     background-color: #FFFFFF;
-    text-align: center;
+    box-sizing: border-box;
+    height: 36px;
+    border: 1px solid #F9E06C;
+    margin: 0px 5px;
+    border-radius: 20px;
+    position: relative;
 }
 
-.schedule p {
+.schedule #schdDate {
     display: inline-block;
     box-sizing: border-box;
-    padding: 7px 0px 0px;
+    margin: 0px 15px 0px 20px;
     font-size: 24px;
+    line-height: 34px;
+}
 
+.schedule .setButton {
+    /* background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C); */
+    background: linear-gradient(170deg, #BBBBBB, #FFFFFF, #BBBBBB);
+    /* background-color: #EEEEEE; */
+    box-sizing: border-box;
+    height: 30px;
+    width: 120px;
+    border: 1px solid #808080;
+    margin-top: 2px;
+    font-size: 20px;
+    line-height: 28px;
+    border-radius: 10px;
+    vertical-align: top;
+}
+
+.schedule #goToAnotherDay {
+    position: absolute;
+    right: 15px;
+    top: 0px;
 }
 
 .schedule table {
     border-collapse: collapse;
     background-color: #EEEEEE;
+    margin: 0px 5px;
     border-radius: 20px;
 }
 
 .schedule tr td {
     box-sizing: border-box;
-    height: 30px;
+    height: 29px;
     border: 1px solid #BBBBBB;
     font-size: 20px;
 }
 
-.schedule .row_01 td {
-    height: 40px;
-    padding-left: 15px;
-    border: none;
-    font-size: 24px;
-    line-height: 39px;
-    position: relative;
-}
-
-.schedule button {
-    display: inline-block;
-    background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C);
-    box-sizing: border-box;
-    height: 36px;
-    width: 36px;
-    border: 2px solid #B6B6B6;
-    margin-top: 2px;
-    font-size: 16px;
-    border-radius: 50%;
-    vertical-align: top;
-}
-
-.schedule .refSOC {
-    background-color: #FFFFFF80;
-    box-sizing: border-box;
-    height: 36px;
-    width: 180px;
-    padding: 0px 0px 0px 10px;
-    border: 1px solid #808080;
-    font-size: 24px;
-    line-height: 34px;
-    border-radius: 10px;
-    position: absolute;
-    right: 15px;
-    top: 2px;
-}
-
-.schedule #setBut_refSOCToday,
-.schedule #setBut_refSOCTomorrow {
-    height: 30px;
-    width: 30px;
-    font-size: 14px;
-}
-
-/* .schedule button {
-    display: inline-block;
-    box-sizing: border-box;
-    padding: 4px 0px 4px;
-    border: 1px solid #695A14;
-    font-size: 20px;
-    text-align: center;
-    border-radius: 15px;
-}
-
-.schedule .setAllTP {
-    background-color: #F9E06C;
-    width: 120px;
-    margin: 0px 0px 0px 20px;
-}
-
-.schedule .resetAllTP {
-    background-color: #F9E06C;
-    width: 120px;
-    margin: 0px 0px 0px 5px;
-}
-
-.schedule .refSOC {
-    background-color: #FFFFFF;
-    width: 120px;
-    position: absolute;
-    right: 20px;
-} */
-
 .schedule .row_head {
     text-align: center;
+}
+
+.schedule .row_01 td {
+    border-top: none;
 }
 
 .schedule .row_last td {
     border-bottom: none;
 }
 
-/* .schedule .schdToday .row_last .col_last { */
-.schedule .schdToday .col_last {
+.schedule .col_01 {
+    width: 64px;
+    border-left: none;
+    text-align: center;
+}
+
+.schedule .col_last {
     border-right: none;
 }
 
-.schedule .col_01,
-.schedule .col_07 {
-    text-align: center;
-    /* width: 6.173%; */
+.schedule .col_other {
+    width: 78px;
+}
+
+.schedule .P_schd,
+.schedule .P_cmd,
+.schedule .socRefVal {
+    display: inline-block;
+    /* background-color: #fa0; */
+    font-size: 20px;
+    text-align: right;
+}
+
+.schedule .P_schd {
+    margin-left: calc(50% - 30px);
+    width: 60px;
+}
+
+.schedule .P_cmd {
+    margin-left: calc(50% - 28px);
+    width: 55px;
+}
+
+.schedule .socRefVal {
+    margin-left: calc(50% - 25px);
     width: 50px;
 }
 
-.schedule .schdToday .col_01 {
-    border-left: none;
+.popUpWindow.setScheduleW {
+    height: 880px;
+    width: 660px;
+    left: 390px;
+    top: -60px;
 }
 
-.schedule .col_P_schd {
-    text-align: right;
-    /* width: 75px; */
-    width: 9.259%;
+.setScheduleW .title_setBut {
+    margin: 15px 20px 10px;
+    position: relative;
 }
 
-.schedule .col_P_cmd {
-    text-align: right;
-    width: 8.642%;
-    /* width: 70px; */
+.setScheduleW .titlePUW {
+    padding-left: 20px;
+    margin: 0px;
+    text-align: left;
 }
 
-.schedule .col_P_schd label {
-    font-size: 20px;
-    margin: 0px 7px 0px 0px;
-}
-
-.schedule .col_P_cmd label {
-    font-size: 20px;
-    margin: 0px 6px 0px 0px;
-}
-
-.schdTomorrow {
-    display: inline-block;
-    width: 49.39%;
-    margin: 0px 0.304% 5px;
-    min-width: 660px;
-}
-
-/* .schedule .schdTomorrow .row_last .col_01 { */
-.schedule .schdTomorrow .col_01 {
-    border-left: none;
-}
-
-.schedule .schdTomorrow .col_last {
-    border-right: none;
-}
-
-.popUpWindow.setSchedule {
-    height: 460px;
-    width: 1060px;
-    left: 190px;
-    top: 150px;
-}
-
-.setSchedule .titlePUW_closeWB {
-    display: inline-block;
-    width: 280px;
-    vertical-align: top;
-}
-
-.setSchedule .titlePUW {
-    margin-top: 100px;
-}
-
-.setSchedule .setToOpt {
-    margin-left: 30px;
-    margin-right: 30px;
-}
-
-.setSchedule .setToOpt_3 {
-    display: none;
-}
-
-.dataStatus_Set #radioOpt_1_today:checked~#checkBoxOpt_1::after,
-.dataStatus_Set #radioOpt_2_today:checked~#checkBoxOpt_2::after,
-.dataStatus_Set #radioOpt_3_today:checked~#checkBoxOpt_3::after,
-.dataStatus_Set #radioOpt_1_tomorrow:checked~#checkBoxOpt_1::after,
-.dataStatus_Set #radioOpt_2_tomorrow:checked~#checkBoxOpt_2::after,
-.dataStatus_Set #radioOpt_3_tomorrow:checked~#checkBoxOpt_3::after {
-    display: block;
-}
-
-.setSchedule .alertInfo {
-    margin: 25px 20px 0px;
-}
-
-.setSchedule #closeWB_Yes {
-    margin-left: 85px;
-}
-
-.setSchedule .scheduleTable {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.scheduleTable table {
-    margin-top: 15px;
-    border-collapse: collapse;
-}
-
-.scheduleTable tr td {
+.setScheduleW .title_setBut .setButton {
+    background: linear-gradient(170deg, #BBBBBB, #FFFFFF, #BBBBBB);
     box-sizing: border-box;
-    height: 30px;
-    border: 1px solid #B6B6B6;
-    font-size: 20px;
-}
-
-.scheduleTable .col_01,
-.scheduleTable .col_07 {
-    text-align: center;
-    width: 45px;
-}
-
-.scheduleTable .col_P_schd {
-    text-align: right;
-    width: 70px;
-}
-
-.scheduleTable .col_P_cmd {
-    text-align: right;
-    width: 65px;
-}
-
-.scheduleTable .row_head td {
-    text-align: center;
-}
-
-.scheduleTable label {
-    font-size: 20px;
-}
-
-.scheduleTable .P_schd_set,
-.scheduleTable .P_cmd_set {
-    margin-right: 6px;
-}
-
-.scheduleTable .timePeriod {
-    display: block;
-    line-height: 29px;
-}
-
-.scheduleTable .timePeriod.setTo0 {
-    background-color: #B6B6B6;
-}
-
-.popUpWindow.socRef {
-    height: 505px;
-    width: 650px;
-    left: 50%;
-    top: 406px;
-}
-
-.socRef .titlePUW {
-    margin: 15px 180px 0px;
-}
-
-.socRef table {
-    width: calc(100% - 20px);
-    margin: 10px 10px 0px;
-    border-collapse: collapse;
-}
-
-.socRef tr td {
-    box-sizing: border-box;
-    height: 30px;
-    border: 1px solid #B6B6B6;
-    font-size: 20px;
-    text-align: center;
-}
-
-.socRef tr .col_01 {
-    width: 50px;
-}
-
-.socRef tr .col_other {
-    width: 65px;
-}
-
-.socRef .row_other .col_other {
-    padding-right: 10px;
-    text-align: right;
-}
-
-.socRef .socRefVal {
-    font-size: 20px;
-}
-
-.socRef .closeWindowButton {
-    margin-left: 295px;
-}
-
-.popUpWindow.socRef.tomorrow {
-    left: calc(50% - 650px);
-}
-
-.block_temp {
-    display: none;
-    background-color: #aaf;
-    height: 560px;
+    height: 32px;
     width: 150px;
+    border: 1px solid #808080;
+    margin-top:3px;
     font-size: 20px;
+    border-radius: 10px;
+    vertical-align: top;
     position: absolute;
-    right: 50px;
-    top: 20px
+    right: 20px;
+    top: 1px;
 }
 
-.block_temp .schdStatus {
-    display: inline-block;
-    width: 70px;
+.setScheduleW .title_setBut #winAllBid {
+    right: 175px;
+}
+
+.setScheduleW table {
+    border-collapse: collapse;
+    margin: 0px 0px 10px 20px;
+}
+
+.setScheduleW tr td {
+    box-sizing: border-box;
+    height: 29px;
+    border: 1px solid #BBBBBB;
     font-size: 20px;
+    text-align: center;
+}
+
+.setScheduleW .col_01 {
+    width: 50px;
+}
+
+.setScheduleW .col_other {
+    width: 70px;
+}
+
+.setScheduleW .P_schd_set,
+.setScheduleW .P_cmd_set {
+    /* background-color: #fa0; */
+    box-sizing: border-box;
+    height: 28px;
+    width: 65px;
+    font-size: 20px;
+    text-align: right;
+}
+
+.setScheduleW .closeWindowButton {
+    margin-top: 0px;
+}
+
+.setScheduleW #closeWB_Yes {
+    margin-left: 270px;
+}
+
+.popUpWindow.dataStatus_Set .titlePUW {
+    margin: 25px 11px 0px;
 }

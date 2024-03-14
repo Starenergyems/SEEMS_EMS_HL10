@@ -28,6 +28,10 @@ const {
   mapBMSPCSstatus,
   mapAvail_SS,
   mapEdReg_SS,
+  Scale_Data,
+  Convert_UInt_to_revBitString,
+  mapBitStatus,
+  Convert_unixTime_to_dateTime,
 } = require("./function");
 
 // const otherrf01nanoDb = nano.use("other_rf01");
@@ -220,16 +224,112 @@ router.get("/mode/sysctrl/:data", async (req, res) => {
 });
 
 /******排程**************************************************************/
-router.get("/mode/schedule", (req, res) => {
-  res.render("Mode_Schedule", { permission: "manager" });
-  // console.log(`id：${req.body.id}, levle：${req.body.level}`)
+let Schd_KeyValuePairs;
+let dateNumber = 0;
+const date_MT = {
+  0: { dicName: "Today", pUW_title: "明日排程" },
+  1: { dicName: "Tomorrow", pUW_title: "今日排程" },
+};
+
+async function query_Schd_KeyValuePairs() {
+  const indexDef = {
+    index: { fields: ["time"] },
+    name: "time_index",
+  };
+  await GCnanoDb.createIndex(indexDef);
+
+  const mangoQuery = {
+    selector: {
+      time: { $exists: true },
+    },
+    sort: [{ time: "desc" }],
+    limit: 1,
+  };
+
+  try {
+    const result = await GCnanoDb.find(mangoQuery);
+
+    const GCData = result.docs[0];
+    const value = GCData.Schedule.Today[401002];
+    console.log("Value:", value);
+
+    const sysCtrl_2_MT = {
+      0: { 0: "頻率表", 1: "測試用頻率" },
+      1: { 0: "否", 1: "是" },
+      2: { 0: "否", 1: "是" },
+      3: { 0: "否", 1: "是" },
+      4: { 0: "否", 1: "是" },
+      5: { 0: "否", 1: "是" },
+      6: { 0: "否", 1: "是" },
+      7: { 0: "否", 1: "是" },
+      8: { 0: "禁用", 1: "啟用" },
+      9: { 0: "禁用", 1: "啟用" },
+      10: { 0: "禁用", 1: "啟用" },
+    };
+
+    Schd_KeyValuePairs = {
+      permission: "manager",
+
+      // P_Project: scaleProcess(GCData.System[400001], 0.01, 1),
+      use_P_schd: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 2),
+      use_P_LS: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 3),
+      use_SOC_ref: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 4),
+      autoCal_SOC_ideal: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 5),
+      use_MTE_P_96Q: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 6),
+      use_MTE_API: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 7),
+      use_Freq_Cmd: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 1),
+      freqSource: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 0),
+      Freq_test: Scale_Data(GCData.MTE[410001], 0.01, 2),
+      exeCmdInd: "Done",
+      exeCmdStatus: "執行結束",
+      sbyCmdInd: "Standby",
+      sbyCmdStatus: "待命中",
+      exeCmd_StartDT: Convert_unixTime_to_dateTime(GCData.API[400989]),
+      sbyCmd_StartDT: Convert_unixTime_to_dateTime(GCData.API[400995]),
+      exeCmd_StopDT: Convert_unixTime_to_dateTime(GCData.API[400991]),
+      sbyCmd_StopDT: Convert_unixTime_to_dateTime(GCData.API[400997]),
+      exeCmd_P: Scale_Data(GCData.API[400993], 1, 0),
+      sbyCmd_P: Scale_Data(GCData.API[400999], 1, 0),
+
+
+
+
+
+
+
+
+
+
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+}
+
+
+router.get("/mode/schedule", async (req, res) => {
+  try {
+    await query_Schd_KeyValuePairs();
+    console.log(Schd_KeyValuePairs);
+
+    res.render("Mode_Schedule", Schd_KeyValuePairs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-//運轉資訊+單線圖
-// router.get("/operateinfo", (req, res) => {
-//   // num與fun
-//   res.render("Op_Meter_SLD");
-// });
+router.get("/mode/schedule/:data", async (req, res) => {
+  try {
+    await query_Schd_KeyValuePairs();
+
+    res.json(Schd_KeyValuePairs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 module.exports = router;
 // app.listen(port, () => {
