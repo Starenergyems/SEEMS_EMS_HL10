@@ -1777,7 +1777,7 @@ function LC_error_result_unit(
     }
   } else {
     if (error_type === "int") {
-      const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${value}`;
+      const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
       const content = error_table[key_error][tag]["status"][value];
       const line = error_table[key_error][tag]["line"];
       const category = error_table[key_error][tag]["category"];
@@ -1800,17 +1800,14 @@ function LC_error_result_unit(
       let min = error_table[key_error][tag]["status"]["min"];
       let max = error_table[key_error][tag]["status"]["max"];
       // console.log(v)
-      let valve_status = "";
       let content = "";
       if (value < min) {
-        valve_status = "0";
         content = "Lower valve";
       } else if (value > max) {
-        valve_status = "1";
         content = "Greater valve";
       }
-      if (valve_status && content) {
-        const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${valve_status}`;
+      if (content) {
+        const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
         const line = error_table[key_error][tag]["line"];
         const category = error_table[key_error][tag]["category"];
         error_result[_id] = createErrorRecord(
@@ -1837,6 +1834,25 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
   let error_result = {};
+  // let _recover_doc = {};
+
+  // const alarmnanoDb = nano.use("alarm");
+  // alarmnanoDb
+  //   .list()
+  //   .then((body) => {
+  //     return alarmnanoDb.find({
+  //       selector: {
+  //         db_name: db_name,
+  //         // recover: { $exists: true, $eq: false },
+  //       },
+  //       limit: body.total_rows,
+  //       use_index: ["rAlarm_ddoc", "db_name_recover_index"],
+  //     });
+  //   })
+  //   .then((response) => {
+  //     // console.log(response.docs);
+  //     console.log("alarmnanoDb");
+  //   })
 
   for (let key in item) {
     if (item.hasOwnProperty(key)) {
@@ -1993,7 +2009,7 @@ function Other_error_result_unit(
     }
   } else {
     if (error_type === "int") {
-      const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${value}`;
+      const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
       const content = error_table[tag]["status"][value];
       const line = error_table[tag]["line"];
       const category = error_table[tag]["category"];
@@ -2016,17 +2032,14 @@ function Other_error_result_unit(
       let min = error_table[tag]["status"]["min"];
       let max = error_table[tag]["status"]["max"];
       // console.log(v)
-      let valve_status = "";
       let content = "";
       if (value < min) {
-        valve_status = "0";
         content = "Lower valve";
       } else if (value > max) {
-        valve_status = "1";
         content = "Greater valve";
       }
-      if (valve_status && content) {
-        const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${valve_status}`;
+      if (content) {
+        const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
         const line = error_table[tag]["line"];
         const category = error_table[tag]["category"];
         error_result[_id] = createErrorRecord(
@@ -2588,6 +2601,39 @@ function alarm_processor(
       });
   });
 }
+
+// function get_latest_value(
+//   db_name,
+//   device,
+//   tag
+// ) {
+//   const nanoDb = nano.use(db_name);
+//   const mangoQuery_latest_rawdata = {
+//     selector: {
+//       time: { $exists: true },
+//     },
+//     sort: [{ time: "desc" }],
+//     limit: 1,
+//     use_index: ["rAlarm_ddoc", "time_index"],
+//   };
+//   nanoDb
+//       .find(mangoQuery_latest_rawdata)
+//       .then((response) => {
+//         const item = response.docs[0];
+//         // console.log(item);
+        
+//       })
+//       .catch((err) => {
+//         if (err.statusCode === 404) {
+//           reject("Data not found in alarm_promise:", err.request.data);
+//         } else if (err.statusCode === 409) {
+//           reject("Error update conflict alarm_promise:", err.request.data);
+//         } else {
+//           console.log(err);
+//           reject("Error checking alarm_promise:", err);
+//         }
+//       });
+// }
 //************************************************************* */
 router.use(async (req, res, next) => {
   try {
