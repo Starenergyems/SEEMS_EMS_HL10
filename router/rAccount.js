@@ -1,10 +1,10 @@
-const port = 8888;
+// const port = 8888;
 
 const express = require("express");
 //const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const path = require("path");
-//const port = 3000;
+const port = 3000;
 //const User = require("../models/userschema");
 const router = express.Router();
 const app = express();
@@ -18,7 +18,7 @@ const nano = require("nano")(
 const cookieParser = require('cookie-parser'); // use for cookies, if not req.cookies will undefined.
 app.use(cookieParser());
 
-const { getconfig, findaccount, updateaccount, alldoc, deleteuser } = require("./rLogin");
+const { getconfig, findaccount, updateaccount, alldoc, getbyid, deleteuser, datetime, userlog } = require("./rLogin");
 const { brotliDecompress } = require("zlib");
 
 // mongoose
@@ -54,14 +54,14 @@ app.use(express.json()); // use to get json from ejs
 //app.use(myMiddleware);
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+// const app = require("./app.js")
 
-
-app.get("/account", (req, res) => {
+router.get("/account", (req, res) => {
   res.redirect("/account/personalinfo")
 });
 
 
-app.get("/account/personalinfo", async (req, res) => {
+router.get("/account/personalinfo", async (req, res) => {
   try {
     // const token = req.headers.cookie.split('=')[1]
     const token = req.cookies.token;
@@ -94,7 +94,8 @@ app.get("/account/personalinfo", async (req, res) => {
   }
 });
 
-app.post("/account/personalinfo", async (req, res) => {
+
+router.post("/account/personalinfo", async (req, res) => {
 // Change password.
 // Judge function should be write.
 console.log("Change password function execute.")
@@ -123,84 +124,114 @@ catch (error) {
 }})
 
 
-app.get("/account/manage", (req, res) => {
-  // num與fun
-  res.render("AccountManage");
-});
+router.get("/account/personalinfo/log", async (req, res) => {
+  try {
+    const token = req.cookies.token
+    const user = await findaccount("", token)
+    const id = user.id
+    let response = await userlog(id)
+    let log = []
+    for (let i = 0; i < response.docs.length; i++) {
+      let temp = response.docs[i]
+      log.push({Time: temp.time, description: temp.content})
+    }
+    res.json(log)
+  }
+  catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+}})
 
-app.get("/account/system", (req, res) => {
-  res.render("SysManage");
-});
 
-// app.get("/account/system/accounts", (req, res) => {
-//   //讀所有帳戶資料
+// The page do not need 
+// app.get("/account/manage", (req, res) => {
 //   // num與fun
-//   var account = [
-//     {
-//       employeeno: "SE0001",
-//       name: "YC",
-//       company: "星佑",
-//       department: "EMS",
-//       email: "123@hdrenewables.com",
-//       permission: "admin",
-//       status: "normal",
-//       note: "",
-//     },
-//     {
-//       employeeno: "SE0001",
-//       name: "ZG",
-//       company: "星佑",
-//       department: "EMS",
-//       email: "123@hdrenewables.com",
-//       permission: "manager",
-//       status: "lock",
-//       note: "",
-//     },
-//   ];
-//   res.json(account);
+//   res.render("AccountManage");
 // });
 
 
-app.post("/account/system/accounts", async(req, res) => {
-  // Create new user or delete exist user.
-  try {
-    const body = req.body
-    // console.log(body)
-    let createdata = [
-      {
-        num: body.num,
-        name: body.name,
-        company: body.company,
-        department: body.department,
-        email: body.email,
-        level: body.permission,
-        state: body.status,
-        note: body.note,
-        password: body.password
-      }
-    ]
-    // console.log(createdata)
-    const response = await alldoc(db.account);
-    console.log(11, response)
-    const alldocc = response.json();
-    console.log(alldoc)
-    let id = []
-    for (let i = 0; i < alldocc.rows.length; i++) {
-      id.push(alldocc.rows[i].id)
-    }
-    if (id.includes(body.num)){
-      deleteuser(body.num)
-      console.log(`${req.method} ${req.url} delete user ${body.num}`)
-    } else{
-      updateaccount(body.num,"","",createdata)
-      console.log(`${req.method} ${req.url} create user ${body.num}`)
-    }
-    res.status(200)
-  }
-  catch (error) {console.error("Error:", error.message)}
+router.get("/account/system", (req, res) => {
+  res.render("SysManage");
 });
 
-app.get("/account/system/passwordsetting", async(req, res) => {
+
+router.get("/account/system/accounts", async(req, res) => {
+  let response = await alldoc(db.account)
+  response = await response.json()
+  let userset = []
+  for (let i = 0; i < response.total_rows; i++) {
+    if (response.rows[i].doc._id !== db.config) {
+      let temp = response.rows[i].doc.user
+      userset.push({
+        employeeno: temp.num === (undefined || "")? response.rows[i].doc._id : temp.num,
+        name: temp.name === undefined? "" : temp.name, 
+        company: temp.company === undefined? "" : temp.company,
+        department: temp.department === undefined? "" : temp.department,
+        email: temp.mail === undefined? "" : temp.mail,
+        permission: temp.level === undefined? "" : temp.level,
+        status: temp.state === undefined? "" : temp.state,
+        note: temp.note === undefined? "" : temp.note,
+      })
+    }}
+  res.json(userset);
+  })
+
+
+router.post("/account/system/accounts", async(req, res) => {
+  // Create new user.  Change or delete exist user.
+  try {
+  let response = await alldoc(db.account);
+  response = await response.json();
+  let allid = []
+  for (let i = 0; i < response.total_rows; i++) {
+    if (response.rows[i].doc._id !== db.config) {
+      allid.push(response.rows[i].doc._id)
+    }
+  }
+  const body = req.body
+  const bottom = body.bottom
+  let iddata = await getbyid(body.num)
+  iddata = await iddata.json()
+  console.log(iddata)
+  let data = [{
+        _id: `${iddata._id}`,
+        _rev: `${iddata._rev}`,
+        time: `${datetime()}`, // The doc verify time.
+        user: {
+          num: `${body.num}`,
+          mail: `${body.email}`,
+          name: `${body.name}`,
+          comapny: `${body.company}`,
+          department: `${body.department}`,
+          level: `${body.permission}`,
+          state: `${body.status}`,
+          errcount: `${iddata.errcount}`,
+          note: `${body.note === undefined? "" : body.note}`,
+          last_time: `${iddata.last_time}`,
+          password: `${body.password === "" ? iddata.password : body.password}`,
+          bantill: `${iddata.bantill}`,
+          token: `${iddata.token}`,
+          validtime: `${iddata.validtime}`,
+        }}]
+  if (allid.includes(iddata._id) === false && bottom === "addupdate") {
+    // Create the user.
+    await updateaccount(iddata._id, "", "", data)
+    res.status(200)
+  } else if (allid.includes(iddata._id) === true && bottom === "addupdate") {
+    // Update the user.
+    await updateaccount(iddata._id, "", "", data)
+    res.status(200)
+  } else if (allid.includes(iddata._id) === true && bottom === "delete") {
+    // Delete the user.
+    await deleteuser(iddata._id)
+    res.status(200)
+  }
+
+  }catch (error) {console.error("Error:", error.message)}
+});
+  
+
+router.get("/account/system/passwordsetting", async(req, res) => {
   try {
     response = await getconfig()
     // console.log(response)
@@ -221,7 +252,7 @@ app.get("/account/system/passwordsetting", async(req, res) => {
   }
 });
 
-app.post("/account/system/passwordsetting", async(req, res) => {
+router.post("/account/system/passwordsetting", async(req, res) => {
   try {
     let response = await getconfig()
     let updatedata = [
@@ -253,7 +284,7 @@ app.post("/account/system/passwordsetting", async(req, res) => {
   catch (error) {console.error("config Error:", error.message)}
 });
 
-app.get("/account/system/banrule", async(req, res) => {
+router.get("/account/system/banrule", async(req, res) => {
   try {
     response = await getconfig()
     if (response.suspendtime > 72 || response.suspendtime === "永久"){
@@ -272,7 +303,8 @@ app.get("/account/system/banrule", async(req, res) => {
   }
 });
 
-app.post("/account/system/banrule", async(req, res) => {
+
+router.post("/account/system/banrule", async(req, res) => {
   try {
     let response = await getconfig()
     let updatedata = [
@@ -299,7 +331,7 @@ app.post("/account/system/banrule", async(req, res) => {
   catch (error) {console.error("config Error:", error.message)}
 });
 
-app.get("/account/system/logintext", async(req, res) => {
+router.get("/account/system/logintext", async(req, res) => {
   try {
     response = await getconfig()
     // console.log(response)
@@ -315,7 +347,7 @@ app.get("/account/system/logintext", async(req, res) => {
   }
   });
 
-app.post("/account/system/logintext", async(req, res) => {
+router.post("/account/system/logintext", async(req, res) => {
   try {
     let response = await getconfig()
     let updatedata = [
@@ -355,6 +387,6 @@ app.post("/account/system/logintext", async(req, res) => {
 
 module.exports = router;
 
-app.listen(port, () => {
-  console.log(`應用程式正在監聽端口 ${port}`);
-});
+// router.listen(port, () => {
+//   console.log(`應用程式正在監聽端口 ${port}`);
+// });

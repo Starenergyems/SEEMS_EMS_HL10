@@ -78,18 +78,14 @@ app.post("/login", async (req, res) => {
     const email = req.body["username"];
     const password = req.body["password"];
     console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
-    // const config = await getconfig()
-    // console.log(config.duration*3600)
 
     const response = await submit(email, password);
     if (response["result"] === true) {
       console.log(response["text"]);
       res.cookie("token", response["token"]);
-      //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
       // res.redirect(302, "/mode");
-      // res.redirect('mode');
       res.json({ redirect: "http://localhost:3000/mode" });
       // res.redirect("/mode")
       // res.redirect("./operateinfo");
@@ -108,8 +104,6 @@ app.use("*", async (req, res, next) => {
     const authenticated = await authentication(req);
     if (authenticated === false) {
       // return res.redirect(302,"/login")
-      // res.redirect('login');
-      // res.clearCookie("token");
       return res.status(401).send("Unauthorized");
     } else {
       req.customData = authenticated;
@@ -242,6 +236,7 @@ const mangoQuery = {
 //Navbar資料api
 
 app.get("/navbar", async (req, res) => {
+  console.log("後端收到");
   try {
     // 呼叫函式並取得最新數值
     const Values = await getLatestValuesFromDatabase();
@@ -527,11 +522,7 @@ async function getLatestValuesFromDatabaseforother() {
       1,
       2
     ); //data*CT/65536
-    const L_M_powerFactor = scaleProcess(
-      Math.abs(gcData.IEC61850[400127]),
-      0.01,
-      1
-    );
+    const L_M_powerFactor = scaleProcess(otherrf01Data.Freq[408025], 0.001, 1);
     const L_M_avgSOC = scaleProcess(
       gcData.IEC61850[400129] / (447200 * 7),
       100,
@@ -582,36 +573,36 @@ async function getLatestValuesFromDatabaseforother() {
 }
 
 //***************************************************************************************************************** */
-const accountRouter = require("./rAccount");
-const modeRouter = require("./rMode");
-const meterRouter = require("./rMeter");
-const pcsRouter = require("./rPCS");
-const batteryRouter = require("./rBattery");
-const commuRouter = require("./rCommu");
-const deviceRouter = require("./rDevice");
-const environmentRouter = require("./rEnvironment");
-const eventRouter = require("./rEvent");
-const reportRouter = require("./rReport");
-const chartRouter = require("./rChart");
-// const alarmRouter = require("./rAlarm");
+// const accountRouter = require("./rAccount");
+// const modeRouter = require("./rMode");
+// const meterRouter = require("./rMeter");
+// const pcsRouter = require("./rPCS");
+// const batteryRouter = require("./rBattery");
+// const commuRouter = require("./rCommu");
+// const deviceRouter = require("./rDevice");
+// const environmentRouter = require("./rEnvironment");
+// const eventRouter = require("./rEvent");
+// const reportRouter = require("./rReport");
+// const chartRouter = require("./rChart");
+const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
-const login = require("./rLogin");
-const { authentication } = require("./authMiddleware");
+// const login = require("./rLogin");
+// const { authentication } = require("./authMiddleware");
 //***************************************************************************************************************** */
 // 使用這些路由
 // // app.use(authentication)
-app.use(accountRouter);
-app.use(modeRouter);
-app.use(meterRouter);
-app.use(pcsRouter);
-app.use(batteryRouter);
-app.use(commuRouter);
-app.use(deviceRouter);
-app.use(environmentRouter);
-app.use(eventRouter);
-app.use(reportRouter);
-app.use(chartRouter);
-// app.use(alarmRouter);
+// app.use(accountRouter);
+// app.use(modeRouter);
+// app.use(meterRouter);
+// app.use(pcsRouter);
+// app.use(batteryRouter);
+// app.use(commuRouter);
+// app.use(deviceRouter);
+// app.use(environmentRouter);
+// app.use(eventRouter);
+// app.use(reportRouter);
+// app.use(chartRouter);
+app.use(alarmRouter);
 
 //***************************************************************************************************************** */
 

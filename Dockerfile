@@ -14,7 +14,8 @@ RUN npm install
 COPY . .
 
 # Set the working directory in the container
-WORKDIR /usr/src/app/router
+WORKDIR /usr/src/app
 
 # Define the command to run your app
-CMD ["node", "app.js"]
+# CMD ["node", "app.js"]
+CMD ["tail", "-f", "/dev/null"]

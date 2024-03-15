@@ -19,6 +19,7 @@ app.use(cors());
 // Need change.
 //如果要換資料庫的host 改掉".database"
 const couchdbConfig = config.database;
+const db = couchdbConfig
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
@@ -317,7 +318,7 @@ async function submit(EMAIL, PASSWORD) {
     permission: "",
   };
   await getconfig();
-  await findaccount((maill = EMAIL)).then((temp) => {
+  await findaccount(EMAIL,"").then((temp) => {
     console.log(temp);
   });
   // According login page submit mail to select account data
@@ -394,7 +395,7 @@ async function submit(EMAIL, PASSWORD) {
       }
     }
   }
-  updateaccount(id);
+  await updateaccount(id,"","","");
   console.log(response["text"]);
   return response;
 }
@@ -402,7 +403,7 @@ async function submit(EMAIL, PASSWORD) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // The function for get all document in database.
 async function alldoc(database) {
-  const URL = `${db_URL}/${database}/_all_docs`
+  const URL = `${db_URL}/${database}/_all_docs?include_docs=true`
   const response = await fetch(URL, {
     method: "GET",
     headers: { Authorization: AUTHORIZATION },
@@ -411,7 +412,26 @@ async function alldoc(database) {
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
-  return response
+  // console.log("login", typeof(response))
+  // console.log(await response.json())
+  return  response
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// The function for get all document in database.
+async function getbyid(id) {
+  const URL = `${db_URL}/${db.account}/${id}?include_docs=true`
+  const response = await fetch(URL, {
+    method: "GET",
+    headers: { Authorization: AUTHORIZATION },
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+  // console.log("login", typeof(response))
+  // console.log(await response.json())
+  return  response
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -431,6 +451,37 @@ async function deleteuser(doc_num) {
     })
   }
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// User log.
+async function userlog(userid) {
+  const URL = `${db_URL}/${db.log}/_find`
+  const mangoQuery = { selector: { "username": { $eq: userid } } };
+  // console.log(mangoQuery)
+  logdata = await fetch(URL, {
+    method: 'POST',
+    headers: { 
+      'Content-Type': "application/json",
+      Authorization: AUTHORIZATION,
+    },
+    credentials: "include",
+    body: JSON.stringify(mangoQuery),
+  })
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error('Failed to delete user');
+  //     }
+  //     console.log('User deleted successfully');
+  //   })
+  // }
+  logdata = await logdata.json();
+  // console.log(logdata)
+  return logdata
+  }
+  
+    
+
 ////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
@@ -441,5 +492,7 @@ module.exports = {
   datetime,
   uuid,
   alldoc,
+  getbyid,
   deleteuser,
+  userlog
 };

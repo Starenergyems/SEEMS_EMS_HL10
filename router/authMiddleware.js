@@ -32,13 +32,15 @@ async function authentication(req) {
     }
     else if (browser_token !== ""){
         await findaccount("", browser_token).then(temp => {
+            // console.log(temp)
             id = temp['id']
             token = temp['token']
             level = temp['level']
         })
         const res = `\ncookie's token is ${browser_token}\naccount token is ${token}`
         if (token === browser_token) {
-            console.log("Authentication is OK.", res)
+            // console.log("Authentication is OK.", res)
+            // console.log({"id": id, "permission": level})
             return {"id": id, "permission": level}
         } else {
             console.log("Authentication is not OK.", res)

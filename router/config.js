@@ -10,6 +10,8 @@ module.exports = {
     password: "ems45877096",
     account: "account",
     config: "CONFIG",
+    log:"log",
+    door:"log_door"
   },
   //改為案場電腦用
   // database: {
