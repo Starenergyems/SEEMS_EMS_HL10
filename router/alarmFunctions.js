@@ -843,14 +843,14 @@ const LC_BSC_error_table = {
     line: true,
     category: "ENV",
   },
-  // 406009: {
-  //   name: "HVAC_2 running status",
-  //   status: LC_BSC_406009,
-  //   type: "int",
-  //   location: "ESS?x-1",
-  //   line: true,
-  //   category: "ENV",
-  // },
+  406009: {
+    name: "HVAC_2 running status",
+    status: LC_BSC_406009,
+    type: "int",
+    location: "ESS?x-1",
+    line: true,
+    category: "ENV",
+  },
   // 406011: {
   //   name: "HVAC_3 running status",
   //   status: LC_BSC_406011,
@@ -1852,6 +1852,13 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
   //   .then((response) => {
   //     // console.log(response.docs);
   //     console.log("alarmnanoDb");
+  //     const _alarm_ids = [];
+
+  //     // // Iterate through the list of objects
+  //     // for (let i = 0; i < listOfObjects.length; i++) {
+  //     //   // Retrieve _id from each object and push it to the ids array
+  //     //   ids.push(listOfObjects[i]._id);
+  //     // }
   //   })
 
   for (let key in item) {
@@ -1870,7 +1877,9 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
             let value = item[key][tag];
             let device = `${key}`;
             // console.log(key_error, tag, value, device)
-            if (value) {
+            // console.log(typeof value)
+
+            if (value === 0 || value) {
               LC_error_result_unit(
                 time,
                 occurrence_time,
@@ -1894,7 +1903,7 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
               //console.log(mapBitToStatus(item[key][tag], error_table[key_error][tag]['status']))
               let value = inner_item[inner_key][tag];
               let device = `${key}_${inner_key}`;
-              if (typeof value !== "undefined") {
+              if (value === 0 || value) {
                 LC_error_result_unit(
                   time,
                   occurrence_time,
@@ -2074,8 +2083,8 @@ function Other_error_result_gen(
       for (let [tag, value] of Object.entries(v)) {
         if (Object.keys(error_table).includes(tag)) {
           // console.log(key, tag, value)
-          if (value) {
-            let device = `${key}`;
+          let device = `${key}`;
+          if (value === 0 || value) {
             Other_error_result_unit(
               time,
               occurrence_time,
@@ -2101,10 +2110,12 @@ function compare_trigger_alarms(error_result, response) {
   Object.keys(error_result).forEach((key) => {
     triggering_alarm_array.push(key);
   });
+  // console.log("triggering_alarm_array")
   // console.log(triggering_alarm_array);
 
   let triggered_alarm_array = [];
   response.docs.forEach((element) => triggered_alarm_array.push(element._id));
+  // console.log("triggered_alarm_array")
   // console.log(triggered_alarm_array);
 
   const remain = triggering_alarm_array.filter((element) =>
@@ -2223,8 +2234,10 @@ function update_trigger_alarms_batch(
   compare_result,
   nanoDB,
   hisnanoDB,
+  data_item,
   line_flag = false
 ) {
+  // console.log(data_item.System["402001"]);
   // console.log(error_result)
   // console.log(compare_result)
   return new Promise((resolve, reject) => {
@@ -2413,6 +2426,8 @@ function update_trigger_alarms_batch(
                   if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     let doc = element.doc;
+                    console.log(_id.split(':'))
+                    // console.log(doc)
                     // const line = error_result[_id]["line"];
                     // delete error_result[_id]["line"];
                     if (!doc.recover) {
@@ -2562,6 +2577,7 @@ function alarm_processor(
               compare_result,
               alarm_nanoDB,
               hisalarm_nanoDB,
+              item,
               true
             );
 
