@@ -267,6 +267,11 @@ router.get("/systeminfo/environment", async (req, res) => {
 
 router.get("/systeminfo/environment/:data", async (req, res) => {
   try {
+    // console.log(req.body)
+    // console.log(req.body.permission); //還找不到
+    // console.log(req.body.id); //獲得使用者id
+    // console.log(789 + req.customData.keys); //還找不到
+    // console.log(1011 + Object.keys(req.body)); //輸出id,permission
     await queryEnv_variables();
     res.json(Env_variables);
   } catch (error) {

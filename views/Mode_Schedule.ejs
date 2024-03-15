@@ -1,8 +1,8 @@
 <%- include('Navbar', { 
     title: '排程設置', 
      stylesheets: [
-        '../public/styles/style_template.css',
-        '../public/styles/Mode_Schedule.css'
+        '/public/styles/style_template.css',
+        '/public/styles/Mode_Schedule.css'
     ],
     permission: 'admin',
    
@@ -128,10 +128,10 @@
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">00</td>
-                        <td class="col_other"><label class="P_schd" id="P_schd_00_0">10.00</label></td>
-                        <td class="col_other"><label class="P_schd" id="P_schd_00_1">10.00</label></td>
-                        <td class="col_other"><label class="P_schd" id="P_schd_00_2">10.00</label></td>
-                        <td class="col_other"><label class="P_schd" id="P_schd_00_3">10.00</label></td>
+                        <td class="col_other"><label class="P_schd" id="P_schd_00_0"><%=P_schd_00_0%></label></td>
+                        <td class="col_other"><label class="P_schd" id="P_schd_00_1"><%=P_schd_00_1%></label></td>
+                        <td class="col_other"><label class="P_schd" id="P_schd_00_2"><%=P_schd_00_2%></label></td>
+                        <td class="col_other"><label class="P_schd" id="P_schd_00_3"><%=P_schd_00_3%></label></td>
                         <td class="col_other"><label class="P_cmd" id="P_cmd_00_0">0</label></td>
                         <td class="col_other"><label class="P_cmd" id="P_cmd_00_1">0</label></td>
                         <td class="col_other"><label class="P_cmd" id="P_cmd_00_2">0</label></td>
@@ -802,9 +802,9 @@
         </div>
     </div>
 
-    <script src="../public/scripts/jquery-3.6.0.js"></script>
-    <script src="../public/scripts/script_template.js"></script>
-    <script src="../public/scripts/Mode_Schedule.js"></script>
+    <script src="/public/scripts/jquery-3.6.0.js"></script>
+    <script src="/public/scripts/script_template.js"></script>
+    <script src="/public/scripts/Mode_Schedule.js"></script>
 </body>
 
 </html>

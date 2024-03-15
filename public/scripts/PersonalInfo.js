@@ -1,8 +1,11 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
+async function dataGet(url) { 
+	const response = await fetch(url);
+	const values = await response.json();
+	return values;}
 
-
-$(document).ready(function () {
+$(document).ready(async function () {
 
     let lang = {
         sProcessing: "處理中...",
@@ -29,76 +32,76 @@ $(document).ready(function () {
             sSortDescending: ": 以降序排列此列",
         },
     };
-    var dataset = [{
-        "Time": "2023/09/01 15:23:10",
-        "description": "關閉保護邏輯"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "登入EMS系統"
-    }, {
-        "Time": "2023/09/01 15:13:10",
-        "description": "登出EMS系統"
-    }, {
-        "Time": "2023/09/01 13:23:10",
-        "description": "設定今日18:00得標量為5000 kW"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "設定今日17:00得標量為6000 kW"
-    }, {
-        "Time": "2023/09/01 15:13:10",
-        "description": "設定今日16:00得標量為8000 kW"
-    }, {
-        "Time": "2023/09/01 13:23:10",
-        "description": "更改使用者密碼"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "登入EMS系統"
-    }, {
-        "Time": "2023/09/01 15:13:10",
-        "description": "登出EMS系統"
-    }, {
-        "Time": "2023/09/01 13:23:10",
-        "description": "切離BMS3-1、BMS3-2電池櫃"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "關閉保護邏輯"
-    }, {
-        "Time": "2023/09/01 15:13:10",
-        "description": "設定LC1輸出實功為1000 kW"
-    }, {
-        "Time": "2023/09/01 13:23:10",
-        "description": "關閉排程模式"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "登入EMS系統"
-    }, {
-        "Time": "2023/09/01 15:13:10",
-        "description": "登出EMS系統"
-    }, {
-        "Time": "2023/09/01 13:23:10",
-        "description": "開啟保護邏輯"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "切離ACB1-3"
-    }, {
-        "Time": "2023/09/01 15:13:10",
-        "description": "設定LC2輸出虛功為-500 kVar"
-    }, {
-        "Time": "2023/09/01 13:23:10",
-        "description": "關閉保護邏輯"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "登入EMS系統"
-    }, {
-        "Time": "2023/09/01 15:13:10",
-        "description": "登出EMS系統"
-    }, {
-        "Time": "2023/09/01 13:23:10",
-        "description": "更改使用者密碼"
-    }, {
-        "Time": "2023/09/01 15:22:10",
-        "description": "設定LC1輸出實功為1000 kW"
-    }];
+     var dataset = await dataGet("/account/personalinfo/log");
+    //     "Time": "2023/09/01 15:23:10",
+    //     "description": "關閉保護邏輯"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "登入EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 15:13:10",
+    //     "description": "登出EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 13:23:10",
+    //     "description": "設定今日18:00得標量為5000 kW"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "設定今日17:00得標量為6000 kW"
+    // }, {
+    //     "Time": "2023/09/01 15:13:10",
+    //     "description": "設定今日16:00得標量為8000 kW"
+    // }, {
+    //     "Time": "2023/09/01 13:23:10",
+    //     "description": "更改使用者密碼"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "登入EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 15:13:10",
+    //     "description": "登出EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 13:23:10",
+    //     "description": "切離BMS3-1、BMS3-2電池櫃"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "關閉保護邏輯"
+    // }, {
+    //     "Time": "2023/09/01 15:13:10",
+    //     "description": "設定LC1輸出實功為1000 kW"
+    // }, {
+    //     "Time": "2023/09/01 13:23:10",
+    //     "description": "關閉排程模式"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "登入EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 15:13:10",
+    //     "description": "登出EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 13:23:10",
+    //     "description": "開啟保護邏輯"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "切離ACB1-3"
+    // }, {
+    //     "Time": "2023/09/01 15:13:10",
+    //     "description": "設定LC2輸出虛功為-500 kVar"
+    // }, {
+    //     "Time": "2023/09/01 13:23:10",
+    //     "description": "關閉保護邏輯"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "登入EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 15:13:10",
+    //     "description": "登出EMS系統"
+    // }, {
+    //     "Time": "2023/09/01 13:23:10",
+    //     "description": "更改使用者密碼"
+    // }, {
+    //     "Time": "2023/09/01 15:22:10",
+    //     "description": "設定LC1輸出實功為1000 kW"
+    // }];
 
     $('#opRecordTable').DataTable({
 
@@ -131,8 +134,3 @@ $(document).ready(function () {
     })
 
 });
-
-
-
-
-

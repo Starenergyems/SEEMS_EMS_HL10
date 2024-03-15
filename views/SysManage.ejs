@@ -1,13 +1,13 @@
-<%- include('Navbar', { 
+<!-- <%- include('Navbar', { 
     title: '系統設定', 
      stylesheets: [
         'https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css',
-        '../public/styles/style_template.css',
-        '../public/styles/SysManage.css'
+        '/public/styles/style_template.css',
+        '/public/styles/SysManage.css'
     ],
     permission: 'admin',
    
-}) %>
+}) %> -->
 
 <div class="R_Main">
     <div class="subNavBar" id="sub_NavBar">
@@ -18,7 +18,7 @@
               <div class="account">
                 <div class="title">
                   <h1>帳戶總覽</h1>
-                  <button onclick="addUser()"><img src="../public/images/edit.svg" style="width: 20px"></button>
+                  <button onclick="addUser()"><img src="/public/images/edit.svg" style="width: 20px"></button>
                 </div>         
                 <table id="myTable" class="table table-striped text-center" style="width: 100%"> <!--目前可登入的帳戶-->
                   <thead>
@@ -246,11 +246,11 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 crossorigin="anonymous"></script>
-<script src="../public/scripts/bootstrap.bundle.min.js"></script>
+<script src="/public/scripts/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script><!--dataTable-->
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!--dataTable-->
-<script src="../public/scripts/script_template.js"></script>
-<script src="../public/scripts/SysManage.js"></script>
+<script src="/public/scripts/script_template.js"></script>
+<script src="/public/scripts/SysManage.js"></script>
 
 </body>
 

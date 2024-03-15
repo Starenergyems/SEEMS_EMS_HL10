@@ -1,8 +1,8 @@
 <%- include('Navbar', { 
     title: '通訊架構圖', 
      stylesheets: [
-        '../public/styles/style_template.css',
-        '../public/styles/Sys_Comm.css'
+        '/public/styles/style_template.css',
+        '/public/styles/Sys_Comm.css'
     ],
     permission: 'admin',
    
@@ -24,7 +24,7 @@
 
         <div class="M_Page">
             <div class="commArchiD">
-                <img src="../public/images/CommArchiDiagram.jpg" alt="通訊架構圖" width="1600px">
+                <img src="/public/images/CommArchiDiagram.jpg" alt="通訊架構圖" width="1600px">
                 <label class="dataLight GB_L <%=Comm_EMS_1%>" id="EMS_1"></label>
                 <label class="dataLight GB_L <%=Comm_EMS_2%>" id="EMS_2"></label>
                 <label class="dataLight GB_L <%=Comm_DC%>" id="DC"></label>
@@ -90,9 +90,9 @@
         </div>
     </div>
 
-    <script src="../public/scripts/jquery-3.6.0.js"></script>
-    <script src="../public/scripts/script_template.js"></script>
-    <script src="../public/scripts/Sys_Comm.js"></script>
+    <script src="/public/scripts/jquery-3.6.0.js"></script>
+    <script src="/public/scripts/script_template.js"></script>
+    <script src="/public/scripts/Sys_Comm.js"></script>
 </body>
 
 </html>

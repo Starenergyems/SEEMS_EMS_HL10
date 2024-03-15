@@ -203,36 +203,36 @@ function classRemove(element, className) {
 async function updateNavbar(url='/navbar') { //刷新側欄
     var data = await getData(url);
     console.log('navbar:', data);
-    $('#totalAlarmNum').text(data.latestValues[0]);
-    $('#AlarmNum_Sys').text(data.latestValues[1]);
-    $('#AlarmNum_Bat').text(data.latestValues[2]);
-    $('#AlarmNum_PCS').text(data.latestValues[3]);
-    $('#AlarmNum_FF').text(data.latestValues[4]);
-    $('#AlarmNum_Env').text(data.latestValues[5]);
-    $('#AlarmNum_Meter').text(data.latestValues[6]);
+    $('#totalAlarmNum').text(data.latestValues.totalAlarmNum);
+    $('#AlarmNum_Sys').text(data.latestValues.AlarmNum_Sys);
+    $('#AlarmNum_Bat').text(data.latestValues.AlarmNum_Bat);
+    $('#AlarmNum_PCS').text(data.latestValues.AlarmNum_PCS);
+    $('#AlarmNum_FF').text(data.latestValues.AlarmNum_FF);
+    $('#AlarmNum_Env').text(data.latestValues.AlarmNum_Env);
+    $('#AlarmNum_Meter').text(data.latestValues.AlarmNum_Meter);
 
-    $('#totalWarningNum').text(data.latestValues[7]);
-    $('#WarningNum_Sys').text(data.latestValues[8]);
-    $('#WarningNum_Bat').text(data.latestValues[9]);
-    $('#WarningNum_PCS').text(data.latestValues[10]);
-    $('#WarningNum_FF').text(data.latestValues[11]);
-    $('#WarningNum_Env').text(data.latestValues[12]);
-    $('#WarningNum_Meter').text(data.latestValues[13]);
+    $('#totalWarningNum').text(data.latestValues.totalWarningNum);
+    $('#WarningNum_Sys').text(data.latestValues.WarningNum_Sys);
+    $('#WarningNum_Bat').text(data.latestValues.WarningNum_Bat);
+    $('#WarningNum_PCS').text(data.latestValues.WarningNum_PCS);
+    $('#WarningNum_FF').text(data.latestValues.WarningNum_FF);
+    $('#WarningNum_Env').text(data.latestValues.WarningNum_Env);
+    $('#WarningNum_Meter').text(data.WarningNum_Meter);
 
     /////////////////////////////////////////////////
-    $('#L_M_systemMode').text(data.latestValues2[0]);
-    $('#L_M_freq').text(data.latestValues2[1]);
-    $('#L_M_activeP').text(data.latestValues2[2]);
-    $('#L_M_reactiveP').text(data.latestValues2[3]);
-    $('#L_M_voltage').text(data.latestValues2[4]);
-    $('#L_M_current').text(data.latestValues2[5]);
-    $('#L_M_powerFactor').text(data.latestValues2[6]);
+    $('#L_M_systemMode').text(data.latestValues2.L_M_systemMode);
+    $('#L_M_freq').text(data.latestValues2.L_M_freq);
+    $('#L_M_activeP').text(data.latestValues2.L_M_activeP);
+    $('#L_M_reactiveP').text(data.latestValues2.L_M_reactiveP);
+    $('#L_M_voltage').text(data.latestValues2.L_M_voltage);
+    $('#L_M_current').text(data.latestValues2.L_M_current);
+    $('#L_M_powerFactor').text(data.latestValues2.L_M_powerFactor);
 
-    $('#L_M_avgSOC').text(data.latestValues2[7]);
-    $('#L_M_minSOH').text(data.latestValues2[8]);
-    $('#L_M_SBSPM').text(data.latestValues2[9]);
-    $('#L_M_chgEtoday').text(data.latestValues2[10]);
-    $('#L_M_dcgEtoday').text(data.latestValues2[11]);
+    $('#L_M_avgSOC').text(data.latestValues2.L_M_avgSOC);
+    $('#L_M_minSOH').text(data.latestValues2.L_M_minSOH);
+    $('#L_M_SBSPM').text(data.latestValues2.L_M_SBSPM);
+    $('#L_M_chgEtoday').text(data.latestValues2.L_M_chgEtoday);
+    $('#L_M_dcgEtoday').text(data.latestValues2.L_M_dcgEtoday);
 
 }
 

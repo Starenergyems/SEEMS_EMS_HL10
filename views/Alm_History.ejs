@@ -2,8 +2,8 @@
     title: '歷史告警', 
      stylesheets: [
         'https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css',
-        '../public/styles/style_template.css',
-        '../public/styles/Alm_History.css'
+        '/public/styles/style_template.css',
+        '/public/styles/Alm_History.css'
     ],
     permission: 'admin',
    
@@ -26,7 +26,7 @@
                 <button class="clickBut" id="filtNone">總覽</button>
                 <div class="filter filtDevice">
                     <p>設備</p>
-                    <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtDevice">
+                    <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtDevice">
                     <div class="filtOptions">
                         <button class="filtOpt" id="deviceFO_01">控制室</button>
                         <button class="filtOpt" id="deviceFO_02">電腦主機</button>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="filter filtLocation">
                     <p>地點</p>
-                    <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtLocation">
+                    <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtLocation">
                     <div class="filtOptions">
                         <button class="filtOpt" id="locationFO_01">控制室</button>
                         <button class="filtOpt" id="locationFO_02">MVCB</button>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="filter filtLevel">
                     <p>等級</p>
-                    <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtLevel">
+                    <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_filtLevel">
                     <div class="filtOptions">
                         <button class="filtOpt" id="levelFO_01">警告</button>
                         <button class="filtOpt" id="levelFO_02">錯誤</button>
@@ -69,17 +69,17 @@
                     <p>時間區間查詢</p>
                     <div class="setStartEnd">
                         <div class="setStartTime">開始時間
-                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst_dS"><img
-                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious_dS">
+                            <img src="/public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst_dS"><img
+                                src="/public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious_dS">
                             <input type="date" id="dateStart"><input type="time" step="1" id="timeStart">
-                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext_dS"><img src="../public/images/GoToLast.png"
+                            <img src="/public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext_dS"><img src="/public/images/GoToLast.png"
                                 alt="移至最後一個時間段" id="goToLast_dS">
                         </div>
                         <div class="setEndTime">結束時間
-                            <img src="../public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst_dE"><img
-                                src="../public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious_dE">
+                            <img src="/public/images/GoToFirst.png" alt="移至第一個時間段" id="goToFirst_dE"><img
+                                src="/public/images/GoToPrevious.png" alt="移至上一個時間段" id="goToPrevious_dE">
                             <input type="date" id="dateEnd"><input type="time" step="1" id="timeEnd">
-                            <img src="../public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext_dE"><img src="../public/images/GoToLast.png"
+                            <img src="/public/images/GoToNext.png" alt="移至下一個時間段" id="goToNext_dE"><img src="/public/images/GoToLast.png"
                                 alt="移至最後一個時間段" id="goToLast_dE">
                         </div>
                     </div>
@@ -134,8 +134,8 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script><!--dataTable-->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!--dataTable-->
-    <script src="../public/scripts/script_template.js"></script>
-    <script src="../public/scripts/Alm_History.js"></script>
+    <script src="/public/scripts/script_template.js"></script>
+    <script src="/public/scripts/Alm_History.js"></script>
 </body>
 
 </html>

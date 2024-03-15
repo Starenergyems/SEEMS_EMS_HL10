@@ -592,7 +592,7 @@ async function updateTable(){
                 var rowIndex = row.index; // Get the index from the row object
                 //var checkboxId = "chb_Ack_" + rowIndex;
                   if (data === true) {
-                    return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                    return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
                   } else {
                     return "";
                   }
@@ -602,7 +602,7 @@ async function updateTable(){
               data: "recover",
               render: function (data, type, row) {
                 if (data === true) {
-                  return '<img src="../public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                  return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
                 } else {
                   return "";
                 }

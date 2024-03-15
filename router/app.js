@@ -78,11 +78,13 @@ app.post("/login", async (req, res) => {
     const email = req.body["username"];
     const password = req.body["password"];
     console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
+    const config = await getconfig()
+    console.log(config.duration*3600)
 
     const response = await submit(email, password);
     if (response["result"] === true) {
       console.log(response["text"]);
-      res.cookie("token", response["token"]);
+      res.cookie("token", response["token"], { maxAge: config.duration*3600, httpOnly: true });
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
       // res.redirect(302, "/mode");
@@ -108,7 +110,7 @@ app.use("*", async (req, res, next) => {
     } else {
       req.customData = authenticated;
       req.body.id = authenticated.id;
-      req.body.permission = authenticated.level;
+      req.body.permission = authenticated.permission;
     }
     next();
   } catch (error) {
@@ -239,9 +241,43 @@ app.get("/navbar", async (req, res) => {
   console.log("後端收到");
   try {
     // 呼叫函式並取得最新數值
-    const latestValues = await getLatestValuesFromDatabase();
+    const Values = await getLatestValuesFromDatabase();
     //沒有計算 純粹讀取+換算
-    const latestValues2 = await getLatestValuesFromDatabaseforother();
+    const Values2 = await getLatestValuesFromDatabaseforother();
+
+    var latestValues = {
+      totalAlarmNum: Values[0],
+      AlarmNum_Sys: Values[1], //新增`
+      AlarmNum_Bat: Values[2],
+      AlarmNum_PCS: Values[3],
+      AlarmNum_FF: Values[4],
+      AlarmNum_Env: Values[5],
+      AlarmNum_Meter: Values[6],
+      //
+      totalWarningNum: Values[7],
+      WarningNum_Sys: Values[8], //新增
+      WarningNum_Bat: Values[9],
+      WarningNum_PCS: Values[10],
+      WarningNum_FF: Values[11],
+      WarningNum_Env: Values[12],
+      WarningNum_Meter: Values[13],
+    };
+
+    var latestValues2 = {
+      L_M_systemMode: Values2[0],
+      L_M_freq: Values2[1],
+      L_M_activeP: Values2[2],
+      L_M_reactiveP: Values2[3],
+      L_M_voltage: Values2[4],
+      L_M_current: Values2[5],
+      L_M_powerFactor: Values2[6],
+      L_M_avgSOC: Values2[7],
+      L_M_minSOH: Values2[8],
+      L_M_SBSPM: Values2[9],
+      L_M_chgEtoday: Values2[10],
+      L_M_dcgEtoday: Values2[11],
+    };
+    // console.log("latestValues",latestValues);
     res.send({ latestValues, latestValues2 });
   } catch (error) {
     console.error(error);
@@ -467,25 +503,61 @@ async function getLatestValuesFromDatabaseforother() {
 
     //系統資訊(純數值顯示)
 
-    const L_M_freq = scaleProcess(otherrf01Data.Freq[408026], 1, 3);
-    const L_M_activeP = scaleProcess(otherrf01Data.Freq[408019], 1, 1);
-    const L_M_reactiveP = scaleProcess(otherrf01Data.Freq[408021], 1, 1);
-    const L_M_voltage = scaleProcess(otherrf01Data.Freq[408007], 1, 3);
-    const L_M_curren = scaleProcess(otherrf01Data.Freq[408017], 1, 2);
-    const L_M_powerFactor = scaleProcess(otherrf01Data.Freq[408025], 1, 3);
-    const L_M_avgSOC = scaleProcess(gcData.IEC61850[400129], 1, 3);
-    const L_M_minSOH = mapminSOH(
-      lc1Data.BMS1[404005],
-      lc1Data.BMS2[404005],
-      lc2Data.BMS1[404005],
-      lc2Data.BMS2[404005],
-      lc3Data.BMS1[404005],
-      lc3Data.BMS2[404005],
-      lc4Data.BMS1[404005]
+    const L_M_freq = scaleProcess(otherrf01Data.Freq[408026] / 65536, 1, 3);
+    const L_M_activeP = scaleProcess(
+      (otherrf01Data.Freq[408019] * 200 * 100) / 65536,
+      0.001,
+      1
+    ); //data*CT*PT/655356
+    const L_M_reactiveP = scaleProcess(
+      (otherrf01Data.Freq[408021] * 200 * 100) / 65536,
+      0.001,
+      1
     );
-    const L_M_SBSPM = scaleProcess(gcData.System[400037], 1, 0);
-    const L_M_chgEtoday = otherrf01Data.Freq[408028] - ChgEtoday0; //408028 kWh_Import
-    const L_M_dcgEtoday = otherrf01Data.Freq[408030] - DcgEtoday0; //408030 kWh_Export
+    const L_M_voltage = scaleProcess(
+      (otherrf01Data.Freq[408007] * 100) / 65536,
+      0.001,
+      2
+    ); //data*PT/65536
+    const L_M_curren = scaleProcess(
+      (otherrf01Data.Freq[408017] * 200) / 65536,
+      1,
+      2
+    ); //data*CT/65536
+    const L_M_powerFactor = scaleProcess(
+      Math.abs(gcData.IEC61850[400127]),
+      0.01,
+      1
+    );
+    const L_M_avgSOC = scaleProcess(
+      gcData.IEC61850[400129] / (447200 * 7),
+      100,
+      1
+    ); //單位kwh轉%，7台4472
+    const L_M_minSOH = scaleProcess(
+      mapminSOH(
+        lc1Data.BMS1[404005],
+        lc1Data.BMS2[404005],
+        lc2Data.BMS1[404005],
+        lc2Data.BMS2[404005],
+        lc3Data.BMS1[404005],
+        lc3Data.BMS2[404005],
+        lc4Data.BMS1[404005]
+      ),
+      0.1,
+      1
+    );
+    const L_M_SBSPM = scaleProcess(gcData.System[400037], 0.01, 1);
+    const L_M_chgEtoday = scaleProcess(
+      otherrf01Data.Freq[408028] - ChgEtoday0,
+      0.1,
+      1
+    ); //408028 kWh_Import
+    const L_M_dcgEtoday = scaleProcess(
+      otherrf01Data.Freq[408030] - DcgEtoday0,
+      0.1,
+      1
+    ); //408030 kWh_Export
     return [
       L_M_systemMode,
       L_M_freq,
@@ -507,7 +579,7 @@ async function getLatestValuesFromDatabaseforother() {
 }
 
 //***************************************************************************************************************** */
-//const accountRouter = require("./rAccount");
+// const accountRouter = require("./rAccount");
 const modeRouter = require("./rMode");
 const meterRouter = require("./rMeter");
 const pcsRouter = require("./rPCS");
@@ -516,7 +588,7 @@ const commuRouter = require("./rCommu");
 const deviceRouter = require("./rDevice");
 const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
-//const reportRouter = require("./rReport");
+const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
@@ -524,7 +596,7 @@ const login = require("./rLogin");
 const { authentication } = require("./authMiddleware");
 //***************************************************************************************************************** */
 // 使用這些路由
-// app.use(authentication)
+// // app.use(authentication)
 // app.use(accountRouter);
 app.use(modeRouter);
 app.use(meterRouter);
@@ -534,7 +606,7 @@ app.use(commuRouter);
 app.use(deviceRouter);
 app.use(environmentRouter);
 app.use(eventRouter);
-//app.use(reportRouter);
+app.use(reportRouter);
 app.use(chartRouter);
 app.use(alarmRouter);
 

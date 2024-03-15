@@ -9,7 +9,6 @@ $(document).ready(function () {
     routineWork();
 });
 
-// setInterval(updateNavbar, 1000);
 setInterval(routineWork, 5000);    // ~~~~~~~~~!!!!!!!@@@@@@@@@@###########$$$$$$$$$$$$%%%%%%%%%%%^^^^^^^^^&&&&&&&&&&&************
 
 /////////////////////////////////////////////////////////////////////////
@@ -263,9 +262,12 @@ async function updateData() {                                   // 更新資料 
     assign_TextContent_To_SpID("#exeCmd_P", data.exeCmd_P);
     assign_TextContent_To_SpID("#sbyCmd_P", data.sbyCmd_P);
 
-
-
-
+    assign_TextContent_To_SpID("#P_schd_00_0", data.P_schd_00_0);
+    assign_TextContent_To_SpID("#P_schd_00_1", data.P_schd_00_1);
+    assign_TextContent_To_SpID("#P_schd_00_2", data.P_schd_00_2);
+    assign_TextContent_To_SpID("#P_schd_00_3", data.P_schd_00_3);
+    // assign_TextContent_To_SpID("#use", data.use);
+    // assign_TextContent_To_SpID("#use", data.use);
 
 
 }

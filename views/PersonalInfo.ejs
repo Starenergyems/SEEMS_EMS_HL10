@@ -2,8 +2,8 @@
     title: '個人資料', 
      stylesheets: [
         'https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css',
-        '../public/styles/style_template.css',
-        '../public/styles/PersonalInfo.css'
+        '/public/styles/style_template.css',
+        '/public/styles/PersonalInfo.css'
     ],
     permission: 'admin',
    
@@ -16,7 +16,7 @@
         <div class="M_Page">
             <div class="title">
                 <h2>【個人資料】</h2>
-                <a href="/account/manage" id="goToAccountManage">人員管理</a>
+                <!-- <a href="/account/manage" id="goToAccountManage">人員管理</a> -->
             </div>
 
             <div class="BG_personalInfo">
@@ -132,8 +132,8 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script><!--dataTable-->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> <!--dataTable-->
-    <script src="../public/scripts/script_template.js"></script>
-    <script src="../public/scripts/PersonalInfo.js"></script>
+    <script src="/public/scripts/script_template.js"></script>
+    <script src="/public/scripts/PersonalInfo.js"></script>
 
     <script>
         async function dataPost(url) {

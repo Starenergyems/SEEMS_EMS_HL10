@@ -1,8 +1,8 @@
 <%- include('Navbar', { 
     title: '單線圖', 
      stylesheets: [
-        '../public/styles/style_template.css',
-        '../public/styles/Op_Meter_SLD.css'
+        '/public/styles/style_template.css',
+        '/public/styles/Op_Meter_SLD.css'
     ],
     permission: 'admin',
    
@@ -13,7 +13,7 @@
             <!-- <h2>模式控制</h2> -->
             <div class="button_sNB default_sNB" id="sNB_01">
                 <a href="/operateinfo/singlelinediagram" class="name_button_sNB">單線圖</a>
-                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
+                <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_01">
                 <div class="ssNavBar">
                     <a href="/operateinfo/singlelinediagram" class="default_ssNB" id="ssNB_01">電力單線圖</a>
                     <a href="/operateinfo/auxmeter" id="ssNB_03">輔電表</a>
@@ -21,7 +21,7 @@
             </div>
             <div class="button_sNB" id="sNB_02">
                 <a href="/operateinfo/pcs" class="name_button_sNB">PCS</a>
-                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
+                <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_02">
                 <div class="ssNavBar">
                     <a href="/operateinfo/pcs/infodetail/1" id="ssNB_01">PCS 1-1</a>
                     <a href="/operateinfo/pcs/infodetail/2" id="ssNB_02">PCS 1-2</a>
@@ -34,7 +34,7 @@
             </div>
             <div class="button_sNB button_sNB_last" id="sNB_03">
                 <a href="/operateinfo/battery" class="name_button_sNB">電池</a>
-                <img src="../public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
+                <img src="/public/images/DropDown_Logo_v1.png" alt="下拉式選單圖示_v1" id="dDL_sNB_03">
                 <div class="ssNavBar">
                     <a href="/operateinfo/battery/infodetail/1" id="ssNB_01">BMS 1-1</a>
                     <a href="/operateinfo/battery/infodetail/2" id="ssNB_02">BMS 1-2</a>
@@ -50,7 +50,7 @@
         <div class="M_Page">
             <div class="singleLineD_oilTemp">
                 <div class="singleLineD">
-                    <img src="../public/images/SingleLineDiagram.jpg" alt="案場單線圖" width="1150px">
+                    <img src="/public/images/SingleLineDiagram.jpg" alt="案場單線圖" width="1150px">
                     <h2>單線圖</h2>
                     <label class="status_CB <%=statusL_of_MVCB%>" id="MVCB"></label>
                     <label class="status_CB <%=statusL_of_VCB1%>" id="VCB_1"></label>
@@ -90,7 +90,7 @@
                     <div class="infoTR">
                         <div class="no_of_TR">A1-TR
                             <div class="BG_thermo">
-                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <img src="/public/images/Thermometer_frame.png" alt="溫度計外框">
                                 <div class="thermoBar" id="thermoBar_TR1"></div>
                                 <div class="thermoBottom" id="thermoBot_TR1"></div>
                             </div>
@@ -103,7 +103,7 @@
                     <div class="infoTR">
                         <div class="no_of_TR">A2-TR
                             <div class="BG_thermo">
-                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <img src="/public/images/Thermometer_frame.png" alt="溫度計外框">
                                 <div class="thermoBar" id="thermoBar_TR2"></div>
                                 <div class="thermoBottom" id="thermoBot_TR2"></div>
                             </div>
@@ -116,7 +116,7 @@
                     <div class="infoTR">
                         <div class="no_of_TR">A3-TR
                             <div class="BG_thermo">
-                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <img src="/public/images/Thermometer_frame.png" alt="溫度計外框">
                                 <div class="thermoBar" id="thermoBar_TR3"></div>
                                 <div class="thermoBottom" id="thermoBot_TR3"></div>
                             </div>
@@ -129,7 +129,7 @@
                     <div class="infoTR">
                         <div class="no_of_TR">A4-TR
                             <div class="BG_thermo">
-                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">
+                                <img src="/public/images/Thermometer_frame.png" alt="溫度計外框">
                                 <div class="thermoBar" id="thermoBar_TR4"></div>
                                 <div class="thermoBottom" id="thermoBot_TR4"></div>
                             </div>
@@ -142,7 +142,7 @@
                     <div class="infoTR">
                         <div class="no_of_TR">Aux-TR
                             <div class="BG_thermo">
-                                <img src="../public/images/Thermometer_frame.png" alt="溫度計外框">                                
+                                <img src="/public/images/Thermometer_frame.png" alt="溫度計外框">                                
                                 <div class="thermoBar" id="thermoBar_TR_aux"></div>
                                 <div class="thermoBottom" id="thermoBot_TR_aux"></div>
                             </div>
@@ -444,9 +444,9 @@
             </div>
         </div>
     </div>
-    <script src="../public/scripts/jquery-3.6.0.js"></script>
-    <script src="../public/scripts/script_template.js"></script>
-    <script src="../public/scripts/Op_Meter_SLD.js"></script>
+    <script src="/public/scripts/jquery-3.6.0.js"></script>
+    <script src="/public/scripts/script_template.js"></script>
+    <script src="/public/scripts/Op_Meter_SLD.js"></script>
 
 
 </body>
