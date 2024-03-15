@@ -2239,7 +2239,7 @@ function update_trigger_alarms_batch(
 ) {
   // console.log(data_item.System["402001"]);
   // console.log(error_result)
-  // console.log(compare_result)
+  console.log(compare_result)
   return new Promise((resolve, reject) => {
     let remain_result = [];
     let income_result = [];
@@ -2426,13 +2426,25 @@ function update_trigger_alarms_batch(
                   if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     let doc = element.doc;
-                    console.log(_id.split(':'))
+                    // console.log(_id.split(':'))
+                    const _device = _id.split(':')[1];
+                    const _tag = _id.split(':')[2];
+                    const _bit = _id.split(':')[3];
+                    let _value = undefined;
+                    if (_bit) {
+                      _value = '0';
+                      // console.log(_value)
+                    } else {
+                      _value = data_item[_device][_tag];
+                      // console.log(_value)
+                    }
+
                     // console.log(doc)
                     // const line = error_result[_id]["line"];
                     // delete error_result[_id]["line"];
                     if (!doc.recover) {
                       // Set the recover boolean as true and the time to the current time as it is not an error now
-                      doc.value = "Normal";
+                      doc.value = _value;
                       doc.recover = true;
                       doc.recover_time = current_locale_time();
                       // if the recover and read boolean are both true: del the doc
@@ -2500,6 +2512,7 @@ function sendLineNotify(error_result_item) {
     Device:   ${error_result_item["device"]}
     Value:   ${error_result_item["value"]}
     Warning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
+    Recover is ${error_result_item["recover"]}
   `;
   const request = {
     method: "post",
