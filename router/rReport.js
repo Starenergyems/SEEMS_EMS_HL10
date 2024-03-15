@@ -1,4 +1,4 @@
-//const port = 3005;
+const port = 3005;
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
@@ -130,6 +130,8 @@ const specified_date_clone18 = specified_date.clone();
 const specified_date_clone19 = specified_date.clone();
 const specified_date_clone20 = specified_date.clone();
 const specified_date_clone21 = specified_date.clone();
+const specified_date_clone22 = specified_date.clone();
+const specified_date_clone23 = specified_date.clone();
 // console.log(
 //   "specified_date_clone: " + specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
 // );
@@ -292,9 +294,9 @@ async function getDayData() {
       ...dayBeforeYesterdayData.docs.map((doc) => doc.System["400037"])
     );
 
-    console.log("Data length fetched for day before yesterday:", data.length);
-    console.log("Data fetched for day before yesterday:", data);
-    console.log("********************************************");
+    //console.log("Data length fetched for day before yesterday:", data.length);
+    ////console.log("Data fetched for day before yesterday:", data);
+    //console.log("********************************************");
 
     // 計算昨天的時間範圍
     const yesterdayStart = specified_date_clone3
@@ -343,18 +345,18 @@ async function getDayData() {
       const intervalData = await gcDb.find(filterInterval);
       data.push(...intervalData.docs.map((doc) => doc.System["400037"]));
 
-      console.log(
-        "Data fetched for interval:",
-        intervalStart + "+08:00",
-        "-",
-        intervalEnd + "+08:00-",
-        "Pushed",
-        data.length,
-        "items."
-      );
+      //console.log(
+      //   "Data fetched for interval:",
+      //   intervalStart + "+08:00",
+      //   "-",
+      //   intervalEnd + "+08:00-",
+      //   "Pushed",
+      //   data.length,
+      //   "items."
+      // );
     }
-    console.log("初始Data陣列的86403筆資料", data.length);
-    console.log("原本獲得的Data :", data);
+    // console.log("初始Data陣列的86403筆資料", data.length);
+    // console.log("原本獲得的Data :", data);
 
     //取得大前天+昨天的實際得標容量******************************************************************** */
     //大前天的最後一筆
@@ -434,7 +436,7 @@ async function getDayData() {
     });
 
     console.log("昨天的實際得標容量長度:", scheduleTodayValues.length);
-    console.log("實際得標容量 :", scheduleTodayValues);
+    console.log("昨天實際得標容量 :", scheduleTodayValues);
 
     const maxData = [];
 
@@ -483,248 +485,276 @@ async function getDayData() {
     console.log("時段總數:" + period_calculation);
 
     let sum = 0;
-    //const intervalIndex = Math.floor(j / 900);
-    for (let k = 0; k < maxData.length; k++) {
-      sum += maxData[k]; // 將 maxData 陣列中的數值加總
+    let total_count = 0;
+    maxData_processed = [];
+    for (let k = 0; k < 86400; k++) {
+      const intervalIndex = Math.floor(k / 900); //intervalIndex用來取出區間的並判斷是否要計算平均?
+      if (scheduleTodayValues[intervalIndex] === 0) {
+        maxData_processed[k] = 999999; //如果該小時沒有調度 則直接給一個超大的值去排除
+      } else {
+        maxData_processed[k] = maxData[k];
+      }
+    }
+    //console.log("如果有停止執行的時候處理過的陣列內容" + maxData_processed);
+
+    for (let r = 0; r < maxData_processed.length; r++) {
+      if (maxData_processed[r] <= 10000) {
+        //可以計算的必須是調度的範圍(0-10000)
+        sum += maxData[r]; // 將 maxData 陣列中的數值加總}
+        total_count++;
+      }
+    }
+    console.log("加總所有的spm: " + sum);
+    console.log("總共有幾個可以進行加法的數值:" + total_count);
+    //獲得平均值
+    const averageoriginal = sum / total_count; // 計算平均值並四捨五入到整數 eg94.99
+    const average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數 eg94.99
+    const averagefloor = Math.floor(sum / total_count); // 計算平均值且捨去小數部分
+
+    console.log("averageoriginal :", averageoriginal);
+    console.log("average45 :", average45);
+    console.log("averagefloor :", averagefloor);
+
+    //******************************************************************* */
+    //開始針對每個小時取出最大最小值，並給與該小時的執行率
+    //取得每小時的最小SBSPM
+    const minValues = []; // 存儲每個小時中的最小值
+    const maxValues = []; // 存儲每個小時中的最大值
+    const averageValues = []; // 存儲小時中的平均值
+
+    for (let l = 0; l < maxData_processed.length; l += 3600) {
+      const group = maxData_processed.slice(l, l + 3600); // 取出每個分組的數據
+
+      // 找出每個分組中的最小值
+      const min = Math.min(...group);
+
+      // 找出每個分組中的最大值
+      const max = Math.max(...group);
+
+      // 計算每個分組中的平均值
+      const sum = group.reduce((acc, val) => acc + val, 0);
+      const average = sum / group.length;
+
+      // 將計算結果存入相應的陣列中
+      minValues.push(min);
+      maxValues.push(max);
+      averageValues.push(average);
+    }
+    console.log("minValues :", minValues);
+
+    console.log("maxValues :", minValues);
+    console.log("averageValues :", minValues);
+
+    //換算獲得服務品質指標
+    const quality = [];
+    let counthourstop = 0;
+    // 創建二維陣列並初始化所有元素為0
+    const numRows = 25; // 定義行數
+    const numCols = 9; // 定義列數
+    const hour_final = Array(numRows)
+      .fill(0)
+      .map(() => Array(numCols).fill(0));
+    //const hour_final = Array(7).fill(0);
+    let quality_val = 0;
+    for (let m = 0; m < minValues.length; m++) {
+      const hour_min = minValues[m];
+      // const hour_min = minValues[m] / 100;
+      if (hour_min >= 999999) {
+        quality_val = 0;
+        hour_final[m][5] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+        counthourstop++;
+      }
+      if (hour_min >= 9500 && hour_min <= 10000) {
+        quality_val = 1;
+        hour_final[m][0] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+      } else if (hour_min < 9500 && hour_min >= 9400) {
+        quality_val = 0.8;
+        hour_final[m][1] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+      } else if (hour_min < 9400 && hour_min >= 9300) {
+        quality_val = 0.6;
+        hour_final[m][2] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+      } else if (hour_min < 9300 && hour_min >= 9200) {
+        quality_val = 0.4;
+        hour_final[m][3] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+      } else if (hour_min < 9200 && hour_min >= 9100) {
+        quality_val = 0.2;
+        hour_final[m][4] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+      } else if (hour_min < 9100 && hour_min >= 7000) {
+        quality_val = 0;
+        hour_final[m][5] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+      } else if (hour_min < 7000) {
+        quality_val = 999;
+        hour_final[m][6] = 1;
+        hour_final[m][7] = Conversionpercentage(maxValues[m]);
+        hour_final[m][8] = Conversionpercentage(minValues[m]);
+        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        quality.push(quality_val);
+      }
+      console.log("Time:" + m + " / quality_val :", quality_val);
     }
 
-    //獲得平均值
-    // const averageoriginal = sum / maxData.length; // 計算平均值並四捨五入到整數 eg94.99
-    // const average45 = Math.round(sum / maxData.length); // 計算平均值並四捨五入到整數 eg94.99
-    // const averagefloor = Math.floor(sum / maxData.length); // 計算平均值且捨去小數部分
+    for (let n = 0; n <= 23; n++) {
+      hour_final[24][0] += hour_final[n][0];
+      hour_final[24][1] += hour_final[n][1];
+      hour_final[24][2] += hour_final[n][2];
+      hour_final[24][3] += hour_final[n][3];
+      hour_final[24][4] += hour_final[n][4];
+      hour_final[24][5] += hour_final[n][5];
+      hour_final[24][6] += hour_final[n][6];
+    }
 
-    // console.log("averageoriginal :", averageoriginal);
-    // console.log("average45 :", average45);
-    // console.log("averagefloor :", averagefloor);
+    hour_final[24][7] = Conversionpercentage(globalMax);
+    hour_final[24][8] = Conversionpercentage(average45);
+    hour_final[24][9] = Conversionpercentage(globalMin);
+    console.log("the qualityis :", quality);
+    console.log("counthourstop:" + counthourstop);
+    console.log("the hour_final :", hour_final);
 
-    // //取得每小時的最小SBSPM
-    // const minValues = []; // 存儲每個小時中的最小值
-    // const maxValues = []; // 存儲每個小時中的最大值
-    // const averageValues = []; // 存儲小時中的平均值
+    const yesterdaystart = specified_date_clone5
+      .subtract(1, "days")
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
+      .utcOffset("+0800")
+      .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    const yesterdayend1 = specified_date_clone6
+      .subtract(1, "days")
+      .set({ hour: 23, minute: 59, second: 59, millisecond: 0 }) // 設置結束時間需大於 23:59:58.999
+      .utcOffset("+0800")
+      .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    console.log("yesterdaystart:" + yesterdaystart);
+    console.log("yesterdayend1:" + yesterdayend1);
+    const filteryesterdaystart = {
+      selector: {
+        time: {
+          $gte: yesterdaystart,
+        },
+      },
+      limit: 1,
+    };
 
-    // for (let l = 0; l < maxData.length; l += 3600) {
-    //   const group = maxData.slice(l, l + 3600); // 取出每個分組的數據
+    const filteryesterdayend = {
+      selector: {
+        time: {
+          $gte: yesterdayend1,
+        },
+      },
+      limit: 1,
+    };
 
-    //   // 找出每個分組中的最小值
-    //   const min = Math.min(...group);
+    //使用篩選器查詢前天的電表數據 昨天00:00:00
+    const meterYesterdayDataStart = await other01Db.find(filteryesterdaystart);
 
-    //   // 找出每個分組中的最大值
-    //   const max = Math.max(...group);
+    const YesterdayStart_kWh_Import = meterYesterdayDataStart.docs.map(
+      (doc) => doc.Freq["408032"]
+    );
+    const YesterdayStart_kWh_Export = meterYesterdayDataStart.docs.map(
+      (doc) => doc.Freq["408034"]
+    );
+    // 使用篩選器查詢前天的電表數據 今天00:00:00
+    const meterYesterdayDataEnd = await other01Db.find(filteryesterdayend);
 
-    //   // 計算每個分組中的平均值
-    //   const sum = group.reduce((acc, val) => acc + val, 0);
-    //   const average = sum / group.length;
+    const YesterdayEnd_kWh_Import = meterYesterdayDataEnd.docs.map(
+      (doc) => doc.Freq["408032"]
+    );
+    const YesterdayEnd_kWh_Export = meterYesterdayDataEnd.docs.map(
+      (doc) => doc.Freq["408034"]
+    );
 
-    //   // 將計算結果存入相應的陣列中
-    //   minValues.push(min);
-    //   maxValues.push(max);
-    //   averageValues.push(average);
-    // }
-    // console.log("minValues :", minValues);
+    console.log("********************************************************");
+    console.log("YesterdayStart_kWh_Import: " + YesterdayStart_kWh_Import); //起始時間的充電
+    console.log("YesterdayStart_kWh_Export: " + YesterdayStart_kWh_Export); //起始時間的放電量
+    console.log("YesterdayEnd_kWh_Import: " + YesterdayEnd_kWh_Import); //結束時間的充電
+    console.log("YesterdayEnd_kWh_Export: " + YesterdayEnd_kWh_Export); //結束時間的放電
 
-    // console.log("maxValues :", minValues);
-    // console.log("averageValues :", minValues);
+    let elsedata1 = [];
+    let elsedata2 = [];
+    let elsedata = [];
 
-    // //換算獲得服務品質指標
-    // const quality = [];
-    // // 創建二維陣列並初始化所有元素為0
-    // const numRows = 25; // 定義行數
-    // const numCols = 9; // 定義列數
-    // const hour_final = Array(numRows)
-    //   .fill(0)
-    //   .map(() => Array(numCols).fill(0));
-    // //const hour_final = Array(7).fill(0);
-    // let quality_val = 0;
-    // for (let m = 0; m < minValues.length; m++) {
-    //   const hour_min = minValues[m];
-    //   // const hour_min = minValues[m] / 100;
-    //   if (hour_min >= 9500) {
-    //     quality_val = 1;
-    //     hour_final[m][0] = 1;
-    //     hour_final[m][7] = Conversionpercentage(maxValues[m]);
-    //     hour_final[m][8] = Conversionpercentage(minValues[m]);
-    //     hour_final[m][9] = Conversionpercentage(averageValues[m]);
-    //     quality.push(quality_val);
-    //   } else if (hour_min < 9500 && hour_min >= 9400) {
-    //     quality_val = 0.8;
-    //     hour_final[m][1] = 1;
-    //     hour_final[m][7] = Conversionpercentage(maxValues[m]);
-    //     hour_final[m][8] = Conversionpercentage(minValues[m]);
-    //     hour_final[m][9] = Conversionpercentage(averageValues[m]);
-    //     quality.push(quality_val);
-    //   } else if (hour_min < 9400 && hour_min >= 9300) {
-    //     quality_val = 0.6;
-    //     hour_final[m][2] = 1;
-    //     hour_final[m][7] = Conversionpercentage(maxValues[m]);
-    //     hour_final[m][8] = Conversionpercentage(minValues[m]);
-    //     hour_final[m][9] = Conversionpercentage(averageValues[m]);
-    //     quality.push(quality_val);
-    //   } else if (hour_min < 9300 && hour_min >= 9200) {
-    //     quality_val = 0.4;
-    //     hour_final[m][3] = 1;
-    //     hour_final[m][7] = Conversionpercentage(maxValues[m]);
-    //     hour_final[m][8] = Conversionpercentage(minValues[m]);
-    //     hour_final[m][9] = Conversionpercentage(averageValues[m]);
-    //     quality.push(quality_val);
-    //   } else if (hour_min < 9200 && hour_min >= 9100) {
-    //     quality_val = 0.2;
-    //     hour_final[m][4] = 1;
-    //     hour_final[m][7] = Conversionpercentage(maxValues[m]);
-    //     hour_final[m][8] = Conversionpercentage(minValues[m]);
-    //     hour_final[m][9] = Conversionpercentage(averageValues[m]);
-    //     quality.push(quality_val);
-    //   } else if (hour_min < 9100 && hour_min >= 7000) {
-    //     quality_val = 0;
-    //     hour_final[m][5] = 1;
-    //     hour_final[m][7] = Conversionpercentage(maxValues[m]);
-    //     hour_final[m][8] = Conversionpercentage(minValues[m]);
-    //     hour_final[m][9] = Conversionpercentage(averageValues[m]);
-    //     quality.push(quality_val);
-    //   } else if (hour_min < 7000) {
-    //     quality_val = 999;
-    //     hour_final[m][6] = 1;
-    //     hour_final[m][7] = Conversionpercentage(maxValues[m]);
-    //     hour_final[m][8] = Conversionpercentage(minValues[m]);
-    //     hour_final[m][9] = Conversionpercentage(averageValues[m]);
-    //     quality.push(quality_val);
-    //   }
-    //   console.log("Time:" + m + " / quality_val :", quality_val);
-    // }
+    let kWh_Import = YesterdayEnd_kWh_Import - YesterdayStart_kWh_Import; //充電量
+    let kWh_Export = YesterdayEnd_kWh_Export - YesterdayStart_kWh_Export; //放電量
+    let net = kWh_Import - kWh_Export;
 
-    // for (let n = 0; n <= 23; n++) {
-    //   hour_final[24][0] += hour_final[n][0];
-    //   hour_final[24][1] += hour_final[n][1];
-    //   hour_final[24][2] += hour_final[n][2];
-    //   hour_final[24][3] += hour_final[n][3];
-    //   hour_final[24][4] += hour_final[n][4];
-    //   hour_final[24][5] += hour_final[n][5];
-    //   hour_final[24][6] += hour_final[n][6];
-    // }
+    let stopminutes = 0;
+    let capacity = 0;
+    let RTE = 0;
+    if (kWh_Export === kWh_Import) {
+      RTE = 0.0;
+    } else {
+      RTE = ((kWh_Export / kWh_Import) * 100).toFixed(1);
+    }
 
-    // hour_final[24][7] = Conversionpercentage(globalMax);
-    // hour_final[24][8] = Conversionpercentage(average45);
-    // hour_final[24][9] = Conversionpercentage(globalMin);
-    // console.log("the qualityis :", quality);
+    elsedata1[0] = kWh_Import / 10;
+    elsedata1[1] = kWh_Export / 10;
+    elsedata1[2] = net / 10;
+    elsedata2[0] = counthourstop;
+    elsedata2[1] = capacity;
+    elsedata2[2] = parseFloat(RTE);
 
-    // console.log("the hour_final :", hour_final);
+    elsedata = elsedata.concat(elsedata1, elsedata2);
 
-    // const yesterdaystart = specified_date_clone5
-    //   .subtract(1, "days")
-    //   .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
-    //   .utcOffset("+0800")
-    //   .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    // const yesterdayend1 = specified_date_clone6
-    //   .subtract(1, "days")
-    //   .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間需大於 23:59:58.999
-    //   .utcOffset("+0800")
-    //   .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    // const yesterdayend2 = specified_date_clone7
-    //   .subtract(0, "days")
-    //   .set({ hour: 0, minute: 0, second: 0, millisecond: 999 }) // 設置結束時間需大於 23:59:58.999 //00
-    //   .utcOffset("+0800")
-    //   .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    console.log("kWh_Import: ", kWh_Import);
+    console.log("kWh_Export: ", kWh_Export);
+    console.log("net: ", net);
+    console.log("stop_Minutes: ", stopminutes);
+    console.log("capacity: ", capacity);
+    console.log("RTE: ", RTE);
+    console.log("elsedata1: ", elsedata1);
+    console.log("elsedata2: ", elsedata2);
 
-    // const filteryesterdaystart = {
-    //   selector: {
-    //     time: {
-    //       $gte: yesterdaystart,
-    //     },
-    //   },
-    //   limit: 1,
-    // };
+    // 昨天的日期
+    const yesterdayDate = specified_date_clone8
+      .subtract(1, "days")
+      .format("YYYY-MM-DD");
+    // 定義要存資料庫的時間
+    const everydayData = {
+      time: yesterdayDate,
+      exacutive_rate: hour_final[24],
+      other_info: elsedata,
+    };
 
-    // const filteryesterdayend = {
-    //   selector: {
-    //     time: {
-    //       $gte: yesterdayend1,
-    //       $lt: yesterdayend2,
-    //     },
-    //   },
-    //   limit: 1,
-    // };
-
-    // 使用篩選器查詢前天的電表數據 昨天00:00:00
-    // const meterYesterdayDataStart = await other01Db.find(filteryesterdaystart);
-
-    // const YesterdayStart_kWh_Import = meterYesterdayDataStart.docs.map(
-    //   (doc) => doc.Freq["408028"]
-    // );
-    // const YesterdayStart_kWh_Export = meterYesterdayDataStart.docs.map(
-    //   (doc) => doc.Freq["408030"]
-    // );
-    // // 使用篩選器查詢前天的電表數據 今天00:00:00
-    // const meterYesterdayDataEnd = await other01Db.find(filteryesterdayend);
-
-    // const YesterdayEnd_kWh_Import = meterYesterdayDataEnd.docs.map(
-    //   (doc) => doc.Freq["408028"]
-    // );
-    // const YesterdayEnd_kWh_Export = meterYesterdayDataEnd.docs.map(
-    //   (doc) => doc.Freq["408030"]
-    // );
-
-    // console.log("********************************************************");
-    // console.log("YesterdayStart_kWh_Import: " + YesterdayStart_kWh_Import);
-    // console.log("YesterdayStart_kWh_Export: " + YesterdayStart_kWh_Export);
-    // console.log("YesterdayEnd_kWh_Import: " + YesterdayEnd_kWh_Import);
-    // console.log("YesterdayEnd_kWh_Export: " + YesterdayEnd_kWh_Export);
-
-    // const elsedata1 = [];
-    // const elsedata2 = [];
-    // let elsedata = [];
-
-    // const kWh_Import = YesterdayEnd_kWh_Import - YesterdayStart_kWh_Import;
-    // const kWh_Export = YesterdayEnd_kWh_Export - YesterdayStart_kWh_Export;
-    // const net = kWh_Import - kWh_Export;
-
-    // const stopminutes = 0;
-    // const capacity = 0;
-    // const RTE = ((kWh_Export / kWh_Import) * 100).toFixed(1);
-
-    // elsedata1[0] = kWh_Import / 10;
-    // elsedata1[1] = kWh_Export / 10;
-    // elsedata1[2] = net / 10;
-    // elsedata2[0] = stopminutes;
-    // elsedata2[1] = capacity;
-    // elsedata2[2] = parseFloat(RTE);
-
-    // elsedata = elsedata.concat(elsedata1, elsedata2);
-
-    // console.log("kWh_Import: ", kWh_Import);
-    // console.log("kWh_Export: ", kWh_Export);
-    // console.log("net: ", net);
-    // console.log("stop_Minutes: ", stopminutes);
-    // console.log("capacity: ", capacity);
-    // console.log("RTE: ", RTE);
-    // console.log("elsedata1: ", elsedata1);
-    // console.log("elsedata2: ", elsedata2);
-
-    // // 昨天的日期
-    // const yesterdayDate = specified_date_clone8
-    //   .subtract(1, "days")
-    //   .format("YYYY-MM-DD");
-    // // 定義要存資料庫的時間
-    // const everydayData = {
-    //   time: yesterdayDate,
-    //   exacutive_rate: hour_final[24],
-    //   other_info: elsedata,
-    // };
-
-    // // 每天的資料存到 CouchDB 中
-    // reportDb.insert(everydayData, (err, body) => {
-    //   if (err) {
-    //     console.error("Error inserting document:", err);
-    //   } else {
-    //     console.log("Document inserted successfully:", body);
-    //   }
-    // });
-    // 獲取系統當前時間的前一天日期
-    //const Date = specified_date_clone9.subtract(1, "days").format("YYYY-MM-DD");
+    // 每天的資料存到 CouchDB 中
+    reportDb.insert(everydayData, (err, body) => {
+      if (err) {
+        console.error("Error inserting document:", err);
+      } else {
+        console.log("Document inserted successfully:", body);
+      }
+    });
+    //獲取系統當前時間的前一天日期;
+    const Date = specified_date_clone9.subtract(1, "days").format("YYYY-MM-DD");
 
     return {
-      // Date: Date,
-      // hour_final: hour_final,
-      // elsedata1: elsedata1,
-      // elsedata2: elsedata2,
+      Date: Date,
+      hour_final: hour_final,
+      elsedata1: elsedata1,
+      elsedata2: elsedata2,
     };
 
     //return Date, hour_final, elsedata; //回傳時間、整天的資料、下面統計完的資料
@@ -733,569 +763,643 @@ async function getDayData() {
   }
 }
 
-getDayData();
-
-// async function getMonthData() {
-//   // 獲取系統當前時間的前一個月的第一天
-//   const MonthsStartStr = specified_date_clone10
-//     .subtract(1, "month")
-//     .startOf("month")
-//     .format("YYYY-MM-DD");
-
-//   // 獲取系統當前時間的前一個月的最後一天
-//   const MonthsEndStr = specified_date_clone11
-//     .subtract(1, "month")
-//     .endOf("month")
-//     .format("YYYY-MM-DD");
-
-//   // 將格式化的日期字符串轉換為 Moment.js 物件
-//   const MonthsStart = moment(MonthsStartStr);
-//   const MonthsEnd = moment(MonthsEndStr);
-
-//   // 使用 Moment.js 的 diff 函式計算天數差異
-//   const numberOfDays = MonthsEnd.diff(MonthsStart, "days") + 1; // 因為 endOf('month') 已經是當月最後一天了，所以需要加 1
-
-//   console.log("上個月的搜尋條件_MonthsStart: ", MonthsStartStr);
-//   console.log("上個月的搜尋條件_MonthsEnd: ", MonthsEndStr);
-//   console.log("本月共有:", numberOfDays, "天");
-
-//   // 初始化存儲數值的陣列
-//   let data_exacutive_rate = [];
-//   let data_other_info = [];
-
-//   // 定義篩選器條件，查詢大前天的數據
-//   const filterIntervalforMonth = {
-//     selector: {
-//       time: {
-//         $gte: MonthsStartStr, // 開始時間當月起始
-//         $lte: MonthsEndStr, // 結束時間為當月最後一天
-//       },
-//     },
-//     limit: numberOfDays, //限制當月天數
-//   };
-
-//   // 使用篩選器查詢大前天的數據
-//   const monthBefordata = await reportDb.find(filterIntervalforMonth);
-//   data_exacutive_rate.push(
-//     ...monthBefordata.docs.map((doc) => doc.exacutive_rate)
-//   );
-//   data_other_info.push(...monthBefordata.docs.map((doc) => doc.other_info));
-
-//   // console.log("data_exacutive_rate:", data_exacutive_rate);
-//   // console.log("data_other_info:", data_other_info);
-
-//   //Power consumption analysis
-
-//   // 取出 data_exacutive_rate 中的數值
-//   const executiveRates = [];
-//   for (let i = 0; i < data_exacutive_rate.length; i++) {
-//     const innerArray = data_exacutive_rate[i];
-//     for (let j = 0; j < innerArray.length; j++) {
-//       const value = innerArray[j];
-//       executiveRates.push(value);
-//     }
-//   }
-
-//   // 取出 data_other_info 中的數值
-//   const otherInfo = [];
-//   for (let i = 0; i < data_other_info.length; i++) {
-//     const innerArray = data_other_info[i];
-//     for (let j = 0; j < innerArray.length; j++) {
-//       const value = innerArray[j];
-//       otherInfo.push(value);
-//     }
-//   }
-
-//   // 儲存加總結果的陣列
-//   const sumArray = Array.from({ length: 7 }, () => 0); // 初始化為全零陣列
-//   // 儲存平均值的陣列
-//   const averageArray = Array.from({ length: 3 }, () => 0); // 初始化為全零陣列
-
-//   // 對 data_exacutive_rate 進行遍歷
-//   for (let j = 0; j < 7; j++) {
-//     let sum = 0; // 初始化加總值為 0
-//     // 對每個子陣列進行遍歷，將相同 j 範圍的數值進行加總
-//     for (let i = 0; i < data_exacutive_rate.length; i++) {
-//       sum += data_exacutive_rate[i][j]; // 將數值加到加總值中
-//     }
-//     sumArray[j] = sum; // 將加總結果存入 sumArray 中
-//   }
-
-//   // 對 data_exacutive_rate 中相同 j 範圍的數值進行平均計算
-//   for (let j = 7; j < 10; j++) {
-//     let sum = 0; // 初始化加總值為 0
-//     // 對每個子陣列進行遍歷，將相同 j 範圍的數值加總
-//     for (let i = 0; i < data_exacutive_rate.length; i++) {
-//       sum += data_exacutive_rate[i][j]; // 將數值加到加總值中
-//     }
-//     averageArray[j - 7] = (sum / data_exacutive_rate.length).toFixed(1);
-//   }
-
-//   // console.log("加總結果陣列:", sumArray);
-//   // console.log("平均值陣列:", averageArray);
-//   other_sum = [];
-//   for (let j = 0; j < 5; j++) {
-//     let sum = 0; // 初始化加總值為 0
-//     // 對每個子陣列進行遍歷，將相同 j 範圍的數值進行加總
-//     for (let i = 0; i < data_other_info.length; i++) {
-//       sum += data_other_info[i][j]; // 將數值加到加總值中
-//     }
-//     other_sum[j] = sum.toFixed(1); // 將加總結果存入 sumArray 中
-//   }
-
-//   // 對 data_exacutive_rate 中相同 j 範圍的數值進行平均計算
-//   for (let j = 5; j < 6; j++) {
-//     let sum = 0; // 初始化加總值為 0
-//     // 對每個子陣列進行遍歷，將相同 j 範圍的數值加總
-//     for (let i = 0; i < data_other_info.length; i++) {
-//       sum += data_other_info[i][j]; // 將數值加到加總值中
-//     }
-//     other_sum[5] = (sum / data_exacutive_rate.length).toFixed(1);
-//   }
-
-//   // console.log("data_exacutive_rate[0]:", data_exacutive_rate[0]);
-//   // console.log("data_exacutive_rate[0][]:", data_exacutive_rate[0][0]);
-//   const exacutive_rate_sum = [];
-//   // console.log("executiveRates:", executiveRates);
-//   // console.log("otherInfo:", otherInfo);
-
-//   const lastMonthstart = specified_date_clone12
-//     .subtract(1, "month")
-//     .startOf("month")
-//     .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
-//     .utcOffset("+0800")
-//     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-//   const thisMonthstart = specified_date_clone13
-//     .subtract(0, "month")
-//     .startOf("month")
-//     .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) //00
-//     .utcOffset("+0800")
-//     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-//   const filterforMonthStart = {
-//     selector: {
-//       time: {
-//         $gte: lastMonthstart, // 開始時間當月起始
-//       },
-//     },
-//     limit: 1, //限制當月天數
-//   };
-
-//   const filterforMonthEnd = {
-//     selector: {
-//       time: {
-//         $gte: thisMonthstart, // 開始時間當月起始
-//       },
-//     },
-//     limit: 1, //限制當月天數
-//   };
-
-//   console.log("電表搜尋時間起始/lastMonthstart:" + lastMonthstart);
-//   console.log("電表搜尋時間結束/thisMonth:" + thisMonthstart);
-
-//   const Month_DataStart = await other10Db.find(filterforMonthStart);
-
-//   const Month_start_kWh_Import = Month_DataStart.docs.map(
-//     (doc) => doc.AuxMtot1["408075"]
-//   );
-
-//   const Month_start_kWh_Total_H_1_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM1["408080"]
-//   );
-//   const Month_start_kWh_Total_M_1_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM1["408081"]
-//   );
-//   const Month_start_kWh_Total_L_1_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM1["408082"]
-//   );
-
-//   const Month_start_kWh_Total_H_1_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM2["408080"]
-//   );
-//   const Month_start_kWh_Total_M_1_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM2["408081"]
-//   );
-//   const Month_start_kWh_Total_L_1_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM2["408082"]
-//   );
-//   const Month_start_kWh_Total_H_2_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM3["408080"]
-//   );
-//   const Month_start_kWh_Total_M_2_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM3["408081"]
-//   );
-//   const Month_start_kWh_Total_L_2_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM3["408082"]
-//   );
-
-//   const Month_start_kWh_Total_H_2_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM4["408080"]
-//   );
-//   const Month_start_kWh_Total_M_2_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM4["408081"]
-//   );
-//   const Month_start_kWh_Total_L_2_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM4["408082"]
-//   );
-//   const Month_start_kWh_Total_H_3_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM5["408080"]
-//   );
-//   const Month_start_kWh_Total_M_3_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM5["408081"]
-//   );
-//   const Month_start_kWh_Total_L_3_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM5["408082"]
-//   );
-
-//   const Month_start_kWh_Total_H_3_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM6["408080"]
-//   );
-//   const Month_start_kWh_Total_M_3_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM6["408081"]
-//   );
-//   const Month_start_kWh_Total_L_3_2 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM6["408082"]
-//   );
-//   const Month_start_kWh_Total_H_4_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM7["408080"]
-//   );
-//   const Month_start_kWh_Total_M_4_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM7["408081"]
-//   );
-//   const Month_start_kWh_Total_L_4_1 = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM7["408082"]
-//   );
-
-//   const Month_start_kWh_Total_H_EMS = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM8["408080"]
-//   );
-//   const Month_start_kWh_Total_M_EMS = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM8["408081"]
-//   );
-//   const Month_start_kWh_Total_L_EMS = Month_DataStart.docs.map(
-//     (doc) => doc.AuxM8["408082"]
-//   );
-//   //////////////////////////////////////////////////////////////////
-//   const Month_DataEnd = await other10Db.find(filterforMonthEnd);
-
-//   const Month_end_kWh_Import = Month_DataStart.docs.map(
-//     (doc) => doc.AuxMtot1["408075"]
-//   );
-
-//   const Month_end_kWh_Total_H_1_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM1["408080"]
-//   );
-//   const Month_end_kWh_Total_M_1_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM1["408081"]
-//   );
-//   const Month_end_kWh_Total_L_1_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM1["408082"]
-//   );
-
-//   const Month_end_kWh_Total_H_1_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM2["408080"]
-//   );
-//   const Month_end_kWh_Total_M_1_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM2["408081"]
-//   );
-//   const Month_end_kWh_Total_L_1_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM2["408082"]
-//   );
-//   const Month_end_kWh_Total_H_2_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM3["408080"]
-//   );
-//   const Month_end_kWh_Total_M_2_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM3["408081"]
-//   );
-//   const Month_end_kWh_Total_L_2_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM3["408082"]
-//   );
-
-//   const Month_end_kWh_Total_H_2_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM4["408080"]
-//   );
-//   const Month_end_kWh_Total_M_2_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM4["408081"]
-//   );
-//   const Month_end_kWh_Total_L_2_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM4["408082"]
-//   );
-//   const Month_end_kWh_Total_H_3_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM5["408080"]
-//   );
-//   const Month_end_kWh_Total_M_3_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM5["408081"]
-//   );
-//   const Month_end_kWh_Total_L_3_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM5["408082"]
-//   );
-
-//   const Month_end_kWh_Total_H_3_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM6["408080"]
-//   );
-//   const Month_end_kWh_Total_M_3_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM6["408081"]
-//   );
-//   const Month_end_kWh_Total_L_3_2 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM6["408082"]
-//   );
-//   const Month_end_kWh_Total_H_4_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM7["408080"]
-//   );
-//   const Month_end_kWh_Total_M_4_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM7["408081"]
-//   );
-//   const Month_end_kWh_Total_L_4_1 = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM7["408082"]
-//   );
-
-//   const Month_end_kWh_Total_H_EMS = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM8["408080"]
-//   );
-//   const Month_end_kWh_Total_M_EMS = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM8["408081"]
-//   );
-//   const Month_end_kWh_Total_L_EMS = Month_DataEnd.docs.map(
-//     (doc) => doc.AuxM8["408082"]
-//   );
-
-//   //console.log("Month_start_kWh_Import:", Month_start_kWh_Import);
-//   //計算用電量
-//   const powerFor_aux = (Month_end_kWh_Import - Month_start_kWh_Import) * 0.1;
-//   const powerFor_EMS = count_power(
-//     Month_start_kWh_Total_H_EMS,
-//     Month_start_kWh_Total_M_EMS,
-//     Month_start_kWh_Total_L_EMS,
-//     Month_end_kWh_Total_H_EMS,
-//     Month_end_kWh_Total_M_EMS,
-//     Month_end_kWh_Total_L_EMS
-//   );
-//   const powerFor_ESS1_1 = count_power(
-//     Month_start_kWh_Total_H_1_1,
-//     Month_start_kWh_Total_M_1_1,
-//     Month_start_kWh_Total_L_1_1,
-//     Month_end_kWh_Total_H_1_1,
-//     Month_end_kWh_Total_M_1_1,
-//     Month_end_kWh_Total_L_1_1
-//   );
-
-//   const powerFor_ESS1_2 = count_power(
-//     Month_start_kWh_Total_H_1_2,
-//     Month_start_kWh_Total_M_1_2,
-//     Month_start_kWh_Total_L_1_2,
-//     Month_end_kWh_Total_H_1_2,
-//     Month_end_kWh_Total_M_1_2,
-//     Month_end_kWh_Total_L_1_2
-//   );
-
-//   const powerFor_ESS2_1 = count_power(
-//     Month_start_kWh_Total_H_2_1,
-//     Month_start_kWh_Total_M_2_1,
-//     Month_start_kWh_Total_L_2_1,
-//     Month_end_kWh_Total_H_2_1,
-//     Month_end_kWh_Total_M_2_1,
-//     Month_end_kWh_Total_L_2_1
-//   );
-
-//   const powerFor_ESS2_2 = count_power(
-//     Month_start_kWh_Total_H_2_2,
-//     Month_start_kWh_Total_M_2_2,
-//     Month_start_kWh_Total_L_2_2,
-//     Month_end_kWh_Total_H_2_2,
-//     Month_end_kWh_Total_M_2_2,
-//     Month_end_kWh_Total_L_2_2
-//   );
-
-//   const powerFor_ESS3_1 = count_power(
-//     Month_start_kWh_Total_H_3_1,
-//     Month_start_kWh_Total_M_3_1,
-//     Month_start_kWh_Total_L_3_1,
-//     Month_end_kWh_Total_H_3_1,
-//     Month_end_kWh_Total_M_3_1,
-//     Month_end_kWh_Total_L_3_1
-//   );
-
-//   const powerFor_ESS3_2 = count_power(
-//     Month_start_kWh_Total_H_3_2,
-//     Month_start_kWh_Total_M_3_2,
-//     Month_start_kWh_Total_L_3_2,
-//     Month_end_kWh_Total_H_3_2,
-//     Month_end_kWh_Total_M_3_2,
-//     Month_end_kWh_Total_L_3_2
-//   );
-//   const powerFor_ESS4_1 = count_power(
-//     Month_start_kWh_Total_H_4_1,
-//     Month_start_kWh_Total_M_4_1,
-//     Month_start_kWh_Total_L_4_1,
-//     Month_end_kWh_Total_H_4_1,
-//     Month_end_kWh_Total_M_4_1,
-//     Month_end_kWh_Total_L_4_1
-//   );
-
-//   // console.log("powerFor_aux: " + powerFor_aux);
-//   // console.log("powerFor_ESS1_1: " + powerFor_ESS1_1);
-//   // console.log("powerFor_ESS1_2: " + powerFor_ESS1_2);
-//   // console.log("powerFor_ESS2_1: " + powerFor_ESS2_1);
-//   // console.log("powerFor_ESS2_2: " + powerFor_ESS2_2);
-//   // console.log("powerFor_ESS3_1: " + powerFor_ESS3_1);
-//   // console.log("powerFor_ESS3_2: " + powerFor_ESS3_2);
-//   // console.log("powerFor_ESS4_1: " + powerFor_ESS4_1);
-//   // console.log("powerFor_EMS: " + powerFor_EMS);
-
-//   const power = [];
-//   power[0] = powerFor_aux;
-//   power[1] = powerFor_EMS;
-//   power[2] = powerFor_ESS1_1;
-//   power[3] = powerFor_ESS1_2;
-//   power[4] = powerFor_ESS2_1;
-//   power[5] = powerFor_ESS2_2;
-//   power[6] = powerFor_ESS3_1;
-//   power[7] = powerFor_ESS3_2;
-//   power[8] = powerFor_ESS4_1;
-
-//   // 取得上個月的日期物件
-//   const lastMonth = specified_date_clone14.subtract(1, "months");
-
-//   // 取得上個月的年份及月份
-//   const lastMonthYearMonth = lastMonth.format("YYYY-MM");
-//   console.log("lastMonthYearMonth:", lastMonthYearMonth);
-//   console.log("data_exacutive_rate:", data_exacutive_rate);
-//   console.log("data_other_info:", data_other_info);
-//   console.log("sumArray:", sumArray);
-//   console.log("other_sum:", other_sum);
-//   console.log("averageArray:", averageArray);
-//   console.log("power:", power);
-
-//   // 定義要存資料庫的時間
-//   const MonthData = {
-//     time: lastMonthYearMonth, //時間
-//     sumArray: sumArray, //加總的服務品質
-//     averageArray: averageArray, //表格SPM的TOTAL
-//     other_sum: other_sum, //用電總量(IM/EXP/NET/終止服務/充放電效率)
-//     power: power,
-//     totMWH: powerFor_aux, //輔助用電總量
-//   };
-
-//   // 每天的資料存到 CouchDB 中
-//   monthly_reportDb.insert(MonthData, (err, body) => {
-//     if (err) {
-//       console.error("Error inserting document:", err);
-//     } else {
-//       console.log("Document inserted successfully:", body);
-//     }
-//   });
-
-//   //撈出上期及去年同期資料
-//   const last_month = specified_date_clone15
-//     .subtract(2, "months") // 減去兩個月
-//     .format("YYYY-MM");
-
-//   const last_year = specified_date_clone16
-//     .subtract(1, "year") // 減去一年
-//     .subtract(1, "months") // 再減去一個月
-//     .format("YYYY-MM");
-
-//   console.log("last_month:", last_month);
-//   console.log("last_year:", last_year);
-
-//   const filterlast_month = {
-//     selector: {
-//       time: {
-//         $eq: last_month, // 時間等於 last_month
-//       },
-//     },
-//     limit: 1, // 只讀取一個文檔
-//   };
-//   const filterlast_year = {
-//     selector: {
-//       time: {
-//         $eq: last_year, // 時間等於 去年
-//       },
-//     },
-//     limit: 1, // 只讀取一個文檔
-//   };
-//   const lastMonthDoc = await monthly_reportDb.find(filterlast_month);
-//   const lastYearDoc = await monthly_reportDb.find(filterlast_year);
-
-//   // 將符合條件的資料存入陣列
-//   const data1 = [];
-//   const data2 = [];
-//   const data3 = [];
-//   const data4 = [];
-
-//   // 提取所需屬性並存入陣列
-//   if (lastMonthDoc.docs.length > 0) {
-//     const { sumArray, other_sum, averageArray } = lastMonthDoc.docs[0];
-
-//     // 直接將數值合併到一個新的陣列中
-//     const extractedData1 = [
-//       ...sumArray,
-//       ...other_sum.map((value) => parseFloat(value)),
-//       ...averageArray,
-//     ];
-//     data1.push(extractedData1);
-//   }
-//   console.log("符合上個月條件的資料:", data1[0]);
-
-//   if (lastMonthDoc.docs.length > 0) {
-//     const { power } = lastMonthDoc.docs[0];
-//     // 直接將數值合併到一個新的陣列中
-//     const extractedData = [...power];
-//     data3.push(extractedData);
-//   }
-//   console.log("我是power 1:", data3[0]);
-
-//   if (lastYearDoc.docs.length > 0) {
-//     const { sumArray, other_sum, averageArray } = lastYearDoc.docs[0];
-
-//     // 直接將數值合併到一個新的陣列中
-//     const extractedData2 = [
-//       ...sumArray,
-//       ...other_sum.map((value) => parseFloat(value)),
-//       ...averageArray,
-//     ];
-//     data2.push(extractedData2);
-//   }
-//   console.log("符合去年同期條件的資料:", data2[0]);
-
-//   if (lastYearDoc.docs.length > 0) {
-//     const { power } = lastYearDoc.docs[0];
-
-//     // 直接將數值合併到一個新的陣列中
-//     const extractedData = [...power];
-//     data4.push(extractedData);
-//   }
-//   console.log("我是power 2:", data4[0]);
-
-//   return {
-//     lastMonthYearMonth: lastMonthYearMonth, //年-月
-//     data_exacutive_rate: data_exacutive_rate, //每月的服務品質指標加總結果 SPM最大最小 31筆
-//     data_other_info: data_other_info, //每月的總用電量統計 終止服務 充放電效率
-//     other_sum: other_sum, //表格中統計總用電量以及終止服務時數
-//     sumArray: sumArray, // 表格服務品質指標的TOTAL欄位
-//     averageArray: averageArray, //表格SPM的TOTAL
-//     power: power, //輔助用電分析
-//     last_month: data1[0], //前期
-//     last_month_power: data3[0], //前期power
-//     last_year: data2[0], //去年同期
-//     last_year_power: data4[0], //去年同期power
-//   };
-// }
-
-// function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
-//   // 計算時間1的總共差值
-//   const totalDiff1 = start_H * 1000000 + start_M * 1000 + start_L * 0.1;
-
-//   // 計算時間2的總共差值
-//   const totalDiff2 = end_H * 1000000 + end_M * 1000 + end_L * 0.1;
-
-//   // 計算兩個時間的差值
-//   const totalDifference = totalDiff2 - totalDiff1;
-
-//   return totalDifference;
-// }
-
+//getDayData();
+////////////////////////////////////////////////////////////////////////////////////////////
+async function getMonthData() {
+  // 獲取系統當前時間的前一個月的第一天
+  const MonthsStartStr = specified_date_clone10
+    .subtract(1, "month")
+    .startOf("month")
+    .format("YYYY-MM-DD");
+
+  // 獲取系統當前時間的前一個月的最後一天
+  const MonthsEndStr = specified_date_clone11
+    .subtract(1, "month")
+    .endOf("month")
+    .format("YYYY-MM-DD");
+
+  // 將格式化的日期字符串轉換為 Moment.js 物件
+  const MonthsStart = moment(MonthsStartStr);
+  const MonthsEnd = moment(MonthsEndStr);
+
+  // 使用 Moment.js 的 diff 函式計算天數差異
+  const numberOfDays = MonthsEnd.diff(MonthsStart, "days") + 1; // 因為 endOf('month') 已經是當月最後一天了，所以需要加 1
+
+  console.log("上個月的搜尋條件(MonthsStart): ", MonthsStartStr);
+  console.log("上個月的搜尋條件(MonthsEnd): ", MonthsEndStr);
+  console.log("本月共有:", numberOfDays, "天");
+
+  // 初始化存儲數值的陣列
+  let data_exacutive_rate = [];
+  let data_other_info = [];
+
+  // 定義篩選器條件，查詢大前天的數據
+  const filterIntervalforMonth = {
+    selector: {
+      time: {
+        $gte: MonthsStartStr, // 開始時間當月起始
+        $lte: MonthsEndStr, // 結束時間為當月最後一天
+      },
+    },
+    limit: numberOfDays, //限制當月天數
+  };
+
+  // 使用篩選器查詢大前天的數據
+  const monthBefordata = await reportDb.find(filterIntervalforMonth);
+  data_exacutive_rate.push(
+    ...monthBefordata.docs.map((doc) => doc.exacutive_rate)
+  );
+  data_other_info.push(...monthBefordata.docs.map((doc) => doc.other_info));
+
+  // console.log("data_exacutive_rate:", data_exacutive_rate);
+  // console.log("data_other_info:", data_other_info);
+
+  //Power consumption analysis
+
+  // 取出 data_exacutive_rate 中的數值
+  const executiveRates = [];
+  for (let i = 0; i < data_exacutive_rate.length; i++) {
+    const innerArray = data_exacutive_rate[i];
+    for (let j = 0; j < innerArray.length; j++) {
+      const value = innerArray[j];
+      executiveRates.push(value);
+    }
+  }
+
+  // 取出 data_other_info 中的數值
+  const otherInfo = [];
+  for (let i = 0; i < data_other_info.length; i++) {
+    const innerArray = data_other_info[i];
+    for (let j = 0; j < innerArray.length; j++) {
+      const value = innerArray[j];
+      otherInfo.push(value);
+    }
+  }
+
+  // 儲存加總結果的陣列
+  const sumArray = Array.from({ length: 7 }, () => 0); // 初始化為全零陣列
+  // 儲存平均值的陣列
+  const averageArray = Array.from({ length: 3 }, () => 0); // 初始化為全零陣列
+
+  //當月的一號的00:00:00:000
+  const monthstart = specified_date_clone22
+    .subtract(1, "months") // 減去一個月
+    .startOf("month") // 設置為該月份的第一天
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置時間為 00:00:00.000  //000
+    .utcOffset("+0800") // 設置時區
+    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"); // 格式化日期
+
+  //當月的最後一天的23:59:59:000
+  // 設置為指定日期的上個月的最後一天
+  const monthend = specified_date_clone23
+    .subtract(1, "months") // 減去一個月
+    .endOf("month") // 設置為該月份的最後一天
+    .set({ hour: 23, minute: 59, second: 59, millisecond: 0 }) // 設置時間為 23:59:59.000 //000
+    .utcOffset("+0800") // 設置時區
+    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"); // 格式化日期
+
+  console.log("monthstart:" + monthstart);
+  console.log("monthend:" + monthend);
+
+  //當月的一號的00:00:00:000
+  const filterMonthstart = {
+    selector: {
+      time: {
+        $gte: monthstart,
+      },
+    },
+    limit: 1,
+  };
+  //當月的最後一天的23:59:59:000
+  const filterMonthend = {
+    selector: {
+      time: {
+        $gte: monthend,
+      },
+    },
+    limit: 1,
+  };
+
+  //修改整月的RTE數值
+  //使用篩選器查詢上個月月初一號的電表數據 當月的一號的00:00:00:000
+  const meterMonthDataStart = await other01Db.find(filterMonthstart);
+
+  const MonthStart_kWh_Import = meterMonthDataStart.docs.map(
+    (doc) => doc.Freq["408032"]
+  );
+  const MonthStart_kWh_Export = meterMonthDataStart.docs.map(
+    (doc) => doc.Freq["408034"]
+  );
+  // 使用篩選器查詢上個月月底的電表數據 當月的最後一天的23:59:59:000
+  const meterMonthDataEnd = await other01Db.find(filterMonthend);
+
+  const MonthEnd_kWh_Import = meterMonthDataEnd.docs.map(
+    (doc) => doc.Freq["408032"]
+  );
+  const MonthEnd_kWh_Export = meterMonthDataEnd.docs.map(
+    (doc) => doc.Freq["408034"]
+  );
+
+  let kWh_Import = MonthEnd_kWh_Import - MonthStart_kWh_Import;
+  let kWh_Export = MonthEnd_kWh_Export - MonthStart_kWh_Export;
+  let RTE = 0;
+  if (kWh_Export === kWh_Import) {
+    RTE = 0.0;
+  } else {
+    RTE = ((kWh_Export / kWh_Import) * 100).toFixed(1);
+  }
+  console.log("MonthStart_kWh_Import: " + MonthStart_kWh_Import); //起始時間的充電
+  console.log("MonthStart_kWh_Export: " + MonthStart_kWh_Export); //起始時間的放電量
+  console.log("MonthEnd_kWh_Import: " + MonthEnd_kWh_Import); //結束時間的充電
+  console.log("MonthEnd_kWh_Export: " + MonthEnd_kWh_Export); //結束時間的放電
+  console.log("kWh_Import: " + kWh_Import); //結束時間的放電
+  console.log("kWh_Export: " + kWh_Export); //結束時間的放電
+
+  console.log("RTE: " + RTE); //當月往返效率的結果 (單獨算 不可以取當月平均)
+
+  console.log("********************************************************");
+
+  // 對 data_exacutive_rate(存放執行率的) 進行遍歷
+  for (let j = 0; j < 7; j++) {
+    let sum = 0; // 初始化加總值為 0
+    // 對每個子陣列進行遍歷，將相同 j 範圍的數值進行加總
+    for (let i = 0; i < data_exacutive_rate.length; i++) {
+      sum += data_exacutive_rate[i][j]; // 將數值加到加總值中
+    }
+    sumArray[j] = sum; // 將加總結果存入 sumArray 中
+  }
+
+  // 對 data_exacutive_rate (存放執行率的) 中相同 j 範圍的數值進行平均計算 計算SBSPM的數值 總共三個 最大、平均和最小
+  for (let j = 7; j < 10; j++) {
+    let sum = 0; // 初始化加總值為 0
+    // 對每個子陣列進行遍歷，將相同 j 範圍的數值加總
+    for (let i = 0; i < data_exacutive_rate.length; i++) {
+      sum += data_exacutive_rate[i][j]; // 將數值加到加總值中
+    }
+    averageArray[j - 7] = (sum / data_exacutive_rate.length).toFixed(1);
+  }
+
+  console.log("執行率加總結果陣列(1 0.8...):", sumArray);
+  console.log("執行率最大最小全部的平均值陣列:", averageArray);
+
+  other_sum = [];
+  for (let j = 0; j < 5; j++) {
+    let sum = 0; // 初始化加總值為 0
+    // 對每個子陣列進行遍歷，將相同 j 範圍的數值進行加總
+    for (let i = 0; i < data_other_info.length; i++) {
+      sum += data_other_info[i][j]; // 將數值加到加總值中
+    }
+    other_sum[j] = sum.toFixed(1); // 將加總結果存入 sumArray 中
+  }
+
+  other_sum[5] = RTE;
+
+  console.log("data_exacutive_rate[0]:", data_exacutive_rate[0]); //輸出一排
+  console.log("data_exacutive_rate[0][0]:", data_exacutive_rate[0][0]); //輸出一格
+  const exacutive_rate_sum = [];
+  console.log("executiveRates:", executiveRates); //整個內容輸出
+  console.log("otherInfo:", otherInfo);
+
+  const lastMonthstart = specified_date_clone12
+    .subtract(1, "month")
+    .startOf("month")
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) // 設置結束時間為 23:59:59.999 //00
+    .utcOffset("+0800")
+    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+  const thisMonthstart = specified_date_clone13
+    .subtract(0, "month")
+    .startOf("month")
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) //00
+    .utcOffset("+0800")
+    .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+  const filterforMonthStart = {
+    selector: {
+      time: {
+        $gte: lastMonthstart, // 開始時間當月起始
+      },
+    },
+    limit: 1, //限制當月天數
+  };
+
+  const filterforMonthEnd = {
+    selector: {
+      time: {
+        $gte: thisMonthstart, // 開始時間當月起始
+      },
+    },
+    limit: 1, //限制當月天數
+  };
+
+  console.log("電表搜尋時間起始/lastMonthstart:" + lastMonthstart);
+  console.log("電表搜尋時間結束/thisMonth:" + thisMonthstart);
+
+  const Month_DataStart = await other10Db.find(filterforMonthStart);
+
+  const Month_start_kWh_Import = Month_DataStart.docs.map(
+    (doc) => doc.AuxMtot1["408075"]
+  );
+
+  const Month_start_kWh_Total_H_1_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM1["408080"]
+  );
+  const Month_start_kWh_Total_M_1_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM1["408081"]
+  );
+  const Month_start_kWh_Total_L_1_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM1["408082"]
+  );
+
+  const Month_start_kWh_Total_H_1_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM2["408080"]
+  );
+  const Month_start_kWh_Total_M_1_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM2["408081"]
+  );
+  const Month_start_kWh_Total_L_1_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM2["408082"]
+  );
+  const Month_start_kWh_Total_H_2_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM3["408080"]
+  );
+  const Month_start_kWh_Total_M_2_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM3["408081"]
+  );
+  const Month_start_kWh_Total_L_2_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM3["408082"]
+  );
+
+  const Month_start_kWh_Total_H_2_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM4["408080"]
+  );
+  const Month_start_kWh_Total_M_2_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM4["408081"]
+  );
+  const Month_start_kWh_Total_L_2_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM4["408082"]
+  );
+  const Month_start_kWh_Total_H_3_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM5["408080"]
+  );
+  const Month_start_kWh_Total_M_3_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM5["408081"]
+  );
+  const Month_start_kWh_Total_L_3_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM5["408082"]
+  );
+
+  const Month_start_kWh_Total_H_3_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM6["408080"]
+  );
+  const Month_start_kWh_Total_M_3_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM6["408081"]
+  );
+  const Month_start_kWh_Total_L_3_2 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM6["408082"]
+  );
+  const Month_start_kWh_Total_H_4_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM7["408080"]
+  );
+  const Month_start_kWh_Total_M_4_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM7["408081"]
+  );
+  const Month_start_kWh_Total_L_4_1 = Month_DataStart.docs.map(
+    (doc) => doc.AuxM7["408082"]
+  );
+
+  const Month_start_kWh_Total_H_EMS = Month_DataStart.docs.map(
+    (doc) => doc.AuxM8["408080"]
+  );
+  const Month_start_kWh_Total_M_EMS = Month_DataStart.docs.map(
+    (doc) => doc.AuxM8["408081"]
+  );
+  const Month_start_kWh_Total_L_EMS = Month_DataStart.docs.map(
+    (doc) => doc.AuxM8["408082"]
+  );
+  //////////////////////////////////////////////////////////////////
+  const Month_DataEnd = await other10Db.find(filterforMonthEnd);
+
+  const Month_end_kWh_Import = Month_DataStart.docs.map(
+    (doc) => doc.AuxMtot1["408075"]
+  );
+
+  const Month_end_kWh_Total_H_1_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM1["408080"]
+  );
+  const Month_end_kWh_Total_M_1_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM1["408081"]
+  );
+  const Month_end_kWh_Total_L_1_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM1["408082"]
+  );
+
+  const Month_end_kWh_Total_H_1_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM2["408080"]
+  );
+  const Month_end_kWh_Total_M_1_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM2["408081"]
+  );
+  const Month_end_kWh_Total_L_1_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM2["408082"]
+  );
+  const Month_end_kWh_Total_H_2_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM3["408080"]
+  );
+  const Month_end_kWh_Total_M_2_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM3["408081"]
+  );
+  const Month_end_kWh_Total_L_2_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM3["408082"]
+  );
+
+  const Month_end_kWh_Total_H_2_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM4["408080"]
+  );
+  const Month_end_kWh_Total_M_2_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM4["408081"]
+  );
+  const Month_end_kWh_Total_L_2_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM4["408082"]
+  );
+  const Month_end_kWh_Total_H_3_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM5["408080"]
+  );
+  const Month_end_kWh_Total_M_3_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM5["408081"]
+  );
+  const Month_end_kWh_Total_L_3_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM5["408082"]
+  );
+
+  const Month_end_kWh_Total_H_3_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM6["408080"]
+  );
+  const Month_end_kWh_Total_M_3_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM6["408081"]
+  );
+  const Month_end_kWh_Total_L_3_2 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM6["408082"]
+  );
+  const Month_end_kWh_Total_H_4_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM7["408080"]
+  );
+  const Month_end_kWh_Total_M_4_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM7["408081"]
+  );
+  const Month_end_kWh_Total_L_4_1 = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM7["408082"]
+  );
+
+  const Month_end_kWh_Total_H_EMS = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM8["408080"]
+  );
+  const Month_end_kWh_Total_M_EMS = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM8["408081"]
+  );
+  const Month_end_kWh_Total_L_EMS = Month_DataEnd.docs.map(
+    (doc) => doc.AuxM8["408082"]
+  );
+
+  //console.log("Month_start_kWh_Import:", Month_start_kWh_Import);
+  //計算用電量
+  const powerFor_aux = (Month_end_kWh_Import - Month_start_kWh_Import) * 0.1;
+  const powerFor_EMS = count_power(
+    Month_start_kWh_Total_H_EMS,
+    Month_start_kWh_Total_M_EMS,
+    Month_start_kWh_Total_L_EMS,
+    Month_end_kWh_Total_H_EMS,
+    Month_end_kWh_Total_M_EMS,
+    Month_end_kWh_Total_L_EMS
+  );
+  const powerFor_ESS1_1 = count_power(
+    Month_start_kWh_Total_H_1_1,
+    Month_start_kWh_Total_M_1_1,
+    Month_start_kWh_Total_L_1_1,
+    Month_end_kWh_Total_H_1_1,
+    Month_end_kWh_Total_M_1_1,
+    Month_end_kWh_Total_L_1_1
+  );
+
+  const powerFor_ESS1_2 = count_power(
+    Month_start_kWh_Total_H_1_2,
+    Month_start_kWh_Total_M_1_2,
+    Month_start_kWh_Total_L_1_2,
+    Month_end_kWh_Total_H_1_2,
+    Month_end_kWh_Total_M_1_2,
+    Month_end_kWh_Total_L_1_2
+  );
+
+  const powerFor_ESS2_1 = count_power(
+    Month_start_kWh_Total_H_2_1,
+    Month_start_kWh_Total_M_2_1,
+    Month_start_kWh_Total_L_2_1,
+    Month_end_kWh_Total_H_2_1,
+    Month_end_kWh_Total_M_2_1,
+    Month_end_kWh_Total_L_2_1
+  );
+
+  const powerFor_ESS2_2 = count_power(
+    Month_start_kWh_Total_H_2_2,
+    Month_start_kWh_Total_M_2_2,
+    Month_start_kWh_Total_L_2_2,
+    Month_end_kWh_Total_H_2_2,
+    Month_end_kWh_Total_M_2_2,
+    Month_end_kWh_Total_L_2_2
+  );
+
+  const powerFor_ESS3_1 = count_power(
+    Month_start_kWh_Total_H_3_1,
+    Month_start_kWh_Total_M_3_1,
+    Month_start_kWh_Total_L_3_1,
+    Month_end_kWh_Total_H_3_1,
+    Month_end_kWh_Total_M_3_1,
+    Month_end_kWh_Total_L_3_1
+  );
+
+  const powerFor_ESS3_2 = count_power(
+    Month_start_kWh_Total_H_3_2,
+    Month_start_kWh_Total_M_3_2,
+    Month_start_kWh_Total_L_3_2,
+    Month_end_kWh_Total_H_3_2,
+    Month_end_kWh_Total_M_3_2,
+    Month_end_kWh_Total_L_3_2
+  );
+  const powerFor_ESS4_1 = count_power(
+    Month_start_kWh_Total_H_4_1,
+    Month_start_kWh_Total_M_4_1,
+    Month_start_kWh_Total_L_4_1,
+    Month_end_kWh_Total_H_4_1,
+    Month_end_kWh_Total_M_4_1,
+    Month_end_kWh_Total_L_4_1
+  );
+
+  // console.log("powerFor_aux: " + powerFor_aux);
+  // console.log("powerFor_ESS1_1: " + powerFor_ESS1_1);
+  // console.log("powerFor_ESS1_2: " + powerFor_ESS1_2);
+  // console.log("powerFor_ESS2_1: " + powerFor_ESS2_1);
+  // console.log("powerFor_ESS2_2: " + powerFor_ESS2_2);
+  // console.log("powerFor_ESS3_1: " + powerFor_ESS3_1);
+  // console.log("powerFor_ESS3_2: " + powerFor_ESS3_2);
+  // console.log("powerFor_ESS4_1: " + powerFor_ESS4_1);
+  // console.log("powerFor_EMS: " + powerFor_EMS);
+
+  const power = [];
+  power[0] = powerFor_aux;
+  power[1] = powerFor_EMS;
+  power[2] = powerFor_ESS1_1;
+  power[3] = powerFor_ESS1_2;
+  power[4] = powerFor_ESS2_1;
+  power[5] = powerFor_ESS2_2;
+  power[6] = powerFor_ESS3_1;
+  power[7] = powerFor_ESS3_2;
+  power[8] = powerFor_ESS4_1;
+
+  // 取得上個月的日期物件
+  const lastMonth = specified_date_clone14.subtract(1, "months");
+
+  // 取得上個月的年份及月份
+  const lastMonthYearMonth = lastMonth.format("YYYY-MM");
+  console.log("lastMonthYearMonth:", lastMonthYearMonth);
+  console.log("data_exacutive_rate:", data_exacutive_rate);
+  console.log("data_other_info:", data_other_info);
+  console.log("sumArray:", sumArray);
+  console.log("other_sum:", other_sum);
+  console.log("averageArray:", averageArray);
+  console.log("power:", power);
+
+  // 定義要存資料庫的時間
+  const MonthData = {
+    time: lastMonthYearMonth, //時間
+    sumArray: sumArray, //加總的服務品質
+    averageArray: averageArray, //表格SPM的TOTAL
+    other_sum: other_sum, //用電總量(IM/EXP/NET/終止服務/充放電效率)
+    power: power,
+    totMWH: powerFor_aux, //輔助用電總量
+  };
+
+  // 每天的資料存到 CouchDB 中
+  monthly_reportDb.insert(MonthData, (err, body) => {
+    if (err) {
+      console.error("Error inserting document:", err);
+    } else {
+      console.log("Document inserted successfully:", body);
+    }
+  });
+
+  //撈出上期及去年同期資料
+  const last_month = specified_date_clone15
+    .subtract(2, "months") // 減去兩個月
+    .format("YYYY-MM");
+
+  const last_year = specified_date_clone16
+    .subtract(1, "year") // 減去一年
+    .subtract(1, "months") // 再減去一個月
+    .format("YYYY-MM");
+
+  console.log("last_month:", last_month);
+  console.log("last_year:", last_year);
+
+  const filterlast_month = {
+    selector: {
+      time: {
+        $eq: last_month, // 時間等於 last_month
+      },
+    },
+    limit: 1, // 只讀取一個文檔
+  };
+  const filterlast_year = {
+    selector: {
+      time: {
+        $eq: last_year, // 時間等於 去年
+      },
+    },
+    limit: 1, // 只讀取一個文檔
+  };
+  const lastMonthDoc = await monthly_reportDb.find(filterlast_month);
+  const lastYearDoc = await monthly_reportDb.find(filterlast_year);
+
+  // 將符合條件的資料存入陣列
+  const data1 = [];
+  const data2 = [];
+  const data3 = [];
+  const data4 = [];
+
+  // 提取所需屬性並存入陣列
+  if (lastMonthDoc.docs.length > 0) {
+    const { sumArray, other_sum, averageArray } = lastMonthDoc.docs[0];
+
+    // 直接將數值合併到一個新的陣列中
+    const extractedData1 = [
+      ...sumArray,
+      ...other_sum.map((value) => parseFloat(value)),
+      ...averageArray,
+    ];
+    data1.push(extractedData1);
+  }
+  console.log("符合上個月條件的資料:", data1[0]);
+
+  if (lastMonthDoc.docs.length > 0) {
+    const { power } = lastMonthDoc.docs[0];
+    // 直接將數值合併到一個新的陣列中
+    const extractedData = [...power];
+    data3.push(extractedData);
+  }
+  console.log("我是power 1:", data3[0]);
+
+  if (lastYearDoc.docs.length > 0) {
+    const { sumArray, other_sum, averageArray } = lastYearDoc.docs[0];
+
+    // 直接將數值合併到一個新的陣列中
+    const extractedData2 = [
+      ...sumArray,
+      ...other_sum.map((value) => parseFloat(value)),
+      ...averageArray,
+    ];
+    data2.push(extractedData2);
+  }
+  console.log("符合去年同期條件的資料:", data2[0]);
+
+  if (lastYearDoc.docs.length > 0) {
+    const { power } = lastYearDoc.docs[0];
+
+    // 直接將數值合併到一個新的陣列中
+    const extractedData = [...power];
+    data4.push(extractedData);
+  }
+  console.log("我是power 2:", data4[0]);
+
+  return {
+    lastMonthYearMonth: lastMonthYearMonth, //年-月
+    data_exacutive_rate: data_exacutive_rate, //每月的服務品質指標加總結果 SPM最大最小 31筆
+    data_other_info: data_other_info, //每月的總用電量統計 終止服務 充放電效率
+    other_sum: other_sum, //表格中統計總用電量以及終止服務時數
+    sumArray: sumArray, // 表格服務品質指標的TOTAL欄位
+    averageArray: averageArray, //表格SPM的TOTAL
+    power: power, //輔助用電分析
+    last_month: data1[0], //前期
+    last_month_power: data3[0], //前期power
+    last_year: data2[0], //去年同期
+    last_year_power: data4[0], //去年同期power
+  };
+}
+
+function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
+  // 計算時間1的總共差值
+  const totalDiff1 = start_H * 1000000 + start_M * 1000 + start_L * 0.1;
+
+  // 計算時間2的總共差值
+  const totalDiff2 = end_H * 1000000 + end_M * 1000 + end_L * 0.1;
+
+  // 計算兩個時間的差值
+  const totalDifference = totalDiff2 - totalDiff1;
+
+  return totalDifference;
+}
+
+getMonthData();
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // async function getYearData() {
 //   const last_year = specified_date_clone17
 //     .subtract(1, "year") // 減去一年

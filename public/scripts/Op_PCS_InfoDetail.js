@@ -60,6 +60,8 @@ async function updateData() {
   $("#chargeStatus").text(data.chargeStatus);
   $("#tot_E_chg").text(data.tot_E_chg);
   $("#tot_E_dcg").text(data.tot_E_dcg);
+  $("#workStatus").text(data.workStatus);
+  $("#workMode").text(data.workMode);
 
   /*輸出限制************************************* */
   $('#max_P_chg').text(data.max_P_chg);

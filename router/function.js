@@ -76,10 +76,77 @@ function mapchargeStatus(decimalValue) {
     return "Non-working state";
   }
 }
+//***************************************************************************** */
+function mapworkStatus_page(decimalValue) {
+  // 將十進制數值轉換為二進制字串
+  const binaryString = decimalValue.toString(2).padStart(32, "0");
 
+  // 尋找第一個為1的位元的索引
+  const indexOfOne = 32 - binaryString.indexOf("1");
+
+  // 根據索引對應的位元，返回相應的狀態
+  const statuses = {
+    0: "運作中",
+    3: "停止-Key stop",
+    4: "準備中",
+    6: "啟動中",
+    9: "停止-錯誤",
+    10: "運作-告警",
+    11: "降載運作",
+    15: "通訊異常",
+  };
+
+  return statuses[indexOfOne] || "Unknown status";
+}
+
+// // 範例使用
+// const decimalValue = 8; // 這裡使用8作為範例，代表第四位元為1
+// const status = mapworkStatus_page(decimalValue);
+// console.log(status); // 輸出目前的狀態
+
+// bit 0: Running
+// bit 3: Key stop
+// bit 4: Standby
+// bit 6: Starting
+// bit 9: Fault stop
+// bit 10: Alarm running
+// bit 11: Derated running
+// bit 15: Communication exception
+//***************************************************************************** */
+
+function mapworkMode_page(decimalValue) {
+  // 將十進制數值轉換為二進制字串
+  const binaryString = decimalValue.toString(2).padStart(32, "0");
+
+  // 尋找第一個為1的位元的索引
+  const indexOfOne = 32 - binaryString.indexOf("1");
+
+  // 根據索引對應的位元，返回相應的狀態
+  const statuses = {
+    0: "On-grid constant current",
+    1: "On-grid constant voltage",
+    2: "On-grid constant power (AC)",
+    3: "On-grid constant power (DC)",
+    9: "On-grid mode",
+    10: "Off-grid mode",
+    11: "VSG mode",
+  };
+
+  return statuses[indexOfOne] || "Unknown status";
+}
+// bit 0: On-grid constant current
+// bit 1: On-grid constant voltage
+// bit 2: On-grid constant power (AC)
+// bit 3: On-grid constant power (DC)
+// bit 9: On-grid mode
+// bit 10: Off-grid mode
+// bit 11: VSG mode
+
+function mapgridStatus_page() {}
 //***************************************************************************** */
 //PCSWorkingStatus
 function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
+  console.log("#1;" + lc1 + "#2;" + lc2 + "#3;" + lc3 + "#4;" + lc4);
   const sum = lc1 + lc2 + lc3 + lc4;
   if (sum === 7) {
     return "運轉中";
@@ -101,42 +168,41 @@ function mapPCSonlineNum(lc1, lc2, lc3, lc4) {
 
 function mapModeActPas(input) {
   if (input === 0) {
-    return "Active mode";
+    return "主動";
   }
   if (input === 1) {
-    return "Passive mode";
+    return "被動";
   }
 }
 function mapModeQctrl(input) {
   if (input === 85) {
-    return "Off";
+    return "關閉";
   }
   if (input === 161) {
-    return "Power factor mode";
+    return "功因模式";
   }
   if (input === 162) {
-    return "Reactive power mode";
+    return "功率(kVar)模式";
   }
 }
 function mapStandbyCmd(input) {
   if (input === 85) {
-    return "PCS exit standby";
+    return "停止待機";
   }
   if (input === 170) {
-    return "PCS standby";
+    return "待機";
   }
 }
 function mapModeLR(input) {
+  if (input === 0) {
+    return "本地 & 遠端";
+  }
   if (input === 1) {
-    return "Local & Remote";
+    return "遠端";
   }
   if (input === 2) {
-    return "Remote";
-  }
-  if (input === 3) {
-    return "local";
-  }
-  else {
+    return "本地";
+  } else {
     return "undefined";
   }
 }
@@ -696,7 +762,7 @@ function mapL_M_systemMode(var1, var2, var3, var4) {
     var4_SubSys_Availability == 1 &&
     var4_edReg == 1
   ) {
-    console.log("調頻服務中");
+    //console.log("調頻服務中");
     return "調頻服務中";
   } else {
     if (
@@ -705,10 +771,10 @@ function mapL_M_systemMode(var1, var2, var3, var4) {
       (var3_SubSys_Availability == 1 && var3_edReg == 1) ||
       (var4_SubSys_Availability == 1 && var4_edReg == 1)
     ) {
-      console.log("部分服務中");
+      //console.log("部分服務中");
       return "部分服務中";
     } else {
-      console.log("暫停服務");
+      //console.log("暫停服務");
       return "暫停服務";
     }
   }
@@ -737,14 +803,16 @@ function mapminSOH(...input) {
 function mapSysMode(SysMode) {
   const binary = SysMode.toString(2).padStart(32, "0");
   console.log("binary:" + binary);
-  const bit = 31 - 15;
-  console.log("bit:" + bit);
-  if (binary[bit] === "0") {
+  const bit15 = 31 - 15;
+  const bit5 = 31 - 5;
+  console.log("bit15:" + bit15);
+  console.log("bit5:" + bit5);
+  if (binary[bit15] === "0") {
     //console.log("Not Available");
-    return "Not Available";
-  } else if (binary[bit] === "1") {
+    return "停機";
+  } else if (binary[bit15] === "1" && binary[bit5] === "1") {
     //console.log("Available");
-    return "Available";
+    return "E-dreg";
   }
 }
 
@@ -772,11 +840,19 @@ function mapStatusAllPCS(pcs1, pcs2, pcs3, pcs4) {
     pcs3_binary[bit] === "1" ||
     pcs4_binary[bit] === "1"
   ) {
-    console.log("Available");
-    //return "Available";
+    //console.log("Available");
+    return "全部投入";
+  } else if (
+    pcs1_binary[bit] === "0" ||
+    pcs2_binary[bit] === "0" ||
+    pcs3_binary[bit] === "0" ||
+    pcs4_binary[bit] === "0"
+  ) {
+    //console.log("Available");
+    return "全部切離";
   } else {
-    console.log("Not Available");
-    //return "Not Available";
+    //console.log("Not Available");
+    return "部分投入";
   }
 }
 //mapStatusAllPCS(0, 0, 0, 0);
@@ -786,7 +862,7 @@ function mapStatusAllBMS(bms1, bms2, bms3, bms4) {
   const bms1_binary = bms1.toString(2).padStart(32, "0");
   const bms2_binary = bms2.toString(2).padStart(32, "0");
   const bms3_binary = bms3.toString(2).padStart(32, "0");
-  const bms4_binary = bms3.toString(2).padStart(32, "0");
+  const bms4_binary = bms4.toString(2).padStart(32, "0");
 
   console.log("bms1_binary:" + bms1_binary);
   console.log("bms2_binary:" + bms2_binary);
@@ -809,10 +885,22 @@ function mapStatusAllBMS(bms1, bms2, bms3, bms4) {
     bms4_binary[bit1] === "1"
   ) {
     //console.log("Available");
-    return "Available";
+    return "全部投入";
+  } else if (
+    bms1_binary[bit0] === "0" ||
+    bms2_binary[bit0] === "0" ||
+    bms3_binary[bit0] === "0" ||
+    bms4_binary[bit0] === "0" ||
+    bms1_binary[bit1] === "0" ||
+    bms2_binary[bit1] === "0" ||
+    bms3_binary[bit1] === "0" ||
+    bms4_binary[bit1] === "0"
+  ) {
+    //console.log("Not Available");
+    return "部分投入";
   } else {
     //console.log("Not Available");
-    return "Not Available";
+    return "全部切離";
   }
 }
 //******************************************************************************* */
@@ -950,7 +1038,6 @@ function mapUPSwarning(inputs, checkbit) {
 //******************************************************************************* *///******************************************************************************* */
 
 module.exports = {
-  mapPCSworkStatus,
   mapPCSonlineNum,
   calculateAverage,
   mapchargeStatus,
@@ -1016,6 +1103,10 @@ module.exports = {
   mapEdReg_SS,
   //****************** */
   mapUPSwarning,
+  mapworkMode_page,
+  mapworkStatus_page,
+  mapPCSworkStatus,
+  mapgridStatus_page,
 };
 
 // //***************************************************************************** */
@@ -1159,4 +1250,3 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 // console.log(mn_2);
 // const op_2 = Determine_DL_of_AlarmWords([rawData1, rawData2, rawData3, rawData4]);
 // console.log(op_2);
-

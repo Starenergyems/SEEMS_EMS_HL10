@@ -6,7 +6,7 @@ const path = require("path");
 const app = express(); // Create an Express application instance
 const cors = require("cors");
 const router = express.Router();
-
+const moment = require("moment");
 // const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
@@ -40,6 +40,10 @@ const {
   Calculate_N1450_PF,
   Calculate_Tr_oilTemp,
   Count_SpecificClosedBit,
+  mapworkMode_page,
+  mapworkStatus_page,
+  mapgridStatus,
+  mapgridStatus_page,
 } = require("./function");
 
 app.set("view engine", "ejs");
@@ -69,10 +73,10 @@ router.use(
 //   express.static(path.join(__dirname, "../public"))
 // );
 // 共同的中間件，處理 /operateinfo/pcs/infodetail/1、2、3、4、5 及其子路徑下的靜態文件
-router.use(
-  "/operateinfo/pcs/infodetail/:id",
-  express.static(path.join(__dirname, "../public"))
-);
+// app.use(
+//   "/operateinfo/pcs/infodetail/:id",
+//   express.static(path.join(__dirname, "../public"))
+// );
 
 //************************************************************************************************************************************************ */
 
@@ -123,6 +127,18 @@ const getLatestDocument = async (nano) => {
   });
 };
 
+// 定義全域變數
+let total_exp = 0;
+let total_imp = 0;
+let lc1_exp = 0;
+let lc1_imp = 0;
+let lc2_exp = 0;
+let lc2_imp = 0;
+let lc3_exp = 0;
+let lc3_imp = 0;
+let lc4_exp = 0;
+let lc4_imp = 0;
+
 //pcs主頁
 var pcs_summary_variables;
 async function queryPcsSum() {
@@ -138,6 +154,41 @@ async function queryPcsSum() {
   lc4Data = allData[3];
   gcData = allData[6];
 
+  const now = moment();
+  const formattedNow = now.format("HH:mm:ss:SSS");
+  console.log("now: " + formattedNow);
+
+  const startOfDay = moment().startOf("day");
+  const formattedStartOfDay = startOfDay.format("HH:mm:ss:SSS");
+  console.log("startOfDay: " + formattedStartOfDay);
+
+  if (now.isSame(startOfDay, "day")) {
+    // 更新全域變數
+    total_exp =
+      lc1Data.System[402062] +
+      lc2Data.System[402062] +
+      lc3Data.System[402062] +
+      lc4Data.System[402062];
+    total_imp =
+      lc1Data.System[402060] +
+      lc2Data.System[402060] +
+      lc3Data.System[402060] +
+      lc4Data.System[402060];
+
+    lc1_exp = lc1Data.System[402062];
+    lc1_imp = lc1Data.System[402060];
+    lc2_exp = lc2Data.System[402062];
+    lc2_imp = lc2Data.System[402060];
+    lc3_exp = lc3Data.System[402062];
+    lc3_imp = lc3Data.System[402060];
+    lc4_exp = lc4Data.System[402062];
+    lc4_imp = lc4Data.System[402060];
+
+    console.log("lc3_exp: " + lc3_exp);
+    console.log("lc1_exp: " + lc1_exp);
+    console.log("已更新全域變數");
+  }
+
   pcs_summary_variables = {
     //id,
     permission: "manager",
@@ -147,42 +198,77 @@ async function queryPcsSum() {
       lc3Data.System[402052],
       lc4Data.System[402052]
     ),
-    onlineNum: mapPCSonlineNum(
-      lc1Data.System[402052],
-      lc2Data.System[402052],
-      lc3Data.System[402052],
-      lc4Data.System[402052]
+    onlineNum:
+      lc1Data.System[402052] +
+      lc2Data.System[402052] +
+      lc3Data.System[402052] +
+      lc4Data.System[402052],
+
+    totalP: scaleProcess(
+      lc1Data.System[402055] +
+        lc2Data.System[402055] +
+        lc3Data.System[402055] +
+        lc4Data.System[402055],
+      0.1,
+      1
     ),
 
-    totalP: calculateAdd(
-      lc1Data.System[402055],
-      lc2Data.System[402055],
-      lc3Data.System[402055],
-      lc4Data.System[402055]
-    ),
-
-    totalQ: calculateAdd(
-      lc1Data.System[402057],
-      lc2Data.System[402057],
-      lc3Data.System[402057],
-      lc4Data.System[402057]
+    totalQ: scaleProcess(
+      lc1Data.System[402057] +
+        lc2Data.System[402057] +
+        lc3Data.System[402057] +
+        lc4Data.System[402057],
+      0.1,
+      1
     ),
 
     totalRatedP: scaleProcess(gcData.System[400005], 0.1, 1),
-    today_E_chg: scaleProcess(lc1Data.System[402064], 0.01, 1),
-    today_E_dcg: scaleProcess(lc1Data.System[402066], 0.01, 1),
-    tot_E_chg: scaleProcess(lc1Data.System[402060], 0.01, 1),
-    tot_E_dcg: scaleProcess(lc1Data.System[402062], 0.01, 1),
+
+    today_E_chg: scaleProcess(
+      lc1Data.System[402060] +
+        lc2Data.System[402060] +
+        lc3Data.System[402060] +
+        lc4Data.System[402060] -
+        total_imp,
+      0.01,
+      1
+    ),
+    today_E_dcg: scaleProcess(
+      lc1Data.System[402062] +
+        lc2Data.System[402062] +
+        lc3Data.System[402062] +
+        lc4Data.System[402062] -
+        total_exp,
+      0.1,
+      1
+    ),
+
+    tot_E_chg: scaleProcess(
+      lc1Data.System[402060] +
+        lc2Data.System[402060] +
+        lc3Data.System[402060] +
+        lc1Data.System[402060],
+      1,
+      1
+    ),
+    tot_E_dcg: scaleProcess(
+      lc1Data.System[402062] +
+        lc2Data.System[402062] +
+        lc3Data.System[402062] +
+        lc4Data.System[402062],
+      1,
+      1
+    ),
     //******************************************************************** */
     //lc1
     onlineNum_LC1: lc1Data.System[402052],
     ratedP_LC1: 3450, //這個數值是固定的 1725*2
-    activePower_LC1: scaleProcess(lc1Data.System[402055], 0.01, 1),
-    reactivePower_LC1: scaleProcess(lc1Data.System[402057], 0.01, 1),
-    today_E_chg_LC1: scaleProcess(lc1Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC1: scaleProcess(lc1Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC1: scaleProcess(lc1Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC1: scaleProcess(lc1Data.System[402066], 0.01, 1),
+    activePower_LC1: scaleProcess(lc1Data.System[402055], 0.1, 1),
+    reactivePower_LC1: scaleProcess(lc1Data.System[402057], 0.1, 1),
+    today_E_chg_LC1: scaleProcess(lc1Data.System[402060] - lc1_imp, 0.1, 1),
+    today_E_dcg_LC1: scaleProcess(lc1Data.System[402062] - lc1_exp, 0.1, 1),
+    tot_E_chg_LC1: scaleProcess(lc1Data.System[402060], 1, 1),
+    tot_E_dcg_LC1: scaleProcess(lc1Data.System[402062], 1, 1),
 
     alarm_PCS1_1: countPCSAlarmAndFault(
       lc1Data.PCS[403063],
@@ -214,12 +300,12 @@ async function queryPcsSum() {
     //lc2
     onlineNum_LC2: lc2Data.System[402052],
     ratedP_LC2: 3450, //這個數值是固定的 1725*2
-    activePower_LC2: scaleProcess(lc2Data.System[402055], 0.01, 1),
-    reactivePower_LC2: scaleProcess(lc2Data.System[402057], 0.01, 1),
-    today_E_chg_LC2: scaleProcess(lc2Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC2: scaleProcess(lc2Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC2: scaleProcess(lc2Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC2: scaleProcess(lc2Data.System[402066], 0.01, 1),
+    activePower_LC2: scaleProcess(lc2Data.System[402055], 0.1, 1),
+    reactivePower_LC2: scaleProcess(lc2Data.System[402057], 0.1, 1),
+    today_E_chg_LC2: scaleProcess(lc2Data.System[402060] - lc2_imp, 0.1, 1),
+    today_E_dcg_LC2: scaleProcess(lc2Data.System[402062] - lc2_exp, 0.1, 1),
+    tot_E_chg_LC2: scaleProcess(lc2Data.System[402060], 1, 1),
+    tot_E_dcg_LC2: scaleProcess(lc2Data.System[402062], 1, 1),
 
     alarm_PCS2_1: countPCSAlarmAndFault(
       lc2Data.PCS[403063],
@@ -251,12 +337,12 @@ async function queryPcsSum() {
     //lc3
     onlineNum_LC3: lc3Data.System[402052],
     ratedP_LC3: 3450, //這個數值是固定的 1725*2
-    activePower_LC3: scaleProcess(lc3Data.System[402055], 0.01, 1),
-    reactivePower_LC3: scaleProcess(lc3Data.System[402057], 0.01, 1),
-    today_E_chg_LC3: scaleProcess(lc3Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC3: scaleProcess(lc3Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC3: scaleProcess(lc3Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC3: scaleProcess(lc3Data.System[402066], 0.01, 1),
+    activePower_LC3: scaleProcess(lc3Data.System[402055], 0.1, 1),
+    reactivePower_LC3: scaleProcess(lc3Data.System[402057], 0.1, 1),
+    today_E_chg_LC3: scaleProcess(lc3Data.System[402064] - lc3_imp, 0.1, 1), //算
+    today_E_dcg_LC3: scaleProcess(lc3Data.System[402066] - lc3_exp, 0.1, 1), //算
+    tot_E_chg_LC3: scaleProcess(lc3Data.System[402060], 1, 1),
+    tot_E_dcg_LC3: scaleProcess(lc3Data.System[402062], 1, 1),
 
     alarm_PCS3_1: countPCSAlarmAndFault(
       lc3Data.PCS[403063],
@@ -288,12 +374,12 @@ async function queryPcsSum() {
     //lc4
     onlineNum_LC4: lc4Data.System[402052],
     ratedP_LC4: 1725, //這個數值是固定的 1725
-    activePower_LC4: scaleProcess(lc4Data.System[402055], 0.01, 1),
-    reactivePower_LC4: scaleProcess(lc4Data.System[402057], 0.01, 1),
-    today_E_chg_LC4: scaleProcess(lc4Data.System[402060], 0.01, 1), //算
-    today_E_dcg_LC4: scaleProcess(lc4Data.System[402062], 0.01, 1), //算
-    tot_E_chg_LC4: scaleProcess(lc4Data.System[402064], 0.01, 1),
-    tot_E_dcg_LC4: scaleProcess(lc4Data.System[402066], 0.01, 1),
+    activePower_LC4: scaleProcess(lc4Data.System[402055], 0.1, 1),
+    reactivePower_LC4: scaleProcess(lc4Data.System[402057], 0.1, 1),
+    today_E_chg_LC4: scaleProcess(lc4Data.System[402060] - lc4_imp, 0.1, 1), //算
+    today_E_dcg_LC4: scaleProcess(lc4Data.System[402062] - lc4_exp, 0.1, 1), //算
+    tot_E_chg_LC4: scaleProcess(lc4Data.System[402060], 1, 1),
+    tot_E_dcg_LC4: scaleProcess(lc4Data.System[402062], 1, 1),
 
     alarm_PCS4_1: countPCSAlarmAndFault(
       lc4Data.PCS[403534],
@@ -315,6 +401,7 @@ async function queryPcsSum() {
 router.get("/operateinfo/pcs", async (req, res) => {
   try {
     await queryPcsSum();
+    //console.log("workStatus" + workStatus);
     res.render("Op_PCS_InfoSummary", pcs_summary_variables);
   } catch (error) {
     console.error(error);
@@ -374,11 +461,10 @@ async function queryPcsDetail() {
     pcsDetail_variables = {
       permission: "manager",
       pageNumber,
-      No_of_PCS:No_of_PCS,
-      Workingstatus: mapPCSWorkingstatus(
-        lcData.PCS[403078],
-        lcData.PCS[403080]
-      ),
+      No_of_PCS: No_of_PCS,
+      workStatus: mapworkStatus_page(lcData.PCS[403078]),
+      workMode: mapworkMode_page(lcData.PCS[403080]),
+      //Workingstatus
       chargeStatus: mapWordStatus(lcData.PCS[403069], pcsCHGStatus_MT),
       tot_E_chg: scaleProcess(lcData.PCS[403074], 0.01, 1),
       tot_E_dcg: scaleProcess(lcData.PCS[403076], 0.01, 1),
@@ -388,7 +474,7 @@ async function queryPcsDetail() {
       // max_Q_c: scaleProcess(lcData.PCS[403069], 0.1, 1), //刪除
       HB_Counts: lcData.PCS[403039],
       leakage_I: scaleProcess(lcData.PCS[403044], 0.01, 2),
-      //gridStatus: mapWordStatus(lcData.PCS[403054], pcsGridStatus_MT), //刪除
+      //gridStatus: mapgridStatus_page(lcData.PCS[403054], pcsGridStatus_MT), //刪除
       activePower: scaleProcess(lcData.PCS[403059], 0.1, 1),
       reactivePower: scaleProcess(lcData.PCS[403061], 0.1, 1),
       powerFactor: scaleProcess(lcData.PCS[403085], 0.001, 3),
@@ -440,7 +526,7 @@ async function queryPcsDetail() {
       // max_Q_c: scaleProcess(lcData.PCS[403069], 0.1, 1),
       HB_Counts: lcData.PCS[403039],
       leakage_I: scaleProcess(lcData.PCS[403044], 0.01, 2),
-      // gridStatus: mapWordStatus(lcData.PCS[403054], pcsGridStatus_MT),
+      // gridStatus: mapgridStatus_page(lcData.PCS[403054], pcsGridStatus_MT),
       activePower: scaleProcess(lcData.PCS[403098], 0.1, 1),
       reactivePower: scaleProcess(lcData.PCS[403100], 0.1, 1),
       powerFactor: scaleProcess(lcData.PCS[403124], 0.001, 3),
@@ -478,10 +564,8 @@ async function queryPcsDetail() {
       permission: "manager",
       pageNumber,
       No_of_PCS,
-      Workingstatus: mapPCSWorkingstatus(
-        lcData.PCS[403549],
-        lcData.PCS[403551]
-      ),
+      workStatus: mapworkStatus_page(lcData.PCS[403549]),
+      workMode: mapworkMode_page(lcData.PCS[403551]),
       chargeStatus: mapWordStatus(lcData.PCS[403540], pcsCHGStatus_MT),
       tot_E_chg: scaleProcess(lcData.PCS[403545], 0.01, 1),
       tot_E_dcg: scaleProcess(lcData.PCS[403547], 0.01, 1),
@@ -491,7 +575,7 @@ async function queryPcsDetail() {
       max_Q_c: scaleProcess(lcData.PCS[403569], 0.1, 1),
       HB_Counts: lcData.PCS[403507],
       leakage_I: scaleProcess(lcData.PCS[403508], 0.01, 2),
-      gridStatus: mapWordStatus(lcData.PCS[403554], pcsGridStatus_MT),
+      gridStatus: mapgridStatus_page(lcData.PCS[403554], pcsGridStatus_MT),
       activePower: scaleProcess(lcData.PCS[403526], 0.1, 1),
       reactivePower: scaleProcess(lcData.PCS[403528], 0.1, 1),
       powerFactor: scaleProcess(lcData.PCS[403556], 0.001, 3),
@@ -531,9 +615,7 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
     if (pageNumber === 7) {
       res.render("Op_PCS_InfoDetail", pcsDetail_variables);
     } else {
-      res.render("Op_PCS_InfoDetail_LC1_3", 
-        pcsDetail_variables,
-      );
+      res.render("Op_PCS_InfoDetail_LC1_3", pcsDetail_variables);
     }
   } catch (error) {
     console.error(error);

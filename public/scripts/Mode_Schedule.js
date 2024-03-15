@@ -237,6 +237,41 @@ function closePopup_dSS_No() {
 
 /////////////////////////////////////////////////////////////////////////
 
+const dateOfSchedule = document.querySelector("#schdDate");
+
+const setBut_goToAnotherDay = document.querySelector("#goToAnotherDay");
+setBut_goToAnotherDay.addEventListener("click", Go_to_another_day);
+async function Go_to_another_day() {
+    let getData = await change_dateNumber();
+    console.log(getData);
+
+    dateOfSchedule.textContent = getData.scheduleDate;
+    setBut_goToAnotherDay.textContent = getData.anotherDay;
+
+    updateData_Scedule(getData.KVPairs);
+    // console.log("點擊時觸發更新");
+}
+
+async function change_dateNumber() {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/change_dateNumber", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(),
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////
+
 async function updateData() {                                   // 更新資料 ajax
     var router = window.location.href + "/data";
     var data = await getData(router);
@@ -262,13 +297,112 @@ async function updateData() {                                   // 更新資料 
     assign_TextContent_To_SpID("#exeCmd_P", data.exeCmd_P);
     assign_TextContent_To_SpID("#sbyCmd_P", data.sbyCmd_P);
 
-    assign_TextContent_To_SpID("#P_schd_00_0", data.P_schd_00_0);
-    assign_TextContent_To_SpID("#P_schd_00_1", data.P_schd_00_1);
-    assign_TextContent_To_SpID("#P_schd_00_2", data.P_schd_00_2);
-    assign_TextContent_To_SpID("#P_schd_00_3", data.P_schd_00_3);
-    // assign_TextContent_To_SpID("#use", data.use);
-    // assign_TextContent_To_SpID("#use", data.use);
+    updateData_Scedule(data);
+    // console.log("定時更新");
+}
 
+function updateData_Scedule(Data) {
+    assign_TextContent_To_SpID("#P_schd_00_0", Data.P_schd_00_0);
+    assign_TextContent_To_SpID("#P_schd_00_1", Data.P_schd_00_1);
+    assign_TextContent_To_SpID("#P_schd_00_2", Data.P_schd_00_2);
+    assign_TextContent_To_SpID("#P_schd_00_3", Data.P_schd_00_3);
+    assign_TextContent_To_SpID("#P_schd_01_0", Data.P_schd_01_0);
+    assign_TextContent_To_SpID("#P_schd_01_1", Data.P_schd_01_1);
+    assign_TextContent_To_SpID("#P_schd_01_2", Data.P_schd_01_2);
+    assign_TextContent_To_SpID("#P_schd_01_3", Data.P_schd_01_3);
+
+    assign_TextContent_To_SpID("#P_schd_02_0", Data.P_schd_02_0);
+    assign_TextContent_To_SpID("#P_schd_02_1", Data.P_schd_02_1);
+    assign_TextContent_To_SpID("#P_schd_02_2", Data.P_schd_02_2);
+    assign_TextContent_To_SpID("#P_schd_02_3", Data.P_schd_02_3);
+    assign_TextContent_To_SpID("#P_schd_03_0", Data.P_schd_03_0);
+    assign_TextContent_To_SpID("#P_schd_03_1", Data.P_schd_03_1);
+    assign_TextContent_To_SpID("#P_schd_03_2", Data.P_schd_03_2);
+    assign_TextContent_To_SpID("#P_schd_03_3", Data.P_schd_03_3);
+    assign_TextContent_To_SpID("#P_schd_04_0", Data.P_schd_04_0);
+    assign_TextContent_To_SpID("#P_schd_04_1", Data.P_schd_04_1);
+    assign_TextContent_To_SpID("#P_schd_04_2", Data.P_schd_04_2);
+    assign_TextContent_To_SpID("#P_schd_04_3", Data.P_schd_04_3);
+    assign_TextContent_To_SpID("#P_schd_05_0", Data.P_schd_05_0);
+    assign_TextContent_To_SpID("#P_schd_05_1", Data.P_schd_05_1);
+    assign_TextContent_To_SpID("#P_schd_05_2", Data.P_schd_05_2);
+    assign_TextContent_To_SpID("#P_schd_05_3", Data.P_schd_05_3);
+    assign_TextContent_To_SpID("#P_schd_06_0", Data.P_schd_06_0);
+    assign_TextContent_To_SpID("#P_schd_06_1", Data.P_schd_06_1);
+    assign_TextContent_To_SpID("#P_schd_06_2", Data.P_schd_06_2);
+    assign_TextContent_To_SpID("#P_schd_06_3", Data.P_schd_06_3);
+    assign_TextContent_To_SpID("#P_schd_07_0", Data.P_schd_07_0);
+    assign_TextContent_To_SpID("#P_schd_07_1", Data.P_schd_07_1);
+    assign_TextContent_To_SpID("#P_schd_07_2", Data.P_schd_07_2);
+    assign_TextContent_To_SpID("#P_schd_07_3", Data.P_schd_07_3);
+    assign_TextContent_To_SpID("#P_schd_08_0", Data.P_schd_08_0);
+    assign_TextContent_To_SpID("#P_schd_08_1", Data.P_schd_08_1);
+    assign_TextContent_To_SpID("#P_schd_08_2", Data.P_schd_08_2);
+    assign_TextContent_To_SpID("#P_schd_08_3", Data.P_schd_08_3);
+    assign_TextContent_To_SpID("#P_schd_09_0", Data.P_schd_09_0);
+    assign_TextContent_To_SpID("#P_schd_09_1", Data.P_schd_09_1);
+    assign_TextContent_To_SpID("#P_schd_09_2", Data.P_schd_09_2);
+    assign_TextContent_To_SpID("#P_schd_09_3", Data.P_schd_09_3);
+    assign_TextContent_To_SpID("#P_schd_10_0", Data.P_schd_10_0);
+    assign_TextContent_To_SpID("#P_schd_10_1", Data.P_schd_10_1);
+    assign_TextContent_To_SpID("#P_schd_10_2", Data.P_schd_10_2);
+    assign_TextContent_To_SpID("#P_schd_10_3", Data.P_schd_10_3);
+
+    assign_TextContent_To_SpID("#P_schd_11_0", Data.P_schd_11_0);
+    assign_TextContent_To_SpID("#P_schd_11_1", Data.P_schd_11_1);
+    assign_TextContent_To_SpID("#P_schd_11_2", Data.P_schd_11_2);
+    assign_TextContent_To_SpID("#P_schd_11_3", Data.P_schd_11_3);
+    assign_TextContent_To_SpID("#P_schd_12_0", Data.P_schd_12_0);
+    assign_TextContent_To_SpID("#P_schd_12_1", Data.P_schd_12_1);
+    assign_TextContent_To_SpID("#P_schd_12_2", Data.P_schd_12_2);
+    assign_TextContent_To_SpID("#P_schd_12_3", Data.P_schd_12_3);
+    assign_TextContent_To_SpID("#P_schd_13_0", Data.P_schd_13_0);
+    assign_TextContent_To_SpID("#P_schd_13_1", Data.P_schd_13_1);
+    assign_TextContent_To_SpID("#P_schd_13_2", Data.P_schd_13_2);
+    assign_TextContent_To_SpID("#P_schd_13_3", Data.P_schd_13_3);
+    assign_TextContent_To_SpID("#P_schd_14_0", Data.P_schd_14_0);
+    assign_TextContent_To_SpID("#P_schd_14_1", Data.P_schd_14_1);
+    assign_TextContent_To_SpID("#P_schd_14_2", Data.P_schd_14_2);
+    assign_TextContent_To_SpID("#P_schd_14_3", Data.P_schd_14_3);
+    assign_TextContent_To_SpID("#P_schd_15_0", Data.P_schd_15_0);
+    assign_TextContent_To_SpID("#P_schd_15_1", Data.P_schd_15_1);
+    assign_TextContent_To_SpID("#P_schd_15_2", Data.P_schd_15_2);
+    assign_TextContent_To_SpID("#P_schd_15_3", Data.P_schd_15_3);
+    assign_TextContent_To_SpID("#P_schd_16_0", Data.P_schd_16_0);
+    assign_TextContent_To_SpID("#P_schd_16_1", Data.P_schd_16_1);
+    assign_TextContent_To_SpID("#P_schd_16_2", Data.P_schd_16_2);
+    assign_TextContent_To_SpID("#P_schd_16_3", Data.P_schd_16_3);
+    assign_TextContent_To_SpID("#P_schd_17_0", Data.P_schd_17_0);
+    assign_TextContent_To_SpID("#P_schd_17_1", Data.P_schd_17_1);
+    assign_TextContent_To_SpID("#P_schd_17_2", Data.P_schd_17_2);
+    assign_TextContent_To_SpID("#P_schd_17_3", Data.P_schd_17_3);
+    assign_TextContent_To_SpID("#P_schd_18_0", Data.P_schd_18_0);
+    assign_TextContent_To_SpID("#P_schd_18_1", Data.P_schd_18_1);
+    assign_TextContent_To_SpID("#P_schd_18_2", Data.P_schd_18_2);
+    assign_TextContent_To_SpID("#P_schd_18_3", Data.P_schd_18_3);
+    assign_TextContent_To_SpID("#P_schd_19_0", Data.P_schd_19_0);
+    assign_TextContent_To_SpID("#P_schd_19_1", Data.P_schd_19_1);
+    assign_TextContent_To_SpID("#P_schd_19_2", Data.P_schd_19_2);
+    assign_TextContent_To_SpID("#P_schd_19_3", Data.P_schd_19_3);
+    assign_TextContent_To_SpID("#P_schd_20_0", Data.P_schd_20_0);
+    assign_TextContent_To_SpID("#P_schd_20_1", Data.P_schd_20_1);
+    assign_TextContent_To_SpID("#P_schd_20_2", Data.P_schd_20_2);
+    assign_TextContent_To_SpID("#P_schd_20_3", Data.P_schd_20_3);
+
+    assign_TextContent_To_SpID("#P_schd_21_0", Data.P_schd_21_0);
+    assign_TextContent_To_SpID("#P_schd_21_1", Data.P_schd_21_1);
+    assign_TextContent_To_SpID("#P_schd_21_2", Data.P_schd_21_2);
+    assign_TextContent_To_SpID("#P_schd_21_3", Data.P_schd_21_3);
+    assign_TextContent_To_SpID("#P_schd_22_0", Data.P_schd_22_0);
+    assign_TextContent_To_SpID("#P_schd_22_1", Data.P_schd_22_1);
+    assign_TextContent_To_SpID("#P_schd_22_2", Data.P_schd_22_2);
+    assign_TextContent_To_SpID("#P_schd_22_3", Data.P_schd_22_3);
+    assign_TextContent_To_SpID("#P_schd_23_0", Data.P_schd_23_0);
+    assign_TextContent_To_SpID("#P_schd_23_1", Data.P_schd_23_1);
+    assign_TextContent_To_SpID("#P_schd_23_2", Data.P_schd_23_2);
+    assign_TextContent_To_SpID("#P_schd_23_3", Data.P_schd_23_3);
+    // assign_TextContent_To_SpID("#use", data.use);
+    // assign_TextContent_To_SpID("#use", data.use);
 
 }
 

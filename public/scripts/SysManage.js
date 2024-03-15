@@ -69,16 +69,40 @@ async function dataGet(url) {
 	const values = await response.json();
 	return values;}
 
+let bottom
+// document.getElementById("btn_addRD").addEventListener("click", function() {
+// 	bottom = "add"
+// });
+document.getElementById("btn_updateEditRD").addEventListener("click", function() {
+	bottom = "addupdate"
+});
+document.getElementById("btn_deleteEditRD").addEventListener("click", function() {
+	bottom = "delete"
+});
+
+
 async function dataPost(form, url) {//提交表單
 	return new Promise((resolve, reject) => {
 		$(form).off('submit').submit(function (e) {
 			e.preventDefault();
-			console.log('POST')
-
+			// console.log('POST')
+			// console.log(23232)
+			// console.log(777, typeof($(form).serialize()),$(form).serialize())
+			// console.log(5454)
+			// console.log(111,$(this))
+			let data = $(this).serialize()
+			// console.log(555,data)
+			// console.log(222,typeof(data),data)
+			// data["bottom"] = bottom
+			data = `${data}&bottom=${bottom}`
+			// console.log(333,typeof(data),data)
+			// console.log(777, bottom)
 			$.ajax({
 				type: 'POST',
 				url: url,
-				data: $(this).serialize(),
+				// data: $(this).serialize()
+				// data["bottom"] = bottom
+				data: data,
 				success: function (data) {
 					resolve(data);
 					hideEdit();//隱藏編輯框
@@ -207,9 +231,9 @@ async function dataTable(){
                     }},
 					{data:"status",
                     render:  function (data, type, row) {
-						if(data==="normal"){
+						if(data==="activate"){ // normal
                             return '正常'
-                        } else if (data==="lock"){
+                        } else if (data==="deactivate"){ //lock
                             return '停用'
                         } else {
                             return ''
@@ -230,8 +254,8 @@ async function dataTable(){
 		
 /*告警總數*/
 /*跟後端拿告警資料*/ 
-var realtime;
-var realLength;
+// var realtime;
+// var realLength;
 
 
 // function totalWarning(n){

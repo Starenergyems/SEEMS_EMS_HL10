@@ -13,10 +13,11 @@ const nano = require("nano")(
 );
 
 //確認回傳的內容有那些
-// freq
-// active prower
-// execute rate
-// soc
+// freq hl_4-1_10MW.Other_RF01.Freq.408026
+// active prower hl_4-1_10MW.Other_RF01.Freq.408019
+// execute rate SBSPM hl_4-1_10MW.GC_RF10.System.400037
+// soc hl_4-1_10MW.GC_RF01.IEC61850.400129
+
 // 時間長度(即時圖)
 // 搜尋時間:起始/結束/時間長度/時間間隔(歷史圖)
 
