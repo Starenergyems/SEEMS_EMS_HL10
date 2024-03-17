@@ -142,7 +142,7 @@ function mapworkMode_page(decimalValue) {
 // bit 10: Off-grid mode
 // bit 11: VSG mode
 
-function mapgridStatus_page() {}
+function mapgridStatus_page() { }
 //***************************************************************************** */
 //PCSWorkingStatus
 function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
@@ -489,6 +489,14 @@ function Count_SpecificClosedBit(rawData, NumberOfDigit, specificBitList) {
   }
 
   return NumberOfSpClosedBit;
+}
+
+function Convert_socRef_kWh_to_pct(rawData) {
+  if (rawData === null) {
+    return "#*#";
+  }
+
+  return ((rawData + (4472 * 7 - 10000 * 2.5) / 2) / (4472 * 7) * 100).toFixed(1);
 }
 
 function Determine_BGC_of_VcMaxDiff(data_maxV, data_minV) {
@@ -1057,6 +1065,7 @@ module.exports = {
   Calculate_N1450_PF,
   Calculate_Tr_oilTemp,
   Count_SpecificClosedBit,
+  Convert_socRef_kWh_to_pct,
   Determine_BGC_of_VcMaxDiff,
   Determine_BGC_of_TcMaxDiff,
   Determine_DL_of_RackHWStatus,
@@ -1150,7 +1159,7 @@ module.exports = {
 
 // //********************************************************************************************************** */
 
-const rawData = 27182;
+const rawData = 0;
 const NumberOfDigit = 16;
 const pcsCHGStatus_MT = {
   17: "Charging",
@@ -1249,4 +1258,7 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 // const mn_2 = Determine_DL_of_AlarmWord(rawData1);
 // console.log(mn_2);
 // const op_2 = Determine_DL_of_AlarmWords([rawData1, rawData2, rawData3, rawData4]);
+// console.log(op_2);
+
+// const op_2 = Convert_socRef_kWh_to_pct(rawData);
 // console.log(op_2);
