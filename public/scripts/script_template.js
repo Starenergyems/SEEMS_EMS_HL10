@@ -200,7 +200,7 @@ function classRemove(element, className) {
     $(element).removeClass(className);
 }
 
-async function updateNavbar(url='/navbar') { //刷新側欄
+async function updateNavbar(url = '/navbar') { //刷新側欄
     var data = await getData(url);
     console.log('navbar:', data);
     $('#totalAlarmNum').text(data.latestValues.totalAlarmNum);
@@ -236,7 +236,7 @@ async function updateNavbar(url='/navbar') { //刷新側欄
 
 }
 
-function routineWork(url='/navbar'){ //持續刷新
+function routineWork(url = '/navbar') { //持續刷新
     updateData();
     updateNavbar(url);
 }

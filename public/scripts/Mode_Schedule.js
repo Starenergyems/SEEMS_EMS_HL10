@@ -34,6 +34,7 @@ setInterval(routineWork, 5000);    // ~~~~~~~~~!!!!!!!@@@@@@@@@@###########$$$$$
 
 const window_setSchedule = document.querySelector(".setScheduleW");
 const title_setSchdedule = document.querySelector(".setScheduleW .titlePUW");
+const dateOfSchedule = document.querySelector("#schdDate");
 let qSelectAll_P_schd;
 let qSelectAll_P_cmd;
 let qSelectAll_P_schd_set;
@@ -43,13 +44,12 @@ const setBut_Schdedule = document.querySelector(".schedule #setBut_Schdedule")
 setBut_Schdedule.addEventListener("click", Set_Schdedule);
 function Set_Schdedule() {
     window_setSchedule.classList.add("appear");
-    title_setSchdedule.textContent = "今日/明日排程設定";
+    title_setSchdedule.textContent = `${dateOfSchedule.textContent[0]}日排程設定`;
 
     qSelectAll_P_schd = document.querySelectorAll(".schedule .P_schd");
     qSelectAll_P_cmd = document.querySelectorAll(".schedule .P_cmd");
     qSelectAll_P_schd_set = document.querySelectorAll(".setScheduleW .P_schd_set");
     qSelectAll_P_cmd_set = document.querySelectorAll(".setScheduleW .P_cmd_set");
-    console.log("element array 長度: " + qSelectAll_P_schd.length);
 
     for (i = 0; i < qSelectAll_P_schd.length; i++) {
         qSelectAll_P_schd_set[i].value = qSelectAll_P_schd[i].textContent;
@@ -237,16 +237,14 @@ function closePopup_dSS_No() {
 
 /////////////////////////////////////////////////////////////////////////
 
-const dateOfSchedule = document.querySelector("#schdDate");
-
 const setBut_goToAnotherDay = document.querySelector("#goToAnotherDay");
 setBut_goToAnotherDay.addEventListener("click", Go_to_another_day);
 async function Go_to_another_day() {
     let getData = await change_dateNumber();
     console.log(getData);
 
-    dateOfSchedule.textContent = getData.scheduleDate;
-    setBut_goToAnotherDay.textContent = getData.anotherDay;
+    // dateOfSchedule.textContent = getData.scheduleDate;
+    setBut_goToAnotherDay.textContent = getData.KVPairs.goToAnotherDay;
 
     updateData_Scedule(getData.KVPairs);
     // console.log("點擊時觸發更新");
@@ -286,6 +284,7 @@ async function updateData() {                                   // 更新資料 
     assign_TextContent_To_SpID("#use_Freq_Cmd", data.use_Freq_Cmd);
     assign_TextContent_To_SpID("#freqSource", data.freqSource);
     assign_TextContent_To_SpID("#Freq_test", data.Freq_test);
+
     assign_TextContent_To_SpID("#exeCmdInd", data.exeCmdInd);
     assign_TextContent_To_SpID("#exeCmdStatus", data.exeCmdStatus);
     assign_TextContent_To_SpID("#sbyCmdInd", data.sbyCmdInd);
@@ -302,6 +301,8 @@ async function updateData() {                                   // 更新資料 
 }
 
 function updateData_Scedule(Data) {
+    assign_TextContent_To_SpID("#schdDate", Data.schdDate);
+
     assign_TextContent_To_SpID("#P_schd_00_0", Data.P_schd_00_0);
     assign_TextContent_To_SpID("#P_schd_00_1", Data.P_schd_00_1);
     assign_TextContent_To_SpID("#P_schd_00_2", Data.P_schd_00_2);
@@ -403,7 +404,6 @@ function updateData_Scedule(Data) {
     assign_TextContent_To_SpID("#P_cmd_00_1", Data.P_cmd_00_1);
     assign_TextContent_To_SpID("#P_cmd_00_2", Data.P_cmd_00_2);
     assign_TextContent_To_SpID("#P_cmd_00_3", Data.P_cmd_00_3);
-
     assign_TextContent_To_SpID("#P_cmd_01_0", Data.P_cmd_01_0);
     assign_TextContent_To_SpID("#P_cmd_01_1", Data.P_cmd_01_1);
     assign_TextContent_To_SpID("#P_cmd_01_2", Data.P_cmd_01_2);
@@ -444,7 +444,6 @@ function updateData_Scedule(Data) {
     assign_TextContent_To_SpID("#P_cmd_10_1", Data.P_cmd_10_1);
     assign_TextContent_To_SpID("#P_cmd_10_2", Data.P_cmd_10_2);
     assign_TextContent_To_SpID("#P_cmd_10_3", Data.P_cmd_10_3);
-
     assign_TextContent_To_SpID("#P_cmd_11_0", Data.P_cmd_11_0);
     assign_TextContent_To_SpID("#P_cmd_11_1", Data.P_cmd_11_1);
     assign_TextContent_To_SpID("#P_cmd_11_2", Data.P_cmd_11_2);
@@ -485,7 +484,6 @@ function updateData_Scedule(Data) {
     assign_TextContent_To_SpID("#P_cmd_20_1", Data.P_cmd_20_1);
     assign_TextContent_To_SpID("#P_cmd_20_2", Data.P_cmd_20_2);
     assign_TextContent_To_SpID("#P_cmd_20_3", Data.P_cmd_20_3);
-
     assign_TextContent_To_SpID("#P_cmd_21_0", Data.P_cmd_21_0);
     assign_TextContent_To_SpID("#P_cmd_21_1", Data.P_cmd_21_1);
     assign_TextContent_To_SpID("#P_cmd_21_2", Data.P_cmd_21_2);
@@ -539,7 +537,6 @@ function updateData_Scedule(Data) {
     assign_TextContent_To_SpID("#socRef_09_1", Data.socRef_09_1);
     assign_TextContent_To_SpID("#socRef_09_2", Data.socRef_09_2);
     assign_TextContent_To_SpID("#socRef_09_3", Data.socRef_09_3);
-
     assign_TextContent_To_SpID("#socRef_10_0", Data.socRef_10_0);
     assign_TextContent_To_SpID("#socRef_10_1", Data.socRef_10_1);
     assign_TextContent_To_SpID("#socRef_10_2", Data.socRef_10_2);
@@ -580,7 +577,6 @@ function updateData_Scedule(Data) {
     assign_TextContent_To_SpID("#socRef_19_1", Data.socRef_19_1);
     assign_TextContent_To_SpID("#socRef_19_2", Data.socRef_19_2);
     assign_TextContent_To_SpID("#socRef_19_3", Data.socRef_19_3);
-
     assign_TextContent_To_SpID("#socRef_20_0", Data.socRef_20_0);
     assign_TextContent_To_SpID("#socRef_20_1", Data.socRef_20_1);
     assign_TextContent_To_SpID("#socRef_20_2", Data.socRef_20_2);
@@ -597,9 +593,5 @@ function updateData_Scedule(Data) {
     assign_TextContent_To_SpID("#socRef_23_1", Data.socRef_23_1);
     assign_TextContent_To_SpID("#socRef_23_2", Data.socRef_23_2);
     assign_TextContent_To_SpID("#socRef_23_3", Data.socRef_23_3);
-
-    //~~~~~~~~!!!!!!!!!!@@@@##########$$$$$$%%%%%%%%%%%%%^^^^^^^^&&&&&&&&********((((((((((((((()))))))))))))))
-
-
 }
 

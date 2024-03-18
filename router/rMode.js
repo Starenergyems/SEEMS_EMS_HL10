@@ -228,8 +228,8 @@ router.get("/mode/sysctrl/:data", async (req, res) => {
 let Schd_KeyValuePairs;
 let dateNumber = 0;
 const date_MT = {
-  0: { dicName: "Today", subTitle: "今日排程(2024/03/15)", buttonContext: "明日排程" },
-  1: { dicName: "Tomorrow", subTitle: "明日排程(2024/03/16)", buttonContext: "今日排程" },
+  0: { dicName: "Today", subTitle: "今日排程(", buttonContext: "明日排程" },
+  1: { dicName: "Tomorrow", subTitle: "明日排程(", buttonContext: "今日排程" },
 };
 
 async function query_Schd_KeyValuePairs() {
@@ -251,8 +251,20 @@ async function query_Schd_KeyValuePairs() {
     const result = await GCnanoDb.find(mangoQuery);
 
     const GCData = result.docs[0];
-    const value = GCData.Schedule.Today[401002];
-    //console.log("Value:", value);
+
+    let rawDateTime_now = new Date();
+    let rawDateTime_schd;
+
+    if (dateNumber === 0) {
+      rawDateTime_schd = rawDateTime_now;
+    } else {
+      rawDateTime_schd = new Date(rawDateTime_now.getTime() + 1000 * 60 * 60 * 24);
+    }
+
+    let yy = rawDateTime_schd.getFullYear();
+    let mm = String(rawDateTime_schd.getMonth() + 1).padStart(2, '0');
+    let dd = String(rawDateTime_schd.getDate()).padStart(2, '0');
+    // let ss = String(rawDateTime_schd.getSeconds()).padStart(2, '0');
 
     const sysCtrl_2_MT = {
       0: { 0: "頻率表", 1: "測試用頻率" },
@@ -292,6 +304,9 @@ async function query_Schd_KeyValuePairs() {
       sbyCmd_StopDT: Convert_unixTime_to_dateTime(GCData.API[400997]),
       exeCmd_P: Scale_Data(GCData.API[400993], 1, 0),
       sbyCmd_P: Scale_Data(GCData.API[400999], 1, 0),
+
+      schdDate: `${date_MT[dateNumber].subTitle}${yy}/${mm}/${dd})`,   // _@_${ss}
+      goToAnotherDay: date_MT[dateNumber].buttonContext,
 
       P_schd_00_0: Scale_Data(GCData.Schedule[date_MT[dateNumber].dicName][401001], 0.01, 2),
       P_schd_00_1: Scale_Data(GCData.Schedule[date_MT[dateNumber].dicName][401002], 0.01, 2),
@@ -430,7 +445,6 @@ async function query_Schd_KeyValuePairs() {
       P_cmd_09_1: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400275], 1, 0),
       P_cmd_09_2: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400277], 1, 0),
       P_cmd_09_3: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400279], 1, 0),
-
       P_cmd_10_0: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400281], 1, 0),
       P_cmd_10_1: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400283], 1, 0),
       P_cmd_10_2: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400285], 1, 0),
@@ -471,7 +485,6 @@ async function query_Schd_KeyValuePairs() {
       P_cmd_19_1: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400355], 1, 0),
       P_cmd_19_2: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400357], 1, 0),
       P_cmd_19_3: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400359], 1, 0),
-
       P_cmd_20_0: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400361], 1, 0),
       P_cmd_20_1: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400363], 1, 0),
       P_cmd_20_2: Scale_Data(GCData.API[date_MT[dateNumber].dicName][400365], 1, 0),
@@ -529,7 +542,6 @@ async function query_Schd_KeyValuePairs() {
       socRef_09_1: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400467]),
       socRef_09_2: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400469]),
       socRef_09_3: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400471]),
-
       socRef_10_0: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400473]),
       socRef_10_1: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400475]),
       socRef_10_2: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400477]),
@@ -570,7 +582,6 @@ async function query_Schd_KeyValuePairs() {
       socRef_19_1: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400547]),
       socRef_19_2: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400549]),
       socRef_19_3: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400551]),
-
       socRef_20_0: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400553]),
       socRef_20_1: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400555]),
       socRef_20_2: Convert_socRef_kWh_to_pct(GCData.API[date_MT[dateNumber].dicName][400557]),
@@ -633,8 +644,8 @@ router.post("/change_dateNumber", async (req, res) => {
 
     const response = {
       dateNumber: dateNumber,
-      scheduleDate: date_MT[dateNumber].subTitle,
-      anotherDay: date_MT[dateNumber].buttonContext,
+      // scheduleDate: Schd_KeyValuePairs.schdDate,
+      // anotherDay: date_MT[dateNumber].buttonContext,
       KVPairs: Schd_KeyValuePairs,
     };
 
