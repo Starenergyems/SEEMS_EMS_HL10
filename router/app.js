@@ -593,7 +593,7 @@ const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
 const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
-// const alarmRouter = require("./rAlarm");
+const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
 const login = require("./rLogin");
 const { authentication } = require("./authMiddleware");
@@ -611,7 +611,7 @@ app.use(environmentRouter);
 app.use(eventRouter);
 app.use(reportRouter);
 app.use(chartRouter);
-// app.use(alarmRouter);
+app.use(alarmRouter);
 
 //***************************************************************************************************************** */
 

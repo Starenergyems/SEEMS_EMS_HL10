@@ -3,7 +3,7 @@
 var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
-  classAdd("#nB_Alarm", "default_nB");
+  classAdd("#nB_Chart", "default_nB");
 });
 
 setInterval(updateNavbar, 1000);
