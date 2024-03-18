@@ -9,7 +9,7 @@ const lc1DBName = "lc1_rf10";
 const lc2DBName = "lc2_rf10";
 const lc3DBName = "lc3_rf10";
 const lc4DBName = "lc4_rf10";
-const gcDBName = "gc";
+const gcDBName = "gc_rf10";
 const accountDBName = "account";
 const alarmDBName = "alarm";
 

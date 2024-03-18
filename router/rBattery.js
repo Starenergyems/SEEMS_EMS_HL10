@@ -11,16 +11,19 @@ const {
   calculateAverage,
   scaleProcess,
   Convert_UInt_to_revBitString,
-  Convert_UInt_to_BitString,
   mapWordStatus,
   getHighLowByte,
   Calculate_BMS_energy,
-  Count_SpecificClosedBit,
   Determine_BGC_of_VcMaxDiff,
   Determine_BGC_of_TcMaxDiff,
   Determine_DL_of_RackHWStatus,
-  checkValues,
+  checkValuesalarm,
+  checkValuesFault,
   workStatuschange,
+  maponGridStatus,
+  workStatus_LC,
+  maponGridStatus_LC,
+  mapBMSMode,
 } = require("./function");
 
 const { Console } = require("console");
@@ -122,6 +125,7 @@ router.get("/operateinfo", (req, res) => {
 
 //
 var batterySum_variables;
+
 async function querySumData() {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
@@ -140,17 +144,22 @@ async function querySumData() {
     //BMS資訊總覽
     //workStatus: "正常", //檢查四個LC狀態
     workStatus: workStatuschange(
-      lc1Data.BMS1["404011"],
-      lc1Data.BMS2["404011"],
-      lc2Data.BMS1["404011"],
-      lc2Data.BMS2["404011"],
-      lc3Data.BMS1["404011"],
-      lc3Data.BMS2["404011"],
-      lc4Data.BMS1["404011"]
-    ), //檢查四個LC狀態 fun要在重寫
+      lc1Data.System["402089"],
+      lc2Data.System["402089"],
+      lc3Data.System["402089"],
+      lc4Data.System["402089"]
+    ), //檢查四個LC狀態
 
-    onGridStatus: lc1Data.System["402019"], //並往狀態
-    onlineNum: lc1Data.System["402089"],
+    onGridStatus: maponGridStatus(lc1Data.System["402019"],
+    lc2Data.System["402019"],
+    lc3Data.System["402019"],
+    lc4Data.System["402019"]), //併網狀態
+    //hl_4-1_10MW.LC#_RF10.System.402064
+
+    onlineNum:lc1Data.System["402089"]+
+    lc2Data.System["402089"]+
+    lc3Data.System["402089"]+
+    lc4Data.System["402089"],
 
     systemV: scaleProcess(calculateAverage(
       lc1Data.BMS1["404002"],
@@ -161,6 +170,7 @@ async function querySumData() {
       lc3Data.BMS2["404002"],
       lc4Data.BMS1["404002"]
     ), 0.1, 1),
+
     //所有BMS電壓平均
     systemI: scaleProcess(calculateAverage(
       lc1Data.BMS1["404003"],
@@ -213,9 +223,9 @@ async function querySumData() {
     //lc01
     onlineNum_LC1: lc1Data.BMS1["404008"] + lc1Data.BMS2["404008"],
 
-    workStatus_LC1: lc1Data.System["402019"], //還需轉換輸出結果
+    workStatus_LC1: workStatus_LC(lc1Data.System["402019"]), //還需轉換輸出結果
 
-    onGridStatus_LC1: calculateAverage(lc1Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+    onGridStatus_LC1: maponGridStatus_LC(lc1Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
     voltage_LC1: scaleProcess(calculateAverage(
       lc1Data.BMS1["404002"],
@@ -261,17 +271,17 @@ async function querySumData() {
       lc1Data.BMS2["404026"]
     ), 0.1, 1),
 
-    alarm_BMS1_1: lc1Data.BMS1["404044"],
-    alarm_BMS1_2: lc1Data.BMS2["404044"],
+    alarm_BMS1_1: checkValuesalarm(lc1Data.BMS1["404044"]),
+    alarm_BMS1_2: checkValuesalarm(lc1Data.BMS2["404044"]),
 
     //要做判斷 回傳一個結果 紅燈1和綠燈0
-    fault_BMS1_1: checkValues(
+    fault_BMS1_1: checkValuesFault(
       lc1Data.BMS1["404046"],
       lc1Data.BMS1["404048"],
       lc1Data.BMS1["404061"]
     ),
 
-    fault_BMS1_2: checkValues(
+    fault_BMS1_2: checkValuesFault(
       lc1Data.BMS2["404046"],
       lc1Data.BMS2["404048"],
       lc1Data.BMS2["404061"]
@@ -280,9 +290,9 @@ async function querySumData() {
     //lc02
     onlineNum_LC2: lc2Data.BMS1["404008"] + lc2Data.BMS2["404008"],
 
-    workStatus_LC2: lc2Data.System["402019"], //還需轉換輸出結果
+    workStatus_LC2: workStatus_LC(lc2Data.System["402019"]), //還需轉換輸出結果
 
-    onGridStatus_LC2: calculateAverage(lc2Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+    onGridStatus_LC2: maponGridStatus_LC(lc2Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
     voltage_LC2: scaleProcess(calculateAverage(
       lc2Data.BMS1["404002"],
@@ -328,17 +338,17 @@ async function querySumData() {
       lc2Data.BMS2["404026"]
     ), 0.1, 1),
 
-    alarm_BMS2_1: lc2Data.BMS1["404044"],
-    alarm_BMS2_2: lc2Data.BMS2["404044"],
+    alarm_BMS2_1: checkValuesalarm(lc2Data.BMS1["404044"]),
+    alarm_BMS2_2: checkValuesalarm(lc2Data.BMS2["404044"]),
 
     //要做判斷 回傳一個結果 紅燈1和綠燈0
-    fault_BMS2_1: checkValues(
+    fault_BMS2_1: checkValuesFault(
       lc2Data.BMS1["404046"],
       lc2Data.BMS1["404048"],
       lc2Data.BMS1["404061"]
     ),
 
-    fault_BMS2_2: checkValues(
+    fault_BMS2_2: checkValuesFault(
       lc2Data.BMS2["404046"],
       lc2Data.BMS2["404048"],
       lc2Data.BMS2["404061"]
@@ -347,9 +357,9 @@ async function querySumData() {
     //LC3
     onlineNum_LC3: lc3Data.BMS1["404008"] + lc3Data.BMS2["404008"],
 
-    workStatus_LC3: lc3Data.System["402019"], //還需轉換輸出結果
+    workStatus_LC3: workStatus_LC(lc3Data.System["402019"]), //還需轉換輸出結果
 
-    onGridStatus_LC3: calculateAverage(lc3Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+    onGridStatus_LC3: maponGridStatus_LC(lc3Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
     voltage_LC3: scaleProcess(calculateAverage(
       lc3Data.BMS1["404002"],
@@ -395,17 +405,17 @@ async function querySumData() {
       lc3Data.BMS2["404026"]
     ), 0.1, 1),
 
-    alarm_BMS3_1: lc3Data.BMS1["404044"],
-    alarm_BMS3_2: lc3Data.BMS2["404044"],
+    alarm_BMS3_1: checkValuesalarm(lc3Data.BMS1["404044"]),
+    alarm_BMS3_2: checkValuesalarm(lc3Data.BMS2["404044"]),
 
     //要做判斷 回傳一個結果 紅燈1和綠燈0
-    fault_BMS3_1: checkValues(
+    fault_BMS3_1: checkValuesFault(
       lc3Data.BMS1["404046"],
       lc3Data.BMS1["404048"],
       lc3Data.BMS1["404061"]
     ),
 
-    fault_BMS3_2: checkValues(
+    fault_BMS3_2: checkValuesFault(
       lc3Data.BMS2["404046"],
       lc3Data.BMS2["404048"],
       lc3Data.BMS2["404061"]
@@ -414,9 +424,9 @@ async function querySumData() {
     //LC4
     onlineNum_LC4: lc4Data.BMS1["404008"],
 
-    workStatus_LC4: lc4Data.System["402019"], //還需轉換輸出結果
-
-    onGridStatus_LC4: calculateAverage(lc4Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
+    workStatus_LC4: workStatus_LC(lc4Data.System["402019"]), //還需轉換輸出結果
+    
+    onGridStatus_LC4: maponGridStatus_LC(lc4Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
     voltage_LC4: calculateAverage(
       scaleProcess(lc4Data.BMS1["404002"], 0.1, 1),
@@ -441,10 +451,10 @@ async function querySumData() {
     T_cell_Min_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404024"]), 0.1, 1),
     T_cell_MaxDiff_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404026"]), 0.1, 1),
 
-    alarm_BMS4_1: lc4Data.BMS1["404044"],
+    alarm_BMS4_1: checkValuesalarm(lc4Data.BMS1["404044"]),
 
     //要做判斷 回傳一個結果 紅燈1和綠燈0
-    fault_BMS4_1: checkValues(
+    fault_BMS4_1: checkValuesFault(
       lc4Data.BMS1["404046"],
       lc4Data.BMS1["404048"],
       lc4Data.BMS1["404061"]
@@ -459,6 +469,7 @@ router.get("/operateinfo/battery", async (req, res) => {
   try {
     await querySumData();
     console.log(batterySum_variables);
+    console.log("**************");
     res.render("Op_Bat_InfoSummary", batterySum_variables);
   } catch (error) {
     console.error(error);
@@ -468,18 +479,6 @@ router.get("/operateinfo/battery", async (req, res) => {
 
 router.get("/operateinfo/battery/data", async (req, res) => {
   try {
-    // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
-    /*const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
-    });*/
-
-    /*const allData = await Promise.all(dataPromises); //取得所有資料庫的數值 存在陣列裡面 由零開始
-    const lc1Data = allData[0];
-    const lc2Data = allData[1];
-    const lc3Data = allData[2];
-    const lc4Data = allData[3];*/
-
     querySumData(); //重新撈資料
     const responseData = batterySum_variables;
 
@@ -545,20 +544,15 @@ router.post("/backendEndpoint", async (req, res) => {
     //console.log("extractedNumber:" + extractedNumber); //提取出來的lc數值
     // 修改 407008 這個點的數值
     const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
-    //將最新的數值存到新的位置
 
     if (extractedNumber == 1) {
       newdwctrlData.lc1.W407008 = selectedValue;
-      //console.log("newdwctrlData.lc1.W407008:" + newdwctrlData.lc1.W407008);
     } else if (extractedNumber == 2) {
       newdwctrlData.lc2.W407008 = selectedValue;
-      //console.log("newdwctrlData.lc2.W407008:" + newdwctrlData.lc2.W407008);
     } else if (extractedNumber == 3) {
       newdwctrlData.lc3.W407008 = selectedValue;
-      //console.log("newdwctrlData.lc3.W407008:" + newdwctrlData.lc3.W407008);
     } else if (extractedNumber == 4) {
       newdwctrlData.lc4.W407008 = selectedValue;
-      //console.log("newdwctrlData.lc4.W407008:" + newdwctrlData.lc4.W407008);
     }
     //const accountDb = createNanoInstance("account");
     //存入資料庫的時區問題
@@ -595,7 +589,7 @@ router.post("/backendEndpoint", async (req, res) => {
       time: isoString,
       category: "設備控制",
       device: `LC${extractedNumber}`,
-      username: "SE0008",
+      username: req.body.id,
       content: `將LC${extractedNumber}BMS併網狀態設為${content}`,
     };
     //console.log(doc);
@@ -678,6 +672,8 @@ async function queryDetailData() {
       permission: "manager",
       pageNumber,
       No_of_BMS,
+      BMSMode:mapBMSMode(lcData.BMS2[404011]),
+      onlineNum:lcData.BMS2[404008],
       onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
       BMSsystemV: scaleProcess(lcData.BMS2[404002], 0.1, 1),
       BMSsystemI: scaleProcess(lcData.BMS2[404003], 0.1, 1),
@@ -734,6 +730,8 @@ async function queryDetailData() {
       permission: "manager",
       pageNumber,
       No_of_BMS,
+      BMSMode:mapBMSMode(lcData.BMS1[404011]),
+      onlineNum:lcData.BMS1[404008],
       onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
       BMSsystemV: scaleProcess(lcData.BMS1[404002], 0.1, 1),
       BMSsystemI: scaleProcess(lcData.BMS1[404003], 0.1, 1),
@@ -905,7 +903,7 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
-    console.log(pageNumber);
+    //console.log(pageNumber);
     await queryDetailData();
     res.render("Op_Bat_InfoDetail", batteryDetail_variables);
   } catch (error) {

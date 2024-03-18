@@ -49,7 +49,7 @@ const databases = [
   "lc2_rf10", //1
   "lc3_rf10", //2
   "lc4_rf10", //3
-  "GC", //4
+  "gc_rf10", //4
   "other_rf01", //5
   "other_rf10", //6
   "dwctrl", //7

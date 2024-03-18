@@ -2239,7 +2239,7 @@ function update_trigger_alarms_batch(
 ) {
   // console.log(data_item.System["402001"]);
   // console.log(error_result)
-  console.log(compare_result)
+  // console.log(compare_result)
   return new Promise((resolve, reject) => {
     let remain_result = [];
     let income_result = [];
@@ -2430,6 +2430,7 @@ function update_trigger_alarms_batch(
                     const _device = _id.split(':')[1];
                     const _tag = _id.split(':')[2];
                     const _bit = _id.split(':')[3];
+                    // console.log(_device, _tag, _bit)
                     let _value = undefined;
                     if (_bit) {
                       _value = '0';
@@ -2502,7 +2503,7 @@ function update_trigger_alarms_batch(
   });
 }
 
-const LineNotifyToken = process.env.LineNotifyToken;
+const LineNotifyToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
 
 function sendLineNotify(error_result_item) {
   const message = `

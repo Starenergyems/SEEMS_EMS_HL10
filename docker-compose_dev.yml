@@ -1,40 +1,40 @@
 version: "3.8"
 
 services:
-  ems-service:
+  ems-dev:
     # restart: always
-    image: ems-service_v8
+    image: ems-dev
     build:
       context: .
       dockerfile: Dockerfile
-    # container_name: ems-service
+    # container_name: ems-dev
     environment:
       - TZ=Asia/Taipei
-    # volumes:
+    volumes:
       # - ./router:/usr/src/app/router # Mount the <local directory>:<container directory>
-      # - .:/usr/src/app
+      - .:/usr/src/app
     ports:
-      - "3000:3000"
+      - "3030-3036:3000"
     # environment:
     # - POSTGRES_NAME=postgres
     # - POSTGRES_USER=postgres
     # - POSTGRES_PASSWORD=postgres
     deploy:
-      replicas: 1 # Set the desired number of replicas
+      replicas: 6 # Set the desired number of replicas
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
         window: 120s
-    healthcheck:
-      test: ["CMD", "curl", "-fs", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-fs", "http://localhost:3000/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 5s
     networks:
-      - ems-service-network
+      - dev-network
 
 networks:
-  ems-service-network:
+  dev-network:
     external: false

@@ -270,8 +270,8 @@ async function getDayData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-    console.log("Day Before Yesterday Start Time:", dayBeforeYesterdayStart);
-    console.log("Day Before Yesterday End Time:", dayBeforeYesterdayEnd);
+    //console.log("Day Before Yesterday Start Time:", dayBeforeYesterdayStart);
+    //console.log("Day Before Yesterday End Time:", dayBeforeYesterdayEnd);
 
     // 初始化存儲數值的陣列
     let data = [];
@@ -374,8 +374,8 @@ async function getDayData() {
       },
       limit: 1, // 搜尋一筆資料
     };
-    console.log("------------------------------------");
-    console.log("endOfDaybeforyesterday:" + endOfDaybeforyesterday);
+    //console.log("------------------------------------");
+    //console.log("endOfDaybeforyesterday:" + endOfDaybeforyesterday);
     const ScheduleDataDaybeforyesterday = await gcDb.find(
       filter_acrossthenightyesterday
     );
@@ -388,18 +388,18 @@ async function getDayData() {
       });
     });
 
-    console.log(
-      "Total data fetched scheduleDaybeforyesterdayValues:",
-      scheduleDaybeforyesterdayValues.length
-    );
-    console.log(
-      "scheduleDaybeforyesterdayValues :",
-      scheduleDaybeforyesterdayValues
-    );
-    console.log(
-      "scheduleDaybeforyesterdayValues[95]:",
-      scheduleDaybeforyesterdayValues[95] //最後一個小時的資料
-    );
+    // console.log(
+    //   "Total data fetched scheduleDaybeforyesterdayValues:",
+    //   scheduleDaybeforyesterdayValues.length
+    // );
+    // console.log(
+    //   "scheduleDaybeforyesterdayValues :",
+    //   scheduleDaybeforyesterdayValues
+    // );
+    // console.log(
+    //   "scheduleDaybeforyesterdayValues[95]:",
+    //   scheduleDaybeforyesterdayValues[95] //最後一個小時的資料
+    // );
 
     //如果大前天最後一個時段沒得標則要將spm改為100%
     if (scheduleDaybeforyesterdayValues[95] === 0) {
@@ -407,9 +407,9 @@ async function getDayData() {
       data[1] = 10000;
       data[2] = 10000;
     }
-    console.log("經過第一次處理的Data(處理大前天最後一小時有沒有得標) :", data);
+    //console.log("經過第一次處理的Data(處理大前天最後一小時有沒有得標) :", data);
 
-    console.log("------------------------------------");
+    //console.log("------------------------------------");
     //昨天的96筆(每筆15分鐘))
     const endOfDay = moment(yesterdayEnd)
       .endOf("day")
@@ -423,7 +423,7 @@ async function getDayData() {
       },
       limit: 1, // 搜尋一筆資料
     };
-    console.log("endOfDay" + endOfDay);
+    //console.log("endOfDay" + endOfDay);
 
     const ScheduleData = await gcDb.find(filter_acrossthenight);
     const scheduleTodayValues = [];
@@ -435,8 +435,8 @@ async function getDayData() {
       });
     });
 
-    console.log("昨天的實際得標容量長度:", scheduleTodayValues.length);
-    console.log("昨天實際得標容量 :", scheduleTodayValues);
+    //console.log("昨天的實際得標容量長度:", scheduleTodayValues.length);
+    //console.log("昨天實際得標容量 :", scheduleTodayValues);
 
     const maxData = [];
 
@@ -449,8 +449,8 @@ async function getDayData() {
       }
     }
 
-    console.log("取出四秒滾動最大值的長度(應該要是86400):", maxData.length);
-    console.log("取出四秒滾動最大值的陣列:", maxData);
+    //console.log("取出四秒滾動最大值的長度(應該要是86400):", maxData.length);
+    //console.log("取出四秒滾動最大值的陣列:", maxData);
 
     let globalMax = Number.NEGATIVE_INFINITY; // 初始化全局最大值為負無窮大
     let globalMin = Number.POSITIVE_INFINITY; // 初始化全局最小值為正無窮大
@@ -463,8 +463,8 @@ async function getDayData() {
         globalMin = maxData[q];
       }
     }
-    console.log("86400秒裡面最大的sbspm(沒有判斷有沒得標的情況下):", globalMax);
-    console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
+    //console.log("86400秒裡面最大的sbspm(沒有判斷有沒得標的情況下):", globalMax);
+    //console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
     //console.log("最小值存入 globalMin 的位置:", minIndex);
     //console.log("取出最小位置的數值:", maxData[minIndex]);
 
@@ -504,16 +504,16 @@ async function getDayData() {
         total_count++;
       }
     }
-    console.log("加總所有的spm: " + sum);
-    console.log("總共有幾個可以進行加法的數值:" + total_count);
+    // console.log("加總所有的spm: " + sum);
+    // console.log("總共有幾個可以進行加法的數值:" + total_count);
     //獲得平均值
     const averageoriginal = sum / total_count; // 計算平均值並四捨五入到整數 eg94.99
     const average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數 eg94.99
     const averagefloor = Math.floor(sum / total_count); // 計算平均值且捨去小數部分
 
-    console.log("averageoriginal :", averageoriginal);
-    console.log("average45 :", average45);
-    console.log("averagefloor :", averagefloor);
+    // console.log("averageoriginal :", averageoriginal);
+    // console.log("average45 :", average45);
+    // console.log("averagefloor :", averagefloor);
 
     //******************************************************************* */
     //開始針對每個小時取出最大最小值，並給與該小時的執行率
@@ -540,10 +540,10 @@ async function getDayData() {
       maxValues.push(max);
       averageValues.push(average);
     }
-    console.log("minValues :", minValues);
+    //console.log("minValues :", minValues);
 
-    console.log("maxValues :", minValues);
-    console.log("averageValues :", minValues);
+    //console.log("maxValues :", minValues);
+    //console.log("averageValues :", minValues);
 
     //換算獲得服務品質指標
     const quality = [];
@@ -618,7 +618,7 @@ async function getDayData() {
         hour_final[m][9] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       }
-      console.log("Time:" + m + " / quality_val :", quality_val);
+      //console.log("Time:" + m + " / quality_val :", quality_val);
     }
 
     for (let n = 0; n <= 23; n++) {
@@ -634,9 +634,9 @@ async function getDayData() {
     hour_final[24][7] = Conversionpercentage(globalMax);
     hour_final[24][8] = Conversionpercentage(average45);
     hour_final[24][9] = Conversionpercentage(globalMin);
-    console.log("the qualityis :", quality);
-    console.log("counthourstop:" + counthourstop);
-    console.log("the hour_final :", hour_final);
+    // console.log("the qualityis :", quality);
+    // console.log("counthourstop:" + counthourstop);
+    // console.log("the hour_final :", hour_final);
 
     const yesterdaystart = specified_date_clone5
       .subtract(1, "days")
@@ -648,8 +648,8 @@ async function getDayData() {
       .set({ hour: 23, minute: 59, second: 59, millisecond: 0 }) // 設置結束時間需大於 23:59:58.999
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    console.log("yesterdaystart:" + yesterdaystart);
-    console.log("yesterdayend1:" + yesterdayend1);
+    // console.log("yesterdaystart:" + yesterdaystart);
+    // console.log("yesterdayend1:" + yesterdayend1);
     const filteryesterdaystart = {
       selector: {
         time: {
@@ -687,11 +687,11 @@ async function getDayData() {
       (doc) => doc.Freq["408034"]
     );
 
-    console.log("********************************************************");
-    console.log("YesterdayStart_kWh_Import: " + YesterdayStart_kWh_Import); //起始時間的充電
-    console.log("YesterdayStart_kWh_Export: " + YesterdayStart_kWh_Export); //起始時間的放電量
-    console.log("YesterdayEnd_kWh_Import: " + YesterdayEnd_kWh_Import); //結束時間的充電
-    console.log("YesterdayEnd_kWh_Export: " + YesterdayEnd_kWh_Export); //結束時間的放電
+    // console.log("********************************************************");
+    // console.log("YesterdayStart_kWh_Import: " + YesterdayStart_kWh_Import); //起始時間的充電
+    // console.log("YesterdayStart_kWh_Export: " + YesterdayStart_kWh_Export); //起始時間的放電量
+    // console.log("YesterdayEnd_kWh_Import: " + YesterdayEnd_kWh_Import); //結束時間的充電
+    // console.log("YesterdayEnd_kWh_Export: " + YesterdayEnd_kWh_Export); //結束時間的放電
 
     let elsedata1 = [];
     let elsedata2 = [];
@@ -719,14 +719,14 @@ async function getDayData() {
 
     elsedata = elsedata.concat(elsedata1, elsedata2);
 
-    console.log("kWh_Import: ", kWh_Import);
-    console.log("kWh_Export: ", kWh_Export);
-    console.log("net: ", net);
-    console.log("stop_Minutes: ", stopminutes);
-    console.log("capacity: ", capacity);
-    console.log("RTE: ", RTE);
-    console.log("elsedata1: ", elsedata1);
-    console.log("elsedata2: ", elsedata2);
+    // console.log("kWh_Import: ", kWh_Import);
+    // console.log("kWh_Export: ", kWh_Export);
+    // console.log("net: ", net);
+    // console.log("stop_Minutes: ", stopminutes);
+    // console.log("capacity: ", capacity);
+    // console.log("RTE: ", RTE);
+    // console.log("elsedata1: ", elsedata1);
+    // console.log("elsedata2: ", elsedata2);
 
     // 昨天的日期
     const yesterdayDate = specified_date_clone8
@@ -785,9 +785,9 @@ async function getMonthData() {
   // 使用 Moment.js 的 diff 函式計算天數差異
   const numberOfDays = MonthsEnd.diff(MonthsStart, "days") + 1; // 因為 endOf('month') 已經是當月最後一天了，所以需要加 1
 
-  console.log("上個月的搜尋條件(MonthsStart): ", MonthsStartStr);
-  console.log("上個月的搜尋條件(MonthsEnd): ", MonthsEndStr);
-  console.log("本月共有:", numberOfDays, "天");
+  // console.log("上個月的搜尋條件(MonthsStart): ", MonthsStartStr);
+  // console.log("上個月的搜尋條件(MonthsEnd): ", MonthsEndStr);
+  // console.log("本月共有:", numberOfDays, "天");
 
   // 初始化存儲數值的陣列
   let data_exacutive_rate = [];
@@ -858,8 +858,8 @@ async function getMonthData() {
     .utcOffset("+0800") // 設置時區
     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"); // 格式化日期
 
-  console.log("monthstart:" + monthstart);
-  console.log("monthend:" + monthend);
+  // console.log("monthstart:" + monthstart);
+  // console.log("monthend:" + monthend);
 
   //當月的一號的00:00:00:000
   const filterMonthstart = {
@@ -908,16 +908,16 @@ async function getMonthData() {
   } else {
     RTE = ((kWh_Export / kWh_Import) * 100).toFixed(1);
   }
-  console.log("MonthStart_kWh_Import: " + MonthStart_kWh_Import); //起始時間的充電
-  console.log("MonthStart_kWh_Export: " + MonthStart_kWh_Export); //起始時間的放電量
-  console.log("MonthEnd_kWh_Import: " + MonthEnd_kWh_Import); //結束時間的充電
-  console.log("MonthEnd_kWh_Export: " + MonthEnd_kWh_Export); //結束時間的放電
-  console.log("kWh_Import: " + kWh_Import); //結束時間的放電
-  console.log("kWh_Export: " + kWh_Export); //結束時間的放電
+  // console.log("MonthStart_kWh_Import: " + MonthStart_kWh_Import); //起始時間的充電
+  // console.log("MonthStart_kWh_Export: " + MonthStart_kWh_Export); //起始時間的放電量
+  // console.log("MonthEnd_kWh_Import: " + MonthEnd_kWh_Import); //結束時間的充電
+  // console.log("MonthEnd_kWh_Export: " + MonthEnd_kWh_Export); //結束時間的放電
+  // console.log("kWh_Import: " + kWh_Import); //結束時間的放電
+  // console.log("kWh_Export: " + kWh_Export); //結束時間的放電
 
-  console.log("RTE: " + RTE); //當月往返效率的結果 (單獨算 不可以取當月平均)
+  // console.log("RTE: " + RTE); //當月往返效率的結果 (單獨算 不可以取當月平均)
 
-  console.log("********************************************************");
+  // console.log("********************************************************");
 
   // 對 data_exacutive_rate(存放執行率的) 進行遍歷
   for (let j = 0; j < 7; j++) {
@@ -939,8 +939,8 @@ async function getMonthData() {
     averageArray[j - 7] = (sum / data_exacutive_rate.length).toFixed(1);
   }
 
-  console.log("執行率加總結果陣列(1 0.8...):", sumArray);
-  console.log("執行率最大最小全部的平均值陣列:", averageArray);
+  // console.log("執行率加總結果陣列(1 0.8...):", sumArray);
+  // console.log("執行率最大最小全部的平均值陣列:", averageArray);
 
   other_sum = [];
   for (let j = 0; j < 5; j++) {
@@ -954,11 +954,11 @@ async function getMonthData() {
 
   other_sum[5] = RTE;
 
-  console.log("data_exacutive_rate[0]:", data_exacutive_rate[0]); //輸出一排
-  console.log("data_exacutive_rate[0][0]:", data_exacutive_rate[0][0]); //輸出一格
+  //console.log("data_exacutive_rate[0]:", data_exacutive_rate[0]); //輸出一排
+  // console.log("data_exacutive_rate[0][0]:", data_exacutive_rate[0][0]); //輸出一格
   const exacutive_rate_sum = [];
-  console.log("executiveRates:", executiveRates); //整個內容輸出
-  console.log("otherInfo:", otherInfo);
+  // console.log("executiveRates:", executiveRates); //整個內容輸出
+  // console.log("otherInfo:", otherInfo);
 
   const lastMonthstart = specified_date_clone12
     .subtract(1, "month")
@@ -992,8 +992,8 @@ async function getMonthData() {
     limit: 1, //限制當月天數
   };
 
-  console.log("電表搜尋時間起始/lastMonthstart:" + lastMonthstart);
-  console.log("電表搜尋時間結束/thisMonth:" + thisMonthstart);
+  // console.log("電表搜尋時間起始/lastMonthstart:" + lastMonthstart);
+  // console.log("電表搜尋時間結束/thisMonth:" + thisMonthstart);
 
   const Month_DataStart = await other10Db.find(filterforMonthStart);
 
@@ -1260,13 +1260,13 @@ async function getMonthData() {
 
   // 取得上個月的年份及月份
   const lastMonthYearMonth = lastMonth.format("YYYY-MM");
-  console.log("lastMonthYearMonth:", lastMonthYearMonth);
-  console.log("data_exacutive_rate:", data_exacutive_rate);
-  console.log("data_other_info:", data_other_info);
-  console.log("sumArray:", sumArray);
-  console.log("other_sum:", other_sum);
-  console.log("averageArray:", averageArray);
-  console.log("power:", power);
+  // console.log("lastMonthYearMonth:", lastMonthYearMonth);
+  // console.log("data_exacutive_rate:", data_exacutive_rate);
+  // console.log("data_other_info:", data_other_info);
+  // console.log("sumArray:", sumArray);
+  // console.log("other_sum:", other_sum);
+  // console.log("averageArray:", averageArray);
+  // console.log("power:", power);
 
   // 定義要存資料庫的時間
   const MonthData = {
@@ -1297,8 +1297,8 @@ async function getMonthData() {
     .subtract(1, "months") // 再減去一個月
     .format("YYYY-MM");
 
-  console.log("last_month:", last_month);
-  console.log("last_year:", last_year);
+  // console.log("last_month:", last_month);
+  // console.log("last_year:", last_year);
 
   const filterlast_month = {
     selector: {
@@ -1337,7 +1337,7 @@ async function getMonthData() {
     ];
     data1.push(extractedData1);
   }
-  console.log("符合上個月條件的資料:", data1[0]);
+  //console.log("符合上個月條件的資料:", data1[0]);
 
   if (lastMonthDoc.docs.length > 0) {
     const { power } = lastMonthDoc.docs[0];
@@ -1345,7 +1345,7 @@ async function getMonthData() {
     const extractedData = [...power];
     data3.push(extractedData);
   }
-  console.log("我是power 1:", data3[0]);
+  //console.log("我是power 1:", data3[0]);
 
   if (lastYearDoc.docs.length > 0) {
     const { sumArray, other_sum, averageArray } = lastYearDoc.docs[0];
@@ -1358,7 +1358,7 @@ async function getMonthData() {
     ];
     data2.push(extractedData2);
   }
-  console.log("符合去年同期條件的資料:", data2[0]);
+  //console.log("符合去年同期條件的資料:", data2[0]);
 
   if (lastYearDoc.docs.length > 0) {
     const { power } = lastYearDoc.docs[0];
@@ -1367,7 +1367,7 @@ async function getMonthData() {
     const extractedData = [...power];
     data4.push(extractedData);
   }
-  console.log("我是power 2:", data4[0]);
+  //console.log("我是power 2:", data4[0]);
 
   return {
     lastMonthYearMonth: lastMonthYearMonth, //年-月

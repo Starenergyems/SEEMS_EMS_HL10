@@ -651,13 +651,73 @@ function Determine_statusL_of_ACB(closeStatus, openStatus) {
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
-function checkValues(value1, value2, value3) {
-  // 判斷是否有任一數值不為零
-  if (value1 !== 0 || value2 !== 0 || value3 !== 0) {
-    return 1;
-  } else {
-    return 0;
+function checkValuesFault(v1, v2, v3) {
+  // 轉換數值為二進制並填補為 32 位元
+  const binary1 = v1.toString(2).padStart(32, '0');
+  const binary2 = v2.toString(2).padStart(32, '0');
+  const binary3 = v3.toString(2).padStart(32, '0');
+
+  // 檢查特定位元是否包含 1 404046/404048/404061
+  const positions1 = [0, 1, 2, 3, 4, 5, 7, 9,10,11,12,13,14,15,17,18,20,21,22,23]; // 第一個數值要檢查的位置
+  const positions2 = [0,1,2,3,4]; // 第二個數值要檢查的位置
+  const positions3 = [0,11,15]; // 第三個數值要檢查的位置
+
+  // 檢查第一個數值的指定位置是否包含 1
+  for (let position of positions1) {
+    if (binary1.charAt(31 - position) === '1') {
+      return 1; // 若指定位置出現 1，則返回 1
+    }
   }
+
+  // 檢查第二個數值的指定位置是否包含 1
+  for (let position of positions2) {
+    if (binary2.charAt(31 - position) === '1') {
+      return 1; // 若指定位置出現 1，則返回 1
+    }
+  }
+
+  // 檢查第三個數值的指定位置是否包含 1
+  for (let position of positions3) {
+    if (binary3.charAt(31 - position) === '1') {
+      return 1; // 若指定位置出現 1，則返回 1
+    }
+  }
+
+  return 0; // 若所有指定位置都沒有出現 1，則返回 0
+}
+
+// 測試
+//console.log(checkValuesFault(44046, 404048, 404061)); // 1
+
+// 1: Open
+// 2: Close
+// 3: Reset
+function maponGridStatus_LC(input){
+if(input===1)
+{
+  return "切離";
+}
+if  (input===2)
+{
+  return "投入";
+}
+if  (input===3)
+{
+  return "故障復位";
+}
+return "未定義"
+}
+
+function checkValuesalarm(values) {
+  const binary1 = values.toString(2).padStart(32, '0');
+  const positions1 = [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 20];
+    // 檢查第一個數值的指定位置是否包含 1
+    for (let position of positions1) {
+      if (binary1.charAt(31 - position) === '1') {
+        return 1; // 若指定位置出現 1，則返回 1
+      }
+    }
+    return 0; // 若所有指定位置都沒有出現 1，則返回 0
 }
 //電池總攬下的電池狀態
 // bit 0: First SOC calibrate tip clear[CMD]
@@ -672,6 +732,7 @@ function checkValues(value1, value2, value3) {
 // bit 14: Discharge mode
 // bit 15: Charge mode
 
+//電池總攬
 function workStatuschange(var1, var2, var3, var4, var5, var6, var7) {
   // 將變數轉換為二進制並固定長度為32
   const binaryInputs = [
@@ -723,7 +784,65 @@ function workStatuschange(var1, var2, var3, var4, var5, var6, var7) {
 // 測試函數
 // const result = workStatuschange(8448, 8448, 8448, 8448, 8448, 8448, 8448);
 // console.log(result); // 這將輸出符合條件的總和
+//******************************************************************************* */
+function workStatus_LC(input){
+if(input === 0 ){
+  return "併網"
+}
+else if (input === 1 ){
+  return "離網"
+}
+}
 
+// "0: Grid mode
+// 1: Off-grid mode"
+
+//******************************************************************************* */
+function maponGridStatus(input1,input2,input3,input4){
+  const sum = input1+input2+input3+input4;
+  if(sum===0){
+    return "併網";
+  }
+  else if(sum===4){
+    return "離網"
+  }
+  else{
+    return "部分併網";
+  }
+}
+
+//******************************************************************************* */
+function mapBMSMode(input){
+  const binary = input.toString(2).padStart(32, "0");
+  //console.log("binary:" + binary);
+  const bit8 = 31 - 8;
+  const bit13 = 31 - 13;
+  const bit9 = 31 - 9;
+  const bit12 = 31 - 12;
+
+  //console.log("bit15:" + bit15);
+  if (binary[bit8] === "1"||binary[bit13] === "1") {
+    //console.log("Not Available");
+    return "運轉中";
+  } else if (binary[bit9] === "1" && binary[bit12] === "1") {
+    //console.log("Available");
+    return "停機中";
+  }
+  return "檢查"
+}
+
+
+// bit 0: First SOC calibrate tip clear[CMD]
+// bit 1: Second SOC calibrate tip clear[CMD]
+// bit 2: First SOC calibrate tip clear cancel[CMD]
+// bit 3: Second SOC calibrate tip clear cancel[CMD]
+// bit 8: Ready
+// bit 9: Idle
+// bit 10: Off-line
+// bit 12: Main switch off[CMD]
+// bit 13: Main switch on[CMD]
+// bit 14: Discharge mode
+// bit 15: Charge mode
 //******************************************************************************* */
 //側邊欄位
 //最上面的狀態顯示轉換
@@ -802,11 +921,11 @@ function mapminSOH(...input) {
 //對照系統可用性
 function mapSysMode(SysMode) {
   const binary = SysMode.toString(2).padStart(32, "0");
-  console.log("binary:" + binary);
+  //console.log("binary:" + binary);
   const bit15 = 31 - 15;
   const bit5 = 31 - 5;
-  console.log("bit15:" + bit15);
-  console.log("bit5:" + bit5);
+  //console.log("bit15:" + bit15);
+  //console.log("bit5:" + bit5);
   if (binary[bit15] === "0") {
     //console.log("Not Available");
     return "停機";
@@ -826,13 +945,13 @@ function mapStatusAllPCS(pcs1, pcs2, pcs3, pcs4) {
   const pcs3_binary = pcs3.toString(2).padStart(32, "0");
   const pcs4_binary = pcs4.toString(2).padStart(32, "0");
 
-  console.log("pcs1_binary:" + pcs1_binary);
-  console.log("pcs2_binary:" + pcs2_binary);
-  console.log("pcs3_binary:" + pcs3_binary);
-  console.log("pcs4_binary:" + pcs4_binary);
+  // console.log("pcs1_binary:" + pcs1_binary);
+  // console.log("pcs2_binary:" + pcs2_binary);
+  // console.log("pcs3_binary:" + pcs3_binary);
+  // console.log("pcs4_binary:" + pcs4_binary);
 
   const bit = 31 - 2;
-  console.log("bit:" + bit);
+  //console.log("bit:" + bit);
 
   if (
     pcs1_binary[bit] === "1" ||
@@ -864,15 +983,15 @@ function mapStatusAllBMS(bms1, bms2, bms3, bms4) {
   const bms3_binary = bms3.toString(2).padStart(32, "0");
   const bms4_binary = bms4.toString(2).padStart(32, "0");
 
-  console.log("bms1_binary:" + bms1_binary);
-  console.log("bms2_binary:" + bms2_binary);
-  console.log("bms3_binary:" + bms3_binary);
-  console.log("bms4_binary:" + bms4_binary);
+  // console.log("bms1_binary:" + bms1_binary);
+  // console.log("bms2_binary:" + bms2_binary);
+  // console.log("bms3_binary:" + bms3_binary);
+  // console.log("bms4_binary:" + bms4_binary);
 
   const bit0 = 31 - 0;
   const bit1 = 31 - 1;
-  console.log("bit0:" + bit0);
-  console.log("bit1:" + bit1);
+  // console.log("bit0:" + bit0);
+  // console.log("bit1:" + bit1);
 
   if (
     bms1_binary[bit0] === "1" ||
@@ -1042,7 +1161,6 @@ module.exports = {
   calculateAverage,
   mapchargeStatus,
   scaleProcess,
-  //mapPCSWorkingMode,
   countPCSAlarmAndFault,
   mapgridStatus,
   Scale_Data,
@@ -1068,7 +1186,6 @@ module.exports = {
   Determine_statusL_of_recloser,
   Determine_statusL_of_VCB,
   Determine_statusL_of_ACB,
-  checkValues,
   workStatuschange,
   calculateAdd,
   //****************** */
@@ -1079,18 +1196,6 @@ module.exports = {
   mapStandbyCmd,
   mapModeLR,
   mapPCSWorkingstatus,
-  //counttotalWarningNum,
-  //countWarningNum_Meter,
-  //calculateWarningNum_PCS,
-  //calculateWarningNum_Bat,
-  //calculateWarningNum_FF,
-  //cal_BSC,
-  //cal_HVAC,
-  // cal_Temperature,
-  // cal_Humidity,
-  // cal_UPS_1,
-  // cal_UPS_2,
-  // calculateWarningNum_Env,
   //****************** */
   mapSysMode,
   mapStatusAllBMS,
@@ -1107,6 +1212,12 @@ module.exports = {
   mapworkStatus_page,
   mapPCSworkStatus,
   mapgridStatus_page,
+  maponGridStatus,
+  workStatus_LC,
+  checkValuesFault,
+  checkValuesalarm,
+  maponGridStatus_LC,
+  mapBMSMode,
 };
 
 // //***************************************************************************** */

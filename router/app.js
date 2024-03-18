@@ -15,6 +15,7 @@ require("dotenv").config();
 const { submit } = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
+//const fetch = require("node-fetch");
 //如果要換資料庫的host 改掉".database"
 
 const couchdbConfig = config.database;
@@ -102,6 +103,16 @@ app.post("/login", async (req, res) => {
   }
 });
 
+
+app.get("/health", (req, res) => {
+  const isHealthy = true;
+  if (isHealthy) {
+    res.status(200).json({ status: "OK" });
+  } else {
+    res.status(500).json({ status: "Error" });
+  }
+});
+
 //身分驗證
 app.use("*", async (req, res, next) => {
   try {
@@ -169,8 +180,8 @@ const job = schedule.scheduleJob(rule, async () => {
     ChgEtoday0 = otherrf01Data.Freq[408028];
     DcgEtoday0 = otherrf01Data.Freq[408030];
 
-    console.log("ChgEtoday0:", ChgEtoday0);
-    console.log("mapDcgEtoday0:", DcgEtoday0);
+    //console.log("ChgEtoday0:", ChgEtoday0);
+    //console.log("mapDcgEtoday0:", DcgEtoday0);
 
     // 取消定時任務
     job.cancel();
@@ -488,7 +499,7 @@ async function getLatestValuesFromDatabaseforother() {
         lc3nanoDb.createIndex(indexDef).then(() => lc3nanoDb.find(mangoQuery)),
         lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery)),
       ]);
-
+   
     // 取得每個資料庫的第一條資料
     const gcData = gcBody.docs[0];
     const otherrf01Data = rf01Body.docs[0];
@@ -496,7 +507,7 @@ async function getLatestValuesFromDatabaseforother() {
     const lc2Data = lc2Body.docs[0];
     const lc3Data = lc3Body.docs[0];
     const lc4Data = lc4Body.docs[0];
-
+    //console.log("++++gcData ",gcData);
     const L_M_systemMode = mapL_M_systemMode(
       gcData.System["400078"],
       gcData.System["400079"],
@@ -530,7 +541,7 @@ async function getLatestValuesFromDatabaseforother() {
     const L_M_powerFactor = scaleProcess(
       Math.abs(gcData.IEC61850[400127]),
       0.01,
-      1
+      2
     );
     const L_M_avgSOC = scaleProcess(
       gcData.IEC61850[400129] / (447200 * 7),
@@ -593,7 +604,7 @@ const environmentRouter = require("./rEnvironment");
 const eventRouter = require("./rEvent");
 const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
-// const alarmRouter = require("./rAlarm");
+const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
 const login = require("./rLogin");
 const { authentication } = require("./authMiddleware");
@@ -611,7 +622,7 @@ app.use(environmentRouter);
 app.use(eventRouter);
 app.use(reportRouter);
 app.use(chartRouter);
-// app.use(alarmRouter);
+app.use(alarmRouter);
 
 //***************************************************************************************************************** */
 
@@ -623,14 +634,7 @@ app.get("/error", (req, res) => {
   res.render("error");
 });
 
-app.get("/health", (req, res) => {
-  const isHealthy = true;
-  if (isHealthy) {
-    res.status(200).json({ status: "OK" });
-  } else {
-    res.status(500).json({ status: "Error" });
-  }
-});
+
 
 server.listen(port, () => {
   console.log(`app.js 應用程式正在監聽端口 ${port}`);

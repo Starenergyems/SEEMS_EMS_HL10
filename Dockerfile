@@ -11,11 +11,14 @@ COPY package*.json ./
 RUN npm install
 
 # Bundle app source
-COPY . .
+COPY public public
+COPY router router
+COPY Set_SOC_ref Set_SOC_ref
+COPY views views 
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/router
 
 # Define the command to run your app
-# CMD ["node", "app.js"]
-CMD ["tail", "-f", "/dev/null"]
+CMD ["node", "app.js"]
+#CMD ["tail", "-f", "/dev/null"]

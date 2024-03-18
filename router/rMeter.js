@@ -183,7 +183,7 @@ router.get("/operateinfo", (req, res) => {
 router.get("/operateinfo/singlelinediagram", async (req, res) => {
   try {
     await query_SLD_KeyValuePairs();
-    console.log(SLD_KeyValuePairs);
+    //console.log(SLD_KeyValuePairs);
 
     res.render("Op_Meter_SLD", SLD_KeyValuePairs);
   } catch (error) {
@@ -205,9 +205,9 @@ router.get("/operateinfo/singlelinediagram/:data", async (req, res) => {
 
 router.post("/change_num_of_RelayVCB", async (req, res) => {
   try {
-    console.log("接收到前端請求");
+    //console.log("接收到前端請求");
     num_RelayVCB = req.body.num_of_RelayVCB;
-    console.log(num_RelayVCB);
+    //console.log(num_RelayVCB);
 
     await query_SLD_KeyValuePairs();
 
@@ -426,7 +426,7 @@ async function query_AuxM_KeyValuePairs() {
 router.get("/operateinfo/auxmeter", async (req, res) => {
   try {
     await query_AuxM_KeyValuePairs();
-    console.log(AuxM_KeyValuePairs);
+    //console.log(AuxM_KeyValuePairs);
 
     res.render("Op_Meter_AuxMeter", AuxM_KeyValuePairs);
   } catch (error) {

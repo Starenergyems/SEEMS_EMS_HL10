@@ -14,7 +14,7 @@ app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(cors());
-
+//const fetch = require("node-fetch");
 ////////////////////////////////////////////////////////////////////////////////////////
 // Need change.
 //如果要換資料庫的host 改掉".database"
@@ -33,7 +33,10 @@ const doc_CONFIG = couchdbConfig.config; // The account setting doc id.
 
 const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
 // const db_URL = couchDBUrl; // Use for fetch database function.
-const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
+// const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
+const credentials = Buffer.from(`${db_USERNAME}:${db_PASSWORD}`).toString('base64');
+const AUTHORIZATION = "Basic " + credentials;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare, config data.
@@ -138,6 +141,7 @@ async function findaccount(inmail = "", intoken = "") {
   } else if (inmail === "" && intoken !== "") {
     mangoQuery = { selector: { "user.token": { $eq: intoken } } };
   }
+  console.log(mangoQuery)
   try {
     data = await fetch(URL, {
       method: "POST",
@@ -149,6 +153,7 @@ async function findaccount(inmail = "", intoken = "") {
       body: JSON.stringify(mangoQuery),
     });
     data = await data.json();
+    // console.log(data)
     if (data.docs.length === 1) {
       id = data.docs[0]._id; // Impossible  undefined.
       rev = data.docs[0]._rev; // Impossible  undefined.

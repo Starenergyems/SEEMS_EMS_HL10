@@ -77,7 +77,7 @@ async function query_Syscrtl_variables() {
 
     const GCData = result.docs[0];
     const value = GCData.System[400078];
-    console.log("Value:", value);
+    //console.log("Value:", value);
 
     sysctrl_variables = {
       permission: "manager",
@@ -213,13 +213,13 @@ router.get("/mode", (req, res) => {
 //系統模式控制頁面切換
 router.get("/mode/sysctrl", async (req, res) => {
   await query_Syscrtl_variables();
-  console.log(sysctrl_variables);
+  //console.log(sysctrl_variables);
   res.render("Mode_SysCtrl", sysctrl_variables);
 });
 
 router.get("/mode/sysctrl/:data", async (req, res) => {
   await query_Syscrtl_variables();
-  console.log(sysctrl_variables);
+  //console.log(sysctrl_variables);
   res.json(sysctrl_variables);
 });
 
@@ -251,7 +251,7 @@ async function query_Schd_KeyValuePairs() {
 
     const GCData = result.docs[0];
     const value = GCData.Schedule.Today[401002];
-    console.log("Value:", value);
+    //console.log("Value:", value);
 
     const sysCtrl_2_MT = {
       0: { 0: "頻率表", 1: "測試用頻率" },
@@ -400,7 +400,7 @@ async function query_Schd_KeyValuePairs() {
 router.get("/mode/schedule", async (req, res) => {
   try {
     await query_Schd_KeyValuePairs();
-    console.log(Schd_KeyValuePairs);
+    //console.log(Schd_KeyValuePairs);
 
     res.render("Mode_Schedule", Schd_KeyValuePairs);
   } catch (error) {
@@ -430,7 +430,7 @@ router.post("/change_dateNumber", async (req, res) => {
       dateNumber = 0;
     }
 
-    console.log(dateNumber);
+    //console.log(dateNumber);
 
     await query_Schd_KeyValuePairs();
 
