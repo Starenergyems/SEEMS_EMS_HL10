@@ -1060,23 +1060,34 @@ const Other_408187 = {
   scale: 0.1,
 };
 
-const Other_408201 = {
-  0: "51-1",
+const Other_408200 = {
   1: "50-1",
+  0: "51-1",
   2: "51N-1",
   3: "50N-1",
-  4: "51-2",
-  5: "50-2",
-  6: "51N-2",
-  7: "50N-2",
-  8: "51-3",
-  9: "50-3",
-  10: "51N-3",
-  11: "50N-3",
-  12: "51-4",
-  13: "50-4",
-  14: "51N-4",
-  15: "50N-4",
+  4: "51G-1",
+  5: "50G-1",
+  6: "51-2",
+  7: "50-2",
+  8: "51N-2",
+  9: "50N-2",
+  10: "51G-2",
+  11: "50G-2",
+  12: "51-3",
+  13: "50-3",
+  14: "51N-3",
+  15: "50N-3",
+};
+
+const Other_408201 = {
+  0: "51G-3",
+  1: "50G-3",
+  2: "51-4",
+  3: "50-4",
+  4: "51N-4",
+  5: "50N-4",
+  6: "51G-4",
+  7: "50G-4",
 };
 
 const Other_408202 = {
@@ -1097,18 +1108,14 @@ const Other_408203 = {
   1: "50-1",
   2: "51N-1",
   3: "50N-1",
-  4: "51-2",
-  5: "50-2",
-  6: "51N-2",
-  7: "50N-2",
-  8: "51-3",
-  9: "50-3",
-  10: "51N-3",
-  11: "50N-3",
-  12: "51-4",
-  13: "50-4",
-  14: "51N-4",
-  15: "50N-4",
+  4: "51G-1",
+  5: "50G-1",
+  6: "51-2",
+  7: "50-2",
+  8: "51N-2",
+  9: "50N-2",
+  10: "51G-2",
+  11: "50G-2",
 };
 
 const Other_408204 = {
@@ -1154,6 +1161,27 @@ const Other_408207 = {
   5: "ACB_#-3_Open Ctrl",
 };
 
+const Other_408208 = {
+  0: "Auto",
+  1: "Manual",
+  2: "Off",
+};
+
+const Other_408209 = {
+  4: "Relay Buzzer",
+  5: "Relay On",
+  6: "Relay Off",
+};
+
+const Other_408210 = {
+  0: "Fail",
+  1: "Reclose",
+  2: "Buzzer",
+  3: "Ext. Lock",
+  4: "Error Trip",
+  5: "Standby",
+};
+
 const Other_error_table = {
   408154: {
     name: "UPS status",
@@ -1178,6 +1206,14 @@ const Other_error_table = {
     location: "Control Room",
     line: true,
     category: "ENV",
+  },
+  408200: {
+    name: "Relay_MVCB-0",
+    status: Other_408200,
+    type: "bit",
+    location: "MVCB",
+    line: true,
+    category: "meter",
   },
   408201: {
     name: "Relay_MVCB-1",
@@ -1230,6 +1266,30 @@ const Other_error_table = {
   408207: {
     name: "ACB Control",
     status: Other_408207,
+    type: "bit",
+    location: "device",
+    line: true,
+    category: "meter",
+  },
+  408208: {
+    name: "Recloser mode",
+    status: Other_408208,
+    type: "bit",
+    location: "device",
+    line: true,
+    category: "meter",
+  },
+  408209: {
+    name: "Relay status",
+    status: Other_408209,
+    type: "bit",
+    location: "device",
+    line: true,
+    category: "meter",
+  },
+  408210: {
+    name: "Recloser status",
+    status: Other_408210,
     type: "bit",
     location: "device",
     line: true,
@@ -2545,7 +2605,8 @@ function current_locale_time() {
   const date = new Date();
   // console.log(date)
 
-  const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSSZ");
+  // const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSSZ");
+  const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ssZ");
 
   // console.log(formattedString);
   return formattedString;

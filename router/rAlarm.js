@@ -301,7 +301,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
         })
         .then((resp) => {
           let alarm_db_array = [];
-          let alarm_db_array_read = [];
+          // let alarm_db_array_read = [];
 
           for (const item of resp.docs) {
             // console.log(item);
@@ -309,15 +309,16 @@ router.get("/alarm/realtime/edit", (req, res) => {
             //   delete item[key];
             // });
             item["index"] = "";
-            if (item.read) {
-              alarm_db_array_read.push(item);
-            } else {
-              alarm_db_array.push(item);
-            }
+            alarm_db_array.push(item);
+            // if (item.read) {
+            //   alarm_db_array_read.push(item);
+            // } else {
+            // }
           }
           // console.log("alarm_db_array");
           // console.log(alarm_db_array);
-          res.send([...alarm_db_array, ...alarm_db_array_read]);
+          // res.send([...alarm_db_array, ...alarm_db_array_read]);
+          res.send(alarm_db_array);
         });
     })
     .catch((err) => {
