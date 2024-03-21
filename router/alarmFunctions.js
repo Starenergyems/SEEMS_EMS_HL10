@@ -1729,6 +1729,7 @@ function createErrorRecord(
   time,
   error_table_tag,
   device,
+  tag,
   content,
   value,
   occurrence_time,
@@ -1767,6 +1768,7 @@ function createErrorRecord(
     time: time,
     location: location,
     device: device,
+    tag: tag,
     level: content.toLowerCase().includes("fault") ? "Fault" : "Alarm",
     content: content,
     value: value,
@@ -1826,6 +1828,7 @@ function LC_error_result_unit(
           time,
           error_table[key_error][tag],
           device,
+          tag,
           error_table[key_error][tag]["name"] + ":" + error_arr[i],
           bit_status,
           occurrence_time,
@@ -1848,6 +1851,7 @@ function LC_error_result_unit(
           time,
           error_table[key_error][tag],
           device,
+          tag,
           error_table[key_error][tag]["name"] + ":" + content,
           value,
           occurrence_time,
@@ -1876,6 +1880,7 @@ function LC_error_result_unit(
           time,
           error_table[key_error][tag],
           device,
+          tag,
           error_table[key_error][tag]["name"] + ":" + content,
           value,
           occurrence_time,
@@ -1894,6 +1899,7 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
   let error_result = {};
+  let null_tags = [];
   // let _recover_doc = {};
 
   // const alarmnanoDb = nano.use("alarm");
@@ -1950,7 +1956,9 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
                 value,
                 device,
                 error_result
-              );
+              )
+            } else if (value === null) {
+              null_tags.push(tag);
             }
           }
         } else {
@@ -1975,6 +1983,8 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
                   device,
                   error_result
                 );
+              } else if (value === null) {
+                null_tags.push(tag);
               }
             }
           }
@@ -1982,13 +1992,14 @@ function LC_error_result_gen(item, db_name, error_table = LC_error_table) {
       }
     }
   }
-  return error_result;
+  return {"error_result": error_result, "null_tags": null_tags};
 }
 
 function DC_error_result_gen(item, db_name, error_table = DC_error_table) {
   const time = current_locale_time();
   const occurrence_time = item.time;
   let error_result = {};
+  let null_tags = [];
   // console.log(Object.keys(error_table))
   for (let [key, v] of Object.entries(item)) {
     if (typeof v === "object" && v !== null) {
@@ -2008,18 +2019,21 @@ function DC_error_result_gen(item, db_name, error_table = DC_error_table) {
               time,
               error_table[tag],
               device,
+              tag,
               error_table[tag]["name"] + ":" + content,
               value,
               occurrence_time,
               line,
               category
             );
+          } else if (value === null) {
+            null_tags.push(tag);
           }
         }
       }
     }
   }
-  return error_result;
+  return {"error_result": error_result, "null_tags": null_tags};
 }
 
 function Other_error_result_unit(
@@ -2068,6 +2082,7 @@ function Other_error_result_unit(
           time,
           error_table[tag],
           device,
+          tag,
           error_table[tag]["name"] + ":" + error_arr[i],
           bit_status,
           occurrence_time,
@@ -2089,6 +2104,7 @@ function Other_error_result_unit(
           time,
           error_table[tag],
           device,
+          tag,
           error_table[tag]["name"] + ":" + content,
           value,
           occurrence_time,
@@ -2117,6 +2133,7 @@ function Other_error_result_unit(
           time,
           error_table[tag],
           device,
+          tag,
           error_table[tag]["name"] + ":" + content,
           value,
           occurrence_time,
@@ -2136,6 +2153,7 @@ function Other_error_result_gen(
   const time = current_locale_time();
   const occurrence_time = item.time;
   let error_result = {};
+  let null_tags = [];
   // console.log(Object.keys(error_table))
   for (let [key, v] of Object.entries(item)) {
     if (typeof v === "object" && v !== null) {
@@ -2155,12 +2173,14 @@ function Other_error_result_gen(
               device,
               error_result
             );
+          } else if (value === null) {
+            null_tags.push(tag);
           }
         }
       }
     }
   }
-  return error_result;
+  return {"error_result": error_result, "null_tags": null_tags};
 }
 
 function compare_trigger_alarms(error_result, response) {
@@ -2295,6 +2315,7 @@ function update_trigger_alarms_batch(
   nanoDB,
   hisnanoDB,
   data_item,
+  null_tags,
   line_flag = false
 ) {
   // console.log(data_item.System["402001"]);
@@ -2322,21 +2343,26 @@ function update_trigger_alarms_batch(
                   // then line notify + insert to DB
                   if (element.hasOwnProperty("error")) {
                     const _id = element.key;
+                    const tag = error_result[_id]["tag"];
+                    // const tag = _id.split(":")[2]
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
-                    if (line_flag && line) {
-                      sendLineNotify(error_result[_id]);
-                    }
-                    docs_batch.push(error_result[_id]);
-
-                    const obj = error_result[_id];
-                    const newObj = { ...obj };
-                    delete newObj["_id"];
-                    hisAlarm_batch.push(newObj);
+                    if (!null_tags.includes(tag)) {
+                      if (line_flag && line) {
+                        sendLineNotify(error_result[_id]);
+                      }
+                      docs_batch.push(error_result[_id]);
+  
+                      const obj = error_result[_id];
+                      const newObj = { ...obj };
+                      delete newObj["_id"];
+                      hisAlarm_batch.push(newObj);
+                    };
 
                     // The cases which the _id has been inserted into the DB once
                   } else if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
+                    const tag = error_result[_id]["tag"];
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
                     // Case 1: it remains in the DB correctly
@@ -2346,33 +2372,37 @@ function update_trigger_alarms_batch(
                       let doc = element.doc;
                       let error_element = error_result[_id];
                       // console.log(error_result[_id]["_id"])
-                      if (doc.value !== error_element["value"]) {
-                        error_element["_rev"] = doc._rev;
-                        error_element["read"] = doc.read;
-                        // error_element["recover"] = false;
-                        if (line_flag && line) {
-                          sendLineNotify(error_element);
-                        }
-                        docs_batch.push(error_element);
-
-                        const obj = error_element[_id];
-                        const newObj = { ...obj };
-                        delete newObj["_id"];
-                        hisAlarm_batch.push(newObj);
-                      }
+                      if (!null_tags.includes(tag)) {
+                        if (doc.value !== error_element["value"]) {
+                          error_element["_rev"] = doc._rev;
+                          error_element["read"] = doc.read;
+                          // error_element["recover"] = false;
+                          if (line_flag && line) {
+                            sendLineNotify(error_element);
+                          }
+                          docs_batch.push(error_element);
+  
+                          const obj = error_element[_id];
+                          const newObj = { ...obj };
+                          delete newObj["_id"];
+                          hisAlarm_batch.push(newObj);
+                        };
+                      };
 
                       // Case 2: it has been deleted before and not existed in the db currently
                       // then line notify + insert to DB
                     } else {
-                      if (line_flag && line) {
-                        sendLineNotify(error_result[_id]);
-                      }
-                      docs_batch.push(error_result[_id]);
-
-                      const obj = error_result[_id];
-                      const newObj = { ...obj };
-                      delete newObj["_id"];
-                      hisAlarm_batch.push(newObj);
+                      if (!null_tags.includes(tag)) {
+                        if (line_flag && line) {
+                          sendLineNotify(error_result[_id]);
+                        }
+                        docs_batch.push(error_result[_id]);
+  
+                        const obj = error_result[_id];
+                        const newObj = { ...obj };
+                        delete newObj["_id"];
+                        hisAlarm_batch.push(newObj);
+                      };
                     }
                   }
                 });
@@ -2405,21 +2435,25 @@ function update_trigger_alarms_batch(
                   // then line notify + insert to DB
                   if (element.hasOwnProperty("error")) {
                     const _id = element.key;
+                    const tag = error_result[_id]["tag"];
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
-                    if (line_flag && line) {
-                      sendLineNotify(error_result[_id]);
-                    }
-                    docs_batch.push(error_result[_id]);
-
-                    const obj = error_result[_id];
-                    const newObj = { ...obj };
-                    delete newObj["_id"];
-                    hisAlarm_batch.push(newObj);
+                    if (!null_tags.includes(tag)) {
+                      if (line_flag && line) {
+                        sendLineNotify(error_result[_id]);
+                      }
+                      docs_batch.push(error_result[_id]);
+  
+                      const obj = error_result[_id];
+                      const newObj = { ...obj };
+                      delete newObj["_id"];
+                      hisAlarm_batch.push(newObj);
+                    };
 
                     // The cases which the _id has been inserted into the DB once
                   } else if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
+                    const tag = error_result[_id]["tag"];
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
                     // Case 1: it is somehow remain in the DB although it should be a newcomer
@@ -2429,32 +2463,36 @@ function update_trigger_alarms_batch(
                       // console.log(element.doc);
                       let doc = element.doc;
                       let error_element = error_result[_id];
-                      if (doc.value !== error_element["value"]) {
-                        error_element["_rev"] = doc._rev;
-                        error_element["read"] = doc.read;
-                        if (line_flag && line) {
-                          sendLineNotify(error_element);
-                        }
-                        docs_batch.push(error_element);
-
-                        const obj = error_element[_id];
-                        const newObj = { ...obj };
-                        delete newObj["_id"];
-                        hisAlarm_batch.push(newObj);
-                      }
+                      if (!null_tags.includes(tag)) {
+                        if (doc.value !== error_element["value"]) {
+                          error_element["_rev"] = doc._rev;
+                          error_element["read"] = doc.read;
+                          if (line_flag && line) {
+                            sendLineNotify(error_element);
+                          }
+                          docs_batch.push(error_element);
+  
+                          const obj = error_element[_id];
+                          const newObj = { ...obj };
+                          delete newObj["_id"];
+                          hisAlarm_batch.push(newObj);
+                        };
+                      };
 
                       // Case 2: it has been deleted before and not existed in the db currently
                       // then line notify + insert to DB
                     } else {
-                      if (line_flag && line) {
-                        sendLineNotify(error_result[_id]);
-                      }
-                      docs_batch.push(error_result[_id]);
-
-                      const obj = error_result[_id];
-                      const newObj = { ...obj };
-                      delete newObj["_id"];
-                      hisAlarm_batch.push(newObj);
+                      if (!null_tags.includes(tag)) {
+                        if (line_flag && line) {
+                          sendLineNotify(error_result[_id]);
+                        }
+                        docs_batch.push(error_result[_id]);
+  
+                        const obj = error_result[_id];
+                        const newObj = { ...obj };
+                        delete newObj["_id"];
+                        hisAlarm_batch.push(newObj);
+                      };
                     }
                   }
                 });
@@ -2626,7 +2664,10 @@ function alarm_processor(
         const db_name = original_nanoDB["config"]["db"];
         const item = response.docs[0];
         // console.log(item);
-        const error_result = error_result_gen_func(item, db_name);
+        const result = error_result_gen_func(item, db_name);
+        const error_result = result.error_result;
+        const null_tags = result.null_tags;
+
         // console.log(error_result);
 
         alarm_nanoDB
@@ -2653,6 +2694,7 @@ function alarm_processor(
               alarm_nanoDB,
               hisalarm_nanoDB,
               item,
+              null_tags,
               true
             );
 
