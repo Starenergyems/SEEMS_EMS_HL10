@@ -23,7 +23,6 @@ const {
   submit,
 } = require("./rLogin");
 
-const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -31,7 +30,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-const nanoDb = nano(couchDBUrl);
+// const nanoDb = nano(couchDBUrl);
 
 // Middleware
 app.set("view engine", "ejs");

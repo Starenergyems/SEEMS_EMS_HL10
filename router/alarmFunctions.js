@@ -160,7 +160,7 @@ const LC_System_error_table = {
   402013: {
     name: "System CHG/DCG status",
     status: LC_System_402013,
-    type: "int",
+    type: "int_bit",
     location: "ESS?x-1",
     line: false,
     category: "system",
@@ -168,7 +168,7 @@ const LC_System_error_table = {
   402019: {
     name: "Running mode",
     status: LC_System_402019,
-    type: "int",
+    type: "int_bit",
     location: "ESS?x-1",
     line: false,
     category: "system",
@@ -176,7 +176,7 @@ const LC_System_error_table = {
   402020: {
     name: "Grid status",
     status: LC_System_402020,
-    type: "int",
+    type: "int_bit",
     location: "ESS?x-1",
     line: false,
     category: "system",
@@ -354,9 +354,9 @@ const LC_PCS_error_table = {
   // 403035: { name: "LC_PCS_Alarm status2", status: LC_PCS_403035, type: "bit", location: "ESS?x-1", line: true },
   // 403036: { name: "LC_PCS_Fault status1", status: LC_PCS_403036, type: "bit", location: "ESS?x-1", line: true },
   // 403038: { name: "LC_PCS_Fault status2", status: LC_PCS_403038, type: "bit", location: "ESS?x-1", line: true },
-  // 403040: { name: "LC_PCS_Charge status", status: LC_PCS_403040, type: "int", location: "ESS?x-1", line: false },
+  // 403040: { name: "LC_PCS_Charge status", status: LC_PCS_403040, type: "int_bit", location: "ESS?x-1", line: false },
   // 403049: { name: "LC_PCS_Working status", status: LC_PCS_403049, type: "bit", location: "ESS?x-1", line: true },
-  // 403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int", location: "ESS?x-1", line: false },
+  // 403054: { name: "LC_PCS_Grid status", status: LC_PCS_403054, type: "int_bit", location: "ESS?x-1", line: false },
   // 403058: { name: "LC_PCS_Node status", status: LC_PCS_403058, type: "bit", location: "ESS?x-1", line: true },
   403063: {
     name: "Unit 1_Alarm status1",
@@ -838,7 +838,7 @@ const LC_BSC_error_table = {
   406007: {
     name: "HVAC_1 running status",
     status: LC_BSC_406007,
-    type: "int",
+    type: "int_bit",
     location: "ESS?x-1",
     line: true,
     category: "ENV",
@@ -846,7 +846,7 @@ const LC_BSC_error_table = {
   406009: {
     name: "HVAC_2 running status",
     status: LC_BSC_406009,
-    type: "int",
+    type: "int_bit",
     location: "ESS?x-1",
     line: true,
     category: "ENV",
@@ -854,7 +854,7 @@ const LC_BSC_error_table = {
   // 406011: {
   //   name: "HVAC_3 running status",
   //   status: LC_BSC_406011,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -862,7 +862,7 @@ const LC_BSC_error_table = {
   // 406013: {
   //   name: "HVAC_4 running status",
   //   status: LC_BSC_406013,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -870,7 +870,7 @@ const LC_BSC_error_table = {
   // 406015: {
   //   name: "HVAC_5 running status",
   //   status: LC_BSC_406015,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -878,7 +878,7 @@ const LC_BSC_error_table = {
   // 406017: {
   //   name: "HVAC_6 running status",
   //   status: LC_BSC_406017,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -886,7 +886,7 @@ const LC_BSC_error_table = {
   // 406019: {
   //   name: "HVAC_7 running status",
   //   status: LC_BSC_406019,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -894,7 +894,7 @@ const LC_BSC_error_table = {
   // 406021: {
   //   name: "HVAC_8 running status",
   //   status: LC_BSC_406021,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -902,7 +902,7 @@ const LC_BSC_error_table = {
   // 406023: {
   //   name: "HVAC_9 running status",
   //   status: LC_BSC_406023,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -910,7 +910,7 @@ const LC_BSC_error_table = {
   // 406025: {
   //   name: "HVAC_10 running status",
   //   status: LC_BSC_406025,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -918,7 +918,7 @@ const LC_BSC_error_table = {
   // 406027: {
   //   name: "HVAC_11 running status",
   //   status: LC_BSC_406027,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -926,7 +926,7 @@ const LC_BSC_error_table = {
   // 406029: {
   //   name: "HVAC_12 running status",
   //   status: LC_BSC_406029,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -934,7 +934,7 @@ const LC_BSC_error_table = {
   // 406031: {
   //   name: "HVAC_13 running status",
   //   status: LC_BSC_406031,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -942,7 +942,7 @@ const LC_BSC_error_table = {
   // 406033: {
   //   name: "HVAC_14 running status",
   //   status: LC_BSC_406033,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -950,7 +950,7 @@ const LC_BSC_error_table = {
   // 406035: {
   //   name: "HVAC_15 running status",
   //   status: LC_BSC_406035,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -958,7 +958,7 @@ const LC_BSC_error_table = {
   // 406037: {
   //   name: "HVAC_16 running status",
   //   status: LC_BSC_406037,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -966,7 +966,7 @@ const LC_BSC_error_table = {
   // 406039: {
   //   name: "HVAC_17 running status",
   //   status: LC_BSC_406039,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -974,7 +974,7 @@ const LC_BSC_error_table = {
   // 406041: {
   //   name: "HVAC_18 running status",
   //   status: LC_BSC_406041,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -982,7 +982,7 @@ const LC_BSC_error_table = {
   // 406043: {
   //   name: "HVAC_19 running status",
   //   status: LC_BSC_406043,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -990,7 +990,7 @@ const LC_BSC_error_table = {
   // 406045: {
   //   name: "HVAC_20 running status",
   //   status: LC_BSC_406045,
-  //   type: "int",
+  //   type: "int_bit",
   //   location: "ESS?x-1",
   //   line: true,
   //   category: "ENV",
@@ -1301,7 +1301,7 @@ const DC_error_table = {
   409101: {
     name: "LC_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "system",
@@ -1309,7 +1309,7 @@ const DC_error_table = {
   409103: {
     name: "Freq-M_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1317,7 +1317,7 @@ const DC_error_table = {
   409105: {
     name: "ACPM_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1325,7 +1325,7 @@ const DC_error_table = {
   409107: {
     name: "AuxMtot_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1333,7 +1333,7 @@ const DC_error_table = {
   409109: {
     name: "AuxM_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1341,7 +1341,7 @@ const DC_error_table = {
   409111: {
     name: "UPS_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1349,7 +1349,7 @@ const DC_error_table = {
   409113: {
     name: "TR_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1357,7 +1357,7 @@ const DC_error_table = {
   409115: {
     name: "TH_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1365,7 +1365,7 @@ const DC_error_table = {
   409117: {
     name: "RelayMVCB_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1373,7 +1373,7 @@ const DC_error_table = {
   409119: {
     name: "RelayVCB_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1381,7 +1381,7 @@ const DC_error_table = {
   409121: {
     name: "RIO_CtrlRoom_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1389,7 +1389,7 @@ const DC_error_table = {
   409123: {
     name: "RIO_MVCB_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1397,7 +1397,7 @@ const DC_error_table = {
   409125: {
     name: "RIO_ACP_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
@@ -1405,7 +1405,7 @@ const DC_error_table = {
   409127: {
     name: "GC_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "system",
@@ -1413,7 +1413,7 @@ const DC_error_table = {
   409129: {
     name: "HVAC_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "ENV",
@@ -1421,29 +1421,171 @@ const DC_error_table = {
   409131: {
     name: "Recloser_Comm_Error",
     status: 1,
-    type: "int",
+    type: "int_bit",
     location: "Control Room",
     line: true,
     category: "meter",
   },
 };
 
-const GC_400033 = {
+const GC_400037 = {
   threshold: 9500,
-  count: 4,
+  scale: 0.01,
+};
+
+const GC_400076 = {
+  0: "Switch all Sub_System to Auto Mode ( 0: Do nothing, 1: Switch )",
+  1: "Sub_System_1 Operation Mode ( 0: Manual, 1: Auto )",
+  2: "Sub_System_2 Operation Mode ( 0: Manual, 1: Auto )",
+  3: "Sub_System_3 Operation Mode ( 0: Manual, 1: Auto )",
+  4: "Sub_System_4 Operation Mode ( 0: Manual, 1: Auto )",
+  8: "Sub_System_1 SOC Judgment Basis ( 0: SOC, 1: Voltage )",
+  9: "Sub_System_2 SOC Judgment Basis ( 0: SOC, 1: Voltage )",
+  10: "Sub_System_3 SOC Judgment Basis ( 0: SOC, 1: Voltage )",
+  11: "Sub_System_4 SOC Judgment Basis ( 0: SOC, 1: Voltage )",
+  15: "Switch all Sub_System to Manual Mode ( 0: Do nothing, 1: Switch )",
+};
+
+const GC_400077 = {
+  0: "Freq_Source ( 0: Real Freq, 1: Test Freq )",
+  1: "Use Freq Cmd ( 0: No, 1: Yes )",
+  2: "Use P_schedule ( 0: No, 1: Yes )",
+  3: "Use P_LS_API ( 0: No, 1: Yes )",
+  4: "Use SOC_API ( 0: No, 1: Yes )",
+  5: "Auto Calculate SOC_ideal ( 0: No, 1: Yes )",
+  6: "Use MTE P_schedule ( 0: No, 1: Yes )",
+  7: "Use MTE P_LS/SOC ( 0: No, 1: Yes )",
+  8: "Delay P_PCS_set ( 0: Disable, 1: Enable )",
+  9: "Enable API ( 0: Disable, 1: Enable )",
+  10: "Enable Schedule ( 0: Disable, 1: Enable )",
+};
+
+const GC_400078 = {
+  0: "ESS_1 Availability ( 0: Not Available, 1: Available )",
+  1: "ESS_2 Availability ( 0: Not Available, 1: Available )",
+  2: "PCS_1 Availability ( 0: Not Available, 1: Available )",
+  3: "ESS & PCS Availability ( 0: Not Available, 1: Available )",
+  4: "Sub_System_1 Availability ( 0: Not Available, 1: Available )",
+  5: "E-dReg ( 0: Stop, 1: Running )",
+  6: "V-Q ( 0: Stop, 1: Running )",
+  13: "V-Q Hysteresis ( 0: Blue, 1: Orange )",
+  14: "Force P_LS to 0 ( 0: No, 1: Yes )",
+  15: "System Availability ( 0: Not Available, 1: Available )",
+};
+
+const GC_400079 = {
+  0: "ESS_3 Availability ( 0: Not Available, 1: Available )",
+  1: "ESS_4 Availability ( 0: Not Available, 1: Available )",
+  2: "PCS_2 Availability ( 0: Not Available, 1: Available )",
+  3: "ESS & PCS Availability ( 0: Not Available, 1: Available )",
+  4: "Sub_System_2 Availability ( 0: Not Available, 1: Available )",
+  5: "E-dReg ( 0: Stop, 1: Running )",
+  6: "V-Q ( 0: Stop, 1: Running )",
+};
+
+const GC_400080 = {
+  0: "ESS_5 Availability ( 0: Not Available, 1: Available )",
+  1: "ESS_6 Availability ( 0: Not Available, 1: Available )",
+  2: "PCS_3 Availability ( 0: Not Available, 1: Available )",
+  3: "ESS & PCS Availability ( 0: Not Available, 1: Available )",
+  4: "Sub_System_3 Availability ( 0: Not Available, 1: Available )",
+  5: "E-dReg ( 0: Stop, 1: Running )",
+  6: "V-Q ( 0: Stop, 1: Running )",
+};
+
+const GC_400081 = {
+  0: "ESS_7 Availability ( 0: Not Available, 1: Available )",
+  1: "ESS_8 Availability ( 0: Not Available, 1: Available )",
+  2: "PCS_4 Availability ( 0: Not Available, 1: Available )",
+  3: "ESS & PCS Availability ( 0: Not Available, 1: Available )",
+  4: "Sub_System_4 Availability ( 0: Not Available, 1: Available )",
+  5: "E-dReg ( 0: Stop, 1: Running )",
+  6: "V-Q ( 0: Stop, 1: Running )",
 };
 
 const GC_400129 = {
-  min: "Min_SOC_Limit",
-  max: "Max_SOC_Limit",
-  capacity: 3500000, //kWh
+  min: 400007,
+  max: 400006,
+  scale: 0.01,
+};
+
+const GC_400989 = {
+  scale: 1000,
+};
+
+const GC_400991 = {
+  scale: 1000,
+};
+
+const GC_400993 = {
+  scale: 0.001,
+};
+
+const GC_400995 = {
+  scale: 1000,
+};
+
+const GC_400997 = {
+  scale: 1000,
+};
+
+const GC_400999 = {
+  scale: 0.001,
 };
 
 const GC_error_table = {
-  400033: {
+  400037: {
     name: "SBSPM",
-    status: GC_400033,
+    status: GC_400037,
     type: "threshold",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400076: {
+    name: "System_Control_1",
+    status: GC_400076,
+    type: "bit_bidirection",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400077: {
+    name: "System_Control_2",
+    status: GC_400077,
+    type: "bit_bidirection",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400078: {
+    name: "Sub_System_1_Status",
+    status: GC_400078,
+    type: "bit_bidirection",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400079: {
+    name: "Sub_System_2_Status",
+    status: GC_400079,
+    type: "bit_bidirection",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400080: {
+    name: "Sub_System_3_Status",
+    status: GC_400080,
+    type: "bit_bidirection",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400081: {
+    name: "Sub_System_4_Status",
+    status: GC_400081,
+    type: "bit_bidirection",
     location: "Control Room",
     line: true,
     category: "system",
@@ -1452,6 +1594,54 @@ const GC_error_table = {
     name: "SOC",
     status: GC_400129,
     type: "valve",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400989: {
+    name: "緊急調度指令1_開始時間",
+    status: GC_400989,
+    type: "int_timestamp",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400991: {
+    name: "緊急調度指令1_結束時間",
+    status: GC_400991,
+    type: "int_timestamp",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400993: {
+    name: "緊急調度指令1_充放電量",
+    status: GC_400993,
+    type: "int_charge",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400995: {
+    name: "緊急調度指令2_開始時間",
+    status: GC_400995,
+    type: "int_timestamp",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400997: {
+    name: "緊急調度指令2_結束時間",
+    status: GC_400997,
+    type: "int_timestamp",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  400999: {
+    name: "緊急調度指令2_充放電量",
+    status: GC_400999,
+    type: "int_charge",
     location: "Control Room",
     line: true,
     category: "system",
@@ -1682,18 +1872,21 @@ function mapBitToStatus(rawData, statusDict, error_arr, bit_arr, bit_status) {
   const bitlength = getLargestKey(statusDict) + 1;
   //console.log(bitlength);
   const rawBitString = rawData.toString(2);
-  const bitString_rev = rawBitString
+  const bit_value_array = rawBitString
     .padStart(bitlength, "0")
     .slice(-bitlength)
     .split("")
     .reverse()
-    .join("");
-  //console.log(bitString_rev);
+  // console.log(bit_value_array);
+
+  const bitString_rev = bit_value_array.join("");
+  // console.log(bitString_rev);
 
   // Iterate through each bit in the bit string
   for (let i = 0; i < bitString_rev.length; i++) {
     // Check if the current bit is set (1)
-    if (bitString_rev[i] === bit_status) {
+    // console.log(statusDict[i])
+    if ((bitString_rev[i] === bit_status) || (bit_status === "bidirection")) {
       // Find the corresponding value in the statusDict using the index
       let matchedValue = statusDict[i];
 
@@ -1705,7 +1898,8 @@ function mapBitToStatus(rawData, statusDict, error_arr, bit_arr, bit_status) {
       }
     }
   }
-  return [error_arr, bit_arr];
+  // console.log([error_arr, bit_arr, bit_value_array]);
+  return [error_arr, bit_arr, bitString_rev];
 }
 
 function checkPartialMatch(k, array) {
@@ -1800,7 +1994,7 @@ function LC_error_result_unit(
     let bit_status;
     if (error_type === "bit") {
       bit_status = "1";
-      [error_arr, bit_arr] = mapBitToStatus(
+      [error_arr, bit_arr, bit_value_array] = mapBitToStatus(
         value,
         error_table[key_error][tag]["status"],
         error_arr,
@@ -1809,7 +2003,7 @@ function LC_error_result_unit(
       );
     } else if (error_type === "bit_abnormal") {
       bit_status = "0";
-      [error_arr, bit_arr] = mapBitToStatus(
+      [error_arr, bit_arr, bit_value_array] = mapBitToStatus(
         value,
         error_table[key_error][tag]["status"],
         error_arr,
@@ -1839,7 +2033,7 @@ function LC_error_result_unit(
       }
     }
   } else {
-    if (error_type === "int") {
+    if (error_type === "int_bit") {
       const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
       const content = error_table[key_error][tag]["status"][value];
       const line = error_table[key_error][tag]["line"];
@@ -2054,7 +2248,7 @@ function Other_error_result_unit(
     let bit_status;
     if (error_type === "bit") {
       bit_status = "1";
-      [error_arr, bit_arr] = mapBitToStatus(
+      [error_arr, bit_arr, bit_value_array] = mapBitToStatus(
         value,
         error_table[tag]["status"],
         error_arr,
@@ -2063,7 +2257,7 @@ function Other_error_result_unit(
       );
     } else if (error_type === "bit_abnormal") {
       bit_status = "0";
-      [error_arr, bit_arr] = mapBitToStatus(
+      [error_arr, bit_arr, bit_value_array] = mapBitToStatus(
         value,
         error_table[tag]["status"],
         error_arr,
@@ -2092,7 +2286,7 @@ function Other_error_result_unit(
       }
     }
   } else {
-    if (error_type === "int") {
+    if (error_type === "int_bit") {
       const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
       const content = error_table[tag]["status"][value];
       const line = error_table[tag]["line"];
@@ -2182,6 +2376,201 @@ function Other_error_result_gen(
   }
   return {"error_result": error_result, "null_tags": null_tags};
 }
+
+function GC_error_result_unit(
+  time,
+  occurrence_time,
+  db_name,
+  error_table,
+  tag,
+  value,
+  device,
+  error_result,
+  Max_SOC_Limit,
+  Min_SOC_Limit,
+  SBSPM_arr,
+) {
+  let error_type = error_table[tag]["type"];
+
+  if (error_type === "bit_bidirection") {
+    let error_arr = [];
+    let bit_arr = [];
+    let bit_status = 'bidirection';
+    [error_arr, bit_arr, bit_value_array] = mapBitToStatus(
+      value,
+      error_table[tag]["status"],
+      error_arr,
+      bit_arr,
+      bit_status
+    );
+
+    if (bit_arr.length > 0) {
+      for (let i = 0; i < bit_arr.length; i++) {
+        const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}:${bit_arr[i]}`;
+        const line = error_table[tag]["line"];
+        const category = error_table[tag]["category"];
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          tag,
+          error_table[tag]["name"] + ":" + error_arr[i],
+          bit_value_array[i],
+          occurrence_time,
+          line,
+          category
+        );
+      }
+    }
+  } else {
+    if (error_type === "int_timestamp") {
+      value = value * error_table[tag]["status"]["scale"];
+      const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
+      const line = error_table[tag]["line"];
+      const category = error_table[tag]["category"];
+      // console.log(timestamp_to_datetime(value));
+      if (typeof value === 'number') {
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          tag,
+          error_table[tag]["name"],
+          timestamp_to_datetime(value),
+          occurrence_time,
+          line,
+          category
+        );
+      }
+    } else if (error_type === "int_charge") {
+      value = value * error_table[tag]["status"]["scale"];
+      const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
+      const line = error_table[tag]["line"];
+      const category = error_table[tag]["category"];
+      if (typeof value === 'number') {
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          tag,
+          error_table[tag]["name"],
+          value,
+          occurrence_time,
+          line,
+          category
+        );
+      }
+    } else if (error_table[tag]["name"] === "SOC") {
+      value = value * error_table[tag]["status"]["scale"];
+      // console.log(v)
+      let content = "";
+      if (value < Min_SOC_Limit) {
+        content = "Lower valve";
+      } else if (value > Max_SOC_Limit) {
+        content = "Greater valve";
+      }
+      if (content) {
+        const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
+        const line = error_table[tag]["line"];
+        const category = error_table[tag]["category"];
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          tag,
+          error_table[tag]["name"] + ":" + content,
+          value,
+          occurrence_time,
+          line,
+          category
+        );
+      }
+    } else if (error_table[tag]["name"] === "SBSPM") {
+      SBSPM_performance = SBSPM_arr.every(function(element) {
+        return element <= error_table[tag]["status"]["threshold"];});
+      // console.log(SBSPM_arr, SBSPM_performance);
+
+      let content = "";
+      if (SBSPM_performance) {
+        content = "Lower SBSPM_performance";
+      }
+      if (content) {
+        const _id = `${db_name.replace(/_rf10/g, "")}:${device}:${tag}`;
+        const line = error_table[tag]["line"];
+        const category = error_table[tag]["category"];
+        error_result[_id] = createErrorRecord(
+          _id,
+          db_name,
+          time,
+          error_table[tag],
+          device,
+          tag,
+          error_table[tag]["name"] + ":" + content,
+          SBSPM_arr,
+          occurrence_time,
+          line,
+          category
+        );
+      }
+    }
+  }
+}
+
+function GC_error_result_gen(
+  item,
+  db_name,
+  error_table = GC_error_table
+) {
+  const time = current_locale_time();
+  const occurrence_time = item.time;
+  let error_result = {};
+  let null_tags = [];
+  const Max_SOC_Limit = item.System[400006] * 0.1;
+  const Min_SOC_Limit = item.System[400007] * 0.1;
+  fifoPush(item.System[400037])
+  // console.log(SBSPM_arr);
+  // console.log(Max_SOC_Limit, Min_SOC_Limit);
+
+  for (let [key, v] of Object.entries(item)) {
+    // console.log(key, v);
+    if (typeof v === "object" && v !== null) {
+      for (let [tag, value] of Object.entries(v)) {
+        // console.log(tag, value);
+        if (Object.keys(error_table).includes(tag)) {
+          // console.log(key, tag, value)
+          let device = `${key}`;
+          if (value === 0 || value) {
+            GC_error_result_unit(
+              time,
+              occurrence_time,
+              db_name,
+              error_table,
+              tag,
+              value,
+              device,
+              error_result,
+              Max_SOC_Limit,
+              Min_SOC_Limit,
+              SBSPM_arr,
+            );
+          } else if (value === null) {
+            null_tags.push(tag);
+          }
+        }
+      }
+    }
+  }
+  return {"error_result": error_result, "null_tags": null_tags};
+}
+
 
 function compare_trigger_alarms(error_result, response) {
   // console.log(error_result)
@@ -2373,7 +2762,7 @@ function update_trigger_alarms_batch(
                       let error_element = error_result[_id];
                       // console.log(error_result[_id]["_id"])
                       if (!null_tags.includes(tag)) {
-                        if (doc.value !== error_element["value"]) {
+                        if (doc.value.toString() !== error_element["value"].toString()) {
                           error_element["_rev"] = doc._rev;
                           error_element["read"] = doc.read;
                           // error_element["recover"] = false;
@@ -2464,7 +2853,7 @@ function update_trigger_alarms_batch(
                       let doc = element.doc;
                       let error_element = error_result[_id];
                       if (!null_tags.includes(tag)) {
-                        if (doc.value !== error_element["value"]) {
+                        if (doc.value.toString() !== error_element["value"].toString()) {
                           error_element["_rev"] = doc._rev;
                           error_element["read"] = doc.read;
                           if (line_flag && line) {
@@ -2648,6 +3037,25 @@ function current_locale_time() {
 
   // console.log(formattedString);
   return formattedString;
+}
+
+function timestamp_to_datetime(timestamp) {
+  const ts_datetime = moment(timestamp).format("YYYY-MM-DDTHH:mm:ssZ");
+
+  // console.log(ts_datetime);
+  return ts_datetime;
+}
+
+let SBSPM_arr = [];
+// Function to perform FIFO push operation
+function fifoPush(element) {
+  // Add the element to the end of the array
+  SBSPM_arr.push(element);
+  
+  // If the length of the array exceeds the maximum length, remove the first element
+  if (SBSPM_arr.length > 4) {
+    SBSPM_arr = SBSPM_arr.slice(1);
+  }
 }
 
 function alarm_processor(
@@ -2956,6 +3364,7 @@ module.exports = {
   LC_error_result_gen,
   DC_error_result_gen,
   Other_error_result_gen,
+  GC_error_result_gen,
   compare_trigger_alarms,
   update_trigger_alarms_batch,
   alarm_processor,
