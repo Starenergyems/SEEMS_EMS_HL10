@@ -65,6 +65,18 @@ body {
     background-color: #9D653D;
 }
 
+/****by YC*********************/
+.dataLight.RB_L.setToOpen,
+.dataLight.RG_L.setToOpen {
+  background-color: #236E37;
+}
+
+.dataLight.OB_L.setToOpen,
+.dataLight.OG_L.setToOpen {
+  background-color: #236E37;
+}
+/*******************************/
+
 .DV_Line {
     box-sizing: border-box;
     font-size: 24px;

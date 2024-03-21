@@ -416,6 +416,10 @@
     right: calc(27% - 14px);
 }
 
-.faultAlarm .spareL {
-    background-color: #FFFFFF00;
+.dataLight.OG_L.spareL, .dataLight.RG_L.spareL{
+    background-color:#fdfaed;
+}
+
+.dataLight.RG_L, .dataLight.OG_L{
+    background-color: #000000;
 }

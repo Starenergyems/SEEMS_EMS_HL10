@@ -1,12 +1,9 @@
-//const port = 3005;
-
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
 const cors = require("cors");
 const router = express.Router();
 const app = express();
-// const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -14,7 +11,6 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-//const nanoDb = nano(couchDBUrl);
 
 //set
 app.set("view engine", "ejs");
@@ -28,10 +24,6 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 
 const log = "log";
 const logDb = nano.use(log); // 請注意這裡使用 nano.use() 來設定數據庫
-
-const dc_rf10 = "dc_rf10";
-const dcDb = nano.use(dc_rf10); // 請注意這裡使用 nano.use() 來設定數據庫
-// 創建 Nano 實例的函式
 const log_door = "log_door";
 const logdoorDb = nano.use(log_door); // 請注意這裡使用 nano.use() 來設定數據庫
 
@@ -203,7 +195,7 @@ router.post("/event/door/edit", async (req, res) => {
 });
 
 // 處理GET /event/operation/edit的請求
-router.get("/event/door/edit", (req, res) => {
+router.get("/event/door/edit", async (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
@@ -212,8 +204,6 @@ router.get("/event/door/edit", (req, res) => {
     sort: [{ time: "desc" }],
   };
 
-  const logdoorDb = createNanoInstance("log_door");
-  // 使用logDb對CouchDB執行Mango查詢
   logdoorDb.find(mangoQuery, (err, body) => {
     if (err) {
       // 如果發生錯誤，印出錯誤信息並回應500 Internal Server Error

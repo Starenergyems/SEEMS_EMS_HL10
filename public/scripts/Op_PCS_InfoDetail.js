@@ -58,8 +58,9 @@ async function updateData() {
   var data = await getData(router);
   console.log(data);
   $("#chargeStatus").text(data.chargeStatus);
-  $("#tot_E_chg").text(data.tot_E_chg);
-  $("#tot_E_dcg").text(data.tot_E_dcg);
+  $("#tot_E_chg").text(data.tot_E_chg); //畫面顯示MWh
+  $("#tot_E_dcg").text(data.tot_E_dcg); //畫面顯示MWh
+
   $("#workStatus").text(data.workStatus);
   $("#workMode").text(data.workMode);
 
@@ -100,60 +101,17 @@ async function updateData() {
   $("#DCpower").text(data.DCpower);
 
   /*故障與告警****************************************************** */
-  if (data.overallFault > 0) {
-    classAdd("#overallFault", "setToClose");
-  } else {
-    classRemove("#overallFault", "setToClose");
-  }
-
-  if (data.overallAlarm > 0) {
-    classAdd("#overallAlarm", "setToClose");
-  } else {
-    classRemove("#overallAlarm", "setToClose");
-  }
-
-  if (data.faultStatus > 0) {
-    classAdd("#faultStatus", "setToClose");
-  } else {
-    classRemove("#faultStatus", "setToClose");
-  }
-
-  if (data.alarmStatus > 0) {
-    classAdd("#alarmStatus", "setToClose");
-  } else {
-    classRemove("#alarmStatus", "setToClose");
-  }
+  light_color(data.overallFault, '#overallFault', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.overallAlarm, '#overallAlarm', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultStatus, '#faultStatus', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmStatus, '#alarmStatus', 0, 'setToOpen', 1, "setToClose");
 
   /*節點狀態************************************************ */
-  if (data.nodeStatus[1] === "1") {
-    classAdd("#NS_bit_1", "setToClose");
-  } else {
-    classRemove("#NS_bit_1", "setToClose");
-  }
-
-  if (data.nodeStatus[2] === "1") {
-    classAdd("#NS_bit_2", "setToClose");
-  } else {
-    classRemove("#NS_bit_2", "setToClose");
-  }
-
-  if (data.nodeStatus[3] === "1") {
-    classAdd("#NS_bit_3", "setToClose");
-  } else {
-    classRemove("#NS_bit_3", "setToClose");
-  }
-
-  if (data.nodeStatus[4] === "1") {
-    classAdd("#NS_bit_4", "setToClose");
-  } else {
-    classRemove("#NS_bit_4", "setToClose");
-  }
-
-  if (data.nodeStatus[5] === "1") {
-    classAdd("#NS_bit_5", "setToClose");
-  } else {
-    classRemove("#NS_bit_5", "setToClose");
-  }
+  light_color(data.nodeStatus[1], '#NS_bit_1', "0", 'setToOpen', "1", "setToClose");
+  light_color(data.nodeStatus[2], '#NS_bit_2', "0", 'setToOpen', "1", "setToClose");
+  light_color(data.nodeStatus[3], '#NS_bit_3', "0", 'setToOpen', "1", "setToClose");
+  light_color(data.nodeStatus[4], '#NS_bit_4', "0", 'setToOpen', "1", "setToClose");
+  light_color(data.nodeStatus[5], '#NS_bit_5', "0", 'setToOpen', "1", "setToClose");
 
   /*溫度值*************************************************** */
   $("#innerTemp").text(data.innerTemp);

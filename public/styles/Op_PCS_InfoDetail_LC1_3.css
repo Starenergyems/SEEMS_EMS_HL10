@@ -271,7 +271,7 @@
 }
 
 .infoBlock .dataLight {
-    /* background-color: #236E37; */
+    background-color: #000000; 
     right: 15px;
     top: 8px;
 }

@@ -219,3 +219,7 @@
 .Fault .dataLight {
     top: 5px;
 }
+
+.dataLight.RG_L, .dataLight.OG_L{
+    background-color: #000000;
+}
