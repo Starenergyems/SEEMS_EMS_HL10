@@ -16,6 +16,7 @@ const {
   LC_error_result_gen,
   DC_error_result_gen,
   Other_error_result_gen,
+  GC_error_result_gen,
   alarm_processor,
 } = require("./alarmFunctions");
 
@@ -301,7 +302,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
         })
         .then((resp) => {
           let alarm_db_array = [];
-          let alarm_db_array_read = [];
+          // let alarm_db_array_read = [];
 
           for (const item of resp.docs) {
             // console.log(item);
@@ -309,15 +310,16 @@ router.get("/alarm/realtime/edit", (req, res) => {
             //   delete item[key];
             // });
             item["index"] = "";
-            if (item.read) {
-              alarm_db_array_read.push(item);
-            } else {
-              alarm_db_array.push(item);
-            }
+            alarm_db_array.push(item);
+            // if (item.read) {
+            //   alarm_db_array_read.push(item);
+            // } else {
+            // }
           }
           // console.log("alarm_db_array");
           // console.log(alarm_db_array);
-          res.send([...alarm_db_array, ...alarm_db_array_read]);
+          // res.send([...alarm_db_array, ...alarm_db_array_read]);
+          res.send(alarm_db_array);
         });
     })
     .catch((err) => {
@@ -430,34 +432,34 @@ function alarm_processor_call() {
       use_index: ["rAlarm_ddoc", "time_index"],
     };
 
-    const lc1_alarm_promise = alarm_processor(
-      lc1nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
-    const lc2_alarm_promise = alarm_processor(
-      lc2nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
-    const lc3_alarm_promise = alarm_processor(
-      lc3nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
-    const lc4_alarm_promise = alarm_processor(
-      lc4nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
+    // const lc1_alarm_promise = alarm_processor(
+    //   lc1nanoDb,
+    //   mangoQuery_latest_rawdata,
+    //   LC_error_result_gen,
+    //   alarmnanoDb,
+    //   hisalarmnanoDb
+    // );
+    // const lc2_alarm_promise = alarm_processor(
+    //   lc2nanoDb,
+    //   mangoQuery_latest_rawdata,
+    //   LC_error_result_gen,
+    //   alarmnanoDb,
+    //   hisalarmnanoDb
+    // );
+    // const lc3_alarm_promise = alarm_processor(
+    //   lc3nanoDb,
+    //   mangoQuery_latest_rawdata,
+    //   LC_error_result_gen,
+    //   alarmnanoDb,
+    //   hisalarmnanoDb
+    // );
+    // const lc4_alarm_promise = alarm_processor(
+    //   lc4nanoDb,
+    //   mangoQuery_latest_rawdata,
+    //   LC_error_result_gen,
+    //   alarmnanoDb,
+    //   hisalarmnanoDb
+    // );
 
     // console.log(lc_alarm_promise)
     // Promise.race([lc_alarm_promise]).then(() => {
@@ -465,22 +467,26 @@ function alarm_processor_call() {
     //   console.log("done");
     //   })
 
-    const dc_alarm_promise = alarm_processor(
-      dcnanoDb,
-      mangoQuery_latest_rawdata,
-      DC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
-    const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    // const dc_alarm_promise = alarm_processor(
+    //   dcnanoDb,
+    //   mangoQuery_latest_rawdata,
+    //   DC_error_result_gen,
+    //   alarmnanoDb,
+    //   hisalarmnanoDb
+    // );
+
+    // const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+
+    const gc_alarm_promise = alarm_processor(gcnanoDb, mangoQuery_latest_rawdata, GC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
 
     Promise.all([
-      lc1_alarm_promise,
-      lc2_alarm_promise,
-      lc3_alarm_promise,
-      lc4_alarm_promise,
-      dc_alarm_promise,
-      other_alarm_promise
+      // lc1_alarm_promise,
+      // lc2_alarm_promise,
+      // lc3_alarm_promise,
+      // lc4_alarm_promise,
+      // dc_alarm_promise,
+      // other_alarm_promise,
+      gc_alarm_promise,
     ])
       .then(() => {
         console.log("All alarm_processor: Suc!");

@@ -5,7 +5,7 @@ const path = require("path");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-
+const moment = require("moment");
 const config = require("./config");
 const couchdbConfig = config.database;
 const nano = require("nano")(
@@ -22,6 +22,9 @@ const nano = require("nano")(
 // 搜尋時間:起始/結束/時間長度/時間間隔(歷史圖)
 
 //****額外最後再加新增搜尋點位
+
+const gc_rf01 = "gc_rf01";
+const gc01Db = nano.use(gc_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
 
 //set
 app.set("view engine", "ejs");
@@ -40,28 +43,117 @@ router.get("/chart", (req, res) => {
 });
 
 router.get("/chart/realtime", (req, res) => {
-  // num與fun
   res.render("Cht_RealTime");
 });
 
-router.post("/chart/realtime", (req, res) => {
-  // num與fun
-  const { input1, input2 } = req.body;
-  console.log("num: " + input1);
-  console.log("unit:" + input2);
+router.post("/chart/realtime/edit", async (req, res) => {
+  const Freq_array = [];
+  const ActivePower_array = [];
+  const Execute_array = [];
+  const SOC_array = [];
+  const All_data = [];
+
+  const last_second = moment() //改時間 原本是1
+    .subtract(2, "seconds")
+    .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+
+  const this_second = moment() //改時間 原本是1
+    .subtract(1, "seconds")
+    .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+
+  console.log("last_second " + last_second);
+  console.log("this_second " + this_second);
+  const filter_now = {
+    selector: {
+      time: {
+        $gte: last_second, // 時間大於或等於 last_year_start
+        $lte: this_second // 時間小於或等於 last_year_end
+      }
+    },
+    limit: 10,
+  };
+
+  const Data = await gc01Db.find(filter_now);
+
+  Freq_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
+  ActivePower_array.push(
+    ...Data.docs.map((doc) => doc.IEC61850.rf01["400123"])
+  );
+
+  SOC_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
+
+  Execute_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+
+  //存到同一個陣列
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400123"]));
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+
+  console.log("A " + Freq_array);
+  console.log("B " + ActivePower_array);
+  console.log("C " + SOC_array);
+  console.log("D " + Execute_array);
+  console.log("E " + All_data);
+  res.send(All_data);
 });
 
 router.get("/chart/history", (req, res) => {
-  // num與fun
   res.render("Cht_History");
 });
 
-router.post("/chart/history", (req, res) => {
-  // num與fun
-  const { input1, input2, input3 } = req.body;
-  console.log("start: " + input1);
-  console.log("end:" + input2);
-  console.log("unit(ms):" + input3);
+router.get("/chart/history/edit", async (req, res) => {
+  //async function test(){
+  const startTime = moment(); //需要改成獲取前端的資料
+  const lengthOfTime = 3600; //需要改成獲取前端的資料且處理 轉為秒 或是進來的就必須是秒
+  const timeInterval = 1; //目前預設是一秒
+  const Freq_array = [];
+  const ActivePower_array = [];
+  const Execute_array = [];
+  const SOC_array = [];
+  const All_data = [];
+
+  const Start_Time = startTime.format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+
+  const End_Time = moment()
+    .subtract(lengthOfTime, "seconds")
+    .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+
+  console.log("Start_Time " + Start_Time);
+  console.log("End_Time " + End_Time);
+  const filter_now = {
+    selector: {
+      time: {
+        $gte: End_Time, // 時間大於或等於 last_year_start
+        $lte: Start_Time // 時間小於或等於 last_year_end
+      }
+    }
+    //limit: 10,
+  };
+
+  const Data = await gc01Db.find(filter_now);
+
+  Freq_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
+  ActivePower_array.push(
+    ...Data.docs.map((doc) => doc.IEC61850.rf01["400123"])
+  );
+
+  SOC_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
+
+  Execute_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+
+  //存到同一個陣列
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400123"]));
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
+  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+
+  console.log("A " + Freq_array);
+  console.log("B " + ActivePower_array);
+  console.log("C " + SOC_array);
+  console.log("D " + Execute_array);
+  console.log("E " + All_data);
+  //}
 });
 
 module.exports = router;
@@ -69,22 +161,3 @@ module.exports = router;
 /*app.listen(port, () => {
   console.log(`應用程式正在監聽端口 ${port}`);
 });*/
-
-const input_time = 0;
-const input_interval = 0;
-
-function getDate_realtime() {
-  const last_year_start = moment
-    .subtract(1, "year") // 減去一年
-    .startOf("year") // 獲取一年中的開始時間
-    .format("YYYY-MM");
-  const filter_year = {
-    selector: {
-      time: {
-        $gte: last_year_start, // 時間大於或等於 last_year_start
-        $lte: last_year_end, // 時間小於或等於 last_year_end
-      },
-    },
-    limit: 12, // 12個月
-  };
-}

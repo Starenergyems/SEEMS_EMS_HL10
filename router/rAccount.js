@@ -1,60 +1,50 @@
-// const port = 8888;
-
 const express = require("express");
-//const mongoose = require("mongoose");
-const methodOverride = require("method-override");
-const path = require("path");
-const port = 3000;
-//const User = require("../models/userschema");
+// const router = require("./config"); // Importing configuration from config.js
 const router = express.Router();
-const app = express();
-const cors = require("cors");
-const config = require("./config");
-const couchdbConfig = config.database;
-const db = couchdbConfig;
-const nano = require("nano")(
-  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
-);
-const cookieParser = require('cookie-parser'); // use for cookies, if not req.cookies will undefined.
-app.use(cookieParser());
+// Your routes and other configurations can continue from here
 
-const { getconfig, findaccount, updateaccount, alldoc, getbyid, deleteuser, datetime, userlog } = require("./rLogin");
-const { brotliDecompress } = require("zlib");
+// For example:
+// const userRoutes = require("./routes/userRoutes");
+// app.use("/users", userRoutes);
 
-// mongoose
-//   .connect("mongodb://localhost:27017/ems")
-//   .then(() => {
-//     console.log("成功連結mongoDB....");
+// Start the server
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
 
-//     // 檢查當前數據庫名稱
-//     const currentDBName = mongoose.connection.name;
-//     console.log("我是account，當前數據庫名稱：", currentDBName);
-//   })
-//   .catch((e) => {
-//     console.log(e);
-//   });
+// 代辦 預設密碼 ˋ整理CODE　account 功能
 
-//const collections = mongoose.connection.collections;
+// const express = require("express");
+// const app = express();
+// const router = express.Router();
+// app.use(express.json()); // use to get json from ejs
+// app.set("view engine", "ejs");
+// app.use(express.urlencoded({ extended: true }));
+// const path = require("path");
+// app.set("views", path.join(__dirname, "../views"));
+// app.use("/public", express.static(path.join(__dirname, "../public")));
+// const methodOverride = require("method-override");
+// app.use(methodOverride("_method"));
+// const cors = require("cors");
+// app.use(cors());
+// const cookieParser = require('cookie-parser'); // use for cookies, if not req.cookies will undefined.
+// app.use(cookieParser());
 
-// 轉換為 collection 名稱的數組
-//const collectionNames = Object.keys(collections);
+const db = require("./config").database;
+// // const db = config
+const {
+  getconfig,
+  findaccount,
+  updateaccount,
+  alldoc,
+  getbyid,
+  deleteuser,
+  datetime,
+  userlog
+} = require("./rLogin");
 
-//console.log("當前連接中的 collection 名稱：", collectionNames);
-
-//set
-app.set("view engine", "ejs");
-// 設定視圖目錄為 C:\Test\SEEMS_EMS\views
-app.set("views", path.join(__dirname, "../views"));
-//use
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.use("/public", express.static(path.join(__dirname, "../public")));
-app.use(cors());
-app.use(express.json()); // use to get json from ejs
-//app.use(myMiddleware);
-
-//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
-// const app = require("./app.js")
+//////////////////////////////////////////////////////////////////////////////
 
 router.get("/account", (req, res) => {
   res.redirect("/account/personalinfo")
@@ -63,11 +53,8 @@ router.get("/account", (req, res) => {
 
 router.get("/account/personalinfo", async (req, res) => {
   try {
-    // const token = req.headers.cookie.split('=')[1]
     const token = req.cookies.token;
-    // console.log(token);
     const resopnse = await findaccount(inmail="", intoken=token );
-    // console.log(resopnse)
     const content = {
       num: resopnse.num,
       name: resopnse.name,
@@ -143,11 +130,7 @@ router.get("/account/personalinfo/log", async (req, res) => {
 }})
 
 
-// The page do not need 
-// app.get("/account/manage", (req, res) => {
-//   // num與fun
-//   res.render("AccountManage");
-// });
+
 
 
 router.get("/account/system", (req, res) => {
@@ -156,6 +139,7 @@ router.get("/account/system", (req, res) => {
 
 
 router.get("/account/system/accounts", async(req, res) => {
+  
   let response = await alldoc(db.account)
   response = await response.json()
   let userset = []
@@ -179,6 +163,7 @@ router.get("/account/system/accounts", async(req, res) => {
 
 router.post("/account/system/accounts", async(req, res) => {
   // Create new user.  Change or delete exist user.
+  
   try {
   let response = await alldoc(db.account);
   response = await response.json();
@@ -190,9 +175,11 @@ router.post("/account/system/accounts", async(req, res) => {
   }
   const body = req.body
   const bottom = body.bottom
+
+  if (allid.includes(body.num) === true){
+    console.log("id exist")
   let iddata = await getbyid(body.num)
   iddata = await iddata.json()
-  console.log(iddata)
   let data = [{
         _id: `${iddata._id}`,
         _rev: `${iddata._rev}`,
@@ -205,25 +192,49 @@ router.post("/account/system/accounts", async(req, res) => {
           department: `${body.department}`,
           level: `${body.permission}`,
           state: `${body.status}`,
-          errcount: `${iddata.errcount}`,
+          errcount: `${iddata.user.errcount}`,
           note: `${body.note === undefined? "" : body.note}`,
-          last_time: `${iddata.last_time}`,
+          last_time: `${iddata.user.last_time}`,
           password: `${body.password === "" ? iddata.password : body.password}`,
-          bantill: `${iddata.bantill}`,
-          token: `${iddata.token}`,
-          validtime: `${iddata.validtime}`,
+          bantill: `${iddata.user.bantill}`,
+          token: `${iddata.user.token}`,
+          validtime: `${iddata.user.validtime === (undefined || "")? "":""}`,
         }}]
-  if (allid.includes(iddata._id) === false && bottom === "addupdate") {
+      } else if (allid.includes(body.num) === false){
+        console.log("id nottttt exist")
+        let data = [{
+          _id: `${body.num}`,
+          time: `${datetime()}`, // The doc verify time.
+          user: {
+            num: `${body.num}`,
+            mail: `${body.email}`,
+            name: `${body.name}`,
+            comapny: `${body.company}`,
+            department: `${body.department}`,
+            level: `${body.permission}`,
+            state: `${body.status}`,
+            errcount: `${iddata.user.errcount}`,
+            note: `${body.note === undefined? "" : body.note}`,
+            last_time: `${iddata.user.last_time}`,
+            password: `${body.password === "" ? iddata.password : body.password}`,
+            bantill: `${iddata.user.bantill}`,
+            token: `${iddata.user.token}`,
+            validtime: `${iddata.user.validtime === (undefined || "")? "":""}`,
+          }}]
+          }
+  
+  if (allid.includes(data._id) === false && bottom === "addupdate") {
     // Create the user.
-    await updateaccount(iddata._id, "", "", data)
+    await updateaccount(data._id, "", "", data)
+    
     res.status(200)
-  } else if (allid.includes(iddata._id) === true && bottom === "addupdate") {
+  } else if (allid.includes(data._id) === true && bottom === "addupdate") {
     // Update the user.
-    await updateaccount(iddata._id, "", "", data)
+    await updateaccount(data._id, "", "", data)
     res.status(200)
-  } else if (allid.includes(iddata._id) === true && bottom === "delete") {
+  } else if (allid.includes(data._id) === true && bottom === "delete") {
     // Delete the user.
-    await deleteuser(iddata._id)
+    await deleteuser(data._id)
     res.status(200)
   }
 
@@ -373,6 +384,16 @@ router.post("/account/system/logintext", async(req, res) => {
   catch (error) {console.error("config Error:", error.message)}
 });
 
+module.exports = router;
+
+//////////////////////////////////////////////////////////////////////////////
+
+// const db = couchdbConfig;
+// const nano = require("nano")(
+//   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+// );
+// const { brotliDecompress } = require("zlib");
+
 // ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
 
 // router.get("/personalinfo", (req, res) => {
@@ -385,8 +406,42 @@ router.post("/account/system/logintext", async(req, res) => {
 //   res.render("AccountManage");
 // });
 
-module.exports = router;
+
 
 // router.listen(port, () => {
 //   console.log(`應用程式正在監聽端口 ${port}`);
+// });
+
+
+
+// const port = 8888;
+//const User = require("../models/userschema");
+//const mongoose = require("mongoose");
+
+// mongoose
+//   .connect("mongodb://localhost:27017/ems")
+//   .then(() => {
+//     console.log("成功連結mongoDB....");
+
+//     // 檢查當前數據庫名稱
+//     const currentDBName = mongoose.connection.name;
+//     console.log("我是account，當前數據庫名稱：", currentDBName);
+//   })
+//   .catch((e) => {
+//     console.log(e);
+//   });
+
+//const collections = mongoose.connection.collections;
+
+// 轉換為 collection 名稱的數組
+//const collectionNames = Object.keys(collections);
+
+//console.log("當前連接中的 collection 名稱：", collectionNames);
+
+//set
+
+// The page do not need 
+// app.get("/account/manage", (req, res) => {
+//   // num與fun
+//   res.render("AccountManage");
 // });

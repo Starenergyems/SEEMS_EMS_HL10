@@ -60,374 +60,108 @@ async function updateData(){ //更新資料ajax
     $('#noAlarm').text(data.noAlarm);
 
     /*整機故障狀態********************************************** */
-    if (data.OF[1] === '1') {
-        classAdd("#OF_bit_1", "setToClose");
-    } else {
-        classRemove("#OF_bit_1", "setToClose");
-    }
-    
-    if (data.OF[2] === '1') {
-        classAdd("#OF_bit_2", "setToClose");
-    } else {
-        classRemove("#OF_bit_2", "setToClose");
-    } 
-     
-    if (data.OF[3] === '1') {
-        classAdd("#OF_bit_3", "setToClose");
-    } else {
-        classRemove("#OF_bit_3", "setToClose");
-    }   
-    if (data.OF[5] === '1') {
-        classAdd("#OF_bit_5", "setToClose");
-    } else {
-        classRemove("#OF_bit_5", "setToClose");
-    }
-    
-    if (data.OF[13] === '1') {
-        classAdd("#OF_bit_13", "setToClose");
-    } else {
-        classRemove("#OF_bit_13", "setToClose");
-    } 
-     
-    if (data.OF[15] === '1') {
-        classAdd("#OF_bit_15", "setToClose");
-    } else {
-        classRemove("#OF_bit_15", "setToClose");
-    }   
+    light_color(data.OF[1], '#OF_bit_1', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.OF[2], '#OF_bit_2', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.OF[3], '#OF_bit_3', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.OF[5], '#OF_bit_5', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.OF[13], '#OF_bit_13', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.OF[15], '#OF_bit_15', "0", 'setToOpen', "1", "setToClose");
 
     /*整機告警狀態********************************************** */
-    if (data.OA[1] === '1') {
-        classAdd("#OA_bit_1", "setToClose");
-    } else {
-        classRemove("#OA_bit_1", "setToClose");
-    }
-    
-    if (data.OA[2] === '1') {
-        classAdd("#OA_bit_2", "setToClose");
-    } else {
-        classRemove("#OA_bit_2", "setToClose");
-    } 
-        
-    if (data.OA[10] === '1') {
-        classAdd("#OA_bit_10", "setToClose");
-    } else {
-        classRemove("#OA_bit_10", "setToClose");
-    }   
+    light_color(data.OA[1], '#OA_bit_1', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.OA[2], '#OA_bit_2', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.OA[10], '#OA_bit_10', "0", 'setToOpen', "1", "setToClose");
 
     /*告警狀態********************************************** */
-    if (data.Alarm1[8] === '1') {
-        classAdd("#A1_bit_8", "setToClose");
-    } else {
-        classRemove("#A1_bit_8", "setToClose");
-    }
-    
-    if (data.Alarm2[1] === '1') {
-        classAdd("#A2_bit_1", "setToClose");
-    } else {
-        classRemove("#A2_bit_1", "setToClose");
-    } 
-        
-    if (data.Alarm2[3] === '1') {
-        classAdd("#A2_bit_3", "setToClose");
-    } else {
-        classRemove("#A2_bit_3", "setToClose");
-    }    
+    light_color(data.Alarm1[8], '#A1_bit_8', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm2[1], '#A2_bit_1', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm2[3], '#A2_bit_3', "0", 'setToOpen', "1", "setToClose");
+  
     ///////////////////////////////////////////////////////////
-    if (data.Alarm1[9] === '1') {
-        classAdd("#A1_bit_9", "setToClose");
-    } else {
-        classRemove("#A1_bit_9", "setToClose");
-    }
-    if (data.Alarm1[10] === '1') {
-        classAdd("#A1_bit_10", "setToClose");
-    } else {
-        classRemove("#A1_bit_10", "setToClose");
-    }
-    if (data.Alarm1[4] === '1') {
-        classAdd("#A1_bit_4", "setToClose");
-    } else {
-        classRemove("#A1_bit_4", "setToClose");
-    }
-    if (data.Alarm1[6] === '1') {
-        classAdd("#A1_bit_6", "setToClose");
-    } else {
-        classRemove("#A1_bit_6", "setToClose");
-    }
-    if (data.Alarm1[7] === '1') {
-        classAdd("#A1_bit_7", "setToClose");
-    } else {
-        classRemove("#A1_bit_7", "setToClose");
-    }
-    if (data.Alarm1[12] === '1') {
-        classAdd("#A1_bit_12", "setToClose");
-    } else {
-        classRemove("#A1_bit_12", "setToClose");
-    }
+    light_color(data.Alarm1[9], '#A1_bit_9', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm1[10], '#A1_bit_10', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm1[4], '#A1_bit_4', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm1[6], '#A1_bit_6', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm1[7], '#A1_bit_7', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm1[12], '#A1_bit_12', "0", 'setToOpen', "1", "setToClose");
+
     ////////////////////////////////////////////////////////
-    if (data.Alarm1[1] === '1') {
-        classAdd("#A1_bit_1", "setToClose");
-    } else {
-        classRemove("#A1_bit_1", "setToClose");
-    }
-    if (data.Alarm1[2] === '1') {
-        classAdd("#A1_bit_2", "setToClose");
-    } else {
-        classRemove("#A1_bit_2", "setToClose");
-    } 
+    light_color(data.Alarm1[1], '#A1_bit_1', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm1[2], '#A1_bit_2', "0", 'setToOpen', "1", "setToClose");
+
     /////////////////////////////////////////////////////////   
-    if (data.Alarm1[0] === '1') {
-        classAdd("#A1_bit_0", "setToClose");
-    } else {
-        classRemove("#A1_bit_0", "setToClose");
-    } 
+    light_color(data.Alarm1[0], '#A1_bit_0', "0", 'setToOpen', "1", "setToClose");
+
     ///////////////////////////////////////////////////////    
-    if (data.Alarm1[13] === '1') {
-        classAdd("#A1_bit_13", "setToClose");
-    } else {
-        classRemove("#A1_bit_13", "setToClose");
-    } 
-    if (data.Alarm2[2] === '1') {
-        classAdd("#A2_bit_2", "setToClose");
-    } else {
-        classRemove("#A2_bit_2", "setToClose");
-    } 
+    light_color(data.Alarm1[13], '#A1_bit_13', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Alarm2[2], '#A2_bit_2', "0", 'setToOpen', "1", "setToClose");
+
     ///////////////////////////////////////////////////////////
-    if (data.Alarm2[0] === '1') {
-        classAdd("#A2_bit_0", "setToClose");
-    } else {
-        classRemove("#A2_bit_0", "setToClose");
-    } 
+    light_color(data.Alarm2[0], '#A2_bit_0', "0", 'setToOpen', "1", "setToClose");
 
     /*故障狀態******************************************************************** */
     //交流////////////////////////////////////////
-    if (data.Fault1[2] === '1') {
-        classAdd("#F1_bit_2", "setToClose");
-    } else {
-        classRemove("#F1_bit_2", "setToClose");
-    } 
-    if (data.Fault1[3] === '1') {
-        classAdd("#F1_bit_3", "setToClose");
-    } else {
-        classRemove("#F1_bit_3", "setToClose");
-    } 
-    if (data.Fault1[4] === '1') {
-        classAdd("#F1_bit_4", "setToClose");
-    } else {
-        classRemove("#F1_bit_4", "setToClose");
-    } 
-    if (data.Fault1[5] === '1') {
-        classAdd("#F1_bit_5", "setToClose");
-    } else {
-        classRemove("#F1_bit_5", "setToClose");
-    } 
-    if (data.Fault1[6] === '1') {
-        classAdd("#F1_bit_6", "setToClose");
-    } else {
-        classRemove("#F1_bit_6", "setToClose");
-    } 
-    if (data.Fault1[21] === '1') {
-        classAdd("#F1_bit_21", "setToClose");
-    } else {
-        classRemove("#F1_bit_21", "setToClose");
-    } 
+    light_color(data.Fault1[2], '#F1_bit_2', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[3], '#F1_bit_3', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[4], '#F1_bit_4', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[5], '#F1_bit_5', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[6], '#F1_bit_6', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[21], '#F1_bit_21', "0", 'setToOpen', "1", "setToClose");
 
-    if (data.Fault2[1] === '1') {
-        classAdd("#F2_bit_1", "setToClose");
-    } else {
-        classRemove("#F2_bit_1", "setToClose");
-    }
-    if (data.Fault2[16] === '1') {
-        classAdd("#F2_bit_16", "setToClose");
-    } else {
-        classRemove("#F2_bit_16", "setToClose");
-    }
-    if (data.Fault2[6] === '1') {
-        classAdd("#F2_bit_6", "setToClose");
-    } else {
-        classRemove("#F2_bit_6", "setToClose");
-    }
-    if (data.Fault2[23] === '1') {
-        classAdd("#F2_bit_23", "setToClose");
-    } else {
-        classRemove("#F2_bit_23", "setToClose");
-    }
-    if (data.Fault2[24] === '1') {
-        classAdd("#F2_bit_24", "setToClose");
-    } else {
-        classRemove("#F2_bit_24", "setToClose");
-    }
-    if (data.Fault2[19] === '1') {
-        classAdd("#F2_bit_19", "setToClose");
-    } else {
-        classRemove("#F2_bit_19", "setToClose");
-    }
+    light_color(data.Fault2[1], '#F2_bit_1', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[16], '#F2_bit_16', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[6], '#F2_bit_6', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[23], '#F2_bit_23', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[24], '#F2_bit_24', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[19], '#F2_bit_19', "0", 'setToOpen', "1", "setToClose");
 
     //直流//////////////////////////////////////////////////
-    if (data.Fault1[0] === '1') {
-        classAdd("#F1_bit_0", "setToClose");
-    } else {
-        classRemove("#F1_bit_0", "setToClose");
-    }
-    if (data.Fault1[1] === '1') {
-        classAdd("#F1_bit_1", "setToClose");
-    } else {
-        classRemove("#F1_bit_1", "setToClose");
-    }
-    if (data.Fault1[18] === '1') {
-        classAdd("#F1_bit_18", "setToClose");
-    } else {
-        classRemove("#F1_bit_18", "setToClose");
-    }
-    if (data.Fault1[20] === '1') {
-        classAdd("#F1_bit_20", "setToClose");
-    } else {
-        classRemove("#F1_bit_20", "setToClose");
-    }
-    if (data.Fault2[8] === '1') {
-        classAdd("#F2_bit_8", "setToClose");
-    } else {
-        classRemove("#F2_bit_8", "setToClose");
-    }
-    if (data.Fault2[10] === '1') {
-        classAdd("#F2_bit_10", "setToClose");
-    } else {
-        classRemove("#F2_bit_10", "setToClose");
-    }
-    if (data.Fault2[11] === '1') {
-        classAdd("#F2_bit_11", "setToClose");
-    } else {
-        classRemove("#F2_bit_11", "setToClose");
-    }
-    if (data.Fault2[21] === '1') {
-        classAdd("#F2_bit_21", "setToClose");
-    } else {
-        classRemove("#F2_bit_21", "setToClose");
-    }
+    light_color(data.Fault1[0], '#F1_bit_0', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[1], '#F1_bit_1', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[18], '#F1_bit_18', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[20], '#F1_bit_20', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[6], '#F1_bit_6', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[21], '#F1_bit_21', "0", 'setToOpen', "1", "setToClose");
+
+    light_color(data.Fault2[8], '#F2_bit_8', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[10], '#F2_bit_10', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[11], '#F2_bit_11', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[21], '#F2_bit_21', "0", 'setToOpen', "1", "setToClose");
 
     //孤島////////////////////////////////////////////////////////////
-    if (data.Fault1[7] === '1') {
-        classAdd("#F1_bit_7", "setToClose");
-    } else {
-        classRemove("#F1_bit_7", "setToClose");
-    }
-    if (data.Fault1[9] === '1') {
-        classAdd("#F1_bit_9", "setToClose");
-    } else {
-        classRemove("#F1_bit_9", "setToClose");
-    }
-    if (data.Fault1[13] === '1') {
-        classAdd("#F1_bit_13", "setToClose");
-    } else {
-        classRemove("#F1_bit_13", "setToClose");
-    }
-    if (data.Fault1[15] === '1') {
-        classAdd("#F1_bit_15", "setToClose");
-    } else {
-        classRemove("#F1_bit_15", "setToClose");
-    }
+    light_color(data.Fault1[7], '#F1_bit_7', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[9], '#F1_bit_9', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[13], '#F1_bit_13', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[15], '#F1_bit_15', "0", 'setToOpen', "1", "setToClose");
 
     //硬件///////////////////////////////////////////////////////////////
-    if (data.Fault1[24] === '1') {
-        classAdd("#F1_bit_24", "setToClose");
-    } else {
-        classRemove("#F1_bit_24", "setToClose");
-    }
-    if (data.Fault2[0] === '1') {
-        classAdd("#F2_bit_0", "setToClose");
-    } else {
-        classRemove("#F2_bit_0", "setToClose");
-    }
-    if (data.Fault2[2] === '1') {
-        classAdd("#F2_bit_2", "setToClose");
-    } else {
-        classRemove("#F2_bit_2", "setToClose");
-    }
-    if (data.Fault2[3] === '1') {
-        classAdd("#F2_bit_3", "setToClose");
-    } else {
-        classRemove("#F2_bit_3", "setToClose");
-    }
-    if (data.Fault2[7] === '1') {
-        classAdd("#F2_bit_7", "setToClose");
-    } else {
-        classRemove("#F2_bit_7", "setToClose");
-    }
-    if (data.Fault2[12] === '1') {
-        classAdd("#F2_bit_12", "setToClose");
-    } else {
-        classRemove("#F2_bit_12", "setToClose");
-    }
-    if (data.Fault2[20] === '1') {
-        classAdd("#F2_bit_20", "setToClose");
-    } else {
-        classRemove("#F2_bit_20", "setToClose");
-    }
-    if (data.Fault2[25] === '1') {
-        classAdd("#F2_bit_25", "setToClose");
-    } else {
-        classRemove("#F2_bit_25", "setToClose");
-    }
-    if (data.Fault2[26] === '1') {
-        classAdd("#F2_bit_26", "setToClose");
-    } else {
-        classRemove("#F2_bit_26", "setToClose");
-    }
-    if (data.Fault2[27] === '1') {
-        classAdd("#F2_bit_27", "setToClose");
-    } else {
-        classRemove("#F2_bit_27", "setToClose");
-    }
+    light_color(data.Fault1[24], '#F1_bit_24', "0", 'setToOpen', "1", "setToClose");
+
+    light_color(data.Fault2[0], '#F2_bit_0', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[2], '#F2_bit_2', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[3], '#F2_bit_3', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[7], '#F2_bit_7', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[12], '#F2_bit_12', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[20], '#F2_bit_20', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[25], '#F2_bit_25', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[26], '#F2_bit_26', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[27], '#F2_bit_27', "0", 'setToOpen', "1", "setToClose");
 
     //模塊/////////////////////////////////////////////
-    if (data.Fault1[10] === '1') {
-        classAdd("#F1_bit_10", "setToClose");
-    } else {
-        classRemove("#F1_bit_10", "setToClose");
-    }
-    if (data.Fault1[11] === '1') {
-        classAdd("#F1_bit_11", "setToClose");
-    } else {
-        classRemove("#F1_bit_11", "setToClose");
-    }
-    if (data.Fault1[12] === '1') {
-        classAdd("#F1_bit_12", "setToClose");
-    } else {
-        classRemove("#F1_bit_12", "setToClose");
-    }
-    if (data.Fault1[23] === '1') {
-        classAdd("#F1_bit_23", "setToClose");
-    } else {
-        classRemove("#F1_bit_23", "setToClose");
-    }
-    if (data.Fault2[14] === '1') {
-        classAdd("#F2_bit_14", "setToClose");
-    } else {
-        classRemove("#F2_bit_14", "setToClose");
-    }
+    light_color(data.Fault1[10], '#F1_bit_10', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[11], '#F1_bit_11', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[12], '#F1_bit_12', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault1[23], '#F1_bit_23', "0", 'setToOpen', "1", "setToClose");
+    
+    light_color(data.Fault2[14], '#F2_bit_14', "0", 'setToOpen', "1", "setToClose");
 
     //風機///////////////////////////////////////////////////
-    if (data.Fault1[17] === '1') {
-        classAdd("#F1_bit_17", "setToClose");
-    } else {
-        classRemove("#F1_bit_17", "setToClose");
-    }
-    if (data.Fault2[22] === '1') {
-        classAdd("#F2_bit_22", "setToClose");
-    } else {
-        classRemove("#F2_bit_22", "setToClose");
-    }
-
+    light_color(data.Fault1[17], '#F1_bit_17', "0", 'setToOpen', "1", "setToClose");
+    
+    light_color(data.Fault2[22], '#F2_bit_22', "0", 'setToOpen', "1", "setToClose");
     //LCD//////////////////////////////////////////////////
-    if (data.Fault2[5] === '1') {
-        classAdd("#F2_bit_5", "setToClose");
-    } else {
-        classRemove("#F2_bit_5", "setToClose");
-    }
-    if (data.Fault2[13] === '1') {
-        classAdd("#F2_bit_13", "setToClose");
-    } else {
-        classRemove("#F2_bit_13", "setToClose");
-    }
+    light_color(data.Fault2[5], '#F2_bit_5', "0", 'setToOpen', "1", "setToClose");
+    light_color(data.Fault2[13], '#F2_bit_13', "0", 'setToOpen', "1", "setToClose");
 }
 
 

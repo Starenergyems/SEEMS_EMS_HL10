@@ -227,8 +227,8 @@ async function sendDataToBackend() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-async function updateData(){
-  var data = await getData(window.location.href+"/data");//port要改
+async function updateData() {
+  var data = await getData(window.location.href + "/data");//port要改
   console.log(data);
 
   $('#workStatus').text(data.workStatus);
@@ -240,7 +240,7 @@ async function updateData(){
   $('#systemSOH').text(data.systemSOH);
   $('#avgContainerTemp').text(data.avgContainerTemp);
   $('#heartBeat').text(data.heartBeat);
-/*LC1************************************ */
+  /*LC1************************************ */
   $('#onlineNum_LC1').text(data.onlineNum_LC1);
   $('#workStatus_LC1').text(data.workStatus_LC1);
   $('#onGridStatus_LC1').text(data.onGridStatus_LC1);
@@ -256,26 +256,10 @@ async function updateData(){
   $('#T_cell_Min_LC1').text(data.T_cell_Min_LC1);
   $('#T_cell_MaxDiff_LC1').text(data.T_cell_MaxDiff_LC1);
 
-  if (data.alarm_BMS1_1 > 0){ 
-    classAdd('#alarm_BMS1-1', 'setToClose');
-  } else {
-    classRemove('#alarm_BMS1-1', 'setToClose');
-  }
-  if (data.alarm_BMS1_2 > 0){ 
-    classAdd('#alarm_BMS1-2', 'setToClose');
-  } else {
-    classRemove('#alarm_BMS1-2', 'setToClose');
-  }
-  if (data.fault_BMS1_1 > 0){ 
-    classAdd('#fault_BMS1-1', 'setToClose');
-  } else {
-    classRemove('#fault_BMS1-1', 'setToClose');
-  }
-  if (data.fault_BMS1_2 > 0){ 
-    classAdd('#fault_BMS1-2', 'setToClose');
-  } else {
-    classRemove('#fault_BMS1-2', 'setToClose');
-  }
+  light_color(data.alarm_BMS1_1, '#alarm_BMS1-1', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarm_BMS1_2, '#alarm_BMS1-2', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.fault_BMS1_1, '#fault_BMS1-1', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.fault_BMS1_2, '#fault_BMS1-2', 0, 'setToOpen', 1, "setToClose");
 
   /*LC2*********************** */
   $('#onlineNum_LC2').text(data.onlineNum_LC2);
@@ -293,26 +277,10 @@ async function updateData(){
   $('#T_cell_Min_LC2').text(data.T_cell_Min_LC2);
   $('#T_cell_MaxDiff_LC2').text(data.T_cell_MaxDiff_LC2);
 
-  if (data.alarm_BMS2_1 > 0){ 
-    classAdd('#alarm_BMS2-1', 'setToClose');
-  } else {
-    classRemove('#alarm_BMS2-1', 'setToClose');
-  }
-  if (data.alarm_BMS2_2 > 0){ 
-    classAdd('#alarm_BMS2-2', 'setToClose');
-  } else {
-    classRemove('#alarm_BMS2-2', 'setToClose');
-  }
-  if (data.fault_BMS2_1 > 0){ 
-    classAdd('#fault_BMS2-1', 'setToClose');
-  } else {
-    classRemove('#fault_BMS2-1', 'setToClose');
-  }
-  if (data.fault_BMS2_2 > 0){ 
-    classAdd('#fault_BMS2-2', 'setToClose');
-  } else {
-    classRemove('#fault_BMS2-2', 'setToClose');
-  }
+  light_color(data.alarm_BMS2_1, '#alarm_BMS2-1', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarm_BMS2_2, '#alarm_BMS2-2', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.fault_BMS2_1, '#fault_BMS2-1', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.fault_BMS2_2, '#fault_BMS2-2', 0, 'setToOpen', 1, "setToClose");
 
   /*LC3*********************** */
   $('#onlineNum_LC3').text(data.onlineNum_LC3);
@@ -329,27 +297,10 @@ async function updateData(){
   $('#T_cell_Max_LC3').text(data.T_cell_Max_LC3);
   $('#T_cell_Min_LC3').text(data.T_cell_Min_LC3);
   $('#T_cell_MaxDiff_LC3').text(data.T_cell_MaxDiff_LC3);
-
-  if (data.alarm_BMS3_1 > 0){ 
-    classAdd('#alarm_BMS3-1', 'setToClose');
-  } else {
-    classRemove('#alarm_BMS3-1', 'setToClose');
-  }
-  if (data.alarm_BMS3_2 > 0){ 
-    classAdd('#alarm_BMS3-2', 'setToClose');
-  } else {
-    classRemove('#alarm_BMS3-2', 'setToClose');
-  }
-  if (data.fault_BMS3_1 > 0){ 
-    classAdd('#fault_BMS3-1', 'setToClose');
-  } else {
-    classRemove('#fault_BMS3-1', 'setToClose');
-  }
-  if (data.fault_BMS3_2 > 0){ 
-    classAdd('#fault_BMS3-2', 'setToClose');
-  } else {
-    classRemove('#fault_BMS3-2', 'setToClose');
-  }
+  light_color(data.alarm_BMS3_1, '#alarm_BMS3-1', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarm_BMS3_2, '#alarm_BMS3-2', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.fault_BMS3_1, '#fault_BMS3-1', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.fault_BMS3_2, '#fault_BMS3-2', 0, 'setToOpen', 1, "setToClose");
 
   /*LC4*********************** */
   $('#onlineNum_LC4').text(data.onlineNum_LC4);
@@ -367,16 +318,7 @@ async function updateData(){
   $('#T_cell_Min_LC4').text(data.T_cell_Min_LC4);
   $('#T_cell_MaxDiff_LC4').text(data.T_cell_MaxDiff_LC4);
 
-  if (data.alarm_BMS4_1 > 0){ 
-    classAdd('#alarm_BMS4-1', 'setToClose');
-  } else {
-    classRemove('#alarm_BMS4-1', 'setToClose');
-  }
-  if (data.fault_BMS4_1 > 0){ 
-    classAdd('#fault_BMS4-1', 'setToClose');
-  } else {
-    classRemove('#fault_BMS4-1', 'setToClose');
-  }
-
+  light_color(data.alarm_BMS4_1, '#alarm_BMS4-1', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.fault_BMS4_1, '#fault_BMS4-1', 0, 'setToOpen', 1, "setToClose");
   console.log("data updated");
 }

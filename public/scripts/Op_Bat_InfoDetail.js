@@ -111,287 +111,63 @@ async function updateData(){ //更新資料
     $('rackNo_commSMUCMU').text(data.rackNo_commSMUCMU);
 
     /**DI狀態///////////////////////////////////////////////////////////////// */
-    if(data.statusDI[0] === '1'){
-        classAdd('#statusDI01', 'setToClose');
-    } else {
-        classRemove('#statusDI01', 'setToClose');
-    };
+    light_color(data.statusDI[0], '#statusDI01', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.statusDI[1], '#statusDI02', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.statusDI[2], '#statusDI03', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.statusDI[3], '#statusDI04', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.statusDI[4], '#statusDI05', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.statusDI[5], '#statusDI06', '0', 'setToOpen', '1', "setToClose");
 
-    if(data.statusDI[1] === '1'){
-        classAdd('#statusDI02', 'setToClose');
-    } else {
-        classRemove('#statusDI02', 'setToClose');
-    };
-
-    if(data.statusDI[2] === '1'){
-        classAdd('#statusDI03', 'setToClose');
-    } else {
-        classRemove('#statusDI03', 'setToClose');
-    };
-
-    if(data.statusDI[3] === '1'){
-        classAdd('#statusDI04', 'setToClose');
-    } else {
-        classRemove('#statusDI04', 'setToClose');
-    };
-
-    if(data.statusDI[4] === '1'){
-        classAdd('#statusDI05', 'setToClose');
-    } else {
-        classRemove('#statusDI05', 'setToClose');
-    };
-
-    if(data.statusDI[5] === '1'){
-        classAdd('#statusDI06', 'setToClose');
-    } else {
-        classRemove('#statusDI06', 'setToClose');
-    };
     /*硬體故障****************************************************** */
-    if(data.faultHW[0] === '1'){
-        classAdd('#faultPRelay', 'setToClose');
-    } else {
-        classRemove('#faultPRelay', 'setToClose');
-    };
+    light_color(data.faultHW[0], '#faultPRelay', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.faultHW[1], '#faultNRelay', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.faultHW[2], '#closeFailPRelay', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.faultHW[3], '#closeFailNRelay', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.faultHW[4], '#blownFuse', '0', 'setToOpen', '1', "setToClose");
 
-    if(data.faultHW[1] === '1'){
-        classAdd('#faultNRelay', 'setToClose');
-    } else {
-        classRemove('#faultNRelay', 'setToClose');
-    };
-
-    if(data.faultHW[2] === '1'){
-        classAdd('#closeFailPRelay', 'setToClose');
-    } else {
-        classRemove('#closeFailPRelay', 'setToClose');
-    };
-
-    if(data.faultHW[3] === '1'){
-        classAdd('#closeFailNRelay', 'setToClose');
-    } else {
-        classRemove('#closeFailNRelay', 'setToClose');
-    };
-
-    if(data.faultHW[4] === '1'){
-        classAdd('#blownFuse', 'setToClose');
-    } else {
-        classRemove('#blownFuse', 'setToClose');
-    };
 /*SMU故障***************************************************************** */
-        
-    if(data.faultSMU[0] === '1'){
-        classAdd('#commSMUCMU', 'setToClose');
-    } else {
-        classRemove('#commSMUCMU', 'setToClose');
-    };
+    light_color(data.faultSMU[0], '#commSMUCMU', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.faultSMU[11], '#rackNoProtect', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.faultSMU[15], '#systemStop', '0', 'setToOpen', '1', "setToClose");
 
-    if(data.faultSMU[11] === '1'){
-        classAdd('#rackNoProtect', 'setToClose');
-    } else {
-        classRemove('#rackNoProtect', 'setToClose');
-    };
-
-    if(data.faultSMU[15] === '1'){
-        classAdd('#systemStop', 'setToClose');
-    } else {
-        classRemove('#systemStop', 'setToClose');
-    };
     /*SOC校準************************************************************** */
-    if(data.SOCcali[0] === '1'){
-        classAdd('#1stSOCcal', 'setToClose');
-    } else {
-        classRemove('#1stSOCcal', 'setToClose');
-    };
+    light_color(data.SOCcali[0], '#1stSOCcal', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.SOCcali[1], '#2ndSOCcal', '0', 'setToOpen', '1', "setToClose");
 
-    if(data.SOCcali[1] === '1'){
-        classAdd('#2ndSOCcal', 'setToClose');
-    } else {
-        classRemove('#2ndSOCcal', 'setToClose');
-    };
     /*CMU故障告警************************************************************ */
-    if(data.alarm[0] === '1'){
-        classAdd('#cellOV_Alarm', 'setToClose');
-    } else {
-        classRemove('#cellOV_Alarm', 'setToClose');
-    };
-    if(data.fault[0] === '1'){
-        classAdd('#cellOV_Fault', 'setToClose');
-    } else {
-        classRemove('#cellOV_Fault', 'setToClose');
-    };
-
-    if(data.alarm[1] === '1'){
-        classAdd('#cellUV_Alarm', 'setToClose');
-    } else {
-        classRemove('#cellUV_Alarm', 'setToClose');
-    };
-    if(data.fault[1] === '1'){
-        classAdd('#cellUV_Fault', 'setToClose');
-    } else {
-        classRemove('#cellUV_Fault', 'setToClose');
-    };
-
-    if(data.alarm[2] === '1'){
-        classAdd('#rackOV_Alarm', 'setToClose');
-    } else {
-        classRemove('#rackOV_Alarm', 'setToClose');
-    };
-    if(data.fault[2] === '1'){
-        classAdd('#rackOV_Fault', 'setToClose');
-    } else {
-        classRemove('#rackOV_Fault', 'setToClose');
-    };
-
-    if(data.alarm[3] === '1'){
-        classAdd('#rackUV_Alarm', 'setToClose');
-    } else {
-        classRemove('#rackUV_Alarm', 'setToClose');
-    };
-    if(data.fault[3] === '1'){
-        classAdd('#rackUV_Fault', 'setToClose');
-    } else {
-        classRemove('#rackUV_Fault', 'setToClose');
-    };
-
-    if(data.alarm[4] === '1'){
-        classAdd('#packOV_Alarm', 'setToClose');
-    } else {
-        classRemove('#packOV_Alarm', 'setToClose');
-    };
-    if(data.fault[4] === '1'){
-        classAdd('#packOV_Fault', 'setToClose');
-    } else {
-        classRemove('#packOV_Fault', 'setToClose');
-    };
-
-    if(data.alarm[5] === '1'){
-        classAdd('#packUV_Alarm', 'setToClose');
-    } else {
-        classRemove('#packUV_Alarm', 'setToClose');
-    };
-    if(data.fault[5] === '1'){
-        classAdd('#packUV_Fault', 'setToClose');
-    } else {
-        classRemove('#packUV_Fault', 'setToClose');
-    };
-
-    if(data.alarm[6] === '1'){
-        classAdd('#cellVDiff_Alarm', 'setToClose');
-    } else {
-        classRemove('#cellVDiff_Alarm', 'setToClose');
-    };
-
-    if(data.fault[7] === '1'){
-        classAdd('#rackVDiff_Fault', 'setToClose');
-    } else {
-        classRemove('#rackVDiff_Fault', 'setToClose');
-    };
-
-    if(data.alarm[8] === '1'){
-        classAdd('#packVDiff_Alarm', 'setToClose');
-    } else {
-        classRemove('#packVDiff_Alarm', 'setToClose');
-    };
-
+    light_color(data.alarm[0], '#cellOV_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[1], '#cellUV_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[2], '#rackOV_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[3], '#rackUV_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[4], '#packOV_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[5], '#packUV_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[6], '#cellVDiff_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[8], '#packVDiff_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[9], '#cellOT_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[10], '#cellUT_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[11], '#cellTDiff_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[12], '#leakageI_Alarm', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.alarm[20], '#overCurrent_Alarm', '0', 'setToOpen', '1', "setToClose");
     
-    if(data.alarm[9] === '1'){
-        classAdd('#cellOT_Alarm', 'setToClose');
-    } else {
-        classRemove('#cellOT_Alarm', 'setToClose');
-    };
-    if(data.fault[9] === '1'){
-        classAdd('#cellOT_Fault', 'setToClose');
-    } else {
-        classRemove('#cellOT_Fault', 'setToClose');
-    };
-
-    if(data.alarm[10] === '1'){
-        classAdd('#cellUT_Alarm', 'setToClose');
-    } else {
-        classRemove('#cellUT_Alarm', 'setToClose');
-    };
-    if(data.fault[10] === '1'){
-        classAdd('#cellUT_Fault', 'setToClose');
-    } else {
-        classRemove('#cellUT_Fault', 'setToClose');
-    };
-
-    if(data.alarm[11] === '1'){
-        classAdd('#cellTDiff_Alarm', 'setToClose');
-    } else {
-        classRemove('#cellTDiff_Alarm', 'setToClose');
-    };
-
-    if(data.alarm[12] === '1'){
-        classAdd('#leakageI_Alarm', 'setToClose');
-    } else {
-        classRemove('#leakageI_Alarm', 'setToClose');
-    };
-    if(data.fault[12] === '1'){
-        classAdd('#leakageI_Fault', 'setToClose');
-    } else {
-        classRemove('#leakageI_Fault', 'setToClose');
-    };
-
-    if(data.fault[13] === '1'){
-        classAdd('#commCMUBMU_Fault', 'setToClose');
-    } else {
-        classRemove('#commCMUBMU_Fault', 'setToClose');
-    };
-
-    if(data.fault[14] === '1'){
-        classAdd('#voltSample_Fault', 'setToClose');
-    } else {
-        classRemove('#voltSample_Fault', 'setToClose');
-    };
-
-    if(data.fault[15] === '1'){
-        classAdd('#tempSample_Fault', 'setToClose');
-    } else {
-        classRemove('#tempSample_Fault', 'setToClose');
-    };
-    
-    if(data.fault[17] === '1'){
-        classAdd('#currentSample_Fault', 'setToClose');
-    } else {
-        classRemove('#currentSample_Fault', 'setToClose');
-    };
-
-    if(data.fault[18] === '1'){
-        classAdd('#commCMUSMU_Fault', 'setToClose');
-    } else {
-        classRemove('#commCMUSMU_Fault', 'setToClose');
-    };
-
-    if(data.alarm[20] === '1'){
-        classAdd('#overCurrent_Alarm', 'setToClose');
-    } else {
-        classRemove('#overCurrent_Alarm', 'setToClose');
-    };
-    if(data.fault[20] === '1'){
-        classAdd('#overCurrent_Fault', 'setToClose');
-    } else {
-        classRemove('#overCurrent_Fault', 'setToClose');
-    };
-
-    if(data.fault[21] === '1'){
-        classAdd('#polarityReverse_Fault', 'setToClose');
-    } else {
-        classRemove('#polarityReverse_Fault', 'setToClose');
-    };
-
-    if(data.fault[22] === '1'){
-        classAdd('#fuse_Fault', 'setToClose');
-    } else {
-        classRemove('#fuse_Fault', 'setToClose');
-    };
-
-    if(data.fault[23] === '1'){
-        classAdd('#contactor_Fault', 'setToClose');
-    } else {
-        classRemove('#contactor_Fault', 'setToClose');
-    };
-
-    console.log("data updated");
+    light_color(data.fault[0], '#cellOV_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[1], '#cellUV_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[2], '#rackOV_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[3], '#rackUV_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[4], '#packOV_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[5], '#packUV_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[7], '#rackVDiff_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[9], '#cellOT_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[10], '#cellUT_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[12], '#leakageI_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[13], '#commCMUBMU_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[14], '#voltSample_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[15], '#tempSample_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[17], '#currentSample_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[18], '#commCMUSMU_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[20], '#overCurrent_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[21], '#polarityReverse_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[22], '#fuse_Fault', '0', 'setToOpen', '1', "setToClose");
+    light_color(data.fault[23], '#contactor_Fault', '0', 'setToOpen', '1', "setToClose");
 
   }
 

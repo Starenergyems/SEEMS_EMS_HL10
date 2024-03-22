@@ -203,6 +203,8 @@ function classRemove(element, className) {
 async function updateNavbar(url = '/navbar') { //刷新側欄
     var data = await getData(url);
     console.log('navbar:', data);
+    
+    $('#userAccount').text(data.latestValues.userAccount);
     $('#totalAlarmNum').text(data.latestValues.totalAlarmNum);
     $('#AlarmNum_Sys').text(data.latestValues.AlarmNum_Sys);
     $('#AlarmNum_Bat').text(data.latestValues.AlarmNum_Bat);
@@ -217,7 +219,7 @@ async function updateNavbar(url = '/navbar') { //刷新側欄
     $('#WarningNum_PCS').text(data.latestValues.WarningNum_PCS);
     $('#WarningNum_FF').text(data.latestValues.WarningNum_FF);
     $('#WarningNum_Env').text(data.latestValues.WarningNum_Env);
-    $('#WarningNum_Meter').text(data.WarningNum_Meter);
+    $('#WarningNum_Meter').text(data.latestValues.WarningNum_Meter);
 
     /////////////////////////////////////////////////
     $('#L_M_systemMode').text(data.latestValues2.L_M_systemMode);
@@ -239,6 +241,18 @@ async function updateNavbar(url = '/navbar') { //刷新側欄
 function routineWork(url = '/navbar') { //持續刷新
     updateData();
     updateNavbar(url);
+}
+
+function light_color(data, target, normal_value, green_class, fault_value, red_class){ //燈號變色
+    if (data === normal_value){
+        $(target).addClass(green_class);
+        $(target).removeClass(red_class);
+    } else if (data === fault_value){
+        $(target).addClass(red_class);
+        $(target).removeClass(green_class);
+    } else {
+        console.log(target, "light status error, should be", normal_value, "or", fault_value);
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 function assign_TextContent_To_SpID(SpID, assignContent) {

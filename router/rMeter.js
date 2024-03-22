@@ -7,8 +7,8 @@ const nano = require("nano")(
 );
 const other_rf01 = "other_rf01";
 const other_rf10 = "other_rf10";
-const rf01Db = nano.use(other_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
-const rf10Db = nano.use(other_rf10); // 請注意這裡使用 nano.use() 來設定數據庫
+const rf01Db = nano.use(other_rf01);
+const rf10Db = nano.use(other_rf10);
 const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
@@ -25,7 +25,7 @@ const {
   Calculate_Tr_oilTemp,
   Calculate_N1450_PF,
   Convert_UInt_to_revBitString,
-  Calculate_CPM10_energy,
+  Calculate_CPM10_energy
 } = require("./function");
 
 app.set("view engine", "ejs");
@@ -38,7 +38,7 @@ app.use(cors());
 // 定義 CouchDB 資料庫名稱
 const databases = [
   "other_rf10", //0
-  "other_rf01", //1
+  "other_rf01" //1
 ];
 
 // 創建 Nano 實例的函式
@@ -48,7 +48,7 @@ const createNanoInstance = (dbName) => nano.db.use(dbName);
 const getLatestDocument = async (nanoDb) => {
   const indexDef = {
     index: { fields: ["time"] },
-    name: "time_index",
+    name: "time_index"
   };
 
   //建立index
@@ -57,10 +57,10 @@ const getLatestDocument = async (nanoDb) => {
   //利用mango作為篩選器
   const mangoQuery = {
     selector: {
-      time: { $exists: true },
+      time: { $exists: true }
     },
     sort: [{ time: "desc" }],
-    limit: 1,
+    limit: 1
   };
 
   return new Promise((resolve, reject) => {
@@ -85,7 +85,7 @@ const relayVCB_MT = {
   2: { dicName: "RelayVCB2", pUW_title: "VCB盤2保護電驛" },
   3: { dicName: "RelayVCB3", pUW_title: "VCB盤3保護電驛" },
   4: { dicName: "RelayVCB4", pUW_title: "VCB盤4保護電驛" },
-  5: { dicName: "RelayVCB5", pUW_title: "輔電VCB盤保護電驛" },
+  5: { dicName: "RelayVCB5", pUW_title: "輔電VCB盤保護電驛" }
 };
 
 async function query_SLD_KeyValuePairs() {
@@ -99,27 +99,81 @@ async function query_SLD_KeyValuePairs() {
   const other10Data = allData[0];
   const other01Data = allData[1];
 
-  const MVCB_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus0[408205], 16);
-  const VCB1_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus1[408205], 16);
-  const VCB2_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus2[408205], 16);
-  const VCB3_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus3[408205], 16);
-  const VCB4_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus4[408205], 16);
-  const VCB_aux_rBitS = Convert_UInt_to_revBitString(other10Data.VCBStatus5[408205], 16);
-  const ACB1_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus1[408206], 16);
-  const ACB2_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus2[408206], 16);
-  const ACB3_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus3[408206], 16);
-  const ACB4_rBitS = Convert_UInt_to_revBitString(other10Data.ACBStatus4[408206], 16);
+  const MVCB_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus0[408205],
+    16
+  );
+  const VCB1_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus1[408205],
+    16
+  );
+  const VCB2_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus2[408205],
+    16
+  );
+  const VCB3_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus3[408205],
+    16
+  );
+  const VCB4_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus4[408205],
+    16
+  );
+  const VCB_aux_rBitS = Convert_UInt_to_revBitString(
+    other10Data.VCBStatus5[408205],
+    16
+  );
+  const ACB1_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus1[408206],
+    16
+  );
+  const ACB2_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus2[408206],
+    16
+  );
+  const ACB3_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus3[408206],
+    16
+  );
+  const ACB4_rBitS = Convert_UInt_to_revBitString(
+    other10Data.ACBStatus4[408206],
+    16
+  );
 
   SLD_KeyValuePairs = {
     permission: "manager",
     // permission: other10Data.TH1[408187],
 
-    statusL_of_MVCB: Determine_statusL_of_VCB(MVCB_rBitS[0], MVCB_rBitS[1], MVCB_rBitS[2]),
-    statusL_of_VCB1: Determine_statusL_of_VCB(VCB1_rBitS[0], VCB1_rBitS[1], VCB1_rBitS[2]),
-    statusL_of_VCB2: Determine_statusL_of_VCB(VCB2_rBitS[0], VCB2_rBitS[1], VCB2_rBitS[2]),
-    statusL_of_VCB3: Determine_statusL_of_VCB(VCB3_rBitS[0], VCB3_rBitS[1], VCB3_rBitS[2]),
-    statusL_of_VCB4: Determine_statusL_of_VCB(VCB4_rBitS[0], VCB4_rBitS[1], VCB4_rBitS[2]),
-    statusL_of_VCB_aux: Determine_statusL_of_VCB(VCB_aux_rBitS[0], VCB_aux_rBitS[1], VCB_aux_rBitS[2]),
+    statusL_of_MVCB: Determine_statusL_of_VCB(
+      MVCB_rBitS[0],
+      MVCB_rBitS[1],
+      MVCB_rBitS[2]
+    ),
+    statusL_of_VCB1: Determine_statusL_of_VCB(
+      VCB1_rBitS[0],
+      VCB1_rBitS[1],
+      VCB1_rBitS[2]
+    ),
+    statusL_of_VCB2: Determine_statusL_of_VCB(
+      VCB2_rBitS[0],
+      VCB2_rBitS[1],
+      VCB2_rBitS[2]
+    ),
+    statusL_of_VCB3: Determine_statusL_of_VCB(
+      VCB3_rBitS[0],
+      VCB3_rBitS[1],
+      VCB3_rBitS[2]
+    ),
+    statusL_of_VCB4: Determine_statusL_of_VCB(
+      VCB4_rBitS[0],
+      VCB4_rBitS[1],
+      VCB4_rBitS[2]
+    ),
+    statusL_of_VCB_aux: Determine_statusL_of_VCB(
+      VCB_aux_rBitS[0],
+      VCB_aux_rBitS[1],
+      VCB_aux_rBitS[2]
+    ),
 
     statusL_of_ACB1_1: Determine_statusL_of_ACB(ACB1_rBitS[0], ACB1_rBitS[1]),
     statusL_of_ACB1_2: Determine_statusL_of_ACB(ACB1_rBitS[2], ACB1_rBitS[3]),
@@ -132,22 +186,60 @@ async function query_SLD_KeyValuePairs() {
     statusL_of_ACB3_3: Determine_statusL_of_ACB(ACB3_rBitS[4], ACB3_rBitS[5]),
     statusL_of_ACB4_1: Determine_statusL_of_ACB(ACB4_rBitS[0], ACB4_rBitS[1]),
 
-    statusL_of_relayMVCB: Determine_DL_of_AlarmWords([other10Data.RelayMVCB[408200], other10Data.RelayMVCB[408201], other10Data.RelayMVCB[408202]]),
-    relayMVCB_S0: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408200], 16),
-    relayMVCB_S1: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408201], 16),
-    relayMVCB_S2: Convert_UInt_to_revBitString(other10Data.RelayMVCB[408202], 16),
+    statusL_of_relayMVCB: Determine_DL_of_AlarmWords([
+      other10Data.RelayMVCB[408200],
+      other10Data.RelayMVCB[408201],
+      other10Data.RelayMVCB[408202]
+    ]),
+    relayMVCB_S0: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408200],
+      16
+    ),
+    relayMVCB_S1: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408201],
+      16
+    ),
+    relayMVCB_S2: Convert_UInt_to_revBitString(
+      other10Data.RelayMVCB[408202],
+      16
+    ),
 
-    statusL_of_relayVCB1: Determine_DL_of_AlarmWord(other10Data.RelayVCB1[408203]),
-    statusL_of_relayVCB2: Determine_DL_of_AlarmWord(other10Data.RelayVCB2[408203]),
-    statusL_of_relayVCB3: Determine_DL_of_AlarmWord(other10Data.RelayVCB3[408203]),
-    statusL_of_relayVCB4: Determine_DL_of_AlarmWord(other10Data.RelayVCB4[408203]),
-    statusL_of_relayVCB_aux: Determine_DL_of_AlarmWord(other10Data.RelayVCB5[408203]),
-    relayVCB: Convert_UInt_to_revBitString(other10Data[relayVCB_MT[num_RelayVCB].dicName][408203], 16),
+    statusL_of_relayVCB1: Determine_DL_of_AlarmWord(
+      other10Data.RelayVCB1[408203]
+    ),
+    statusL_of_relayVCB2: Determine_DL_of_AlarmWord(
+      other10Data.RelayVCB2[408203]
+    ),
+    statusL_of_relayVCB3: Determine_DL_of_AlarmWord(
+      other10Data.RelayVCB3[408203]
+    ),
+    statusL_of_relayVCB4: Determine_DL_of_AlarmWord(
+      other10Data.RelayVCB4[408203]
+    ),
+    statusL_of_relayVCB_aux: Determine_DL_of_AlarmWord(
+      other10Data.RelayVCB5[408203]
+    ),
+    relayVCB: Convert_UInt_to_revBitString(
+      other10Data[relayVCB_MT[num_RelayVCB].dicName][408203],
+      16
+    ),
 
-    statusL_of_recloser: Determine_statusL_of_recloser(other10Data.Recloser[408210], other10Data.Recloser[408209]),
-    recloserMode: Convert_UInt_to_revBitString(other10Data.Recloser[408208], 16),
-    recloserStatus: Convert_UInt_to_revBitString(other10Data.Recloser[408210], 16),
-    recloserRelay: Convert_UInt_to_revBitString(other10Data.Recloser[408209], 16),
+    statusL_of_recloser: Determine_statusL_of_recloser(
+      other10Data.Recloser[408210],
+      other10Data.Recloser[408209]
+    ),
+    recloserMode: Convert_UInt_to_revBitString(
+      other10Data.Recloser[408208],
+      16
+    ),
+    recloserStatus: Convert_UInt_to_revBitString(
+      other10Data.Recloser[408210],
+      16
+    ),
+    recloserRelay: Convert_UInt_to_revBitString(
+      other10Data.Recloser[408209],
+      16
+    ),
 
     temp_TR1: Calculate_Tr_oilTemp(other10Data.TR1[408181]),
     temp_TR2: Calculate_Tr_oilTemp(other10Data.TR2[408181]),
@@ -157,21 +249,45 @@ async function query_SLD_KeyValuePairs() {
 
     V_Freq: Scale_Data(other01Data.Freq[408007], ((1 / 65536) * 100) / 1000, 3),
     I_Freq: Scale_Data(other01Data.Freq[408017], (1 / 65536) * 200, 2),
-    P_Freq: Scale_Data(other01Data.Freq[408019], ((1 / 65536) * 100 * 200) / 1000, 1),
-    Q_Freq: Scale_Data(other01Data.Freq[408021], ((1 / 65536) * 100 * 200) / 1000, 1),
-    V_ab_Freq: Scale_Data(other01Data.Freq[408001], ((1 / 65536) * 100) / 1000, 3),
-    V_bc_Freq: Scale_Data(other01Data.Freq[408003], ((1 / 65536) * 100) / 1000, 3),
-    V_ca_Freq: Scale_Data(other01Data.Freq[408005], ((1 / 65536) * 100) / 1000, 3),
+    P_Freq: Scale_Data(
+      other01Data.Freq[408019],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
+    Q_Freq: Scale_Data(
+      other01Data.Freq[408021],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
+    V_ab_Freq: Scale_Data(
+      other01Data.Freq[408001],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    V_bc_Freq: Scale_Data(
+      other01Data.Freq[408003],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
+    V_ca_Freq: Scale_Data(
+      other01Data.Freq[408005],
+      ((1 / 65536) * 100) / 1000,
+      3
+    ),
     I_a_Freq: Scale_Data(other01Data.Freq[408009], (1 / 65536) * 200, 2),
     I_b_Freq: Scale_Data(other01Data.Freq[408011], (1 / 65536) * 200, 2),
     I_c_Freq: Scale_Data(other01Data.Freq[408013], (1 / 65536) * 200, 2),
-    S_Freq: Scale_Data(other01Data.Freq[408023], ((1 / 65536) * 100 * 200) / 1000, 1),
+    S_Freq: Scale_Data(
+      other01Data.Freq[408023],
+      ((1 / 65536) * 100 * 200) / 1000,
+      1
+    ),
     PF_Freq: Calculate_N1450_PF(other01Data.Freq[408025]),
     Freq_Freq: Scale_Data(other01Data.Freq[408026], 1 / 65536, 3),
     AE_imp_Freq: Scale_Data(other01Data.Freq[408028], 0.1, 1),
     AE_exp_Freq: Scale_Data(other01Data.Freq[408030], 0.1, 1),
     RE_imp_Freq: Scale_Data(other01Data.Freq[408032], 0.1, 1),
-    RE_exp_Freq: Scale_Data(other01Data.Freq[408034], 0.1, 1),
+    RE_exp_Freq: Scale_Data(other01Data.Freq[408034], 0.1, 1)
   };
 }
 
@@ -211,7 +327,10 @@ router.post("/change_num_of_RelayVCB", async (req, res) => {
 
     await query_SLD_KeyValuePairs();
 
-    const response = { title_of_pUW: relayVCB_MT[num_RelayVCB].pUW_title, relayVCB_revBitString: SLD_KeyValuePairs.relayVCB };
+    const response = {
+      title_of_pUW: relayVCB_MT[num_RelayVCB].pUW_title,
+      relayVCB_revBitString: SLD_KeyValuePairs.relayVCB
+    };
 
     res.json(response);
   } catch (error) {
@@ -317,7 +436,7 @@ router.post("/change_num_of_RelayVCB", async (req, res) => {
 /************************************************************************************ */
 
 const databases_AuxM = [
-  "other_rf10", //0
+  "other_rf10" //0
 ];
 
 let AuxM_KeyValuePairs;
@@ -419,7 +538,7 @@ async function query_AuxM_KeyValuePairs() {
       other10Data.AuxM8[408080],
       other10Data.AuxM8[408081],
       other10Data.AuxM8[408082]
-    ),
+    )
   };
 }
 

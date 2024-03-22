@@ -226,3 +226,7 @@
     margin: 5px 5px 5px 25px;
     min-width: 320px;
 }
+
+.dataLight.RG_L, .dataLight.OG_L{
+    background-color: #000000;
+}

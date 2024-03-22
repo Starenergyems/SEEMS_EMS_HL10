@@ -50,8 +50,6 @@ router.get("/report", (req, res) => {
   res.render("Rpt_Report");
 });
 
-//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
-
 router.get("/report/report", (req, res) => {
   // num與fun
   res.render("Rpt_Report");
@@ -78,167 +76,178 @@ router.get("/report/report", (req, res) => {
 //   "YearReport.xlsx"
 // );
 
-// var specified_date; // 指定要撈哪天(會撈前一天) / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
-// var specified_date_clone1;
-// var specified_date_clone2;
-// var specified_date_clone3;
-// var specified_date_clone4;
-// var specified_date_clone5;
-// var specified_date_clone6;
-// var specified_date_clone7;
-// var specified_date_clone8;
-// var specified_date_clone9;
-// var specified_date_clone10;
-// var specified_date_clone11;
-// var specified_date_clone12;
-// var specified_date_clone13;
-// var specified_date_clone14;
-// var specified_date_clone15;
-// var specified_date_clone16;
-// var specified_date_clone17;
-// var specified_date_clone18;
-// var specified_date_clone19;
-// var specified_date_clone20;
+var specified_date; // 指定要撈哪天(會撈前一天) / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
+var specified_date_clone1;
+var specified_date_clone2;
+var specified_date_clone3;
+var specified_date_clone4;
+var specified_date_clone5;
+var specified_date_clone6;
+var specified_date_clone7;
+var specified_date_clone8;
+var specified_date_clone9;
+var specified_date_clone10;
+var specified_date_clone11;
+var specified_date_clone12;
+var specified_date_clone13;
+var specified_date_clone14;
+var specified_date_clone15;
+var specified_date_clone16;
+var specified_date_clone17;
+var specified_date_clone18;
+var specified_date_clone19;
+var specified_date_clone20;
+var specified_date_clone21;
+var specified_date_clone22;
+var specified_date_clone23;
 
 /*************************************************************************************************** */
+
+//測試用 直接指定下載時間
 //const specified_date = moment();
 //const specified_date = moment("2023-01-01", "YYYY-MM-DD"); // 指定為 2023 年 1 月 1 日
 // const input_dateandtime = "2023-01-01 00:00:00";
 
-var specified_date = moment("2024-03-01 00:00:00", "YYYY-MM-DD HH:mm:ss"); // 指定為 2024 年 3 月 1 日的凌晨 12 點
+//var specified_date = moment("2024-03-15 00:00:00", "YYYY-MM-DD HH:mm:ss"); // 指定為 2024 年 3 月 1 日的凌晨 12 點
 
 // console.log("specified_date: " + specified_date.format("YYYY-MM-DD HH:mm:ss"));
 
-const specified_date_clone1 = specified_date.clone();
-const specified_date_clone2 = specified_date.clone();
-const specified_date_clone3 = specified_date.clone();
-const specified_date_clone4 = specified_date.clone();
-const specified_date_clone5 = specified_date.clone();
-const specified_date_clone6 = specified_date.clone();
-const specified_date_clone7 = specified_date.clone();
-const specified_date_clone8 = specified_date.clone();
-const specified_date_clone9 = specified_date.clone();
-const specified_date_clone10 = specified_date.clone();
-const specified_date_clone11 = specified_date.clone();
-const specified_date_clone12 = specified_date.clone();
-const specified_date_clone13 = specified_date.clone();
-const specified_date_clone14 = specified_date.clone();
-const specified_date_clone15 = specified_date.clone();
-const specified_date_clone16 = specified_date.clone();
-const specified_date_clone17 = specified_date.clone();
-const specified_date_clone18 = specified_date.clone();
-const specified_date_clone19 = specified_date.clone();
-const specified_date_clone20 = specified_date.clone();
-const specified_date_clone21 = specified_date.clone();
-const specified_date_clone22 = specified_date.clone();
-const specified_date_clone23 = specified_date.clone();
+// const specified_date_clone1 = specified_date.clone();
+// const specified_date_clone2 = specified_date.clone();
+// const specified_date_clone3 = specified_date.clone();
+// const specified_date_clone4 = specified_date.clone();
+// const specified_date_clone5 = specified_date.clone();
+// const specified_date_clone6 = specified_date.clone();
+// const specified_date_clone7 = specified_date.clone();
+// const specified_date_clone8 = specified_date.clone();
+// const specified_date_clone9 = specified_date.clone();
+// const specified_date_clone10 = specified_date.clone();
+// const specified_date_clone11 = specified_date.clone();
+// const specified_date_clone12 = specified_date.clone();
+// const specified_date_clone13 = specified_date.clone();
+// const specified_date_clone14 = specified_date.clone();
+// const specified_date_clone15 = specified_date.clone();
+// const specified_date_clone16 = specified_date.clone();
+// const specified_date_clone17 = specified_date.clone();
+// const specified_date_clone18 = specified_date.clone();
+// const specified_date_clone19 = specified_date.clone();
+// const specified_date_clone20 = specified_date.clone();
+// const specified_date_clone21 = specified_date.clone();
+// const specified_date_clone22 = specified_date.clone();
+// const specified_date_clone23 = specified_date.clone();
 // console.log(
 //   "specified_date_clone: " + specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
 // );
+
 /*************************************************************************************************** */
+
+
 //記得要打開
-// router.get("/report/download-excel", async (req, res) => {
-//   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
-//   try {
-//     //查詢參數中取得templatePath
-//     const { templatePath, reportType, fileName } = req.query; //url要帶參數
-//     if (!templatePath) {
-//       return res.status(400).send("Missing templatePath parameter");
-//     }
+router.get("/report/download-excel", async (req, res) => {
+  //定期撈資料供下載存至地端or檔案不存在就自己撈資料
+  try {
+    //查詢參數中取得templatePath
+    const { templatePath, reportType, fileName } = req.query; //url要帶參數
+    if (!templatePath) {
+      return res.status(400).send("Missing templatePath parameter");
+    }
 
-//     console.log("fileName:" + fileName);
-//     var queryDate = convertFileNameToDate(fileName);
-//     console.log("queryDate:" + queryDate);
-//     specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
+    console.log("fileName:" + fileName);
+    var queryDate = convertFileNameToDate(fileName);
+    console.log("queryDate:" + queryDate);
+    specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
 
-//     specified_date_clone1 = specified_date.clone();
-//     specified_date_clone2 = specified_date.clone();
-//     specified_date_clone3 = specified_date.clone();
-//     specified_date_clone4 = specified_date.clone();
-//     specified_date_clone5 = specified_date.clone();
-//     specified_date_clone6 = specified_date.clone();
-//     specified_date_clone7 = specified_date.clone();
-//     specified_date_clone8 = specified_date.clone();
-//     specified_date_clone9 = specified_date.clone();
-//     specified_date_clone10 = specified_date.clone();
-//     specified_date_clone11 = specified_date.clone();
-//     specified_date_clone12 = specified_date.clone();
-//     specified_date_clone13 = specified_date.clone();
-//     specified_date_clone14 = specified_date.clone();
-//     specified_date_clone15 = specified_date.clone();
-//     specified_date_clone16 = specified_date.clone();
-//     specified_date_clone17 = specified_date.clone();
-//     specified_date_clone18 = specified_date.clone();
-//     specified_date_clone19 = specified_date.clone();
-//     specified_date_clone20 = specified_date.clone();
-//specified_date_clone21 = specified_date.clone();
-//     var tempFilePath; //暫存的excel資料
+    specified_date_clone1 = specified_date.clone();
+    specified_date_clone2 = specified_date.clone();
+    specified_date_clone3 = specified_date.clone();
+    specified_date_clone4 = specified_date.clone();
+    specified_date_clone5 = specified_date.clone();
+    specified_date_clone6 = specified_date.clone();
+    specified_date_clone7 = specified_date.clone();
+    specified_date_clone8 = specified_date.clone();
+    specified_date_clone9 = specified_date.clone();
+    specified_date_clone10 = specified_date.clone();
+    specified_date_clone11 = specified_date.clone();
+    specified_date_clone12 = specified_date.clone();
+    specified_date_clone13 = specified_date.clone();
+    specified_date_clone14 = specified_date.clone();
+    specified_date_clone15 = specified_date.clone();
+    specified_date_clone16 = specified_date.clone();
+    specified_date_clone17 = specified_date.clone();
+    specified_date_clone18 = specified_date.clone();
+    specified_date_clone19 = specified_date.clone();
+    specified_date_clone20 = specified_date.clone();
+    specified_date_clone21 = specified_date.clone();
+    specified_date_clone22 = specified_date.clone();
+    specified_date_clone23 = specified_date.clone();
 
-//     //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
-//     const workbook = await xlsx.fromFileAsync(templatePath);
-//     var couchData; //插入excel的數值
-//     // Fetch data from MongoDB
-//     if (reportType === "年報") {
-//       couchData = await getYearData();
+    var tempFilePath; //暫存的excel資料
 
-//       updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
-//       updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
-//       updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
-//       updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
-//       tempFilePath = path.join(__dirname, "temp.xlsx");
-//       await workbook.toFileAsync(tempFilePath);
-//     } else if (reportType === "月報") {
-//       couchData = await getMonthData();
-//       updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
-//       updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 1, "K3"); //日期
-//       updateExcel2DHorizon(workbook, couchData.data_exacutive_rate, 1, "D6"); //服務品質指標+SPM
-//       updateExcel2DHorizon(workbook, couchData.data_other_info, 1, "N6"); //總用電+中止+充放電效率
-//       updateExcel1DHorizon(workbook, couchData.other_sum, 1, "N37"); //total總用電+中止+充放電效率
-//       updateExcel1DHorizon(workbook, couchData.sumArray, 1, "D37"); //total服務品質指標
-//       updateExcel1DHorizon(workbook, couchData.averageArray, 1, "K37"); //total SPM
-//       updateExcel1DHorizon(workbook, couchData.last_month, 1, "D38"); //上期
-//       updateExcel1DHorizon(workbook, couchData.last_year, 1, "D39"); //去年同期
+    //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
+    const workbook = await xlsx.fromFileAsync(templatePath);
+    var couchData; //插入excel的數值
+    // Fetch data from MongoDB
+    if (reportType === "年報") {
+      couchData = await getYearData();
 
-//       updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
-//       updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
-//       updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
+      updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
+      updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
+      updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
+      updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
+      tempFilePath = path.join(__dirname, "temp.xlsx");
+      await workbook.toFileAsync(tempFilePath);
+    } else if (reportType === "月報") {
+      couchData = await getMonthData();
+      updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
+      updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 1, "K3"); //日期
+      updateExcel2DHorizon(workbook, couchData.data_exacutive_rate, 1, "D6"); //服務品質指標+SPM
+      updateExcel2DHorizon(workbook, couchData.data_other_info, 1, "N6"); //總用電+中止+充放電效率
+      updateExcel1DHorizon(workbook, couchData.other_sum, 1, "N37"); //total總用電+中止+充放電效率
+      updateExcel1DHorizon(workbook, couchData.sumArray, 1, "D37"); //total服務品質指標
+      updateExcel1DHorizon(workbook, couchData.averageArray, 1, "K37"); //total SPM
+      updateExcel1DHorizon(workbook, couchData.last_month, 1, "D38"); //上期
+      updateExcel1DHorizon(workbook, couchData.last_year, 1, "D39"); //去年同期
 
-//       tempFilePath = path.join(__dirname, "temp.xlsx");
-//       await workbook.toFileAsync(tempFilePath);
-//     } else if (reportType === "日報") {
-//       couchData = await getDayData();
+      updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
+      updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
+      updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
 
-//       // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
-//       updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
-//       updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
-//       updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
-//       updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
-//       tempFilePath = path.join(__dirname, "temp.xlsx");
-//       await workbook.toFileAsync(tempFilePath);
-//     } else {
-//       console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
-//     }
-//     // Set up response headers for Excel file download
-//     res.setHeader(
-//       "Content-Type",
-//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//     );
-//     res.setHeader("Content-Disposition", "attachment;");
+      tempFilePath = path.join(__dirname, "temp.xlsx");
+      await workbook.toFileAsync(tempFilePath);
+    } else if (reportType === "日報") {
+      couchData = await getDayData();
 
-//     // Read the temporary file as a stream and pipe it to the response
-//     //設置HTTP響應標頭，指定返回的內容類型為Excel文件，並設置Content-Disposition標頭，提示瀏覽器以附件形式處理。
-//     const fileStream = fs.createReadStream(tempFilePath);
-//     fileStream.pipe(res);
+      // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
+      updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
+      updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
+      updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
+      updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
+      tempFilePath = path.join(__dirname, "temp.xlsx");
+      await workbook.toFileAsync(tempFilePath);
+    } else {
+      console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
+    }
+    // Set up response headers for Excel file download
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", "attachment;");
 
-//     // Remove the temporary file after sending the response
-//     fileStream.on("end", () => {
-//       fs.unlinkSync(tempFilePath);
-//     });
-//   } catch (error) {
-//     console.error("Error generating Excel file:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
+    // Read the temporary file as a stream and pipe it to the response
+    //設置HTTP響應標頭，指定返回的內容類型為Excel文件，並設置Content-Disposition標頭，提示瀏覽器以附件形式處理。
+    const fileStream = fs.createReadStream(tempFilePath);
+    fileStream.pipe(res);
+
+    // Remove the temporary file after sending the response
+    fileStream.on("end", () => {
+      fs.unlinkSync(tempFilePath);
+    });
+  } catch (error) {
+    console.error("Error generating Excel file:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 /***************************************************************************************************** */
 //百分比對照
 function Conversionpercentage(randomNumber) {
@@ -282,10 +291,10 @@ async function getDayData() {
       selector: {
         time: {
           $gte: dayBeforeYesterdayStart, // 開始時間為大前天的 23:59:57
-          $lte: dayBeforeYesterdayEnd, // 結束時間為大前天的 23:59:59
-        },
+          $lte: dayBeforeYesterdayEnd // 結束時間為大前天的 23:59:59
+        }
       },
-      limit: 3, //只讀取最後三秒
+      limit: 3 //只讀取最後三秒
     };
 
     // 使用篩選器查詢大前天的數據
@@ -294,9 +303,9 @@ async function getDayData() {
       ...dayBeforeYesterdayData.docs.map((doc) => doc.System["400037"])
     );
 
-    //console.log("Data length fetched for day before yesterday:", data.length);
-    ////console.log("Data fetched for day before yesterday:", data);
-    //console.log("********************************************");
+    console.log("Data length fetched for day before yesterday:", data.length);
+    console.log("Data fetched for day before yesterday:", data);
+    console.log("********************************************");
 
     // 計算昨天的時間範圍
     const yesterdayStart = specified_date_clone3
@@ -311,6 +320,9 @@ async function getDayData() {
       .subtract(1, "seconds") // 減去1秒到昨天的 23:59:59
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+    // 新增一個陣列暫存每個小時的資料
+    const tempData = [];
 
     // 依序讀取後續的資料，每次增加一小時
     for (let i = 0; i < 24; i++) {
@@ -327,36 +339,45 @@ async function getDayData() {
         .add(999, "milliseconds")
         .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-      // console.log("intervalStart : " + intervalStart);
-      // console.log("intervalEnd   : " + intervalEnd);
+      console.log("intervalStart : " + intervalStart);
+      console.log("intervalEnd   : " + intervalEnd);
 
       // 定義篩選器條件，查詢該時間段的數據
       const filterInterval = {
         selector: {
           time: {
             $gte: intervalStart, // 開始時間
-            $lte: intervalEnd, // 結束時間
-          },
+            $lte: intervalEnd // 結束時間
+          }
         },
-        limit: 3600, // 每個時間段讀取3600
+        limit: 3600 // 每個時間段讀取3600
       };
 
-      // 每個小時的資料分24次每次一小時存進data陣列裡面
+      // 每個小時的資料分24次每次一小時存進tempData陣列裡面
       const intervalData = await gcDb.find(filterInterval);
-      data.push(...intervalData.docs.map((doc) => doc.System["400037"]));
+      tempData.push(...intervalData.docs.map((doc) => doc.System["400037"]));
 
-      //console.log(
-      //   "Data fetched for interval:",
-      //   intervalStart + "+08:00",
-      //   "-",
-      //   intervalEnd + "+08:00-",
-      //   "Pushed",
-      //   data.length,
-      //   "items."
-      // );
+      console.log(
+        "Data fetched for interval:",
+        intervalStart + "+08:00",
+        "-",
+        intervalEnd + "+08:00-",
+        "Pushed",
+        tempData.length,
+        "items."
+      );
+
+      // 檢查每秒是否都有數值，不足的補0
+      for (let j = 0; j < 3600; j++) {
+        if (!tempData[i * 3600 + j]) {
+          data.push(0);
+        } else {
+          data.push(tempData[i * 3600 + j]);
+        }
+      }
     }
-    // console.log("初始Data陣列的86403筆資料", data.length);
-    // console.log("原本獲得的Data :", data);
+    console.log("初始Data陣列的86403筆資料", data.length);
+    console.log("原本獲得的Data :", data);
 
     //取得大前天+昨天的實際得標容量******************************************************************** */
     //大前天的最後一筆
@@ -369,13 +390,13 @@ async function getDayData() {
     const filter_acrossthenightyesterday = {
       selector: {
         time: {
-          $gte: endOfDaybeforyesterday, // 等於當天的結束時間
-        },
+          $gte: endOfDaybeforyesterday // 等於當天的結束時間
+        }
       },
-      limit: 1, // 搜尋一筆資料
+      limit: 1 // 搜尋一筆資料
     };
-    //console.log("------------------------------------");
-    //console.log("endOfDaybeforyesterday:" + endOfDaybeforyesterday);
+    console.log("------------------------------------");
+    console.log("endOfDaybeforyesterday:" + endOfDaybeforyesterday);
     const ScheduleDataDaybeforyesterday = await gcDb.find(
       filter_acrossthenightyesterday
     );
@@ -388,18 +409,18 @@ async function getDayData() {
       });
     });
 
-    // console.log(
-    //   "Total data fetched scheduleDaybeforyesterdayValues:",
-    //   scheduleDaybeforyesterdayValues.length
-    // );
-    // console.log(
-    //   "scheduleDaybeforyesterdayValues :",
-    //   scheduleDaybeforyesterdayValues
-    // );
-    // console.log(
-    //   "scheduleDaybeforyesterdayValues[95]:",
-    //   scheduleDaybeforyesterdayValues[95] //最後一個小時的資料
-    // );
+    console.log(
+      "Total data fetched scheduleDaybeforyesterdayValues:",
+      scheduleDaybeforyesterdayValues.length
+    );
+    console.log(
+      "scheduleDaybeforyesterdayValues :",
+      scheduleDaybeforyesterdayValues
+    );
+    console.log(
+      "scheduleDaybeforyesterdayValues[95]:",
+      scheduleDaybeforyesterdayValues[95] //最後一個小時的資料
+    );
 
     //如果大前天最後一個時段沒得標則要將spm改為100%
     if (scheduleDaybeforyesterdayValues[95] === 0) {
@@ -407,9 +428,9 @@ async function getDayData() {
       data[1] = 10000;
       data[2] = 10000;
     }
-    //console.log("經過第一次處理的Data(處理大前天最後一小時有沒有得標) :", data);
+    console.log("經過第一次處理的Data(處理大前天最後一小時有沒有得標) :", data);
 
-    //console.log("------------------------------------");
+    console.log("------------------------------------");
     //昨天的96筆(每筆15分鐘))
     const endOfDay = moment(yesterdayEnd)
       .endOf("day")
@@ -418,12 +439,12 @@ async function getDayData() {
     const filter_acrossthenight = {
       selector: {
         time: {
-          $gte: endOfDay, // 等於當天的結束時間
-        },
+          $gte: endOfDay // 等於當天的結束時間
+        }
       },
-      limit: 1, // 搜尋一筆資料
+      limit: 1 // 搜尋一筆資料
     };
-    //console.log("endOfDay" + endOfDay);
+    console.log("endOfDay" + endOfDay);
 
     const ScheduleData = await gcDb.find(filter_acrossthenight);
     const scheduleTodayValues = [];
@@ -435,8 +456,8 @@ async function getDayData() {
       });
     });
 
-    //console.log("昨天的實際得標容量長度:", scheduleTodayValues.length);
-    //console.log("昨天實際得標容量 :", scheduleTodayValues);
+    console.log("昨天的實際得標容量長度:", scheduleTodayValues.length);
+    console.log("昨天實際得標容量 :", scheduleTodayValues);
 
     const maxData = [];
 
@@ -449,24 +470,29 @@ async function getDayData() {
       }
     }
 
-    //console.log("取出四秒滾動最大值的長度(應該要是86400):", maxData.length);
-    //console.log("取出四秒滾動最大值的陣列:", maxData);
+    console.log("取出四秒滾動最大值的長度(應該要是86400):", maxData.length);
+    console.log("取出四秒滾動最大值的陣列:", maxData);
 
+    let minIndex; // 在此定義 minIndex 變數
+    let maxIndex; // 在此定義 minIndex 變數
     let globalMax = Number.NEGATIVE_INFINITY; // 初始化全局最大值為負無窮大
     let globalMin = Number.POSITIVE_INFINITY; // 初始化全局最小值為正無窮大
 
     for (let q = 0; q < 86400; q++) {
       if (maxData[q] > globalMax) {
         globalMax = maxData[q];
+        maxIndex = q;
       }
       if (maxData[q] < globalMin) {
         globalMin = maxData[q];
+        minIndex = q; // 設定 minIndex 變數
       }
     }
-    //console.log("86400秒裡面最大的sbspm(沒有判斷有沒得標的情況下):", globalMax);
-    //console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
-    //console.log("最小值存入 globalMin 的位置:", minIndex);
-    //console.log("取出最小位置的數值:", maxData[minIndex]);
+
+    console.log("86400秒裡面最大的sbspm(沒有判斷有沒得標的情況下):", globalMax);
+    console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
+    console.log("最小值存入 globalMin 的位置:", minIndex);
+    console.log("取出最小位置的數值:", maxData[minIndex]);
 
     var no_Execution_period_calculation = 0; //計算沒有在執行的時段(最大96 一個時段15分鐘)
     var Execution_period_calculation = 0; //計算實際上有在執行的時段(最大96 一個時段15分鐘)
@@ -504,15 +530,15 @@ async function getDayData() {
         total_count++;
       }
     }
-    // console.log("加總所有的spm: " + sum);
-    // console.log("總共有幾個可以進行加法的數值:" + total_count);
+    console.log("加總所有的spm: " + sum);
+    console.log("總共有幾個可以進行加法的數值:" + total_count);
     //獲得平均值
     const averageoriginal = sum / total_count; // 計算平均值並四捨五入到整數 eg94.99
     const average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數 eg94.99
     const averagefloor = Math.floor(sum / total_count); // 計算平均值且捨去小數部分
 
     // console.log("averageoriginal :", averageoriginal);
-    // console.log("average45 :", average45);
+    console.log("average45 :", average45);
     // console.log("averagefloor :", averagefloor);
 
     //******************************************************************* */
@@ -540,10 +566,9 @@ async function getDayData() {
       maxValues.push(max);
       averageValues.push(average);
     }
-    //console.log("minValues :", minValues);
-
-    //console.log("maxValues :", minValues);
-    //console.log("averageValues :", minValues);
+    console.log("minValues :", minValues);
+    console.log("maxValues :", minValues);
+    console.log("averageValues :", minValues);
 
     //換算獲得服務品質指標
     const quality = [];
@@ -634,9 +659,9 @@ async function getDayData() {
     hour_final[24][7] = Conversionpercentage(globalMax);
     hour_final[24][8] = Conversionpercentage(average45);
     hour_final[24][9] = Conversionpercentage(globalMin);
-    // console.log("the qualityis :", quality);
-    // console.log("counthourstop:" + counthourstop);
-    // console.log("the hour_final :", hour_final);
+    console.log("the qualityis :", quality);
+    console.log("counthourstop:" + counthourstop);
+    console.log("the hour_final :", hour_final);
 
     const yesterdaystart = specified_date_clone5
       .subtract(1, "days")
@@ -649,49 +674,49 @@ async function getDayData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
     // console.log("yesterdaystart:" + yesterdaystart);
-    // console.log("yesterdayend1:" + yesterdayend1);
+    console.log("yesterdayend1:" + yesterdayend1);
     const filteryesterdaystart = {
       selector: {
         time: {
-          $gte: yesterdaystart,
-        },
+          $gte: yesterdaystart
+        }
       },
-      limit: 1,
+      limit: 1
     };
 
     const filteryesterdayend = {
       selector: {
         time: {
-          $gte: yesterdayend1,
-        },
+          $gte: yesterdayend1
+        }
       },
-      limit: 1,
+      limit: 1
     };
 
     //使用篩選器查詢前天的電表數據 昨天00:00:00
     const meterYesterdayDataStart = await other01Db.find(filteryesterdaystart);
 
     const YesterdayStart_kWh_Import = meterYesterdayDataStart.docs.map(
-      (doc) => doc.Freq["408032"]
+      (doc) => doc.Freq["408028"]
     );
     const YesterdayStart_kWh_Export = meterYesterdayDataStart.docs.map(
-      (doc) => doc.Freq["408034"]
+      (doc) => doc.Freq["408030"]
     );
     // 使用篩選器查詢前天的電表數據 今天00:00:00
     const meterYesterdayDataEnd = await other01Db.find(filteryesterdayend);
 
     const YesterdayEnd_kWh_Import = meterYesterdayDataEnd.docs.map(
-      (doc) => doc.Freq["408032"]
+      (doc) => doc.Freq["408028"]
     );
     const YesterdayEnd_kWh_Export = meterYesterdayDataEnd.docs.map(
-      (doc) => doc.Freq["408034"]
+      (doc) => doc.Freq["408030"]
     );
 
     // console.log("********************************************************");
-    // console.log("YesterdayStart_kWh_Import: " + YesterdayStart_kWh_Import); //起始時間的充電
-    // console.log("YesterdayStart_kWh_Export: " + YesterdayStart_kWh_Export); //起始時間的放電量
-    // console.log("YesterdayEnd_kWh_Import: " + YesterdayEnd_kWh_Import); //結束時間的充電
-    // console.log("YesterdayEnd_kWh_Export: " + YesterdayEnd_kWh_Export); //結束時間的放電
+    console.log("YesterdayStart_kWh_Import: " + YesterdayStart_kWh_Import); //起始時間的充電
+    console.log("YesterdayStart_kWh_Export: " + YesterdayStart_kWh_Export); //起始時間的放電量
+    console.log("YesterdayEnd_kWh_Import: " + YesterdayEnd_kWh_Import); //結束時間的充電
+    console.log("YesterdayEnd_kWh_Export: " + YesterdayEnd_kWh_Export); //結束時間的放電
 
     let elsedata1 = [];
     let elsedata2 = [];
@@ -704,10 +729,11 @@ async function getDayData() {
     let stopminutes = 0;
     let capacity = 0;
     let RTE = 0;
-    if (kWh_Export === kWh_Import) {
+    if (kWh_Export === kWh_Import||kWh_Export >= kWh_Import) {
       RTE = 0.0;
     } else {
-      RTE = ((kWh_Export / kWh_Import) * 100).toFixed(1);
+      RTE = Math.abs(((kWh_Export / kWh_Import) * 100).toFixed(1));
+
     }
 
     elsedata1[0] = kWh_Import / 10;
@@ -719,14 +745,14 @@ async function getDayData() {
 
     elsedata = elsedata.concat(elsedata1, elsedata2);
 
-    // console.log("kWh_Import: ", kWh_Import);
-    // console.log("kWh_Export: ", kWh_Export);
-    // console.log("net: ", net);
-    // console.log("stop_Minutes: ", stopminutes);
-    // console.log("capacity: ", capacity);
-    // console.log("RTE: ", RTE);
-    // console.log("elsedata1: ", elsedata1);
-    // console.log("elsedata2: ", elsedata2);
+    console.log("kWh_Import: ", kWh_Import);
+    console.log("kWh_Export: ", kWh_Export);
+    console.log("net: ", net);
+    console.log("stop_Minutes: ", stopminutes);
+    console.log("capacity: ", capacity);
+    console.log("RTE: ", RTE);
+    console.log("elsedata1: ", elsedata1);
+    console.log("elsedata2: ", elsedata2);
 
     // 昨天的日期
     const yesterdayDate = specified_date_clone8
@@ -736,7 +762,7 @@ async function getDayData() {
     const everydayData = {
       time: yesterdayDate,
       exacutive_rate: hour_final[24],
-      other_info: elsedata,
+      other_info: elsedata
     };
 
     // 每天的資料存到 CouchDB 中
@@ -754,7 +780,7 @@ async function getDayData() {
       Date: Date,
       hour_final: hour_final,
       elsedata1: elsedata1,
-      elsedata2: elsedata2,
+      elsedata2: elsedata2
     };
 
     //return Date, hour_final, elsedata; //回傳時間、整天的資料、下面統計完的資料
@@ -798,10 +824,10 @@ async function getMonthData() {
     selector: {
       time: {
         $gte: MonthsStartStr, // 開始時間當月起始
-        $lte: MonthsEndStr, // 結束時間為當月最後一天
-      },
+        $lte: MonthsEndStr // 結束時間為當月最後一天
+      }
     },
-    limit: numberOfDays, //限制當月天數
+    limit: numberOfDays //限制當月天數
   };
 
   // 使用篩選器查詢大前天的數據
@@ -865,19 +891,19 @@ async function getMonthData() {
   const filterMonthstart = {
     selector: {
       time: {
-        $gte: monthstart,
-      },
+        $gte: monthstart
+      }
     },
-    limit: 1,
+    limit: 1
   };
   //當月的最後一天的23:59:59:000
   const filterMonthend = {
     selector: {
       time: {
-        $gte: monthend,
-      },
+        $gte: monthend
+      }
     },
-    limit: 1,
+    limit: 1
   };
 
   //修改整月的RTE數值
@@ -977,19 +1003,19 @@ async function getMonthData() {
   const filterforMonthStart = {
     selector: {
       time: {
-        $gte: lastMonthstart, // 開始時間當月起始
-      },
+        $gte: lastMonthstart // 開始時間當月起始
+      }
     },
-    limit: 1, //限制當月天數
+    limit: 1 //限制當月天數
   };
 
   const filterforMonthEnd = {
     selector: {
       time: {
-        $gte: thisMonthstart, // 開始時間當月起始
-      },
+        $gte: thisMonthstart // 開始時間當月起始
+      }
     },
-    limit: 1, //限制當月天數
+    limit: 1 //限制當月天數
   };
 
   // console.log("電表搜尋時間起始/lastMonthstart:" + lastMonthstart);
@@ -1275,7 +1301,7 @@ async function getMonthData() {
     averageArray: averageArray, //表格SPM的TOTAL
     other_sum: other_sum, //用電總量(IM/EXP/NET/終止服務/充放電效率)
     power: power,
-    totMWH: powerFor_aux, //輔助用電總量
+    totMWH: powerFor_aux //輔助用電總量
   };
 
   // 每天的資料存到 CouchDB 中
@@ -1303,18 +1329,18 @@ async function getMonthData() {
   const filterlast_month = {
     selector: {
       time: {
-        $eq: last_month, // 時間等於 last_month
-      },
+        $eq: last_month // 時間等於 last_month
+      }
     },
-    limit: 1, // 只讀取一個文檔
+    limit: 1 // 只讀取一個文檔
   };
   const filterlast_year = {
     selector: {
       time: {
-        $eq: last_year, // 時間等於 去年
-      },
+        $eq: last_year // 時間等於 去年
+      }
     },
-    limit: 1, // 只讀取一個文檔
+    limit: 1 // 只讀取一個文檔
   };
   const lastMonthDoc = await monthly_reportDb.find(filterlast_month);
   const lastYearDoc = await monthly_reportDb.find(filterlast_year);
@@ -1333,7 +1359,7 @@ async function getMonthData() {
     const extractedData1 = [
       ...sumArray,
       ...other_sum.map((value) => parseFloat(value)),
-      ...averageArray,
+      ...averageArray
     ];
     data1.push(extractedData1);
   }
@@ -1354,7 +1380,7 @@ async function getMonthData() {
     const extractedData2 = [
       ...sumArray,
       ...other_sum.map((value) => parseFloat(value)),
-      ...averageArray,
+      ...averageArray
     ];
     data2.push(extractedData2);
   }
@@ -1380,7 +1406,7 @@ async function getMonthData() {
     last_month: data1[0], //前期
     last_month_power: data3[0], //前期power
     last_year: data2[0], //去年同期
-    last_year_power: data4[0], //去年同期power
+    last_year_power: data4[0] //去年同期power
   };
 }
 
@@ -1397,7 +1423,7 @@ function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
   return totalDifference;
 }
 
-getMonthData();
+//getMonthData();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // async function getYearData() {

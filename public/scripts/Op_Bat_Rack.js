@@ -575,152 +575,46 @@ async function updateData(){
   $('#T_cell_MaxDiff_R12').text(data.T_cell_MaxDiff_R12);
 
 /*CMU告警**************************************************************************** */  
-  if (data.alarmCMU_R01_rawD > 0){
-    classAdd('#alarmCMU_R01', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R01', 'setToClose');
-  }
-
-  if (data.alarmCMU_R02_rawD > 0){
-    classAdd('#alarmCMU_R02', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R02', 'setToClose');
-  }
-
-  if (data.alarmCMU_R03_rawD > 0){
-    classAdd('#alarmCMU_R03', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R03', 'setToClose');
-  }
-
-  if (data.alarmCMU_R04_rawD > 0){
-    classAdd('#alarmCMU_R04', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R04', 'setToClose');
-  }
-
-  if (data.alarmCMU_R05_rawD > 0){
-    classAdd('#alarmCMU_R05', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R05', 'setToClose');
-  }
-
-  if (data.alarmCMU_R06_rawD > 0){
-    classAdd('#alarmCMU_R06', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R06', 'setToClose');
-  }
-
-  if (data.alarmCMU_R07_rawD > 0){
-    classAdd('#alarmCMU_R07', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R07', 'setToClose');
-  }
-
-  if (data.alarmCMU_R08_rawD > 0){
-    classAdd('#alarmCMU_R08', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R08', 'setToClose');
-  }
-
-  if (data.alarmCMU_R09_rawD > 0){
-    classAdd('#alarmCMU_R09', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R09', 'setToClose');
-  }
-
-  if (data.alarmCMU_R10_rawD > 0){
-    classAdd('#alarmCMU_R10', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R10', 'setToClose');
-  }
-
-  if (data.alarmCMU_R11_rawD > 0){
-    classAdd('#alarmCMU_R11', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R11', 'setToClose');
-  }
-
-  if (data.alarmCMU_R12_rawD > 0){
-    classAdd('#alarmCMU_R12', 'setToClose');
-  } else {
-    classRemove('#alarmCMU_R12', 'setToClose');
-  }
+  light_color(data.alarmCMU_R01_rawD, '#alarmCMU_R01', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R02_rawD, '#alarmCMU_R02', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R03_rawD, '#alarmCMU_R03', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R04_rawD, '#alarmCMU_R04', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R05_rawD, '#alarmCMU_R05', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R06_rawD, '#alarmCMU_R06', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R07_rawD, '#alarmCMU_R07', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R08_rawD, '#alarmCMU_R08', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R09_rawD, '#alarmCMU_R09', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R10_rawD, '#alarmCMU_R10', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R11_rawD, '#alarmCMU_R11', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.alarmCMU_R12_rawD, '#alarmCMU_R12', 0, 'setToOpen', 1, "setToClose");
 
   /*CMU故障***************************************************** */
-  if (data.faultCMU_R01_rawD > 0){
-    classAdd('#faultCMU_R01', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R01', 'setToClose');
-  }
-
-  if (data.faultCMU_R02_rawD > 0){
-    classAdd('#faultCMU_R02', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R02', 'setToClose');
-  }
-
-  if (data.faultCMU_R03_rawD > 0){
-    classAdd('#faultCMU_R03', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R03', 'setToClose');
-  }
-
-  if (data.faultCMU_R04_rawD > 0){
-    classAdd('#faultCMU_R04', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R04', 'setToClose');
-  }
-
-  if (data.faultCMU_R05_rawD > 0){
-    classAdd('#faultCMU_R05', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R05', 'setToClose');
-  }
-
-  if (data.faultCMU_R06_rawD > 0){
-    classAdd('#faultCMU_R06', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R06', 'setToClose');
-  }
-
-  if (data.faultCMU_R07_rawD > 0){
-    classAdd('#faultCMU_R07', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R07', 'setToClose');
-  }
-
-  if (data.faultCMU_R08_rawD > 0){
-    classAdd('#faultCMU_R08', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R08', 'setToClose');
-  }
-
-  if (data.faultCMU_R09_rawD > 0){
-    classAdd('#faultCMU_R09', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R09', 'setToClose');
-  }
-
-  if (data.faultCMU_R10_rawD > 0){
-    classAdd('#faultCMU_R10', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R10', 'setToClose');
-  }
-
-  if (data.faultCMU_R11_rawD > 0){
-    classAdd('#faultCMU_R11', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R11', 'setToClose');
-  }
-
-  if (data.faultCMU_R12_rawD > 0){
-    classAdd('#faultCMU_R12', 'setToClose');
-  } else {
-    classRemove('#faultCMU_R12', 'setToClose');
-  }
+  light_color(data.faultCMU_R01_rawD, '#faultCMU_R01', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R02_rawD, '#faultCMU_R02', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R03_rawD, '#faultCMU_R03', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R04_rawD, '#faultCMU_R04', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R05_rawD, '#faultCMU_R05', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R06_rawD, '#faultCMU_R06', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R07_rawD, '#faultCMU_R07', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R08_rawD, '#faultCMU_R08', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R09_rawD, '#faultCMU_R09', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R10_rawD, '#faultCMU_R10', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R11_rawD, '#faultCMU_R11', 0, 'setToOpen', 1, "setToClose");
+  light_color(data.faultCMU_R12_rawD, '#faultCMU_R12', 0, 'setToOpen', 1, "setToClose");
 
   /*硬體狀態******************************************************************* */
+  light_color(data.DL_of_statusHW_R01, '#statusHW_R01', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R02, '#statusHW_R02', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R03, '#statusHW_R03', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R04, '#statusHW_R04', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R05, '#statusHW_R05', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R06, '#statusHW_R06', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R07, '#statusHW_R07', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R08, '#statusHW_R08', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R09, '#statusHW_R09', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R10, '#statusHW_R10', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R11, '#statusHW_R11', "", 'setToOpen', "setToClose", "setToClose");
+  light_color(data.DL_of_statusHW_R12, '#statusHW_R12', "", 'setToOpen', "setToClose", "setToClose");
   if (data.DL_of_statusHW_R01 === "setToClose"){
     classAdd('#statusHW_R01', 'setToClose');
   } else {

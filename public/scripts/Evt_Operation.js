@@ -39,6 +39,7 @@ let lang = {
 
 async function updateTable() {
   var dataset = await getData(window.location.href+"/edit");
+  console.log(dataset);
 
   $("#evtTable").DataTable({
     lengthMenu: [10, 20, 25, 50, 100],

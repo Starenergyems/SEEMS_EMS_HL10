@@ -262,7 +262,7 @@
 }
 
 .totalE {
-    width: 53.968%;
+    width: 100%;
     margin: 5px 0.79% 0px 0px;
     min-width: 310px;
 }
@@ -272,12 +272,12 @@
 }
 
 .totalE .dataValue {
-    width: 40%;
-    right: calc(20% + 2%);
+    right: 55%;
 }
 
 .totalE .dataUnit {
-    width: 20%;
+    width: 52%;
+
 }
 
 .info .lastLine {
@@ -416,6 +416,10 @@
     right: calc(27% - 14px);
 }
 
-.faultAlarm .spareL {
-    background-color: #FFFFFF00;
+.dataLight.OG_L.spareL, .dataLight.RG_L.spareL{
+    background-color:#fdfaed;
+}
+
+.dataLight.RG_L, .dataLight.OG_L{
+    background-color: #000000;
 }

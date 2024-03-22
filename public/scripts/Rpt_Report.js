@@ -289,11 +289,11 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
         //判斷是日報 月報 還是年報
         var templateUrl
         if (reportType === "年報"){
-            templateUrl =  '/report/download-excel?templatePath=/public/report/YearReport.xlsx&reportType=年報&fileName='+fileName;
+            templateUrl =  '/report/download-excel?templatePath=../public/report/YearReport.xlsx&reportType=年報&fileName='+fileName;
         } else if (reportType === "月報"){
-            templateUrl = '/report/download-excel?templatePath=/public/report/MonthReport.xlsx&reportType=月報&fileName='+fileName;
+            templateUrl = '/report/download-excel?templatePath=../public/report/MonthReport.xlsx&reportType=月報&fileName='+fileName;
         } else if (reportType === "日報"){
-            templateUrl = '/report/download-excel?templatePath=/public/report/DayReport.xlsx&reportType=日報&fileName='+fileName;
+            templateUrl = '/report/download-excel?templatePath=../public/report/DayReport.xlsx&reportType=日報&fileName='+fileName;
         } else {
             console.error("報表類型錯誤: 應為年報/月報/日報");
             return

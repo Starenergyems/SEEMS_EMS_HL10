@@ -1,11 +1,13 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 $(document).ready(function () {
+  extractTable();
   updateTable();
   classAdd("#nB_System", "default_nB");
 });
 
 setInterval(updateNavbar, 1000);
+setInterval(updateTable, 5000);
 
 //設備地點篩選
 /*(function(document) {
@@ -79,161 +81,7 @@ let lang = {
   },
 };
 
-/*var dataset = [{
-    "index": "1",
-    "equip": "EMS-1",
-    "place": "控制室",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:00:08",
-}, {
-    "index": "2",
-    "equip": "EMS-2",
-    "place": "控制室",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:00:07",
-}, {
-    "index": "3",
-    "equip": "DC",
-    "place": "控制室",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:00:06",
-}, {
-    "index": "4",
-    "equip": "HMI",
-    "place": "控制室",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:00:05",
-}, {
-    "index": "5",
-    "equip": "Remote I/O",
-    "place": "控制室",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:00:04",
-}, {
-    "index": "6",
-    "equip": "GC-1",
-    "place": "控制室",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:00:03",
-}, {
-    "index": "7",
-    "equip": "GC-2",
-    "place": "控制室",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:00:02",
-}, {
-    "index": "8",
-    "equip": "HVAC-1",
-    "place": "控制室",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:00:01",
-}, {
-    "index": "9",
-    "equip": "HVAC-2",
-    "place": "控制室",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:00:00",
-}, {
-    "index": "10",
-    "equip": "UPS-EMS",
-    "place": "控制室",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:01:08",
-}, {
-    "index": "11",
-    "equip": "UPS-CCTV",
-    "place": "控制室",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:01:07",
-}, {
-    "index": "12",
-    "equip": "頻率表",
-    "place": "MVCB",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:01:06",
-}, {
-    "index": "13",
-    "equip": "Remote I/O",
-    "place": "MVCB",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:01:05",
-}, {
-    "index": "14",
-    "equip": "Remote I/O",
-    "place": "MVCB",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:01:04",
-}, {
-    "index": "15",
-    "equip": "UPS-MVCB",
-    "place": "MVCB",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:01:03",
-}, {
-    "index": "16",
-    "equip": "保護電驛",
-    "place": "MVCB",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:01:02",
-}, {
-    "index": "17",
-    "equip": "自動復閉器",
-    "place": "MVCB",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:01:01",
-}, {
-    "index": "18",
-    "equip": "MVCB負載表",
-    "place": "MVCB",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:01:00",
-}, {
-    "index": "19",
-    "equip": "保護電驛",
-    "place": "VCB-1",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:00:38",
-}, {
-    "index": "20",
-    "equip": "保護電驛",
-    "place": "VCB-2",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:00:37",
-}, {
-    "index": "21",
-    "equip": "保護電驛",
-    "place": "VCB-3",
-    "status": "異常",
-    "threshold": "10 sec",
-    "time": "00:00:36",
-}, {
-    "index": "22",
-    "equip": "保護電驛",
-    "place": "VCB-4",
-    "status": "正常",
-    "threshold": "10 sec",
-    "time": "00:00:35",
-}];*/
+
 
 var dataset;
 
@@ -271,8 +119,7 @@ var dataset;
     })
 }*/
 var fixedValues = [];
-function extractTable() {
-  fixedValues = [];
+function extractTable() { //將畫面上的欄位及標題讀出來
   $("#deviceTable tbody tr").each(function () {
     const rowValues = [];
     $(this)
@@ -281,7 +128,7 @@ function extractTable() {
         rowValues.push($(this).text());
       });
     fixedValues.push(rowValues);
-    console.log(fixedValues);
+    // console.log(fixedValues);
   });
 }
 const bitList = [
@@ -331,17 +178,25 @@ function assignBit(index) {
   }
 }
 
+var currentPageIndex; //頁碼初始為0
 async function updateTable() {
+
+  if ($.fn.DataTable.isDataTable("#deviceTable")) { // If DataTable is already initialized, read the page number
+    currentPageIndex = $("#deviceTable").DataTable().page.info().page; // Get the current page index
+  } else { 
+    currentPageIndex = 0; 
+  }
+  
+
   const dataset = await getData(window.location.href+"/edit");
-  extractTable();
 
   // Combine fixed values with dynamic data
   var combinedData = fixedValues.map((fixedRowValues, index) => {
     const dynamicValues = Object.values(dataset[0]) || []; // Assuming the data structure matches the table structure
-    console.log(1, dynamicValues);
-    console.log("index" + index);
+    // console.log(1, dynamicValues);
+    // console.log("index" + index);
     var bit = assignBit(index);
-    console.log(bit);
+    // console.log(bit);
     if (bit) {
       fixedRowValues[3] = dynamicValues[index + 2][bit[0]]; // Insert the value for "狀態" into position [3]
       fixedRowValues[5] = dynamicValues[index + 2][bit[1]]; // Insert the value for "重新連線次數" into position [5]
@@ -351,8 +206,9 @@ async function updateTable() {
     }
     return fixedRowValues;
   });
+  console.log(combinedData);
 
-  console.log(2, combinedData);
+  // console.log(2, combinedData);
 
   // Check if DataTable is already initialized
   if ($.fn.DataTable.isDataTable("#deviceTable")) {
@@ -383,67 +239,68 @@ async function updateTable() {
             ],*/
     });
   }
+  $("#deviceTable").DataTable().page(currentPageIndex).draw("page");//設定頁數為原本停留的頁面
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
-const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
+// const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
+// const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
 
-const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
-dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
-function showHide_filtDevOpts() {
-  filtDeviceOpts.classList.toggle("appear");
-  filtLocationOpts.classList.remove("appear");
-}
+// const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
+// dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
+// function showHide_filtDevOpts() {
+//   filtDeviceOpts.classList.toggle("appear");
+//   filtLocationOpts.classList.remove("appear");
+// }
 
-const dDL_filtLoc = document.querySelector(".title #dDL_filtLocation");
-dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
-function showHide_filtLocOpts() {
-  filtLocationOpts.classList.toggle("appear");
-  filtDeviceOpts.classList.remove("appear");
-}
+// const dDL_filtLoc = document.querySelector(".title #dDL_filtLocation");
+// dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
+// function showHide_filtLocOpts() {
+//   filtLocationOpts.classList.toggle("appear");
+//   filtDeviceOpts.classList.remove("appear");
+// }
 
-const filterDevice = document.querySelector(".title .filtDevice p");
-const filterLocation = document.querySelector(".title .filtLocation p");
+// const filterDevice = document.querySelector(".title .filtDevice p");
+// const filterLocation = document.querySelector(".title .filtLocation p");
 
-document.addEventListener("click", hideFiltOptions);
-function hideFiltOptions(clickItem) {
-  if (
-    clickItem.target.id !== "dDL_filtDevice" &&
-    clickItem.target.id !== "dDL_filtLocation"
-  ) {
-    if (clickItem.target.id === "filtNone") {
-      filterDevice.textContent = "設備";
-      filterLocation.textContent = "地點";
-    } else if (
-      clickItem.target.id === "deviceFO_01" ||
-      clickItem.target.id === "deviceFO_02" ||
-      clickItem.target.id === "deviceFO_03" ||
-      clickItem.target.id === "deviceFO_04" ||
-      clickItem.target.id === "deviceFO_05" ||
-      clickItem.target.id === "deviceFO_06" ||
-      clickItem.target.id === "deviceFO_07" ||
-      clickItem.target.id === "deviceFO_08"
-    ) {
-      filterDevice.textContent = clickItem.target.textContent;
-    } else if (
-      clickItem.target.id === "locationFO_01" ||
-      clickItem.target.id === "locationFO_02" ||
-      clickItem.target.id === "locationFO_03" ||
-      clickItem.target.id === "locationFO_04" ||
-      clickItem.target.id === "locationFO_05" ||
-      clickItem.target.id === "locationFO_06" ||
-      clickItem.target.id === "locationFO_07" ||
-      clickItem.target.id === "locationFO_08" ||
-      clickItem.target.id === "locationFO_09" ||
-      clickItem.target.id === "locationFO_10"
-    ) {
-      filterLocation.textContent = clickItem.target.textContent;
-    }
+// document.addEventListener("click", hideFiltOptions);
+// function hideFiltOptions(clickItem) {
+//   if (
+//     clickItem.target.id !== "dDL_filtDevice" &&
+//     clickItem.target.id !== "dDL_filtLocation"
+//   ) {
+//     if (clickItem.target.id === "filtNone") {
+//       filterDevice.textContent = "設備";
+//       filterLocation.textContent = "地點";
+//     } else if (
+//       clickItem.target.id === "deviceFO_01" ||
+//       clickItem.target.id === "deviceFO_02" ||
+//       clickItem.target.id === "deviceFO_03" ||
+//       clickItem.target.id === "deviceFO_04" ||
+//       clickItem.target.id === "deviceFO_05" ||
+//       clickItem.target.id === "deviceFO_06" ||
+//       clickItem.target.id === "deviceFO_07" ||
+//       clickItem.target.id === "deviceFO_08"
+//     ) {
+//       filterDevice.textContent = clickItem.target.textContent;
+//     } else if (
+//       clickItem.target.id === "locationFO_01" ||
+//       clickItem.target.id === "locationFO_02" ||
+//       clickItem.target.id === "locationFO_03" ||
+//       clickItem.target.id === "locationFO_04" ||
+//       clickItem.target.id === "locationFO_05" ||
+//       clickItem.target.id === "locationFO_06" ||
+//       clickItem.target.id === "locationFO_07" ||
+//       clickItem.target.id === "locationFO_08" ||
+//       clickItem.target.id === "locationFO_09" ||
+//       clickItem.target.id === "locationFO_10"
+//     ) {
+//       filterLocation.textContent = clickItem.target.textContent;
+//     }
 
-    filtDeviceOpts.classList.remove("appear");
-    filtLocationOpts.classList.remove("appear");
-  }
-}
+//     filtDeviceOpts.classList.remove("appear");
+//     filtLocationOpts.classList.remove("appear");
+//   }
+// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

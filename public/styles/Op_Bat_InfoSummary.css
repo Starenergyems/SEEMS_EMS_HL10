@@ -194,3 +194,7 @@
     height: 355px;
     top: 200px;
 }
+
+.dataLight.RG_L, .dataLight.OG_L{
+    background-color: #000000;
+}
