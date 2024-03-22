@@ -454,60 +454,54 @@ function alarm_processor_call() {
       use_index: ["rAlarm_ddoc", "time_index"],
     };
 
-    // const lc1_alarm_promise = alarm_processor(
-    //   lc1nanoDb,
-    //   mangoQuery_latest_rawdata,
-    //   LC_error_result_gen,
-    //   alarmnanoDb,
-    //   hisalarmnanoDb
-    // );
-    // const lc2_alarm_promise = alarm_processor(
-    //   lc2nanoDb,
-    //   mangoQuery_latest_rawdata,
-    //   LC_error_result_gen,
-    //   alarmnanoDb,
-    //   hisalarmnanoDb
-    // );
-    // const lc3_alarm_promise = alarm_processor(
-    //   lc3nanoDb,
-    //   mangoQuery_latest_rawdata,
-    //   LC_error_result_gen,
-    //   alarmnanoDb,
-    //   hisalarmnanoDb
-    // );
-    // const lc4_alarm_promise = alarm_processor(
-    //   lc4nanoDb,
-    //   mangoQuery_latest_rawdata,
-    //   LC_error_result_gen,
-    //   alarmnanoDb,
-    //   hisalarmnanoDb
-    // );
+    const lc1_alarm_promise = alarm_processor(
+      lc1nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
+    const lc2_alarm_promise = alarm_processor(
+      lc2nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
+    const lc3_alarm_promise = alarm_processor(
+      lc3nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
+    const lc4_alarm_promise = alarm_processor(
+      lc4nanoDb,
+      mangoQuery_latest_rawdata,
+      LC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
 
-    // console.log(lc_alarm_promise)
-    // Promise.race([lc_alarm_promise]).then(() => {
-    //   console.log(lc_alarm_promise)
-    //   console.log("done");
-    //   })
+    const dc_alarm_promise = alarm_processor(
+      dcnanoDb,
+      mangoQuery_latest_rawdata,
+      DC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
 
-    // const dc_alarm_promise = alarm_processor(
-    //   dcnanoDb,
-    //   mangoQuery_latest_rawdata,
-    //   DC_error_result_gen,
-    //   alarmnanoDb,
-    //   hisalarmnanoDb
-    // );
-
-    // const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
 
     const gc_alarm_promise = alarm_processor(gcnanoDb, mangoQuery_latest_rawdata, GC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
 
     Promise.all([
-      // lc1_alarm_promise,
-      // lc2_alarm_promise,
-      // lc3_alarm_promise,
-      // lc4_alarm_promise,
-      // dc_alarm_promise,
-      // other_alarm_promise,
+      lc1_alarm_promise,
+      lc2_alarm_promise,
+      lc3_alarm_promise,
+      lc4_alarm_promise,
+      dc_alarm_promise,
+      other_alarm_promise,
       gc_alarm_promise,
     ])
       .then(() => {

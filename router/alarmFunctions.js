@@ -2391,7 +2391,7 @@ function GC_error_result_unit(
   SBSPM_arr,
 ) {
   let error_type = error_table[tag]["type"];
-
+  // console.log(error_table[tag]["name"])
   if (error_type === "bit_bidirection") {
     let error_arr = [];
     let bit_arr = [];
@@ -2468,7 +2468,7 @@ function GC_error_result_unit(
       }
     } else if (error_table[tag]["name"] === "SOC") {
       value = value * error_table[tag]["status"]["scale"];
-      // console.log(v)
+      // console.log(value)
       let content = "";
       if (value < Min_SOC_Limit) {
         content = "Lower valve";
@@ -3063,7 +3063,8 @@ function fifoPush(element) {
   // If the length of the array exceeds the maximum length, remove the first element
   if (SBSPM_arr.length > 4) {
     SBSPM_arr = SBSPM_arr.slice(1);
-  }
+  };
+  // console.log(SBSPM_arr)
 }
 
 function alarm_processor(
