@@ -2906,6 +2906,7 @@ function update_trigger_alarms_batch(
             .fetch({ keys: compare_result.recover })
             .then((resp) => {
               let docs_batch = [];
+              let hisAlarm_batch = [];
               try {
                 resp.rows.forEach((element) => {
                   // As the _id is fetched in the DB
@@ -2943,6 +2944,12 @@ function update_trigger_alarms_batch(
                         doc._deleted = true;
                       }
                       docs_batch.push(doc);
+
+                      const obj = doc;
+                      const newObj = { ...obj };
+                      delete newObj["_id"];
+                      delete newObj["_deleted"];
+                      hisAlarm_batch.push(newObj);
                     }
                     else {
                       // do nothing
@@ -2953,7 +2960,10 @@ function update_trigger_alarms_batch(
                 console.log(error);
               }
               // console.log(docs_batch)
-              return nanoDB.bulk({ docs: docs_batch });
+              return Promise.all([
+                nanoDB.bulk({ docs: docs_batch }),
+                hisnanoDB.bulk({ docs: hisAlarm_batch }),
+              ]);
             });
           // console.log("recover_result");
         }
