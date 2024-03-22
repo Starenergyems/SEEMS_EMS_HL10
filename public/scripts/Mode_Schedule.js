@@ -9,7 +9,7 @@ $(document).ready(function () {
     routineWork();
 });
 
-setInterval(routineWork, 5000);    // ~~~~~~~~~!!!!!!!@@@@@@@@@@###########$$$$$$$$$$$$%%%%%%%%%%%^^^^^^^^^&&&&&&&&&&&************
+setInterval(routineWork, 1000);    // ~~~~~~~~~!!!!!!!@@@@@@@@@@###########$$$$$$$$$$$$%%%%%%%%%%%^^^^^^^^^&&&&&&&&&&&************
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -285,10 +285,17 @@ async function updateData() {                                   // 更新資料 
     assign_TextContent_To_SpID("#freqSource", data.freqSource);
     assign_TextContent_To_SpID("#Freq_test", data.Freq_test);
 
-    assign_TextContent_To_SpID("#exeCmdInd", data.exeCmdInd);
-    assign_TextContent_To_SpID("#exeCmdStatus", data.exeCmdStatus);
-    assign_TextContent_To_SpID("#sbyCmdInd", data.sbyCmdInd);
-    assign_TextContent_To_SpID("#sbyCmdStatus", data.sbyCmdStatus);
+    assign_TextContent_To_SpID("#exeCmdInd", data.exeCmd.indicator);
+    assign_TextContent_To_SpID("#exeCmdStatus", data.exeCmd.status);
+    assign_TextContent_To_SpID("#sbyCmdInd", data.sbyCmd.indicator);
+    assign_TextContent_To_SpID("#sbyCmdStatus", data.sbyCmd.status);
+
+    const classCollection_exeCmdInd = ["running", "Err", "ErrData"];
+    assign_ClassD_to_StatusOfDL_with_SpID("#exeCmdInd", data.exeCmd.bgColor, classCollection_exeCmdInd);
+    const classCollection_sbyCmdInd = ["standby", "ErrData"];
+    assign_ClassD_to_StatusOfDL_with_SpID("#sbyCmdInd", data.sbyCmd.bgColor, classCollection_sbyCmdInd);
+
+
     assign_TextContent_To_SpID("#exeCmd_StartDT", data.exeCmd_StartDT);
     assign_TextContent_To_SpID("#sbyCmd_StartDT", data.sbyCmd_StartDT);
     assign_TextContent_To_SpID("#exeCmd_StopDT", data.exeCmd_StopDT);

@@ -203,7 +203,7 @@ function classRemove(element, className) {
 async function updateNavbar(url = '/navbar') { //刷新側欄
     var data = await getData(url);
     console.log('navbar:', data);
-    
+
     $('#userAccount').text(data.latestValues.userAccount);
     $('#totalAlarmNum').text(data.latestValues.totalAlarmNum);
     $('#AlarmNum_Sys').text(data.latestValues.AlarmNum_Sys);
@@ -243,11 +243,11 @@ function routineWork(url = '/navbar') { //持續刷新
     updateNavbar(url);
 }
 
-function light_color(data, target, normal_value, green_class, fault_value, red_class){ //燈號變色
-    if (data === normal_value){
+function light_color(data, target, normal_value, green_class, fault_value, red_class) { //燈號變色
+    if (data === normal_value) {
         $(target).addClass(green_class);
         $(target).removeClass(red_class);
-    } else if (data === fault_value){
+    } else if (data === fault_value) {
         $(target).addClass(red_class);
         $(target).removeClass(green_class);
     } else {

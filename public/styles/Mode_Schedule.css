@@ -157,8 +157,20 @@ body {
     border-radius: 10px;
 }
 
-.emergencyCmd #sbyCmdInd {
+.emergencyCmd #exeCmdInd.running {
+    background-color: #E53935;
+}
+
+.emergencyCmd #exeCmdInd.Err {
+    background-color: #FF00FF;
+}
+
+.emergencyCmd #sbyCmdInd.standby {
     background-color: #F9E06C;
+}
+
+.emergencyCmd .cmdIndicator.ErrData {
+    background-color: #000000;
 }
 
 .emergencyCmd .cmdStatus {

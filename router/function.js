@@ -121,7 +121,7 @@ function mapworkMode_page(decimalValue) {
 // bit 10: Off-grid mode
 // bit 11: VSG mode
 
-function mapgridStatus_page() {}
+function mapgridStatus_page() { }
 //***************************************************************************** */
 //PCSWorkingStatus
 function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
@@ -630,6 +630,34 @@ function Determine_statusL_of_ACB(closeStatus, openStatus) {
     return "setToClose";
   } else {
     return "";
+  }
+}
+
+function Determine_status_of_exeCmd(unixTime_Now, startTime_eCmd, endTime_eCmd) {
+  if (startTime_eCmd === null || endTime_eCmd === null) {
+    return { indicator: "#*#", status: "#*#", bgColor: "ErrData" };
+  }
+
+  if (unixTime_Now >= startTime_eCmd) {
+    if (unixTime_Now < endTime_eCmd) {
+      return { indicator: "Running", status: "執行中", bgColor: "running" };
+    } else {
+      return { indicator: "Done", status: "執行結束", bgColor: "" };
+    }
+  } else {
+    return { indicator: "@@@", status: "@@@", bgColor: "Err" };
+  }
+}
+
+function Determine_status_of_sbyCmd(unixTime_Now, startTime_sCmd, endTime_sCmd) {
+  if (startTime_sCmd === null || endTime_sCmd === null) {
+    return { indicator: "#*#", status: "#*#", bgColor: "ErrData" };
+  }
+
+  if (unixTime_Now >= startTime_sCmd) {
+    return { indicator: "Done", status: "待命結束", bgColor: "" };
+  } else {
+    return { indicator: "Standby", status: "待命中", bgColor: "standby" };
   }
 }
 
@@ -1165,6 +1193,8 @@ module.exports = {
   Determine_statusL_of_recloser,
   Determine_statusL_of_VCB,
   Determine_statusL_of_ACB,
+  Determine_status_of_exeCmd,
+  Determine_status_of_sbyCmd,
   workStatuschange,
   calculateAdd,
   //****************** */
@@ -1341,5 +1371,13 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 // const op_2 = Determine_DL_of_AlarmWords([rawData1, rawData2, rawData3, rawData4]);
 // console.log(op_2);
 
-// const op_2 = Convert_socRef_kWh_to_pct(rawData);
-// console.log(op_2);
+// const qr_2 = Convert_socRef_kWh_to_pct(rawData);
+// console.log(qr_2);
+
+// const unixTime_Now = 13;
+// const startTime = 15;
+// const endTime = 19;
+// const st_2 = Determine_status_of_exeCmd(unixTime_Now, startTime, endTime);
+// console.log(st_2);
+// const uv_2 = Determine_status_of_sbyCmd(unixTime_Now, startTime, endTime);
+// console.log(uv_2);

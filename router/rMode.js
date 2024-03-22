@@ -33,6 +33,8 @@ const {
   mapBitStatus,
   Convert_unixTime_to_dateTime,
   Convert_socRef_kWh_to_pct,
+  Determine_status_of_exeCmd,
+  Determine_status_of_sbyCmd
 } = require("./function");
 
 // const otherrf01nanoDb = nano.use("other_rf01");
@@ -254,6 +256,7 @@ async function query_Schd_KeyValuePairs() {
 
     let rawDateTime_now = new Date();
     let rawDateTime_schd;
+    let unixTime_now = Math.floor(rawDateTime_now.getTime() / 1000);
 
     if (dateNumber === 0) {
       rawDateTime_schd = rawDateTime_now;
@@ -283,7 +286,6 @@ async function query_Schd_KeyValuePairs() {
     Schd_KeyValuePairs = {
       permission: "manager",
 
-      // P_Project: scaleProcess(GCData.System[400001], 0.01, 1),
       use_P_schd: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 2),
       use_P_LS: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 3),
       use_SOC_ref: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 4),
@@ -294,10 +296,8 @@ async function query_Schd_KeyValuePairs() {
       freqSource: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 0),
       Freq_test: Scale_Data(GCData.MTE[410001], 0.01, 2),
 
-      exeCmdInd: "Done",
-      exeCmdStatus: "執行結束",
-      sbyCmdInd: "Standby",
-      sbyCmdStatus: "待命中",
+      exeCmd: Determine_status_of_exeCmd(unixTime_now, GCData.API[400989], GCData.API[400991]),
+      sbyCmd: Determine_status_of_sbyCmd(unixTime_now, GCData.API[400995], GCData.API[400997]),
       exeCmd_StartDT: Convert_unixTime_to_dateTime(GCData.API[400989]),
       sbyCmd_StartDT: Convert_unixTime_to_dateTime(GCData.API[400995]),
       exeCmd_StopDT: Convert_unixTime_to_dateTime(GCData.API[400991]),
@@ -638,14 +638,10 @@ router.post("/change_dateNumber", async (req, res) => {
       dateNumber = 0;
     }
 
-    //console.log(dateNumber);
-
     await query_Schd_KeyValuePairs();
 
     const response = {
       dateNumber: dateNumber,
-      // scheduleDate: Schd_KeyValuePairs.schdDate,
-      // anotherDay: date_MT[dateNumber].buttonContext,
       KVPairs: Schd_KeyValuePairs,
     };
 

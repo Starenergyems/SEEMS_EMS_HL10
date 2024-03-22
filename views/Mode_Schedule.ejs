@@ -64,10 +64,10 @@
                         </tr>
                         <tr class="row_other">
                             <td class="col_01">指令狀態</td>
-                            <td class="col_02"><label class="cmdIndicator" id="exeCmdInd"><%=exeCmdInd%></label><label 
-                                class="cmdStatus" id="exeCmdStatus"><%=exeCmdStatus%></label></td>
-                            <td class="col_03"><label class="cmdIndicator" id="sbyCmdInd"><%=sbyCmdInd%></label><label
-                                class="cmdStatus" id="sbyCmdStatus"><%=sbyCmdStatus%></label></td>
+                            <td class="col_02"><label class="cmdIndicator <%=exeCmd.bgColor%>" id="exeCmdInd"><%=exeCmd.indicator%></label><label 
+                                class="cmdStatus" id="exeCmdStatus"><%=exeCmd.status%></label></td>
+                            <td class="col_03"><label class="cmdIndicator <%=sbyCmd.bgColor%>" id="sbyCmdInd"><%=sbyCmd.indicator%></label><label
+                                class="cmdStatus" id="sbyCmdStatus"><%=sbyCmd.status%></label></td>
                         </tr>
                         <tr class="row_other">
                             <td class="col_01">開始日期時間</td>
