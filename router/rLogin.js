@@ -1,23 +1,24 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Node.js setting, do not change.
 
-const express = require("express");
-const path = require("path");
-const methodOverride = require("method-override");
-const router = express.Router();
-const app = express();
-const cors = require("cors");
-const config = require("./config");
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../views"));
-app.use(methodOverride("_method"));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "../public")));
-app.use(cors());
+// const express = require("express");
+// const path = require("path");
+// const methodOverride = require("method-override");
+// const router = express.Router();
+// const app = express();
+// const cors = require("cors");
+
+// app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "../views"));
+// app.use(methodOverride("_method"));
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.static(path.join(__dirname, "../public")));
+// app.use(cors());
 //const fetch = require("node-fetch");
 ////////////////////////////////////////////////////////////////////////////////////////
 // Need change.
 //如果要換資料庫的host 改掉".database"
+const config = require("./config");
 const couchdbConfig = config.database;
 const db = couchdbConfig
 
@@ -36,6 +37,74 @@ const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database func
 // const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
 const credentials = Buffer.from(`${db_USERNAME}:${db_PASSWORD}`).toString('base64');
 const AUTHORIZATION = "Basic " + credentials;
+
+
+// Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
+// async function ggg() {
+//   const URL = `${db_URL}/${db_account}/${doc_CONFIG}`;
+//   response = await fetch(URL, {
+//       method: "GET",
+//       headers: { Authorization: AUTHORIZATION },
+//       credentials: "include",
+//     })
+//     console.log(1,response)
+//   return await response.json()
+//   // const data = await response.json();
+  
+  
+// }
+
+// ggg()
+
+////////////////////////////////////////////////////////////////////////////////////////
+async function XX(url) {
+fetch(url, {
+  method: 'GET',
+  // body: JSON.stringify(data),
+  headers: new Headers({
+    'Content-Type': 'application/json',
+    "cookie":"6fe314f5-4c5a-459b-b0e8-3fa4fb73bf06",
+    credentials: 'include'
+  })
+}).then(res => res.json())
+.catch(error => console.error('Error:', error))
+.then(response => console.log('Success:', response));
+}
+
+// XX("http://localhost:3000/account/system/accounts")
+
+
+// function fetchData(url) {
+//   // Make a fetch request to the specified URL
+//   return fetch(url)
+//     .then(response => {
+//       // Check if the response is successful (status code in the range 200-299)
+//       if (!response.ok) {
+//         // If not successful, throw an error with the status text
+//         throw new Error(`Error: ${response.statusText}`);
+//       }
+//       // If successful, parse the response as JSON and return it
+//       return response.json();
+//     })
+//     .catch(error => {
+//       // Catch any errors that occur during the fetch request
+//       console.error('Error fetching data:', error);
+//       // Optionally re-throw the error to propagate it further
+//       throw error;
+//     });
+// }
+
+// // Example usage:
+// const url = 'https://api.example.com/data';
+// fetchData(url)
+//   .then(data => {
+//     // Handle the fetched data
+//     console.log('Fetched data:', data);
+//   })
+//   .catch(error => {
+//     // Handle any errors that occurred during the fetch request
+//     console.error('Fetch error:', error);
+//   });
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +210,7 @@ async function findaccount(inmail = "", intoken = "") {
   } else if (inmail === "" && intoken !== "") {
     mangoQuery = { selector: { "user.token": { $eq: intoken } } };
   }
-  console.log(mangoQuery)
+  // console.log(mangoQuery)
   try {
     data = await fetch(URL, {
       method: "POST",
@@ -431,11 +500,13 @@ async function getbyid(id) {
     headers: { Authorization: AUTHORIZATION },
     credentials: "include",
   });
+  console.log(33333333,response)
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
   // console.log("login", typeof(response))
   // console.log(await response.json())
+  
   return  response
 }
 
@@ -484,7 +555,57 @@ async function userlog(userid) {
   // console.log(logdata)
   return logdata
   }
-  
+  // This middleware is use for check authorization.
+// input toekn
+// output reslut permission id
+
+// const express = require("express");
+// const path = require("path");
+// const methodOverride = require("method-override");
+// const router = express.Router();
+// const app = express();
+// const cors = require("cors");
+
+// app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "../views"));
+// app.use(methodOverride("_method"));
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.static(path.join(__dirname, "../public")));
+// app.use(cors());
+
+// const cookieParser = require('cookie-parser');
+// app.use(cookieParser());
+
+// const { findaccount } = require("./rLogin")
+
+async function authentication(req) {
+    let token = ""
+    let browser_token = ""
+    req.cookies.token === undefined ? browser_token = "" : browser_token = req.cookies.token
+    if (browser_token === "" || browser_token === undefined){
+        console.log("The token is not exist in browser's cookie.")
+        return false
+    }
+    else if (browser_token !== ""){
+        await findaccount("", browser_token).then(temp => {
+            // console.log(temp)
+            id = temp['id']
+            token = temp['token']
+            level = temp['level']
+        })
+        const res = `\ncookie's token is ${browser_token}\naccount token is ${token}`
+        if (token === browser_token) {
+            // console.log("Authentication is OK.", res)
+            // console.log({"id": id, "permission": level})
+            return {"id": id, "permission": level}
+        } else {
+            console.log("Authentication is not OK.", res)
+            return false
+        }
+    }
+}
+
+// module.exports = {authentication}
     
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -499,5 +620,7 @@ module.exports = {
   alldoc,
   getbyid,
   deleteuser,
-  userlog
+  userlog,
+  authentication,
+  // ggg
 };

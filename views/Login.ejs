@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>登入頁面</title>
+  <title>登入</title>
   <link href="/public/styles/Login.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -35,7 +35,23 @@
   <div class="bgStripe bgStripe_5"></div>
 
   <script>
-    document.getElementById('btn_Login').addEventListener('click', async function() {
+    // document.getElementById('btn_Login').addEventListener(['click',] 
+    document.addEventListener("keypress", async function(event) {
+            if (event.key === "Enter") {
+              // console.log("press enter")
+                // Execute your function here
+                // event.preventDefault();
+    // Trigger the button element with a click
+                document.getElementById("btn_Login").click();
+            }
+        });
+
+    document.getElementById("btn_Login").addEventListener("click", function() {
+      // console.log("click")
+            // Execute your function here
+        login();
+        });
+    async function login() {
       const username = document.getElementById("account").value
       const password = document.getElementById("password").value
       fetch('/login', {
@@ -54,7 +70,7 @@
             }).catch(error => {
             console.error('Error:', error);
             });
-      });
+      };
   </script>
 </body>
 </html>
