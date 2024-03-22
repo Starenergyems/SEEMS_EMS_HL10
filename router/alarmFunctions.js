@@ -3000,8 +3000,6 @@ function update_trigger_alarms_batch(
   });
 }
 
-const LineNotifyToken = "HoAxmTKOKPFSq2bPOQyP0d0Wn270PX30FQRbNC2RLpz";
-
 function sendLineNotify(error_result_item) {
   const message = `
     ID:   ${error_result_item["_id"]} 
@@ -3017,7 +3015,7 @@ function sendLineNotify(error_result_item) {
     //url: 'http://192.168.8.112/line-notify',
     url: "https://notify-api.line.me/api/notify",
     headers: {
-      Authorization: `Bearer ${LineNotifyToken}`,
+      Authorization: `Bearer ${process.env.LineNotifyToken}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     params: {
