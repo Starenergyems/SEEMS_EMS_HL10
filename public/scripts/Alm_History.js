@@ -4,7 +4,7 @@
 $(document).ready(function () {
 
     classAdd('#nB_Alarm', "default_nB");
-
+    updateTable();//讀取今日的歷史告警
     // block_temp
     // btn_test_01
     // inText_test_01
@@ -615,6 +615,90 @@ async function updateTable(){
     createIndex('#almTable');
 }
 
+async function updateTable_post(data){
+    dataset = data;
+    console.log(dataset);
+    let lang = {
+        sProcessing: "處理中...",
+        sLengthMenu: "每頁 _MENU_ 項",
+        sZeroRecords: "沒有匹配結果",
+        sInfo: "當前顯示第 _START_ 至 _END_ 項，共 _TOTAL_ 項。",
+        sInfoEmpty: "當前顯示第 0 至 0 項，共 0 項",
+        sInfoFiltered: "(由 _MAX_ 項結果過濾)",
+        sInfoPostFix: "",
+        sSearch: "搜尋:",
+        sUrl: "",
+        sEmptyTable: "查無資料",
+        sLoadingRecords: "載入中...",
+        sInfoThousands: ",",
+        oPaginate: {
+            sFirst: "首頁",
+            sPrevious: "上頁",
+            sNext: "下頁",
+            sLast: "末頁",
+            sJump: "跳轉",
+        },
+        oAria: {
+            sSortAscending: ": 以升序排列此列",
+            sSortDescending: ": 以降序排列此列",
+        },
+    };
+
+    $('#almTable').DataTable({
+
+        lengthMenu: [10, 20, 25, 50, 100],
+        scrollY: "660px",
+
+        destroy: true,
+        language: lang, //提示資訊
+        autoWidth: false, //禁用自動調整列寬
+        // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
+        processing: false, //隱藏載入提示,自行處理
+        //serverSide: true, //啟用伺服器端分頁
+        //searching: false, //禁用原生搜尋
+        orderMulti: false, //啟用多列排序
+        ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
+        //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
+        pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
+        pageLength: 15, // 預設為'10'，若需更改初始每頁顯示筆數，才需設定
+        responsive: true,
+
+        "data": dataset,
+        "columns": [
+            { data: "index" },
+            { data: "occurrence_time" },
+            { data: "location" },
+            { data: "device" },
+            { data: "level" },
+            { data: "content" },
+            {
+              data: "read",
+              render: function (data, type, row) {
+                var rowIndex = row.index; // Get the index from the row object
+                //var checkboxId = "chb_Ack_" + rowIndex;
+                  if (data === true) {
+                    return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                  } else {
+                    return "";
+                  }
+              },
+            },
+            {
+              data: "recover",
+              render: function (data, type, row) {
+                if (data === true) {
+                  return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                } else {
+                  return "";
+                }
+              },
+            },
+            { data: "recover_time" },
+          ],
+
+    })
+    createIndex('#almTable');
+}
 
 
 

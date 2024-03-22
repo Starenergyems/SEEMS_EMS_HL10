@@ -116,7 +116,6 @@ async function getData() {
       midnightData3.docs[0].System["402060"] +
       midnightData4.docs[0].System["402060"];
 
-
     lc4_imp = midnightData4.docs[0].System["402060"];
     lc4_exp = midnightData4.docs[0].System["402062"];
 
@@ -124,9 +123,9 @@ async function getData() {
     total_exp = expValue;
     total_imp = impValue;
 
-    console.log("PCS用電度數: " + total_exp + " / " + total_imp);
+    //console.log("PCS用電度數: " + total_exp + " / " + total_imp);
   }
-  console.log("呼叫getdata");
+  //console.log("呼叫getdata");
   flag = 1;
 }
 // 調用 getData 函數
@@ -261,7 +260,7 @@ async function queryPcsSum(req) {
         lc2Data.System[402062] +
         lc3Data.System[402062] +
         lc4Data.System[402062],
-        0.001,
+      0.001,
       2
     ),
     //******************************************************************** */
@@ -523,8 +522,8 @@ async function queryPcsDetail() {
         lcData.PCS[403080]
       ),
       chargeStatus: mapWordStatus(lcData.PCS[403108], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS[403113], 0.00001, 3),  //畫面顯示MWh所以會比點表再乘0.001
-      tot_E_dcg: scaleProcess(lcData.PCS[403115], 0.00001, 3),  //畫面顯示MWh所以會比點表再乘0.001
+      tot_E_chg: scaleProcess(lcData.PCS[403113], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
+      tot_E_dcg: scaleProcess(lcData.PCS[403115], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
       // max_P_chg: scaleProcess(lcData.PCS[403066], 0.1, 1),
       // max_P_dcg: scaleProcess(lcData.PCS[403067], 0.1, 1),
       // max_Q_l: scaleProcess(lcData.PCS[403068], 0.1, 1),

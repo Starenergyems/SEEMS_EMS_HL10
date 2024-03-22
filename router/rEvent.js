@@ -11,7 +11,7 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-
+const moment = require("moment");
 //set
 app.set("view engine", "ejs");
 // 設定視圖目錄為 C:\Test\SEEMS_EMS\views
@@ -30,7 +30,7 @@ const logdoorDb = nano.use(log_door); // 請注意這裡使用 nano.use() 來設
 // 設定index
 const indexDef = {
   index: { fields: ["time"] },
-  name: "time_index",
+  name: "time_index"
 };
 
 // 事件紀錄
@@ -51,9 +51,15 @@ router.post("/event/operation/edit", async (req, res) => {
     console.log("原始Received start:", input1 + " " + input2);
     console.log("原始Received end:", input3 + " " + input4);
 
-    // 將日期時間字符串轉換為 ISO 8601 格式
-    const startTime = new Date(input1 + "T" + input2 + ".000Z");
-    const endTime = new Date(input3 + "T" + input4 + ".000Z");
+    // 將日期時間字符串轉換為 JavaScript Date 對象
+    const startTime = moment(
+      input1 + " " + input2,
+      "YYYY-MM-DD HH:mm:ss"
+    ).toDate();
+    const endTime = moment(
+      input3 + " " + input4,
+      "YYYY-MM-DD HH:mm:ss"
+    ).toDate();
 
     console.log("轉換後的 start:", startTime.toISOString());
     console.log("轉換後的 end:", endTime.toISOString());
@@ -62,10 +68,10 @@ router.post("/event/operation/edit", async (req, res) => {
       selector: {
         time: {
           $gte: startTime.toISOString(),
-          $lte: endTime.toISOString(),
-        },
+          $lte: endTime.toISOString()
+        }
       },
-      sort: [{ time: "desc" }],
+      sort: [{ time: "desc" }]
     };
 
     // 使用logDb對CouchDB執行Mango查詢
@@ -103,9 +109,9 @@ router.get("/event/operation/edit", async (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
-      time: { $exists: true },
+      time: { $exists: true }
     },
-    sort: [{ time: "desc" }],
+    sort: [{ time: "desc" }]
   };
 
   // 使用logDb對CouchDB執行Mango查詢
@@ -147,9 +153,15 @@ router.post("/event/door/edit", async (req, res) => {
     console.log("原始Received start:", input1 + " " + input2);
     console.log("原始Received end:", input3 + " " + input4);
 
-    // 將日期時間字符串轉換為 ISO 8601 格式
-    const startTime = new Date(input1 + "T" + input2 + ".000Z");
-    const endTime = new Date(input3 + "T" + input4 + ".000Z");
+    // 將日期時間字符串轉換為 JavaScript Date 對象
+    const startTime = moment(
+      input1 + " " + input2,
+      "YYYY-MM-DD HH:mm:ss"
+    ).toDate();
+    const endTime = moment(
+      input3 + " " + input4,
+      "YYYY-MM-DD HH:mm:ss"
+    ).toDate();
 
     console.log("轉換後的 start:", startTime.toISOString());
     console.log("轉換後的 end:", endTime.toISOString());
@@ -158,10 +170,10 @@ router.post("/event/door/edit", async (req, res) => {
       selector: {
         time: {
           $gte: startTime.toISOString(),
-          $lte: endTime.toISOString(),
-        },
+          $lte: endTime.toISOString()
+        }
       },
-      sort: [{ time: "desc" }],
+      sort: [{ time: "desc" }]
     };
 
     // 使用logDb對CouchDB執行Mango查詢
@@ -199,9 +211,9 @@ router.get("/event/door/edit", async (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
-      time: { $exists: true },
+      time: { $exists: true }
     },
-    sort: [{ time: "desc" }],
+    sort: [{ time: "desc" }]
   };
 
   logdoorDb.find(mangoQuery, (err, body) => {
