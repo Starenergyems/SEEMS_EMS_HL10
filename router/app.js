@@ -12,9 +12,10 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
-const { submit } = require("./rLogin");
+const { submit, authentication, ggg } = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
+const moment = require("moment");
 //const fetch = require("node-fetch");
 //如果要換資料庫的host 改掉".database"
 
@@ -39,6 +40,7 @@ app.use(cookieParser());
 const otherrf01nanoDb = nano.use("other_rf01");
 const otherrf10nanoDb = nano.use("other_rf10");
 const GCnanoDb = nano.use("gc_rf10");
+const GC01nanoDb = nano.use("gc_rf01");
 const DCnanoDb = nano.use("dc_rf10");
 const lc1nanoDb = nano.use("lc1_rf10");
 const lc2nanoDb = nano.use("lc2_rf10");
@@ -50,11 +52,12 @@ const alarmnanoDb = nano.use("alarm");
 //時間索引
 const indexDef = {
   index: { fields: ["time"] },
-  name: "time_index",
+  name: "time_index"
 };
 //***************************************************************************************************************** */
 // 為每個資料庫創建針對時間的索引
 GCnanoDb.createIndex(indexDef);
+GC01nanoDb.createIndex(indexDef);
 DCnanoDb.createIndex(indexDef);
 otherrf10nanoDb.createIndex(indexDef);
 otherrf01nanoDb.createIndex(indexDef);
@@ -65,14 +68,18 @@ lc4nanoDb.createIndex(indexDef);
 alarmnanoDb.createIndex(indexDef);
 //***************************************************************************************************************** */
 
+//////////////////////////////////////////////////////////////////////////////
+// Login page. URL = "/login", LOGIN_URL can redirect.
 app.get("/login", (req, res) => {
   res.clearCookie("token");
   res.render("Login");
 });
 
-app.get("/", (req, res) => {
+app.get(["/", "/signin"], (req, res) => {
   res.redirect("/login");
 });
+
+//////////////////////////////////////////////////////////////////////////////
 
 app.post("/login", async (req, res) => {
   try {
@@ -81,7 +88,6 @@ app.post("/login", async (req, res) => {
     console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
     // const config = await getconfig()
     // console.log(config.duration*3600)
-
     const response = await submit(email, password);
     if (response["result"] === true) {
       console.log(response["text"]);
@@ -89,11 +95,7 @@ app.post("/login", async (req, res) => {
       //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
-      // res.redirect(302, "/mode");
-      // res.redirect('mode');
       res.json({ redirect: "http://localhost:3000/mode" });
-      // res.redirect("/mode")
-      // res.redirect("./operateinfo");
     } else {
       res.status(401).send(response["text"]);
     }
@@ -102,7 +104,7 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
+//////////////////////////////////////////////////////////////////////////////
 
 app.get("/health", (req, res) => {
   const isHealthy = true;
@@ -118,10 +120,12 @@ app.use("*", async (req, res, next) => {
   try {
     const authenticated = await authentication(req);
     if (authenticated === false) {
-      // return res.redirect(302,"/login")
+      return res.redirect(302, "/login");
+      return res.status(401).send("Unauthorized");
+
       // res.redirect('login');
       // res.clearCookie("token");
-      return res.status(401).send("Unauthorized");
+      //
     } else {
       req.customData = authenticated;
       req.body.id = authenticated.id;
@@ -134,132 +138,88 @@ app.use("*", async (req, res, next) => {
   }
 });
 
-// app.get("/test", (req, res) => {
-//   const id = req.customData.id;
-//   const level = req.customData.permission;
-//   console.log(`authmiddle body:${req.body}, customDate: ${req.customDate}`);
-// });
-
 //***************************************************************************************************************** */
 //側欄用
-const today = new Date();
-const midnight = new Date(
-  today.getFullYear(),
-  today.getMonth(),
-  today.getDate(),
-  0,
-  0,
-  0,
-  0
-); // 當天 00:00:00:000
-const mangoQueryforday = {
-  selector: {
-    time: { $gt: midnight.getTime() },
-  },
-  sort: [{ time: "desc" }],
-  limit: 1,
-};
-// 創建定時任務
-// 定義每天的 00:00:00 觸發的規則
-const rule = new schedule.RecurrenceRule();
-rule.hour = 0;
-rule.minute = 0;
-rule.second = 0;
 
+const lc1_rf10 = "lc1_rf10";
+const lc01Db = nano.use(lc1_rf10);
+const lc2_rf10 = "lc2_rf10";
+const lc02Db = nano.use(lc2_rf10);
+const lc3_rf10 = "lc3_rf10";
+const lc03Db = nano.use(lc3_rf10);
+const lc4_rf10 = "lc4_rf10";
+const lc04Db = nano.use(lc4_rf10);
+const other_rf01 = "other_rf01";
+const other_rf10 = "other_rf10";
+const rf01Db = nano.use(other_rf01);
+const rf10Db = nano.use(other_rf10);
 let ChgEtoday0 = 0;
 let DcgEtoday0 = 0;
+let flag = 0;
 
-// 創建定時任務
-const job = schedule.scheduleJob(rule, async () => {
-  try {
-    // 執行資料庫查詢
-    const result = await otherrf01nanoDb.find(mangoQueryforday);
-    const otherrf01Data = result.docs[0];
+async function getData() {
+  const now = moment();
+  const startOfDay = moment().startOf("day");
+  if (flag === 0 || now.isSame(startOfDay, "day")) {
+    const night = moment()
+      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .utcOffset("+0800")
+      .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+    const nightoneseconds = moment()
+      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .utcOffset("+0800")
+      .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
-    // 讀取相應的值並存入全域變數
-    ChgEtoday0 = otherrf01Data.Freq[408028];
-    DcgEtoday0 = otherrf01Data.Freq[408030];
+    const filterTime = {
+      selector: {
+        time: {
+          $gte: night,
+          $lte: nightoneseconds
+        }
+      },
+      limit: 1
+    };
 
-    //console.log("ChgEtoday0:", ChgEtoday0);
-    //console.log("mapDcgEtoday0:", DcgEtoday0);
+    const midnightData = await rf01Db.find(filterTime);
 
-    // 取消定時任務
-    job.cancel();
-  } catch (error) {
-    console.error("Error:", error);
+    //discharge capacity
+    const expValue = midnightData.docs[0].Freq["408030"];
+
+    //charge capacity
+    const impValue = midnightData.docs[0].Freq["408028"];
+
+    // 更新全域變數
+    ChgEtoday0 = impValue; //408028 充電
+    DcgEtoday0 = expValue; //408030 放電
+
+    console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
   }
-});
+  console.log("呼叫getdata");
+  flag = 1;
+}
 
-const mangoQuery = {
-  selector: {
-    time: { $exists: true },
-  },
-  sort: [{ time: "desc" }],
-  limit: 1,
-};
-/******************************************************************************************* */
-// // 呼叫函式並取得最新數值
-// const latestValues = getLatestValuesFromDatabase();
-
-// // 透過迴圈遍歷陣列或物件，取出每個數值
-// console.log(latestValues); // 或者你可以做任何你需要的處理
-
-// //let navbarData = null; // 定義一個全局變數用於存儲 navbarData
-// app.use(async (req, res, next) => {
-//   //console.log("navbarDataObject", navbarDataObject);
-
-//   // console.log("****res.locals", res.locals);
-//   // const number = 99998888;
-//   // res.locals.number = number;
-//   // console.log("****res.locals", res.locals);
-
-//   // 呼叫函式並取得最新數值
-//   const latestValues = await getLatestValuesFromDatabase();
-//   // 獲取總數 這裡用的是FAULT是錯誤
-//   res.locals.totalAlarmNum = latestValues[0];
-//   res.locals.AlarmNum_Sys = latestValues[1]; //新增
-//   res.locals.AlarmNum_Bat = latestValues[2];
-//   res.locals.AlarmNum_PCS = latestValues[3];
-//   res.locals.AlarmNum_FF = latestValues[4];
-//   res.locals.AlarmNum_Env = latestValues[5];
-//   res.locals.AlarmNum_Meter = latestValues[6];
-//   //
-//   res.locals.totalWarningNum = latestValues[7];
-//   res.locals.WarningNum_Sys = latestValues[8]; //新增
-//   res.locals.WarningNum_Bat = latestValues[9];
-//   res.locals.WarningNum_PCS = latestValues[10];
-//   res.locals.WarningNum_FF = latestValues[11];
-//   res.locals.WarningNum_Env = latestValues[12];
-//   res.locals.WarningNum_Meter = latestValues[13];
-
-//   //沒有計算 純粹讀取+換算
-//   const latestValues2 = await getLatestValuesFromDatabaseforother();
-//   res.locals.L_M_systemMode = latestValues2[0];
-//   res.locals.L_M_freq = latestValues2[1];
-//   res.locals.L_M_activeP = latestValues2[2];
-//   res.locals.L_M_reactiveP = latestValues2[3];
-//   res.locals.L_M_voltage = latestValues2[4];
-//   res.locals.L_M_current = latestValues2[5];
-//   res.locals.L_M_powerFactor = latestValues2[6];
-//   res.locals.L_M_avgSOC = latestValues2[7];
-//   res.locals.L_M_minSOH = latestValues2[8];
-//   res.locals.L_M_SBSPM = latestValues2[9];
-//   res.locals.L_M_chgEtoday = latestValues2[10];
-//   res.locals.L_M_dcgEtoday = latestValues2[11];
-//   // console.log("****res.locals", res.locals);
-//   next();
-// });
 /************************************************************************* */
 //Navbar資料api
 
+const mangoQuery = {
+  selector: {
+    time: { $exists: true }
+  },
+  sort: [{ time: "desc" }],
+  limit: 1
+};
+
 app.get("/navbar", async (req, res) => {
   try {
-    // 呼叫函式並取得最新數值
+    // 呼叫函式並取
+    getData();
     const Values = await getLatestValuesFromDatabase();
     //沒有計算 純粹讀取+換算
     const Values2 = await getLatestValuesFromDatabaseforother();
 
     var latestValues = {
+      permission: req.body.permission,
+      userAccount: req.body.id,
       totalAlarmNum: Values[0],
       AlarmNum_Sys: Values[1], //新增`
       AlarmNum_Bat: Values[2],
@@ -274,7 +234,7 @@ app.get("/navbar", async (req, res) => {
       WarningNum_PCS: Values[10],
       WarningNum_FF: Values[11],
       WarningNum_Env: Values[12],
-      WarningNum_Meter: Values[13],
+      WarningNum_Meter: Values[13]
     };
 
     var latestValues2 = {
@@ -289,7 +249,7 @@ app.get("/navbar", async (req, res) => {
       L_M_minSOH: Values2[8],
       L_M_SBSPM: Values2[9],
       L_M_chgEtoday: Values2[10],
-      L_M_dcgEtoday: Values2[11],
+      L_M_dcgEtoday: Values2[11]
     };
     // console.log("latestValues",latestValues);
     res.send({ latestValues, latestValues2 });
@@ -306,7 +266,7 @@ async function getLatestValuesFromDatabase() {
     const alarmData = await alarmnanoDb.find({
       selector: { time: { $exists: true } },
       sort: [{ time: "desc" }],
-      limit: 1000,
+      limit: 1000
     });
 
     let Fault_system_num = 0;
@@ -477,7 +437,7 @@ async function getLatestValuesFromDatabase() {
       Alarm_pcs_num,
       Alarm_FFS_num,
       Alarm_ENV_num,
-      Alarm_meter_num,
+      Alarm_meter_num
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
@@ -497,9 +457,9 @@ async function getLatestValuesFromDatabaseforother() {
         lc1nanoDb.createIndex(indexDef).then(() => lc1nanoDb.find(mangoQuery)),
         lc2nanoDb.createIndex(indexDef).then(() => lc2nanoDb.find(mangoQuery)),
         lc3nanoDb.createIndex(indexDef).then(() => lc3nanoDb.find(mangoQuery)),
-        lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery)),
+        lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery))
       ]);
-   
+
     // 取得每個資料庫的第一條資料
     const gcData = gcBody.docs[0];
     const otherrf01Data = rf01Body.docs[0];
@@ -563,15 +523,23 @@ async function getLatestValuesFromDatabaseforother() {
     );
     const L_M_SBSPM = scaleProcess(gcData.System[400037], 0.01, 1);
     const L_M_chgEtoday = scaleProcess(
-      otherrf01Data.Freq[408028] - ChgEtoday0,
+      otherrf01Data.Freq["408028"] - ChgEtoday0,
       0.1,
       1
     ); //408028 kWh_Import
     const L_M_dcgEtoday = scaleProcess(
-      otherrf01Data.Freq[408030] - DcgEtoday0,
+      otherrf01Data.Freq["408030"] - DcgEtoday0,
       0.1,
       1
     ); //408030 kWh_Export
+
+    // console.log("現在充電: " + L_M_chgEtoday);
+    // console.log("零時充電: " + ChgEtoday0);
+    // console.log("當日充電: " + otherrf01Data.Freq["408028"]);
+
+    // console.log("現在放電: " + L_M_dcgEtoday);
+    // console.log("零時放電: " + DcgEtoday0);
+    // console.log("當日放電: " + otherrf01Data.Freq["408030"]);
     return [
       L_M_systemMode,
       L_M_freq,
@@ -584,7 +552,7 @@ async function getLatestValuesFromDatabaseforother() {
       L_M_minSOH,
       L_M_SBSPM,
       L_M_chgEtoday,
-      L_M_dcgEtoday,
+      L_M_dcgEtoday
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
@@ -607,7 +575,7 @@ const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
 const login = require("./rLogin");
-const { authentication } = require("./authMiddleware");
+// const { authentication } = require("./authMiddleware");
 //***************************************************************************************************************** */
 // 使用這些路由
 // // app.use(authentication)
@@ -633,8 +601,6 @@ app.use(alarmRouter);
 app.get("/error", (req, res) => {
   res.render("error");
 });
-
-
 
 server.listen(port, () => {
   console.log(`app.js 應用程式正在監聽端口 ${port}`);

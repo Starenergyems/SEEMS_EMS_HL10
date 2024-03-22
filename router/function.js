@@ -22,29 +22,8 @@ function calculateAdd(...numbers) {
 //單位轉換
 function scaleProcess(decimalValue, scale, point) {
   // 檢查輸入是否合法
-  if (typeof decimalValue !== "number" || isNaN(decimalValue)) {
-    if (decimalValue === null) {
-      return "NAN//";
-      decimalValue = 0;
-      //console.log("decimalValue = null");
-    } else if (typeof decimalValue === "string") {
-      decimalValue = 0;
-      return "string//";
-      //console.log("decimalValue=" + decimalValue);
-    } else {
-      //console.log("decimalValue must be a number.");
-      return "OXO//";
-    }
-  }
-
-  if (typeof scale !== "number" || isNaN(scale)) {
-    //console.log("scale must be a number.");
-    return "scale NAN//";
-  }
-
-  if (typeof point !== "number" || isNaN(point)) {
-    //console.log("point must be a number.");
-    return "number NAN//";
+  if (decimalValue === null || scale === null || point === null) {
+    return "#*#";
   }
 
   // 將 decimalValue 乘上 scale
@@ -93,7 +72,7 @@ function mapworkStatus_page(decimalValue) {
     9: "停止-錯誤",
     10: "運作-告警",
     11: "降載運作",
-    15: "通訊異常",
+    15: "通訊異常"
   };
 
   return statuses[indexOfOne] || "Unknown status";
@@ -129,7 +108,7 @@ function mapworkMode_page(decimalValue) {
     3: "On-grid constant power (DC)",
     9: "On-grid mode",
     10: "Off-grid mode",
-    11: "VSG mode",
+    11: "VSG mode"
   };
 
   return statuses[indexOfOne] || "Unknown status";
@@ -142,11 +121,14 @@ function mapworkMode_page(decimalValue) {
 // bit 10: Off-grid mode
 // bit 11: VSG mode
 
-function mapgridStatus_page() { }
+function mapgridStatus_page() {}
 //***************************************************************************** */
 //PCSWorkingStatus
 function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
-  console.log("#1;" + lc1 + "#2;" + lc2 + "#3;" + lc3 + "#4;" + lc4);
+  //console.log("#1;" + lc1 + "#2;" + lc2 + "#3;" + lc3 + "#4;" + lc4);
+  if (lc1 === null || lc2 === null || lc3 === null || lc4 === null) {
+    return "#*#";
+  }
   const sum = lc1 + lc2 + lc3 + lc4;
   if (sum === 7) {
     return "運轉中";
@@ -154,15 +136,6 @@ function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
     return "部分運轉中";
   } else {
     return "停機";
-  }
-}
-
-function mapPCSonlineNum(lc1, lc2, lc3, lc4) {
-  if (lc1 < 3 && lc2 < 3 && lc3 < 3 && lc4 < 3) {
-    const sum = lc1 + lc2 + lc3 + lc4;
-    return sum;
-  } else {
-    return "err?";
   }
 }
 
@@ -227,7 +200,7 @@ function mapPCSWorkingstatus(input1, input2) {
     9: "Fault stop",
     10: "Alarm running",
     11: "Derated running",
-    15: "Communication exception",
+    15: "Communication exception"
   };
 
   const statusMap2 = {
@@ -237,7 +210,7 @@ function mapPCSWorkingstatus(input1, input2) {
     3: "On-grid constant power (DC)",
     9: "On-grid mode",
     10: "Off-grid mode",
-    11: "VSG mode",
+    11: "VSG mode"
   };
 
   // 處理第一個變數
@@ -496,7 +469,10 @@ function Convert_socRef_kWh_to_pct(rawData) {
     return "#*#";
   }
 
-  return ((rawData + (4472 * 7 - 10000 * 2.5) / 2) / (4472 * 7) * 100).toFixed(1);
+  return (
+    ((rawData + (4472 * 7 - 10000 * 2.5) / 2) / (4472 * 7)) *
+    100
+  ).toFixed(1);
 }
 
 function Determine_BGC_of_VcMaxDiff(data_maxV, data_minV) {
@@ -661,32 +637,34 @@ function Determine_statusL_of_ACB(closeStatus, openStatus) {
 
 function checkValuesFault(v1, v2, v3) {
   // 轉換數值為二進制並填補為 32 位元
-  const binary1 = v1.toString(2).padStart(32, '0');
-  const binary2 = v2.toString(2).padStart(32, '0');
-  const binary3 = v3.toString(2).padStart(32, '0');
+  const binary1 = v1.toString(2).padStart(32, "0");
+  const binary2 = v2.toString(2).padStart(32, "0");
+  const binary3 = v3.toString(2).padStart(32, "0");
 
   // 檢查特定位元是否包含 1 404046/404048/404061
-  const positions1 = [0, 1, 2, 3, 4, 5, 7, 9,10,11,12,13,14,15,17,18,20,21,22,23]; // 第一個數值要檢查的位置
-  const positions2 = [0,1,2,3,4]; // 第二個數值要檢查的位置
-  const positions3 = [0,11,15]; // 第三個數值要檢查的位置
+  const positions1 = [
+    0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 20, 21, 22, 23
+  ]; // 第一個數值要檢查的位置
+  const positions2 = [0, 1, 2, 3, 4]; // 第二個數值要檢查的位置
+  const positions3 = [0, 11, 15]; // 第三個數值要檢查的位置
 
   // 檢查第一個數值的指定位置是否包含 1
   for (let position of positions1) {
-    if (binary1.charAt(31 - position) === '1') {
+    if (binary1.charAt(31 - position) === "1") {
       return 1; // 若指定位置出現 1，則返回 1
     }
   }
 
   // 檢查第二個數值的指定位置是否包含 1
   for (let position of positions2) {
-    if (binary2.charAt(31 - position) === '1') {
+    if (binary2.charAt(31 - position) === "1") {
       return 1; // 若指定位置出現 1，則返回 1
     }
   }
 
   // 檢查第三個數值的指定位置是否包含 1
   for (let position of positions3) {
-    if (binary3.charAt(31 - position) === '1') {
+    if (binary3.charAt(31 - position) === "1") {
       return 1; // 若指定位置出現 1，則返回 1
     }
   }
@@ -700,32 +678,29 @@ function checkValuesFault(v1, v2, v3) {
 // 1: Open
 // 2: Close
 // 3: Reset
-function maponGridStatus_LC(input){
-if(input===1)
-{
-  return "切離";
-}
-if  (input===2)
-{
-  return "投入";
-}
-if  (input===3)
-{
-  return "故障復位";
-}
-return "未定義"
+function maponGridStatus_LC(input) {
+  if (input === 1) {
+    return "切離";
+  }
+  if (input === 2) {
+    return "投入";
+  }
+  if (input === 3) {
+    return "故障復位";
+  }
+  return "未定義";
 }
 
 function checkValuesalarm(values) {
-  const binary1 = values.toString(2).padStart(32, '0');
+  const binary1 = values.toString(2).padStart(32, "0");
   const positions1 = [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 20];
-    // 檢查第一個數值的指定位置是否包含 1
-    for (let position of positions1) {
-      if (binary1.charAt(31 - position) === '1') {
-        return 1; // 若指定位置出現 1，則返回 1
-      }
+  // 檢查第一個數值的指定位置是否包含 1
+  for (let position of positions1) {
+    if (binary1.charAt(31 - position) === "1") {
+      return 1; // 若指定位置出現 1，則返回 1
     }
-    return 0; // 若所有指定位置都沒有出現 1，則返回 0
+  }
+  return 0; // 若所有指定位置都沒有出現 1，則返回 0
 }
 //電池總攬下的電池狀態
 // bit 0: First SOC calibrate tip clear[CMD]
@@ -764,7 +739,7 @@ function workStatuschange(var1, var2, var3, var4, var5, var6, var7) {
       : "00000000000000000000000000000000",
     var7 != null
       ? var7.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
+      : "00000000000000000000000000000000"
   ];
 
   // 初始化總和為0
@@ -793,34 +768,31 @@ function workStatuschange(var1, var2, var3, var4, var5, var6, var7) {
 // const result = workStatuschange(8448, 8448, 8448, 8448, 8448, 8448, 8448);
 // console.log(result); // 這將輸出符合條件的總和
 //******************************************************************************* */
-function workStatus_LC(input){
-if(input === 0 ){
-  return "併網"
-}
-else if (input === 1 ){
-  return "離網"
-}
+function workStatus_LC(input) {
+  if (input === 0) {
+    return "併網";
+  } else if (input === 1) {
+    return "離網";
+  }
 }
 
 // "0: Grid mode
 // 1: Off-grid mode"
 
 //******************************************************************************* */
-function maponGridStatus(input1,input2,input3,input4){
-  const sum = input1+input2+input3+input4;
-  if(sum===0){
+function maponGridStatus(input1, input2, input3, input4) {
+  const sum = input1 + input2 + input3 + input4;
+  if (sum === 0) {
     return "併網";
-  }
-  else if(sum===4){
-    return "離網"
-  }
-  else{
+  } else if (sum === 4) {
+    return "離網";
+  } else {
     return "部分併網";
   }
 }
 
 //******************************************************************************* */
-function mapBMSMode(input){
+function mapBMSMode(input) {
   const binary = input.toString(2).padStart(32, "0");
   //console.log("binary:" + binary);
   const bit8 = 31 - 8;
@@ -829,16 +801,15 @@ function mapBMSMode(input){
   const bit12 = 31 - 12;
 
   //console.log("bit15:" + bit15);
-  if (binary[bit8] === "1"||binary[bit13] === "1") {
+  if (binary[bit8] === "1" || binary[bit13] === "1") {
     //console.log("Not Available");
     return "運轉中";
   } else if (binary[bit9] === "1" && binary[bit12] === "1") {
     //console.log("Available");
     return "停機中";
   }
-  return "檢查"
+  return "檢查";
 }
-
 
 // bit 0: First SOC calibrate tip clear[CMD]
 // bit 1: Second SOC calibrate tip clear[CMD]
@@ -1165,7 +1136,6 @@ function mapUPSwarning(inputs, checkbit) {
 //******************************************************************************* *///******************************************************************************* */
 
 module.exports = {
-  mapPCSonlineNum,
   calculateAverage,
   mapchargeStatus,
   scaleProcess,
@@ -1226,7 +1196,7 @@ module.exports = {
   checkValuesFault,
   checkValuesalarm,
   maponGridStatus_LC,
-  mapBMSMode,
+  mapBMSMode
 };
 
 // //***************************************************************************** */
@@ -1275,7 +1245,7 @@ const NumberOfDigit = 16;
 const pcsCHGStatus_MT = {
   17: "Charging",
   55: "Discharging",
-  98: "Non-working state",
+  98: "Non-working state"
 };
 const sysCtrl_2_MT = {
   0: { 0: "否", 1: "是" },
@@ -1284,7 +1254,7 @@ const sysCtrl_2_MT = {
   6: { 0: "手動", 1: "自動" },
   9: { 0: "正常", 1: "異常" },
   10: { 0: "正常", 1: "通訊異常" },
-  13: { 0: "SOC", 1: "Volt" },
+  13: { 0: "SOC", 1: "Volt" }
 };
 const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 
