@@ -251,7 +251,7 @@ function light_color(data, target, normal_value, green_class, fault_value, red_c
         $(target).addClass(red_class);
         $(target).removeClass(green_class);
     } else {
-        console.log(target, "light status error, should be 0 or 1")
+        console.log(target, "light status error, should be", normal_value, "or", fault_value);
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////

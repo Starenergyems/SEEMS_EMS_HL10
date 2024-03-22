@@ -227,8 +227,8 @@ async function sendDataToBackend() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-async function updateData(){
-  var data = await getData(window.location.href+"/data");//port要改
+async function updateData() {
+  var data = await getData(window.location.href + "/data");//port要改
   console.log(data);
 
   $('#workStatus').text(data.workStatus);
@@ -240,7 +240,7 @@ async function updateData(){
   $('#systemSOH').text(data.systemSOH);
   $('#avgContainerTemp').text(data.avgContainerTemp);
   $('#heartBeat').text(data.heartBeat);
-/*LC1************************************ */
+  /*LC1************************************ */
   $('#onlineNum_LC1').text(data.onlineNum_LC1);
   $('#workStatus_LC1').text(data.workStatus_LC1);
   $('#onGridStatus_LC1').text(data.onGridStatus_LC1);
