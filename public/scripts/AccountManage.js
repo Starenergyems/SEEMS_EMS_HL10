@@ -250,6 +250,18 @@ $(document).ready(function () {
     }
 });
 
-
+// let bottom
+// // document.getElementById("btn_addRD").addEventListener("click", function() {
+// // 	bottom = "add"
+// // });
+// document.getElementById("btn_updateEditRD").addEventListener("click", function() {
+// 	bottom = "addupdate"
+//     hideEdit()
+	
+// });
+// document.getElementById("btn_deleteEditRD").addEventListener("click", function() {
+// 	bottom = "delete"
+//     hideEdit()
+// });
 
 

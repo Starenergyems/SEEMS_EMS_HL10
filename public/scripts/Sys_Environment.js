@@ -475,6 +475,33 @@ async function updateData() { //更新資料ajax
     $('#ctrl_hvac_2_humid').text(data.ctrl_hvac_2_humid);
     $('#ctrl_hvac_2_error').text(data.ctrl_hvac_2_error);
 
+    /*BSC告警******************************************************* */
+    light_color(data.bscAlarm_1_1_rawD, "#bscAlarm_1-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_1_2_rawD, "#bscAlarm_1-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_2_1_rawD, "#bscAlarm_2-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_2_2_rawD, "#bscAlarm_2-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_3_1_rawD, "#bscAlarm_3-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_3_2_rawD, "#bscAlarm_3-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_4_1_rawD, "#bscAlarm_4-1", 0, "setToOpen", 1, "setToClose");
+
+    /*BSC故障******************************************************* */
+    light_color(data.bscFault_1_1_rawD, "#bscFault_1-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_1_2_rawD, "#bscFault_1-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_2_1_rawD, "#bscFault_2-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_2_2_rawD, "#bscFault_2-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_3_1_rawD, "#bscFault_3-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_3_2_rawD, "#bscFault_3-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_4_1_rawD, "#bscFault_4-1", 0, "setToOpen", 1, "setToClose");
+
+    /*消防狀態******************************************************* */
+    light_color(data.ffsStatus_1_1_rawD, "#ffsStatus_1-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_1_2_rawD, "#ffsStatus_1-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_2_1_rawD, "#ffsStatus_2-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_2_2_rawD, "#ffsStatus_2-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_3_1_rawD, "#ffsStatus_3-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_3_2_rawD, "#ffsStatus_3-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_4_1_rawD, "#ffsStatus_4-1", 0, "setToOpen", 1, "setToClose");
+
     /*UPS_MVCB****************************************************************** */
     $('#ups_MVCB_volt').text(data.ups_MVCB_volt);
     $('#ups_MVCB_temp').text(data.ups_MVCB_temp);

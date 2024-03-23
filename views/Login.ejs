@@ -38,17 +38,10 @@
     // document.getElementById('btn_Login').addEventListener(['click',] 
     document.addEventListener("keypress", async function(event) {
             if (event.key === "Enter") {
-              // console.log("press enter")
-                // Execute your function here
-                // event.preventDefault();
-    // Trigger the button element with a click
                 document.getElementById("btn_Login").click();
             }
         });
-
     document.getElementById("btn_Login").addEventListener("click", function() {
-      // console.log("click")
-            // Execute your function here
         login();
         });
     async function login() {

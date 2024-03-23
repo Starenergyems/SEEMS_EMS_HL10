@@ -56,20 +56,96 @@ const AUTHORIZATION = "Basic " + credentials;
 
 // ggg()
 
+// a = fetchData("http://localhost:3000/account/system/accounts", {"cookie":"734235b0-4efd-47d3-a76a-32a6a510673a"})
+// console.log(a)
+// Function to perform a GET request
+
+
+// Function to perform a GET request with headers
+// function fetchData(url, headers) {
+//   return fetch(url, {
+//     method: 'GET',
+//     headers: new Headers(headers), // Pass the headers object here
+//     mode: 'cors',
+//     cache: 'no-cache'
+//   })
+//   .then(response => {
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok ' + response.statusText);
+//     }
+//     return response.json();
+//   })
+//   .then(data => console.log(data))
+//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
+// }
+
+// Example usage:
+// fetchDataWithHeaders('https://api.example.com/data', { 'Content-Type': 'application/json', 'Authorization': 'Bearer your-token-here' });
+
+
+
+
+// function fetchData(url) {
+//   return fetch(url)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok ' + response.statusText);
+//       }
+//       return response.json();
+//     })
+//     .then(data => console.log(data))
+//     .catch(error => console.error('There has been a problem with your fetch operation:', error));
+// }
+
+// Function to perform a POST request
+// function postData(url, data) {
+//   return fetch(url, {
+//     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//     mode: 'cors', // no-cors, *cors, same-origin
+//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: 'same-origin', // include, *same-origin, omit
+//     headers: {
+//       'Content-Type': 'application/json'
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: 'follow', // manual, *follow, error
+//     referrerPolicy: 'no-referrer', // no-referrer, *client
+//     body: JSON.stringify(data) // body data type must match "Content-Type" header
+//   })
+//   .then(response => {
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok ' + response.statusText);
+//     }
+//     return response.json();
+//   })
+//   .then(data => console.log(data))
+//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
+// }
+
+// Example usage:
+// fetchData('https://api.example.com/data');
+// postData('https://api.example.com/submit', { answer: 42 });
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
-async function XX(url) {
-fetch(url, {
-  method: 'GET',
-  // body: JSON.stringify(data),
-  headers: new Headers({
-    'Content-Type': 'application/json',
-    "cookie":"6fe314f5-4c5a-459b-b0e8-3fa4fb73bf06",
-    credentials: 'include'
-  })
-}).then(res => res.json())
-.catch(error => console.error('Error:', error))
-.then(response => console.log('Success:', response));
-}
+// async function XX(url) {
+// fetch(url, {
+//   method: 'GET',
+//   // body: JSON.stringify(data),
+//   headers: new Headers({
+//     'Content-Type': 'application/json',
+//     "cookie":"6fe314f5-4c5a-459b-b0e8-3fa4fb73bf06",
+//     credentials: 'include'
+//   })
+// }).then(res => res.json())
+// .catch(error => console.error('Error:', error))
+// .then(response => console.log('Success:', response));
+// }
 
 // XX("http://localhost:3000/account/system/accounts")
 
@@ -231,7 +307,7 @@ async function findaccount(inmail = "", intoken = "") {
       user.num === undefined ? (employeenum = "") : (employeenum = user.num);
       mail = user.mail; // Impossible  undefined.
       user.name === undefined ? (namee = "") : (namee = user.name);
-      user.comapny === undefined ? (company = "") : (company = user.comapny);
+      user.company === undefined ? (company = "") : (company = user.company);
       user.department === undefined
         ? (department = "")
         : (department = user.department);
@@ -263,7 +339,7 @@ async function findaccount(inmail = "", intoken = "") {
         level: level ,
         num : employeenum,
         name : namee,
-        comapny : company,
+        company : company,
         department : department,
         state : state,
         note : note,
@@ -296,7 +372,7 @@ async function updateaccount(id, configdata="", passwordd="", createdata="") {
       num: `${employeenum}`,
       mail: `${mail}`,
       name: `${namee}`,
-      comapny: `${company}`,
+      company: `${company}`,
       department: `${department}`,
       level: `${level}`,
       state: `${state}`,
@@ -500,35 +576,54 @@ async function getbyid(id) {
     headers: { Authorization: AUTHORIZATION },
     credentials: "include",
   });
-  console.log(33333333,response)
+  data = await response.json()
+  // for (let i =0 )
+  let rrr = {}
+  for (const [key, value] of Object.entries(data)) 
+{
+  rrr[key] = value
+} 
+// console.log(rrr)
+  // console.log(33333333, Object.keys(data.user))
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
   // console.log("login", typeof(response))
   // console.log(await response.json())
-  
-  return  response
+  // 
+  return await rrr
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Delete account specify user.
-async function deleteuser(doc_num) {
-  const URL = `${db_URL}/${db.account}/${doc_num}/`
+async function deleteuser(docid) {
+  const rr = await getbyid(docid)
+  // console.log()
+  const URL = `${db_URL}/${db.account}/${docid}/?rev=${rr._rev}`
   fetch(URL, {
     method: 'DELETE',
     headers: { Authorization: AUTHORIZATION },
     credentials: "include",
   })
     .then(response => {
+      console.log(response.status)
       if (!response.ok) {
         throw new Error('Failed to delete user');
       }
       console.log('User deleted successfully');
     })
-  }
+  // }
+  // if (!response.ok) {
+  //   throw new Error(`Request failed with status ${response.status}`);
+  // }
+}
 
-
-
+// deleteuser("SE0077")
+// async function ttttt(){
+// const a = await getbyid("SE0077")
+// console.log(a)
+// }
+// ttttt()
 ////////////////////////////////////////////////////////////////////////////////////////
 // User log.
 async function userlog(userid) {

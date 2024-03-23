@@ -192,9 +192,9 @@ async function getData() {
     ChgEtoday0 = impValue; //408028 充電
     DcgEtoday0 = expValue; //408030 放電
 
-    console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
+    //console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
   }
-  console.log("呼叫getdata");
+  //console.log("呼叫getdata");
   flag = 1;
 }
 
