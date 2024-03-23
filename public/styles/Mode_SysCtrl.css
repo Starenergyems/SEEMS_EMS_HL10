@@ -128,8 +128,8 @@
     border: 1px solid #CBE198;
     border-radius: 50%;
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: -1px;
+    top: -1px;
 }
 
 .sysInfo table button {
@@ -140,13 +140,16 @@
     font-size: 14px;
     border-radius: 50%;
     position: absolute;
-    right: 1px;
-    top: 1px;
+    right: 0px;
+    top: 0px;
 }
 
-.sysInfo table .data_Light {
-    background: none;
-    background-color: #B6B6B6;
+.sysInfo table .dataLight {
+    height: 33px;
+    width: 33px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
 }
 
 .EdReg {
@@ -323,15 +326,10 @@
     text-align: right;
 }
 
-.subSysInfo .data_light {
-    display: inline-block;
-    background-color: #000000;
-    box-sizing: border-box;
+.subSysInfo .dataLight {
     height: 32px;
     width: 32px;
-    border: 2px solid #B6B6B6;
     margin: 3px 0px 0px 35%;
-    border-radius: 50%;
 }
 
 .subSysInfo .data_status {
@@ -340,10 +338,6 @@
     margin: 7px 0px 0px 10px;
     font-size: 24px;
     vertical-align: top;
-}
-
-.subSysInfo .row_relative .data_light.setToClose {
-    background-color: #236E37;
 }
 
 .subSysInfo .row_relative button {
@@ -368,7 +362,7 @@
     height: 460px;
     width: 600px;
     left: 420px;
-    top: 210px;
+    top: 150px;
 }
 
 .freqVsP_Set .titlePUW {
@@ -453,7 +447,7 @@
     height: 400px;
     width: 440px;
     left: 500px;
-    top: 240px;
+    top: 180px;
 }
 
 .socRef_Set .titlePUW {
@@ -524,7 +518,7 @@
     height: 200px;
     width: 320px;
     left: 560px;
-    top: 340px;
+    top: 280px;
 }
 
 .alert_WrongDataSet p {

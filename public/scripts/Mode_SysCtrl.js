@@ -17,13 +17,19 @@
 
 //var permission="viewer"; //需讀權限
 var permission = "manager";
-$(document).ready(function () {
-  console.log("start reading js");
-  classAdd("#nB_Mode","default_nB");
-  routineWork();
-});
 
-setInterval(routineWork, 1000);
+document.addEventListener("DOMContentLoaded", afterLoadDCM);
+function afterLoadDCM() {
+    asdfg = "DOM加载了! 哈哈\n阿哈哈~";
+    console.log(asdfg);
+
+    const defaultBut_navBar = document.querySelector("#nB_Mode");
+    defaultBut_navBar.classList.add("default_nB");
+
+    routineWork();
+}
+
+setInterval(routineWork, 5000);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 let minLimit;
@@ -553,8 +559,8 @@ const cht_freqVsP = new Chart(cht_fVsP_Canvus, {
                     display: true,
                     text: '輸出 (%)'
                 },
-                min: -110.00,
-                max: 110.00,
+                min: -100.00,
+                max: 100.00,
                 ticks: {
                     stepSize: 10,
                 },
@@ -619,7 +625,7 @@ const cht_freqVsP = new Chart(cht_fVsP_Canvus, {
             ctx.fillText('C', chart.getDatasetMeta(1).data[3].x - left * 0.2, bottom - top * 0.25);
             ctx.fillText('D', chart.getDatasetMeta(1).data[4].x + left * 0.2, bottom - top * 0.25);
             ctx.fillText('E', chart.getDatasetMeta(1).data[5].x - left * 0.2, bottom - top * 0.25);
-            ctx.fillText('F', chart.getDatasetMeta(1).data[6].x - left * 0.2, bottom - top * 0.25);
+            ctx.fillText('F', chart.getDatasetMeta(1).data[6].x + left * 0.2, bottom - top * 0.25);
 
             ctx.fillText('t', right + left * 0.15, chart.getDatasetMeta(1).data[1].y);
             ctx.fillText('u', right + left * 0.15, chart.getDatasetMeta(1).data[2].y);
@@ -632,59 +638,59 @@ const cht_freqVsP = new Chart(cht_fVsP_Canvus, {
     ],
 });
 
+////////////////////////////////////////////////////////////////////////////////
 
-let refreshRate = 0.5;
+// let refreshRate = 0.5;
+// document.addEventListener("DOMContentLoaded", afterLoadDCM);
+// function afterLoadDCM() {
+//     let schedule_02 = setInterval(update_freqVsP_Location, refreshRate * 1000);
+//     function update_freqVsP_Location() {
+//         const freq_t_1 = document.querySelector(".block_temp #spareVal_Freq");
+//         const power_t = document.querySelector(".block_temp #spareVal_P");
 
-document.addEventListener("DOMContentLoaded", afterLoadDCM);
-function afterLoadDCM() {
-    let schedule_02 = setInterval(update_freqVsP_Location, refreshRate * 1000);
-    function update_freqVsP_Location() {
-        const freq_t_1 = document.querySelector(".block_temp #spareVal_Freq");
-        const power_t = document.querySelector(".block_temp #spareVal_P");
+//         let x_min = 59500;
+//         let x_max = 60500;
+//         let y_min = -1000;
+//         let y_max = 1000;
+//         const deltaFreq = 10;
+//         const deltaP = -40;
 
-        let x_min = 59500;
-        let x_max = 60500;
-        let y_min = -1000;
-        let y_max = 1000;
-        const deltaFreq = 10;
-        const deltaP = -40;
+//         let valFreq_t_1 = Number(freq_t_1.textContent);
+//         let valPower_t = Number(power_t.textContent);
+//         let Val_Freq;
+//         let Val_Power;
 
-        let valFreq_t_1 = Number(freq_t_1.textContent);
-        let valPower_t = Number(power_t.textContent);
-        let Val_Freq;
-        let Val_Power;
+//         if (valFreq_t_1 <= (x_max - deltaFreq)) {
+//             Val_Freq = valFreq_t_1 + deltaFreq;
+//         } else {
+//             Val_Freq = x_min;
+//         }
+//         if (valPower_t >= (y_min - deltaP)) {
+//             Val_Power = valPower_t + deltaP;
+//         } else {
+//             Val_Power = y_max;
+//         }
 
-        if (valFreq_t_1 <= (x_max - deltaFreq)) {
-            Val_Freq = valFreq_t_1 + deltaFreq;
-        } else {
-            Val_Freq = x_min;
-        }
-        if (valPower_t >= (y_min - deltaP)) {
-            Val_Power = valPower_t + deltaP;
-        } else {
-            Val_Power = y_max;
-        }
+//         if (Val_Freq < x_min) {
+//             Val_Freq = x_min;
+//         } else if (Val_Freq > x_max) {
+//             Val_Freq = x_max;
+//         }
+//         if (Val_Power < y_min) {
+//             Val_Power = y_min;
+//         } else if (Val_Power > y_max) {
+//             Val_Power = y_max;
+//         }
 
-        if (Val_Freq < x_min) {
-            Val_Freq = x_min;
-        } else if (Val_Freq > x_max) {
-            Val_Freq = x_max;
-        }
-        if (Val_Power < y_min) {
-            Val_Power = y_min;
-        } else if (Val_Power > y_max) {
-            Val_Power = y_max;
-        }
+//         freq_t_1.textContent = "" + Val_Freq;
+//         power_t.textContent = "" + Val_Power;
 
-        freq_t_1.textContent = "" + Val_Freq;
-        power_t.textContent = "" + Val_Power;
+//         cht_freqVsP.data.datasets[0].data[0].x = Val_Freq / 1000;
+//         cht_freqVsP.data.datasets[0].data[0].y = Val_Power / 10;
 
-        cht_freqVsP.data.datasets[0].data[0].x = Val_Freq / 1000;
-        cht_freqVsP.data.datasets[0].data[0].y = Val_Power / 10;
-
-        cht_freqVsP.update();
-    }
-}
+//         cht_freqVsP.update();
+//     }
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -804,64 +810,166 @@ function Set_SOC_Ref() {
     window.open('../Set_SOC_ref/Set_SOC_ref.html', 'SOC參考值設定', 'width=500, height=300, left=600, top=650, location=no, menubar=no, resizable=no, scrollbars=yes, status=no, toolbar=no, directories=no');
 }
 
-async function updateData(){   //更新資料
-  var router = window.location.href + "/data";
-  console.log(router);
-  var data = await getData(router);
-  console.log(data);
-  $("#sysAvailability").text(data.sysAvailability);
-  $("#SOC").text(data.SOC);
-  $("#SBSPM").text(data.SBSPM);
+async function updateData() {   //更新資料
+    var router = window.location.href + "/data";
+    console.log(router);
+    var data = await getData(router);
+    console.log(data);
 
-  $("#sysMode").text(data.sysMode);
-  $("#P_Project").text(data.P_Project);
-  $("#P_LoadShift").text(data.P_LoadShift);
-  $("#statusAllPCS").text(data.statusAllPCS);
-  $("#statusAllBMS").text(data.statusAllBMS);
-  $("#stopCHGsched").text(data.stopCHGsched);
+    assign_TextContent_To_SpID("#sysAvailability", data.sysAvailability);
+    assign_TextContent_To_SpID("#SOC", data.SOC);
+    assign_TextContent_To_SpID("#SBSPM", data.SBSPM);
 
-  //E-dReg/////////////////////////////////////////////////////
-  $("#Freq_A").text(data.Freq_A);
-  $("#P_t").text(data.P_t);
-  $("#Freq_B").text(data.Freq_B);
-  $("#P_u").text(data.P_u);
-  $("#Freq_C").text(data.Freq_C);
-  $("#P_v").text(data.P_v);
-  $("#Freq_D").text(data.Freq_D);
-  $("#P_w").text(data.P_w);
-  $("#Freq_E").text(data.Freq_E);
-  $("#P_x").text(data.P_x);
-  $("#Freq_F").text(data.Freq_F);
-  $("#P_y").text(data.P_y);
+    Determine_bgColor_of_SOC("#BG_SOC", data.SOC);
 
-  //子系統資訊/////////////////////////////////////////
-  $("#P_base_SS1").text(data.P_base_SS1);
-  $("#P_base_SS2").text(data.P_base_SS2);
-  $("#P_base_SS3").text(data.P_base_SS3);
-  $("#P_base_SS4").text(data.P_base_SS4);
+    assign_TextContent_To_SpID("#sysMode", data.sysMode);
+    assign_TextContent_To_SpID("#P_Project", data.P_Project);
+    assign_TextContent_To_SpID("#P_LoadShift", data.P_LoadShift);
+    assign_TextContent_To_SpID("#statusAllPCS", data.statusAllPCS);
+    assign_TextContent_To_SpID("#statusAllBMS", data.statusAllBMS);
+    assign_TextContent_To_SpID("#stopCHGsched", data.stopCHGsched);
 
-  $("#Q_base_SS1").text(data.Q_base_SS1);
-  $("#Q_base_SS2").text(data.Q_base_SS2);
-  $("#Q_base_SS3").text(data.Q_base_SS3);
-  $("#Q_base_SS4").text(data.Q_base_SS4);
+    assign_TextContent_To_SpID("#Freq_A", data.Freq_A);
+    assign_TextContent_To_SpID("#Freq_B", data.Freq_B);
+    assign_TextContent_To_SpID("#Freq_C", data.Freq_C);
+    assign_TextContent_To_SpID("#Freq_D", data.Freq_D);
+    assign_TextContent_To_SpID("#Freq_E", data.Freq_E);
+    assign_TextContent_To_SpID("#Freq_F", data.Freq_F);
+    assign_TextContent_To_SpID("#P_t", data.P_t);
+    assign_TextContent_To_SpID("#P_u", data.P_u);
+    assign_TextContent_To_SpID("#P_v", data.P_v);
+    assign_TextContent_To_SpID("#P_w", data.P_w);
+    assign_TextContent_To_SpID("#P_x", data.P_x);
+    assign_TextContent_To_SpID("#P_y", data.P_y);
 
-  $("#AutoMan_SS1").text(data.AutoMan_SS1);
-  $("#AutoMan_SS2").text(data.AutoMan_SS2);
-  $("#AutoMan_SS3").text(data.AutoMan_SS3);
-  $("#AutoMan_SS4").text(data.AutoMan_SS4);
+    update_freqVsP_Location(data.Freq_now, data.P_out_pct);
 
-  $("#BMSPCSstatus_SS1").text(data.BMSPCSstatus_SS1);
-  $("#BMSPCSstatus_SS2").text(data.BMSPCSstatus_SS2);
-  $("#BMSPCSstatus_SS3").text(data.BMSPCSstatus_SS3);
-  $("#BMSPCSstatus_SS4").text(data.BMSPCSstatus_SS4);
+    assign_TextContent_To_SpID("#P_base_SS1", data.P_base_SS1);
+    assign_TextContent_To_SpID("#P_base_SS2", data.P_base_SS2);
+    assign_TextContent_To_SpID("#P_base_SS3", data.P_base_SS3);
+    assign_TextContent_To_SpID("#P_base_SS4", data.P_base_SS4);
+    assign_TextContent_To_SpID("#Q_base_SS1", data.Q_base_SS1);
+    assign_TextContent_To_SpID("#Q_base_SS2", data.Q_base_SS2);
+    assign_TextContent_To_SpID("#Q_base_SS3", data.Q_base_SS3);
+    assign_TextContent_To_SpID("#Q_base_SS4", data.Q_base_SS4);
 
-  $("#Avail_SS1").text(data.Avail_SS1);
-  $("#Avail_SS2").text(data.Avail_SS2);
-  $("#Avail_SS3").text(data.Avail_SS3);
-  $("#Avail_SS4").text(data.Avail_SS4);
-  
-  $("#EdReg_SS1").text(data.EdReg_SS1);
-  $("#EdReg_SS2").text(data.EdReg_SS2);
-  $("#EdReg_SS3").text(data.EdReg_SS3);
-  $("#EdReg_SS4").text(data.EdReg_SS4);
+    assign_TextContent_To_SpID("#AutoMan_SS1", data.AutoMan_SS1);
+    assign_TextContent_To_SpID("#AutoMan_SS2", data.AutoMan_SS2);
+    assign_TextContent_To_SpID("#AutoMan_SS3", data.AutoMan_SS3);
+    assign_TextContent_To_SpID("#AutoMan_SS4", data.AutoMan_SS4);
+    Determine_DL_of_ManAuto("#AutoMan_SS1_Light", data.AutoMan_SS1);
+    Determine_DL_of_ManAuto("#AutoMan_SS2_Light", data.AutoMan_SS2);
+    Determine_DL_of_ManAuto("#AutoMan_SS3_Light", data.AutoMan_SS3);
+    Determine_DL_of_ManAuto("#AutoMan_SS4_Light", data.AutoMan_SS4);
+
+    assign_TextContent_To_SpID("#BMSPCSstatus_SS1", data.BMSPCSstatus_SS1);
+    assign_TextContent_To_SpID("#BMSPCSstatus_SS2", data.BMSPCSstatus_SS2);
+    assign_TextContent_To_SpID("#BMSPCSstatus_SS3", data.BMSPCSstatus_SS3);
+    assign_TextContent_To_SpID("#BMSPCSstatus_SS4", data.BMSPCSstatus_SS4);
+    Determine_DL_of_Avail("#BMSPCSstatus_SS1_Light", data.BMSPCSstatus_SS1);
+    Determine_DL_of_Avail("#BMSPCSstatus_SS2_Light", data.BMSPCSstatus_SS2);
+    Determine_DL_of_Avail("#BMSPCSstatus_SS3_Light", data.BMSPCSstatus_SS3);
+    Determine_DL_of_Avail("#BMSPCSstatus_SS4_Light", data.BMSPCSstatus_SS4);
+
+    assign_TextContent_To_SpID("#Avail_SS1", data.Avail_SS1);
+    assign_TextContent_To_SpID("#Avail_SS2", data.Avail_SS2);
+    assign_TextContent_To_SpID("#Avail_SS3", data.Avail_SS3);
+    assign_TextContent_To_SpID("#Avail_SS4", data.Avail_SS4);
+    Determine_DL_of_Avail("#Avail_SS1_Light", data.Avail_SS1);
+    Determine_DL_of_Avail("#Avail_SS2_Light", data.Avail_SS2);
+    Determine_DL_of_Avail("#Avail_SS3_Light", data.Avail_SS3);
+    Determine_DL_of_Avail("#Avail_SS4_Light", data.Avail_SS4);
+
+    assign_TextContent_To_SpID("#EdReg_SS1", data.EdReg_SS1);
+    assign_TextContent_To_SpID("#EdReg_SS2", data.EdReg_SS2);
+    assign_TextContent_To_SpID("#EdReg_SS3", data.EdReg_SS3);
+    assign_TextContent_To_SpID("#EdReg_SS4", data.EdReg_SS4);
+    Determine_DL_of_LogicStatus("#EdReg_SS1_Light", data.EdReg_SS1);
+    Determine_DL_of_LogicStatus("#EdReg_SS2_Light", data.EdReg_SS2);
+    Determine_DL_of_LogicStatus("#EdReg_SS3_Light", data.EdReg_SS3);
+    Determine_DL_of_LogicStatus("#EdReg_SS4_Light", data.EdReg_SS4);
+}
+
+function update_freqVsP_Location(Val_Freq, Val_Power) {
+    if (Val_Freq !== "#*#" && Val_Power !== "#*#") {
+        cht_freqVsP.data.datasets[0].data[0].x = Number(Val_Freq);
+        cht_freqVsP.data.datasets[0].data[0].y = Number(Val_Power);
+
+        cht_freqVsP.update();
+    }
+}
+
+function Determine_bgColor_of_sysAvail(elementID, dataStatus) {
+    const element = document.querySelector(elementID);
+
+    if (dataStatus === "不可用") {
+        element.style.background = "#FF0000";
+    } else if (dataStatus === "可用") {
+        element.style.background = "#CBE198";
+    } else {
+        element.style.background = "#000000";
+    }
+}
+
+function Determine_bgColor_of_SOC(elementID, SOC) {
+    const element = document.querySelector(elementID);
+
+    if (SOC === "#*#") {
+        return;
+    }
+    console.log(SOC);
+    console.log(typeof SOC);
+    console.log(SOC > 50);
+
+    if (SOC >= 95) {
+        element.style.background = "#FF0000";
+    } else if (SOC >= 90) {
+        element.style.background = "#EF860F";
+    } else if (SOC > 10) {
+        element.style.background = "#CBE198";
+    } else if (SOC > 5) {
+        element.style.background = "#EF860F";
+    } else {
+        element.style.background = "#FF0000";
+    }
+}
+
+
+
+
+
+function Determine_DL_of_ManAuto(elementID, dataStatus) {
+    const element = document.querySelector(elementID);
+
+    if (dataStatus === "手動") {
+        element.style.background = "#FF0000";
+    } else if (dataStatus === "自動") {
+        element.style.background = "#236E37";
+    } else {
+        element.style.background = "#000000";
+    }
+}
+
+function Determine_DL_of_Avail(elementID, dataStatus) {
+    const element = document.querySelector(elementID);
+
+    if (dataStatus === "不可用") {
+        element.style.background = "#FF0000";
+    } else if (dataStatus === "可用") {
+        element.style.background = "#236E37";
+    } else {
+        element.style.background = "#000000";
+    }
+}
+
+function Determine_DL_of_LogicStatus(elementID, dataStatus) {
+    const element = document.querySelector(elementID);
+
+    if (dataStatus === "停止") {
+        element.style.background = "#FF0000";
+    } else if (dataStatus === "運行中") {
+        element.style.background = "#236E37";
+    } else {
+        element.style.background = "#000000";
+    }
 }

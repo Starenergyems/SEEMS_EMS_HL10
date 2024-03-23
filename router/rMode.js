@@ -40,7 +40,9 @@ const {
 // const otherrf01nanoDb = nano.use("other_rf01");
 // const otherrf10nanoDb = nano.use("other_rf10");
 const gc_rf10 = "gc_rf10";
-const GCnanoDb = nano.use(gc_rf10);
+const gc_rf01 = "gc_rf01";
+const GC10nanoDb = nano.use(gc_rf10);
+const GC01nanoDb = nano.use(gc_rf01);
 
 //app.use(myMiddleware);
 
@@ -60,12 +62,50 @@ const GCnanoDb = nano.use(gc_rf10);
 //導向童話面作法同於METER
 
 var sysctrl_variables;
+
+const sysCtrl_1_MT = {
+  0: { 0: "不動作", 1: "切換" },
+  1: { 0: "手動", 1: "自動" },
+  2: { 0: "手動", 1: "自動" },
+  3: { 0: "手動", 1: "自動" },
+  4: { 0: "手動", 1: "自動" },
+  8: { 0: "SOC", 1: "電壓" },
+  9: { 0: "SOC", 1: "電壓" },
+  10: { 0: "SOC", 1: "電壓" },
+  11: { 0: "SOC", 1: "電壓" },
+  15: { 0: "不動作", 1: "切換" },
+};
+
+const ss1_Status_MT = {
+  0: { 0: "不可用", 1: "可用" },
+  1: { 0: "不可用", 1: "可用" },
+  2: { 0: "不可用", 1: "可用" },
+  3: { 0: "不可用", 1: "可用" },
+  4: { 0: "不可用", 1: "可用" },
+  5: { 0: "停止", 1: "運行中" },
+  6: { 0: "停止", 1: "運行中" },
+  13: { 0: "藍", 1: "橘" },
+  14: { 0: "依原定排程", 1: "停止排程" },
+  15: { 0: "不可用", 1: "可用" },
+};
+
+const ss234_Status_MT = {
+  0: { 0: "不可用", 1: "可用" },
+  1: { 0: "不可用", 1: "可用" },
+  2: { 0: "不可用", 1: "可用" },
+  3: { 0: "不可用", 1: "可用" },
+  4: { 0: "不可用", 1: "可用" },
+  5: { 0: "停止", 1: "運行中" },
+  6: { 0: "停止", 1: "運行中" },
+};
+
 async function query_Syscrtl_variables() {
   const indexDef = {
     index: { fields: ["time"] },
     name: "time_index",
   };
-  await GCnanoDb.createIndex(indexDef);
+  await GC10nanoDb.createIndex(indexDef);
+  await GC01nanoDb.createIndex(indexDef);
 
   const mangoQuery = {
     selector: {
@@ -76,102 +116,125 @@ async function query_Syscrtl_variables() {
   };
 
   try {
-    const result = await GCnanoDb.find(mangoQuery);
+    const result10 = await GC10nanoDb.find(mangoQuery);
+    const result01 = await GC01nanoDb.find(mangoQuery);
 
-    const GCData = result.docs[0];
-    const value = GCData.System[400078];
-    //console.log("Value:", value);
+    const GC10Data = result10.docs[0];
+    console.log("Value[400078]:", GC10Data.System[400078]);
+
+    const GC01Data = result01.docs[0];
+    console.log("Value[400107]:", GC01Data.IEC61850[400107]);
+
+    const sysCtrl1_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400076], 16);
+    const ss1_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400078], 16);
+    const ss2_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400079], 16);
+    const ss3_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400080], 16);
+    const ss4_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400081], 16);
 
     sysctrl_variables = {
       permission: "manager",
-      sysAvailability: mapSysAvailability(GCData.System[400078]), //15
-      SOC: scaleProcess(GCData.System[400036], 0.1, 1),
-      SBSPM: scaleProcess(GCData.System[400037], 0.01, 1),
-      sysMode: mapSysMode(
-        GCData.System[400078] //5 15
-      ),
 
-      P_Project: scaleProcess(GCData.System[400001], 0.01, 1),
-      P_LoadShift: scaleProcess(GCData.System[400002], 0.001, 1),
-      statusAllPCS: mapStatusAllPCS(
-        GCData.System[400078], //bit2
-        GCData.System[400079], //bit2
-        GCData.System[400080], //bit2
-        GCData.System[400081] //bit2
-      ),
-      statusAllBMS: mapStatusAllBMS(
-        GCData.System[400078], //BIT0、BIT1
-        GCData.System[400079], //BIT0、BIT1
-        GCData.System[400080], //BIT0、BIT1
-        GCData.System[400081] //BIT0、BIT1
-      ),
+      sysAvailability: mapBitStatus(ss1_Status_rBitS, ss1_Status_MT, 15),
+      SOC: Scale_Data(GC01Data.IEC61850[400129], 0.01 * 1 / (4472 * 7) * 100, 1),
+      SBSPM: Scale_Data(GC01Data.IEC61850[400133], 0.01, 1),
 
-      stopCHGsched: mapStopCHGsched(GCData.System[400078]), //bit 14: Force P_LS to 0 ( 0: No, 1: Yes )
-      Freq_A: scaleProcess(GCData.System[400016], 0.01, 2),
-      Freq_B: scaleProcess(GCData.System[400017], 0.01, 2),
-      Freq_C: scaleProcess(GCData.System[400018], 0.01, 2),
-      Freq_D: scaleProcess(GCData.System[400019], 0.01, 2),
-      Freq_E: scaleProcess(GCData.System[400020], 0.01, 2),
-      Freq_F: scaleProcess(GCData.System[400021], 0.01, 2),
+      sysMode: "這個白癡",
+      P_Project: Scale_Data(GC10Data.System[400001], 10, 0),
+      P_LoadShift: Scale_Data(GC10Data.System[400002], 1, 0),
+      statusAllPCS: "亂搞",
+      statusAllBMS: "不動腦耶",
+      stopCHGsched: "笨蛋",
+      // sysMode: mapSysMode(
+      //   GC10Data.System[400078] //5 15
+      // ),
+      // statusAllPCS: mapStatusAllPCS(
+      //   GC10Data.System[400078], //bit2
+      //   GC10Data.System[400079], //bit2
+      //   GC10Data.System[400080], //bit2
+      //   GC10Data.System[400081] //bit2
+      // ),
+      // statusAllBMS: mapStatusAllBMS(
+      //   GC10Data.System[400078], //BIT0、BIT1
+      //   GC10Data.System[400079], //BIT0、BIT1
+      //   GC10Data.System[400080], //BIT0、BIT1
+      //   GC10Data.System[400081] //BIT0、BIT1
+      // ),
+      // stopCHGsched: "笨蛋",
 
-      P_t: scaleProcess(GCData.System[400022], 0.1, 1),
-      P_u: scaleProcess(GCData.System[400023], 0.1, 1),
-      P_v: scaleProcess(GCData.System[400024], 0.1, 1),
-      P_w: scaleProcess(GCData.System[400025], 0.1, 1),
-      P_x: scaleProcess(GCData.System[400026], 0.1, 1),
-      P_y: scaleProcess(GCData.System[400027], 0.1, 1),
+      Freq_A: Scale_Data(GC10Data.System[400016], 0.01, 2),
+      Freq_B: Scale_Data(GC10Data.System[400017], 0.01, 2),
+      Freq_C: Scale_Data(GC10Data.System[400018], 0.01, 2),
+      Freq_D: Scale_Data(GC10Data.System[400019], 0.01, 2),
+      Freq_E: Scale_Data(GC10Data.System[400020], 0.01, 2),
+      Freq_F: Scale_Data(GC10Data.System[400021], 0.01, 2),
 
-      //實功基準值
-      P_base_SS1: GCData.System[400028],
-      P_base_SS2: GCData.System[400029],
-      P_base_SS3: GCData.System[400030],
-      P_base_SS4: GCData.System[400031],
+      P_t: Scale_Data(GC10Data.System[400022], 0.1, 1),
+      P_u: Scale_Data(GC10Data.System[400023], 0.1, 1),
+      P_v: Scale_Data(GC10Data.System[400024], 0.1, 1),
+      P_w: Scale_Data(GC10Data.System[400025], 0.1, 1),
+      P_x: Scale_Data(GC10Data.System[400026], 0.1, 1),
+      P_y: Scale_Data(GC10Data.System[400027], 0.1, 1),
 
-      //虛功基準值
-      Q_base_SS1: GCData.System[400056],
-      Q_base_SS2: GCData.System[400057],
-      Q_base_SS3: GCData.System[400058],
-      Q_base_SS4: GCData.System[400059],
+      Freq_now: Scale_Data(GC10Data.System[400039], 0.001, 3),
+      P_out_pct: Scale_Data(GC10Data.System[400040], 0.01, 2),
+      Freq_target: Scale_Data(GC10Data.MTE[410010], 0.01, 2),
+
+      P_base_SS1: Scale_Data(GC10Data.System[400028], 1, 0),
+      P_base_SS2: Scale_Data(GC10Data.System[400029], 1, 0),
+      P_base_SS3: Scale_Data(GC10Data.System[400030], 1, 0),
+      P_base_SS4: Scale_Data(GC10Data.System[400031], 1, 0),
+
+      Q_base_SS1: Scale_Data(GC10Data.System[400056], 1, 0),
+      Q_base_SS2: Scale_Data(GC10Data.System[400057], 1, 0),
+      Q_base_SS3: Scale_Data(GC10Data.System[400058], 1, 0),
+      Q_base_SS4: Scale_Data(GC10Data.System[400059], 1, 0),
+
+      AutoMan_SS1: mapBitStatus(sysCtrl1_rBitS, sysCtrl_1_MT, 1),
+      AutoMan_SS2: mapBitStatus(sysCtrl1_rBitS, sysCtrl_1_MT, 2),
+      AutoMan_SS3: mapBitStatus(sysCtrl1_rBitS, sysCtrl_1_MT, 3),
+      AutoMan_SS4: mapBitStatus(sysCtrl1_rBitS, sysCtrl_1_MT, 4),
+
+      BMSPCSstatus_SS1: mapBitStatus(ss1_Status_rBitS, ss1_Status_MT, 3),
+      BMSPCSstatus_SS2: mapBitStatus(ss2_Status_rBitS, ss234_Status_MT, 3),
+      BMSPCSstatus_SS3: mapBitStatus(ss3_Status_rBitS, ss234_Status_MT, 3),
+      BMSPCSstatus_SS4: mapBitStatus(ss4_Status_rBitS, ss234_Status_MT, 3),
+
+      Avail_SS1: mapBitStatus(ss1_Status_rBitS, ss1_Status_MT, 4),
+      Avail_SS2: mapBitStatus(ss2_Status_rBitS, ss234_Status_MT, 4),
+      Avail_SS3: mapBitStatus(ss3_Status_rBitS, ss234_Status_MT, 4),
+      Avail_SS4: mapBitStatus(ss4_Status_rBitS, ss234_Status_MT, 4),
+
+      EdReg_SS1: mapBitStatus(ss1_Status_rBitS, ss1_Status_MT, 5),
+      EdReg_SS2: mapBitStatus(ss2_Status_rBitS, ss234_Status_MT, 5),
+      EdReg_SS3: mapBitStatus(ss3_Status_rBitS, ss234_Status_MT, 5),
+      EdReg_SS4: mapBitStatus(ss4_Status_rBitS, ss234_Status_MT, 5),
 
       //子系統運作模式
-      AutoMan_SS1: mapAutoMan(GCData.System[400076], 1), //bit 1
-      AutoMan_SS1_Light: mapAutoMan(GCData.System[400076], 1),
-      AutoMan_SS2: mapAutoMan(GCData.System[400076], 2),
-      AutoMan_SS2_Light: mapAutoMan(GCData.System[400076], 2),
-      AutoMan_SS3: mapAutoMan(GCData.System[400076], 3), //bit 3
-      AutoMan_SS3_Light: mapAutoMan(GCData.System[400076], 3),
-      AutoMan_SS4: mapAutoMan(GCData.System[400076], 4), //bit 4
-      AutoMan_SS4_Light: mapAutoMan(GCData.System[400076], 4),
+      // AutoMan_SS1: mapAutoMan(GC10Data.System[400076], 1), //bit 1
+      // AutoMan_SS2: mapAutoMan(GC10Data.System[400076], 2),
+      // AutoMan_SS3: mapAutoMan(GC10Data.System[400076], 3), //bit 3
+      // AutoMan_SS4: mapAutoMan(GC10Data.System[400076], 4), //bit 4
 
       //電池與PCS狀態
-      BMSPCSstatus_SS1_Light: mapBMSPCSstatus(GCData.System[400078]), //bit3
-      BMSPCSstatus_SS1: mapBMSPCSstatus(GCData.System[400078]),
-      BMSPCSstatus_SS2_Light: mapBMSPCSstatus(GCData.System[400079]), //bit3
-      BMSPCSstatus_SS2: mapBMSPCSstatus(GCData.System[400079]),
-      BMSPCSstatus_SS3_Light: mapBMSPCSstatus(GCData.System[400080]), //bit3
-      BMSPCSstatus_SS3: mapBMSPCSstatus(GCData.System[400080]), //bit3
-      BMSPCSstatus_SS4_Light: mapBMSPCSstatus(GCData.System[400081]), //bit3
-      BMSPCSstatus_SS4: mapBMSPCSstatus(GCData.System[400081]),
+      // BMSPCSstatus_SS1: "白癡",
+      // // BMSPCSstatus_SS1: mapBMSPCSstatus(GC10Data.System[400078]),
+      // BMSPCSstatus_SS2: mapBMSPCSstatus(GC10Data.System[400079]),
+      // BMSPCSstatus_SS3: mapBMSPCSstatus(GC10Data.System[400080]), //bit3
+      // BMSPCSstatus_SS4: mapBMSPCSstatus(GC10Data.System[400081]),
 
       //子系統可用性
-      Avail_SS1_Light: mapAvail_SS(GCData.System[400078]), //bit4
-      Avail_SS1: mapAvail_SS(GCData.System[400078]),
-      Avail_SS2_Light: mapAvail_SS(GCData.System[400079]), //bit4
-      Avail_SS2: mapAvail_SS(GCData.System[400079]),
-      Avail_SS3_Light: mapAvail_SS(GCData.System[400080]), //bit4
-      Avail_SS3: mapAvail_SS(GCData.System[400080]),
-      Avail_SS4_Light: mapAvail_SS(GCData.System[400081]), //bit4
-      Avail_SS4: mapAvail_SS(GCData.System[400081]),
+      // Avail_SS1: "智障",
+      // // Avail_SS1: mapAvail_SS(GC10Data.System[400078]),
+      // Avail_SS2: mapAvail_SS(GC10Data.System[400079]),
+      // Avail_SS3: mapAvail_SS(GC10Data.System[400080]),
+      // Avail_SS4: mapAvail_SS(GC10Data.System[400081]),
 
       //E-dReg服務狀態
-      EdReg_SS1_Light: mapEdReg_SS(GCData.System[400078]), //bit5
-      EdReg_SS1: mapEdReg_SS(GCData.System[400078]), //bit5
-      EdReg_SS2_Light: mapEdReg_SS(GCData.System[400079]), //bit5
-      EdReg_SS2: mapEdReg_SS(GCData.System[400079]), //bit5
-      EdReg_SS3_Light: mapEdReg_SS(GCData.System[400080]), //bit5
-      EdReg_SS3: mapEdReg_SS(GCData.System[400080]), //bit5
-      EdReg_SS4_Light: mapEdReg_SS(GCData.System[400081]), //bit5
-      EdReg_SS4: mapEdReg_SS(GCData.System[400081]), //bit5
+      // EdReg_SS1: "低能",
+      // // EdReg_SS1: mapEdReg_SS(GC10Data.System[400078]), //bit5
+      // EdReg_SS2: mapEdReg_SS(GC10Data.System[400079]), //bit5
+      // EdReg_SS3: mapEdReg_SS(GC10Data.System[400080]), //bit5
+      // EdReg_SS4: mapEdReg_SS(GC10Data.System[400081]), //bit5
     };
   } catch (error) {
     console.error("Error:", error);
@@ -234,12 +297,26 @@ const date_MT = {
   1: { dicName: "Tomorrow", subTitle: "明日排程(", buttonContext: "今日排程" },
 };
 
+const sysCtrl_2_MT = {
+  0: { 0: "頻率表", 1: "測試用頻率" },
+  1: { 0: "否", 1: "是" },
+  2: { 0: "否", 1: "是" },
+  3: { 0: "否", 1: "是" },
+  4: { 0: "否", 1: "是" },
+  5: { 0: "否", 1: "是" },
+  6: { 0: "否", 1: "是" },
+  7: { 0: "否", 1: "是" },
+  8: { 0: "禁用", 1: "啟用" },
+  9: { 0: "禁用", 1: "啟用" },
+  10: { 0: "禁用", 1: "啟用" },
+};
+
 async function query_Schd_KeyValuePairs() {
   const indexDef = {
     index: { fields: ["time"] },
     name: "time_index",
   };
-  await GCnanoDb.createIndex(indexDef);
+  await GC10nanoDb.createIndex(indexDef);
 
   const mangoQuery = {
     selector: {
@@ -250,7 +327,7 @@ async function query_Schd_KeyValuePairs() {
   };
 
   try {
-    const result = await GCnanoDb.find(mangoQuery);
+    const result = await GC10nanoDb.find(mangoQuery);
 
     const GCData = result.docs[0];
 
@@ -269,31 +346,19 @@ async function query_Schd_KeyValuePairs() {
     let dd = String(rawDateTime_schd.getDate()).padStart(2, '0');
     // let ss = String(rawDateTime_schd.getSeconds()).padStart(2, '0');
 
-    const sysCtrl_2_MT = {
-      0: { 0: "頻率表", 1: "測試用頻率" },
-      1: { 0: "否", 1: "是" },
-      2: { 0: "否", 1: "是" },
-      3: { 0: "否", 1: "是" },
-      4: { 0: "否", 1: "是" },
-      5: { 0: "否", 1: "是" },
-      6: { 0: "否", 1: "是" },
-      7: { 0: "否", 1: "是" },
-      8: { 0: "禁用", 1: "啟用" },
-      9: { 0: "禁用", 1: "啟用" },
-      10: { 0: "禁用", 1: "啟用" },
-    };
+    const sysCtrl2_rBitS = Convert_UInt_to_revBitString(GCData.System[400077], 16);
 
     Schd_KeyValuePairs = {
       permission: "manager",
 
-      use_P_schd: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 2),
-      use_P_LS: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 3),
-      use_SOC_ref: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 4),
-      autoCal_SOC_ideal: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 5),
-      use_MTE_P_96Q: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 6),
-      use_MTE_API: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 7),
-      use_Freq_Cmd: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 1),
-      freqSource: mapBitStatus(Convert_UInt_to_revBitString(GCData.System[400077], 16), sysCtrl_2_MT, 0),
+      use_P_schd: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 2),
+      use_P_LS: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 3),
+      use_SOC_ref: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 4),
+      autoCal_SOC_ideal: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 5),
+      use_MTE_P_96Q: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 6),
+      use_MTE_API: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 7),
+      use_Freq_Cmd: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 1),
+      freqSource: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 0),
       Freq_test: Scale_Data(GCData.MTE[410001], 0.01, 2),
 
       exeCmd: Determine_status_of_exeCmd(unixTime_now, GCData.API[400989], GCData.API[400991]),

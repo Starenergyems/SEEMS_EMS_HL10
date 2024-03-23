@@ -26,21 +26,21 @@
                 </div>
 
                 <div class="bigInfo">
-                    <div class="BG_bigInfo">
+                    <div class="BG_bigInfo" id="BG_sysAvailability">
                         <div class="subBG_bigInfo"></div>
                         <label class="data_val" id="sysAvailability"><%=sysAvailability%></label>
                     </div>
                     <P>系統可用性</P>
                 </div>
                 <div class="bigInfo">
-                    <div class="BG_bigInfo">
+                    <div class="BG_bigInfo" id="BG_SOC">
                         <div class="subBG_bigInfo">%</div>
                         <label class="data_val" id="SOC"><%=SOC%></label>
                     </div>
                     <P>SOC</P>
                 </div>
                 <div class="bigInfo">
-                    <div class="BG_bigInfo">
+                    <div class="BG_bigInfo" id="BG_SBSPM">
                         <div class="subBG_bigInfo">%</div>
                         <label class="data_val" id="SBSPM"><%=SBSPM%></label>
                     </div>
@@ -96,7 +96,7 @@
                     <tr>
                         <td class="col_01"><span>充電排程</span></td>
                         <td class="col_02"><label class="data_status" id="stopCHGsched"><%=stopCHGsched%></label>
-                            <div class="BG_button"></div><button  class="data_Light" id="stopCHGsched_Light"></button>
+                            <div class="BG_button"></div><label class="dataLight RG_L" id="stopCHGsched_Light"></label>
                         </td>
                     </tr>
                 </table>
@@ -212,28 +212,28 @@
                     <tr class="row_other row_relative">
                         <td class="col_01">子系統運作模式</td>
                         <td class="col_other">
-                            <label class="data_light" id="AutoMan_SS1_Light"></label>
+                            <label class="dataLight RG_L" id="AutoMan_SS1_Light"></label>
                             <label class="data_status" id="AutoMan_SS1"><%=AutoMan_SS1%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS1_set">Set</button>
                             <% } %>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="AutoMan_SS2_Light"></label>
+                            <label class="dataLight RG_L" id="AutoMan_SS2_Light"></label>
                             <label class="data_status" id="AutoMan_SS2"><%=AutoMan_SS2%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS2_set">Set</button>
                             <% } %>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="AutoMan_SS3_Light"></label>
+                            <label class="dataLight RG_L" id="AutoMan_SS3_Light"></label>
                             <label class="data_status" id="AutoMan_SS3"><%=AutoMan_SS3%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS3_set">Set</button>
                             <% } %>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="AutoMan_SS4_Light"></label>
+                            <label class="dataLight RG_L" id="AutoMan_SS4_Light"></label>
                             <label class="data_status" id="AutoMan_SS4"><%=AutoMan_SS4%></label>
                             <% if (permission === 'manager') { %>
                                 <button id="AutoMan_SS4_set">Set</button>
@@ -243,57 +243,57 @@
                     <tr class="row_other">
                         <td class="col_01">電池與PCS狀態</td>
                         <td class="col_other">
-                            <label class="data_light" id="BMSPCSstatus_SS1_Light"></label>
+                            <label class="dataLight RG_L" id="BMSPCSstatus_SS1_Light"></label>
                             <label class="data_status" id="BMSPCSstatus_SS1"><%=BMSPCSstatus_SS1%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="BMSPCSstatus_SS2_Light"></label>
+                            <label class="dataLight RG_L" id="BMSPCSstatus_SS2_Light"></label>
                             <label class="data_status" id="BMSPCSstatus_SS2"><%=BMSPCSstatus_SS2%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="BMSPCSstatus_SS3_Light"></label>
+                            <label class="dataLight RG_L" id="BMSPCSstatus_SS3_Light"></label>
                             <label class="data_status" id="BMSPCSstatus_SS3"><%=BMSPCSstatus_SS3%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="BMSPCSstatus_SS4_Light"></label>
+                            <label class="dataLight RG_L" id="BMSPCSstatus_SS4_Light"></label>
                             <label class="data_status" id="BMSPCSstatus_SS4"><%=BMSPCSstatus_SS4%></label>
                         </td>
                     </tr>
                     <tr class="row_other">
                         <td class="col_01">子系統可用性</td>
                         <td class="col_other">
-                            <label class="data_light" id="Avail_SS1_Light"></label>
+                            <label class="dataLight RG_L" id="Avail_SS1_Light"></label>
                             <label class="data_status" id="Avail_SS1"><%=Avail_SS1%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="Avail_SS2_Light"></label>
+                            <label class="dataLight RG_L" id="Avail_SS2_Light"></label>
                             <label class="data_status" id="Avail_SS2"><%=Avail_SS2%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="Avail_SS3_Light"></label>
+                            <label class="dataLight RG_L" id="Avail_SS3_Light"></label>
                             <label class="data_status" id="Avail_SS3"><%=Avail_SS3%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="Avail_SS4_Light"></label>
+                            <label class="dataLight RG_L" id="Avail_SS4_Light"></label>
                             <label class="data_status" id="Avail_SS4"><%=Avail_SS4%></label>
                         </td>
                     </tr>
                     <tr class="row_other row_last">
                         <td class="col_01">E-dReg服務狀態</td>
                         <td class="col_other">
-                            <label class="data_light" id="EdReg_SS1_Light"></label>
+                            <label class="dataLight RG_L" id="EdReg_SS1_Light"></label>
                             <label class="data_status" id="EdReg_SS1"><%=EdReg_SS1%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="EdReg_SS2_Light"></label>
+                            <label class="dataLight RG_L" id="EdReg_SS2_Light"></label>
                             <label class="data_status" id="EdReg_SS2"><%=EdReg_SS2%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="EdReg_SS3_Light"></label>
+                            <label class="dataLight RG_L" id="EdReg_SS3_Light"></label>
                             <label class="data_status" id="EdReg_SS3"><%=EdReg_SS3%></label>
                         </td>
                         <td class="col_other">
-                            <label class="data_light" id="EdReg_SS4_Light"></label>
+                            <label class="dataLight RG_L" id="EdReg_SS4_Light"></label>
                             <label class="data_status" id="EdReg_SS4"><%=EdReg_SS4%></label>
                         </td>
                     </tr>
@@ -461,7 +461,7 @@
                 </div>
 
                 <label class="data_status" id="spare_Status">哈哈</label>
-                <label class="data_light" id="spare_Light"></label><br>
+                <label class="dataLight RG_L" id="spare_Light"></label><br>
                 <label class="data_val" id="spareVal_01">90.1</label>
                 <label class="data_val" id="spareVal_02">1234.5</label><br>
                 <label class="data_val" id="spareVal_03">76.5</label>
