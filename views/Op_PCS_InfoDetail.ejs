@@ -66,14 +66,14 @@
                     <p>工作狀態</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workStatus"></label>
+                        <label class="data_val" id="workStatus"><%=workStatus%></label>
                     </div>
                 </div>
                 <div class="bigInfo bI_workMode">
                     <p>工作模式</p>
                     <div class="BG_bigInfo">
                         <div class="subBG_bigInfo"></div>
-                        <label class="data_val" id="workMode"></label>
+                        <label class="data_val" id="workMode"><%=workMode%></label>
                     </div>
                 </div>
                 <div class="bigInfo bI_chargeStatus">
@@ -99,7 +99,7 @@
                 </div>
             </div>
 
-            <div class="infoBlock outputLimit">
+            <!-- <div class="infoBlock outputLimit">
                 <h3>輸出限制</h3>
                 <div class="DV_Line">最大充電功率<label class="dataValue" id="max_P_chg">刪除</label>
                     <p class="dataUnit">kW</p>
@@ -113,7 +113,7 @@
                 <div class="DV_Line lastLine">最大容性無功<label class="dataValue" id="max_Q_c">刪除</label>
                     <p class="dataUnit">kVar</p>
                 </div>
-            </div>
+            </div> -->
 
             <div class="heartBeat_leakageCurrent">
                 <div class="infoBlock heartBeat">
@@ -133,7 +133,6 @@
             <div class="infoBlock ACside">
                 <h3>交流側</h3>
                 <div class="columnDVL">
-                    <div class="DS_Line">電網狀態<label class="dataStatus" id="gridStatus" style="right:0"></label></div>
                     <div class="DV_Line">實功<label class="dataValue" id="activePower"><%=activePower%></label>
                         <p class="dataUnit">kW</p>
                     </div>

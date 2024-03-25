@@ -475,6 +475,33 @@ async function updateData() { //更新資料ajax
     $('#ctrl_hvac_2_humid').text(data.ctrl_hvac_2_humid);
     $('#ctrl_hvac_2_error').text(data.ctrl_hvac_2_error);
 
+    /*BSC告警******************************************************* */
+    light_color(data.bscAlarm_1_1_rawD, "#bscAlarm_1-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_1_2_rawD, "#bscAlarm_1-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_2_1_rawD, "#bscAlarm_2-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_2_2_rawD, "#bscAlarm_2-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_3_1_rawD, "#bscAlarm_3-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_3_2_rawD, "#bscAlarm_3-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscAlarm_4_1_rawD, "#bscAlarm_4-1", 0, "setToOpen", 1, "setToClose");
+
+    /*BSC故障******************************************************* */
+    light_color(data.bscFault_1_1_rawD, "#bscFault_1-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_1_2_rawD, "#bscFault_1-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_2_1_rawD, "#bscFault_2-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_2_2_rawD, "#bscFault_2-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_3_1_rawD, "#bscFault_3-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_3_2_rawD, "#bscFault_3-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.bscFault_4_1_rawD, "#bscFault_4-1", 0, "setToOpen", 1, "setToClose");
+
+    /*消防狀態******************************************************* */
+    light_color(data.ffsStatus_1_1_rawD, "#ffsStatus_1-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_1_2_rawD, "#ffsStatus_1-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_2_1_rawD, "#ffsStatus_2-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_2_2_rawD, "#ffsStatus_2-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_3_1_rawD, "#ffsStatus_3-1", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_3_2_rawD, "#ffsStatus_3-2", 0, "setToOpen", 1, "setToClose");
+    light_color(data.ffsStatus_4_1_rawD, "#ffsStatus_4-1", 0, "setToOpen", 1, "setToClose");
+
     /*UPS_MVCB****************************************************************** */
     $('#ups_MVCB_volt').text(data.ups_MVCB_volt);
     $('#ups_MVCB_temp').text(data.ups_MVCB_temp);
@@ -493,186 +520,41 @@ async function updateData() { //更新資料ajax
     $('#ups_EMS_mode').text(data.ups_EMS_mode);
     $('#ups_EMS_error').text(data.ups_EMS_error);
 
-    if (data.ups_EMS_408161_bit9 > 0) {
-      classAdd("#ups_EMS_408161_bit9", "setToClose");
-      classRemove("#ups_EMS_408161_bit9", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408161_bit9", "setToGreen");
-      classRemove("#ups_EMS_408161_bit9", "setToClose");
-    }
-
-    if (data.ups_EMS_408161_bit11 > 0) {
-      classAdd("#ups_EMS_408161_bit11", "setToClose");
-      classRemove("#ups_EMS_408161_bit11", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408161_bit11", "setToGreen");
-      classRemove("#ups_EMS_408161_bit11", "setToClose");
-    }
-
-    if (data.ups_EMS_408161_bit12 > 0) {
-      classAdd("#ups_EMS_408161_bit12", "setToClose");
-      classRemove("#ups_EMS_408161_bit12", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408161_bit12", "setToGreen");
-      classRemove("#ups_EMS_408161_bit12", "setToClose");
-    }
-
-    if (data.ups_EMS_408162_bit6 > 0) {
-      classAdd("#ups_EMS_408162_bit6", "setToClose");
-      classRemove("#ups_EMS_408162_bit6", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit6", "setToGreen");
-      classRemove("#ups_EMS_408162_bit6", "setToClose");
-    }
-    
-    if (data.ups_EMS_408162_bit8 > 0) {
-      classAdd("#ups_EMS_408162_bit8", "setToClose");
-      classRemove("#ups_EMS_408162_bit8", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit8", "setToGreen");
-      classRemove("#ups_EMS_408162_bit8", "setToClose");
-    }
-
-    if (data.ups_EMS_408162_bit10 > 0) {
-      classAdd("#ups_EMS_408162_bit10", "setToClose");
-      classRemove("#ups_EMS_408162_bit10", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit10", "setToGreen");
-      classRemove("#ups_EMS_408162_bit10", "setToClose");
-    }
-
-    if (data.ups_EMS_408162_bit11 > 0) {
-      classAdd("#ups_EMS_408162_bit11", "setToClose");
-      classRemove("#ups_EMS_408162_bit11", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit11", "setToGreen");
-      classRemove("#ups_EMS_408162_bit11", "setToClose");
-    }
-
-    if (data.ups_EMS_408162_bit12 > 0) {
-      classAdd("#ups_EMS_408162_bit12", "setToClose");
-      classRemove("#ups_EMS_408162_bit12", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit12", "setToGreen");
-      classRemove("#ups_EMS_408162_bit12", "setToClose");
-    }
-
-    if (data.ups_EMS_408162_bit13 > 0) {
-      classAdd("#ups_EMS_408162_bit13", "setToClose");
-      classRemove("#ups_EMS_408162_bit13", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit13", "setToGreen");
-      classRemove("#ups_EMS_408162_bit13", "setToClose");
-    }
-
-    if (data.ups_EMS_408162_bit14 > 0) {
-      classAdd("#ups_EMS_408162_bit14", "setToClose");
-      classRemove("#ups_EMS_408162_bit14", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit14", "setToGreen");
-      classRemove("#ups_EMS_408162_bit14", "setToClose");
-    }
-
-    if (data.ups_EMS_408162_bit15 > 0) {
-      classAdd("#ups_EMS_408162_bit15", "setToClose");
-      classRemove("#ups_EMS_408162_bit15", "setToGreen");
-    } else {
-      classAdd("#ups_EMS_408162_bit15", "setToGreen");
-      classRemove("#ups_EMS_408162_bit15", "setToClose");
-    }
+    light_color(data.ups_EMS_408161_bit9, "#ups_EMS_408161_bit9", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408161_bit11, "#ups_EMS_408161_bit11", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408161_bit12, "#ups_EMS_408161_bit12", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408162_bit6, "#ups_EMS_408162_bit6", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408162_bit8, "#ups_EMS_408162_bit8", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408162_bit10, "#ups_EMS_408162_bit10", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408162_bit11, "#ups_EMS_408162_bit11", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408162_bit12, "#ups_EMS_408162_bit12", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408162_bit13, "#ups_EMS_408162_bit13", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_EMS_408162_bit14, "#ups_EMS_408162_bit14", "0", "setToOpen", "1", "setToClose");    
+    light_color(data.ups_EMS_408162_bit15, "#ups_EMS_408162_bit15", "0", "setToOpen", "1", "setToClose");   
+        
   /*UPS_CMS********************************************************* */
-  $('#ups_CMS_SOC').text(data.ups_CMS_SOC);
-  $('#ups_CMS_timeLeft').text(data.ups_CMS_timeLeft);
-  $('#ups_CMS_mode').text(data.ups_CMS_mode);
-  $('#ups_CMS_error').text(data.ups_CMS_error);
+    $('#ups_CMS_SOC').text(data.ups_CMS_SOC);
+    $('#ups_CMS_timeLeft').text(data.ups_CMS_timeLeft);
+    $('#ups_CMS_mode').text(data.ups_CMS_mode);
+    $('#ups_CMS_error').text(data.ups_CMS_error);
 
-  if (data.ups_CMS_408161_bit9 > 0) {
-    classAdd("#ups_CMS_408161_bit9", "setToClose");
-    classRemove("#ups_CMS_408161_bit9", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408161_bit9", "setToGreen");
-    classRemove("#ups_CMS_408161_bit9", "setToClose");
-  }
+    light_color(data.ups_CMS_408161_bit9, "#ups_CMS_408161_bit9", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408161_bit11, "#ups_CMS_408161_bit11", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408161_bit12, "#ups_CMS_408161_bit12", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408162_bit6, "#ups_CMS_408162_bit6", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408162_bit8, "#ups_CMS_408162_bit8", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408162_bit10, "#ups_CMS_408162_bit10", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408162_bit11, "#ups_CMS_408162_bit11", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408162_bit12, "#ups_CMS_408162_bit12", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408162_bit13, "#ups_CMS_408162_bit13", "0", "setToOpen", "1", "setToClose");
+    light_color(data.ups_CMS_408162_bit14, "#ups_CMS_408162_bit14", "0", "setToOpen", "1", "setToClose");    
+    light_color(data.ups_CMS_408162_bit15, "#ups_CMS_408162_bit15", "0", "setToOpen", "1", "setToClose");   
+    }
 
-  if (data.ups_CMS_408161_bit11 > 0) {
-    classAdd("#ups_CMS_408161_bit11", "setToClose");
-    classRemove("#ups_CMS_408161_bit11", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408161_bit11", "setToGreen");
-    classRemove("#ups_CMS_408161_bit11", "setToClose");
-  }
 
-  if (data.ups_CMS_408161_bit12 > 0) {
-    classAdd("#ups_CMS_408161_bit12", "setToClose");
-    classRemove("#ups_CMS_408161_bit12", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408161_bit12", "setToGreen");
-    classRemove("#ups_CMS_408161_bit12", "setToClose");
-  }
 
-  if (data.ups_CMS_408162_bit6 > 0) {
-    classAdd("#ups_CMS_408162_bit6", "setToClose");
-    classRemove("#ups_CMS_408162_bit6", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit6", "setToGreen");
-    classRemove("#ups_CMS_408162_bit6", "setToClose");
-  }
-  
-  if (data.ups_CMS_408162_bit8 > 0) {
-    classAdd("#ups_CMS_408162_bit8", "setToClose");
-    classRemove("#ups_CMS_408162_bit8", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit8", "setToGreen");
-    classRemove("#ups_CMS_408162_bit8", "setToClose");
-  }
 
-  if (data.ups_CMS_408162_bit10 > 0) {
-    classAdd("#ups_CMS_408162_bit10", "setToClose");
-    classRemove("#ups_CMS_408162_bit10", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit10", "setToGreen");
-    classRemove("#ups_CMS_408162_bit10", "setToClose");
-  }
 
-  if (data.ups_CMS_408162_bit11 > 0) {
-    classAdd("#ups_CMS_408162_bit11", "setToClose");
-    classRemove("#ups_CMS_408162_bit11", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit11", "setToGreen");
-    classRemove("#ups_CMS_408162_bit11", "setToClose");
-  }
-
-  if (data.ups_CMS_408162_bit12 > 0) {
-    classAdd("#ups_CMS_408162_bit12", "setToClose");
-    classRemove("#ups_CMS_408162_bit12", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit12", "setToGreen");
-    classRemove("#ups_CMS_408162_bit12", "setToClose");
-  }
-
-  if (data.ups_CMS_408162_bit13 > 0) {
-    classAdd("#ups_CMS_408162_bit13", "setToClose");
-    classRemove("#ups_CMS_408162_bit13", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit13", "setToGreen");
-    classRemove("#ups_CMS_408162_bit13", "setToClose");
-  }
-
-  if (data.ups_CMS_408162_bit14 > 0) {
-    classAdd("#ups_CMS_408162_bit14", "setToClose");
-    classRemove("#ups_CMS_408162_bit14", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit14", "setToGreen");
-    classRemove("#ups_CMS_408162_bit14", "setToClose");
-  }
-
-  if (data.ups_CMS_408162_bit15 > 0) {
-    classAdd("#ups_CMS_408162_bit15", "setToClose");
-    classRemove("#ups_CMS_408162_bit15", "setToGreen");
-  } else {
-    classAdd("#ups_CMS_408162_bit15", "setToGreen");
-    classRemove("#ups_CMS_408162_bit15", "setToClose");
-  }
   /*空調#3************************************************* */
 //   $('#acu_3_Status_1-1').text(data.acu_3_Status_1_1);
 //   $('#acu_3_Temp_1-1').text(data.acu_3_Temp_1_1);
@@ -1030,4 +912,4 @@ async function updateData() { //更新資料ajax
 //   } else {
 //     classRemove("#ffsStatus_4-1", "setToClose");
 //   }
- }
+ //}

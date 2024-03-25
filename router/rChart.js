@@ -25,6 +25,8 @@ const nano = require("nano")(
 
 const gc_rf01 = "gc_rf01";
 const gc01Db = nano.use(gc_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
+const gc_rf10 = "gc_rf10";
+const gc10Db = nano.use(gc_rf10); // 請注意這裡使用 nano.use() 來設定數據庫
 
 //set
 app.set("view engine", "ejs");
@@ -46,114 +48,164 @@ router.get("/chart/realtime", (req, res) => {
   res.render("Cht_RealTime");
 });
 
-router.post("/chart/realtime/edit", async (req, res) => {
-  const Freq_array = [];
-  const ActivePower_array = [];
-  const Execute_array = [];
-  const SOC_array = [];
-  const All_data = [];
+let flag = 0; // 初始設定 flag 為 0
 
-  const last_second = moment() //改時間 原本是1
-    .subtract(2, "seconds")
-    .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+let lasttime_record; // 宣告一個變數用來儲存時間
 
-  const this_second = moment() //改時間 原本是1
-    .subtract(1, "seconds")
-    .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
-
-  console.log("last_second " + last_second);
-  console.log("this_second " + this_second);
-  const filter_now = {
-    selector: {
-      time: {
-        $gte: last_second, // 時間大於或等於 last_year_start
-        $lte: this_second // 時間小於或等於 last_year_end
-      }
-    },
-    limit: 10,
+router.get("/chart/realtime/edit", async (req, res) => {
+  const Data = {
+    freq: [],
+    ActivePower: [],
+    ExecuteRate: [],
+    SOC: []
   };
 
-  const Data = await gc01Db.find(filter_now);
+  try {
+    let last_second;
+    let this_second;
 
-  Freq_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
-  ActivePower_array.push(
-    ...Data.docs.map((doc) => doc.IEC61850.rf01["400123"])
-  );
+    if (!lasttime_record) {
+      // 如果還沒有記錄過時間，則設定第一次進入路由的時間範圍
+      this_second = moment().toISOString(); // 當前時間
+      last_second = moment(this_second).subtract(1, "seconds").toISOString(); // 前一秒的時間
+      lasttime_record = last_second; // 記錄前一秒的時間
+    } else {
+      // 已經有記錄過時間，則使用上次記錄的時間範圍
+      last_second = lasttime_record;
+      this_second = moment().toISOString(); // 當前時間
+      lasttime_record = this_second; // 更新時間範圍為這次進入的時間
+    }
 
-  SOC_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
+    const filter_now = {
+      selector: {
+        time: {
+          $gte: last_second,
+          $lte: this_second
+        }
+      }
+    };
 
-  Execute_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+    console.log("lasttime_record " + lasttime_record);
+    console.log("this_second " + this_second);
 
-  //存到同一個陣列
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400123"]));
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+    const doc = await gc01Db.find(filter_now);
+    //console.log("gc01Db.find() result:", doc);
 
-  console.log("A " + Freq_array);
-  console.log("B " + ActivePower_array);
-  console.log("C " + SOC_array);
-  console.log("D " + Execute_array);
-  console.log("E " + All_data);
-  res.send(All_data);
+    if (!doc || !doc.docs || doc.docs.length === 0) {
+      console.error("Error: No document found.");
+      return res.status(404).send("Not Found");
+    }
+
+    doc.docs.forEach((doc) => {
+      const timestamp = doc.time;
+      Data.freq.push({ x: timestamp, y: doc.IEC61850["400121"] });
+      Data.ActivePower.push({ x: timestamp, y: doc.IEC61850["400123"] });
+      Data.ExecuteRate.push({ x: timestamp, y: doc.IEC61850["400133"] });
+      Data.SOC.push({ x: timestamp, y: doc.IEC61850["400129"] });
+    });
+
+    //console.log("Data " + JSON.stringify(Data));
+    res.send(Data);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/chart/history", (req, res) => {
   res.render("Cht_History");
 });
 
-router.get("/chart/history/edit", async (req, res) => {
-  //async function test(){
-  const startTime = moment(); //需要改成獲取前端的資料
-  const lengthOfTime = 3600; //需要改成獲取前端的資料且處理 轉為秒 或是進來的就必須是秒
-  const timeInterval = 1; //目前預設是一秒
-  const Freq_array = [];
-  const ActivePower_array = [];
-  const Execute_array = [];
-  const SOC_array = [];
-  const All_data = [];
-
-  const Start_Time = startTime.format("YYYY-MM-DDTHH:mm:ss.000[Z]");
-
-  const End_Time = moment()
-    .subtract(lengthOfTime, "seconds")
-    .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
-
-  console.log("Start_Time " + Start_Time);
-  console.log("End_Time " + End_Time);
-  const filter_now = {
-    selector: {
-      time: {
-        $gte: End_Time, // 時間大於或等於 last_year_start
-        $lte: Start_Time // 時間小於或等於 last_year_end
-      }
-    }
-    //limit: 10,
+router.post("/chart/history/edit", async (req, res) => {
+  const Data = {
+    freq: [],
+    ActivePower: [],
+    ExecuteRate: [],
+    SOC: []
   };
 
-  const Data = await gc01Db.find(filter_now);
+  try {
+    const { startTime, lengthOfTime, timeUnit } = req.body;
 
-  Freq_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
-  ActivePower_array.push(
-    ...Data.docs.map((doc) => doc.IEC61850.rf01["400123"])
-  );
+    if (timeUnit === "sec") {
+      // 確認時間單位為秒時，限制 lengthOfTime 最大值為 3600
+      const maxTimeInSeconds = 3600;
+      const maxTimeInMilliseconds = maxTimeInSeconds * 1000; // 將秒轉換為毫秒
+      const adjustedLengthOfTime =
+        timeUnit === "sec"
+          ? Math.min(lengthOfTime, maxTimeInSeconds)
+          : lengthOfTime;
 
-  SOC_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
+      // 計算結束時間
+      const endTime = moment(startTime).add(adjustedLengthOfTime, timeUnit);
 
-  Execute_array.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+      const filter = {
+        selector: {
+          time: {
+            $gte: startTime,
+            $lte: endTime.format("YYYY-MM-DD HH:mm:ss") // 格式化結束時間
+          }
+        }
+      };
 
-  //存到同一個陣列
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400121"]));
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400123"]));
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400129"]));
-  All_data.push(...Data.docs.map((doc) => doc.IEC61850.rf01["400133"]));
+      const doc = await gc10Db.find(filter);
 
-  console.log("A " + Freq_array);
-  console.log("B " + ActivePower_array);
-  console.log("C " + SOC_array);
-  console.log("D " + Execute_array);
-  console.log("E " + All_data);
-  //}
+      if (!doc || !doc.docs || doc.docs.length === 0) {
+        console.error("Error: No document found.");
+        return res.status(404).send("Not Found");
+      }
+
+      doc.docs.forEach((doc) => {
+        const timestamp = doc.time;
+        Data.freq.push({ x: timestamp, y: doc.IEC61850["400121"] });
+        Data.ActivePower.push({ x: timestamp, y: doc.IEC61850["400123"] });
+        Data.ExecuteRate.push({ x: timestamp, y: doc.IEC61850["400133"] });
+        Data.SOC.push({ x: timestamp, y: doc.IEC61850["400129"] });
+      });
+    } else {
+      let endTime;
+      if (timeUnit === "minutes") {
+        endTime = moment(startTime).add(lengthOfTime, "minutes");
+      } else if (timeUnit === "hours") {
+        endTime = moment(startTime).add(lengthOfTime, "hours");
+      } else if (timeUnit === "days") {
+        endTime = moment(startTime).add(lengthOfTime, "days");
+      } else {
+        // 如果時間單位不是秒、分、時、日，可能需要額外的處理
+        console.error("Unsupported time unit:", timeUnit);
+        return res.status(400).send("Bad Request: Unsupported time unit");
+      }
+
+      // 接下來的程式碼保持不變，使用 endTime 來篩選資料
+      const filter = {
+        selector: {
+          time: {
+            $gte: startTime,
+            $lte: endTime.format("YYYY-MM-DD HH:mm:ss") // 格式化結束時間
+          }
+        }
+      };
+      const doc = await gc01Db.find(filter);
+
+      if (!doc || !doc.docs || doc.docs.length === 0) {
+        console.error("Error: No document found.");
+        return res.status(404).send("Not Found");
+      }
+
+      doc.docs.forEach((doc) => {
+        const timestamp = doc.time;
+        Data.freq.push({ x: timestamp, y: doc.IEC61850["400121"] });
+        Data.ActivePower.push({ x: timestamp, y: doc.IEC61850["400123"] });
+        Data.ExecuteRate.push({ x: timestamp, y: doc.IEC61850["400133"] });
+        Data.SOC.push({ x: timestamp, y: doc.IEC61850["400129"] });
+      });
+    }
+
+    res.send(Data);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 module.exports = router;

@@ -1,5 +1,5 @@
 //var permission="viewer"; //需讀權限
-var permission = "manager";
+var permission = "admin";
 $(document).ready(function () {
 
   console.log("start reading js");

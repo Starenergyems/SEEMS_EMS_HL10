@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
-const { submit, authentication, ggg } = require("./rLogin");
+const { getconfig, submit, authentication, ggg } = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
@@ -70,9 +70,15 @@ alarmnanoDb.createIndex(indexDef);
 
 //////////////////////////////////////////////////////////////////////////////
 // Login page. URL = "/login", LOGIN_URL can redirect.
-app.get("/login", (req, res) => {
+app.get("/login", async(req, res) => {
   res.clearCookie("token");
-  res.render("Login");
+  const response = await getconfig()
+  const logintext = response["logintext"];
+  console.log(logintext)
+  const context = {
+    logintext: `${logintext}`,
+  }
+  res.render("Login", {context: context});
 });
 
 app.get(["/", "/signin"], (req, res) => {
@@ -95,9 +101,10 @@ app.post("/login", async (req, res) => {
       //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
-      res.json({ redirect: "http://localhost:3000/mode" });
+      res.json({ redirect: `http://localhost:${port}/mode` });
     } else {
-      res.status(401).send(response["text"]);
+      res.json({ text: response["text"]})
+      // res.status(401).send(response["text"]);
     }
   } catch (error) {
     console.error("Error:", error);
@@ -192,9 +199,9 @@ async function getData() {
     ChgEtoday0 = impValue; //408028 充電
     DcgEtoday0 = expValue; //408030 放電
 
-    console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
+    //console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
   }
-  console.log("呼叫getdata");
+  //console.log("呼叫getdata");
   flag = 1;
 }
 

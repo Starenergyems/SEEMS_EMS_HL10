@@ -32,39 +32,40 @@ var lang = {
 };
 
 async function updateTable() {
-  /* var dataset = [{
-        "index": "1",
-        "Time": "2023/09/01 15:23:10.123",
-        "place": "控制室",
-        "deviceName": "控制室 門1",
-        "description": "開啟",
-        "cardNumber": "123456789",
-        "acked": ""
-    }, {
-        "index": "2",
-        "Time": "2023/09/01 15:23:10.123",
-        "place": "貨櫃",
-        "deviceName": "貨櫃3-1",
-        "description": "錯誤",
-        "cardNumber": "987654321",
-        "acked": ""
-    }, {
-        "index": "3",
-        "Time": "2023/09/01 15:23:10.123",
-        "place": "貨櫃",
-        "deviceName": "貨櫃2-2",
-        "description": "警告",
-        "cardNumber": "~!@#$%^&*",
-        "acked": ""
-    }, {
-        "index": "4",
-        "time": "2023/09/01 15:23:10.123",
-        "location": "控制室",
-        "note": "控制室 門2",
-        "event": "開啟",
-        "cardni": "123459878",
-    }];*/
   dataset = await getData(window.location.href+"/edit"); //port要改
+  console.log(dataset);
+  $("#evtTable").DataTable({
+    lengthMenu: [10, 20, 25, 50, 100],
+    scrollY: "660px",
+
+    destroy: true,
+    language: lang, //提示資訊
+    autoWidth: false, //禁用自動調整列寬
+    // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
+    processing: false, //隱藏載入提示,自行處理
+    //serverSide: true, //啟用伺服器端分頁
+    //searching: false, //禁用原生搜尋
+    orderMulti: false, //啟用多列排序
+    ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
+    //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
+    pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
+    responsive: true,
+
+    data: dataset,
+    columns: [
+      { data: "index" },
+      { data: "location" },
+      { data: "event" },
+      { data: "time" },
+      { data: "cardno" },
+      { data: "note" },
+    ],
+  });
+  createIndex("#evtTable");
+}
+
+async function updateTable_post(data) {
+  dataset = data; //port要改
   console.log(dataset);
   $("#evtTable").DataTable({
     lengthMenu: [10, 20, 25, 50, 100],

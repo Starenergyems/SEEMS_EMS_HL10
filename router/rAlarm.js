@@ -366,9 +366,63 @@ router.get("/alarm/history", (req, res) => {
   res.render("Alm_History");
 });
 
-var hisalarm_db_array = [];
+
 router.get("/alarm/history/edit", (req, res) => {
-    res.send(hisalarm_db_array);
+  const From_date = new Date().toISOString().split('T')[0]; // From_date set to today's date;
+  const To_date = new Date().toISOString(); // To_date set to current date and time
+
+  const From_datetime = From_date + "T00:00:00+08:00"; //預設讀取今天到現在
+  const To_datetime = To_date.slice(0, 19) + "+08:00"; // 
+  console.log(From_datetime, To_datetime);
+
+  Promise.resolve("Init")
+    .then(() => {
+      return alarmnanoDb.find({
+        selector: {
+          occurrence_time: {
+            $exists: true,
+            $gte: From_datetime,
+            $lte: To_datetime,
+          },
+        },
+        fields: [
+          "location",
+          "device",
+          "level",
+          "content",
+          "value",
+          "read",
+          "recover",
+          "recover_time",
+          "occurrence_time",
+        ],
+        sort: [{ occurrence_time: "desc" }],
+        limit: 1000,
+        use_index: ["rAlarm_ddoc", "occurrence_time_index"],
+      });
+    })
+    .then((resp) => {
+      // console.log(resp);
+        var hisalarm_db_array=[];
+
+      for (const item of resp.docs) {
+        item["index"] = "";
+        hisalarm_db_array.push(item);
+      }
+      // console.log("alarm_db_array");
+      console.log(hisalarm_db_array);
+      res.send(hisalarm_db_array);
+    })
+    .catch((err) => {
+      if (err.statusCode === 404) {
+        console.error(
+          "Data not found in /alarm/history/edit:",
+          err.request.data
+        );
+      } else {
+        console.error("Error checking /alarm/history/edit:", err);
+      }
+    });
 });
 
 router.post("/alarm/history/edit", (req, res) => {
@@ -410,7 +464,7 @@ router.post("/alarm/history/edit", (req, res) => {
     })
     .then((resp) => {
       // console.log(resp);
-      hisalarm_db_array = [];//清空
+       var hisalarm_db_array=[];
 
       for (const item of resp.docs) {
         item["index"] = "";

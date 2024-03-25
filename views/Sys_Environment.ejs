@@ -144,6 +144,37 @@
                             <label class="dataValue" id="acu_2_Temp_4-1"><%=acu_2_Temp_4_1%></label>
                         </td>
                     </tr>
+
+                    <tr class="row_other">
+                        <td class="col_01">BSC告警</td>
+                        <td class="col_other"><label class="dataLight OB_L" id="bscAlarm_1-1"></label><button class="openEnvironAlm" id="openEnvironAlm_1-1"></button></td>
+                        <td class="col_other"><label class="dataLight OB_L" id="bscAlarm_1-2"></label><button class="openEnvironAlm" id="openEnvironAlm_1-2"></button></td>
+                        <td class="col_other"><label class="dataLight OB_L" id="bscAlarm_2-1"></label><button class="openEnvironAlm" id="openEnvironAlm_2-1"></button></td>
+                        <td class="col_other"><label class="dataLight OB_L" id="bscAlarm_2-2"></label><button class="openEnvironAlm" id="openEnvironAlm_2-2"></button></td>
+                        <td class="col_other"><label class="dataLight OB_L" id="bscAlarm_3-1"></label><button class="openEnvironAlm" id="openEnvironAlm_3-1"></button></td>
+                        <td class="col_other"><label class="dataLight OB_L" id="bscAlarm_3-2"></label><button class="openEnvironAlm" id="openEnvironAlm_3-2"></button></td>
+                        <td class="col_other"><label class="dataLight OB_L" id="bscAlarm_4-1"></label><button class="openEnvironAlm" id="openEnvironAlm_4-1"></button></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">BSC故障</td>
+                        <td class="col_other"><label class="dataLight RB_L" id="bscFault_1-1"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="bscFault_1-2"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="bscFault_2-1"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="bscFault_2-2"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="bscFault_3-1"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="bscFault_3-2"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="bscFault_4-1"></label></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">消防狀態</td>
+                        <td class="col_other"><label class="dataLight RB_L" id="ffsStatus_1-1"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="ffsStatus_1-2"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="ffsStatus_2-1"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="ffsStatus_2-2"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="ffsStatus_3-1"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="ffsStatus_3-2"></label></td>
+                        <td class="col_other"><label class="dataLight RB_L" id="ffsStatus_4-1"></label></td>
+                    </tr>
                 </table>
                 <div class="subtitle">
                     <h2>【控制室&UPS】</h2>
@@ -208,58 +239,7 @@
                         </td>
                     </tr>
                 </table>
-                <table>
-                    <tr class="row_head">
-                        <td class="col_01"></td>
-                        <td class="col_other">電池電壓</td>
-                        <td class="col_other">內部溫度</td>
-                        <td class="col_other">狀態</td>
-                        <td class="col_other">功率&nbsp%</td>
-                        <td class="col_other col_last" colspan="3"></td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">UPS&nbspMVCB</td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_MVCB_volt"></label>
-                        </td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_MVCB_temp"></label>
-                        </td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_MVCB_status"></label>
-                        </td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_MVCB_power"></label>
-                        </td>
-                        <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L spareL" id=""></label>
-                            <label class="dataLight RB_L spareL" id=""></label>
-                            <label class="dataLight RB_L spareL" id=""></label>
-                            <label class="dataLight RB_L spareL" id=""></label>
-                        </td>
-                    </tr>
-                    <tr class="row_other">
-                        <td class="col_01">UPS&nbspACP</td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_ACP_volt"></label>
-                        </td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_ACP_temp"></label>
-                        </td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_ACP_status"></label>
-                        </td>
-                        <td class="col_other">
-                            <label class="dataStatus" id="ups_ACP_power"></label>
-                        </td>
-                        <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L spareL" ></label>
-                            <label class="dataLight RB_L spareL" ></label>
-                            <label class="dataLight RB_L spareL" ></label>
-                            <label class="dataLight RB_L spareL" ></label>
-                        </td>
-                    </tr>
-                </table>
+
                 <table>
                     <tr class="row_head">
                         <td class="col_01"></td>
@@ -284,23 +264,23 @@
                             <label class="dataStatus" id="ups_EMS_error"></label>
                         </td>
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L <%=ups_EMS_408161_bit9>0?'setToClose':'setToGreen'%>" id="ups_EMS_408161_bit9"><p>L1 IP 保險絲異常</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408161_bit11>0?'setToClose':'setToGreen'%>" id="ups_EMS_408161_bit11"><p>充電器異常</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408161_bit12>0?'setToClose':'setToGreen'%>" id="ups_EMS_408161_bit12"><p>電池低電量</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit6>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit6"><p>開關持續切離</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408161_bit9"><p>L1 IP 保險絲異常</p></label>
+                            <!-- <label class="dataLight RB_L " id="ups_EMS_408161_bit11"><p>充電器異常</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408161_bit12"><p>電池低電量</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit6"><p>開關持續切離</p></label> -->
                         </td>
                     </tr>
-                    <tr class="row_other">
+                    <!-- <tr class="row_other">
                         <td class="col_01"></td>
                         <td class="col_other"> </td>
                         <td class="col_other"></td>
                         <td class="col_other"></td>
                         <td class="col_other"></td>
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit8>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit8"><p>過溫</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit10>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit10"><p>EPO啟動</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit11>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit11"><p>風扇鎖固告警</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit12>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit12"><p>過載警告</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit8"><p>過溫</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit10"><p>EPO啟動</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit11"><p>風扇鎖固告警</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit12"><p>過載警告</p></label>
                         </td>
                     </tr>
                     <tr class="row_other">
@@ -310,12 +290,12 @@
                         <td class="col_other"></td>
                         <td class="col_other"></td>
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit13>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit13"><p>電池過充</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit14>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit14"><p>IP位置異常</p></label>
-                            <label class="dataLight RB_L <%=ups_EMS_408162_bit15>0?'setToClose':'setToGreen'%>" id="ups_EMS_408162_bit15"><p>IP N 遺失</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit13"><p>電池過充</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit14"><p>IP位置異常</p></label>
+                            <label class="dataLight RB_L " id="ups_EMS_408162_bit15"><p>IP N 遺失</p></label>
                             <label class="dataLight RB_L spareL"></label>
                         </td>
-                    </tr>
+                    </tr> -->
                     <tr class="row_other">
                         <td class="col_01">UPS&nbspCMS</td>
                         <td class="col_other">
@@ -331,23 +311,23 @@
                             <label class="dataStatus" id="ups_CMS_error"></label>
                         </td>
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L <%=ups_CMS_408161_bit9>0?'setToClose':'setToGreen'%>" id="ups_CMS_408161_bit9"><p>L1 IP 保險絲異常</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408161_bit11>0?'setToClose':'setToGreen'%>" id="ups_CMS_408161_bit11"><p>充電器異常</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408161_bit12>0?'setToClose':'setToGreen'%>" id="ups_CMS_408161_bit12"><p>電池低電量</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit6>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit6"><p>開關持續切離</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408161_bit9"><p>L1 IP 保險絲異常</p></label>
+                            <!-- <label class="dataLight RB_L " id="ups_CMS_408161_bit11"><p>充電器異常</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408161_bit12"><p>電池低電量</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit6"><p>開關持續切離</p></label> -->
                         </td>
                     </tr>
-                    <tr class="row_other">
+                    <!-- <tr class="row_other">
                         <td class="col_01"></td>
                         <td class="col_other"></td>
                         <td class="col_other"></td>
                         <td class="col_other"></td>
                         <td class="col_other"></td>
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit8>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit8"><p>過溫</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit10>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit10"><p>EPO啟動</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit11>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit11"><p>風扇鎖固警告</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit12>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit12"><p>過載警告</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit8"><p>過溫</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit10"><p>EPO啟動</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit11"><p>風扇鎖固警告</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit12"><p>過載警告</p></label>
                         </td>
                     </tr>
                     <tr class="row_other">
@@ -358,14 +338,65 @@
                         <td class="col_other"></td>
 
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit13>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit13"><p>電池過充</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit14>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit14"><p>IP位置異常</p></label>
-                            <label class="dataLight RB_L <%=ups_CMS_408162_bit15>0?'setToClose':'setToGreen'%>" id="ups_CMS_408162_bit15"><p>IP N 遺失</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit13"><p>電池過充</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit14"><p>IP位置異常</p></label>
+                            <label class="dataLight RB_L " id="ups_CMS_408162_bit15"><p>IP N 遺失</p></label>
                             <label class="dataLight RB_L spareL"></label>
+                        </td>
+                    </tr> -->
+                </table>
+                <table>
+                    <tr class="row_head">
+                        <td class="col_01"></td>
+                        <td class="col_other">電池電壓</td>
+                        <td class="col_other">內部溫度</td>
+                        <td class="col_other">狀態</td>
+                        <td class="col_other">功率&nbsp%</td>
+                        <td class="col_other col_last" colspan="3"></td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">UPS&nbspMVCB</td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_MVCB_volt"></label>
+                        </td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_MVCB_temp"></label>
+                        </td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_MVCB_status"></label>
+                        </td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_MVCB_power"></label>
+                        </td>
+                        <td class="col_other" colspan="3">
+                            <!-- <label class="dataLight RB_L spareL" id=""></label>
+                            <label class="dataLight RB_L spareL" id=""></label>
+                            <label class="dataLight RB_L spareL" id=""></label>
+                            <label class="dataLight RB_L spareL" id=""></label> -->
+                        </td>
+                    </tr>
+                    <tr class="row_other">
+                        <td class="col_01">UPS&nbspACP</td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_ACP_volt"></label>
+                        </td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_ACP_temp"></label>
+                        </td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_ACP_status"></label>
+                        </td>
+                        <td class="col_other">
+                            <label class="dataStatus" id="ups_ACP_power"></label>
+                        </td>
+                        <td class="col_other" colspan="3">
+                            <!-- <label class="dataLight RB_L spareL" ></label>
+                            <label class="dataLight RB_L spareL" ></label>
+                            <label class="dataLight RB_L spareL" ></label>
+                            <label class="dataLight RB_L spareL" ></label> -->
                         </td>
                     </tr>
                 </table>
-
             </div>
 
             <div class="popUpWindow info_EnvironAlm">

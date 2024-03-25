@@ -166,13 +166,13 @@
     background-color: #FF0000;
 }
   
-.dataLight.RGB_L.setToGreen {
+/* .dataLight.RGB_L.setToGreen {
     background-color: #00FF75;
 }
 
 .dataLight.setToGreen {
     background-color: #236E37;
-}
+} */
 
 .dataLight p{
     font-size: 20px;

@@ -119,6 +119,8 @@ async function getData() {
 
     lc4_imp = midnightData4.docs[0].System["402060"];
     lc4_exp = midnightData4.docs[0].System["402062"];
+    //today_E_chg_LC4: scaleProcess(lc4Data.System[402060], 0.1, 1),
+    //today_E_dcg_LC4: scaleProcess(lc4Data.System[402062], 0.1, 1),
 
     // 更新全域變數
     total_exp = expValue;
@@ -211,18 +213,18 @@ async function queryPcsSum(req) {
 
     totalP: scaleProcess(
       lc1Data.System[402055] +
-      lc2Data.System[402055] +
-      lc3Data.System[402055] +
-      lc4Data.System[402055],
+        lc2Data.System[402055] +
+        lc3Data.System[402055] +
+        lc4Data.System[402055],
       0.1,
       1
     ),
 
     totalQ: scaleProcess(
       lc1Data.System[402057] +
-      lc2Data.System[402057] +
-      lc3Data.System[402057] +
-      lc4Data.System[402057],
+        lc2Data.System[402057] +
+        lc3Data.System[402057] +
+        lc4Data.System[402057],
       0.1,
       1
     ),
@@ -231,36 +233,36 @@ async function queryPcsSum(req) {
 
     today_E_chg: scaleProcess(
       lc1Data.System[402060] +
-      lc2Data.System[402060] +
-      lc3Data.System[402060] +
-      lc4Data.System[402060] -
-      total_imp,
+        lc2Data.System[402060] +
+        lc3Data.System[402060] +
+        lc4Data.System[402060] -
+        total_imp,
       0.01,
       1
     ),
     today_E_dcg: scaleProcess(
       lc1Data.System[402062] +
-      lc2Data.System[402062] +
-      lc3Data.System[402062] +
-      lc4Data.System[402062] -
-      total_exp,
+        lc2Data.System[402062] +
+        lc3Data.System[402062] +
+        lc4Data.System[402062] -
+        total_exp,
       0.1,
       1
     ),
 
     tot_E_chg: scaleProcess(
       lc1Data.System[402060] +
-      lc2Data.System[402060] +
-      lc3Data.System[402060] +
-      lc4Data.System[402060],
+        lc2Data.System[402060] +
+        lc3Data.System[402060] +
+        lc4Data.System[402060],
       0.001,
       2
     ),
     tot_E_dcg: scaleProcess(
       lc1Data.System[402062] +
-      lc2Data.System[402062] +
-      lc3Data.System[402062] +
-      lc4Data.System[402062],
+        lc2Data.System[402062] +
+        lc3Data.System[402062] +
+        lc4Data.System[402062],
       0.001,
       2
     ),
@@ -270,10 +272,10 @@ async function queryPcsSum(req) {
     ratedP_LC1: 3450, //這個數值是固定的 1725*2
     activePower_LC1: scaleProcess(lc1Data.System[402055], 0.1, 1),
     reactivePower_LC1: scaleProcess(lc1Data.System[402057], 0.1, 1),
-    today_E_chg_LC1: scaleProcess(lc1Data.System[402060], 0.1, 1),
-    today_E_dcg_LC1: scaleProcess(lc1Data.System[402062], 0.1, 1),
-    tot_E_chg_LC1: scaleProcess(lc1Data.System[402060], 1, 1),
-    tot_E_dcg_LC1: scaleProcess(lc1Data.System[402062], 1, 1),
+    today_E_chg_LC1: scaleProcess(lc1Data.PCS[403016], 0.1, 1),
+    today_E_dcg_LC1: scaleProcess(lc1Data.PCS[403018], 0.1, 1),
+    tot_E_chg_LC1: scaleProcess(lc1Data.PCS[403012], 1, 1),
+    tot_E_dcg_LC1: scaleProcess(lc1Data.PCS[403014], 1, 1),
 
     alarm_PCS1_1: countPCSAlarmAndFault(
       lc1Data.PCS[403063],
@@ -307,16 +309,17 @@ async function queryPcsSum(req) {
     ratedP_LC2: 3450, //這個數值是固定的 1725*2
     activePower_LC2: scaleProcess(lc2Data.System[402055], 0.1, 1),
     reactivePower_LC2: scaleProcess(lc2Data.System[402057], 0.1, 1),
-    today_E_chg_LC2: scaleProcess(lc2Data.System[402060], 0.1, 1),
-    today_E_dcg_LC2: scaleProcess(lc2Data.System[402062], 0.1, 1),
-    tot_E_chg_LC2: scaleProcess(lc2Data.System[402060], 1, 1),
-    tot_E_dcg_LC2: scaleProcess(lc2Data.System[402062], 1, 1),
+    today_E_chg_LC2: scaleProcess(lc2Data.PCS[403016], 0.1, 1),
+    today_E_dcg_LC2: scaleProcess(lc2Data.PCS[403018], 0.1, 1),
+    tot_E_chg_LC2: scaleProcess(lc2Data.PCS[403012], 1, 1),
+    tot_E_dcg_LC2: scaleProcess(lc2Data.PCS[403014], 1, 1),
 
     alarm_PCS2_1: countPCSAlarmAndFault(
       lc2Data.PCS[403063],
       lc2Data.PCS[403064],
       lc2Data.PCS[403144]
     ),
+
     fault_PCS2_1: countPCSAlarmAndFault(
       lc2Data.PCS[403065],
       lc2Data.PCS[403067],
@@ -344,10 +347,10 @@ async function queryPcsSum(req) {
     ratedP_LC3: 3450, //這個數值是固定的 1725*2
     activePower_LC3: scaleProcess(lc3Data.System[402055], 0.1, 1),
     reactivePower_LC3: scaleProcess(lc3Data.System[402057], 0.1, 1),
-    today_E_chg_LC3: scaleProcess(lc3Data.System[402064], 0.1, 1), //算
-    today_E_dcg_LC3: scaleProcess(lc3Data.System[402066], 0.1, 1), //算
-    tot_E_chg_LC3: scaleProcess(lc3Data.System[402060], 1, 1),
-    tot_E_dcg_LC3: scaleProcess(lc3Data.System[402062], 1, 1),
+    today_E_chg_LC3: scaleProcess(lc3Data.PCS[403016], 0.1, 1),
+    today_E_dcg_LC3: scaleProcess(lc3Data.PCS[403018], 0.1, 1),
+    tot_E_chg_LC3: scaleProcess(lc3Data.PCS[403012], 1, 1),
+    tot_E_dcg_LC3: scaleProcess(lc3Data.PCS[403014], 1, 1),
 
     alarm_PCS3_1: countPCSAlarmAndFault(
       lc3Data.PCS[403063],
@@ -381,11 +384,10 @@ async function queryPcsSum(req) {
     ratedP_LC4: 1725, //這個數值是固定的 1725
     activePower_LC4: scaleProcess(lc4Data.System[402055], 0.1, 1),
     reactivePower_LC4: scaleProcess(lc4Data.System[402057], 0.1, 1),
-    today_E_chg_LC4: scaleProcess(lc4Data.System[402060] - lc4_imp, 0.1, 1), //算
-    today_E_dcg_LC4: scaleProcess(lc4Data.System[402062] - lc4_exp, 0.1, 1), //算
+    today_E_chg_LC4: scaleProcess(lc4Data.System[402060] - lc4_imp, 0.1, 1),
+    today_E_dcg_LC4: scaleProcess(lc4Data.System[402062] - lc4_exp, 0.1, 1),
     tot_E_chg_LC4: scaleProcess(lc4Data.System[402060], 1, 1),
     tot_E_dcg_LC4: scaleProcess(lc4Data.System[402062], 1, 1),
-
     alarm_PCS4_1: countPCSAlarmAndFault(
       lc4Data.PCS[403534],
       lc4Data.PCS[403535],
@@ -433,7 +435,7 @@ var pcsDetail_variables;
 var pageNumber;
 
 //PCS
-async function queryPcsDetail() {
+async function queryPcsDetail(req, pageNumber) {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nano = createNanoInstance(dbName);
@@ -444,7 +446,7 @@ async function queryPcsDetail() {
   const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
   const subNumber = pageNumber % 2 === 0 ? 2 : 1;
   const No_of_PCS = `${baseNumber}-${subNumber}`;
-
+  //console.log("No_of_PCS" + No_of_PCS);
   // 根據選擇的集合名稱查詢資料
   let lcData; // 在 if 區塊外部聲明變數
 
@@ -463,20 +465,16 @@ async function queryPcsDetail() {
   //let processedPageNumber;
   if (pageNumber % 2 === 1 && pageNumber <= 6) {
     // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    //console.log("奇數頁 處理方式 傳遞資料給模板引擎，渲染頁面");
     pcsDetail_variables = {
-      permission: "manager",
+      permission: req.body.permission,
       pageNumber,
       No_of_PCS: No_of_PCS,
       workStatus: mapworkStatus_page(lcData.PCS[403078]),
       workMode: mapworkMode_page(lcData.PCS[403080]),
-      //Workingstatus
       chargeStatus: mapWordStatus(lcData.PCS[403069], pcsCHGStatus_MT),
       tot_E_chg: scaleProcess(lcData.PCS[403074], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
       tot_E_dcg: scaleProcess(lcData.PCS[403076], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
-      // max_P_chg: scaleProcess(lcData.PCS[403066], 0.1, 1), //刪除
-      // max_P_dcg: scaleProcess(lcData.PCS[403067], 0.1, 1), //刪除
-      // max_Q_l: scaleProcess(lcData.PCS[403068], 0.1, 1), //刪除
-      // max_Q_c: scaleProcess(lcData.PCS[403069], 0.1, 1), //刪除
       HB_Counts: lcData.PCS[403039],
       leakage_I: scaleProcess(lcData.PCS[403044], 0.01, 2),
       //gridStatus: mapgridStatus_page(lcData.PCS[403054], pcsGridStatus_MT), //刪除
@@ -514,17 +512,19 @@ async function queryPcsDetail() {
     };
   } else if (pageNumber % 2 === 0 && pageNumber <= 6) {
     // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
+    //console.log("偶數頁 處理方式 傳遞資料給模板引擎，渲染頁面");
     pcsDetail_variables = {
-      permission: "manager",
+      permission: req.body.permission,
       pageNumber,
-      No_of_PCS,
-      Workingstatus: mapPCSWorkingstatus(
-        lcData.PCS[403078],
-        lcData.PCS[403080]
-      ),
+      No_of_PCS: No_of_PCS,
+      workStatus: mapworkStatus_page(lcData.PCS[403117]),
+      workMode: mapworkMode_page(lcData.PCS[403119]),
+      //Workingstatus
       chargeStatus: mapWordStatus(lcData.PCS[403108], pcsCHGStatus_MT),
       tot_E_chg: scaleProcess(lcData.PCS[403113], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
       tot_E_dcg: scaleProcess(lcData.PCS[403115], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
+      // tot_E_chg: scaleProcess(lcData.PCS[403113], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
+      // tot_E_dcg: scaleProcess(lcData.PCS[403115], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
       // max_P_chg: scaleProcess(lcData.PCS[403066], 0.1, 1),
       // max_P_dcg: scaleProcess(lcData.PCS[403067], 0.1, 1),
       // max_Q_l: scaleProcess(lcData.PCS[403068], 0.1, 1),
@@ -564,23 +564,24 @@ async function queryPcsDetail() {
       // moduleTemp3: scaleProcess(lcData.PCS[403016], 0.1, 1),
     };
     //單台 LC4-pcs7
-  } else if (pageNumber == 7) {
+  } else if (pageNumber === 7) {
+    //console.log("第七頁 處理方式 傳遞資料給模板引擎，渲染頁面");
     pcsDetail_variables = {
-      permission: "manager",
+      permission: req.body.permission,
       pageNumber,
-      No_of_PCS,
+      No_of_PCS: No_of_PCS,
       workStatus: mapworkStatus_page(lcData.PCS[403549]),
       workMode: mapworkMode_page(lcData.PCS[403551]),
       chargeStatus: mapWordStatus(lcData.PCS[403540], pcsCHGStatus_MT),
       tot_E_chg: scaleProcess(lcData.PCS[403545], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
       tot_E_dcg: scaleProcess(lcData.PCS[403547], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
-      max_P_chg: scaleProcess(lcData.PCS[403566], 0.1, 1),
-      max_P_dcg: scaleProcess(lcData.PCS[403567], 0.1, 1),
-      max_Q_l: scaleProcess(lcData.PCS[403568], 0.1, 1),
-      max_Q_c: scaleProcess(lcData.PCS[403569], 0.1, 1),
+      // max_P_chg: scaleProcess(lcData.PCS[403566], 0.1, 1),
+      // max_P_dcg: scaleProcess(lcData.PCS[403567], 0.1, 1),
+      // max_Q_l: scaleProcess(lcData.PCS[403568], 0.1, 1),
+      // max_Q_c: scaleProcess(lcData.PCS[403569], 0.1, 1),
       HB_Counts: lcData.PCS[403507],
       leakage_I: scaleProcess(lcData.PCS[403508], 0.01, 2),
-      gridStatus: mapgridStatus_page(lcData.PCS[403554], pcsGridStatus_MT),
+      //gridStatus: mapgridStatus_page(lcData.PCS[403554], pcsGridStatus_MT),
       activePower: scaleProcess(lcData.PCS[403526], 0.1, 1),
       reactivePower: scaleProcess(lcData.PCS[403528], 0.1, 1),
       powerFactor: scaleProcess(lcData.PCS[403556], 0.001, 3),
@@ -615,9 +616,9 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
   try {
     //獲取目前切換的頁數
     pageNumber = parseInt(req.params.pageNumber);
-    await queryPcsDetail();
-
+    await queryPcsDetail(req, pageNumber);
     if (pageNumber === 7) {
+      //console.log("pcsDetail_variables" + pcsDetail_variables);
       res.render("Op_PCS_InfoDetail", pcsDetail_variables);
     } else {
       res.render("Op_PCS_InfoDetail_LC1_3", pcsDetail_variables);
@@ -633,9 +634,9 @@ router.get(
   async (req, res) => {
     try {
       //獲取目前切換的頁數
-      pageNumber = parseInt(req.params.pageNumber);
-      await queryPcsDetail();
+      await queryPcsDetail(req, pageNumber);
       const responseData = pcsDetail_variables;
+      //const permission = req.body.permission;
       //console.log(responseData);
       res.json(responseData);
     } catch (error) {
@@ -648,7 +649,7 @@ router.get(
 //************************************************************************************************************************************************ */
 //alarm告警換頁
 var pcsAlarm_variables;
-async function queryPcsAlarm() {
+async function queryPcsAlarm(req, pageNumber) {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nano = createNanoInstance(dbName);
@@ -659,7 +660,7 @@ async function queryPcsAlarm() {
   const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
   const subNumber = pageNumber % 2 === 0 ? 2 : 1;
   const No_of_PCS = `${baseNumber}-${subNumber}`;
-
+  console.log("No_of_PCS" + No_of_PCS);
   // 根據選擇的集合名稱查詢資料
   let lcData; // 在 if 區塊外部聲明變數
   if (pageNumber == 1 || pageNumber == 2) {
@@ -679,9 +680,9 @@ async function queryPcsAlarm() {
   if (pageNumber % 2 === 1 && pageNumber <= 6) {
     // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
     pcsAlarm_variables = {
-      permission: "manager",
+      permission: req.body.permission,
       pageNumber,
-      No_of_PCS,
+      No_of_PCS: No_of_PCS,
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS[403140], 16)
         .num_ClosedBit,
       noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS[403037], 16)
@@ -706,9 +707,9 @@ async function queryPcsAlarm() {
   } else if (pageNumber % 2 === 0 && pageNumber <= 6) {
     // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
     pcsAlarm_variables = {
-      permission: "manager",
+      permission: req.body.permission,
       pageNumber,
-      No_of_PCS,
+      No_of_PCS: No_of_PCS,
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS[403140], 16)
         .num_ClosedBit,
       noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS[403037], 16)
@@ -733,11 +734,11 @@ async function queryPcsAlarm() {
       Fault2: Convert_UInt_to_revBitString(lcData.PCS[403106], 32), //NEW
       Fault3: Convert_UInt_to_revBitString(lcData.PCS[403150], 32),
     };
-  } else if (pageNumber == 7) {
+  } else if (pageNumber === 7) {
     pcsAlarm_variables = {
-      permission: "manager",
+      permission: req.body.permission,
       pageNumber,
-      No_of_PCS,
+      No_of_PCS: No_of_PCS,
       noOverallFault: Convert_UInt_to_BitString(lcData.PCS[403501], 16)
         .num_ClosedBit,
       noOverallAlarm: Convert_UInt_to_BitString(lcData.PCS[403502], 16)
@@ -764,9 +765,8 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
   try {
     //const pageNumber = req.session.pageNumber;
     pageNumber = parseInt(req.params.pageNumber);
-    await queryPcsAlarm();
-
-    if (pageNumber == 7) {
+    await queryPcsAlarm(req, pageNumber);
+    if (pageNumber === 7) {
       res.render("Op_PCS_Alarm", pcsAlarm_variables);
     } else {
       res.render("Op_PCS_Alarm_LC1_3", pcsAlarm_variables);
@@ -780,36 +780,13 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
 router.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   try {
     pageNumber = parseInt(req.params.pageNumber);
-    await queryPcsAlarm();
+    await queryPcsAlarm(req, pageNumber);
     res.json(pcsAlarm_variables);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
-
-/*router.get("/operateinfo/pcs/alarm_lc13/:pageNumber", async (req, res) => {
-  try {
-    pageNumber = parseInt(req.params.pageNumber);
-    console.log(pageNumber);
-    await queryPcsAlarm();
-    res.render("Op_PCS_Alarm_LC1_3", pcsAlarm_variables);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-router.get("/operateinfo/pcs/alarm_lc13/:pageNumber/:data", async (req, res) => {
-  try {
-    pageNumber = parseInt(req.params.pageNumber);
-    await queryPcsAlarm();
-    res.json(pcsAlarm_variables);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});*/
 
 let dVS_Data_dataName;
 let dVS_Data_numInDataGroup;
@@ -826,11 +803,56 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
     dVS_Data_numInDataGroup = req.body.numInDataGroup;
 
     const data_MT = {
-      setBut_P_Project: { dbName_gD: `gc_rf10`, dicName: "System", dataID: 400001, scale: 0.01, decPlace: 2, minLimit: 0, maxLimit: 1000, unit: "MW" },
-      setBut_P_LoadShift: { dbName_gD: `gc_rf10`, dicName: "System", dataID: 400002, scale: 0.001, decPlace: 3, minLimit: -10000, maxLimit: 10000, unit: "MW" },
-      setBut_P_LC: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407078, scale: 1, decPlace: 0, minLimit: -5000, maxLimit: 5000, unit: "kW" },
-      setBut_acuHeatT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407016, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
-      setBut_acuCoolT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407017, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
+      setBut_P_Project: {
+        dbName_gD: `gc_rf10`,
+        dicName: "System",
+        dataID: 400001,
+        scale: 0.01,
+        decPlace: 2,
+        minLimit: 0,
+        maxLimit: 1000,
+        unit: "MW",
+      },
+      setBut_P_LoadShift: {
+        dbName_gD: `gc_rf10`,
+        dicName: "System",
+        dataID: 400002,
+        scale: 0.001,
+        decPlace: 3,
+        minLimit: -10000,
+        maxLimit: 10000,
+        unit: "MW",
+      },
+      setBut_P_LC: {
+        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407078,
+        scale: 1,
+        decPlace: 0,
+        minLimit: -5000,
+        maxLimit: 5000,
+        unit: "kW",
+      },
+      setBut_acuHeatT: {
+        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407016,
+        scale: 0.1,
+        decPlace: 1,
+        minLimit: -1000,
+        maxLimit: 2000,
+        unit: "°C",
+      },
+      setBut_acuCoolT: {
+        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407017,
+        scale: 0.1,
+        decPlace: 1,
+        minLimit: -1000,
+        maxLimit: 2000,
+        unit: "°C",
+      },
       //
       //
       //
@@ -853,7 +875,7 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
 
     const getData_raw =
       allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
-      data_AfM.dataID
+        data_AfM.dataID
       ];
     const response = {
       originData: Scale_Data(getData_raw, data_AfM.scale, data_AfM.decPlace),
@@ -880,29 +902,40 @@ router.post("/set_dVS_Data", async (req, res) => {
     if (setValue_raw !== "" && !Number.isNaN(Number(setValue_raw))) {
       const data_MT = {
         setBut_P_Project: {
-          dicName: `system`, dataID: "W400001",
-          category: "系統模式01", device: `GC`, log_dataName: `額定功率`,
+          dicName: `system`,
+          dataID: "W400001",
+          category: "系統模式01",
+          device: `GC`,
+          log_dataName: `額定功率`,
         },
         setBut_P_LoadShift: {
-          dicName: `system`, dataID: "W400002",
-          category: "系統模式02", device: `GC`, log_dataName: `負載轉移功率`,
+          dicName: `system`,
+          dataID: "W400002",
+          category: "系統模式02",
+          device: `GC`,
+          log_dataName: `負載轉移功率`,
         },
         setBut_P_LC: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407078",
-          category: "設備控制", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`,
+          dicName: `lc${dVS_Data_numInDataGroup}`,
+          dataID: "W407078",
+          category: "設備控制",
+          device: `LC${dVS_Data_numInDataGroup}`,
+          log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`,
         },
         setBut_acuHeatT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407016",
-          category: "設備控制123", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`,
+          dicName: `lc${dVS_Data_numInDataGroup}`,
+          dataID: "W407016",
+          category: "設備控制123",
+          device: `LC${dVS_Data_numInDataGroup}`,
+          log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`,
         },
         setBut_acuCoolT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407017",
-          category: "設備控制456", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`,
+          dicName: `lc${dVS_Data_numInDataGroup}`,
+          dataID: "W407017",
+          category: "設備控制456",
+          device: `LC${dVS_Data_numInDataGroup}`,
+          log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`,
         },
-        //
-        //
-        //
-        //
       };
 
       const data_AfM = data_MT[dVS_Data_dataName];
@@ -994,12 +1027,52 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
     dSS_Data_numInDataGroup = req.body.numInDataGroup;
 
     const data_MT = {
-      setBut_modeAP: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407010, bitNum: 999, status_MT: { " 0": "主動", " 1": "被動" }, },
-      setBut_modeQctrl: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407011, bitNum: 999, status_MT: { " 162": "功率(kVar)模式", " 161": "功因模式", " 85": "關閉", }, },
-      setBut_standbyCmd: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407012, bitNum: 999, status_MT: { " 170": "待機", " 85": "停止待機" }, },
-      setBut_modeLR: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407013, bitNum: 999, status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" }, },
-      setBut_acuOnOff: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407018, bitNum: 999, status_MT: { " 1": "啟動", " 0": "停止" }, },
-      setBut_AutoMan_SS: { dbName_gD: `gc_rf10`, dicName: "System", dataID: 400076, bitNum: dSS_Data_numInDataGroup, status_MT: { " 1": "自動", " 0": "手動" }, },
+      setBut_modeAP: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407010,
+        bitNum: 999,
+        status_MT: { " 0": "主動", " 1": "被動" },
+      },
+      setBut_modeQctrl: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407011,
+        bitNum: 999,
+        status_MT: {
+          " 162": "功率(kVar)模式",
+          " 161": "功因模式",
+          " 85": "關閉",
+        },
+      },
+      setBut_standbyCmd: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407012,
+        bitNum: 999,
+        status_MT: { " 170": "待機", " 85": "停止待機" },
+      },
+      setBut_modeLR: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407013,
+        bitNum: 999,
+        status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" },
+      },
+      setBut_acuOnOff: {
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
+        dicName: "Ctrl",
+        dataID: 407018,
+        bitNum: 999,
+        status_MT: { " 1": "啟動", " 0": "停止" },
+      },
+      setBut_AutoMan_SS: {
+        dbName_gD: `gc_rf10`,
+        dicName: "System",
+        dataID: 400076,
+        bitNum: dSS_Data_numInDataGroup,
+        status_MT: { " 1": "自動", " 0": "手動" },
+      },
       //
       //
     };
@@ -1020,7 +1093,7 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
 
     const getData_raw =
       allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
-      data_AfM.dataID
+        data_AfM.dataID
       ];
 
     let getData;
@@ -1048,28 +1121,46 @@ router.post("/set_dSS_Data", async (req, res) => {
 
     const data_MT = {
       setBut_modeAP: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407010",
-        category: "設備控制", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`,
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407010",
+        category: "設備控制",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`,
       },
       setBut_modeQctrl: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407011",
-        category: "設備控制9101", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`,
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407011",
+        category: "設備控制9101",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`,
       },
       setBut_standbyCmd: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407012",
-        category: "設備控制2531", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`,
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407012",
+        category: "設備控制2531",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`,
       },
       setBut_modeLR: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407013",
-        category: "設備控制4587", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`,
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407013",
+        category: "設備控制4587",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`,
       },
       setBut_acuOnOff: {
-        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407018",
-        category: "設備控制7096", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`,
+        dicName: `lc${dSS_Data_numInDataGroup}`,
+        dataID: "W407018",
+        category: "設備控制7096",
+        device: `LC${dSS_Data_numInDataGroup}`,
+        log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`,
       },
       setBut_AutoMan_SS: {
-        dicName: `system`, dataID: "W400076",
-        category: "系統模式03", device: `GC`, log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`,
+        dicName: `system`,
+        dataID: "W400076",
+        category: "系統模式03",
+        device: `GC`,
+        log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`,
       },
       //
       //
@@ -1090,9 +1181,15 @@ router.post("/set_dSS_Data", async (req, res) => {
     if (dSS_Data_bitNum === 999) {
       setValue = Number(setValue_raw);
     } else {
-      let setValue_old = Convert_UInt_to_BitString(newdwctrlData[data_AfM.dicName][data_AfM.dataID], 32).bitString;
+      let setValue_old = Convert_UInt_to_BitString(
+        newdwctrlData[data_AfM.dicName][data_AfM.dataID],
+        32
+      ).bitString;
       console.log(setValue_old);
-      setValue_old = setValue_old.slice(0, 31 - dSS_Data_bitNum) + setValue_raw.slice(1) + setValue_old.slice(31 - dSS_Data_bitNum + 1);
+      setValue_old =
+        setValue_old.slice(0, 31 - dSS_Data_bitNum) +
+        setValue_raw.slice(1) +
+        setValue_old.slice(31 - dSS_Data_bitNum + 1);
       console.log(setValue_old);
       setValue = parseInt(setValue_old, 2);
     }
@@ -1128,7 +1225,7 @@ router.post("/set_dSS_Data", async (req, res) => {
 
     // if (selectedValue != 0) {
     const result = await logDb.insert(doc); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
-    //   //console.log(result);
+    //console.log(result);
     // }
 
     //console.log("Document added to database. ID: " + result.id);

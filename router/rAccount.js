@@ -130,9 +130,6 @@ router.get("/account/personalinfo/log", async (req, res) => {
 }})
 
 
-
-
-
 router.get("/account/system", (req, res) => {
   res.render("SysManage");
 });
@@ -163,7 +160,8 @@ router.get("/account/system/accounts", async(req, res) => {
 
 router.post("/account/system/accounts", async(req, res) => {
   // Create new user.  Change or delete exist user.
-  
+  console.log("modify accounts")
+  console.log(req.body)
   try {
   let response = await alldoc(db.account);
   response = await response.json();
@@ -176,32 +174,23 @@ router.post("/account/system/accounts", async(req, res) => {
   const body = req.body
   const bottom = body.bottom
 
-  if (allid.includes(body.num) === true){
-    console.log("id exist")
-  let iddata = await getbyid(body.num)
-  iddata = await iddata.json()
-  let data = [{
-        _id: `${iddata._id}`,
-        _rev: `${iddata._rev}`,
-        time: `${datetime()}`, // The doc verify time.
-        user: {
-          num: `${body.num}`,
-          mail: `${body.email}`,
-          name: `${body.name}`,
-          comapny: `${body.company}`,
-          department: `${body.department}`,
-          level: `${body.permission}`,
-          state: `${body.status}`,
-          errcount: `${iddata.user.errcount}`,
-          note: `${body.note === undefined? "" : body.note}`,
-          last_time: `${iddata.user.last_time}`,
-          password: `${body.password === "" ? iddata.password : body.password}`,
-          bantill: `${iddata.user.bantill}`,
-          token: `${iddata.user.token}`,
-          validtime: `${iddata.user.validtime === (undefined || "")? "":""}`,
-        }}]
-      } else if (allid.includes(body.num) === false){
-        console.log("id nottttt exist")
+  if (allid.includes(body.num) === true && bottom === "addupdate"){
+    console.log(`id exist, id:${body.num} will be update`)
+    let iddata = await getbyid(body.num)
+    iddata["time"] = datetime()
+    iddata["user"]["num"] = body.num
+    iddata["user"]["mail"] = body.email
+    iddata["user"]["name"] = body.name
+    iddata["user"]["company"] = body.company
+    iddata["user"]["department"] = body.department
+    iddata["user"]["level"] = body.permission
+    iddata["user"]["state"] = body.status
+    iddata["user"]["note"] = body.note === undefined || ""? "" : body.note
+    iddata["user"]["password"] = body.password === undefined ||"" ? iddata.password : body.password
+    console.log(iddata)
+    await updateaccount(iddata._id, "", "", [iddata])
+  } else if (allid.includes(body.num) === false && bottom === "addupdate"){
+        console.log("id nottttt exist, create")
         let data = [{
           _id: `${body.num}`,
           time: `${datetime()}`, // The doc verify time.
@@ -209,32 +198,26 @@ router.post("/account/system/accounts", async(req, res) => {
             num: `${body.num}`,
             mail: `${body.email}`,
             name: `${body.name}`,
-            comapny: `${body.company}`,
+            company: `${body.company}`,
             department: `${body.department}`,
             level: `${body.permission}`,
             state: `${body.status}`,
-            errcount: `${iddata.user.errcount}`,
+            errcount: "0",
             note: `${body.note === undefined? "" : body.note}`,
-            last_time: `${iddata.user.last_time}`,
-            password: `${body.password === "" ? iddata.password : body.password}`,
-            bantill: `${iddata.user.bantill}`,
-            token: `${iddata.user.token}`,
-            validtime: `${iddata.user.validtime === (undefined || "")? "":""}`,
+            last_time: "",
+            password: `${body.password === "" ? body.num : body.password}`,
+            bantill: "",
+            token: "",
+            validtime: "",
           }}]
+          console.log(data)
+          await updateaccount(data[0]._id, "", "", data)
           }
   
-  if (allid.includes(data._id) === false && bottom === "addupdate") {
-    // Create the user.
-    await updateaccount(data._id, "", "", data)
-    
-    res.status(200)
-  } else if (allid.includes(data._id) === true && bottom === "addupdate") {
-    // Update the user.
-    await updateaccount(data._id, "", "", data)
-    res.status(200)
-  } else if (allid.includes(data._id) === true && bottom === "delete") {
+if (allid.includes(body.num) === true && bottom === "delete") {
     // Delete the user.
-    await deleteuser(data._id)
+    console.log(`delete ${body.num}`)
+    await deleteuser(body.num)
     res.status(200)
   }
 

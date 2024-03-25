@@ -69,19 +69,31 @@ async function dataGet(url) {
 	const values = await response.json();
 	return values;}
 
+
+// // document.getElementById("btn_addRD").addEventListener("click", function() {
+// // 	bottom = "add"
+// // });
+
 let bottom
-// document.getElementById("btn_addRD").addEventListener("click", function() {
-// 	bottom = "add"
-// });
 document.getElementById("btn_updateEditRD").addEventListener("click", function() {
 	bottom = "addupdate"
+	// hideEdit()
 });
 document.getElementById("btn_deleteEditRD").addEventListener("click", function() {
 	bottom = "delete"
+	// hideEdit()
 });
 
 
 async function dataPost(form, url) {//提交表單
+	// document.getElementById("btn_updateEditRD").addEventListener("click", function() {
+	// 	bottom = "addupdate"
+	// 	// hideEdit()
+	// });
+	// document.getElementById("btn_deleteEditRD").addEventListener("click", function() {
+	// 	bottom = "delete"
+	// 	// hideEdit()
+	// });
 	return new Promise((resolve, reject) => {
 		$(form).off('submit').submit(function (e) {
 			e.preventDefault();
@@ -104,6 +116,7 @@ async function dataPost(form, url) {//提交表單
 				// data["bottom"] = bottom
 				data: data,
 				success: function (data) {
+					console.log("post success")
 					resolve(data);
 					hideEdit();//隱藏編輯框
 					dataTable();//重新讀取更新表單

@@ -170,9 +170,9 @@ async function dataPost(url, input1, input2, input3, input4) {//提交資料給�
         type: 'POST',
         url: url,
         data: { input1, input2, input3, input4 },
-        success: function () {
+        success: function (response) {
             console.log("POST完成")
-            updateTable()//更新表格
+            updateTable_post(response)//更新表格
         },
         error: function (error) {
             reject(error);
