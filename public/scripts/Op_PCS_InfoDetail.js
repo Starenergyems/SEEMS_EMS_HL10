@@ -65,10 +65,10 @@ async function updateData() {
   $("#workMode").text(data.workMode);
 
   /*輸出限制************************************* */
-  $('#max_P_chg').text(data.max_P_chg);
-  $("#max_P_dcg").text(data.max_P_dcg);
-  $("#max_Q_l").text(data.max_Q_l);
-  $("#max_Q_c").text(data.max_Q_c);
+  // $('#max_P_chg').text(data.max_P_chg);
+  // $("#max_P_dcg").text(data.max_P_dcg);
+  // $("#max_Q_l").text(data.max_Q_l);
+  // $("#max_Q_c").text(data.max_Q_c);
 
   /*心跳計數******************************************** */
   $("#HB_Counts").text(data.HB_Counts);
@@ -77,7 +77,7 @@ async function updateData() {
   $("#leakage_I").text(data.leakage_I);
 
   /*交流側******************************************************** */
-  $("#gridStatus").text(data.gridStatus);
+  // $("#gridStatus").text(data.gridStatus);
   $("#activePower").text(data.activePower);
   $("#reactivePower").text(data.reactivePower);
   $("#powerFactor").text(data.powerFactor);

@@ -8,7 +8,7 @@ $(document).ready(function () {
   routineWork();
 });
 
-setInterval(routineWork, 1000);
+setInterval(routineWork, 500);
 //////////////////////////////////////////////////////////////////////////////
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");
 const ssNavBar_sNB_02 = document.querySelector(".subNavBar #sNB_02 .ssNavBar");
