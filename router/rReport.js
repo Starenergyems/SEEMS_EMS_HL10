@@ -188,17 +188,40 @@ router.get("/report/download-excel", async (req, res) => {
     // Fetch data from MongoDB
     if (reportType === "年報") {
       couchData = await getYearData();
+      const transformedDataforyear = transformData(couchData.dataforyear); //整理資料為陣列
+      const transformedTot = transformOtherSumTotal(couchData.otherSumTotal, couchData.totMWHTotal);
+      const transformedDataLast = transformDataLastDataYear(couchData.datayear_before_last);
 
-      updateExcel1DHorizon(workbook, couchData.dataforyear[1], 0, "D6"); //
-      updateExcel1DHorizon(workbook, couchData.dataforyear[2], 0, "K6"); //
-      updateExcel1DHorizon(workbook, couchData.dataforyear[3], 0, "L6"); 
-      updateExcel1DHorizon(workbook, couchData.dataforyear[4], 0, "M6"); 
-      updateExcel1DHorizon(workbook, couchData.dataforyear[5], 0, "N6"); 
-      updateExcel1DHorizon(workbook, couchData.dataforyear[6], 0, "O6"); 
-      updateExcel1DHorizon(workbook, couchData.dataforyear[7], 0, "P6"); 
-      // updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
-      // updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
-      // updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
+      updateExcel1DHorizon(workbook, transformedDataforyear[0][1], 0, "D6"); //1月
+      updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[1][1], 0, "D7"); //2月
+      updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[2][1], 0, "D8"); //3月
+      updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[3][1], 0, "D9"); //4月
+      updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[4][1], 0, "D10"); //5月
+      updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[5][1], 0, "D11"); //6月
+      updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[6][1], 0, "D12"); //7月
+      updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[7][1], 0, "D13"); //8月
+      updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[8][1], 0, "D14"); //9月
+      updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[9][1], 0, "D15"); //10月
+      updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[10][1], 0, "D16"); //11月
+      updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16"); 
+      updateExcel1DHorizon(workbook, transformedDataforyear[11][1], 0, "D17"); //12月
+      updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17"); 
+
+      updateExcel1DHorizon(workbook, couchData.sumArrayTotal, 0, "D18"); //總共
+      updateExcel1DHorizon(workbook, transformedTot, 0, "K18"); 
+      updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
+      updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19"); 
+
       tempFilePath = path.join(__dirname, "temp.xlsx");
       await workbook.toFileAsync(tempFilePath);
     } else if (reportType === "月報") {
@@ -254,6 +277,47 @@ router.get("/report/download-excel", async (req, res) => {
   }
 });
 /***************************************************************************************************** */
+// Function to transform the data
+function transformData(data) { //年報用，每月值整理成陣列
+  const transformedData = [];
+
+  for (let i = 0; i < data.length; i += 8) {
+    const monthData = [
+      [data[i]], // Month string
+      data[i + 1], // Numerical data
+      [data[i + 2], data[i + 3], data[i + 4], data[i + 5], data[i + 6], data[i + 7]] // Financial data
+    ];
+    transformedData.push(monthData);
+  }
+
+  return transformedData;
+}
+
+function transformDataLastDataYear(data, data1) { //年報用，上期資料整理成陣列
+  const transformedData = [
+    data[0], 
+    [data[1], data[2], data[3], data[4], data[5], data[6], data1] // Financial data
+  ];
+
+  return transformedData;
+}
+// //百分比對照
+// function Conversionpercentage(randomNumber) {
+//   let result = (randomNumber / 100).toFixed(1);
+//   return parseFloat(result);
+// }
+
+function transformOtherSumTotal(data) { //整理順序格式為陣列
+  const transformedData = [      
+    data[3], 
+    data[0], 
+    data[1],
+    data[2], 
+    data[5]
+  ];
+
+  return transformedData;
+}
 //百分比對照
 function Conversionpercentage(randomNumber) {
   let result = (randomNumber / 100).toFixed(1);
@@ -1624,14 +1688,15 @@ async function getYearData() {
   //   last_year: data2[0], //去年同期
   //   last_year_power: data4[0], //去年同期power
   // };
-  return (
-    dataforyear,
-    sumArrayTotal,
-    otherSumTotal,
-    //averageArrayTotal,
-    totMWHTotal,
-    datayear_before_last
-  );
+
+  return {
+    dataforyear: dataforyear,
+    sumArrayTotal: sumArrayTotal,
+    otherSumTotal: otherSumTotal,
+    totMWHTotal: totMWHTotal,
+    datayear_before_last: datayear_before_last
+  };
+
 }
 
 function convertFileNameToDate(inputFileName) {

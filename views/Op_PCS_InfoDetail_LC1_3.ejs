@@ -50,7 +50,7 @@
         <div class="M_Page">
             <div class="Title">
                 <h2>【PCS</h2><label id="No_of_PCS"><%=No_of_PCS%></label>
-                <!-- <h2>【****PAGE</h2><label id="pageNumber"><%=pageNumber%></label> -->
+                <!-- <h2>【****PAGE</h2><label id="pageNumber"><--%=pageNumber%></label> -->
                 <h2>】</h2>
                 <!-- <a href="#" class="infoStatus" id="infoPCS">狀態與數值</a> -->
                 <a href="/operateinfo/pcs/infodetail/<%= pageNumber %>">狀態與數值</a>
@@ -68,14 +68,14 @@
                             <p>工作狀態</p>
                             <div class="BG_bigInfo">
                                 <div class="subBG_bigInfo"></div>
-                                <label class="data_val" id="workStatus"></label>
+                                <label class="data_val" id="workStatus"><%=workStatus%></label>
                             </div>
                         </div>
                         <div class="bigInfo bI_workMode">
                             <p>工作模式</p>
                             <div class="BG_bigInfo">
                                 <div class="subBG_bigInfo"></div>
-                                <label class="data_val" id="workMode"></label>
+                                <label class="data_val" id="workMode"><%=workMode%></label>
                             </div>
                         </div>
                         <div class="bigInfo bI_chargeStatus">
