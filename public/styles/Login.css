@@ -120,8 +120,47 @@ body {
     cursor: pointer;
 }
 
+.loginWindow #logintext {
+    display: block;
+    /* background-color: #FFFFFF; */
+    box-sizing: border-box;
+    width: 380px;
+    /* border: 3px solid #B6B6B6; */
+    margin: 20px auto 0px;
+    font-size: 25px;
+    color: #fffb00;
+    /* text-decoration: none; */
+    /* line-height: 64px; */
+    font-weight: bold;
+    border-radius: 35px;
+    cursor: pointer;
+}
+
 /* .loginWindow a {
     display: block;
     height: 40px;
     width: 40px;
 } */
+
+.loginWindow #warning {
+    display: block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 380px;
+    border: 3px solid #B6B6B6;
+    margin: 70px auto 0px;
+    font-size: 36px;
+    color: #000000;
+    text-decoration: none;
+    line-height: 64px;
+    font-weight: bold;
+    border-radius: 35px;
+    cursor: pointer;
+    visibility: hidden;
+}   
+
+#warning{
+    visibility: hidden;
+  }
+
+  

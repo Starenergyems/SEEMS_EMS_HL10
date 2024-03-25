@@ -35,8 +35,8 @@ const doc_CONFIG = couchdbConfig.config; // The account setting doc id.
 const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
 // const db_URL = couchDBUrl; // Use for fetch database function.
 // const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
-const credentials = Buffer.from(`${db_USERNAME}:${db_PASSWORD}`).toString('base64');
-const AUTHORIZATION = "Basic " + credentials;
+const CREDENTIALS = Buffer.from(`${db_USERNAME}:${db_PASSWORD}`).toString('base64');
+const AUTHORIZATION = "Basic " + CREDENTIALS;
 
 
 // Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
