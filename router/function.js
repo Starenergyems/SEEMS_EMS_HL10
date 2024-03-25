@@ -46,7 +46,7 @@ function mapchargeStatus(decimalValue) {
   // 檢查位元為1的數量，如果超過兩個以上，返回 "Error"
   if (decimalValue >= 3) {
     console.log(decimalValue);
-    return "Error";
+    return "#*#";
   } else if (decimalValue === 0) {
     return "Charging";
   } else if (decimalValue === 1) {
@@ -58,6 +58,9 @@ function mapchargeStatus(decimalValue) {
 //***************************************************************************** */
 function mapworkStatus_page(decimalValue) {
   // 將十進制數值轉換為二進制字串
+  if (decimalValue === "undefined") {
+    return "#*#";
+  }
   const binaryString = decimalValue.toString(2).padStart(32, "0");
 
   // 尋找第一個為1的位元的索引
@@ -95,6 +98,9 @@ function mapworkStatus_page(decimalValue) {
 
 function mapworkMode_page(decimalValue) {
   // 將十進制數值轉換為二進制字串
+  if (decimalValue === "undefined") {
+    return "#*#";
+  }
   const binaryString = decimalValue.toString(2).padStart(32, "0");
 
   // 尋找第一個為1的位元的索引
@@ -102,25 +108,17 @@ function mapworkMode_page(decimalValue) {
 
   // 根據索引對應的位元，返回相應的狀態
   const statuses = {
-    0: "On-grid constant current",
-    1: "On-grid constant voltage",
-    2: "On-grid constant power (AC)",
-    3: "On-grid constant power (DC)",
-    9: "On-grid mode",
-    10: "Off-grid mode",
-    11: "VSG mode"
+    0: "併網恆流", //"On-grid constant current"
+    1: "併網恆壓", //"On-grid constant voltage"
+    2: "併網恆定功率(AC)", //"On-grid constant power (AC)"
+    3: "併網恆定功率(DC)", //"On-grid constant power (DC)"
+    9: "併網", //"On-grid mode"
+    10: "離網", //"Off-grid mode"
+    11: "VSG" //"VSG mode"
   };
 
   return statuses[indexOfOne] || "Unknown status";
 }
-// bit 0: On-grid constant current
-// bit 1: On-grid constant voltage
-// bit 2: On-grid constant power (AC)
-// bit 3: On-grid constant power (DC)
-// bit 9: On-grid mode
-// bit 10: Off-grid mode
-// bit 11: VSG mode
-
 function mapgridStatus_page() {}
 //***************************************************************************** */
 //PCSWorkingStatus
@@ -142,9 +140,10 @@ function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
 function mapModeActPas(input) {
   if (input === 0) {
     return "主動";
-  }
-  if (input === 1) {
+  } else if (input === 1) {
     return "被動";
+  } else {
+    return "#*#";
   }
 }
 function mapModeQctrl(input) {
@@ -153,30 +152,30 @@ function mapModeQctrl(input) {
   }
   if (input === 161) {
     return "功因模式";
-  }
-  if (input === 162) {
+  } else if (input === 162) {
     return "功率(kVar)模式";
+  } else {
+    return "#*#";
   }
 }
 function mapStandbyCmd(input) {
   if (input === 85) {
     return "停止待機";
-  }
-  if (input === 170) {
+  } else if (input === 170) {
     return "待機";
+  } else {
+    return "#*#";
   }
 }
 function mapModeLR(input) {
   if (input === 0) {
     return "本地 & 遠端";
-  }
-  if (input === 1) {
+  } else if (input === 1) {
     return "遠端";
-  }
-  if (input === 2) {
+  } else if (input === 2) {
     return "本地";
   } else {
-    return "undefined";
+    return "#*#";
   }
 }
 //***************************************************************************** */
@@ -184,7 +183,7 @@ function mapModeLR(input) {
 function mapPCSWorkingstatus(input1, input2) {
   // 檢查參數是否為 undefined
   if (input1 === undefined || input2 === undefined) {
-    return "undefined";
+    return "#*#";
   }
 
   // 將參數轉換為二進制並填補為固定長度為32
@@ -241,7 +240,7 @@ function mapPCSWorkingstatus(input1, input2) {
 function countPCSAlarmAndFault(input1, input2, input3) {
   // 檢查參數是否為 undefined
   if (input1 === undefined || input2 === undefined || input3 === undefined) {
-    return 0; // 或者返回其他預設值，具體取決於你的需求
+    return "#*#"; // 或者返回其他預設值，具體取決於你的需求
   }
 
   // 將參數轉換為二進制並填補為固定長度為32

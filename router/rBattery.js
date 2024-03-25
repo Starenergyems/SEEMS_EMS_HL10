@@ -23,7 +23,7 @@ const {
   maponGridStatus,
   workStatus_LC,
   maponGridStatus_LC,
-  mapBMSMode,
+  mapBMSMode
 } = require("./function");
 
 const { Console } = require("console");
@@ -76,7 +76,7 @@ const databases = [
   "lc3_rf10", //2
   "lc4_rf10", //3
   "dwctrl", //4
-  "log", //5
+  "log" //5
 ];
 // 創建 Nano 實例的函式
 //const createNanoInstance = (dbName) => nano(`${couchDBUrl}/${dbName}`);
@@ -86,7 +86,7 @@ const createNanoInstance = (dbName) => nano.db.use(dbName);
 const getLatestDocument = async (nanoDb) => {
   const indexDef = {
     index: { fields: ["time"] },
-    name: "time_index",
+    name: "time_index"
   };
 
   //建立index
@@ -95,10 +95,10 @@ const getLatestDocument = async (nanoDb) => {
   //利用mango作為篩選器
   const mangoQuery = {
     selector: {
-      time: { $exists: true },
+      time: { $exists: true }
     },
     sort: [{ time: "desc" }],
-    limit: 1,
+    limit: 1
   };
 
   return new Promise((resolve, reject) => {
@@ -150,55 +150,74 @@ async function querySumData() {
       lc4Data.System["402089"]
     ), //檢查四個LC狀態
 
-    onGridStatus: maponGridStatus(lc1Data.System["402019"],
-    lc2Data.System["402019"],
-    lc3Data.System["402019"],
-    lc4Data.System["402019"]), //併網狀態
+    onGridStatus: maponGridStatus(
+      lc1Data.System["402019"],
+      lc2Data.System["402019"],
+      lc3Data.System["402019"],
+      lc4Data.System["402019"]
+    ), //併網狀態
     //hl_4-1_10MW.LC#_RF10.System.402064
 
-    onlineNum:lc1Data.System["402089"]+
-    lc2Data.System["402089"]+
-    lc3Data.System["402089"]+
-    lc4Data.System["402089"],
+    onlineNum:
+      lc1Data.System["402089"] +
+      lc2Data.System["402089"] +
+      lc3Data.System["402089"] +
+      lc4Data.System["402089"],
 
-    systemV: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404002"],
-      lc1Data.BMS2["404002"],
-      lc2Data.BMS1["404002"],
-      lc2Data.BMS2["404002"],
-      lc3Data.BMS1["404002"],
-      lc3Data.BMS2["404002"],
-      lc4Data.BMS1["404002"]
-    ), 0.1, 1),
+    systemV: scaleProcess(
+      calculateAverage(
+        lc1Data.BMS1["404002"],
+        lc1Data.BMS2["404002"],
+        lc2Data.BMS1["404002"],
+        lc2Data.BMS2["404002"],
+        lc3Data.BMS1["404002"],
+        lc3Data.BMS2["404002"],
+        lc4Data.BMS1["404002"]
+      ),
+      0.1,
+      1
+    ),
 
     //所有BMS電壓平均
-    systemI: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404003"],
-      lc1Data.BMS2["404003"],
-      lc2Data.BMS1["404003"],
-      lc2Data.BMS2["404003"],
-      lc3Data.BMS1["404003"],
-      lc3Data.BMS2["404003"],
-      lc4Data.BMS1["404003"]
-    ), 0.1, 1), //所有BMS電流平均
-    systemSOC: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404007"],
-      lc1Data.BMS2["404007"],
-      lc2Data.BMS1["404007"],
-      lc2Data.BMS2["404007"],
-      lc3Data.BMS1["404007"],
-      lc3Data.BMS2["404007"],
-      lc4Data.BMS1["404007"]
-    ), 0.1, 1),
-    systemSOH: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404005"],
-      lc1Data.BMS2["404005"],
-      lc2Data.BMS1["404005"],
-      lc2Data.BMS2["404005"],
-      lc3Data.BMS1["404005"],
-      lc3Data.BMS2["404005"],
-      lc4Data.BMS1["404005"]
-    ), 0.1, 1),
+    systemI: scaleProcess(
+      calculateAverage(
+        lc1Data.BMS1["404003"],
+        lc1Data.BMS2["404003"],
+        lc2Data.BMS1["404003"],
+        lc2Data.BMS2["404003"],
+        lc3Data.BMS1["404003"],
+        lc3Data.BMS2["404003"],
+        lc4Data.BMS1["404003"]
+      ),
+      0.1,
+      1
+    ), //所有BMS電流平均
+    systemSOC: scaleProcess(
+      calculateAverage(
+        lc1Data.BMS1["404007"],
+        lc1Data.BMS2["404007"],
+        lc2Data.BMS1["404007"],
+        lc2Data.BMS2["404007"],
+        lc3Data.BMS1["404007"],
+        lc3Data.BMS2["404007"],
+        lc4Data.BMS1["404007"]
+      ),
+      0.1,
+      1
+    ),
+    systemSOH: scaleProcess(
+      calculateAverage(
+        lc1Data.BMS1["404005"],
+        lc1Data.BMS2["404005"],
+        lc2Data.BMS1["404005"],
+        lc2Data.BMS2["404005"],
+        lc3Data.BMS1["404005"],
+        lc3Data.BMS2["404005"],
+        lc4Data.BMS1["404005"]
+      ),
+      0.1,
+      1
+    ),
 
     avgContainerTemp: calculateAverage(
       lc1Data.BSC1["406047"],
@@ -227,17 +246,27 @@ async function querySumData() {
 
     onGridStatus_LC1: maponGridStatus_LC(lc1Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
-    voltage_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404002"],
-      lc1Data.BMS2["404002"],
-    ), 0.1, 1),
-    current_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404003"],
-      lc1Data.BMS1["404003"]
-    ), 0.1, 1),
+    voltage_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404002"], lc1Data.BMS2["404002"]),
+      0.1,
+      1
+    ),
+    current_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404003"], lc1Data.BMS1["404003"]),
+      0.1,
+      1
+    ),
 
-    SOC_LC1: scaleProcess(calculateAverage(lc1Data.BMS1["404007"], lc1Data.BMS2["404007"]), 0.1, 1),
-    SOH_LC1: scaleProcess(calculateAverage(lc1Data.BMS1["404005"], lc1Data.BMS2["404005"]), 0.1, 1),
+    SOC_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404007"], lc1Data.BMS2["404007"]),
+      0.1,
+      1
+    ),
+    SOH_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404005"], lc1Data.BMS2["404005"]),
+      0.1,
+      1
+    ),
 
     containerTemp_LC1: calculateAverage(
       lc1Data.BSC1["406047"],
@@ -246,30 +275,36 @@ async function querySumData() {
       lc1Data.BSC2["406049"]
     ),
 
-    V_cell_Max_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404021"],
-      lc1Data.BMS2["404021"]
-    ), 0.0001, 3),
-    V_cell_Min_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404022"],
-      lc1Data.BMS2["404022"]
-    ), 0.0001, 3),
-    V_cell_MaxDiff_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404025"],
-      lc1Data.BMS2["404025"]
-    ), 0.1, 1),
-    T_cell_Max_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404023"],
-      lc1Data.BMS2["404023"]
-    ), 0.1, 1),
-    T_cell_Min_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404024"],
-      lc1Data.BMS2["404024"]
-    ), 0.1, 1),
-    T_cell_MaxDiff_LC1: scaleProcess(calculateAverage(
-      lc1Data.BMS1["404026"],
-      lc1Data.BMS2["404026"]
-    ), 0.1, 1),
+    V_cell_Max_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404021"], lc1Data.BMS2["404021"]),
+      0.0001,
+      3
+    ),
+    V_cell_Min_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404022"], lc1Data.BMS2["404022"]),
+      0.0001,
+      3
+    ),
+    V_cell_MaxDiff_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404025"], lc1Data.BMS2["404025"]),
+      0.1,
+      1
+    ),
+    T_cell_Max_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404023"], lc1Data.BMS2["404023"]),
+      0.1,
+      1
+    ),
+    T_cell_Min_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404024"], lc1Data.BMS2["404024"]),
+      0.1,
+      1
+    ),
+    T_cell_MaxDiff_LC1: scaleProcess(
+      calculateAverage(lc1Data.BMS1["404026"], lc1Data.BMS2["404026"]),
+      0.1,
+      1
+    ),
 
     alarm_BMS1_1: checkValuesalarm(lc1Data.BMS1["404044"]),
     alarm_BMS1_2: checkValuesalarm(lc1Data.BMS2["404044"]),
@@ -294,17 +329,27 @@ async function querySumData() {
 
     onGridStatus_LC2: maponGridStatus_LC(lc2Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
-    voltage_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404002"],
-      lc2Data.BMS1["404002"]
-    ), 0.1, 1),
-    current_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404003"],
-      lc2Data.BMS1["404003"]
-    ), 0.1, 1),
+    voltage_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404002"], lc2Data.BMS1["404002"]),
+      0.1,
+      1
+    ),
+    current_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404003"], lc2Data.BMS1["404003"]),
+      0.1,
+      1
+    ),
 
-    SOC_LC2: scaleProcess(calculateAverage(lc2Data.BMS1["404007"], lc2Data.BMS2["404007"]), 0.1, 1),
-    SOH_LC2: scaleProcess(calculateAverage(lc2Data.BMS1["404005"], lc2Data.BMS2["404005"]), 0.1, 1),
+    SOC_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404007"], lc2Data.BMS2["404007"]),
+      0.1,
+      1
+    ),
+    SOH_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404005"], lc2Data.BMS2["404005"]),
+      0.1,
+      1
+    ),
 
     containerTemp_LC2: calculateAverage(
       lc2Data.BSC1["406047"],
@@ -313,30 +358,36 @@ async function querySumData() {
       lc2Data.BSC2["406049"]
     ),
 
-    V_cell_Max_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404021"],
-      lc2Data.BMS2["404021"]
-    ), 0.0001, 3),
-    V_cell_Min_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404022"],
-      lc2Data.BMS2["404022"]
-    ), 0.0001, 3),
-    V_cell_MaxDiff_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404025"],
-      lc2Data.BMS2["404025"]
-    ), 0.1, 1),
-    T_cell_Max_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404023"],
-      lc2Data.BMS2["404023"]
-    ), 0.1, 1),
-    T_cell_Min_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404024"],
-      lc2Data.BMS2["404024"]
-    ), 0.1, 1),
-    T_cell_MaxDiff_LC2: scaleProcess(calculateAverage(
-      lc2Data.BMS1["404026"],
-      lc2Data.BMS2["404026"]
-    ), 0.1, 1),
+    V_cell_Max_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404021"], lc2Data.BMS2["404021"]),
+      0.0001,
+      3
+    ),
+    V_cell_Min_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404022"], lc2Data.BMS2["404022"]),
+      0.0001,
+      3
+    ),
+    V_cell_MaxDiff_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404025"], lc2Data.BMS2["404025"]),
+      0.1,
+      1
+    ),
+    T_cell_Max_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404023"], lc2Data.BMS2["404023"]),
+      0.1,
+      1
+    ),
+    T_cell_Min_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404024"], lc2Data.BMS2["404024"]),
+      0.1,
+      1
+    ),
+    T_cell_MaxDiff_LC2: scaleProcess(
+      calculateAverage(lc2Data.BMS1["404026"], lc2Data.BMS2["404026"]),
+      0.1,
+      1
+    ),
 
     alarm_BMS2_1: checkValuesalarm(lc2Data.BMS1["404044"]),
     alarm_BMS2_2: checkValuesalarm(lc2Data.BMS2["404044"]),
@@ -361,17 +412,27 @@ async function querySumData() {
 
     onGridStatus_LC3: maponGridStatus_LC(lc3Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
-    voltage_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404002"],
-      lc3Data.BMS1["404002"]
-    ), 0.1, 1),
-    current_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404003"],
-      lc3Data.BMS1["404003"]
-    ), 0.1, 1),
+    voltage_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404002"], lc3Data.BMS1["404002"]),
+      0.1,
+      1
+    ),
+    current_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404003"], lc3Data.BMS1["404003"]),
+      0.1,
+      1
+    ),
 
-    SOC_LC3: scaleProcess(calculateAverage(lc3Data.BMS1["404007"], lc3Data.BMS2["404007"]), 0.1, 1),
-    SOH_LC3: scaleProcess(calculateAverage(lc3Data.BMS1["404005"], lc3Data.BMS2["404005"]), 0.1, 1),
+    SOC_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404007"], lc3Data.BMS2["404007"]),
+      0.1,
+      1
+    ),
+    SOH_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404005"], lc3Data.BMS2["404005"]),
+      0.1,
+      1
+    ),
 
     containerTemp_LC3: calculateAverage(
       lc3Data.BSC1["406047"],
@@ -380,30 +441,36 @@ async function querySumData() {
       lc3Data.BSC2["406049"]
     ),
 
-    V_cell_Max_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404021"],
-      lc3Data.BMS2["404021"]
-    ), 0.0001, 3),
-    V_cell_Min_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404022"],
-      lc3Data.BMS2["404022"]
-    ), 0.0001, 3),
-    V_cell_MaxDiff_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404025"],
-      lc3Data.BMS2["404025"]
-    ), 0.1, 1),
-    T_cell_Max_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404023"],
-      lc3Data.BMS2["404023"]
-    ), 0.1, 1),
-    T_cell_Min_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404024"],
-      lc3Data.BMS2["404024"]
-    ), 0.1, 1),
-    T_cell_MaxDiff_LC3: scaleProcess(calculateAverage(
-      lc3Data.BMS1["404026"],
-      lc3Data.BMS2["404026"]
-    ), 0.1, 1),
+    V_cell_Max_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404021"], lc3Data.BMS2["404021"]),
+      0.0001,
+      3
+    ),
+    V_cell_Min_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404022"], lc3Data.BMS2["404022"]),
+      0.0001,
+      3
+    ),
+    V_cell_MaxDiff_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404025"], lc3Data.BMS2["404025"]),
+      0.1,
+      1
+    ),
+    T_cell_Max_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404023"], lc3Data.BMS2["404023"]),
+      0.1,
+      1
+    ),
+    T_cell_Min_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404024"], lc3Data.BMS2["404024"]),
+      0.1,
+      1
+    ),
+    T_cell_MaxDiff_LC3: scaleProcess(
+      calculateAverage(lc3Data.BMS1["404026"], lc3Data.BMS2["404026"]),
+      0.1,
+      1
+    ),
 
     alarm_BMS3_1: checkValuesalarm(lc3Data.BMS1["404044"]),
     alarm_BMS3_2: checkValuesalarm(lc3Data.BMS2["404044"]),
@@ -425,16 +492,15 @@ async function querySumData() {
     onlineNum_LC4: lc4Data.BMS1["404008"],
 
     workStatus_LC4: workStatus_LC(lc4Data.System["402019"]), //還需轉換輸出結果
-    
+
     onGridStatus_LC4: maponGridStatus_LC(lc4Data.Ctrl["407008"]), //下行目前已完成 等檢查下行是否正確寫入 顯示目前控制狀態
 
-    voltage_LC4: calculateAverage(
-      scaleProcess(lc4Data.BMS1["404002"], 0.1, 1),
+    voltage_LC4: calculateAverage(scaleProcess(lc4Data.BMS1["404002"], 0.1, 1)),
+    current_LC4: scaleProcess(
+      calculateAverage(lc4Data.BMS1["404003"], lc4Data.BMS1["404003"]),
+      0.1,
+      1
     ),
-    current_LC4: scaleProcess(calculateAverage(
-      lc4Data.BMS1["404003"],
-      lc4Data.BMS1["404003"]
-    ), 0.1, 1),
 
     SOC_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404007"]), 0.1, 1),
     SOH_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404005"]), 0.1, 1),
@@ -444,12 +510,36 @@ async function querySumData() {
       lc4Data.BSC1["406049"]
     ),
 
-    V_cell_Max_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404021"]), 0.0001, 3),
-    V_cell_Min_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404022"]), 0.0001, 3),
-    V_cell_MaxDiff_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404025"]), 0.1, 1),
-    T_cell_Max_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404023"]), 0.1, 1),
-    T_cell_Min_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404024"]), 0.1, 1),
-    T_cell_MaxDiff_LC4: scaleProcess(calculateAverage(lc4Data.BMS1["404026"]), 0.1, 1),
+    V_cell_Max_LC4: scaleProcess(
+      calculateAverage(lc4Data.BMS1["404021"]),
+      0.0001,
+      3
+    ),
+    V_cell_Min_LC4: scaleProcess(
+      calculateAverage(lc4Data.BMS1["404022"]),
+      0.0001,
+      3
+    ),
+    V_cell_MaxDiff_LC4: scaleProcess(
+      calculateAverage(lc4Data.BMS1["404025"]),
+      0.1,
+      1
+    ),
+    T_cell_Max_LC4: scaleProcess(
+      calculateAverage(lc4Data.BMS1["404023"]),
+      0.1,
+      1
+    ),
+    T_cell_Min_LC4: scaleProcess(
+      calculateAverage(lc4Data.BMS1["404024"]),
+      0.1,
+      1
+    ),
+    T_cell_MaxDiff_LC4: scaleProcess(
+      calculateAverage(lc4Data.BMS1["404026"]),
+      0.1,
+      1
+    ),
 
     alarm_BMS4_1: checkValuesalarm(lc4Data.BMS1["404044"]),
 
@@ -461,7 +551,7 @@ async function querySumData() {
     ),
 
     //其他回傳資料
-    permission: "manager",
+    permission: "manager"
   };
 }
 
@@ -543,6 +633,7 @@ router.post("/backendEndpoint", async (req, res) => {
     const extractedNumber = matchResult ? parseInt(matchResult[0], 10) : null;
     //console.log("extractedNumber:" + extractedNumber); //提取出來的lc數值
     // 修改 407008 這個點的數值
+
     const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
 
     if (extractedNumber == 1) {
@@ -566,7 +657,7 @@ router.post("/backendEndpoint", async (req, res) => {
     newdwctrlData.time = isoString;
     delete newdwctrlData._id;
     delete newdwctrlData._rev;
-    await nanoDb.use("dwctrl").insert(newdwctrlData);
+    await nano.use("dwctrl").insert(newdwctrlData);
     // console.log(
     //   "newdwctrlData 1讀取到的資料是:" + JSON.stringify(newdwctrlData, null, 2)
     // );
@@ -590,7 +681,7 @@ router.post("/backendEndpoint", async (req, res) => {
       category: "設備控制",
       device: `LC${extractedNumber}`,
       username: req.body.id,
-      content: `將LC${extractedNumber}BMS併網狀態設為${content}`,
+      content: `將LC${extractedNumber}BMS併網狀態設為${content}`
     };
     //console.log(doc);
 
@@ -623,7 +714,7 @@ async function queryDetailData() {
     4: "Lc02",
     5: "Lc03",
     6: "Lc03",
-    7: "Lc04",
+    7: "Lc04"
     // 8: "Lc04", // 如果需要處理 8，可以取消註解
   };
 
@@ -672,8 +763,8 @@ async function queryDetailData() {
       permission: "manager",
       pageNumber,
       No_of_BMS,
-      BMSMode:mapBMSMode(lcData.BMS2[404011]),
-      onlineNum:lcData.BMS2[404008],
+      BMSMode: mapBMSMode(lcData.BMS2[404011]),
+      onlineNum: lcData.BMS2[404008],
       onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
       BMSsystemV: scaleProcess(lcData.BMS2[404002], 0.1, 1),
       BMSsystemI: scaleProcess(lcData.BMS2[404003], 0.1, 1),
@@ -722,7 +813,7 @@ async function queryDetailData() {
       faultSMU: Convert_UInt_to_revBitString(lcData.BMS2[404061], 16),
       SOCcali: Convert_UInt_to_revBitString(lcData.BMS2[404060], 16),
       alarm: Convert_UInt_to_revBitString(lcData.BMS2[404044], 32),
-      fault: Convert_UInt_to_revBitString(lcData.BMS2[404046], 32),
+      fault: Convert_UInt_to_revBitString(lcData.BMS2[404046], 32)
     };
   } else {
     // 奇數頁處理方式 傳遞資料給模板引擎，渲染頁面
@@ -730,8 +821,8 @@ async function queryDetailData() {
       permission: "manager",
       pageNumber,
       No_of_BMS,
-      BMSMode:mapBMSMode(lcData.BMS1[404011]),
-      onlineNum:lcData.BMS1[404008],
+      BMSMode: mapBMSMode(lcData.BMS1[404011]),
+      onlineNum: lcData.BMS1[404008],
       onlineV: scaleProcess(lcData.BMS1[404006], 0.1, 1),
       BMSsystemV: scaleProcess(lcData.BMS1[404002], 0.1, 1),
       BMSsystemI: scaleProcess(lcData.BMS1[404003], 0.1, 1),
@@ -780,7 +871,7 @@ async function queryDetailData() {
       faultSMU: Convert_UInt_to_revBitString(lcData.BMS1[404061], 16),
       SOCcali: Convert_UInt_to_revBitString(lcData.BMS1[404060], 16),
       alarm: Convert_UInt_to_revBitString(lcData.BMS1[404044], 32),
-      fault: Convert_UInt_to_revBitString(lcData.BMS1[404046], 32),
+      fault: Convert_UInt_to_revBitString(lcData.BMS1[404046], 32)
     };
   }
 
@@ -937,7 +1028,7 @@ const rackWorkStatus_MT = {
   16: "關機",
   32: "升級",
   64: "ADC校正",
-  128: "測試",
+  128: "測試"
 };
 var batteryRack_variables;
 async function queryRackData() {
@@ -952,7 +1043,7 @@ async function queryRackData() {
     4: "Lc02",
     5: "Lc03",
     6: "Lc03",
-    7: "Lc04",
+    7: "Lc04"
     // 8: "Lc04", // 如果需要處理 8，可以取消註解
   };
 
@@ -1428,7 +1519,7 @@ async function queryRackData() {
     faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
     DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(
       Lc_RackGroup.Rack12[405032]
-    ),
+    )
   };
 }
 
@@ -1495,7 +1586,7 @@ router.post("/getData", async (req, res) => {
       9: "Rack09",
       10: "Rack10",
       11: "Rack11",
-      12: "Rack12",
+      12: "Rack12"
     };
 
     //判斷帶入哪個rack
@@ -1513,7 +1604,7 @@ router.post("/getData", async (req, res) => {
     const data = {
       alarmCMU_rawD: alarmCMU_rawD.toString(2),
       faultCMU_rawD: faultCMU_rawD.toString(2),
-      DL_of_statusHW: DL_of_statusHW.toString(2),
+      DL_of_statusHW: DL_of_statusHW.toString(2)
     };
 
     res.json(data);

@@ -141,7 +141,7 @@ var specified_date_clone23;
 
 /*************************************************************************************************** */
 
-//記得要打開
+
 router.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
@@ -1491,7 +1491,6 @@ function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
   return totalDifference;
 }
 
-//getMonthData();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 async function getYearData() {
@@ -1699,8 +1698,7 @@ async function getYearData() {
 
 }
 
-function convertFileNameToDate(inputFileName) {
-  //將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
+function convertFileNameToDate(inputFileName) {//將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
   // Extract the date parts from the filename using a regular expression
   const regex = /(\d{4})年(?:(\d{1,2})月?(?:(\d{1,2})日)?)?\.xlsx/;
   const match = inputFileName.match(regex);

@@ -53,9 +53,12 @@ function hide_ssNavBar(clickItem) {
 
 async function updateData() {
   //更新資料
-  var router = window.location.href + "data";
+  var router = window.location.href + "/data";
   console.log(router);
   var data = await getData(router);
+  const pageNumber = 1
+  // var data = await getData(`operateinfo/pcs/infodetail/${pageNumber}/data/`)
+  // var data = await getData(`data/`)
   console.log(data);
   $("#chargeStatus").text(data.chargeStatus);
   $("#tot_E_chg").text(data.tot_E_chg); //畫面顯示MWh
