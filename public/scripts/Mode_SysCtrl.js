@@ -29,7 +29,7 @@ function afterLoadDCM() {
     routineWork();
 }
 
-setInterval(routineWork, 5000);
+setInterval(routineWork, 1000);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 const window_dataValue_Set = document.querySelector(".dataValue_Set");
@@ -121,14 +121,14 @@ setBut_sysMode.addEventListener("click", Set_sysMode);
 function Set_sysMode() {
     window_dataStatus_Set.classList.add("appear");
     clearCheckedRadioOption();
-    title_dataStatus_Set.textContent = "運作模式設定";
-    option1_dataStatus_Set.textContent = "E-dReg";
-    option2_dataStatus_Set.textContent = "停機";
+    title_dataStatus_Set.textContent = "子系統運作模式設定";
+    option1_dataStatus_Set.textContent = "全部自動";
+    option2_dataStatus_Set.textContent = "全部手動";
     alertInfo_dataStatus_Set.textContent = "";
     valNow_dataStatus_Set = document.querySelector(".sysInfo #sysMode");
     valLightNow_dataStatus_Set = document.querySelector(".block_temp #spare_Light");
-    option1_Description = "E-dReg";
-    option2_Description = "停機";
+    option1_Description = "全部自動";
+    option2_Description = "全部手動";
 }
 
 const setBut_statusAllPCS = document.querySelector(".sysInfo #statusAllPCS_set");
@@ -232,10 +232,6 @@ function closePopup_dSS_No() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-let freqMin = 5800;
-let freqMax = 6100;
-let powerMin = -1000;
-let powerMax = 1000;
 const window_freqVsP_Set = document.querySelector(".freqVsP_Set");
 const freq_A = document.querySelector(".EdReg #Freq_A");
 const freq_B = document.querySelector(".EdReg #Freq_B");
@@ -262,6 +258,7 @@ const p_w_Set = document.querySelector(".freqVsP_Set #P_w_Set");
 const p_x_Set = document.querySelector(".freqVsP_Set #P_x_Set");
 const p_y_Set = document.querySelector(".freqVsP_Set #P_y_Set");
 const window_WrongDataSet = document.querySelector(".alert_WrongDataSet");
+const alertMessage = document.querySelector("#alertMessage");
 
 const setBut_freqVsP = document.querySelector(".EdReg #FvsP_set");
 setBut_freqVsP.addEventListener("click", Set_freqVsP);
@@ -294,7 +291,7 @@ async function set_freqVsP_Data(setValue_Freq, setValue_P) {
         });
 
         const data = await response.json();
-        console.log(data);
+        return data;
     } catch (error) {
         console.error("Error fetching data:", error);
     }
@@ -302,57 +299,17 @@ async function set_freqVsP_Data(setValue_Freq, setValue_P) {
 
 const closeWB_Yes_freqVsP = document.querySelector(".freqVsP_Set #closeWB_Yes");
 closeWB_Yes_freqVsP.addEventListener("click", close_freqVsP_Yes);
-function close_freqVsP_Yes() {
-    set_freqVsP_Data([freq_A_Set.value, freq_B_Set.value, freq_C_Set.value, freq_D_Set.value, freq_E_Set.value, freq_F_Set.value],
+async function close_freqVsP_Yes() {
+    let getData = await set_freqVsP_Data([freq_A_Set.value, freq_B_Set.value, freq_C_Set.value, freq_D_Set.value, freq_E_Set.value, freq_F_Set.value],
         [p_t_Set.value, p_u_Set.value, p_v_Set.value, p_w_Set.value, p_x_Set.value, p_y_Set.value]);
+    console.log(getData);
 
-    // let freq_A_raw = Math.round(Number(freq_A_Set.value) * 100);
-    // let freq_B_raw = Math.round(Number(freq_B_Set.value) * 100);
-    // let freq_C_raw = Math.round(Number(freq_C_Set.value) * 100);
-    // let freq_D_raw = Math.round(Number(freq_D_Set.value) * 100);
-    // let freq_E_raw = Math.round(Number(freq_E_Set.value) * 100);
-    // let freq_F_raw = Math.round(Number(freq_F_Set.value) * 100);
-    // let p_t_raw = Math.round(Number(p_t_Set.value) * 10);
-    // let p_u_raw = Math.round(Number(p_u_Set.value) * 10);
-    // let p_v_raw = Math.round(Number(p_v_Set.value) * 10);
-    // let p_w_raw = Math.round(Number(p_w_Set.value) * 10);
-    // let p_x_raw = Math.round(Number(p_x_Set.value) * 10);
-    // let p_y_raw = Math.round(Number(p_y_Set.value) * 10);
-
-    // if ((freq_A_raw >= freqMin) && (freq_A_raw <= freqMax) && (freq_B_raw >= freqMin) && (freq_B_raw <= freqMax) &&
-    //     (freq_C_raw >= freqMin) && (freq_C_raw <= freqMax) && (freq_D_raw >= freqMin) && (freq_D_raw <= freqMax) &&
-    //     (freq_E_raw >= freqMin) && (freq_E_raw <= freqMax) && (freq_F_raw >= freqMin) && (freq_F_raw <= freqMax) &&
-    //     (p_t_raw >= powerMin) && (p_t_raw <= powerMax) && (p_u_raw >= powerMin) && (p_u_raw <= powerMax) && (p_v_raw >= powerMin) && (p_v_raw <= powerMax) &&
-    //     (p_w_raw >= powerMin) && (p_w_raw <= powerMax) && (p_x_raw >= powerMin) && (p_x_raw <= powerMax) && (p_y_raw >= powerMin) && (p_y_raw <= powerMax)) {
-    //     let val = freq_A_raw / 100;
-    //     freq_A.textContent = val.toFixed(2);
-    //     val = freq_B_raw / 100;
-    //     freq_B.textContent = val.toFixed(2);
-    //     val = freq_C_raw / 100;
-    //     freq_C.textContent = val.toFixed(2);
-    //     val = freq_D_raw / 100;
-    //     freq_D.textContent = val.toFixed(2);
-    //     val = freq_E_raw / 100;
-    //     freq_E.textContent = val.toFixed(2);
-    //     val = freq_F_raw / 100;
-    //     freq_F.textContent = val.toFixed(2);
-    //     val = p_t_raw / 10;
-    //     p_t.textContent = val.toFixed(1);
-    //     val = p_u_raw / 10;
-    //     p_u.textContent = val.toFixed(1);
-    //     val = p_v_raw / 10;
-    //     p_v.textContent = val.toFixed(1);
-    //     val = p_w_raw / 10;
-    //     p_w.textContent = val.toFixed(1);
-    //     val = p_x_raw / 10;
-    //     p_x.textContent = val.toFixed(1);
-    //     val = p_y_raw / 10;
-    //     p_y.textContent = val.toFixed(1);
-
-    //     window_freqVsP_Set.classList.remove("appear");
-    // } else {
-    //     window_WrongDataSet.classList.add("appear");
-    // }
+    if (getData.status === "ok") {
+        window_freqVsP_Set.classList.remove("appear");
+    } else {
+        alertMessage.textContent = getData.alertMessage;
+        window_WrongDataSet.classList.add("appear");
+    }
 }
 
 const closeWB_No_freqVsP = document.querySelector(".freqVsP_Set #closeWB_No");
@@ -363,10 +320,6 @@ function close_freqVsP_No() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-let socMin = 0;
-let socMax = 1000;
-let voltMin = 7000;
-let voltMax = 15000;
 const window_socRef_Set = document.querySelector(".socRef_Set");
 const socMaxLimit = document.querySelector(".socRef_Set #socMax");
 const socUpperB = document.querySelector(".socRef_Set #socUpperB");
@@ -376,64 +329,72 @@ const voltMaxLimit = document.querySelector(".socRef_Set #voltMax");
 const voltUpperB = document.querySelector(".socRef_Set #voltUpperB");
 const voltLowerB = document.querySelector(".socRef_Set #voltLowerB");
 const voltMinLimit = document.querySelector(".socRef_Set #voltMin");
-const socMaxL = document.querySelector(".block_temp #spareVal_01");
-const socUB = document.querySelector(".block_temp #spareVal_03");
-const socLB = document.querySelector(".block_temp #spareVal_05");
-const socMinL = document.querySelector(".block_temp #spareVal_07");
-const voltMaxL = document.querySelector(".block_temp #spareVal_02");
-const voltUB = document.querySelector(".block_temp #spareVal_04");
-const voltLB = document.querySelector(".block_temp #spareVal_06");
-const voltMinL = document.querySelector(".block_temp #spareVal_08");
 
 const setBut_socRef = document.querySelector(".EdReg #SOC_Ref_set");
 setBut_socRef.addEventListener("click", Set_socRef);
-function Set_socRef() {
+async function Set_socRef() {
     window_socRef_Set.classList.add("appear");
-    socMaxLimit.value = socMaxL.textContent;
-    socUpperB.value = socUB.textContent;
-    socLowerB.value = socLB.textContent;
-    socMinLimit.value = socMinL.textContent;
-    voltMaxLimit.value = voltMaxL.textContent;
-    voltUpperB.value = voltUB.textContent;
-    voltLowerB.value = voltLB.textContent;
-    voltMinLimit.value = voltMinL.textContent;
+
+    let getData = await get_socRef_Data();
+    console.log(getData);
+
+    socMaxLimit.value = getData.socMax;
+    socUpperB.value = getData.socUpperB;
+    socLowerB.value = getData.socLowerB;
+    socMinLimit.value = getData.socMin;
+    voltMaxLimit.value = getData.voltMax;
+    voltUpperB.value = getData.voltUpperB;
+    voltLowerB.value = getData.voltLowerB;
+    voltMinLimit.value = getData.voltMin;
+}
+
+async function get_socRef_Data() {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/get_socRef_Data", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(),
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+async function set_socRef_Data(setValue_SOC, setValue_Volt) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/set_socRef_Data", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ setValue_SOC, setValue_Volt }),
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
 }
 
 const closeWB_Yes_socRef = document.querySelector(".socRef_Set #closeWB_Yes");
 closeWB_Yes_socRef.addEventListener("click", close_socRef_Yes);
-function close_socRef_Yes() {
-    let SOC_max = Math.round(Number(socMaxLimit.value) * 10);
-    let SOC_upperb = Math.round(Number(socUpperB.value) * 10);
-    let SOC_lowerb = Math.round(Number(socLowerB.value) * 10);
-    let SOC_min = Math.round(Number(socMinLimit.value) * 10);
-    let Volt_max = Math.round(Number(voltMaxLimit.value) * 10);
-    let Volt_upperb = Math.round(Number(voltUpperB.value) * 10);
-    let Volt_lowerb = Math.round(Number(voltLowerB.value) * 10);
-    let Volt_min = Math.round(Number(voltMinLimit.value) * 10);
+async function close_socRef_Yes() {
+    let getData = await set_socRef_Data([socMaxLimit.value, socMinLimit.value, socUpperB.value, socLowerB.value],
+        [voltMaxLimit.value, voltMinLimit.value, voltUpperB.value, voltLowerB.value]);
+    console.log(getData);
 
-    if ((SOC_max >= socMin) && (SOC_max <= socMax) && (SOC_upperb >= socMin) && (SOC_upperb <= socMax) &&
-        (SOC_lowerb >= socMin) && (SOC_lowerb <= socMax) && (SOC_min >= socMin) && (SOC_min <= socMax) &&
-        (Volt_max >= voltMin) && (Volt_max <= voltMax) && (Volt_upperb >= voltMin) && (Volt_upperb <= voltMax) &&
-        (Volt_lowerb >= voltMin) && (Volt_lowerb <= voltMax) && (Volt_min >= voltMin) && (Volt_min <= voltMax)) {
-        let val = SOC_max / 10;
-        socMaxL.textContent = val.toFixed(1);
-        val = SOC_upperb / 10;
-        socUB.textContent = val.toFixed(1);
-        val = SOC_lowerb / 10;
-        socLB.textContent = val.toFixed(1);
-        val = SOC_min / 10;
-        socMinL.textContent = val.toFixed(1);
-        val = Volt_max / 10;
-        voltMaxL.textContent = val.toFixed(1);
-        val = Volt_upperb / 10;
-        voltUB.textContent = val.toFixed(1);
-        val = Volt_lowerb / 10;
-        voltLB.textContent = val.toFixed(1);
-        val = Volt_min / 10;
-        voltMinL.textContent = val.toFixed(1);
-
+    if (getData.status === "ok") {
         window_socRef_Set.classList.remove("appear");
     } else {
+        alertMessage.textContent = getData.alertMessage;
         window_WrongDataSet.classList.add("appear");
     }
 }
@@ -449,6 +410,8 @@ button_WrongDataSet.addEventListener("click", close_WrongDataSet);
 function close_WrongDataSet() {
     window_WrongDataSet.classList.remove("appear");
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 // 
 // 
@@ -817,6 +780,8 @@ button_11.addEventListener("click", Set_SOC_Ref);
 function Set_SOC_Ref() {
     window.open('../Set_SOC_ref/Set_SOC_ref.html', 'SOC參考值設定', 'width=500, height=300, left=600, top=650, location=no, menubar=no, resizable=no, scrollbars=yes, status=no, toolbar=no, directories=no');
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 async function updateData() {   //更新資料
     var router = window.location.href + "/data";

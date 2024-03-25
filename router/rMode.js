@@ -270,8 +270,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
   try {
     const setV_Freq_raw = req.body.setValue_Freq;
     const setV_P_raw = req.body.setValue_P;
-    console.log(setV_Freq_raw);
-    console.log(setV_P_raw);
 
     let response;
 
@@ -288,7 +286,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
         check_num++;
       }
     }
-    console.log("check_num: ", check_num);
 
     if (check_num === 12) {
       const freq_scale = 0.01;
@@ -312,9 +309,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
       setV_P[4] = Math.round(Number(setV_P_raw[4]) / p_scale);
       setV_P[5] = Math.round(Number(setV_P_raw[5]) / p_scale);
 
-      console.log(setV_Freq);
-      console.log(setV_P);
-
       const freq_minLimit = 5800;
       const freq_maxLimit = 6100;
       const p_minLimit = -1000;
@@ -330,7 +324,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
           check_num++;
         }
       }
-      console.log("check_num: ", check_num);
 
       if (check_num === 24) {
         const indexDef = {
@@ -338,7 +331,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
           name: "time_index",
         };
         await dwctrlnanoDb.createIndex(indexDef);
-        await GC01nanoDb.createIndex(indexDef);
 
         const mangoQuery = {
           selector: {
@@ -402,7 +394,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
         delete newdwctrlData._id;
         delete newdwctrlData._rev;
         await nano.use("dwctrl").insert(newdwctrlData);     // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
-        console.log(newdwctrlData);
 
         const createNanoInstance = (dbName) => nano.db.use(dbName);
         //log紀錄
@@ -421,19 +412,19 @@ router.post("/set_freqVsP_Data", async (req, res) => {
             username: "SE0008",
             content: `將${freqVsP_MT[Object.keys(freqVsP_MT)[i]].log_dataName}設為${log_dataValue[i]} ${freqVsP_MT[Object.keys(freqVsP_MT)[i]].unit}`,
           };
-          console.log(doc[i]);
+          // console.log(doc[i]);
 
           let result = await logDb.insert(doc[i]);     // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
         }
 
         response = { status: "ok", alertMessage: "NA" };
       } else {
-        console.log("數值範圍有誤~~~");
-        response = { status: "error", alertMessage: "數值範圍有誤@@@###" };
+        console.log("數值範圍有誤@@@###");
+        response = { status: "error", alertMessage: "數值範圍有誤！" };
       }
     } else {
-      console.log("數值輸入錯誤~@@");
-      response = { status: "error", alertMessage: "數值輸入錯誤~~~!!!" };
+      console.log("數值型式有誤~~~!!!");
+      response = { status: "error", alertMessage: "數值型式有誤！" };
     }
 
     res.json(response);
@@ -443,7 +434,194 @@ router.post("/set_freqVsP_Data", async (req, res) => {
   }
 });
 
-/******排程**************************************************************/
+/************************************************************************************ */
+
+router.post("/get_socRef_Data", async (req, res) => {
+  try {
+    // let response;
+    const indexDef = {
+      index: { fields: ["time"] },
+      name: "time_index",
+    };
+    await GC10nanoDb.createIndex(indexDef);
+
+    const mangoQuery = {
+      selector: {
+        time: { $exists: true },
+      },
+      sort: [{ time: "desc" }],
+      limit: 1,
+    };
+
+    const dataGot = await GC10nanoDb.find(mangoQuery);
+    const GC10Data = dataGot.docs[0];
+
+    const response = {
+      socMax: Scale_Data(GC10Data.System[400006], 0.1, 1),
+      socMin: Scale_Data(GC10Data.System[400007], 0.1, 1),
+      voltMax: Scale_Data(GC10Data.System[400008], 0.1, 1),
+      voltMin: Scale_Data(GC10Data.System[400009], 0.1, 1),
+      socUpperB: Scale_Data(GC10Data.System[400032], 0.1, 1),
+      socLowerB: Scale_Data(GC10Data.System[400033], 0.1, 1),
+      voltUpperB: Scale_Data(GC10Data.System[400034], 0.1, 1),
+      voltLowerB: Scale_Data(GC10Data.System[400035], 0.1, 1)
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.post("/set_socRef_Data", async (req, res) => {
+  try {
+    const setV_SOC_raw = req.body.setValue_SOC;
+    const setV_Volt_raw = req.body.setValue_Volt;
+
+    let response;
+
+    let check_num = 0;
+    let i;
+
+    for (i = 0; i < setV_SOC_raw.length; i++) {
+      if (setV_SOC_raw[i] !== "" && !Number.isNaN(Number(setV_SOC_raw[i]))) {
+        check_num++;
+      }
+    }
+    for (i = 0; i < setV_Volt_raw.length; i++) {
+      if (setV_Volt_raw[i] !== "" && !Number.isNaN(Number(setV_Volt_raw[i]))) {
+        check_num++;
+      }
+    }
+
+    if (check_num === 8) {
+      const soc_scale = 0.1;
+      const volt_scale = 0.1;
+      const soc_decPlace = 1;
+      const volt_decPlace = 1;
+
+      let setV_SOC = [];
+      let setV_Volt = [];
+
+      setV_SOC[0] = Math.round(Number(setV_SOC_raw[0]) / soc_scale);
+      setV_SOC[1] = Math.round(Number(setV_SOC_raw[1]) / soc_scale);
+      setV_SOC[2] = Math.round(Number(setV_SOC_raw[2]) / soc_scale);
+      setV_SOC[3] = Math.round(Number(setV_SOC_raw[3]) / soc_scale);
+      setV_Volt[0] = Math.round(Number(setV_Volt_raw[0]) / volt_scale);
+      setV_Volt[1] = Math.round(Number(setV_Volt_raw[1]) / volt_scale);
+      setV_Volt[2] = Math.round(Number(setV_Volt_raw[2]) / volt_scale);
+      setV_Volt[3] = Math.round(Number(setV_Volt_raw[3]) / volt_scale);
+
+      const soc_minLimit = 0;
+      const soc_maxLimit = 1000;
+      const volt_minLimit = 7000;
+      const volt_maxLimit = 15000;
+
+      for (i = 0; i < setV_SOC.length; i++) {
+        if (setV_SOC[i] >= soc_minLimit && setV_SOC[i] <= soc_maxLimit) {
+          check_num++;
+        }
+      }
+      for (i = 0; i < setV_Volt.length; i++) {
+        if (setV_Volt[i] >= volt_minLimit && setV_Volt[i] <= volt_maxLimit) {
+          check_num++;
+        }
+      }
+
+      if (check_num === 16) {
+        const indexDef = {
+          index: { fields: ["time"] },
+          name: "time_index",
+        };
+        await dwctrlnanoDb.createIndex(indexDef);
+
+        const mangoQuery = {
+          selector: {
+            time: { $exists: true },
+          },
+          sort: [{ time: "desc" }],
+          limit: 1,
+        };
+
+        const dataGot = await dwctrlnanoDb.find(mangoQuery);
+        const dwctrlData = dataGot.docs[0];
+        const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+        socRef_MT = {
+          SOC_MaxL: { dataID: "W400006", log_dataName: `SOC保護上限`, log_dataValue: setV_SOC[0], scale: soc_scale, decPlace: soc_decPlace, unit: "%" },
+          SOC_MinL: { dataID: "W400007", log_dataName: `SOC保護下限`, log_dataValue: setV_SOC[1], scale: soc_scale, decPlace: soc_decPlace, unit: "%" },
+          SOC_UB: { dataID: "W400032", log_dataName: `SOC理想範圍上限`, log_dataValue: setV_SOC[2], scale: soc_scale, decPlace: soc_decPlace, unit: "%" },
+          SOC_LB: { dataID: "W400033", log_dataName: `SOC理想範圍下限`, log_dataValue: setV_SOC[3], scale: soc_scale, decPlace: soc_decPlace, unit: "%" },
+          V_MaxL: { dataID: "W400008", log_dataName: `電壓保護上限`, log_dataValue: setV_Volt[0], scale: volt_scale, decPlace: volt_decPlace, unit: "V" },
+          V_MinL: { dataID: "W400009", log_dataName: `電壓保護下限`, log_dataValue: setV_Volt[1], scale: volt_scale, decPlace: volt_decPlace, unit: "V" },
+          V_UB: { dataID: "W400034", log_dataName: `電壓理想範圍上限`, log_dataValue: setV_Volt[2], scale: volt_scale, decPlace: volt_decPlace, unit: "V" },
+          V_LB: { dataID: "W400035", log_dataName: `電壓理想範圍下限`, log_dataValue: setV_Volt[3], scale: volt_scale, decPlace: volt_decPlace, unit: "V" },
+        }
+
+        newdwctrlData["system"]["W400006"] = setV_SOC[0];
+        newdwctrlData["system"]["W400007"] = setV_SOC[1];
+        newdwctrlData["system"]["W400032"] = setV_SOC[2];
+        newdwctrlData["system"]["W400033"] = setV_SOC[3];
+        newdwctrlData["system"]["W400008"] = setV_Volt[0];
+        newdwctrlData["system"]["W400009"] = setV_Volt[1];
+        newdwctrlData["system"]["W400034"] = setV_Volt[2];
+        newdwctrlData["system"]["W400035"] = setV_Volt[3];
+
+        //const accountDb = createNanoInstance("account");
+        //存入資料庫的時區問題
+        const currentDate = new Date();
+        const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
+        const localTime = new Date(currentDate - timezoneOffset);
+        const isoString = localTime.toISOString().replace("Z", "+08:00");
+
+        // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+        newdwctrlData.time = isoString;
+        delete newdwctrlData._id;
+        delete newdwctrlData._rev;
+        await nano.use("dwctrl").insert(newdwctrlData);     // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        // console.log(newdwctrlData.system);
+
+        const createNanoInstance = (dbName) => nano.db.use(dbName);
+        //log紀錄
+        const logDb = createNanoInstance("log");
+
+        let doc = [];
+        let log_dataValue = [];
+        for (i = 0; i < Object.keys(socRef_MT).length; i++) {
+          log_dataValue[i] = Scale_Data(socRef_MT[Object.keys(socRef_MT)[i]].log_dataValue, socRef_MT[Object.keys(socRef_MT)[i]].scale, socRef_MT[Object.keys(socRef_MT)[i]].decPlace);
+
+          doc[i] = {
+            tag: `system.${socRef_MT[Object.keys(socRef_MT)[i]].dataID}`,
+            time: isoString,
+            category: "系統模式05",
+            device: "GC",
+            username: "SE0008",
+            content: `將${socRef_MT[Object.keys(socRef_MT)[i]].log_dataName}設為${log_dataValue[i]} ${socRef_MT[Object.keys(socRef_MT)[i]].unit}`,
+          };
+          // console.log(doc[i]);
+
+          let result = await logDb.insert(doc[i]);     // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        }
+
+        response = { status: "ok", alertMessage: "NA" };
+      } else {
+        console.log("數值範圍有誤@@@###");
+        response = { status: "error", alertMessage: "數值範圍有誤！" };
+      }
+    } else {
+      console.log("數值型式有誤~~~!!!");
+      response = { status: "error", alertMessage: "數值型式有誤！" };
+    }
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+/************************************************************************************ */
 let Schd_KeyValuePairs;
 let dateNumber = 0;
 const date_MT = {
