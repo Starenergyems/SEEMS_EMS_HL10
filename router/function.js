@@ -1382,6 +1382,8 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 // const uv_2 = Determine_status_of_sbyCmd(unixTime_Now, startTime, endTime);
 // console.log(uv_2);
 
+/////////////////////////////////////////////////////////////////////////
+
 // let ab_123 = setTimeout(function () { console.log('x 秒後執行 console'); }, 3000);
 // let ab_234 = setTimeout(function () { console.log('y 秒後執行 console'); }, 3300);
 // setTimeout(function () { console.log('z 秒後執行 console'); }, 3600);
@@ -1410,3 +1412,9 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 //   num = num * 2 + 10;
 //   console.log(`setTimeout後(?), ans=${num}`);
 // }
+
+/////////////////////////////////////////////////////////////////////////
+
+// let abcde_123 = "o";
+// console.log(Number(abcde_123));
+// console.log(typeof Number(abcde_123));

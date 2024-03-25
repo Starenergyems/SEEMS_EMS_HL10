@@ -49,7 +49,7 @@
 
                 <table>
                     <tr>
-                        <td class="col_01"><span>運作模式</span></td>
+                        <td class="col_01"><span>子系統模式設定</span></td>
                         <td class="col_02"><label class="data_status" id="sysMode"><%=sysMode%></label>
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
@@ -59,7 +59,7 @@
                     </tr>
                     <tr>
                         <td class="col_01"><span>額定功率</span></td>
-                        <td class="col_02 data_R_align"><label class="data_val" id="P_Project"><%=P_Project%></label>kW
+                        <td class="col_02 data_R_align"><label class="data_val" id="P_Project"><%=P_Project%></label>MW
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
                                 <button id="P_Project_set">Set</button>
@@ -68,7 +68,7 @@
                     </tr>
                     <tr>
                         <td class="col_01"><span>負載移轉功率</span></td>
-                        <td class="col_02 data_R_align"><label class="data_val" id="P_LoadShift"><%P_LoadShift%></label>kW
+                        <td class="col_02 data_R_align"><label class="data_val" id="P_LoadShift"><%P_LoadShift%></label>MW
                             <div class="BG_button"></div>
                             <% if (permission === 'manager') { %>
                                 <button id="P_LoadShift_set">Set</button>
@@ -321,11 +321,11 @@
                 <h2 class="titlePUW">子系統運作設定</h2>
 
                 <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">系統運作設定</label>
-                    <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
+                    <input type="radio" name="dataStatus" value=" 2" class="radioOpt" id="radioOpt_1">
                     <div class="checkBox" id="checkBoxOpt_1"></div>
                 </div>
                 <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">OpenClose</label>
-                    <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                    <input type="radio" name="dataStatus" value=" 3" class="radioOpt" id="radioOpt_2">
                     <div class="checkBox" id="checkBoxOpt_2"></div>
                 </div>
 

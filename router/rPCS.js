@@ -31,7 +31,8 @@ const {
   mapPCSWorkingstatus,
   mapworkMode_page,
   mapworkStatus_page,
-  mapgridStatus_page
+  mapgridStatus_page,
+  Scale_Data,
 } = require("./function");
 
 app.set("view engine", "ejs");
@@ -91,10 +92,10 @@ async function getData() {
       selector: {
         time: {
           $gte: night, // 開始時間為大前天的 23:59:57
-          $lte: nightoneseconds // 結束時間為大前天的 23:59:59
-        }
+          $lte: nightoneseconds, // 結束時間為大前天的 23:59:59
+        },
       },
-      limit: 1
+      limit: 1,
     };
 
     const midnightData1 = await lc01Db.find(filterTime);
@@ -116,7 +117,6 @@ async function getData() {
       midnightData3.docs[0].System["402060"] +
       midnightData4.docs[0].System["402060"];
 
-
     lc4_imp = midnightData4.docs[0].System["402060"];
     lc4_exp = midnightData4.docs[0].System["402062"];
 
@@ -124,9 +124,9 @@ async function getData() {
     total_exp = expValue;
     total_imp = impValue;
 
-    console.log("PCS用電度數: " + total_exp + " / " + total_imp);
+    //console.log("PCS用電度數: " + total_exp + " / " + total_imp);
   }
-  console.log("呼叫getdata");
+  //console.log("呼叫getdata");
   flag = 1;
 }
 // 調用 getData 函數
@@ -140,7 +140,7 @@ const databases = [
   "lc4_rf10", //3
   "dwctrl", //4
   "log", //5
-  "gc_rf10" //6
+  "gc_rf10", //6
 ];
 
 // 創建 Nano 實例的函式
@@ -150,7 +150,7 @@ const createNanoInstance = (dbName) => nano.db.use(dbName);
 const getLatestDocument = async (nano) => {
   const indexDef = {
     index: { fields: ["time"] },
-    name: "time_index"
+    name: "time_index",
   };
 
   //建立index
@@ -159,10 +159,10 @@ const getLatestDocument = async (nano) => {
   //利用mango作為篩選器
   const mangoQuery = {
     selector: {
-      time: { $exists: true }
+      time: { $exists: true },
     },
     sort: [{ time: "desc" }],
-    limit: 1
+    limit: 1,
   };
 
   return new Promise((resolve, reject) => {
@@ -211,18 +211,18 @@ async function queryPcsSum(req) {
 
     totalP: scaleProcess(
       lc1Data.System[402055] +
-        lc2Data.System[402055] +
-        lc3Data.System[402055] +
-        lc4Data.System[402055],
+      lc2Data.System[402055] +
+      lc3Data.System[402055] +
+      lc4Data.System[402055],
       0.1,
       1
     ),
 
     totalQ: scaleProcess(
       lc1Data.System[402057] +
-        lc2Data.System[402057] +
-        lc3Data.System[402057] +
-        lc4Data.System[402057],
+      lc2Data.System[402057] +
+      lc3Data.System[402057] +
+      lc4Data.System[402057],
       0.1,
       1
     ),
@@ -231,37 +231,37 @@ async function queryPcsSum(req) {
 
     today_E_chg: scaleProcess(
       lc1Data.System[402060] +
-        lc2Data.System[402060] +
-        lc3Data.System[402060] +
-        lc4Data.System[402060] -
-        total_imp,
+      lc2Data.System[402060] +
+      lc3Data.System[402060] +
+      lc4Data.System[402060] -
+      total_imp,
       0.01,
       1
     ),
     today_E_dcg: scaleProcess(
       lc1Data.System[402062] +
-        lc2Data.System[402062] +
-        lc3Data.System[402062] +
-        lc4Data.System[402062] -
-        total_exp,
+      lc2Data.System[402062] +
+      lc3Data.System[402062] +
+      lc4Data.System[402062] -
+      total_exp,
       0.1,
       1
     ),
 
     tot_E_chg: scaleProcess(
       lc1Data.System[402060] +
-        lc2Data.System[402060] +
-        lc3Data.System[402060] +
-        lc4Data.System[402060],
+      lc2Data.System[402060] +
+      lc3Data.System[402060] +
+      lc4Data.System[402060],
       0.001,
       2
     ),
     tot_E_dcg: scaleProcess(
       lc1Data.System[402062] +
-        lc2Data.System[402062] +
-        lc3Data.System[402062] +
-        lc4Data.System[402062],
-        0.001,
+      lc2Data.System[402062] +
+      lc3Data.System[402062] +
+      lc4Data.System[402062],
+      0.001,
       2
     ),
     //******************************************************************** */
@@ -400,7 +400,7 @@ async function queryPcsSum(req) {
     modeActPas_LC4: mapModeActPas(lc4Data.Ctrl[407010]),
     modeQctrl_LC4: mapModeQctrl(lc4Data.Ctrl[407011]),
     standbyCmd_LC4: mapStandbyCmd(lc4Data.Ctrl[407012]),
-    modeLR_LC4: mapModeLR(lc4Data.Ctrl[407013])
+    modeLR_LC4: mapModeLR(lc4Data.Ctrl[407013]),
   };
 }
 router.get("/operateinfo/pcs", async (req, res) => {
@@ -506,7 +506,7 @@ async function queryPcsDetail() {
       //faultStatus3:lcData.PCS[403146],
       alarmStatus: lcData.PCS[403063] + lcData.PCS[403064],
       //alarmStatus3: lcData.PCS[403144],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS[403086], 16)
+      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS[403086], 16),
       // innerTemp: scaleProcess(lcData.PCS[403057], 0.1, 1),
       // moduleTemp1: scaleProcess(lcData.PCS[403014], 0.1, 1),
       // moduleTemp2: scaleProcess(lcData.PCS[403015], 0.1, 1),
@@ -523,8 +523,8 @@ async function queryPcsDetail() {
         lcData.PCS[403080]
       ),
       chargeStatus: mapWordStatus(lcData.PCS[403108], pcsCHGStatus_MT),
-      tot_E_chg: scaleProcess(lcData.PCS[403113], 0.00001, 3),  //畫面顯示MWh所以會比點表再乘0.001
-      tot_E_dcg: scaleProcess(lcData.PCS[403115], 0.00001, 3),  //畫面顯示MWh所以會比點表再乘0.001
+      tot_E_chg: scaleProcess(lcData.PCS[403113], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
+      tot_E_dcg: scaleProcess(lcData.PCS[403115], 0.00001, 3), //畫面顯示MWh所以會比點表再乘0.001
       // max_P_chg: scaleProcess(lcData.PCS[403066], 0.1, 1),
       // max_P_dcg: scaleProcess(lcData.PCS[403067], 0.1, 1),
       // max_Q_l: scaleProcess(lcData.PCS[403068], 0.1, 1),
@@ -557,7 +557,7 @@ async function queryPcsDetail() {
       //faultStatus3:lcData.PCS[403150],
       alarmStatus: lcData.PCS[403102] + lcData.PCS[403103],
       //alarmStatus3: lcData.PCS[403148],
-      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS[403125], 16)
+      nodeStatus: Convert_UInt_to_revBitString(lcData.PCS[403125], 16),
       // innerTemp: scaleProcess(lcData.PCS[403057], 0.1, 1),
       // moduleTemp1: scaleProcess(lcData.PCS[403014], 0.1, 1),
       // moduleTemp2: scaleProcess(lcData.PCS[403015], 0.1, 1),
@@ -604,7 +604,7 @@ async function queryPcsDetail() {
       innerTemp: scaleProcess(lcData.PCS[403557], 0.1, 1),
       moduleTemp1: scaleProcess(lcData.PCS[403514], 0.1, 1),
       moduleTemp2: scaleProcess(lcData.PCS[403515], 0.1, 1),
-      moduleTemp3: scaleProcess(lcData.PCS[403516], 0.1, 1)
+      moduleTemp3: scaleProcess(lcData.PCS[403516], 0.1, 1),
     };
   } else {
     console.log("頁數超出範圍!");
@@ -701,7 +701,7 @@ async function queryPcsAlarm() {
       Alarm3: Convert_UInt_to_revBitString(lcData.PCS[403144], 16),
       Fault1: Convert_UInt_to_revBitString(lcData.PCS[403065], 32),
       Fault2: Convert_UInt_to_revBitString(lcData.PCS[403067], 32),
-      Fault3: Convert_UInt_to_revBitString(lcData.PCS[403146], 32)
+      Fault3: Convert_UInt_to_revBitString(lcData.PCS[403146], 32),
     };
   } else if (pageNumber % 2 === 0 && pageNumber <= 6) {
     // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
@@ -731,7 +731,7 @@ async function queryPcsAlarm() {
       Alarm3: Convert_UInt_to_revBitString(lcData.PCS[403148], 16), //NEW
       Fault1: Convert_UInt_to_revBitString(lcData.PCS[403104], 32),
       Fault2: Convert_UInt_to_revBitString(lcData.PCS[403106], 32), //NEW
-      Fault3: Convert_UInt_to_revBitString(lcData.PCS[403150], 32)
+      Fault3: Convert_UInt_to_revBitString(lcData.PCS[403150], 32),
     };
   } else if (pageNumber == 7) {
     pcsAlarm_variables = {
@@ -753,7 +753,7 @@ async function queryPcsAlarm() {
       Alarm1: Convert_UInt_to_revBitString(lcData.PCS[403534], 16),
       Alarm2: Convert_UInt_to_revBitString(lcData.PCS[403535], 16),
       Fault1: Convert_UInt_to_revBitString(lcData.PCS[403536], 32),
-      Fault2: Convert_UInt_to_revBitString(lcData.PCS[403538], 32)
+      Fault2: Convert_UInt_to_revBitString(lcData.PCS[403538], 32),
     };
   } else {
     console.log("err");
@@ -826,36 +826,11 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
     dVS_Data_numInDataGroup = req.body.numInDataGroup;
 
     const data_MT = {
-      setBut_P_LC: {
-        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407078,
-        scale: 1,
-        decPlace: 0,
-        minLimit: -5000,
-        maxLimit: 5000,
-        unit: "kW"
-      },
-      setBut_acuHeatT: {
-        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407016,
-        scale: 0.1,
-        decPlace: 1,
-        minLimit: -1000,
-        maxLimit: 2000,
-        unit: "°C"
-      },
-      setBut_acuCoolT: {
-        dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407017,
-        scale: 0.1,
-        decPlace: 1,
-        minLimit: -1000,
-        maxLimit: 2000,
-        unit: "°C"
-      }
+      setBut_P_Project: { dbName_gD: `gc_rf10`, dicName: "System", dataID: 400001, scale: 0.01, decPlace: 2, minLimit: 0, maxLimit: 1000, unit: "MW" },
+      setBut_P_LoadShift: { dbName_gD: `gc_rf10`, dicName: "System", dataID: 400002, scale: 0.001, decPlace: 3, minLimit: -10000, maxLimit: 10000, unit: "MW" },
+      setBut_P_LC: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407078, scale: 1, decPlace: 0, minLimit: -5000, maxLimit: 5000, unit: "kW" },
+      setBut_acuHeatT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407016, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
+      setBut_acuCoolT: { dbName_gD: `lc${dVS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407017, scale: 0.1, decPlace: 1, minLimit: -1000, maxLimit: 2000, unit: "°C" },
       //
       //
       //
@@ -878,12 +853,12 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
 
     const getData_raw =
       allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
-        data_AfM.dataID
+      data_AfM.dataID
       ];
     const response = {
-      originData: scaleProcess(getData_raw, data_AfM.scale, data_AfM.decPlace),
-      dataRange: `數值範圍: ${scaleProcess(data_AfM.minLimit, data_AfM.scale, data_AfM.decPlace)}~${scaleProcess(data_AfM.maxLimit, data_AfM.scale, data_AfM.decPlace)} ${data_AfM.unit}`,
-      unit: data_AfM.unit
+      originData: Scale_Data(getData_raw, data_AfM.scale, data_AfM.decPlace),
+      dataRange: `數值範圍: ${Scale_Data(data_AfM.minLimit, data_AfM.scale, data_AfM.decPlace)}~${Scale_Data(data_AfM.maxLimit, data_AfM.scale, data_AfM.decPlace)} ${data_AfM.unit}`,
+      unit: data_AfM.unit,
     };
 
     res.json(response);
@@ -904,27 +879,26 @@ router.post("/set_dVS_Data", async (req, res) => {
 
     if (setValue_raw !== "" && !Number.isNaN(Number(setValue_raw))) {
       const data_MT = {
+        setBut_P_Project: {
+          dicName: `system`, dataID: "W400001",
+          category: "系統模式01", device: `GC`, log_dataName: `額定功率`,
+        },
+        setBut_P_LoadShift: {
+          dicName: `system`, dataID: "W400002",
+          category: "系統模式02", device: `GC`, log_dataName: `負載轉移功率`,
+        },
         setBut_P_LC: {
-          dicName: `lc${dVS_Data_numInDataGroup}`,
-          dataID: "W407078",
-          category: "設備控制",
-          device: `LC${dVS_Data_numInDataGroup}`,
-          log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407078",
+          category: "設備控制", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}輸出實功`,
         },
         setBut_acuHeatT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`,
-          dataID: "W407016",
-          category: "設備控制123",
-          device: `LC${dVS_Data_numInDataGroup}`,
-          log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407016",
+          category: "設備控制123", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制熱溫度`,
         },
         setBut_acuCoolT: {
-          dicName: `lc${dVS_Data_numInDataGroup}`,
-          dataID: "W407017",
-          category: "設備控制456",
-          device: `LC${dVS_Data_numInDataGroup}`,
-          log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`
-        }
+          dicName: `lc${dVS_Data_numInDataGroup}`, dataID: "W407017",
+          category: "設備控制456", device: `LC${dVS_Data_numInDataGroup}`, log_dataName: `LC${dVS_Data_numInDataGroup}空調制冷溫度`,
+        },
         //
         //
         //
@@ -944,6 +918,12 @@ router.post("/set_dVS_Data", async (req, res) => {
         const allData = await Promise.all(dataPromises);
         const dwctrlData = allData[4];
         const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+        console.log("qaz123qaz");
+        console.log(dwctrlData);
+        console.log(typeof dwctrlData);
+        console.log(newdwctrlData);
+        console.log(typeof newdwctrlData);
+        console.log("wsx456wsx");
 
         newdwctrlData[data_AfM.dicName][data_AfM.dataID] = setValue;
 
@@ -970,7 +950,7 @@ router.post("/set_dVS_Data", async (req, res) => {
           category: data_AfM.category,
           device: data_AfM.device,
           username: "SE0008",
-          content: `將${data_AfM.log_dataName}設為${(Math.round(Number(setValue_raw) / dVS_Data_scale) * dVS_Data_scale).toFixed(dVS_Data_decPlace)} ${dVS_Data_unit}`
+          content: `將${data_AfM.log_dataName}設為${(Math.round(Number(setValue_raw) / dVS_Data_scale) * dVS_Data_scale).toFixed(dVS_Data_decPlace)} ${dVS_Data_unit}`,
         };
         console.log(doc);
 
@@ -985,7 +965,7 @@ router.post("/set_dVS_Data", async (req, res) => {
           ststus: ok,
           alarmCMU_rawD: 314159,
           faultCMU_rawD: 6626,
-          DL_of_statusHW: 1602
+          DL_of_statusHW: 1602,
         };
       } else {
         console.log("數值範圍有誤~~~");
@@ -1014,45 +994,12 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
     dSS_Data_numInDataGroup = req.body.numInDataGroup;
 
     const data_MT = {
-      setBut_modeAP: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407010,
-        bitNum: 999,
-        status_MT: { " 0": "主動", " 1": "被動" }
-      },
-      setBut_modeQctrl: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407011,
-        bitNum: 999,
-        status_MT: {
-          " 162": "功率(kVar)模式",
-          " 161": "功因模式",
-          " 85": "關閉"
-        }
-      },
-      setBut_standbyCmd: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407012,
-        bitNum: 999,
-        status_MT: { " 170": "待機", " 85": "停止待機" }
-      },
-      setBut_modeLR: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407013,
-        bitNum: 999,
-        status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" }
-      },
-      setBut_acuOnOff: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407018,
-        bitNum: 999,
-        status_MT: { " 1": "啟動", " 0": "停止" }
-      }
+      setBut_modeAP: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407010, bitNum: 999, status_MT: { " 0": "主動", " 1": "被動" }, },
+      setBut_modeQctrl: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407011, bitNum: 999, status_MT: { " 162": "功率(kVar)模式", " 161": "功因模式", " 85": "關閉", }, },
+      setBut_standbyCmd: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407012, bitNum: 999, status_MT: { " 170": "待機", " 85": "停止待機" }, },
+      setBut_modeLR: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407013, bitNum: 999, status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" }, },
+      setBut_acuOnOff: { dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407018, bitNum: 999, status_MT: { " 1": "啟動", " 0": "停止" }, },
+      setBut_AutoMan_SS: { dbName_gD: `gc_rf10`, dicName: "System", dataID: 400076, bitNum: dSS_Data_numInDataGroup, status_MT: { " 1": "自動", " 0": "手動" }, },
       //
       //
     };
@@ -1060,7 +1007,9 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
     const data_AfM = data_MT[dSS_Data_dataName];
     dSS_Data_bitNum = data_AfM.bitNum;
     dSS_Data_status_MT = data_AfM.status_MT;
-    // console.log(data_AfM.dbName_gD);
+    console.log(data_AfM.dbName_gD);
+    console.log(data_AfM.bitNum);
+    console.log(typeof data_AfM.bitNum);
 
     const dataPromises = databases.map(async (dbName) => {
       const nano = createNanoInstance(dbName);
@@ -1071,7 +1020,7 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
 
     const getData_raw =
       allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
-        data_AfM.dataID
+      data_AfM.dataID
       ];
 
     let getData;
@@ -1099,40 +1048,29 @@ router.post("/set_dSS_Data", async (req, res) => {
 
     const data_MT = {
       setBut_modeAP: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407010",
-        category: "設備控制",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407010",
+        category: "設備控制", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`,
       },
       setBut_modeQctrl: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407011",
-        category: "設備控制9101",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407011",
+        category: "設備控制9101", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`,
       },
       setBut_standbyCmd: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407012",
-        category: "設備控制2531",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407012",
+        category: "設備控制2531", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`,
       },
       setBut_modeLR: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407013",
-        category: "設備控制4587",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407013",
+        category: "設備控制4587", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`,
       },
       setBut_acuOnOff: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407018",
-        category: "設備控制7096",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`
-      }
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407018",
+        category: "設備控制7096", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`,
+      },
+      setBut_AutoMan_SS: {
+        dicName: `system`, dataID: "W400076",
+        category: "系統模式03", device: `GC`, log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`,
+      },
       //
       //
     };
@@ -1152,15 +1090,9 @@ router.post("/set_dSS_Data", async (req, res) => {
     if (dSS_Data_bitNum === 999) {
       setValue = Number(setValue_raw);
     } else {
-      let setValue_old = Convert_UInt_to_BitString(
-        newdwctrlData[data_AfM.dicName][data_AfM.dataID],
-        32
-      ).bitString;
+      let setValue_old = Convert_UInt_to_BitString(newdwctrlData[data_AfM.dicName][data_AfM.dataID], 32).bitString;
       console.log(setValue_old);
-      setValue_old =
-        setValue_old.slice(0, 31 - dSS_Data_bitNum) +
-        setValue_raw.slice(1) +
-        setValue_old.slice(31 - dSS_Data_bitNum + 1);
+      setValue_old = setValue_old.slice(0, 31 - dSS_Data_bitNum) + setValue_raw.slice(1) + setValue_old.slice(31 - dSS_Data_bitNum + 1);
       console.log(setValue_old);
       setValue = parseInt(setValue_old, 2);
     }
@@ -1190,7 +1122,7 @@ router.post("/set_dSS_Data", async (req, res) => {
       category: data_AfM.category,
       device: data_AfM.device,
       username: "SE0008",
-      content: `將${data_AfM.log_dataName}設為${dSS_Data_status_MT[setValue_raw]}`
+      content: `將${data_AfM.log_dataName}設為${dSS_Data_status_MT[setValue_raw]}`,
     };
     console.log(doc);
 
@@ -1204,7 +1136,7 @@ router.post("/set_dSS_Data", async (req, res) => {
       ststus: ok,
       alarmCMU_rawD: 314159,
       faultCMU_rawD: 6626,
-      DL_of_statusHW: 1602
+      DL_of_statusHW: 1602,
     };
 
     res.json(response);

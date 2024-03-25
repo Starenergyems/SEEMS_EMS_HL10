@@ -32,14 +32,8 @@ function afterLoadDCM() {
 setInterval(routineWork, 5000);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-let minLimit;
-let maxLimit;
-let scale;
-let decPlace;
-let dataUnit;
 const window_dataValue_Set = document.querySelector(".dataValue_Set");
 const title_dataValue_Set = document.querySelector(".dataValue_Set .titlePUW");
-let valNow_dataValue_Set;
 const val_origin_dataValue_Set = document.querySelector(".dataValue_Set #valueOrigin");
 const unit_origin_dataValue_Set = document.querySelector(".dataValue_Set .valOrigin .data_unit");
 const unit_new_dataValue_Set = document.querySelector(".dataValue_Set .valNew .data_unit");
@@ -47,38 +41,40 @@ const range_info_dataValue_Set = document.querySelector(".dataValue_Set .rangeIn
 const val_new_dataValue_Set = document.querySelector(".dataValue_Set #valueNew");
 
 const setBut_P_Project = document.querySelector(".sysInfo #P_Project_set");
-setBut_P_Project.addEventListener("click", Set_P_Project);
-function Set_P_Project() {
-    minLimit = "0";
-    maxLimit = "10000";
-    scale = 1;
-    decPlace = 0;
-    dataUnit = "kW";
+setBut_P_Project.addEventListener("click", function () { Set_P_Project(99) });
+async function Set_P_Project(numInDataGroup) {
+    dVS_Data_dataName = "setBut_P_Project";
+
+    title_dataValue_Set.textContent = `額定功率設定`;
     window_dataValue_Set.classList.add("appear");
-    title_dataValue_Set.textContent = "額定功率設定";
-    valNow_dataValue_Set = document.querySelector(".sysInfo #P_Project");       // 記得改點位的id
-    val_origin_dataValue_Set.textContent = valNow_dataValue_Set.textContent;
-    unit_origin_dataValue_Set.textContent = dataUnit;
-    unit_new_dataValue_Set.textContent = dataUnit;
-    range_info_dataValue_Set.textContent = "數值範圍: " + minLimit + "~" + maxLimit + " " + dataUnit;
+
+    let getData = await get_dVS_Data_WhenClicking(dVS_Data_dataName, numInDataGroup);
+    console.log(getData);
+
+    val_origin_dataValue_Set.textContent = getData.originData;
+    unit_origin_dataValue_Set.textContent = getData.unit;
+    unit_new_dataValue_Set.textContent = getData.unit;
+    range_info_dataValue_Set.textContent = getData.dataRange;
+
     val_new_dataValue_Set.focus();
 }
 
 const setBut_P_LoadShift = document.querySelector(".sysInfo #P_LoadShift_set");
 setBut_P_LoadShift.addEventListener("click", Set_P_LoadShift);
-function Set_P_LoadShift() {
-    minLimit = "-10000";
-    maxLimit = "10000";
-    scale = 1;
-    decPlace = 0;
-    dataUnit = "kW";
+async function Set_P_LoadShift(numInDataGroup) {
+    dVS_Data_dataName = "setBut_P_LoadShift";
+
+    title_dataValue_Set.textContent = `負載轉移功率設定`;
     window_dataValue_Set.classList.add("appear");
-    title_dataValue_Set.textContent = "負載轉移功率設定";
-    valNow_dataValue_Set = document.querySelector(".sysInfo #P_LoadShift");       // 記得改點位的id
-    val_origin_dataValue_Set.textContent = valNow_dataValue_Set.textContent;
-    unit_origin_dataValue_Set.textContent = dataUnit;
-    unit_new_dataValue_Set.textContent = dataUnit;
-    range_info_dataValue_Set.textContent = "數值範圍: " + minLimit + "~" + maxLimit + " " + dataUnit;
+
+    let getData = await get_dVS_Data_WhenClicking(dVS_Data_dataName, numInDataGroup);
+    console.log(getData);
+
+    val_origin_dataValue_Set.textContent = getData.originData;
+    unit_origin_dataValue_Set.textContent = getData.unit;
+    unit_new_dataValue_Set.textContent = getData.unit;
+    range_info_dataValue_Set.textContent = getData.dataRange;
+
     val_new_dataValue_Set.focus();
 }
 
@@ -86,13 +82,8 @@ const closeWB_Yes_dVS = document.querySelector(".dataValue_Set #closeWB_Yes");
 closeWB_Yes_dVS.addEventListener("click", closePopup_dVS_Yes);
 function closePopup_dVS_Yes() {
     let value_set_raw = val_new_dataValue_Set.value;
-    if ((value_set_raw) && (value_set_raw !== null)) {
-        let value_set = Math.round(Number(value_set_raw) * scale);
-        if (value_set >= Number(minLimit) * scale && value_set <= Number(maxLimit) * scale) {
-            let val = value_set / scale;
-            valNow_dataValue_Set.textContent = val.toFixed(decPlace);
-        }
-    }
+
+    set_dVS_Data(value_set_raw);
 
     val_new_dataValue_Set.value = "";
     window_dataValue_Set.classList.remove("appear");
@@ -170,68 +161,64 @@ function Set_statusAllBMS() {
     option2_Description = "全部切離";
 }
 
-function Set_AutoMan_SS() {
+let qSelectAll_option = document.querySelectorAll(".dataStatus_Set .option");
+let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set .radioOpt");
+let i;
+
+async function Set_AutoMan_SS(numInDataGroup) {
+    dataName = "setBut_AutoMan_SS";
+
+    title_dataStatus_Set.textContent = `子系統${numInDataGroup}運作模式`;
     window_dataStatus_Set.classList.add("appear");
     clearCheckedRadioOption();
-    option1_dataStatus_Set.textContent = "投入";
-    option2_dataStatus_Set.textContent = "切離";
+
+    let getData = await get_dSS_Data_WhenClicking(dataName, numInDataGroup);
+    console.log(getData);
+    // console.log(getData.status_MT);
+    // console.log(Object.keys(getData.status_MT));
+
+    for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+        qSelectAll_option[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+        qSelectAll_radioOpt[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
+
+        if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+            qSelectAll_radioOpt[i].checked = true;
+        }
+    }
+
     alertInfo_dataStatus_Set.textContent = "";
-    option1_Description = "投入";
-    option2_Description = "切離";
 }
 
 const setBut_AutoMan_SS1 = document.querySelector(".subSysInfo #AutoMan_SS1_set");
-setBut_AutoMan_SS1.addEventListener("click", Set_AutoMan_SS1);
-function Set_AutoMan_SS1() {
-    Set_AutoMan_SS();
-    title_dataStatus_Set.textContent = "子系統1運作模式";
-    valNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS1");
-    valLightNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS1_Light");
-}
+setBut_AutoMan_SS1.addEventListener("click", function () { Set_AutoMan_SS(1); });
+// setBut_AutoMan_SS1.addEventListener("click", Set_AutoMan_SS1);
+// function Set_AutoMan_SS1() {
+//     Set_AutoMan_SS();
+//     title_dataStatus_Set.textContent = "子系統1運作模式";
+//     valNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS1");
+//     valLightNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS1_Light");
+// }
 
 const setBut_AutoMan_SS2 = document.querySelector(".subSysInfo #AutoMan_SS2_set");
-setBut_AutoMan_SS2.addEventListener("click", Set_AutoMan_SS2);
-function Set_AutoMan_SS2() {
-    Set_AutoMan_SS();
-    title_dataStatus_Set.textContent = "子系統2運作模式";
-    valNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS2");
-    valLightNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS2_Light");
-}
+setBut_AutoMan_SS2.addEventListener("click", function () { Set_AutoMan_SS(2); });
 
 const setBut_AutoMan_SS3 = document.querySelector(".subSysInfo #AutoMan_SS3_set");
-setBut_AutoMan_SS3.addEventListener("click", Set_AutoMan_SS3);
-function Set_AutoMan_SS3() {
-    Set_AutoMan_SS();
-    title_dataStatus_Set.textContent = "子系統3運作模式";
-    valNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS3");
-    valLightNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS3_Light");
-}
+setBut_AutoMan_SS3.addEventListener("click", function () { Set_AutoMan_SS(3); });
 
 const setBut_AutoMan_SS4 = document.querySelector(".subSysInfo #AutoMan_SS4_set");
-setBut_AutoMan_SS4.addEventListener("click", Set_AutoMan_SS4);
-function Set_AutoMan_SS4() {
-    Set_AutoMan_SS();
-    title_dataStatus_Set.textContent = "子系統4運作模式";
-    valNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS4");
-    valLightNow_dataStatus_Set = document.querySelector(".subSysInfo #AutoMan_SS4_Light");
-}
+setBut_AutoMan_SS4.addEventListener("click", function () { Set_AutoMan_SS(4); });
 
 const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
 closeWB_Yes_dSS.addEventListener("click", closePopup_dSS_Yes);
 function closePopup_dSS_Yes() {
-    if ((radioOption1.checked === true) || (radioOption2.checked === true)) {
+    if (radioOption1.checked === true || radioOption2.checked === true) {
         optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set [name=dataStatus]:checked");
 
-        if (optionChecked_dataStatus_Set.value === "1") {
-            valNow_dataStatus_Set.textContent = option1_Description;
-            valLightNow_dataStatus_Set.classList.add("setToClose");
-        } else if (optionChecked_dataStatus_Set.value === "2") {
-            valNow_dataStatus_Set.textContent = option2_Description;
-            valLightNow_dataStatus_Set.classList.remove("setToClose");
-        }
+        set_dSS_Data(optionChecked_dataStatus_Set.value);
 
         optionChecked_dataStatus_Set.checked = false;
     }
+
     window_dataStatus_Set.classList.remove("appear");
 }
 
@@ -295,56 +282,77 @@ function Set_freqVsP() {
     freq_A_Set.focus();
 }
 
+async function set_freqVsP_Data(setValue_Freq, setValue_P) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/set_freqVsP_Data", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ setValue_Freq, setValue_P }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
 const closeWB_Yes_freqVsP = document.querySelector(".freqVsP_Set #closeWB_Yes");
 closeWB_Yes_freqVsP.addEventListener("click", close_freqVsP_Yes);
 function close_freqVsP_Yes() {
-    let freq_A_raw = Math.round(Number(freq_A_Set.value) * 100);
-    let freq_B_raw = Math.round(Number(freq_B_Set.value) * 100);
-    let freq_C_raw = Math.round(Number(freq_C_Set.value) * 100);
-    let freq_D_raw = Math.round(Number(freq_D_Set.value) * 100);
-    let freq_E_raw = Math.round(Number(freq_E_Set.value) * 100);
-    let freq_F_raw = Math.round(Number(freq_F_Set.value) * 100);
-    let p_t_raw = Math.round(Number(p_t_Set.value) * 10);
-    let p_u_raw = Math.round(Number(p_u_Set.value) * 10);
-    let p_v_raw = Math.round(Number(p_v_Set.value) * 10);
-    let p_w_raw = Math.round(Number(p_w_Set.value) * 10);
-    let p_x_raw = Math.round(Number(p_x_Set.value) * 10);
-    let p_y_raw = Math.round(Number(p_y_Set.value) * 10);
+    set_freqVsP_Data([freq_A_Set.value, freq_B_Set.value, freq_C_Set.value, freq_D_Set.value, freq_E_Set.value, freq_F_Set.value],
+        [p_t_Set.value, p_u_Set.value, p_v_Set.value, p_w_Set.value, p_x_Set.value, p_y_Set.value]);
 
-    if ((freq_A_raw >= freqMin) && (freq_A_raw <= freqMax) && (freq_B_raw >= freqMin) && (freq_B_raw <= freqMax) &&
-        (freq_C_raw >= freqMin) && (freq_C_raw <= freqMax) && (freq_D_raw >= freqMin) && (freq_D_raw <= freqMax) &&
-        (freq_E_raw >= freqMin) && (freq_E_raw <= freqMax) && (freq_F_raw >= freqMin) && (freq_F_raw <= freqMax) &&
-        (p_t_raw >= powerMin) && (p_t_raw <= powerMax) && (p_u_raw >= powerMin) && (p_u_raw <= powerMax) && (p_v_raw >= powerMin) && (p_v_raw <= powerMax) &&
-        (p_w_raw >= powerMin) && (p_w_raw <= powerMax) && (p_x_raw >= powerMin) && (p_x_raw <= powerMax) && (p_y_raw >= powerMin) && (p_y_raw <= powerMax)) {
-        let val = freq_A_raw / 100;
-        freq_A.textContent = val.toFixed(2);
-        val = freq_B_raw / 100;
-        freq_B.textContent = val.toFixed(2);
-        val = freq_C_raw / 100;
-        freq_C.textContent = val.toFixed(2);
-        val = freq_D_raw / 100;
-        freq_D.textContent = val.toFixed(2);
-        val = freq_E_raw / 100;
-        freq_E.textContent = val.toFixed(2);
-        val = freq_F_raw / 100;
-        freq_F.textContent = val.toFixed(2);
-        val = p_t_raw / 10;
-        p_t.textContent = val.toFixed(1);
-        val = p_u_raw / 10;
-        p_u.textContent = val.toFixed(1);
-        val = p_v_raw / 10;
-        p_v.textContent = val.toFixed(1);
-        val = p_w_raw / 10;
-        p_w.textContent = val.toFixed(1);
-        val = p_x_raw / 10;
-        p_x.textContent = val.toFixed(1);
-        val = p_y_raw / 10;
-        p_y.textContent = val.toFixed(1);
+    // let freq_A_raw = Math.round(Number(freq_A_Set.value) * 100);
+    // let freq_B_raw = Math.round(Number(freq_B_Set.value) * 100);
+    // let freq_C_raw = Math.round(Number(freq_C_Set.value) * 100);
+    // let freq_D_raw = Math.round(Number(freq_D_Set.value) * 100);
+    // let freq_E_raw = Math.round(Number(freq_E_Set.value) * 100);
+    // let freq_F_raw = Math.round(Number(freq_F_Set.value) * 100);
+    // let p_t_raw = Math.round(Number(p_t_Set.value) * 10);
+    // let p_u_raw = Math.round(Number(p_u_Set.value) * 10);
+    // let p_v_raw = Math.round(Number(p_v_Set.value) * 10);
+    // let p_w_raw = Math.round(Number(p_w_Set.value) * 10);
+    // let p_x_raw = Math.round(Number(p_x_Set.value) * 10);
+    // let p_y_raw = Math.round(Number(p_y_Set.value) * 10);
 
-        window_freqVsP_Set.classList.remove("appear");
-    } else {
-        window_WrongDataSet.classList.add("appear");
-    }
+    // if ((freq_A_raw >= freqMin) && (freq_A_raw <= freqMax) && (freq_B_raw >= freqMin) && (freq_B_raw <= freqMax) &&
+    //     (freq_C_raw >= freqMin) && (freq_C_raw <= freqMax) && (freq_D_raw >= freqMin) && (freq_D_raw <= freqMax) &&
+    //     (freq_E_raw >= freqMin) && (freq_E_raw <= freqMax) && (freq_F_raw >= freqMin) && (freq_F_raw <= freqMax) &&
+    //     (p_t_raw >= powerMin) && (p_t_raw <= powerMax) && (p_u_raw >= powerMin) && (p_u_raw <= powerMax) && (p_v_raw >= powerMin) && (p_v_raw <= powerMax) &&
+    //     (p_w_raw >= powerMin) && (p_w_raw <= powerMax) && (p_x_raw >= powerMin) && (p_x_raw <= powerMax) && (p_y_raw >= powerMin) && (p_y_raw <= powerMax)) {
+    //     let val = freq_A_raw / 100;
+    //     freq_A.textContent = val.toFixed(2);
+    //     val = freq_B_raw / 100;
+    //     freq_B.textContent = val.toFixed(2);
+    //     val = freq_C_raw / 100;
+    //     freq_C.textContent = val.toFixed(2);
+    //     val = freq_D_raw / 100;
+    //     freq_D.textContent = val.toFixed(2);
+    //     val = freq_E_raw / 100;
+    //     freq_E.textContent = val.toFixed(2);
+    //     val = freq_F_raw / 100;
+    //     freq_F.textContent = val.toFixed(2);
+    //     val = p_t_raw / 10;
+    //     p_t.textContent = val.toFixed(1);
+    //     val = p_u_raw / 10;
+    //     p_u.textContent = val.toFixed(1);
+    //     val = p_v_raw / 10;
+    //     p_v.textContent = val.toFixed(1);
+    //     val = p_w_raw / 10;
+    //     p_w.textContent = val.toFixed(1);
+    //     val = p_x_raw / 10;
+    //     p_x.textContent = val.toFixed(1);
+    //     val = p_y_raw / 10;
+    //     p_y.textContent = val.toFixed(1);
+
+    //     window_freqVsP_Set.classList.remove("appear");
+    // } else {
+    //     window_WrongDataSet.classList.add("appear");
+    // }
 }
 
 const closeWB_No_freqVsP = document.querySelector(".freqVsP_Set #closeWB_No");
@@ -812,15 +820,15 @@ function Set_SOC_Ref() {
 
 async function updateData() {   //更新資料
     var router = window.location.href + "/data";
-    console.log(router);
     var data = await getData(router);
     console.log(data);
 
     assign_TextContent_To_SpID("#sysAvailability", data.sysAvailability);
     assign_TextContent_To_SpID("#SOC", data.SOC);
     assign_TextContent_To_SpID("#SBSPM", data.SBSPM);
-
+    Determine_bgColor_of_sysAvail("#BG_sysAvailability", data.sysAvailability);
     Determine_bgColor_of_SOC("#BG_SOC", data.SOC);
+    Determine_bgColor_of_SBSPM("#BG_SBSPM", data.SBSPM);
 
     assign_TextContent_To_SpID("#sysMode", data.sysMode);
     assign_TextContent_To_SpID("#P_Project", data.P_Project);
@@ -828,6 +836,7 @@ async function updateData() {   //更新資料
     assign_TextContent_To_SpID("#statusAllPCS", data.statusAllPCS);
     assign_TextContent_To_SpID("#statusAllBMS", data.statusAllBMS);
     assign_TextContent_To_SpID("#stopCHGsched", data.stopCHGsched);
+    Determine_DL_of_stopSched("#stopCHGsched_Light", data.stopCHGsched);
 
     assign_TextContent_To_SpID("#Freq_A", data.Freq_A);
     assign_TextContent_To_SpID("#Freq_B", data.Freq_B);
@@ -915,11 +924,9 @@ function Determine_bgColor_of_SOC(elementID, SOC) {
     const element = document.querySelector(elementID);
 
     if (SOC === "#*#") {
+        element.style.background = "#000000";
         return;
     }
-    console.log(SOC);
-    console.log(typeof SOC);
-    console.log(SOC > 50);
 
     if (SOC >= 95) {
         element.style.background = "#FF0000";
@@ -934,9 +941,34 @@ function Determine_bgColor_of_SOC(elementID, SOC) {
     }
 }
 
+function Determine_bgColor_of_SBSPM(elementID, SBSPM) {
+    const element = document.querySelector(elementID);
 
+    if (SBSPM === "#*#") {
+        element.style.background = "#000000";
+        return;
+    }
 
+    if (SBSPM >= 97) {
+        element.style.background = "#CBE198";
+    } else if (SBSPM >= 95) {
+        element.style.background = "#EF860F";
+    } else {
+        element.style.background = "#FF0000";
+    }
+}
 
+function Determine_DL_of_stopSched(elementID, dataStatus) {
+    const element = document.querySelector(elementID);
+
+    if (dataStatus === "停止排程") {
+        element.style.background = "#FF0000";
+    } else if (dataStatus === "依原定排程") {
+        element.style.background = "#236E37";
+    } else {
+        element.style.background = "#000000";
+    }
+}
 
 function Determine_DL_of_ManAuto(elementID, dataStatus) {
     const element = document.querySelector(elementID);

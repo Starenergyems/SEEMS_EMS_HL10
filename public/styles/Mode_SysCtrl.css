@@ -96,29 +96,29 @@
 .sysInfo table .col_02 {
     background-color: #FFFFFF;
     width: 220px;
-    padding: 0px 0px 0px 12%;
     border-radius: 0px 20px 20px 0px;
     position: relative;
 }
 
 .sysInfo table .col_01 span {
     display: inline-block;
-    width: 150px;
-    margin-left: calc(50% - 75px);
+    width: 95.7%;
+    margin-left: 4.3%;
     font-size: 24px;
-}
-
-.sysInfo .col_02.data_R_align {
-    padding: 0px 15% 0px 0px;
-    text-align: right;
 }
 
 .sysInfo table label {
+    display: inline-block;
+    width: calc(100% - 35px - 5px*2);
+    margin-left: 5px;
     font-size: 24px;
+    text-align: center;
 }
 
 .sysInfo .data_R_align label {
-    padding: 0px 5% 0px 0px;
+    width: 85px;
+    text-align: right;
+    margin: 0px 10px 0px calc(50% - 36px/2 - 130px/2);
 }
 
 .sysInfo table .BG_button {

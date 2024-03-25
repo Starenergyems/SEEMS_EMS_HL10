@@ -44,6 +44,9 @@ const gc_rf01 = "gc_rf01";
 const GC10nanoDb = nano.use(gc_rf10);
 const GC01nanoDb = nano.use(gc_rf01);
 
+const dwctrl = "dwctrl";
+const dwctrlnanoDb = nano.use(dwctrl);
+
 //app.use(myMiddleware);
 
 //const { authentication } = require("./authMiddleware");
@@ -120,10 +123,10 @@ async function query_Syscrtl_variables() {
     const result01 = await GC01nanoDb.find(mangoQuery);
 
     const GC10Data = result10.docs[0];
-    console.log("Value[400078]:", GC10Data.System[400078]);
+    // console.log("Value[400078]:", GC10Data.System[400078]);
 
     const GC01Data = result01.docs[0];
-    console.log("Value[400107]:", GC01Data.IEC61850[400107]);
+    // console.log("Value[400107]:", GC01Data.IEC61850[400107]);
 
     const sysCtrl1_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400076], 16);
     const ss1_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400078], 16);
@@ -138,12 +141,12 @@ async function query_Syscrtl_variables() {
       SOC: Scale_Data(GC01Data.IEC61850[400129], 0.01 * 1 / (4472 * 7) * 100, 1),
       SBSPM: Scale_Data(GC01Data.IEC61850[400133], 0.01, 1),
 
-      sysMode: "這個白癡",
-      P_Project: Scale_Data(GC10Data.System[400001], 10, 0),
-      P_LoadShift: Scale_Data(GC10Data.System[400002], 1, 0),
-      statusAllPCS: "亂搞",
-      statusAllBMS: "不動腦耶",
-      stopCHGsched: "笨蛋",
+      sysMode: "不動作",
+      P_Project: Scale_Data(GC10Data.System[400001], 0.01, 2),
+      P_LoadShift: Scale_Data(GC10Data.System[400002], 0.001, 3),
+      statusAllPCS: "不動作",
+      statusAllBMS: "不動作",
+      stopCHGsched: mapBitStatus(ss1_Status_rBitS, ss1_Status_MT, 14),
       // sysMode: mapSysMode(
       //   GC10Data.System[400078] //5 15
       // ),
@@ -159,7 +162,6 @@ async function query_Syscrtl_variables() {
       //   GC10Data.System[400080], //BIT0、BIT1
       //   GC10Data.System[400081] //BIT0、BIT1
       // ),
-      // stopCHGsched: "笨蛋",
 
       Freq_A: Scale_Data(GC10Data.System[400016], 0.01, 2),
       Freq_B: Scale_Data(GC10Data.System[400017], 0.01, 2),
@@ -208,33 +210,6 @@ async function query_Syscrtl_variables() {
       EdReg_SS2: mapBitStatus(ss2_Status_rBitS, ss234_Status_MT, 5),
       EdReg_SS3: mapBitStatus(ss3_Status_rBitS, ss234_Status_MT, 5),
       EdReg_SS4: mapBitStatus(ss4_Status_rBitS, ss234_Status_MT, 5),
-
-      //子系統運作模式
-      // AutoMan_SS1: mapAutoMan(GC10Data.System[400076], 1), //bit 1
-      // AutoMan_SS2: mapAutoMan(GC10Data.System[400076], 2),
-      // AutoMan_SS3: mapAutoMan(GC10Data.System[400076], 3), //bit 3
-      // AutoMan_SS4: mapAutoMan(GC10Data.System[400076], 4), //bit 4
-
-      //電池與PCS狀態
-      // BMSPCSstatus_SS1: "白癡",
-      // // BMSPCSstatus_SS1: mapBMSPCSstatus(GC10Data.System[400078]),
-      // BMSPCSstatus_SS2: mapBMSPCSstatus(GC10Data.System[400079]),
-      // BMSPCSstatus_SS3: mapBMSPCSstatus(GC10Data.System[400080]), //bit3
-      // BMSPCSstatus_SS4: mapBMSPCSstatus(GC10Data.System[400081]),
-
-      //子系統可用性
-      // Avail_SS1: "智障",
-      // // Avail_SS1: mapAvail_SS(GC10Data.System[400078]),
-      // Avail_SS2: mapAvail_SS(GC10Data.System[400079]),
-      // Avail_SS3: mapAvail_SS(GC10Data.System[400080]),
-      // Avail_SS4: mapAvail_SS(GC10Data.System[400081]),
-
-      //E-dReg服務狀態
-      // EdReg_SS1: "低能",
-      // // EdReg_SS1: mapEdReg_SS(GC10Data.System[400078]), //bit5
-      // EdReg_SS2: mapEdReg_SS(GC10Data.System[400079]), //bit5
-      // EdReg_SS3: mapEdReg_SS(GC10Data.System[400080]), //bit5
-      // EdReg_SS4: mapEdReg_SS(GC10Data.System[400081]), //bit5
     };
   } catch (error) {
     console.error("Error:", error);
@@ -287,6 +262,185 @@ router.get("/mode/sysctrl/:data", async (req, res) => {
   await query_Syscrtl_variables();
   //console.log(sysctrl_variables);
   res.json(sysctrl_variables);
+});
+
+/************************************************************************************ */
+
+router.post("/set_freqVsP_Data", async (req, res) => {
+  try {
+    const setV_Freq_raw = req.body.setValue_Freq;
+    const setV_P_raw = req.body.setValue_P;
+    console.log(setV_Freq_raw);
+    console.log(setV_P_raw);
+
+    let response;
+
+    let check_num = 0;
+    let i;
+
+    for (i = 0; i < setV_Freq_raw.length; i++) {
+      if (setV_Freq_raw[i] !== "" && !Number.isNaN(Number(setV_Freq_raw[i]))) {
+        check_num++;
+      }
+    }
+    for (i = 0; i < setV_P_raw.length; i++) {
+      if (setV_P_raw[i] !== "" && !Number.isNaN(Number(setV_P_raw[i]))) {
+        check_num++;
+      }
+    }
+    console.log("check_num: ", check_num);
+
+    if (check_num === 12) {
+      const freq_scale = 0.01;
+      const p_scale = 0.1;
+      const freq_decPlace = 2;
+      const p_decPlace = 1;
+
+      let setV_Freq = [];
+      let setV_P = [];
+
+      setV_Freq[0] = Math.round(Number(setV_Freq_raw[0]) / freq_scale);
+      setV_Freq[1] = Math.round(Number(setV_Freq_raw[1]) / freq_scale);
+      setV_Freq[2] = Math.round(Number(setV_Freq_raw[2]) / freq_scale);
+      setV_Freq[3] = Math.round(Number(setV_Freq_raw[3]) / freq_scale);
+      setV_Freq[4] = Math.round(Number(setV_Freq_raw[4]) / freq_scale);
+      setV_Freq[5] = Math.round(Number(setV_Freq_raw[5]) / freq_scale);
+      setV_P[0] = Math.round(Number(setV_P_raw[0]) / p_scale);
+      setV_P[1] = Math.round(Number(setV_P_raw[1]) / p_scale);
+      setV_P[2] = Math.round(Number(setV_P_raw[2]) / p_scale);
+      setV_P[3] = Math.round(Number(setV_P_raw[3]) / p_scale);
+      setV_P[4] = Math.round(Number(setV_P_raw[4]) / p_scale);
+      setV_P[5] = Math.round(Number(setV_P_raw[5]) / p_scale);
+
+      console.log(setV_Freq);
+      console.log(setV_P);
+
+      const freq_minLimit = 5800;
+      const freq_maxLimit = 6100;
+      const p_minLimit = -1000;
+      const p_maxLimit = 1000;
+
+      for (i = 0; i < setV_Freq.length; i++) {
+        if (setV_Freq[i] >= freq_minLimit && setV_Freq[i] <= freq_maxLimit) {
+          check_num++;
+        }
+      }
+      for (i = 0; i < setV_P.length; i++) {
+        if (setV_P[i] >= p_minLimit && setV_P[i] <= p_maxLimit) {
+          check_num++;
+        }
+      }
+      console.log("check_num: ", check_num);
+
+      if (check_num === 24) {
+        const indexDef = {
+          index: { fields: ["time"] },
+          name: "time_index",
+        };
+        await dwctrlnanoDb.createIndex(indexDef);
+        await GC01nanoDb.createIndex(indexDef);
+
+        const mangoQuery = {
+          selector: {
+            time: { $exists: true },
+          },
+          sort: [{ time: "desc" }],
+          limit: 1,
+        };
+
+        const dataGot = await dwctrlnanoDb.find(mangoQuery);
+
+        const dwctrlData = dataGot.docs[0];
+
+        // const dataPromises = databases.map(async (dbName) => {
+        //   const nano = createNanoInstance(dbName);
+        //   return getLatestDocument(nano);
+        // });
+
+        // const allData = await Promise.all(dataPromises);
+        // const dwctrlData = allData[4];
+
+        const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+        freqVsP_MT = {
+          F_A: { dataID: "W400016", log_dataName: `Freq_A`, log_dataValue: setV_Freq[0], scale: freq_scale, decPlace: freq_decPlace, unit: "Hz" },
+          F_B: { dataID: "W400017", log_dataName: `Freq_B`, log_dataValue: setV_Freq[1], scale: freq_scale, decPlace: freq_decPlace, unit: "Hz" },
+          F_C: { dataID: "W400018", log_dataName: `Freq_C`, log_dataValue: setV_Freq[2], scale: freq_scale, decPlace: freq_decPlace, unit: "Hz" },
+          F_D: { dataID: "W400019", log_dataName: `Freq_D`, log_dataValue: setV_Freq[3], scale: freq_scale, decPlace: freq_decPlace, unit: "Hz" },
+          F_E: { dataID: "W400020", log_dataName: `Freq_E`, log_dataValue: setV_Freq[4], scale: freq_scale, decPlace: freq_decPlace, unit: "Hz" },
+          F_F: { dataID: "W400021", log_dataName: `Freq_F`, log_dataValue: setV_Freq[5], scale: freq_scale, decPlace: freq_decPlace, unit: "Hz" },
+          P_t: { dataID: "W400022", log_dataName: `P_t`, log_dataValue: setV_P[0], scale: p_scale, decPlace: p_decPlace, unit: "%" },
+          P_u: { dataID: "W400023", log_dataName: `P_u`, log_dataValue: setV_P[1], scale: p_scale, decPlace: p_decPlace, unit: "%" },
+          P_v: { dataID: "W400024", log_dataName: `P_v`, log_dataValue: setV_P[2], scale: p_scale, decPlace: p_decPlace, unit: "%" },
+          P_w: { dataID: "W400025", log_dataName: `P_w`, log_dataValue: setV_P[3], scale: p_scale, decPlace: p_decPlace, unit: "%" },
+          P_x: { dataID: "W400026", log_dataName: `P_x`, log_dataValue: setV_P[4], scale: p_scale, decPlace: p_decPlace, unit: "%" },
+          P_y: { dataID: "W400027", log_dataName: `P_y`, log_dataValue: setV_P[5], scale: p_scale, decPlace: p_decPlace, unit: "%" },
+        }
+
+        newdwctrlData["system"]["W400016"] = setV_Freq[0];
+        newdwctrlData["system"]["W400017"] = setV_Freq[1];
+        newdwctrlData["system"]["W400018"] = setV_Freq[2];
+        newdwctrlData["system"]["W400019"] = setV_Freq[3];
+        newdwctrlData["system"]["W400020"] = setV_Freq[4];
+        newdwctrlData["system"]["W400021"] = setV_Freq[5];
+        newdwctrlData["system"]["W400022"] = setV_P[0];
+        newdwctrlData["system"]["W400023"] = setV_P[1];
+        newdwctrlData["system"]["W400024"] = setV_P[2];
+        newdwctrlData["system"]["W400025"] = setV_P[3];
+        newdwctrlData["system"]["W400026"] = setV_P[4];
+        newdwctrlData["system"]["W400027"] = setV_P[5];
+
+        //const accountDb = createNanoInstance("account");
+        //存入資料庫的時區問題
+        const currentDate = new Date();
+        const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
+        const localTime = new Date(currentDate - timezoneOffset);
+        const isoString = localTime.toISOString().replace("Z", "+08:00");
+
+        // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+        newdwctrlData.time = isoString;
+        delete newdwctrlData._id;
+        delete newdwctrlData._rev;
+        await nano.use("dwctrl").insert(newdwctrlData);     // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        console.log(newdwctrlData);
+
+        const createNanoInstance = (dbName) => nano.db.use(dbName);
+        //log紀錄
+        const logDb = createNanoInstance("log");
+
+        let doc = [];
+        let log_dataValue = [];
+        for (i = 0; i < Object.keys(freqVsP_MT).length; i++) {
+          log_dataValue[i] = Scale_Data(freqVsP_MT[Object.keys(freqVsP_MT)[i]].log_dataValue, freqVsP_MT[Object.keys(freqVsP_MT)[i]].scale, freqVsP_MT[Object.keys(freqVsP_MT)[i]].decPlace);
+
+          doc[i] = {
+            tag: `system.${freqVsP_MT[Object.keys(freqVsP_MT)[i]].dataID}`,
+            time: isoString,
+            category: "系統模式04",
+            device: "GC",
+            username: "SE0008",
+            content: `將${freqVsP_MT[Object.keys(freqVsP_MT)[i]].log_dataName}設為${log_dataValue[i]} ${freqVsP_MT[Object.keys(freqVsP_MT)[i]].unit}`,
+          };
+          console.log(doc[i]);
+
+          let result = await logDb.insert(doc[i]);     // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        }
+
+        response = { status: "ok", alertMessage: "NA" };
+      } else {
+        console.log("數值範圍有誤~~~");
+        response = { status: "error", alertMessage: "數值範圍有誤@@@###" };
+      }
+    } else {
+      console.log("數值輸入錯誤~@@");
+      response = { status: "error", alertMessage: "數值輸入錯誤~~~!!!" };
+    }
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
 });
 
 /******排程**************************************************************/
