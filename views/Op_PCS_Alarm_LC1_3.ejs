@@ -92,7 +92,7 @@
                     <h3>整機告警狀態</h3>
                     <div class="columnDLL">
                         <div class="DL_Line">心跳停止<label class="dataLight OG_L <%=OA[1]==='1'?'setToClose':''%>" id="OA_bit_1"></label></div>
-                        <div class="DL_Line">MV異常<label class="dataLight OG_L <%=OA[2]==='1'?'setToClose':''%>" id="OA_bit_2"></label></div>
+                        <div class="DL_Line">MV異常<label class="dataLight OG_L <%=OA[6]==='1'?'setToClose':''%>" id="OA_bit_6"></label></div>
                         <div class="DL_Line lastLine">配電供電電源異常
                             <label class="dataLight OG_L <%=OA[10]==='1'?'setToClose':''%>" id="OA_bit_10"></label>
                         </div>
@@ -106,7 +106,7 @@
                         <div class="DL_Line">本地緊急停機<label class="dataLight RG_L <%=OF[2]==='1'?'setToClose':''%>" id="OF_bit_2"></label></div>
                         <div class="DL_Line">遠程緊急停機<label class="dataLight RG_L <%=OF[3]==='1'?'setToClose':''%>" id="OF_bit_3"></label></div>
                         <div class="DL_Line">低壓室煙感<label class="dataLight RG_L <%=OF[5]==='1'?'setToClose':''%>" id="OF_bit_5"></label></div>
-                        <div class="DL_Line">主從通訊異常<label class="dataLight RG_L <%=OF[13]==='1'?'setToClose':''%>" id="OF_bit_13"></label></div>
+                        <div class="DL_Line">主從通訊異常<label class="dataLight RG_L <%=OF[6]==='1'?'setToClose':''%>" id="OF_bit_6"></label></div>
                         <div class="DL_Line lastLine">Goose通訊異常
                             <label class="dataLight RG_L <%=OF[15]==='1'?'setToClose':''%>" id="OF_bit_15"></label>
                         </div>
@@ -157,13 +157,13 @@
 
                 <div class="columnDLL"><!--AJAX還沒做-->
                     <div class="DL_Line lastLine">SCU-DSP通訊異常
-                        <label class="dataLight OG_L" id=""></label>
+                        <label class="dataLight OG_L <%=Alarm3[0]==='1'?'setToClose':''%>" id="A3_bit_0"></label>
                     </div>
                     <div class="DL_Line lastLine">BMS通訊異常
-                        <label class="dataLight OG_L" id=""></label>
+                        <label class="dataLight OG_L <%=Alarm3[1]==='1'?'setToClose':''%>"  id="A3_bit_1"></label>
                     </div>
                     <div class="DL_Line lastLine">BMS乾接點
-                        <label class="dataLight OG_L" id=""></label>
+                        <label class="dataLight OG_L <%=Alarm3[2]==='1'?'setToClose':''%>"  id="A3_bit_2"></label>
                     </div>
                 </div>
 
@@ -191,7 +191,7 @@
                     <div class="DL_Line">併機通訊故障
                         <label class="dataLight RG_L <%=Fault2[13]==='1'?'setToClose':''%>" id="F2_bit_13"></label>
                     </div>
-                    <div class="DL_Line gapLine">SCU計量板通訊異常<label class="dataLight RG_L" id=""></label></div><!--AJAX還沒-->
+                    <div class="DL_Line gapLine">SCU計量板通訊異常<label class="dataLight RG_L <%=Fault3[0]==='1'?'setToClose':''%>"  id="F3_bit_0"></label></div><!--AJAX還沒-->
                 </div>
 
                 <div class="columnDLL">

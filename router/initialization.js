@@ -12,9 +12,9 @@ const DB_LOGIN = `${database.username}:${database.password}`;
 const CREDENTIALS = Buffer.from(DB_LOGIN).toString('base64');
 const AUTHORIZATION = "Basic " + CREDENTIALS;
 
-function dbcheck() {
+// function dbcheck() {
     
-}
+// }
 
 async function createdb(name) {
     const URL = `${DB_URL}/${name}`;
@@ -35,4 +35,6 @@ async function createdb(name) {
         }
     }
 
-for ()
+createdb("testttt")
+
+// for ()

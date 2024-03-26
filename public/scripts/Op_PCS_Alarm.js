@@ -67,13 +67,15 @@ async function updateData() {
   light_color(data.OF[1], "#OF_bit_1", "0", "setToOpen", "1", "setToClose");
   light_color(data.OF[2], "#OF_bit_2", "0", "setToOpen", "1", "setToClose");
   light_color(data.OF[3], "#OF_bit_3", "0", "setToOpen", "1", "setToClose");
-  light_color(data.OF[5], "#OF_bit_5", "0", "setToOpen", "1", "setToClose");
   light_color(data.OF[13], "#OF_bit_13", "0", "setToOpen", "1", "setToClose");
+  light_color(data.OF[5], "#OF_bit_5", "0", "setToOpen", "1", "setToClose");
+  light_color(data.OF[6], "#OF_bit_6", "0", "setToOpen", "1", "setToClose");
   light_color(data.OF[15], "#OF_bit_15", "0", "setToOpen", "1", "setToClose");
 
   /*整機告警狀態********************************************** */
   light_color(data.OA[1], "#OA_bit_1", "0", "setToOpen", "1", "setToClose");
   light_color(data.OA[2], "#OA_bit_2", "0", "setToOpen", "1", "setToClose");
+  light_color(data.OA[6], "#OA_bit_6", "0", "setToOpen", "1", "setToClose");
   light_color(data.OA[10], "#OA_bit_10", "0", "setToOpen", "1", "setToClose");
 
   /*告警狀態********************************************** */
@@ -123,6 +125,13 @@ async function updateData() {
 
   ///////////////////////////////////////////////////////////
   light_color(data.Alarm2[0], "#A2_bit_0", "0", "setToOpen", "1", "setToClose");
+  ///////////////////////////////////////////////////////////
+  if (data.Alarm3 && data.Alarm3.length > 0){  
+  light_color(data.Alarm3[0], "#A3_bit_0", "0", "setToOpen", "1", "setToClose");
+  light_color(data.Alarm3[1], "#A3_bit_1", "0", "setToOpen", "1", "setToClose");
+  light_color(data.Alarm3[2], "#A3_bit_2", "0", "setToOpen", "1", "setToClose");
+}
+
 
   /*故障狀態******************************************************************** */
   //交流////////////////////////////////////////
@@ -174,7 +183,22 @@ async function updateData() {
     "1",
     "setToClose"
   );
+  light_color(data.Fault1[6], "#F1_bit_6", "0", "setToOpen", "1", "setToClose");
+  light_color(
+    data.Fault1[21],
+    "#F1_bit_21",
+    "0",
+    "setToOpen",
+    "1",
+    "setToClose"
+  );
 
+  light_color(data.Fault2[1], "#F2_bit_1", "0", "setToOpen", "1", "setToClose");
+  light_color(data.Fault2[16], "#F2_bit_16", "0", "setToOpen", "1", "setToClose");
+  light_color(data.Fault2[6], "#F2_bit_6", "0", "setToOpen", "1", "setToClose");
+  light_color(data.Fault2[23], "#F2_bit_23", "0", "setToOpen", "1", "setToClose");
+  light_color(data.Fault2[24], "#F2_bit_24", "0", "setToOpen", "1", "setToClose");
+  light_color(data.Fault2[19], "#F2_bit_19", "0", "setToOpen", "1", "setToClose");
   //直流//////////////////////////////////////////////////
   light_color(data.Fault1[0], "#F1_bit_0", "0", "setToOpen", "1", "setToClose");
   light_color(data.Fault1[1], "#F1_bit_1", "0", "setToOpen", "1", "setToClose");
@@ -189,15 +213,6 @@ async function updateData() {
   light_color(
     data.Fault1[20],
     "#F1_bit_20",
-    "0",
-    "setToOpen",
-    "1",
-    "setToClose"
-  );
-  light_color(data.Fault1[6], "#F1_bit_6", "0", "setToOpen", "1", "setToClose");
-  light_color(
-    data.Fault1[21],
-    "#F1_bit_21",
     "0",
     "setToOpen",
     "1",
@@ -376,4 +391,8 @@ async function updateData() {
     "1",
     "setToClose"
   );
+  if(data.Fault3 && data.Fault3.length > 0){
+    light_color(data.Fault3[0], "#F3_bit_0", "0", "setToOpen", "1", "setToClose");
+  }
+
 }

@@ -53,7 +53,7 @@ function hide_ssNavBar(clickItem) {
 
 async function updateData() {
   //更新資料
-  var router = window.location.href + "/data";
+  var router = window.location.href + "data";
   console.log(router);
   var data = await getData(router);
   const pageNumber = 1
