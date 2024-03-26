@@ -14,11 +14,12 @@ module.exports = {
   //   door:"log_door"
   // },
   //改為案場電腦用
+
   app: {
     port: 3000
   },
   database: {
-    host: "192.168.1.12",
+    host: "192.168.1.10",
     port: 5984,
     username: "admin",
     password: "ems45877096",
