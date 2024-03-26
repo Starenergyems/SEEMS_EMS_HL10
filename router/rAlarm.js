@@ -11,7 +11,7 @@ const methodOverride = require("method-override");
 const router = express.Router();
 const app = express();
 const cors = require("cors");
-
+const moment = require("moment");
 const {
   LC_error_result_gen,
   DC_error_result_gen,
@@ -50,37 +50,35 @@ let alarm_db_event_lock = false;
   dcnanoDb,
   gcnanoDb,
   otherrf10nanoDb,
-].forEach(
-  (element) => {
-    element.get('_design/' + "rAlarm_ddoc", (err, body) => {
-      // console.log(body)
-      if (err) {
-        if (err.statusCode === 404) {
-          console.log('Design document does not exist. Creating...');
-          const indexDef_time = {
-            index: { fields: ["time"] },
-            ddoc: "rAlarm_ddoc",
-            name: "time_index"
-          };
-          element.createIndex(indexDef_time);
-        } else {
-          console.error('Error:', err);
-        }
+].forEach((element) => {
+  element.get("_design/" + "rAlarm_ddoc", (err, body) => {
+    // console.log(body)
+    if (err) {
+      if (err.statusCode === 404) {
+        console.log("Design document does not exist. Creating...");
+        const indexDef_time = {
+          index: { fields: ["time"] },
+          ddoc: "rAlarm_ddoc",
+          name: "time_index",
+        };
+        element.createIndex(indexDef_time);
       } else {
-        console.log('Design document exists:', Object.keys(body.views));
+        console.error("Error:", err);
       }
-    });
-  }
-)
+    } else {
+      console.log("Design document exists:", Object.keys(body.views));
+    }
+  });
+});
 
 function alarmdb_create_index() {
   return new Promise((resolve, reject) => {
-    Promise.resolve('Design document does not exist. Creating...')
+    Promise.resolve("Design document does not exist. Creating...")
       .then(() => {
         const indexDef_read = {
           index: { fields: ["read"] },
           ddoc: "rAlarm_ddoc",
-          name: "read_index"
+          name: "read_index",
         };
         return alarmnanoDb.createIndex(indexDef_read);
       })
@@ -88,7 +86,7 @@ function alarmdb_create_index() {
         const indexDef_db_name_recover = {
           index: { fields: ["db_name"] },
           ddoc: "rAlarm_ddoc",
-          name: "db_name_recover_index"
+          name: "db_name_recover_index",
         };
         return alarmnanoDb.createIndex(indexDef_db_name_recover);
       })
@@ -96,52 +94,59 @@ function alarmdb_create_index() {
         const indexDef_occurrence_time = {
           index: { fields: ["occurrence_time"] },
           ddoc: "rAlarm_ddoc",
-          name: "occurrence_time_index"
+          name: "occurrence_time_index",
         };
         return alarmnanoDb.createIndex(indexDef_occurrence_time);
       })
       .then(() => {
-        resolve('Resolved alarmdb_create_index');
+        resolve("Resolved alarmdb_create_index");
         // console.log('Resolved alarmdb_create_index');
       })
       .catch((error) => {
-        reject(error)
-      })
-  }) 
+        reject(error);
+      });
+  });
 }
 
-alarmnanoDb.get('_design/' + "rAlarm_ddoc", (err, body) => {
+alarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
   if (err) {
     if (err.statusCode === 404) {
       alarmdb_create_index_promise = alarmdb_create_index();
-      Promise.all([alarmdb_create_index_promise]).then((resolve, reject) => console.log(resolve, reject));
+      Promise.all([alarmdb_create_index_promise]).then((resolve, reject) =>
+        console.log(resolve, reject)
+      );
     } else {
-      console.error('Error:', err);
+      console.error("Error:", err);
     }
   } else if (Object.keys(body.views).length < 3) {
     // console.log(Object.keys(body.views));
     alarmdb_create_index_promise = alarmdb_create_index();
-    Promise.all([alarmdb_create_index_promise]).then((resolve, reject) => console.log(resolve, reject));
+    Promise.all([alarmdb_create_index_promise]).then((resolve, reject) =>
+      console.log(resolve, reject)
+    );
   } else {
-    console.log('alarmnanoDb Design document exists:', Object.keys(body.views));
+    console.log("alarmnanoDb Design document exists:", Object.keys(body.views));
   }
 });
 
-hisalarmnanoDb.get('_design/' + "rAlarm_ddoc", (err, body) => {
+hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
   if (err) {
     if (err.statusCode === 404) {
-      console.log('Design document does not exist. Creating...');
+      console.log("Design document does not exist. Creating...");
       const indexDef_occurrence_time = {
         index: { fields: ["occurrence_time"] },
         ddoc: "rAlarm_ddoc",
-        name: "occurrence_time_index"
+        name: "occurrence_time_index",
       };
       hisalarmnanoDb.createIndex(indexDef_occurrence_time);
     } else {
-      console.error('Error:', err);
+      console.error("Error:", err);
     }
   } else {
-    console.log('hisalarmnanoDb Design document exists:', Object.keys(body.views));
+    console.log(
+      "hisalarmnanoDb Design document exists:",
+      Object.keys(body.views)
+    );
   }
 });
 
@@ -331,7 +336,26 @@ router.get("/alarm/realtime/edit", (req, res) => {
             // ["_rev", "time", "db_name", "value"].forEach((key) => {
             //   delete item[key];
             // });
+            //時間格式修改
             item["index"] = "";
+
+            const formattedTime = moment(item.time).format(
+              "YYYY/MM/DD HH:mm:ss:SSS"
+            );
+            item.time = formattedTime;
+            if (item.recover_time !== "") {
+              const formattedrecover_time = moment(item.recover_time).format(
+                "YYYY/MM/DD HH:mm:ss:SSS"
+              );
+              item.recover_time = formattedrecover_time;
+            }
+            if (item.occurrence_time !== "") {
+              const formattedOccurrenceTime = moment(
+                item.occurrence_time
+              ).format("YYYY/MM/DD HH:mm:ss:SSS");
+              item.occurrence_time = formattedOccurrenceTime;
+            }
+
             alarm_db_array.push(item);
             // if (item.read) {
             //   alarm_db_array_read.push(item);
@@ -366,13 +390,12 @@ router.get("/alarm/history", (req, res) => {
   res.render("Alm_History");
 });
 
-
 router.get("/alarm/history/edit", (req, res) => {
-  const From_date = new Date().toISOString().split('T')[0]; // From_date set to today's date;
+  const From_date = new Date().toISOString().split("T")[0]; // From_date set to today's date;
   const To_date = new Date().toISOString(); // To_date set to current date and time
 
   const From_datetime = From_date + "T00:00:00+08:00"; //預設讀取今天到現在
-  const To_datetime = To_date.slice(0, 19) + "+08:00"; // 
+  const To_datetime = To_date.slice(0, 19) + "+08:00"; //
   console.log(From_datetime, To_datetime);
 
   Promise.resolve("Init")
@@ -403,10 +426,27 @@ router.get("/alarm/history/edit", (req, res) => {
     })
     .then((resp) => {
       // console.log(resp);
-        var hisalarm_db_array=[];
+      var hisalarm_db_array = [];
 
       for (const item of resp.docs) {
         item["index"] = "";
+
+        const formattedTime = moment(item.time).format(
+          "YYYY/MM/DD HH:mm:ss:SSS"
+        );
+        item.time = formattedTime;
+        if (item.recover_time !== "") {
+          const formattedrecover_time = moment(item.recover_time).format(
+            "YYYY/MM/DD HH:mm:ss:SSS"
+          );
+          item.recover_time = formattedrecover_time;
+        }
+        if (item.occurrence_time !== "") {
+          const formattedOccurrenceTime = moment(item.occurrence_time).format(
+            "YYYY/MM/DD HH:mm:ss:SSS"
+          );
+          item.occurrence_time = formattedOccurrenceTime;
+        }
         hisalarm_db_array.push(item);
       }
       // console.log("alarm_db_array");
@@ -426,7 +466,7 @@ router.get("/alarm/history/edit", (req, res) => {
 });
 
 router.post("/alarm/history/edit", (req, res) => {
-  const { input1, input2, input3, input4} = req.body;
+  const { input1, input2, input3, input4 } = req.body;
   const From_date = input1;
   const From_time = input2;
   const To_date = input3;
@@ -464,14 +504,30 @@ router.post("/alarm/history/edit", (req, res) => {
     })
     .then((resp) => {
       // console.log(resp);
-       var hisalarm_db_array=[];
+      var hisalarm_db_array = [];
 
       for (const item of resp.docs) {
         item["index"] = "";
         hisalarm_db_array.push(item);
+        const formattedTime = moment(item.time).format(
+          "YYYY/MM/DD HH:mm:ss:SSS"
+        );
+        item.time = formattedTime;
+        if (item.recover_time !== "") {
+          const formattedrecover_time = moment(item.recover_time).format(
+            "YYYY/MM/DD HH:mm:ss:SSS"
+          );
+          item.recover_time = formattedrecover_time;
+        }
+        if (item.occurrence_time !== "") {
+          const formattedOccurrenceTime = moment(item.occurrence_time).format(
+            "YYYY/MM/DD HH:mm:ss:SSS"
+          );
+          item.occurrence_time = formattedOccurrenceTime;
+        }
       }
       // console.log("alarm_db_array");
-      console.log(hisalarm_db_array);
+      // console.log(hisalarm_db_array);
       res.send(hisalarm_db_array);
     })
     .catch((err) => {
@@ -545,9 +601,21 @@ function alarm_processor_call() {
       hisalarmnanoDb
     );
 
-    const other_alarm_promise = alarm_processor(otherrf10nanoDb, mangoQuery_latest_rawdata, Other_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const other_alarm_promise = alarm_processor(
+      otherrf10nanoDb,
+      mangoQuery_latest_rawdata,
+      Other_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
 
-    const gc_alarm_promise = alarm_processor(gcnanoDb, mangoQuery_latest_rawdata, GC_error_result_gen, alarmnanoDb, hisalarmnanoDb);
+    const gc_alarm_promise = alarm_processor(
+      gcnanoDb,
+      mangoQuery_latest_rawdata,
+      GC_error_result_gen,
+      alarmnanoDb,
+      hisalarmnanoDb
+    );
 
     Promise.all([
       lc1_alarm_promise,

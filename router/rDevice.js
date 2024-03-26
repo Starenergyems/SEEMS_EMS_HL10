@@ -63,6 +63,7 @@ router.get("/systeminfo/device/edit", (req, res) => {
       });
 
       item["index"] = "";
+
       db_array.push(item);
     }
     console.log(db_array);
