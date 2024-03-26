@@ -145,138 +145,142 @@ var specified_date_clone23;
 router.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
-    //查詢參數中取得templatePath
-    const { templatePath, reportType, fileName } = req.query; //url要帶參數
-    if (!templatePath) {
-      return res.status(400).send("Missing templatePath parameter");
-    }
-
-    console.log("fileName:" + fileName);
-    var queryDate = convertFileNameToDate(fileName);
-    console.log("queryDate:" + queryDate);
-    specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
-
-    specified_date_clone1 = specified_date.clone();
-    specified_date_clone2 = specified_date.clone();
-    specified_date_clone3 = specified_date.clone();
-    specified_date_clone4 = specified_date.clone();
-    specified_date_clone5 = specified_date.clone();
-    specified_date_clone6 = specified_date.clone();
-    specified_date_clone7 = specified_date.clone();
-    specified_date_clone8 = specified_date.clone();
-    specified_date_clone9 = specified_date.clone();
-    specified_date_clone10 = specified_date.clone();
-    specified_date_clone11 = specified_date.clone();
-    specified_date_clone12 = specified_date.clone();
-    specified_date_clone13 = specified_date.clone();
-    specified_date_clone14 = specified_date.clone();
-    specified_date_clone15 = specified_date.clone();
-    specified_date_clone16 = specified_date.clone();
-    specified_date_clone17 = specified_date.clone();
-    specified_date_clone18 = specified_date.clone();
-    specified_date_clone19 = specified_date.clone();
-    specified_date_clone20 = specified_date.clone();
-    specified_date_clone21 = specified_date.clone();
-    specified_date_clone22 = specified_date.clone();
-    specified_date_clone23 = specified_date.clone();
-
-    var tempFilePath; //暫存的excel資料
-
-    //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
-    const workbook = await xlsx.fromFileAsync(templatePath);
-    var couchData; //插入excel的數值
-    // Fetch data from MongoDB
-    if (reportType === "年報") {
-      couchData = await getYearData();
-      const transformedDataforyear = transformData(couchData.dataforyear); //整理資料為陣列
-      const transformedTot = transformOtherSumTotal(couchData.otherSumTotal, couchData.totMWHTotal);
-      const transformedDataLast = transformDataLastDataYear(couchData.datayear_before_last);
-
-      updateExcel1DHorizon(workbook, transformedDataforyear[0][1], 0, "D6"); //1月
-      updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[1][1], 0, "D7"); //2月
-      updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[2][1], 0, "D8"); //3月
-      updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[3][1], 0, "D9"); //4月
-      updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[4][1], 0, "D10"); //5月
-      updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[5][1], 0, "D11"); //6月
-      updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[6][1], 0, "D12"); //7月
-      updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[7][1], 0, "D13"); //8月
-      updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[8][1], 0, "D14"); //9月
-      updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[9][1], 0, "D15"); //10月
-      updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[10][1], 0, "D16"); //11月
-      updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16"); 
-      updateExcel1DHorizon(workbook, transformedDataforyear[11][1], 0, "D17"); //12月
-      updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17"); 
-
-      updateExcel1DHorizon(workbook, couchData.sumArrayTotal, 0, "D18"); //總共
-      updateExcel1DHorizon(workbook, transformedTot, 0, "K18"); 
-      updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
-      updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19"); 
-
-      tempFilePath = path.join(__dirname, "temp.xlsx");
-      await workbook.toFileAsync(tempFilePath);
-    } else if (reportType === "月報") {
-      couchData = await getMonthData();
-      updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
-      updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 1, "K3"); //日期
-      updateExcel2DHorizon(workbook, couchData.data_exacutive_rate, 1, "D6"); //服務品質指標+SPM
-      updateExcel2DHorizon(workbook, couchData.data_other_info, 1, "N6"); //總用電+中止+充放電效率
-      updateExcel1DHorizon(workbook, couchData.other_sum, 1, "N37"); //total總用電+中止+充放電效率
-      updateExcel1DHorizon(workbook, couchData.sumArray, 1, "D37"); //total服務品質指標
-      updateExcel1DHorizon(workbook, couchData.averageArray, 1, "K37"); //total SPM
-      updateExcel1DHorizon(workbook, couchData.last_month, 1, "D38"); //上期
-      updateExcel1DHorizon(workbook, couchData.last_year, 1, "D39"); //去年同期
-
-      updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
-      updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
-      updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
-
-      tempFilePath = path.join(__dirname, "temp.xlsx");
-      await workbook.toFileAsync(tempFilePath);
-    } else if (reportType === "日報") {
-      couchData = await getDayData();
-
-      // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
-      updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
-      updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
-      updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
-      updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
-      tempFilePath = path.join(__dirname, "temp.xlsx");
-      await workbook.toFileAsync(tempFilePath);
-    } else {
-      console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
-    }
-    // Set up response headers for Excel file download
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-    res.setHeader("Content-Disposition", "attachment;");
-
-    // Read the temporary file as a stream and pipe it to the response
-    //設置HTTP響應標頭，指定返回的內容類型為Excel文件，並設置Content-Disposition標頭，提示瀏覽器以附件形式處理。
-    const fileStream = fs.createReadStream(tempFilePath);
-    fileStream.pipe(res);
-
-    // Remove the temporary file after sending the response
-    fileStream.on("end", () => {
-      fs.unlinkSync(tempFilePath);
-    });
+    await queryReport(req, res)
   } catch (error) {
     console.error("Error generating Excel file:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 /***************************************************************************************************** */
+const queryReport = async (req, res) => {//撈資料放入對應excel表格
+  const { templatePath, reportType, fileName } = req.query; //url要帶參數
+  if (!templatePath) {
+    return res.status(400).send("Missing templatePath parameter");
+  }
+  console.log("fileName:" + fileName);
+  var queryDate = convertFileNameToDate(fileName);
+  console.log("queryDate:" + queryDate);
+  specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
+
+  specified_date_clone1 = specified_date.clone();
+  specified_date_clone2 = specified_date.clone();
+  specified_date_clone3 = specified_date.clone();
+  specified_date_clone4 = specified_date.clone();
+  specified_date_clone5 = specified_date.clone();
+  specified_date_clone6 = specified_date.clone();
+  specified_date_clone7 = specified_date.clone();
+  specified_date_clone8 = specified_date.clone();
+  specified_date_clone9 = specified_date.clone();
+  specified_date_clone10 = specified_date.clone();
+  specified_date_clone11 = specified_date.clone();
+  specified_date_clone12 = specified_date.clone();
+  specified_date_clone13 = specified_date.clone();
+  specified_date_clone14 = specified_date.clone();
+  specified_date_clone15 = specified_date.clone();
+  specified_date_clone16 = specified_date.clone();
+  specified_date_clone17 = specified_date.clone();
+  specified_date_clone18 = specified_date.clone();
+  specified_date_clone19 = specified_date.clone();
+  specified_date_clone20 = specified_date.clone();
+  specified_date_clone21 = specified_date.clone();
+  specified_date_clone22 = specified_date.clone();
+  specified_date_clone23 = specified_date.clone();
+
+  var tempFilePath; //暫存的excel資料
+
+  //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
+  const workbook = await xlsx.fromFileAsync(templatePath);
+  var couchData; //插入excel的數值
+  // Fetch data from MongoDB
+  if (reportType === "年報") {
+    couchData = await getYearData();
+    const transformedDataforyear = transformData(couchData.dataforyear); //整理資料為陣列
+    const transformedTot = transformOtherSumTotal(couchData.otherSumTotal, couchData.totMWHTotal);
+    const transformedDataLast = transformDataLastDataYear(couchData.datayear_before_last);
+
+    updateExcel1DHorizon(workbook, transformedDataforyear[0][1], 0, "D6"); //1月
+    updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[1][1], 0, "D7"); //2月
+    updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[2][1], 0, "D8"); //3月
+    updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[3][1], 0, "D9"); //4月
+    updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[4][1], 0, "D10"); //5月
+    updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[5][1], 0, "D11"); //6月
+    updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[6][1], 0, "D12"); //7月
+    updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[7][1], 0, "D13"); //8月
+    updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[8][1], 0, "D14"); //9月
+    updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[9][1], 0, "D15"); //10月
+    updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[10][1], 0, "D16"); //11月
+    updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[11][1], 0, "D17"); //12月
+    updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17"); 
+
+    updateExcel1DHorizon(workbook, couchData.sumArrayTotal, 0, "D18"); //總共
+    updateExcel1DHorizon(workbook, transformedTot, 0, "K18"); 
+    updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
+    updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19"); 
+
+    tempFilePath = path.join(__dirname, "temp.xlsx");
+    await workbook.toFileAsync(tempFilePath);
+  } else if (reportType === "月報") {
+    couchData = await getMonthData();
+    updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
+    updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 1, "K3"); //日期
+    updateExcel2DHorizon(workbook, couchData.data_exacutive_rate, 1, "D6"); //服務品質指標+SPM
+    updateExcel2DHorizon(workbook, couchData.data_other_info, 1, "N6"); //總用電+中止+充放電效率
+    updateExcel1DHorizon(workbook, couchData.other_sum, 1, "N37"); //total總用電+中止+充放電效率
+    updateExcel1DHorizon(workbook, couchData.sumArray, 1, "D37"); //total服務品質指標
+    updateExcel1DHorizon(workbook, couchData.averageArray, 1, "K37"); //total SPM
+    updateExcel1DHorizon(workbook, couchData.last_month, 1, "D38"); //上期
+    updateExcel1DHorizon(workbook, couchData.last_year, 1, "D39"); //去年同期
+
+    updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
+    updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
+    updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
+
+    tempFilePath = path.join(__dirname, "temp.xlsx");
+    await workbook.toFileAsync(tempFilePath);
+  } else if (reportType === "日報") {
+    couchData = await getDayData();
+
+    // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
+    updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
+    updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
+    updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
+    updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
+    tempFilePath = path.join(__dirname, "temp.xlsx");
+    await workbook.toFileAsync(tempFilePath);
+  } else {
+    console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
+  }
+
+  // Set up response headers for Excel file download
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader("Content-Disposition", "attachment;");
+
+  // Read the temporary file as a stream and pipe it to the response
+  //設置HTTP響應標頭，指定返回的內容類型為Excel文件，並設置Content-Disposition標頭，提示瀏覽器以附件形式處理。
+  const fileStream = fs.createReadStream(tempFilePath);
+  fileStream.pipe(res);
+
+  // Remove the temporary file after sending the response
+  fileStream.on("end", () => {
+    fs.unlinkSync(tempFilePath);
+  });
+
+}
+
 // Function to transform the data
 function transformData(data) { //年報用，每月值整理成陣列
   const transformedData = [];

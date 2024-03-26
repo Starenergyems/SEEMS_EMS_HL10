@@ -30,7 +30,7 @@ const logdoorDb = nano.use(log_door); // 請注意這裡使用 nano.use() 來設
 // 設定index
 const indexDef = {
   index: { fields: ["time"] },
-  name: "time_index"
+  name: "time_index",
 };
 
 // 事件紀錄
@@ -68,10 +68,10 @@ router.post("/event/operation/edit", async (req, res) => {
       selector: {
         time: {
           $gte: startTime.toISOString(),
-          $lte: endTime.toISOString()
-        }
+          $lte: endTime.toISOString(),
+        },
       },
-      sort: [{ time: "desc" }]
+      sort: [{ time: "desc" }],
     };
 
     // 使用logDb對CouchDB執行Mango查詢
@@ -91,6 +91,12 @@ router.post("/event/operation/edit", async (req, res) => {
           delete item[key];
         });
 
+        // 格式化時間為指定格式
+        const formattedTime = moment(item.time).format(
+          "YYYY/MM/DD HH:mm:ss:SSS"
+        );
+        item.time = formattedTime;
+
         item["index"] = "";
         db_array.push(item);
       }
@@ -109,9 +115,9 @@ router.get("/event/operation/edit", async (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
-      time: { $exists: true }
+      time: { $exists: true },
     },
-    sort: [{ time: "desc" }]
+    sort: [{ time: "desc" }],
   };
 
   // 使用logDb對CouchDB執行Mango查詢
@@ -130,7 +136,9 @@ router.get("/event/operation/edit", async (req, res) => {
       ["_rev"].forEach((key) => {
         delete item[key];
       });
-
+      // 格式化時間為指定格式
+      const formattedTime = moment(item.time).format("YYYY/MM/DD HH:mm:ss:SSS");
+      item.time = formattedTime;
       item["index"] = "";
       db_array.push(item);
     }
@@ -170,10 +178,10 @@ router.post("/event/door/edit", async (req, res) => {
       selector: {
         time: {
           $gte: startTime.toISOString(),
-          $lte: endTime.toISOString()
-        }
+          $lte: endTime.toISOString(),
+        },
       },
-      sort: [{ time: "desc" }]
+      sort: [{ time: "desc" }],
     };
 
     // 使用logDb對CouchDB執行Mango查詢
@@ -192,7 +200,11 @@ router.post("/event/door/edit", async (req, res) => {
         ["_rev"].forEach((key) => {
           delete item[key];
         });
-
+        // 格式化時間為指定格式
+        const formattedTime = moment(item.time).format(
+          "YYYY/MM/DD HH:mm:ss:SSS"
+        );
+        item.time = formattedTime;
         item["index"] = "";
         db_array.push(item);
       }
@@ -211,9 +223,9 @@ router.get("/event/door/edit", async (req, res) => {
   // 定義Mango查詢，找到包含'time'屬性的文檔，並按照'time'降序排序
   const mangoQuery = {
     selector: {
-      time: { $exists: true }
+      time: { $exists: true },
     },
-    sort: [{ time: "desc" }]
+    sort: [{ time: "desc" }],
   };
 
   logdoorDb.find(mangoQuery, (err, body) => {

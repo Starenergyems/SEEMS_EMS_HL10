@@ -585,7 +585,11 @@ async function updateTable(){
             { data: "location" },
             { data: "device" },
             { data: "level" },
-            { data: "content" },
+            { data: "content",
+            render: function(data, type, row) {
+                // Ensure the content is treated as HTML
+                return $('<div/>').html(data).text();
+            }},
             {
               data: "read",
               render: function (data, type, row) {
@@ -670,7 +674,7 @@ async function updateTable_post(data){
             { data: "location" },
             { data: "device" },
             { data: "level" },
-            { data: "content" },
+            { data: "content"}, 
             {
               data: "read",
               render: function (data, type, row) {

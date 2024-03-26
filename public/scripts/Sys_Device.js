@@ -81,8 +81,6 @@ let lang = {
   },
 };
 
-
-
 var dataset;
 
 /*async function updateTable(){
@@ -119,7 +117,8 @@ var dataset;
     })
 }*/
 var fixedValues = [];
-function extractTable() { //將畫面上的欄位及標題讀出來
+function extractTable() {
+  //將畫面上的欄位及標題讀出來
   $("#deviceTable tbody tr").each(function () {
     const rowValues = [];
     $(this)
@@ -180,15 +179,14 @@ function assignBit(index) {
 
 var currentPageIndex; //頁碼初始為0
 async function updateTable() {
-
-  if ($.fn.DataTable.isDataTable("#deviceTable")) { // If DataTable is already initialized, read the page number
+  if ($.fn.DataTable.isDataTable("#deviceTable")) {
+    // If DataTable is already initialized, read the page number
     currentPageIndex = $("#deviceTable").DataTable().page.info().page; // Get the current page index
-  } else { 
-    currentPageIndex = 0; 
+  } else {
+    currentPageIndex = 0;
   }
-  
 
-  const dataset = await getData(window.location.href+"/edit");
+  const dataset = await getData(window.location.href + "/edit");
 
   // Combine fixed values with dynamic data
   var combinedData = fixedValues.map((fixedRowValues, index) => {
@@ -198,7 +196,8 @@ async function updateTable() {
     var bit = assignBit(index);
     // console.log(bit);
     if (bit) {
-      fixedRowValues[3] = dynamicValues[index + 2][bit[0]]; // Insert the value for "狀態" into position [3]
+      fixedRowValues[3] =
+        dynamicValues[index + 2][bit[0]] === 1 ? "異常" : "正常"; // Insert the value for "狀態" into position [3]
       fixedRowValues[5] = dynamicValues[index + 2][bit[1]]; // Insert the value for "重新連線次數" into position [5]
     } else {
       // Handle the case when bit is null (indexShift not in the specified range)
@@ -239,7 +238,7 @@ async function updateTable() {
             ],*/
     });
   }
-  $("#deviceTable").DataTable().page(currentPageIndex).draw("page");//設定頁數為原本停留的頁面
+  $("#deviceTable").DataTable().page(currentPageIndex).draw("page"); //設定頁數為原本停留的頁面
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
