@@ -15,10 +15,10 @@ module.exports = {
   // },
   //改為案場電腦用
   app: {
-    port: 3000,
+    port: 3000
   },
   database: {
-    host: "192.168.1.10",
+    host: "192.168.1.12",
     port: 5984,
     username: "admin",
     password: "ems45877096",
@@ -45,10 +45,10 @@ module.exports = {
       "other_rf01",
       "other_rf10",
       "report",
-      "year_report",
-    ],
+      "year_report"
+    ]
   },
-  mustdatabase: {},
+  mustdatabase: {}
 
   // const express = require("express");
   // const app = express();

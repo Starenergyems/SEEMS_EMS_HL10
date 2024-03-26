@@ -2924,6 +2924,11 @@ function update_trigger_alarms_batch(
                       _value = '0';
                       // console.log(_value)
                     } else {
+                      console.log(_id);
+                      console.log(doc);
+                      // console.log(data_item);
+                      console.log(_tag);
+                      console.log(_device);
                       _value = data_item[_device][_tag];
                       // console.log(_value)
                     }

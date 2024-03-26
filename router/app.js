@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
-const { getconfig, submit, authentication, ggg } = require("./rLogin");
+const { getconfig, submit, authentication } = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
