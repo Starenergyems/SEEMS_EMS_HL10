@@ -1507,6 +1507,7 @@ const GC_400129 = {
   min: 400007,
   max: 400006,
   scale: 0.01,
+  capacity: 3500000
 };
 
 const GC_400989 = {
@@ -2467,7 +2468,7 @@ function GC_error_result_unit(
         );
       }
     } else if (error_table[tag]["name"] === "SOC") {
-      value = value * error_table[tag]["status"]["scale"];
+      value = value / error_table[tag]["status"]["capacity"];
       // console.log(value)
       let content = "";
       if (value < Min_SOC_Limit) {
@@ -2900,6 +2901,7 @@ function update_trigger_alarms_batch(
       .then(() => {
         // update for the recover alarms (Not recongnized as an error from the filter func which also is currently an error in the AlarmDB)
         // console.log("recover_promises");
+        // console.log(compare_result.recover)
         if (compare_result.recover.length > 0) {
           // fetch an array of _id from the AlarmDB
           recover_result = nanoDB
@@ -2924,11 +2926,11 @@ function update_trigger_alarms_batch(
                       _value = '0';
                       // console.log(_value)
                     } else {
-                      console.log(_id);
-                      console.log(doc);
+                      // console.log(_id);
+                      // console.log(doc);
                       // console.log(data_item);
-                      console.log(_tag);
-                      console.log(_device);
+                      // console.log(_tag);
+                      // console.log(_device);
                       _value = data_item[_device][_tag];
                       // console.log(_value)
                     }
@@ -3046,7 +3048,7 @@ function current_locale_time() {
   // console.log(date)
 
   // const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSSZ");
-  const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ssZ");
+  const formattedString = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 
   // console.log(formattedString);
   return formattedString;

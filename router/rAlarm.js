@@ -400,7 +400,7 @@ router.get("/alarm/history/edit", (req, res) => {
 
   Promise.resolve("Init")
     .then(() => {
-      return alarmnanoDb.find({
+      return hisalarmnanoDb.find({
         selector: {
           occurrence_time: {
             $exists: true,
@@ -478,7 +478,7 @@ router.post("/alarm/history/edit", (req, res) => {
 
   Promise.resolve("Init")
     .then(() => {
-      return alarmnanoDb.find({
+      return hisalarmnanoDb.find({
         selector: {
           occurrence_time: {
             $exists: true,
