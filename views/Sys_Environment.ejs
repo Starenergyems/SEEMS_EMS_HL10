@@ -264,7 +264,8 @@
                             <label class="dataStatus" id="ups_EMS_error"></label>
                         </td>
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L " id="ups_EMS_408161_bit9"><p>L1 IP 保險絲異常</p></label>
+                            <label class="dataLight RB_L " id=""></label>
+                            <button class="openEnvironAlm" id="ctrl_ups"></button>
                             <!-- <label class="dataLight RB_L " id="ups_EMS_408161_bit11"><p>充電器異常</p></label>
                             <label class="dataLight RB_L " id="ups_EMS_408161_bit12"><p>電池低電量</p></label>
                             <label class="dataLight RB_L " id="ups_EMS_408162_bit6"><p>開關持續切離</p></label> -->
@@ -311,7 +312,7 @@
                             <label class="dataStatus" id="ups_CMS_error"></label>
                         </td>
                         <td class="col_other" colspan="3">
-                            <label class="dataLight RB_L " id="ups_CMS_408161_bit9"><p>L1 IP 保險絲異常</p></label>
+                            <label class="dataLight RB_L " id="">></label>
                             <!-- <label class="dataLight RB_L " id="ups_CMS_408161_bit11"><p>充電器異常</p></label>
                             <label class="dataLight RB_L " id="ups_CMS_408161_bit12"><p>電池低電量</p></label>
                             <label class="dataLight RB_L " id="ups_CMS_408162_bit6"><p>開關持續切離</p></label> -->
@@ -405,14 +406,14 @@
                 <h2 class="titlePUW titleFaultBSC">ESS x-x BSC故障</h2>
 
                 <div class="columnDLL">
-                    <div class="DL_Line">電網故障<label class="dataLight RB_L"></label></div>
+                    <!-- <div class="DL_Line">電網故障<label class="dataLight RB_L"></label></div>
                     <div class="DL_Line">UPS故障<label class="dataLight RB_L"></label></div>
 
                     <h2 class="titlePUW middleTitle titleUPSstatus2">ESS x-x UPS狀態2</h2>
                     <div class="DL_Line">電池測試失敗<label class="dataLight RB_L"></label></div>
-                    <div class="DL_Line">電池測試正常<label class="dataLight GB_L"></label></div>
+                    <div class="DL_Line">電池測試正常<label class="dataLight GB_L"></label></div> -->
 
-                    <h2 class="titlePUW middleTitle titleFFSstatus">ESS x-x 消防狀態</h2>
+                    <!-- <h2 class="titlePUW middleTitle titleFFSstatus">ESS x-x 消防狀態</h2> -->
                     <div class="DL_Line">消防告警1<label class="dataLight RB_L"></label></div>
                     <div class="DL_Line">消防告警2<label class="dataLight RB_L"></label></div>
                     <div class="DL_Line">消防故障<label class="dataLight RB_L"></label></div>
@@ -497,6 +498,40 @@
                 <p class="alertInfo"></p>
 
                 <button class="closeWindowButton" id="closeWB_Yes">確認</button>
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+            
+            <div class="popUpWindow ctrl_ups">
+                <h2 class="titlePUW">EMS UPS</h2>
+                <h2 class="titlePUW">CMS UPS</h2>
+
+                <div class="columnDLL">
+                    <div class="DL_Line">L1 IP 保險絲異常<label class="dataLight OB_L" id="ups_EMS_408161_bit9"></label></div>
+                    <div class="DL_Line">充電器異常<label class="dataLight OB_L" id="ups_EMS_408161_bit11"></label></div>
+                    <div class="DL_Line">電池低電量<label class="dataLight OB_L" id="ups_EMS_408161_bit12"></label></div>
+                    <div class="DL_Line">開關持續切離<label class="dataLight OB_L" id="ups_EMS_408162_bit6"></label></div>
+                    <div class="DL_Line">過溫<label class="dataLight OB_L" id="ups_EMS_408162_bit8"></label></div>
+                    <div class="DL_Line">EPO啟動<label class="dataLight OB_L" id="ups_EMS_408162_bit10"></label></div>
+                    <div class="DL_Line">風扇鎖固警告<label class="dataLight OB_L" id="ups_EMS_408162_bit11"></label></div>
+                    <div class="DL_Line">過載警告<label class="dataLight OB_L" id="ups_EMS_408162_bit12"></label></div>
+                    <div class="DL_Line">電池過充<label class="dataLight OB_L" id="ups_EMS_408162_bit13"></label></div>
+                    <div class="DL_Line">IP位置異常<label class="dataLight OB_L" id="ups_EMS_408162_bit14"></label></div>
+                    <div class="DL_Line">IP N 遺失<label class="dataLight OB_L" id="ups_EMS_408162_bit15"></label></div>
+                </div>
+                <div class="columnDLL">
+                    <div class="DL_Line">L1 IP 保險絲異常<label class="dataLight OB_L" id="ups_CMS_408161_bit9"></label></div>
+                    <div class="DL_Line">充電器異常<label class="dataLight OB_L" id="ups_CMS_408161_bit11"></label></div>
+                    <div class="DL_Line">電池低電量<label class="dataLight OB_L" id="ups_CMS_408161_bit12"></label></div>
+                    <div class="DL_Line">開關持續切離<label class="dataLight OB_L" id="ups_CMS_408162_bit6"></label></div>
+                    <div class="DL_Line">過溫<label class="dataLight OB_L" id="ups_CMS_408162_bit8"></label></div>
+                    <div class="DL_Line">EPO啟動<label class="dataLight OB_L" id="ups_CMS_408162_bit10"></label></div>
+                    <div class="DL_Line">風扇鎖固警告<label class="dataLight OB_L" id="ups_CMS_408162_bit11"></label></div>
+                    <div class="DL_Line">過載警告<label class="dataLight OB_L" id="ups_CMS_408162_bit12"></label></div>
+                    <div class="DL_Line">電池過充<label class="dataLight OB_L" id="ups_CMS_408162_bit13"></label></div>
+                    <div class="DL_Line">IP位置異常<label class="dataLight OB_L" id="ups_CMS_408162_bit14"></label></div>
+                    <div class="DL_Line">IP N 遺失<label class="dataLight OB_L" id="ups_CMS_408162_bit15"></label></div>
+                </div>
+
                 <button class="closeWindowButton" id="closeWB_No">取消</button>
             </div>
         </div>

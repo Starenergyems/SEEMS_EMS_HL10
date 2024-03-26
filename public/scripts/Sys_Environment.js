@@ -312,9 +312,9 @@ function closePopup_info_EnvironAlm() {
 }
 
 function show_info_EnvironAlm(abc) {
-  title_UPSstatus1.textContent = "ESS " + abc + " UPS狀態1";
-  title_UPSstatus2.textContent = "ESS " + abc + " UPS狀態2";
-  title_FFSstatus.textContent = "ESS " + abc + " 消防狀態";
+  title_UPSstatus1.textContent = "ESS " + abc + " 消防狀態"; //"ESS " + abc + " UPS狀態1";
+  // title_UPSstatus2.textContent = "ESS " + abc + " UPS狀態2";
+  // title_FFSstatus.textContent = "ESS " + abc + " 消防狀態";
   title_AlarmBSC.textContent = "ESS " + abc + " BSC告警";
   title_FaultBSC.textContent = "ESS " + abc + " BSC故障";
   window_info_EnvironAlm.classList.add("appear");
@@ -913,3 +913,12 @@ async function updateData() { //更新資料ajax
 //     classRemove("#ffsStatus_4-1", "setToClose");
 //   }
  //}
+
+
+ $('#ctrl_ups').on('click', function(){
+    $('.ctrl_ups').addClass('appear');
+ })
+
+ $('.ctrl_ups #closeWB_No').on('click', function(){
+  $('.ctrl_ups').removeClass('appear');
+ })

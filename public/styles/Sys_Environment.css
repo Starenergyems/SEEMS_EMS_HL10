@@ -67,6 +67,7 @@
 .environSC .col_other {
     /* width: 12.27%; */
     width: 198px;
+    position: relative;
 }
 
 .environSC .row_head td {
@@ -278,12 +279,15 @@
 
 .environSC .openEnvironAlm {
     background-color: transparent;
-    height: 182px;
-    width: 50px;
+    height: 105px;
+    width: 200px;
     position: absolute;
-    left: calc(50% - 25px);
+    left: 0px;
     top: 0px;
+    z-index: 10;
+    cursor: pointer;
 }
+
 
 .info_EnvironAlm {
     /* display: block; */
@@ -291,6 +295,7 @@
     width: 850px;
     left: 295px;
     top: 10px;
+    z-index: 20;
 }
 
 .info_EnvironAlm .titlePUW {
@@ -326,5 +331,29 @@
     margin: 15px 0px 0px 395px;
 }
 
+/***********************************/
+.openEnvironAlm#ctrl_ups{
+    left: 200px;
+    height: 70px;
+}
 
+.popUpWindow.ctrl_ups{
+    width: 650px;
+    height: 530px;
+    z-index: 20;
+}
+
+.popUpWindow.ctrl_ups .titlePUW{
+    display: inline-block;
+    width: 280px;
+}
+
+.popUpWindow.ctrl_ups .columnDLL{
+    display: inline-block;
+    width: 280px;
+    margin: 20px 20px 0px;
+}
+.popUpWindow.ctrl_ups #closeWB_No{
+    margin: 10px 290px;
+}
 /* /////////////////////////////// */
