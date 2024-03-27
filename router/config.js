@@ -19,7 +19,7 @@ module.exports = {
     port: 3000
   },
   database: {
-    host: "192.168.1.10",
+    host: "192.168.1.10", // 192.168.8.101
     port: 5984,
     username: "admin",
     password: "ems45877096",
@@ -28,7 +28,7 @@ module.exports = {
     log: "log",
     door: "log_door",
     lc: 4,
-    initailizedb: [
+    initialization: [
       "account",
       "alarm",
       "dc_rf10",
