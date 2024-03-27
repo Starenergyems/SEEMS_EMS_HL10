@@ -16,6 +16,7 @@ const { getconfig, submit, authentication } = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
+const {autoDownload} = require("./rReport")
 //const fetch = require("node-fetch");
 //如果要換資料庫的host 改掉".database"
 
@@ -48,6 +49,12 @@ const lc3nanoDb = nano.use("lc3_rf10");
 const lc4nanoDb = nano.use("lc4_rf10");
 const alarmnanoDb = nano.use("alarm");
 
+// nano.db.list().then((databases) => {
+//   console.log("資料庫列表:", databases);
+// }).catch((error) => {
+//   console.error("無法列出資料庫:", error);
+// });
+
 //***************************************************************************************************************** */
 //時間索引
 const indexDef = {
@@ -70,15 +77,15 @@ alarmnanoDb.createIndex(indexDef);
 
 //////////////////////////////////////////////////////////////////////////////
 // Login page. URL = "/login", LOGIN_URL can redirect.
-app.get("/login", async(req, res) => {
+app.get("/login", async (req, res) => {
   res.clearCookie("token");
-  const response = await getconfig()
+  const response = await getconfig();
   const logintext = response["logintext"];
-  console.log(logintext)
+  console.log(logintext);
   const context = {
-    logintext: `${logintext}`,
-  }
-  res.render("Login", {context: context});
+    logintext: `${logintext}`
+  };
+  res.render("Login", { context: context });
 });
 
 app.get(["/", "/signin"], (req, res) => {
@@ -103,7 +110,7 @@ app.post("/login", async (req, res) => {
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
       res.json({ redirect: `http://localhost:${port}/mode` });
     } else {
-      res.json({ text: response["text"]})
+      res.json({ text: response["text"] });
       // res.status(401).send(response["text"]);
     }
   } catch (error) {
@@ -121,6 +128,8 @@ app.get("/health", (req, res) => {
     res.status(500).json({ status: "Error" });
   }
 });
+
+
 
 //身分驗證
 app.use("*", async (req, res, next) => {
@@ -258,7 +267,7 @@ app.get("/navbar", async (req, res) => {
       L_M_chgEtoday: Values2[10],
       L_M_dcgEtoday: Values2[11]
     };
-    // console.log("latestValues",latestValues);
+    //console.log("latestValues",latestValues);
     res.send({ latestValues, latestValues2 });
   } catch (error) {
     console.error(error);
