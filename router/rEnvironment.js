@@ -20,7 +20,7 @@ const {
   scaleProcess,
   mapWordStatus,
   Determine_DL_of_upsStatus2,
-  mapUPSwarning,
+  mapUPSwarning
 } = require("./function");
 
 app.set("view engine", "ejs");
@@ -36,7 +36,7 @@ const acuRunStatus_MT = {
   1: "停機",
   2: "運轉中",
   3: "故障",
-  85: "未配置",
+  85: "未配置"
 };
 const upsMode_MT = {
   66: "Battery mode",
@@ -48,7 +48,7 @@ const upsMode_MT = {
   80: "Power on mode",
   83: "Standby mode",
   84: "Battery test",
-  89: "Bypass mode",
+  89: "Bypass mode"
 };
 
 // 定義 CouchDB 資料庫名稱
@@ -60,7 +60,7 @@ const databases = [
   "dwctrl", //4
   "log", //5
   "other_rf01", //6
-  "other_rf10", //7
+  "other_rf10" //7
 ];
 
 // 創建 Nano 實例的函式
@@ -70,7 +70,7 @@ const createNanoInstance = (dbName) => nano.db.use(dbName);
 const getLatestDocument = async (nano) => {
   const indexDef = {
     index: { fields: ["time"] },
-    name: "time_index",
+    name: "time_index"
   };
 
   //建立index
@@ -79,10 +79,10 @@ const getLatestDocument = async (nano) => {
   //利用mango作為篩選器
   const mangoQuery = {
     selector: {
-      time: { $exists: true },
+      time: { $exists: true }
     },
     sort: [{ time: "desc" }],
-    limit: 1,
+    limit: 1
   };
 
   return new Promise((resolve, reject) => {
@@ -251,7 +251,7 @@ async function queryEnv_variables() {
 
     bscAlarm_4_1_rawD: lc4Data.BSC1[406003],
     bscFault_4_1_rawD: lc4Data.BSC1[406001],
-    ffsStatus_4_1_rawD: lc4Data.BSC1[406005],
+    ffsStatus_4_1_rawD: lc4Data.BSC1[406005]
   };
 }
 
@@ -337,8 +337,9 @@ router.post("/getDataforenv", async (req, res) => {
       upsStatus2,
       bscAlarm,
       bscFault,
-      ffsStatus,
+      ffsStatus
     };
+    console.log(data);
     res.json(data);
   } catch (error) {
     console.error(error);

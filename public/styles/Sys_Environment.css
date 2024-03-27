@@ -280,7 +280,7 @@
 .environSC .openEnvironAlm {
     background-color: transparent;
     height: 105px;
-    width: 200px;
+    width: 100%;
     position: absolute;
     left: 0px;
     top: 0px;
@@ -333,7 +333,7 @@
 
 /***********************************/
 .openEnvironAlm#ctrl_ups{
-    left: 200px;
+    left: 0px;
     height: 70px;
 }
 

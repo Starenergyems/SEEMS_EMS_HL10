@@ -204,9 +204,9 @@
 
             <div class="infoBlock faultAlarm">
                 <h3>故障與告警</h3>
-                <div class="DL_Line">整機故障<label class="dataLight RG_L <%=overallFault>0?'setToClose':''%>" id="overallFault"></label></div>
-                <div class="DL_Line">整機告警<label class="dataLight OG_L <%=overallAlarm>0?'setToClose':''%>" id="overallAlarm"></label></div>
-                <div class="DL_Line">故障狀態<label class="dataLight RG_L <%=faultStatus>0?'setToClose':''%>" id="faultStatus"></label></div>
+                <div class="DL_Line">整機故障<label class="dataLight RG_L " id="overallFault"></label></div>
+                <div class="DL_Line">整機告警<label class="dataLight OG_L " id="overallAlarm"></label></div>
+                <div class="DL_Line">故障狀態<label class="dataLight RG_L " id="faultStatus"></label></div>
                 <div class="DL_Line lastLine">告警狀態
                     <label class="dataLight OG_L <%=alarmStatus>0?'setToClose':''%>" id="alarmStatus"></label>
                 </div>
@@ -214,11 +214,11 @@
 
             <div class="infoBlock nodeStatus">
                 <h3>節點狀態</h3>
-                <div class="DL_Line">交流開關<label class="dataLight RG_L <%=nodeStatus[1]==='1'?'setToClose':''%>" id="NS_bit_1"></label></div>
-                <div class="DL_Line">直流開關<label class="dataLight RG_L <%=nodeStatus[2]==='1'?'setToClose':''%>" id="NS_bit_2"></label></div>
-                <div class="DL_Line">直流熔絲<label class="dataLight RG_L <%=nodeStatus[3]==='1'?'setToClose':''%>" id="NS_bit_3"></label></div>
-                <div class="DL_Line">直流輔助開關1<label class="dataLight RG_L <%=nodeStatus[4]==='1'?'setToClose':''%>" id="NS_bit_4"></label></div>
-                <div class="DL_Line lastLine">直流輔助開關2<label class="dataLight RG_L <%=nodeStatus[5]==='1'?'setToClose':''%>" id="NS_bit_5"></label>
+                <div class="DL_Line">交流開關<label class="dataLight RG_L " id="NS_bit_1"></label></div>
+                <div class="DL_Line">直流開關<label class="dataLight RG_L " id="NS_bit_2"></label></div>
+                <div class="DL_Line">直流熔絲<label class="dataLight RG_L " id="NS_bit_3"></label></div>
+                <div class="DL_Line">直流輔助開關1<label class="dataLight RG_L" id="NS_bit_4"></label></div>
+                <div class="DL_Line lastLine">直流輔助開關2<label class="dataLight RG_L" id="NS_bit_5"></label>
                 </div>
             </div>
 

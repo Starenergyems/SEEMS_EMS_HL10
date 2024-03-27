@@ -182,9 +182,9 @@ function updateTable(){
                 render: function (data, type, row) { 
                     if (row.reportType === "年報" || row.reportType === "月報"){
                         //return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\'alreadyPrepared.xlsx\', \'C:/EMS/Report\')">下載</button>';  
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'\', \''+row.reportType+'\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+convertDate(row.reportName)+'.xlsx\', \'C:/report/'+ selectedYear +'\', \''+row.reportType+'\')">下載</button>';  
                     } else if (row.reportType === "日報"){
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+row.reportName+'.xlsx\', \'/home/hl10_4-1/report/'+ selectedYear +'/'+ selectedMonth + '\', \''+row.reportType+'\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+convertDate(row.reportName)+'.xlsx\', \'C:/report/'+ selectedYear +'/'+ selectedMonth + '\', \''+row.reportType+'\')">下載</button>';  
                     }
                     return ''; // Ensure a default value is returned for other cases
                 } 

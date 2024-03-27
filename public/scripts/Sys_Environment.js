@@ -379,16 +379,22 @@ async function getDataenv(blockId) {
     const data = await response.json();
     console.log("Sys_Environment.js:" + data);
 
-    //displayData(data);
+    displayData(data);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 }
 
 function displayData(data) {
-  console.log("Received data:", data);
-  const dataContainer = document.getElementById("data-container");
-  dataContainer.innerHTML = `<p>${data}</p>`;
+   console.log("Received data:", data.upsMode);
+  // const dataContainer = document.getElementById("data-container");
+  // dataContainer.innerHTML = `<p>${data}</p>`;
+  light_color(data.bscAlarm_1_2_rawD, "#bscAlarm_1-2", 0, "setToOpen", 1, "setToClose");
+  light_color(data.bscAlarm_2_1_rawD, "#bscAlarm_2-1", 0, "setToOpen", 1, "setToClose");
+  light_color(data.bscAlarm_2_2_rawD, "#bscAlarm_2-2", 0, "setToOpen", 1, "setToClose");
+  light_color(data.bscAlarm_3_1_rawD, "#bscAlarm_3-1", 0, "setToOpen", 1, "setToClose");
+  light_color(data.bscAlarm_3_2_rawD, "#bscAlarm_3-2", 0, "setToOpen", 1, "setToClose");
+  light_color(data.bscAlarm_4_1_rawD, "#bscAlarm_4-1", 0, "setToOpen", 1, "setToClose");
 }
 
 async function updateData() { //更新資料ajax
@@ -520,6 +526,12 @@ async function updateData() { //更新資料ajax
     $('#ups_EMS_mode').text(data.ups_EMS_mode);
     $('#ups_EMS_error').text(data.ups_EMS_error);
 
+    var UPS_EMS_TOT =  parseInt(data.ups_EMS_408161_bit9) + parseInt(data.ups_EMS_408161_bit11) + parseInt(data.ups_EMS_408161_bit12) + parseInt(data.ups_EMS_408162_bit6) + parseInt(data.ups_EMS_408162_bit8) 
+    + parseInt(data.ups_EMS_408162_bit10) + parseInt(data.ups_EMS_408162_bit11) + parseInt(data.ups_EMS_408162_bit12) + parseInt(data.ups_EMS_408162_bit13) + parseInt(data.ups_EMS_408162_bit14) + parseInt(data.ups_EMS_408162_bit15);
+    if (UPS_EMS_TOT > 0){
+      UPS_EMS_TOT = 1;
+    }
+    light_color(UPS_EMS_TOT, "#EMS_UPS_TOT", 0, "setToOpen", 1, "setToClose");
     light_color(data.ups_EMS_408161_bit9, "#ups_EMS_408161_bit9", "0", "setToOpen", "1", "setToClose");
     light_color(data.ups_EMS_408161_bit11, "#ups_EMS_408161_bit11", "0", "setToOpen", "1", "setToClose");
     light_color(data.ups_EMS_408161_bit12, "#ups_EMS_408161_bit12", "0", "setToOpen", "1", "setToClose");
@@ -537,6 +549,13 @@ async function updateData() { //更新資料ajax
     $('#ups_CMS_timeLeft').text(data.ups_CMS_timeLeft);
     $('#ups_CMS_mode').text(data.ups_CMS_mode);
     $('#ups_CMS_error').text(data.ups_CMS_error);
+
+    var UPS_CMS_TOT =  parseInt(data.ups_CMS_408161_bit9) + parseInt(data.ups_CMS_408161_bit11) + parseInt(data.ups_CMS_408161_bit12) + parseInt(data.ups_CMS_408162_bit6) + parseInt(data.ups_CMS_408162_bit8) 
+    + parseInt(data.ups_CMS_408162_bit10) + parseInt(data.ups_CMS_408162_bit11) + parseInt(data.ups_CMS_408162_bit12) + parseInt(data.ups_CMS_408162_bit13) + parseInt(data.ups_CMS_408162_bit14) + parseInt(data.ups_CMS_408162_bit15);
+    if (UPS_CMS_TOT > 0){
+      UPS_CMS_TOT = 1;
+    }
+    light_color(UPS_CMS_TOT, "#CMS_UPS_TOT", 0, "setToOpen", 1, "setToClose");
 
     light_color(data.ups_CMS_408161_bit9, "#ups_CMS_408161_bit9", "0", "setToOpen", "1", "setToClose");
     light_color(data.ups_CMS_408161_bit11, "#ups_CMS_408161_bit11", "0", "setToOpen", "1", "setToClose");

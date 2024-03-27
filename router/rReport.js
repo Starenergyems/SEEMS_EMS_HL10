@@ -296,13 +296,10 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
       console.error("報表模板檔名異常,應為YearReport, MonthReport, DayReport")
     }
     let today =  formatedDate(new Date());//今天幾號
-    let fileName = removeDatePart(template, today);
+    let queryDate = removeDatePart(template, today); //
     console.log("today", today);
-    console.log("fileName", fileName);
 
     yesterday(); //昨天幾年幾月幾日
-  console.log("fileName:" + fileName);
-  var queryDate = convertFileNameToDate(fileName);
   console.log("queryDate:" + queryDate);
   specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
 
@@ -408,26 +405,39 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
   }
 
   if (template === "YearReport") {
+    // directoryPath = path.join(
+    //   "/",
+    //   "home",
+    //   "hl10_4-1",
+    //   "report",
+    //   `${yesterdayY}`
+    // ); //下載後存在哪，要跟getReport api同步
     directoryPath = path.join(
-      "/",
-      "home",
-      "hl10_4-1",
+      "C:",
       "report",
       `${yesterdayY}`
     ); //下載後存在哪，要跟getReport api同步
     filePath = path.join(directoryPath, yesterdayY + "y.xlsx"); //檔名叫什麼
   } else if (template === "MonthReport") {
-    directoryPath = path.join(
-      "/",
-      "home",
-      "hl10_4-1",
-      "report",
+    // directoryPath = path.join(
+    //   "/",
+    //   "home",
+    //   "seems",
+    //   "Documents",
+    //   "report",
+    //   `${yesterdayY}`
+    // ); //下載後存在哪，要跟getReport api同步
+        directoryPath = path.join(
+        "C:",
+        "report",
       `${yesterdayY}`
     ); //下載後存在哪，要跟getReport api同步
+
     filePath = path.join(
       directoryPath,
       `${yesterdayY}` + "y" + `${yesterdayM}` + "m.xlsx"
     ); //檔名叫什麼
+
   } else if (template === "DayReport") {
     // directoryPath = path.join(
     //   //在linux中測試
@@ -438,23 +448,24 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     //   `${yesterdayY}`,
     //   `${yesterdayM}`
     // ); 
-      // directoryPath = path.join(
-    //   //在linux中測試
-    //   "C:",
-    //   "report",
-    //   `${yesterdayY}`,
-    //   `${yesterdayM}` //這個有成功存在"router" "/C:/report/2024/3"
-    // ); //下載後存在哪，要跟getReport api同步
-    directoryPath = path.join(
+      directoryPath = path.join(
       //在linux中測試
-      "/",
-      "home",
-      "seems",
-      "Documents",
+      "C:",
       "report",
       `${yesterdayY}`,
-      `${yesterdayM}`
+      `${yesterdayM}` //這個有成功存在"router" "/C:/report/2024/3"
     ); //下載後存在哪，要跟getReport api同步
+    // directoryPath = path.join(
+    //   //在linux中測試
+    //   "/",
+    //   "home",
+    //   "seems",
+    //   "Documents",
+    //   "report",
+    //   `${yesterdayY}`,
+    //   `${yesterdayM}`
+    // ); //下載後存在哪，要跟getReport api同步
+
     filePath = path.join(
       directoryPath,
       `${yesterdayY}` +
@@ -479,6 +490,8 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
       console.error("Error creating directory:", error.message);
     }
   }
+
+
 
   await workbook.toFileAsync(filePath);
   console.log("報表儲存於", filePath);
@@ -2125,7 +2138,7 @@ router.get("/report/getFile", (req, res) => {
   });
 });
 
-function yesterday() { //用來控制自動下載的檔名
+function yesterday() { //用來控制自動下載的檔名，應為昨天的日期or上個月or去年
   // Get the current date and time
   let currentDate = new Date();
 
@@ -2319,7 +2332,7 @@ cron.schedule("0 2 1 1 *", async () => {
   }
 });
 
-cron.schedule("30 1 1 * *", async () => {
+cron.schedule("56 15 27 * *", async () => {
   // 秒 分 時 日 月 星期幾 由右到左對照，每月1日1:30執行產出前一月月報
   try {
     console.log("Cron job: month report download start");
@@ -2330,7 +2343,7 @@ cron.schedule("30 1 1 * *", async () => {
   }
 });
 
-cron.schedule("22 14 * * *", async () => {
+cron.schedule("0 1 * * *", async () => {
   // 秒 分 時 日 月 星期幾 由右到左對照，每日1:00執行產出前一天日報
   try {
     console.log("Cron job: day report download start");
