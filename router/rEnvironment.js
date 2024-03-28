@@ -101,7 +101,7 @@ const getLatestDocument = async (nano) => {
 };
 /************************************************************************************ */
 var Env_variables;
-async function queryEnv_variables() {
+async function queryEnv_variables(req) {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nano = createNanoInstance(dbName);
@@ -119,6 +119,7 @@ async function queryEnv_variables() {
   const other10Data = allData[7];
 
   Env_variables = {
+    permission: req.body.permission,
     acuOnOff_1: mapWordStatus(lc1Data.Ctrl[407018], acuOnOff_MT),
     acuHeatT_1: scaleProcess(lc1Data.Ctrl[407016], 0.1, 1),
     acuCoolT_1: scaleProcess(lc1Data.Ctrl[407017], 0.1, 1),
@@ -257,7 +258,7 @@ async function queryEnv_variables() {
 
 router.get("/systeminfo/environment", async (req, res) => {
   try {
-    await queryEnv_variables();
+    await queryEnv_variables(req);
     res.render("Sys_Environment", Env_variables);
   } catch (error) {
     console.error(error);
@@ -272,7 +273,7 @@ router.get("/systeminfo/environment/:data", async (req, res) => {
     // console.log(req.body.id); //獲得使用者id
     // console.log(789 + req.customData.keys); //還找不到
     // console.log(1011 + Object.keys(req.body)); //輸出id,permission
-    await queryEnv_variables();
+    await queryEnv_variables(req);
     res.json(Env_variables);
   } catch (error) {
     console.error(error);

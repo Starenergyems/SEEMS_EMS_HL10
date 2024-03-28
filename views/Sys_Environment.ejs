@@ -4,7 +4,7 @@
         '/public/styles/style_template.css',
         '/public/styles/Sys_Environment.css'
     ],
-    permission: 'admin',
+    <!-- permission: 'admin', -->
    
 }) %>
 
@@ -54,46 +54,70 @@
                     <tr class="row_other row_set">
                         <td class="col_01">空調啟停</td>
                         <td colspan="2" class="col_other col_S2"><label class="dataStatus" id="acuOnOff_1"><%=acuOnOff_1%></label>
-                            <button class="setButton" id="setBut_acuOnOff_1" >Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuOnOff_1" >Set</button>
+                            <% } %>                               
                         </td>
                         <td colspan="2" class="col_other col_S2"><label class="dataStatus" id="acuOnOff_2"><%=acuOnOff_2%></label>
-                            <button class="setButton" id="setBut_acuOnOff_2">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuOnOff_2" >Set</button>
+                            <% } %>  
                         </td>
                         <td colspan="2" class="col_other col_S2"><label class="dataStatus" id="acuOnOff_3"><%=acuOnOff_3%></label>
-                            <button class="setButton" id="setBut_acuOnOff_3">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuOnOff_3" >Set</button>
+                            <% } %>  
                         </td>
                         <td class="col_other col_last"><label class="dataStatus" id="acuOnOff_4"><%=acuOnOff_4%></label>
-                            <button class="setButton" id="setBut_acuOnOff_4">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuOnOff_4" >Set</button>
+                            <% } %>  
                         </td>
                     </tr>
                     <tr class="row_other row_set">
                         <td class="col_01">空調制熱溫度&nbsp(&#176C)</td>
                         <td colspan="2" class="col_other col_S2"><label class="dataValue" id="acuHeatT_1"><%=acuHeatT_1%></label>
-                            <button class="setButton" id="setBut_acuHeatT_1">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuHeatT_1">Set</button>
+                            <% } %>   
                         </td>
                         <td colspan="2" class="col_other col_S2"><label class="dataValue" id="acuHeatT_2"><%=acuHeatT_2%></label>
-                            <button class="setButton" id="setBut_acuHeatT_2">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuHeatT_2">Set</button>
+                            <% } %>  
                         </td>
                         <td colspan="2" class="col_other col_S2"><label class="dataValue" id="acuHeatT_3"><%=acuHeatT_3%></label>
-                            <button class="setButton" id="setBut_acuHeatT_3">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuHeatT_3">Set</button>
+                            <% } %>  
                         </td>
                         <td class="col_other col_last"><label class="dataValue" id="acuHeatT_4"><%=acuHeatT_4%></label>
-                            <button class="setButton" id="setBut_acuHeatT_4">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuHeatT_4">Set</button>
+                            <% } %>  
                         </td>
                     </tr>
                     <tr class="row_other row_set">
                         <td class="col_01">空調制冷溫度&nbsp(&#176C)</td>
                         <td colspan="2" class="col_other col_S2"><label class="dataValue" id="acuCoolT_1"><%=acuCoolT_1%></label>
-                            <button class="setButton" id="setBut_acuCoolT_1">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuCoolT_1">Set</button>
+                            <% } %>  
                         </td>
                         <td colspan="2" class="col_other col_S2"><label class="dataValue" id="acuCoolT_2"><%=acuCoolT_2%></label>
-                            <button class="setButton" id="setBut_acuCoolT_2">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuCoolT_2">Set</button>
+                            <% } %>  
                         </td>
                         <td colspan="2" class="col_other col_S2"><label class="dataValue" id="acuCoolT_3"><%=acuCoolT_3%></label>
-                            <button class="setButton" id="setBut_acuCoolT_3">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuCoolT_3">Set</button>
+                            <% } %>  
                         </td>
                         <td class="col_other col_last"><label class="dataValue" id="acuCoolT_4"><%=acuCoolT_4%></label>
-                            <button class="setButton" id="setBut_acuCoolT_4">Set</button>
+                            <% if(permission === "manager"){ %>
+                                <button class="setButton" id="setBut_acuCoolT_4">Set</button>
+                            <% } %>  
                         </td>
                     </tr>
                     <tr class="row_other row_ACU">

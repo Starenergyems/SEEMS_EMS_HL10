@@ -255,6 +255,10 @@ function light_color(data, target, normal_value, green_class, fault_value, red_c
         console.log(target, "light status error, should be", normal_value, "or", fault_value);
     }
 }
+
+function hyperlink(addUrl){ //區塊超連結
+    window.location.href= window.location.href+addUrl;
+  }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 function assign_TextContent_To_SpID(SpID, assignContent) {
     const element = document.querySelector(SpID);

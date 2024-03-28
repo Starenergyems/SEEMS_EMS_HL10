@@ -198,7 +198,8 @@ router.get("/alarm", (req, res) => {
 
 router.get("/alarm/realtime", (req, res) => {
   // num與fun
-  res.render("Alm_RealTime");
+  var permission = req.body.permission;
+  res.render("Alm_RealTime",{permission:permission});
 });
 
 router.post("/alarm/realtime/edit", (req, res) => {

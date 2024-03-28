@@ -635,3 +635,7 @@ function updateDataPeriodically() {
 }
 
 //module.exports = { nano };
+app.get("/getPermission", (req, res) => {
+  var permission = req.body.permission;
+  res.send({permission:permission});
+});

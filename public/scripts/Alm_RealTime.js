@@ -1,7 +1,7 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 //var permission="viewer"; //需讀權限
-var permission = "manager";
+// var permission = "manager";
 $(document).ready(function () {
   console.log("start reading js");
   classAdd("#nB_Alarm", "default_nB");
@@ -160,6 +160,7 @@ async function updateTable() {
   console.log(window.location.href+"/edit");
   dataset = await dataGet(window.location.href+"/edit"); //port改端口要改
   console.log(dataset);
+  var permission = await dataGet("/getPermission");
 
   var table = $("#almTable").DataTable({
     lengthMenu: [10, 20, 25, 50, 100],
@@ -202,7 +203,7 @@ async function updateTable() {
           var rowIndex = row.index; // Get the index from the row object
           //var checkboxId = "chb_Ack_" + rowIndex;
 
-          if (permission === "manager") {
+          if (permission.permission === "manager") {
             //管理者才可打勾
             if (data === true) {
               return '<input type="checkbox" checked class="chb_Ack">';

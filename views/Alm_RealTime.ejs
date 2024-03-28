@@ -74,7 +74,11 @@
                             <th>設備名稱</th>
                             <th>等級</th>
                             <th>告警內容</th>
-                            <th>已讀&nbsp<input type="checkbox" id="chb_AckAll" style=" display: inline-block; height: 18px;width: 18px;"></th>
+                            <th>已讀&nbsp
+                                <% if(permission === "manager"){ %>
+                                    <input type="checkbox" id="chb_AckAll" style=" display: inline-block; height: 18px;width: 18px;">
+                                <% } %>  
+                            </th>
                             <th>復歸</th>
                             <th class="col_last">復歸時間</th>
                         </tr>
