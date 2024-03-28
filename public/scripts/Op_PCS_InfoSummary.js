@@ -48,7 +48,41 @@ function hide_ssNavBar(clickItem) {
 }
 
 /////////////////////////////////////////////////////////////////////////
+//燈號超連結
+const PCS1_1_alarm = document.getElementById("PCS1_1_alarm");
+PCS1_1_alarm.onclick = function(){
+  console.log('/alarm/1');
+  hyperlink('/alarm/1');
+}
+const PCS1_2_alarm = document.getElementById("PCS1_2_alarm");
+PCS1_2_alarm.onclick = function(){
+  hyperlink('/alarm/2');
+}
+const PCS2_1_alarm = document.getElementById("PCS2_1_alarm");
+PCS2_1_alarm.onclick = function(){
+  hyperlink('/alarm/3');
+}
+const PCS2_2_alarm = document.getElementById("PCS2_2_alarm");
+PCS2_2_alarm.onclick = function(){
+  hyperlink('/alarm/4');
+}
 
+const PCS3_1_alarm = document.getElementById("PCS3_1_alarm");
+PCS3_1_alarm.onclick = function(){
+  hyperlink('/alarm/5');
+}
+const PCS3_2_alarm = document.getElementById("PCS3_2_alarm");
+PCS3_2_alarm.onclick = function(){
+  hyperlink('/alarm/6');
+}
+const PCS4_1_alarm = document.getElementById("PCS4_1_alarm");
+PCS4_1_alarm.onclick = function(){
+  hyperlink('/alarm/7');
+}
+
+
+
+/*********************************************************************** */
 let dVS_Data_dataName;
 
 let minLimit;
@@ -137,8 +171,11 @@ async function Set_P_LC(numInDataGroup) {
 //   }
 // }
 
+
 const setBut_P_LC1 = document.querySelector(".infoLC #setBut_P_LC1");
-setBut_P_LC1.addEventListener("click", function () { Set_P_LC(1); });
+if(setBut_P_LC1){
+  setBut_P_LC1.addEventListener("click", function () { Set_P_LC(1); });
+}
 // setBut_P_LC1.addEventListener("click", Set_P_LC1);
 // function Set_P_LC1() {
 //   title_dataValue_Set.textContent = "LC1_實功輸出設定";
@@ -147,14 +184,19 @@ setBut_P_LC1.addEventListener("click", function () { Set_P_LC(1); });
 // }
 
 const setBut_P_LC2 = document.querySelector(".infoLC #setBut_P_LC2");
-setBut_P_LC2.addEventListener("click", function () { Set_P_LC(2); });
+if(setBut_P_LC2){
+  setBut_P_LC2.addEventListener("click", function () { Set_P_LC(2); });
+}
 
 const setBut_P_LC3 = document.querySelector(".infoLC #setBut_P_LC3");
-setBut_P_LC3.addEventListener("click", function () { Set_P_LC(3); });
+if(setBut_P_LC3){
+  setBut_P_LC3.addEventListener("click", function () { Set_P_LC(3); });
+}
 
 const setBut_P_LC4 = document.querySelector(".infoLC #setBut_P_LC4");
-setBut_P_LC4.addEventListener("click", function () { Set_P_LC(4); });
-
+if(setBut_P_LC4){
+  setBut_P_LC4.addEventListener("click", function () { Set_P_LC(4); });
+};
 const closeWB_Yes_dVS = document.querySelector(".dataValue_Set #closeWB_Yes");
 closeWB_Yes_dVS.addEventListener("click", closePopup_dVS_Yes);
 function closePopup_dVS_Yes() {
@@ -285,7 +327,10 @@ async function Set_modeActPas_LC(numInDataGroup) {
 // }
 
 const setBut_modeActPas_LC1 = document.querySelector(".infoLC #setBut_modeAP_LC1");
-setBut_modeActPas_LC1.addEventListener("click", function () { Set_modeActPas_LC(1); });
+if(setBut_modeActPas_LC1){
+  setBut_modeActPas_LC1.addEventListener("click", function () { Set_modeActPas_LC(1); });
+}
+
 // setBut_modeActPas_LC1.addEventListener("click", Set_modeActPas_LC1);
 // function Set_modeActPas_LC1() {
 //   Set_modeActPas_LC();
@@ -295,14 +340,17 @@ setBut_modeActPas_LC1.addEventListener("click", function () { Set_modeActPas_LC(
 // }
 
 const setBut_modeActPas_LC2 = document.querySelector(".infoLC #setBut_modeAP_LC2");
-setBut_modeActPas_LC2.addEventListener("click", function () { Set_modeActPas_LC(2); });
-
+if(setBut_modeActPas_LC2){
+  setBut_modeActPas_LC2.addEventListener("click", function () { Set_modeActPas_LC(2); });
+}
 const setBut_modeActPas_LC3 = document.querySelector(".infoLC #setBut_modeAP_LC3");
-setBut_modeActPas_LC3.addEventListener("click", function () { Set_modeActPas_LC(3); });
-
+if(setBut_modeActPas_LC3){
+  setBut_modeActPas_LC3.addEventListener("click", function () { Set_modeActPas_LC(3); });
+}
 const setBut_modeActPas_LC4 = document.querySelector(".infoLC #setBut_modeAP_LC4");
-setBut_modeActPas_LC4.addEventListener("click", function () { Set_modeActPas_LC(4); });
-
+if(setBut_modeActPas_LC4){
+  setBut_modeActPas_LC4.addEventListener("click", function () { Set_modeActPas_LC(4); });
+}
 /////////////////////////////////////////////////////////////////////////
 
 const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
@@ -366,7 +414,9 @@ async function Set_modeQctrl_LC(numInDataGroup) {
 }
 
 const setBut_modeQctrl_LC1 = document.querySelector(".infoLC #setBut_modeQctrl_LC1");
-setBut_modeQctrl_LC1.addEventListener("click", function () { Set_modeQctrl_LC(1); });
+if(setBut_modeQctrl_LC1){
+  setBut_modeQctrl_LC1.addEventListener("click", function () { Set_modeQctrl_LC(1); });
+}
 // setBut_modeQctrl_LC1.addEventListener("click", Set_modeQctrl_LC1);
 // function Set_modeQctrl_LC1() {
 //   Set_modeQctrl_LC();
@@ -375,14 +425,18 @@ setBut_modeQctrl_LC1.addEventListener("click", function () { Set_modeQctrl_LC(1)
 // }
 
 const setBut_modeQctrl_LC2 = document.querySelector(".infoLC #setBut_modeQctrl_LC2");
-setBut_modeQctrl_LC2.addEventListener("click", function () { Set_modeQctrl_LC(2); });
+if(setBut_modeQctrl_LC2){
+  setBut_modeQctrl_LC2.addEventListener("click", function () { Set_modeQctrl_LC(2); });
+}
 
 const setBut_modeQctrl_LC3 = document.querySelector(".infoLC #setBut_modeQctrl_LC3");
-setBut_modeQctrl_LC3.addEventListener("click", function () { Set_modeQctrl_LC(3); });
-
+if(setBut_modeQctrl_LC3){
+  setBut_modeQctrl_LC3.addEventListener("click", function () { Set_modeQctrl_LC(3); });
+}
 const setBut_modeQctrl_LC4 = document.querySelector(".infoLC #setBut_modeQctrl_LC4");
-setBut_modeQctrl_LC4.addEventListener("click", function () { Set_modeQctrl_LC(4); });
-
+if(setBut_modeQctrl_LC4){
+  setBut_modeQctrl_LC4.addEventListener("click", function () { Set_modeQctrl_LC(4); });
+}
 /////////////////////////////////////////////////////////////////////////
 
 async function Set_standbyCmd_LC(numInDataGroup) {
@@ -409,17 +463,21 @@ async function Set_standbyCmd_LC(numInDataGroup) {
 }
 
 const setBut_standbyCmd_LC1 = document.querySelector(".infoLC #setBut_standbyCmd_LC1");
-setBut_standbyCmd_LC1.addEventListener("click", function () { Set_standbyCmd_LC(1); });
-
+if(setBut_standbyCmd_LC1){
+  setBut_standbyCmd_LC1.addEventListener("click", function () { Set_standbyCmd_LC(1); });
+}
 const setBut_standbyCmd_LC2 = document.querySelector(".infoLC #setBut_standbyCmd_LC2");
-setBut_standbyCmd_LC2.addEventListener("click", function () { Set_standbyCmd_LC(2); });
-
+if(setBut_standbyCmd_LC2){
+  setBut_standbyCmd_LC2.addEventListener("click", function () { Set_standbyCmd_LC(2); });
+}
 const setBut_standbyCmd_LC3 = document.querySelector(".infoLC #setBut_standbyCmd_LC3");
-setBut_standbyCmd_LC3.addEventListener("click", function () { Set_standbyCmd_LC(3); });
-
+if(setBut_standbyCmd_LC3){
+  setBut_standbyCmd_LC3.addEventListener("click", function () { Set_standbyCmd_LC(3); });
+}
 const setBut_standbyCmd_LC4 = document.querySelector(".infoLC #setBut_standbyCmd_LC4");
-setBut_standbyCmd_LC4.addEventListener("click", function () { Set_standbyCmd_LC(4); });
-
+if(setBut_standbyCmd_LC4){
+  setBut_standbyCmd_LC4.addEventListener("click", function () { Set_standbyCmd_LC(4); });
+}
 /////////////////////////////////////////////////////////////////////////
 
 async function Set_modeLR_LC(numInDataGroup) {
@@ -445,53 +503,25 @@ async function Set_modeLR_LC(numInDataGroup) {
 }
 
 const setBut_modeLR_LC1 = document.querySelector(".infoLC #setBut_modeLR_LC1");
-setBut_modeLR_LC1.addEventListener("click", function () { Set_modeLR_LC(1); });
+if(setBut_modeLR_LC1){
+  setBut_modeLR_LC1.addEventListener("click", function () { Set_modeLR_LC(1); });
+}
+
 
 const setBut_modeLR_LC2 = document.querySelector(".infoLC #setBut_modeLR_LC2");
-setBut_modeLR_LC2.addEventListener("click", function () { Set_modeLR_LC(2); });
-
+if(setBut_modeLR_LC2){
+  setBut_modeLR_LC2.addEventListener("click", function () { Set_modeLR_LC(2); });
+}
 const setBut_modeLR_LC3 = document.querySelector(".infoLC #setBut_modeLR_LC3");
-setBut_modeLR_LC3.addEventListener("click", function () { Set_modeLR_LC(3); });
-
+if(setBut_modeLR_LC3){
+  setBut_modeLR_LC3.addEventListener("click", function () { Set_modeLR_LC(3); });
+}
 const setBut_modeLR_LC4 = document.querySelector(".infoLC #setBut_modeLR_LC4");
-setBut_modeLR_LC4.addEventListener("click", function () { Set_modeLR_LC(4); });
+if(setBut_modeLR_LC4){
+  setBut_modeLR_LC4.addEventListener("click", function () { Set_modeLR_LC(4); });
+}
 /************************************************************************* */
-//燈號超連結
-const PCS1_1_alarm = document.getElementById("PCS1_1_alarm");
-PCS1_1_alarm.onclick = function(){
-  hyperlink('/alarm/1/');
-}
-const PCS1_2_alarm = document.getElementById("PCS1_2_alarm");
-PCS1_2_alarm.onclick = function(){
-  hyperlink('/alarm/2/');
-}
-const PCS2_1_alarm = document.getElementById("PCS2_1_alarm");
-PCS2_1_alarm.onclick = function(){
-  hyperlink('/alarm/3/');
-}
-const PCS2_2_alarm = document.getElementById("PCS2_2_alarm");
-PCS2_2_alarm.onclick = function(){
-  hyperlink('/alarm/4/');
-}
 
-const PCS3_1_alarm = document.getElementById("PCS3_1_alarm");
-PCS3_1_alarm.onclick = function(){
-  hyperlink('/alarm/5/');
-}
-const PCS3_2_alarm = document.getElementById("PCS3_2_alarm");
-PCS3_2_alarm.onclick = function(){
-  hyperlink('/alarm/6/');
-}
-const PCS4_1_alarm = document.getElementById("PCS4_1_alarm");
-PCS4_1_alarm.onclick = function(){
-  hyperlink('/alarm/7/');
-}
-
-function hyperlink(addUrl){
-  window.location.href= window.location.href+addUrl;
-}
-
-/*********************************************************************** */
 
 async function updateData() {
   //更新資料

@@ -43,7 +43,6 @@ const gc_rf10 = "gc_rf10";
 const gc_rf01 = "gc_rf01";
 const GC10nanoDb = nano.use(gc_rf10);
 const GC01nanoDb = nano.use(gc_rf01);
-
 const dwctrl = "dwctrl";
 const dwctrlnanoDb = nano.use(dwctrl);
 

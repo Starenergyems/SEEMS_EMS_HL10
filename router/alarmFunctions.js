@@ -2468,8 +2468,11 @@ function GC_error_result_unit(
         );
       }
     } else if (error_table[tag]["name"] === "SOC") {
-      value = value / error_table[tag]["status"]["capacity"];
       // console.log(value)
+      value = value / error_table[tag]["status"]["capacity"] * 100;
+      // console.log(value)
+      // console.log(Min_SOC_Limit)
+      // console.log(Max_SOC_Limit)
       let content = "";
       if (value < Min_SOC_Limit) {
         content = "Lower valve";

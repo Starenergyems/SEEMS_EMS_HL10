@@ -64,7 +64,7 @@ function mapworkStatus_page(decimalValue) {
   const binaryString = decimalValue.toString(2).padStart(32, "0");
 
   // 尋找第一個為1的位元的索引
-  const indexOfOne = 32 - binaryString.indexOf("1");
+  const indexOfOne = 31 - binaryString.indexOf("1");
 
   // 根據索引對應的位元，返回相應的狀態
   const statuses = {
@@ -75,10 +75,10 @@ function mapworkStatus_page(decimalValue) {
     9: "停止-錯誤",
     10: "運作-告警",
     11: "降載運作",
-    15: "通訊異常",
+    15: "通訊異常"
   };
 
-  return statuses[indexOfOne] || "Unknown status";
+  return statuses[indexOfOne] || "@@@";
 }
 
 // // 範例使用
@@ -114,7 +114,7 @@ function mapworkMode_page(decimalValue) {
     3: "併網恆定功率(DC)", //"On-grid constant power (DC)"
     9: "併網", //"On-grid mode"
     10: "離網", //"Off-grid mode"
-    11: "VSG", //"VSG mode"
+    11: "VSG" //"VSG mode"
   };
 
   return statuses[indexOfOne] || "Unknown status";
@@ -199,7 +199,7 @@ function mapPCSWorkingstatus(input1, input2) {
     9: "Fault stop",
     10: "Alarm running",
     11: "Derated running",
-    15: "Communication exception",
+    15: "Communication exception"
   };
 
   const statusMap2 = {
@@ -209,7 +209,7 @@ function mapPCSWorkingstatus(input1, input2) {
     3: "On-grid constant power (DC)",
     9: "On-grid mode",
     10: "Off-grid mode",
-    11: "VSG mode",
+    11: "VSG mode"
   };
 
   // 處理第一個變數
@@ -678,7 +678,7 @@ function checkValuesFault(v1, v2, v3) {
 
   // 檢查特定位元是否包含 1 404046/404048/404061
   const positions1 = [
-    0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 20, 21, 22, 23,
+    0, 1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 17, 18, 20, 21, 22, 23
   ]; // 第一個數值要檢查的位置
   const positions2 = [0, 1, 2, 3, 4]; // 第二個數值要檢查的位置
   const positions3 = [0, 11, 15]; // 第三個數值要檢查的位置
@@ -723,7 +723,7 @@ function maponGridStatus_LC(input) {
   if (input === 3) {
     return "故障復位";
   }
-  return "未定義";
+  return "異常";
 }
 
 function checkValuesalarm(values) {
@@ -750,55 +750,46 @@ function checkValuesalarm(values) {
 // bit 14: Discharge mode
 // bit 15: Charge mode
 
-//電池總攬
+//運轉狀態
 function workStatuschange(var1, var2, var3, var4, var5, var6, var7) {
-  // 將變數轉換為二進制並固定長度為32
-  const binaryInputs = [
-    var1 != null
-      ? var1.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
-    var2 != null
-      ? var2.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
-    var3 != null
-      ? var3.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
-    var4 != null
-      ? var4.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
-    var5 != null
-      ? var5.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
-    var6 != null
-      ? var6.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
-    var7 != null
-      ? var7.toString(2).padStart(32, "0")
-      : "00000000000000000000000000000000",
-  ];
-
-  // 初始化總和為0
+  const vars = [var1, var2, var3, var4, var5, var6, var7];
   let sum = 0;
+  let stop = 0;
 
-  // 檢查每個二進制輸入的第8和第13位是否為1
-  for (let i = 0; i < binaryInputs.length; i++) {
-    if (binaryInputs[i][31 - 8] === "1" && binaryInputs[i][31 - 13] === "1") {
-      sum += 1;
+  for (let i = 0; i < vars.length; i++) {
+    const binaryVar = vars[i].toString(2).padStart(32, "0");
+    const bit8 = 31 - 8;
+    const bit13 = 31 - 13;
+    const bit9 = 31 - 9;
+    const bit12 = 31 - 12;
+
+    if (binaryVar[bit8] === "1" || binaryVar[bit13] === "1") {
+      sum++;
+    } else if (binaryVar[bit9] === "1" && binaryVar[bit12] === "1") {
+      stop++;
     }
   }
 
   if (sum === 0) {
-    console.log("0");
     return "停機";
   } else if (sum === 7) {
-    console.log("7");
     return "正常";
   } else {
-    console.log("");
     return "部分運作";
   }
 }
 
+// bit 0: First SOC calibrate tip clear[CMD]
+// bit 1: Second SOC calibrate tip clear[CMD]
+// bit 2: First SOC calibrate tip clear cancel[CMD]
+// bit 3: Second SOC calibrate tip clear cancel[CMD]
+// bit 8: Ready
+// bit 9: Idle
+// bit 10: Off-line
+// bit 12: Main switch off[CMD]
+// bit 13: Main switch on[CMD]
+// bit 14: Discharge mode
+// bit 15: Charge mode
 // 測試函數
 // const result = workStatuschange(8448, 8448, 8448, 8448, 8448, 8448, 8448);
 // console.log(result); // 這將輸出符合條件的總和
@@ -1233,7 +1224,7 @@ module.exports = {
   checkValuesFault,
   checkValuesalarm,
   maponGridStatus_LC,
-  mapBMSMode,
+  mapBMSMode
 };
 
 // //***************************************************************************** */
@@ -1282,7 +1273,7 @@ const NumberOfDigit = 16;
 const pcsCHGStatus_MT = {
   17: "Charging",
   55: "Discharging",
-  98: "Non-working state",
+  98: "Non-working state"
 };
 const sysCtrl_2_MT = {
   0: { 0: "否", 1: "是" },
@@ -1291,7 +1282,7 @@ const sysCtrl_2_MT = {
   6: { 0: "手動", 1: "自動" },
   9: { 0: "正常", 1: "異常" },
   10: { 0: "正常", 1: "通訊異常" },
-  13: { 0: "SOC", 1: "Volt" },
+  13: { 0: "SOC", 1: "Volt" }
 };
 const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 

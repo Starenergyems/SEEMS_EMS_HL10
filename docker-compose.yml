@@ -39,14 +39,13 @@
 #   ems-service-network:
 #     external: false
 
-
 version: "3.8"
 
 services:
   ems-service:
     # restart: always
-    image: ems-service_v8
-    container_name: ems-service  # 正確位置放置 container_name 屬性
+    image: ems-service_v9
+    container_name: ems-service # 正確位置放置 container_name 屬性
     build:
       context: .
       dockerfile: Dockerfile
@@ -79,5 +78,3 @@ services:
 networks:
   ems-service-network:
     external: false
-
-

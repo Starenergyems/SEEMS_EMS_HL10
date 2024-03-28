@@ -1,5 +1,5 @@
 //var permission="viewer"; //需讀權限
-var permission = "manager";
+// var permission = "manager";
 $(document).ready(function () {
 
   console.log("start reading js, update data every 5 sec");
@@ -322,3 +322,35 @@ async function updateData() {
   light_color(data.fault_BMS4_1, '#fault_BMS4-1', 0, 'setToOpen', 1, "setToClose");
   console.log("data updated");
 }
+
+//燈號超連結
+const BMS1_1_alarm = document.getElementById("BMS1_1_alarm");
+BMS1_1_alarm.onclick = function(){
+  hyperlink('/rack/1');
+}
+const BMS1_2_alarm = document.getElementById("BMS1_2_alarm");
+BMS1_2_alarm.onclick = function(){
+  hyperlink('/rack/2');
+}
+const BMS2_1_alarm = document.getElementById("BMS2_1_alarm");
+BMS2_1_alarm.onclick = function(){
+  hyperlink('/rack/3');
+}
+const BMS2_2_alarm = document.getElementById("BMS2_2_alarm");
+BMS2_2_alarm.onclick = function(){
+  hyperlink('/rack/4');
+}
+
+const BMS3_1_alarm = document.getElementById("BMS3_1_alarm");
+BMS3_1_alarm.onclick = function(){
+  hyperlink('/rack/5');
+}
+const BMS3_2_alarm = document.getElementById("BMS3_2_alarm");
+BMS3_2_alarm.onclick = function(){
+  hyperlink('/rack/6');
+}
+const BMS4_1_alarm = document.getElementById("BMS4_1_alarm");
+BMS4_1_alarm.onclick = function(){
+  hyperlink('/rack/7');
+}
+
