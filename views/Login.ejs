@@ -38,6 +38,7 @@
   <div class="bgStripe bgStripe_4"></div>
   <div class="bgStripe bgStripe_5"></div>
 
+  <script src="../public/scripts/jquery-3.6.0.js"></script>
   <script>
     // document.getElementById('btn_Login').addEventListener(['click',] 
     document.addEventListener("keypress", async function(event) {
@@ -70,9 +71,9 @@
             window.location.href = data["redirect"];
               } else if (data["text"]) {
                 console.log(data)
-                document.getElementById("warning").html(data.text).show(); 
+                $("#warning").html(data.text).show(); 
                 // '<strong>警告:</strong> ' 
-                document.getElementById("warning").css("visibility", 'visible');
+                $("#warning").css("visibility", 'visible');
                 // document.getElementById("warning").ㄋ
               }
             }).catch(error => {

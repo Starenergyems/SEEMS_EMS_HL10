@@ -109,6 +109,7 @@ async function dataPost(form, url) {//提交表單
 			data = `${data}&bottom=${bottom}`
 			// console.log(333,typeof(data),data)
 			// console.log(777, bottom)
+			hideEdit();//隱藏編輯框
 			$.ajax({
 				type: 'POST',
 				url: url,
@@ -118,7 +119,6 @@ async function dataPost(form, url) {//提交表單
 				success: function (data) {
 					console.log("post success")
 					resolve(data);
-					hideEdit();//隱藏編輯框
 					dataTable();//重新讀取更新表單
 				},
 				error: function (error) {

@@ -11,7 +11,6 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-
 //確認回傳的內容有那些
 // freq hl_4-1_10MW.Other_RF01.Freq.408026
 // active prower hl_4-1_10MW.Other_RF01.Freq.408019
@@ -116,7 +115,7 @@ router.get("/chart/history", (req, res) => {
   res.render("Cht_History");
 });
 
-router.post("/chart/history/edit", async (req, res) => {
+router.get("/chart/history/edit", async (req, res) => {
   const Data = {
     freq: [],
     ActivePower: [],
@@ -124,74 +123,63 @@ router.post("/chart/history/edit", async (req, res) => {
     SOC: []
   };
 
+  const startTime = "2024-03-24 20:55:10";
+  const lengthOfTime = 100;
+  // const startTime = req.query.startTime; // 從查詢參數中獲取 startTime
+  // const lengthOfTime = parseInt(req.query.lengthOfTime); // 從查詢參數中獲取 lengthOfTime
   try {
-    const { startTime, lengthOfTime, timeUnit } = req.body;
+    // 將 startTime 轉換為所需的格式
+    const formattedStartTime = moment(startTime).format(
+      "YYYY-MM-DDTHH:mm:ss.SSSZ"
+    );
 
-    if (timeUnit === "sec") {
-      // 確認時間單位為秒時，限制 lengthOfTime 最大值為 3600
-      const maxTimeInSeconds = 3600;
-      const maxTimeInMilliseconds = maxTimeInSeconds * 1000; // 將秒轉換為毫秒
-      const adjustedLengthOfTime =
-        timeUnit === "sec"
-          ? Math.min(lengthOfTime, maxTimeInSeconds)
-          : lengthOfTime;
+    // 計算 endTime
+    const endTime = moment(startTime).add(lengthOfTime, "seconds");
 
-      // 計算結束時間
-      const endTime = moment(startTime).add(adjustedLengthOfTime, timeUnit);
+    // 設定每次查詢的時間範圍為1000秒
+    const intervalSeconds = 1000;
+    let currentStartTime = moment(startTime);
 
-      const filter = {
-        selector: {
-          time: {
-            $gte: startTime,
-            $lte: endTime.format("YYYY-MM-DD HH:mm:ss") // 格式化結束時間
-          }
-        }
-      };
+    // 使用迴圈分次尋找每1000秒的數值
+    while (moment(currentStartTime).isBefore(endTime)) {
+      console.log("撈取資料中...... :");
+      let currentEndTime = moment(currentStartTime).add(
+        intervalSeconds,
+        "seconds"
+      );
 
-      const doc = await gc10Db.find(filter);
-
-      if (!doc || !doc.docs || doc.docs.length === 0) {
-        console.error("Error: No document found.");
-        return res.status(404).send("Not Found");
+      // 如果 currentEndTime 超過 endTime，則設置為 endTime
+      if (moment(currentEndTime).isAfter(endTime)) {
+        currentEndTime = endTime;
       }
 
-      doc.docs.forEach((doc) => {
-        const timestamp = doc.time;
-        Data.freq.push({ x: timestamp, y: doc.IEC61850["400121"] });
-        Data.ActivePower.push({ x: timestamp, y: doc.IEC61850["400123"] });
-        Data.ExecuteRate.push({ x: timestamp, y: doc.IEC61850["400133"] });
-        Data.SOC.push({ x: timestamp, y: doc.IEC61850["400129"] });
-      });
-    } else {
-      let endTime;
-      if (timeUnit === "minutes") {
-        endTime = moment(startTime).add(lengthOfTime, "minutes");
-      } else if (timeUnit === "hours") {
-        endTime = moment(startTime).add(lengthOfTime, "hours");
-      } else if (timeUnit === "days") {
-        endTime = moment(startTime).add(lengthOfTime, "days");
-      } else {
-        // 如果時間單位不是秒、分、時、日，可能需要額外的處理
-        console.error("Unsupported time unit:", timeUnit);
-        return res.status(400).send("Bad Request: Unsupported time unit");
-      }
+      // 將查詢時間格式化為ISO 8601格式
+      const formattedCurrentStartTime = currentStartTime.format(
+        "YYYY-MM-DDTHH:mm:ss.SSSZ"
+      );
+      const formattedCurrentEndTime = currentEndTime.format(
+        "YYYY-MM-DDTHH:mm:ss.SSSZ"
+      );
 
-      // 接下來的程式碼保持不變，使用 endTime 來篩選資料
-      const filter = {
+      filter = {
         selector: {
           time: {
-            $gte: startTime,
-            $lte: endTime.format("YYYY-MM-DD HH:mm:ss") // 格式化結束時間
+            $gte: formattedCurrentStartTime,
+            $lte: formattedCurrentEndTime
           }
-        }
+        },
+        limit: 10000 // 限制每次查詢的數量
       };
+
       const doc = await gc01Db.find(filter);
 
       if (!doc || !doc.docs || doc.docs.length === 0) {
         console.error("Error: No document found.");
         return res.status(404).send("Not Found");
       }
-
+      console.log("formattedCurrentStartTime: " + formattedCurrentStartTime);
+      console.log("formattedCurrentEndTime: " + formattedCurrentEndTime);
+      // 將查詢到的資料加入Data物件
       doc.docs.forEach((doc) => {
         const timestamp = doc.time;
         Data.freq.push({ x: timestamp, y: doc.IEC61850["400121"] });
@@ -199,6 +187,9 @@ router.post("/chart/history/edit", async (req, res) => {
         Data.ExecuteRate.push({ x: timestamp, y: doc.IEC61850["400133"] });
         Data.SOC.push({ x: timestamp, y: doc.IEC61850["400129"] });
       });
+
+      // 更新起始時間為當前結束時間以便下一次查詢
+      currentStartTime = currentEndTime;
     }
 
     res.send(Data);

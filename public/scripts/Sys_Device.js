@@ -73,12 +73,12 @@ let lang = {
     sPrevious: "上頁",
     sNext: "下頁",
     sLast: "末頁",
-    sJump: "跳轉",
+    sJump: "跳轉"
   },
   oAria: {
     sSortAscending: ": 以升序排列此列",
-    sSortDescending: ": 以降序排列此列",
-  },
+    sSortDescending: ": 以降序排列此列"
+  }
 };
 
 var dataset;
@@ -142,7 +142,7 @@ const bitList = [
   ["409119", "409120"],
   ["409121", "409122"],
   ["409123", "409124"],
-  ["409125", "409126"],
+  ["409125", "409126"]
 ];
 
 function assignBit(index) {
@@ -226,7 +226,7 @@ async function updateTable() {
       pagingType: "simple_numbers",
       responsive: true,
       data: combinedData,
-      pageLength: 20, // 預設為'10'，若需更改初始每頁顯示筆數，才需設定
+      pageLength: 25 // 預設為'10'，若需更改初始每頁顯示筆數，才需設定
       // Specify column headers for both fixed and dynamic columns
       /*columns: [
                 { title: "Fixed Column 1" },
