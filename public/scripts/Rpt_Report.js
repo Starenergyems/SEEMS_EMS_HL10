@@ -272,10 +272,10 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
     //const folderPath = 'C:\\EMS\\Report' ; //要去哪找檔案 (要兩個斜線\\)
     console.log("目標檔案:"+fileName);
     console.log("目標位置:"+folderPath);
-  
+    $('.btn_Download').prop('disabled', true); //將按鈕反灰,避免使用者狂按
   fetch(`/report/getFile?fileName=${encodeURIComponent(fileName)}&folderPath=${encodeURIComponent(folderPath)}`)
     .then(response => {
-      if (!response.ok) {
+      if (!response.ok) { //如果尋找檔案的路由正常執行
         console.log(response);
         return response.json();
       }
@@ -284,7 +284,7 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
     .then(data => {
       if (data.status === 'error'){
         console.error(data.message);                   
-        console.log('報表不存在地端') // 若不存在就自行撈自料再下載
+        console.log('報表不存在地端') // 若不存在就自行撈資料再下載
 
         //判斷是日報 月報 還是年報
         var templateUrl
@@ -309,6 +309,7 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            $('.btn_Download').prop('disabled', false);//按鈕恢復可按
           })
           .catch(error => console.error('Error downloading Excel file:', error));
       } else {//有找到的話下載 換到linux ok
@@ -320,6 +321,7 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
             a.click(); // Trigger a click on the link to start the download 
             document.body.removeChild(a); // Remove the link from the document 
             window.URL.revokeObjectURL(url);// Release the object URL
+            $('.btn_Download').prop('disabled', false);//按鈕恢復可按
         }
     })
     .catch(error => console.error(error));

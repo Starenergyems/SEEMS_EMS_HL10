@@ -127,3 +127,9 @@ table.dataTable tbody td {
     background: linear-gradient(170deg, #888686, #CCCCCC, #888686);
     cursor: pointer;
 }
+
+.dataTables_wrapper .btn_Download[disabled] {
+    background: #CCCCCC; /* Change background color to indicate disabled state */
+    color: #808080; /* Change text color to indicate disabled state */
+    cursor: wait; /* Change cursor to indicate disabled state */
+}

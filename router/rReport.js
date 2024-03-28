@@ -150,6 +150,7 @@ router.get("/report/download-excel", async (req, res) => {
   }
 });
 /***************************************************************************************************** */
+var click_year, click_month, click_day
 const queryReport = async (req, res) => {//撈資料放入對應excel表格for前端手動下載
   const { templatePath, reportType, fileName } = req.query; //url要帶參數，fileName是從畫面上讀取的
   if (!templatePath) {
@@ -184,11 +185,15 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
   specified_date_clone22 = specified_date.clone();
   specified_date_clone23 = specified_date.clone();
 
-  var tempFilePath; //暫存的excel資料
-
   //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
   const workbook = await xlsx.fromFileAsync(templatePath);
   var couchData; //插入excel的數值
+  tempFilePath = path.join( //站存檔位址
+    __dirname,
+    "C:",
+    "report",
+    "temp",
+    "temp.xlsx");
   // Fetch data from MongoDB
   if (reportType === "年報") {
     couchData = await getYearData();
@@ -226,8 +231,7 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
     updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
     updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19"); 
 
-    tempFilePath = path.join(__dirname, "temp.xlsx");
-    await workbook.toFileAsync(tempFilePath);
+    // await workbook.toFileAsync(tempFilePath);
   } else if (reportType === "月報") {
     couchData = await getMonthData();
     updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
@@ -243,9 +247,7 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
     updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
     updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
     updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
-
-    tempFilePath = path.join(__dirname, "temp.xlsx");
-    await workbook.toFileAsync(tempFilePath);
+    // await workbook.toFileAsync(tempFilePath);
   } else if (reportType === "日報") {
     couchData = await getDayData();
 
@@ -254,12 +256,67 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
     updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
     updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
     updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
-    tempFilePath = path.join(__dirname, "temp.xlsx");
-    await workbook.toFileAsync(tempFilePath);
+    // await workbook.toFileAsync(tempFilePath);
   } else {
     console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
   }
+//************後端將excel存於本機指定位置/////////////////////////////////////////////////////////
+divideFileName(fileName); //將獨到的日期拆分為y, m, d
+  if (reportType === "年報") {
+    directoryPath = path.join(
+      "C:",
+      "report",
+      `${click_year}`
+    ); //下載後存在哪，要跟getReport api同步
 
+  } else if (reportType === "月報") {
+        directoryPath = path.join(
+        "C:",
+        "report",
+      `${click_year}`
+    ); //下載後存在哪，要跟getReport api同步
+
+  } else if (reportType === "日報") {
+    // directoryPath = path.join(
+    //   //在linux中測試
+    //   "/",
+    //   "home",
+    //   "hl10_4-1",
+    //   "report",
+    //   `${yesterdayY}`,
+    //   `${yesterdayM}`
+    // ); 
+      directoryPath = path.join(
+      //在linux中測試
+      "C:",
+      "report",
+      `${click_year}`,
+      `${click_month}` //這個有成功存在"router" "/C:/report/2024/3"
+    ); //下載後存在哪，要跟getReport api同步
+
+  } else {
+    console.log("參數設置錯誤，報表種類應為年報/月報/日報");
+  }
+
+  filePath = path.join(directoryPath, fileName); //檔名叫什麼
+  // Check if the directory exists, create it if not
+  console.log("Resolved absolute path:", path.resolve(directoryPath));
+  if (!fs.existsSync(directoryPath)) {
+    try {
+      console.log("doesn't exist");
+      fs.mkdirSync(directoryPath, { recursive: true });
+      console.log("Directory created successfully:", directoryPath);
+    } catch (error) {
+      console.error("Error creating directory:", error.message);
+    }
+  }
+
+
+
+  await workbook.toFileAsync(filePath);
+  console.log("報表儲存於", filePath);
+
+//回覆給前端/////////////////////////////////////////////////////////
   // Set up response headers for Excel file download
   res.setHeader(
     "Content-Type",
@@ -269,13 +326,13 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
 
   // Read the temporary file as a stream and pipe it to the response
   //設置HTTP響應標頭，指定返回的內容類型為Excel文件，並設置Content-Disposition標頭，提示瀏覽器以附件形式處理。
-  const fileStream = fs.createReadStream(tempFilePath);
+  const fileStream = fs.createReadStream(filePath);
   fileStream.pipe(res);
 
-  // Remove the temporary file after sending the response
-  fileStream.on("end", () => {
-    fs.unlinkSync(tempFilePath);
-  });
+  // // Remove the temporary file after sending the response
+  // fileStream.on("end", () => {
+  //   fs.unlinkSync(tempFilePath);
+  // });
 
 }
 
@@ -1076,7 +1133,6 @@ async function getDayData() {
   }
 }
 
-//getDayData();
 ////////////////////////////////////////////////////////////////////////////////////////////
 async function getMonthData() {
   // 獲取系統當前時間的前一個月的第一天
@@ -1919,7 +1975,7 @@ async function getYearData() {
 
 function convertFileNameToDate(inputFileName) {//將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
   // Extract the date parts from the filename using a regular expression
-  const regex = /(\d{4})年(?:(\d{1,2})月?(?:(\d{1,2})日)?)?\.xlsx/;
+  const regex = /(\d{4})y(?:(\d{1,2})m?(?:(\d{1,2})d)?)?\.xlsx/;
   const match = inputFileName.match(regex);
   if (!match) {
     throw new Error("Invalid filename format");
@@ -1965,6 +2021,20 @@ function convertFileNameToDate(inputFileName) {//將畫面上的名稱轉成搜�
   // Format the date as "yyyy-MM-dd 00:00:00"
   const formattedDate = `${formattedYear}-${formattedMonth}-${formattedDay} 00:00:00`;
   return formattedDate;
+}
+
+function divideFileName(inputFileName) {//將畫面上的名稱轉成分開的y,m,d, 用於設定手動下載的存檔路徑
+  // Extract the date parts from the filename using a regular expression
+  const regex = /(\d{4})y(?:(\d{1,2})m?(?:(\d{1,2})d)?)?\.xlsx/;
+  const match = inputFileName.match(regex);
+  if (!match) {
+    throw new Error("Invalid filename format");
+  }
+  // Extracted date parts
+  click_year = match[1];
+  click_month = match[2] 
+  click_day = match[3] 
+  return click_year, click_month, click_day
 }
 
 // Update Excel file with MongoDB data
@@ -2091,17 +2161,7 @@ function charToAscii(char) {
   }
 }
 
-// function chunkArray(array, chunkSize) {
-//   //將array轉成arrays in array
-//   const result = [];
-//   console.log("array length:" + array.length);
-//   for (let i = 0; i < array.length; i += chunkSize) {
-//     result.push(array.slice(i, i + chunkSize));
-//     console.log("i:" + i);
-//   }
-//   return result;
-// }
-
+/***************************************************************************** */
 router.get("/report/getFile", (req, res) => {
   //點擊尋找已存好的檔案
   //const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
