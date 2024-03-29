@@ -38,7 +38,8 @@ const acuRunStatus_MT = {
   3: "故障",
   85: "未配置"
 };
-const upsMode_MT = {
+//MVCB ACP
+const upsMode1_MT = {
   66: "Battery mode",
   67: "Converter mode",
   68: "Shutdown mode",
@@ -50,6 +51,55 @@ const upsMode_MT = {
   84: "Battery test",
   89: "Bypass mode"
 };
+
+const upsStatus_MT ={
+0: "Enable alarm buzzer",
+1: "Shutdown timer countdown started",
+2: "Self-testing mode",
+3: "Online mode",
+4: "Fault",
+5: "Bypass mode",
+6: "Battery SOC low",
+7: "Utility abnormal"
+};
+//EMS CMS
+const upsMode2_MT = {
+  20480: "Power on mode",
+  21248: "Standby mode",
+  22784: "Bypass mode",
+  19456: "Line mode",
+  16896: "Battery mode",
+  21504: "Battery test mode",
+  17920: "Fault mode",
+  17664: "HE/ECO mode",
+  17152: "Converter mode",
+  17408: "Shutdown mode"
+};
+
+const upErro = {};
+
+const acuOnOffStatus_MT = {
+  0: "關",
+  1: "開"
+};
+
+const acuMode_MT = {
+  0: "冷氣",
+  1: "除濕",
+  2: "風扇",
+  3: "自動",
+  4: "暖氣"
+};
+
+const acufanSpd_MT = {
+  1: "微",
+  3: "弱",
+  4: "強",
+  5: "自動",
+  7: "靜"
+};
+
+const acuerror_MT = {};
 
 // 定義 CouchDB 資料庫名稱
 const databases = [
@@ -120,6 +170,7 @@ async function queryEnv_variables(req) {
 
   Env_variables = {
     permission: req.body.permission,
+    //空調起停 空調制熱 空調制冷
     acuOnOff_1: mapWordStatus(lc1Data.Ctrl[407018], acuOnOff_MT),
     acuHeatT_1: scaleProcess(lc1Data.Ctrl[407016], 0.1, 1),
     acuCoolT_1: scaleProcess(lc1Data.Ctrl[407017], 0.1, 1),
@@ -135,11 +186,13 @@ async function queryEnv_variables(req) {
     acuOnOff_4: mapWordStatus(lc4Data.Ctrl[407018], acuOnOff_MT),
     acuHeatT_4: scaleProcess(lc4Data.Ctrl[407016], 0.1, 1),
     acuCoolT_4: scaleProcess(lc4Data.Ctrl[407017], 0.1, 1),
-
+    //空調 #1 空調 #2
+    //貨櫃1
     acu_1_Status_1_1: mapWordStatus(lc1Data.BSC1[406007], acuRunStatus_MT),
     acu_1_Temp_1_1: scaleProcess(lc1Data.BSC1[406008], 0.1, 1),
     acu_1_Status_1_2: mapWordStatus(lc1Data.BSC2[406007], acuRunStatus_MT),
     acu_1_Temp_1_2: scaleProcess(lc1Data.BSC2[406008], 0.1, 1),
+    //貨櫃2
     acu_2_Status_1_1: mapWordStatus(lc1Data.BSC1[406009], acuRunStatus_MT),
     acu_2_Temp_1_1: scaleProcess(lc1Data.BSC1[406010], 0.1, 1),
     acu_2_Status_1_2: mapWordStatus(lc1Data.BSC2[406009], acuRunStatus_MT),
@@ -153,52 +206,49 @@ async function queryEnv_variables(req) {
     acu_2_Temp_2_1: scaleProcess(lc2Data.BSC1[406010], 0.1, 1),
     acu_2_Status_2_2: mapWordStatus(lc2Data.BSC2[406009], acuRunStatus_MT),
     acu_2_Temp_2_2: scaleProcess(lc2Data.BSC2[406010], 0.1, 1),
-
+    //貨櫃3
     acu_1_Status_3_1: mapWordStatus(lc3Data.BSC1[406007], acuRunStatus_MT),
     acu_1_Temp_3_1: scaleProcess(lc3Data.BSC1[406008], 0.1, 1),
     acu_1_Status_3_2: mapWordStatus(lc3Data.BSC2[406007], acuRunStatus_MT),
     acu_1_Temp_3_2: scaleProcess(lc3Data.BSC2[406008], 0.1, 1),
+
     acu_2_Status_3_1: mapWordStatus(lc3Data.BSC1[406009], acuRunStatus_MT),
     acu_2_Temp_3_1: scaleProcess(lc3Data.BSC1[406010], 0.1, 1),
     acu_2_Status_3_2: mapWordStatus(lc3Data.BSC2[406009], acuRunStatus_MT),
     acu_2_Temp_3_2: scaleProcess(lc3Data.BSC2[406010], 0.1, 1),
-
+    //貨櫃4
     acu_1_Status_4_1: mapWordStatus(lc4Data.BSC1[406007], acuRunStatus_MT),
     acu_1_Temp_4_1: scaleProcess(lc4Data.BSC1[406008], 0.1, 1),
     acu_2_Status_4_1: mapWordStatus(lc4Data.BSC1[406009], acuRunStatus_MT),
     acu_2_Temp_4_1: scaleProcess(lc4Data.BSC1[406010], 0.1, 1),
 
-    /***************************************** */
-    ctrl_hvac_1_open: scaleProcess(other10Data.HVAC1[408101], 1, 1),
-    ctrl_hvac_1_mode: scaleProcess(other10Data.HVAC1[408102], 1, 1),
-    ctrl_hvac_1_fanSpd: scaleProcess(other10Data.HVAC1[408103], 1, 1),
+    /****************************************************************** */
+    ctrl_hvac_1_open: mapWordStatus(
+      other10Data.HVAC1[408101],
+      acuOnOffStatus_MT
+    ),
+    ctrl_hvac_1_mode: mapWordStatus(other10Data.HVAC1[408102], acuMode_MT),
+    ctrl_hvac_1_fanSpd: mapWordStatus(other10Data.HVAC1[408103], acufanSpd_MT),
     ctrl_hvac_1_tempSet: scaleProcess(other10Data.HVAC1[408104], 1, 1),
     ctrl_hvac_1_temp: scaleProcess(other10Data.HVAC1[408105], 1, 1),
     ctrl_hvac_1_humid: scaleProcess(other10Data.HVAC1[408106], 1, 1),
-    ctrl_hvac_1_error: scaleProcess(other10Data.HVAC1[408107], 1, 1),
+    ctrl_hvac_1_error: scaleProcess(other10Data.HVAC1[408107], 1, 0),
 
-    ctrl_hvac_2_open: scaleProcess(other10Data.HVAC2[408101], 1, 1),
-    ctrl_hvac_2_mode: scaleProcess(other10Data.HVAC2[408102], 1, 1),
-    ctrl_hvac_2_fanSpd: scaleProcess(other10Data.HVAC2[408103], 1, 1),
+    ctrl_hvac_2_open: mapWordStatus(
+      other10Data.HVAC2[408101],
+      acuOnOffStatus_MT
+    ),
+    ctrl_hvac_2_mode: mapWordStatus(other10Data.HVAC2[408102], acuMode_MT),
+    ctrl_hvac_2_fanSpd: mapWordStatus(other10Data.HVAC2[408103], acufanSpd_MT),
     ctrl_hvac_2_tempSet: scaleProcess(other10Data.HVAC2[408104], 1, 1),
     ctrl_hvac_2_temp: scaleProcess(other10Data.HVAC2[408105], 1, 1),
     ctrl_hvac_2_humid: scaleProcess(other10Data.HVAC2[408106], 1, 1),
-    ctrl_hvac_2_error: scaleProcess(other10Data.HVAC2[408107], 1, 1),
-
-    ups_MVCB_volt: scaleProcess(other10Data.UPS3[408151], 0.1, 1),
-    ups_MVCB_temp: scaleProcess(other10Data.UPS3[408152], 0.1, 1),
-    ups_MVCB_status: scaleProcess(other10Data.UPS3[408153], 1, 1),
-    ups_MVCB_power: scaleProcess(other10Data.UPS3[408154], 1, 1),
-
-    ups_ACP_volt: scaleProcess(other10Data.UPS4[408151], 0.1, 1),
-    ups_ACP_temp: scaleProcess(other10Data.UPS4[408152], 0.1, 1),
-    ups_ACP_status: scaleProcess(other10Data.UPS4[408153], 1, 1),
-    ups_ACP_power: scaleProcess(other10Data.UPS4[408154], 1, 1),
-
+    ctrl_hvac_2_error: scaleProcess(other10Data.HVAC2[408107], 1, 0),
+    /****************************************************************** */
     ups_EMS_SOC: scaleProcess(other10Data.UPS1[408163], 1, 1),
-    ups_EMS_timeLeft: scaleProcess(other10Data.UPS1[408164], 1, 1),
-    ups_EMS_mode: scaleProcess(other10Data.UPS1[408165], 1, 1),
-    ups_EMS_error: scaleProcess(other10Data.UPS1[408166], 1, 1),
+    ups_EMS_timeLeft: scaleProcess(other10Data.UPS1[408164], 1, 0),
+    ups_EMS_mode: mapWordStatus(other10Data.UPS1[408165], upsMode2_MT),
+    ups_EMS_error: scaleProcess(other10Data.UPS1[408166], 1, 0),
 
     ups_EMS_408161_bit9: mapUPSwarning(other10Data.UPS1[408161], 9),
     ups_EMS_408161_bit11: mapUPSwarning(other10Data.UPS1[408161], 11),
@@ -213,9 +263,9 @@ async function queryEnv_variables(req) {
     ups_EMS_408162_bit15: mapUPSwarning(other10Data.UPS1[408162], 15),
 
     ups_CMS_SOC: scaleProcess(other10Data.UPS2[408163], 1, 1),
-    ups_CMS_timeLeft: scaleProcess(other10Data.UPS2[408164], 1, 1),
-    ups_CMS_mode: scaleProcess(other10Data.UPS2[408165], 1, 1),
-    ups_CMS_error: scaleProcess(other10Data.UPS2[408166], 1, 1),
+    ups_CMS_timeLeft: scaleProcess(other10Data.UPS2[408164], 1, 0),
+    ups_CMS_mode: mapWordStatus(other10Data.UPS2[408165], upsMode2_MT),
+    ups_CMS_error: scaleProcess(other10Data.UPS2[408166], 1, 0),
 
     ups_CMS_408161_bit9: mapUPSwarning(other10Data.UPS2[408161], 9),
     ups_CMS_408161_bit11: mapUPSwarning(other10Data.UPS2[408161], 11),
@@ -228,6 +278,20 @@ async function queryEnv_variables(req) {
     ups_CMS_408162_bit13: mapUPSwarning(other10Data.UPS2[408162], 13),
     ups_CMS_408162_bit14: mapUPSwarning(other10Data.UPS2[408162], 14),
     ups_CMS_408162_bit15: mapUPSwarning(other10Data.UPS2[408162], 15),
+
+    //upsMode1_MT
+    ups_MVCB_volt: scaleProcess(other10Data.UPS3[408151], 0.1, 1),
+    ups_MVCB_temp: scaleProcess(other10Data.UPS3[408152], 0.1, 1),
+    ups_MVCB_status: mapWordStatus(other10Data.UPS3[408153],upsStatus_MT),
+    ups_MVCB_power: scaleProcess(other10Data.UPS3[408154], 1, 1),
+    ups_MVCB_waring: other10Data.UPS3[408154],
+
+    ups_ACP_volt: scaleProcess(other10Data.UPS4[408151], 0.1, 1),
+    ups_ACP_temp: scaleProcess(other10Data.UPS4[408152], 0.1, 1),
+    ups_ACP_status: mapWordStatus(other10Data.UPS4[408153],upsStatus_MT),
+    ups_ACP_power: scaleProcess(other10Data.UPS4[408154], 1, 1),
+    ups_ACP_waring: other10Data.UPS4[408154],
+
     //還要轉換
     bscAlarm_1_1_rawD: lc1Data.BSC1[406003],
     bscAlarm_1_2_rawD: lc1Data.BSC2[406003],

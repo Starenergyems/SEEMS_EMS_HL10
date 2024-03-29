@@ -215,7 +215,9 @@
                         <td class="col_other col_last">錯誤代碼</td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">空調&nbsp#1</td>
+                        <td class="col_01" style="position: relative;">空調&nbsp#1
+                            <button class="setButton_ctrl" id="ctrl_set_1">Set</button>
+                        </td>
                         <td class="col_other">
                             <label class="dataStatus" id="ctrl_hvac_1_open"></label>
                         </td>
@@ -239,7 +241,9 @@
                         </td>
                     </tr>
                     <tr class="row_other">
-                        <td class="col_01">空調&nbsp#2</td>
+                        <td class="col_01" style="position: relative;">空調&nbsp#2
+                            <button class="setButton_ctrl" id="ctrl_set_2">Set</button>
+                        </td>
                         <td class="col_other">
                             <label class="dataStatus" id="ctrl_hvac_2_open"></label>
                         </td>
@@ -556,6 +560,153 @@
                     <div class="DL_Line">IP N 遺失<label class="dataLight OB_L" id="ups_CMS_408162_bit15"></label></div>
                 </div>
 
+                <button class="closeWindowButton" id="closeWB_No">取消</button>
+            </div>
+
+            <div class="popUpWindow ctrl_Set" id="ctrl_Set_block">
+                <h2 class="titlePUW">控制室&nbsp空調#1</h2>
+                <div class="ctrl_col">
+                    <h2 class="titlePUW">開關</h2>
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">開</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">關</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                </div>
+                <div class="ctrl_col">
+                    <h2 class="titlePUW">模式</h2>
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">冷氣</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">除溼</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">送風</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">自動</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">暖氣</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                </div>
+                <div class="ctrl_col">
+                    <h2 class="titlePUW">風速</h2>
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">微風</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">弱風</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">強風</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">自動</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">靜</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                </div>
+                <div class="ctrl_col">    
+                    <h2 class="titlePUW">溫度</h2>
+                    <div class="valOrigin">原數值:<label class="data_val" id="valueOrigin">2357</label>
+                        <p class="data_unit">g/ml</p>
+                    </div>
+                    <div class="valNew">新數值:<input type="text" class="data_input" id="valueNew">
+                        <p class="data_unit">g/ml</p>
+                    </div>
+    
+                    <p class="rangeInfo">數值範圍:&nbsp-11235~81321&nbspg/ml</p>
+                    <p class="alertInfo"></p>
+                </div>
+                
+                <h2 class="titlePUW">控制室&nbsp空調#2</h2>
+                <div class="ctrl_col">
+                    <h2 class="titlePUW">開關</h2>
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">開</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">關</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                </div>
+                <div class="ctrl_col">
+                    <h2 class="titlePUW">模式</h2>
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">冷氣</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">除溼</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">送風</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">自動</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">暖氣</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                </div>
+                <div class="ctrl_col">
+                    <h2 class="titlePUW">風速</h2>
+                    <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">微風</label>
+                        <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
+                        <div class="checkBox" id="checkBoxOpt_1"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">弱風</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">強風</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">自動</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                    <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">靜</label>
+                        <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
+                        <div class="checkBox" id="checkBoxOpt_2"></div>
+                    </div>
+                </div>
+                <div class="ctrl_col">    
+                    <h2 class="titlePUW">溫度</h2>
+                    <div class="valOrigin">原數值:<label class="data_val" id="valueOrigin">2357</label>
+                        <p class="data_unit">g/ml</p>
+                    </div>
+                    <div class="valNew">新數值:<input type="text" class="data_input" id="valueNew">
+                        <p class="data_unit">g/ml</p>
+                    </div>
+    
+                    <p class="rangeInfo">數值範圍:&nbsp-11235~81321&nbspg/ml</p>
+                    <p class="alertInfo"></p>
+                </div>
+
+                <button class="closeWindowButton" id="closeWB_Yes">確認</button>
                 <button class="closeWindowButton" id="closeWB_No">取消</button>
             </div>
         </div>

@@ -28,17 +28,17 @@ body {
 }
 
 .commArchiD #EMS_1 {
-    left: 250px;
+    left: 244px;
     top: 442px;
 }
 
 .commArchiD #EMS_2 {
-    left: 366px;
+    left: 364px;
     top: 442px;
 }
 
 .commArchiD #DC {
-    left: 482px;
+    left: 481px;
     top: 442px;
 }
 
@@ -58,12 +58,12 @@ body {
 }
 
 .commArchiD #HVAC_1 {
-    left: 250px;
+    left: 244px;
     top: 665px;
 }
 
 .commArchiD #HVAC_2 {
-    left: 366px;
+    left: 364px;
     top: 665px;
 }
 
@@ -78,42 +78,42 @@ body {
 }
 
 .commArchiD #RIO_CtrlRoom {
-    left: 366px;
+    left: 364px;
     top: 554px;
 }
 
 .commArchiD #FreqMeter {
-    left: 482px;
+    left: 478px;
     top: 98px;
 }
 
 .commArchiD #AuxM_MVCB {
     left: 599px;
-    top: 210px;
+    top: 206px;
 }
 
 .commArchiD #Relay_MVCB {
-    left: 366px;
-    top: 210px;
+    left: 363px;
+    top: 206px;
 }
 
 .commArchiD #UPS_MVCB {
-    left: 482px;
-    top: 210px;
+    left: 478px;
+    top: 206px;
 }
 
 .commArchiD #Recloser {
-    left: 250px;
-    top: 210px;
+    left: 239px;
+    top: 206px;
 }
 
 .commArchiD #RIO_MVCB_1 {
-    left: 250px;
+    left: 239px;
     top: 98px;
 }
 
 .commArchiD #RIO_MVCB_2 {
-    left: 366px;
+    left: 363px;
     top: 98px;
 }
 
@@ -123,213 +123,213 @@ body {
 }
 
 .commArchiD #Relay_VCB1 {
-    left: 732px;
+    left: 731px;
     top: 98px;
 }
 
 .commArchiD #Relay_VCB2 {
-    left: 732px;
-    top: 210px;
+    left: 731px;
+    top: 206px;
 }
 
 .commArchiD #Relay_VCB3 {
-    left: 845px;
+    left: 851px;
     top: 98px;
 }
 
 .commArchiD #Relay_VCB4 {
-    left: 845px;
-    top: 210px;
+    left: 851px;
+    top: 206px;
 }
 
 .commArchiD #Relay_VCB_Aux {
-    left: 962px;
+    left: 969px;
     top: 98px;
 }
 
 .commArchiD #TR_Aux {
-    left: 962px;
-    top: 210px;
+    left: 969px;
+    top: 206px;
 }
 
 .commArchiD #AuxM_total {
-    left: 1079px;
+    left: 1088px;
     top: 98px;
 }
 
 .commArchiD #AuxM_ESS1_1 {
-    left: 1200px;
+    left: 1213px;
     top: 98px;
 }
 
 .commArchiD #AuxM_ESS1_2 {
-    left: 1200px;
-    top: 210px;
+    left: 1213px;
+    top: 206px;
 }
 
 .commArchiD #AuxM_ESS2_1 {
-    left: 1313px;
+    left: 1327px;
     top: 98px;
 }
 
 .commArchiD #AuxM_ESS2_2 {
-    left: 1313px;
-    top: 210px;
+    left: 1327px;
+    top: 206px;
 }
 
 .commArchiD #AuxM_ESS3_1 {
-    left: 1434px;
+    left: 1447px;
     top: 98px;
 }
 
 .commArchiD #AuxM_ESS3_2 {
-    left: 1434px;
-    top: 210px;
+    left: 1447px;
+    top: 206px;
 }
 
 .commArchiD #AuxM_ESS4 {
-    left: 1547px;
+    left: 1568px;
     top: 98px;
 }
 
 .commArchiD #AuxM_CtrlRoom {
-    left: 1547px;
-    top: 210px;
+    left: 1568px;
+    top: 206px;
 }
 
 .commArchiD #TR_1 {
-    left: 1434px;
+    left: 1447px;
     top: 330px;
 }
 
 .commArchiD #TR_2 {
-    left: 1547px;
+    left: 1568px;
     top: 330px;
 }
 
 .commArchiD #TR_3 {
-    left: 1434px;
+    left: 1447px;
     top: 442px;
 }
 
 .commArchiD #TR_4 {
-    left: 1547px;
+    left: 1568px;
     top: 442px;
 }
 
 .commArchiD #RIO_ACP_1 {
-    left: 732px;
+    left: 727px;
     top: 442px;
 }
 
 .commArchiD #RIO_ACP_2 {
-    left: 845px;
+    left: 846px;
     top: 442px;
 }
 
 .commArchiD #RIO_ACP_3 {
-    left: 966px;
+    left: 965px;
     top: 442px;
 }
 
 .commArchiD #RIO_ACP_4 {
-    left: 1079px;
+    left: 1082px;
     top: 442px;
 }
 
 .commArchiD #UPS_ACP {
-    left: 1313px;
+    left: 1327px;
     top: 330px;
 }
 
 .commArchiD #LC_1 {
-    left: 845px;
-    top: 615px;
+    left: 852px;
+    top: 620px;
 }
 
 .commArchiD #LC_2 {
-    left: 1079px;
-    top: 615px;
+    left: 1090px;
+    top: 620px;
 }
 
 .commArchiD #LC_3 {
-    left: 1313px;
-    top: 615px;
+    left: 1327px;
+    top: 620px;
 }
 
 .commArchiD #LC_4 {
-    left: 1547px;
-    top: 615px;
+    left: 1568px;
+    top: 620px;
 }
 
 .commArchiD #PCS1_1 {
-    left: 845px;
-    top: 771px;
+    left: 852px;
+    top: 782px;
 }
 
 .commArchiD #PCS1_2 {
-    left: 845px;
-    top: 799px;
+    left: 852px;
+    top: 811px;
 }
 
 .commArchiD #BMS1_1 {
-    left: 732px;
-    top: 771px;
+    left: 736px;
+    top: 782px;
 }
 
 .commArchiD #BMS1_2 {
-    left: 732px;
-    top: 799px;
+    left: 736px;
+    top: 811px;
 }
 
 .commArchiD #PCS2_1 {
-    left: 1079px;
-    top: 771px;
+    left: 1090px;
+    top: 782px;
 }
 
 .commArchiD #PCS2_2 {
-    left: 1079px;
-    top: 799px;
+    left: 1090px;
+    top: 811px;
 }
 
 .commArchiD #BMS2_1 {
-    left: 966px;
-    top: 771px;
+    left: 974px;
+    top: 782px;
 }
 
 .commArchiD #BMS2_2 {
-    left: 966px;
-    top: 799px;
+    left: 974px;
+    top: 811px;
 }
 
 .commArchiD #PCS3_1 {
-    left: 1313px;
-    top: 771px;
+    left: 1327px;
+    top: 782px;
 }
 
 .commArchiD #PCS3_2 {
-    left: 1313px;
-    top: 799px;
+    left: 1327px;
+    top: 811px;
 }
 
 .commArchiD #BMS3_1 {
-    left: 1200px;
-    top: 771px;
+    left: 1213px;
+    top: 782px;
 }
 
 .commArchiD #BMS3_2 {
-    left: 1200px;
-    top: 799px;
+    left: 1213px;
+    top: 811px;
 }
 
 .commArchiD #PCS4 {
-    left: 1547px;
-    top: 771px;
+    left: 1568px;
+    top: 782px;
 }
 
 .commArchiD #BMS4 {
-    left: 1434px;
-    top: 771px;
+    left: 1447px;
+    top: 782px;
 }
 
 
