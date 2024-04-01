@@ -103,7 +103,9 @@ async function Set_acuOnOff(numInDataGroup) {
 // }
 
 const setBut_acuOnOff_1 = document.querySelector(".environSC #setBut_acuOnOff_1");
-setBut_acuOnOff_1.addEventListener("click", function () { Set_acuOnOff(1); });
+if(setBut_acuOnOff_1){
+  setBut_acuOnOff_1.addEventListener("click", function () { Set_acuOnOff(1); });
+}
 // setBut_acuOnOff_1.addEventListener("click", Set_acuOnOff_1);
 // function Set_acuOnOff_1() {
 //   Set_acuOnOff();
@@ -114,14 +116,19 @@ setBut_acuOnOff_1.addEventListener("click", function () { Set_acuOnOff(1); });
 // }
 
 const setBut_acuOnOff_2 = document.querySelector(".environSC #setBut_acuOnOff_2");
-setBut_acuOnOff_2.addEventListener("click", function () { Set_acuOnOff(2); });
+if(setBut_acuOnOff_2){
+  setBut_acuOnOff_2.addEventListener("click", function () { Set_acuOnOff(2); });
+}
 
 const setBut_acuOnOff_3 = document.querySelector(".environSC #setBut_acuOnOff_3");
-setBut_acuOnOff_3.addEventListener("click", function () { Set_acuOnOff(3); });
+if(setBut_acuOnOff_3){
+  setBut_acuOnOff_3.addEventListener("click", function () { Set_acuOnOff(3); });
+}
 
 const setBut_acuOnOff_4 = document.querySelector(".environSC #setBut_acuOnOff_4");
-setBut_acuOnOff_4.addEventListener("click", function () { Set_acuOnOff(4); });
-
+if(setBut_acuOnOff_4){
+  setBut_acuOnOff_4.addEventListener("click", function () { Set_acuOnOff(4); });
+}
 const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
 closeWB_Yes_dSS.addEventListener("click", closePopup_dSS_Yes);
 function closePopup_dSS_Yes() {
@@ -240,7 +247,9 @@ async function Set_acuCoolT(numInDataGroup) {
 // }
 
 const setBut_acuHeatT_1 = document.querySelector(".environSC #setBut_acuHeatT_1");
-setBut_acuHeatT_1.addEventListener("click", function () { Set_acuHeatT(1); });
+if(setBut_acuHeatT_1){
+  setBut_acuHeatT_1.addEventListener("click", function () { Set_acuHeatT(1); });
+}
 // setBut_acuHeatT_1.addEventListener("click", Set_acuHeatT_1);
 // function Set_acuHeatT_1() {
 //   title_dataValue_Set.textContent = "LC1_空調制熱溫度";
@@ -249,26 +258,34 @@ setBut_acuHeatT_1.addEventListener("click", function () { Set_acuHeatT(1); });
 // }
 
 const setBut_acuHeatT_2 = document.querySelector(".environSC #setBut_acuHeatT_2");
-setBut_acuHeatT_2.addEventListener("click", function () { Set_acuHeatT(2); });
-
+if(setBut_acuHeatT_2){
+  setBut_acuHeatT_2.addEventListener("click", function () { Set_acuHeatT(2); });
+}
 const setBut_acuHeatT_3 = document.querySelector(".environSC #setBut_acuHeatT_3");
-setBut_acuHeatT_3.addEventListener("click", function () { Set_acuHeatT(3); });
-
+if(setBut_acuHeatT_3){
+  setBut_acuHeatT_3.addEventListener("click", function () { Set_acuHeatT(3); });
+}
 const setBut_acuHeatT_4 = document.querySelector(".environSC #setBut_acuHeatT_4");
-setBut_acuHeatT_4.addEventListener("click", function () { Set_acuHeatT(4); });
-
+if(setBut_acuHeatT_4){
+  setBut_acuHeatT_4.addEventListener("click", function () { Set_acuHeatT(4); });
+}
 const setBut_acuCoolT_1 = document.querySelector(".environSC #setBut_acuCoolT_1");
+if(setBut_acuCoolT_1){
 setBut_acuCoolT_1.addEventListener("click", function () { Set_acuCoolT(1) });
-
+}
 const setBut_acuCoolT_2 = document.querySelector(".environSC #setBut_acuCoolT_2");
-setBut_acuCoolT_2.addEventListener("click", function () { Set_acuCoolT(2) });
+if(setBut_acuCoolT_2){
+  setBut_acuCoolT_2.addEventListener("click", function () { Set_acuCoolT(2) });
+}
 
 const setBut_acuCoolT_3 = document.querySelector(".environSC #setBut_acuCoolT_3");
-setBut_acuCoolT_3.addEventListener("click", function () { Set_acuCoolT(3) });
-
+if(setBut_acuCoolT_3){
+  setBut_acuCoolT_3.addEventListener("click", function () { Set_acuCoolT(3) });
+}
 const setBut_acuCoolT_4 = document.querySelector(".environSC #setBut_acuCoolT_4");
-setBut_acuCoolT_4.addEventListener("click", function () { Set_acuCoolT(4) });
-
+if(setBut_acuCoolT_4){
+  setBut_acuCoolT_4.addEventListener("click", function () { Set_acuCoolT(4) });
+}
 const closeWB_Yes_dVS = document.querySelector(".dataValue_Set #closeWB_Yes");
 closeWB_Yes_dVS.addEventListener("click", closePopup_dVS_Yes);
 function closePopup_dVS_Yes() {
@@ -361,7 +378,18 @@ OpenEnvironAlm_4_1.addEventListener("click", function () {
   show_info_EnvironAlm("4-1");
   getDataenv(7);
 });
+//控制室設定//////////////////////////////////////////////////////////////////////
+$('#ctrl_set_1').on("click", function () {
+  $('#ctrl_Set_block').addClass('appear');
+});
 
+$('#ctrl_set_2').on("click", function () {
+  $('#ctrl_Set_block').addClass('appear');
+});
+
+$('.ctrl_Set #closeWB_No').on("click", function(){
+  $('#ctrl_Set_block').removeClass('appear');
+});
 /////////////////////////////////////////////////////////////////////////
 
 //環境頁面下方彈出視窗 獲取該區塊id
@@ -933,11 +961,13 @@ async function updateData() { //更新資料ajax
 //   }
  //}
 
-
- $('#ctrl_ups').on('click', function(){
-    $('.ctrl_ups').addClass('appear');
- })
-
- $('.ctrl_ups #closeWB_No').on('click', function(){
-  $('.ctrl_ups').removeClass('appear');
- })
+ if ($('#ctrl_ups').length > 0) {
+  $('#ctrl_ups').on('click', function(){
+      $('.ctrl_ups').addClass('appear');
+  })
+ }
+ if ($('.ctrl_ups #closeWB_No').length > 0) {
+  $('.ctrl_ups #closeWB_No').on('click', function(){
+    $('.ctrl_ups').removeClass('appear');
+  })
+}

@@ -102,7 +102,9 @@ function Set_LC_BMS() {
 const setBut_LC1_BMS = document.querySelector(
   ".infoLC_1 #setBut_onGridStatus_LC1"
 );
-setBut_LC1_BMS.addEventListener("click", Set_LC1_BMS);
+if(setBut_LC1_BMS){
+  setBut_LC1_BMS.addEventListener("click", Set_LC1_BMS);
+}
 function Set_LC1_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC1_BMS併網狀態";
@@ -114,7 +116,9 @@ function Set_LC1_BMS() {
 const setBut_LC2_BMS = document.querySelector(
   ".infoLC_2 #setBut_onGridStatus_LC2"
 );
-setBut_LC2_BMS.addEventListener("click", Set_LC2_BMS);
+if(setBut_LC2_BMS){
+  setBut_LC2_BMS.addEventListener("click", Set_LC2_BMS);
+}
 function Set_LC2_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC2_BMS併網狀態";
@@ -125,7 +129,9 @@ function Set_LC2_BMS() {
 const setBut_LC3_BMS = document.querySelector(
   ".infoLC_3 #setBut_onGridStatus_LC3"
 );
-setBut_LC3_BMS.addEventListener("click", Set_LC3_BMS);
+if(setBut_LC3_BMS){
+  setBut_LC3_BMS.addEventListener("click", Set_LC3_BMS);
+}
 function Set_LC3_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC3_BMS併網狀態";
@@ -136,7 +142,9 @@ function Set_LC3_BMS() {
 const setBut_LC4_BMS = document.querySelector(
   ".infoLC_4 #setBut_onGridStatus_LC4"
 );
-setBut_LC4_BMS.addEventListener("click", Set_LC4_BMS);
+if(setBut_LC4_BMS){
+  setBut_LC4_BMS.addEventListener("click", Set_LC4_BMS);
+}
 function Set_LC4_BMS() {
   Set_LC_BMS();
   title_dataStatus_Set.textContent = "LC4_BMS併網狀態";

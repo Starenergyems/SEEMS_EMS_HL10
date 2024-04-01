@@ -80,7 +80,8 @@ alarmnanoDb.createIndex(indexDef);
 app.get("/login", async (req, res) => {
   res.clearCookie("token");
   const response = await getconfig();
-  const logintext = response["logintext"];
+  let logintext = response["logintext"]
+  // const response["logintext"] === undefined? logintext="" : logintext=response["logintext"];
   console.log(logintext);
   const context = {
     logintext: `${logintext}`

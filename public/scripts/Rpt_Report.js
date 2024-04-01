@@ -181,10 +181,10 @@ function updateTable(){
             { 
                 render: function (data, type, row) { 
                     if (row.reportType === "年報" || row.reportType === "月報"){
-                        //return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\'alreadyPrepared.xlsx\', \'C:/EMS/Report\')">下載</button>';  
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+convertDate(row.reportName)+'.xlsx\', \'C:/report/'+ selectedYear +'\', \''+row.reportType+'\')">下載</button>';  
+                        //return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\'alreadyPrepared.xlsx\', \'C/EMS/Report\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+convertDate(row.reportName)+'.xlsx\', \'C/report/'+ selectedYear +'\', \''+row.reportType+'\')">下載</button>';  
                     } else if (row.reportType === "日報"){
-                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+convertDate(row.reportName)+'.xlsx\', \'C:/report/'+ selectedYear +'/'+ selectedMonth + '\', \''+row.reportType+'\')">下載</button>';  
+                        return '<button class="btn_Download" id="btn_DL_' + row.index + '" onclick="downloadExcel(\''+convertDate(row.reportName)+'.xlsx\', \'C/report/'+ selectedYear +'/'+ selectedMonth + '\', \''+row.reportType+'\')">下載</button>';  
                     }
                     return ''; // Ensure a default value is returned for other cases
                 } 
@@ -269,7 +269,7 @@ function convertDate(inputDate) { //檔名轉換
 function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔案
     //看報表是否已存在
     //const fileName = 'alreadyPrepared.xlsx';//要找的檔案
-    //const folderPath = 'C:\\EMS\\Report' ; //要去哪找檔案 (要兩個斜線\\)
+    //const folderPath = 'C\\EMS\\Report' ; //要去哪找檔案 (要兩個斜線\\)
     console.log("目標檔案:"+fileName);
     console.log("目標位置:"+folderPath);
     $('.btn_Download').prop('disabled', true); //將按鈕反灰,避免使用者狂按

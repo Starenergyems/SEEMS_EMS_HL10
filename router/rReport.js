@@ -190,7 +190,7 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
   var couchData; //插入excel的數值
   tempFilePath = path.join( //站存檔位址
     __dirname,
-    "C:",
+    "C",
     "report",
     "temp",
     "temp.xlsx");
@@ -264,14 +264,14 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
 divideFileName(fileName); //將獨到的日期拆分為y, m, d
   if (reportType === "年報") {
     directoryPath = path.join(
-      "C:",
+      "C",
       "report",
       `${click_year}`
     ); //下載後存在哪，要跟getReport api同步
 
   } else if (reportType === "月報") {
         directoryPath = path.join(
-        "C:",
+        "C",
         "report",
       `${click_year}`
     ); //下載後存在哪，要跟getReport api同步
@@ -288,10 +288,12 @@ divideFileName(fileName); //將獨到的日期拆分為y, m, d
     // ); 
       directoryPath = path.join(
       //在linux中測試
-      "C:",
+      "/",
+      "home",
+      "seems",
       "report",
       `${click_year}`,
-      `${click_month}` //這個有成功存在"router" "/C:/report/2024/3"
+      `${click_month}` //這個有成功存在"router" "/C/report/2024/3"
     ); //下載後存在哪，要跟getReport api同步
 
   } else {
@@ -470,7 +472,7 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     //   `${yesterdayY}`
     // ); //下載後存在哪，要跟getReport api同步
     directoryPath = path.join(
-      "C:",
+      "C",
       "report",
       `${yesterdayY}`
     ); //下載後存在哪，要跟getReport api同步
@@ -485,7 +487,7 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     //   `${yesterdayY}`
     // ); //下載後存在哪，要跟getReport api同步
         directoryPath = path.join(
-        "C:",
+        "C",
         "report",
       `${yesterdayY}`
     ); //下載後存在哪，要跟getReport api同步
@@ -507,10 +509,10 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     // ); 
       directoryPath = path.join(
       //在linux中測試
-      "C:",
+      "C",
       "report",
       `${yesterdayY}`,
-      `${yesterdayM}` //這個有成功存在"router" "/C:/report/2024/3"
+      `${yesterdayM}` //這個有成功存在"router" "/C/report/2024/3"
     ); //下載後存在哪，要跟getReport api同步
     // directoryPath = path.join(
     //   //在linux中測試
@@ -2164,7 +2166,7 @@ function charToAscii(char) {
 /***************************************************************************** */
 router.get("/report/getFile", (req, res) => {
   //點擊尋找已存好的檔案
-  //const folderPath = path.join('C:', 'EMS', 'Report'); //要去哪找檔案
+  //const folderPath = path.join('C', 'EMS', 'Report'); //要去哪找檔案
   const fileName = req.query.fileName; //要找哪個檔案
   const folderPath = req.query.folderPath; //要去哪找檔案
 

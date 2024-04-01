@@ -112,8 +112,24 @@
     font-size: 14px;
     border-radius: 50%;
     position: absolute;
+    cursor: pointer;
     right: 5px;
     top: 3px;
+}
+
+
+.environSC .setButton_ctrl {
+    background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C);
+    box-sizing: border-box;
+    height: 28px;
+    width: 28px;
+    border: 2px solid #B6B6B6;
+    font-size: 14px;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    top: 3px;
+    right: 10px;
 }
 
 .environSC .dataValue {
@@ -356,4 +372,126 @@
 .popUpWindow.ctrl_ups #closeWB_No{
     margin: 10px 290px;
 }
+
+#ctrl_Set_block {
+    z-index: 20;
+    height: 750px;
+    width: 1250px;
+    left: 200px;
+    top: 100px;
+}
+
+#ctrl_Set_block .valOrigin, #ctrl_Set_block .valNew {
+    box-sizing: border-box;
+    padding: 0px 0px 0px 5px;
+    border: 1px solid #B6B6B6;
+    margin: 35px 40px 0px;
+    font-size: 24px;
+    line-height: 28px;
+    position: relative;
+}
+#ctrl_Set_block #valueOrigin, #ctrl_Set_block #valueNew {
+    display: inline-block;
+    width: 85px;
+    font-size: 24px;
+    text-align: right;
+}
+
+#ctrl_Set_block .data_unit {
+    display: inline-block;
+    width: 55px;
+    font-size: 24px;
+    text-align: center;
+    position: absolute;
+    right: 0px;
+    top: 2px;
+}
+
+#ctrl_Set_block .valNew {
+    box-sizing: border-box;
+    padding: 0px 0px 0px 5px;
+    border: 1px solid #B6B6B6;
+    margin: 5px 40px 0px;
+    font-size: 24px;
+    line-height: 28px;
+    position: relative;
+}
+
+#ctrl_Set_block #valueNew {
+    display: inline-block;
+    width: 85px;
+    font-size: 24px;
+    text-align: right;
+}
+
+#ctrl_Set_block .rangeInfo {
+    margin: 5px 0px 0px;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+}
+
+#ctrl_Set_block .setToOpt.setToOpt_1 {
+    margin-top: 15px;
+}
+#ctrl_Set_block .setToOpt {
+    box-sizing: border-box;
+    height: 30px;
+    border: 1px solid #B6B6B6;
+    margin: 5px 40px 0px;
+    position: relative;
+}
+
+#ctrl_Set_block .option {
+    display: block;
+    padding-right: 25px;
+    font-size: 24px;
+    line-height: 28px;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+}
+
+#ctrl_Set_block .radioOpt {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 3;
+    opacity: 0;
+}
+
+#ctrl_Set_block .checkBox {
+    display: block;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    background-image: url(../images/checkBox_out.png);
+    background-repeat: no-repeat;
+    z-index: 2;
+}
+
+#ctrl_Set_block .setToOpt {
+    box-sizing: border-box;
+    height: 30px;
+    border: 1px solid #B6B6B6;
+    margin: 5px 40px 0px;
+    position: relative;
+}
+
+#ctrl_Set_block .alertInfo {
+    margin-top: 50px;
+}
+
+.ctrl_col{
+    width: 310px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.ctrl_col .titlePUW{
+    border: none;
+}
+
 /* /////////////////////////////// */
