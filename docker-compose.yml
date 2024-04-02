@@ -17,6 +17,7 @@ services:
     # - POSTGRES_NAME=postgres
     # - POSTGRES_USER=postgres
     # - POSTGRES_PASSWORD=postgres
+    command: ["node", "app.js"]
     deploy:
       replicas: 1 # Set the desired number of replicas
       restart_policy:

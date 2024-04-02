@@ -18,6 +18,7 @@ services:
     # - POSTGRES_NAME=postgres
     # - POSTGRES_USER=postgres
     # - POSTGRES_PASSWORD=postgres
+    command: ["tail", "-f", "/dev/null"]
     deploy:
       replicas: 6 # Set the desired number of replicas
       restart_policy:
