@@ -2,7 +2,7 @@ const express = require("express");
 // const router = require("./config"); // Importing configuration from config.js
 const router = express.Router();
 // Your routes and other configurations can continue from here
-
+const moment = require('moment');
 // For example:
 // const userRoutes = require("./routes/userRoutes");
 // app.use("/users", userRoutes);
@@ -55,16 +55,29 @@ router.get("/account/personalinfo", async (req, res) => {
   try {
     const token = req.cookies.token;
     const resopnse = await findaccount(inmail="", intoken=token );
+    //還沒改好唷
+    let transstate ="";
+    if(resopnse.state==="admin"){
+      transstate="最高權限";
+    }
+    else if(resopnse.state==="manager"){
+      transstate="系統管理者";
+    }
+    else{
+      transstate="一般使用者";
+    }
+    
     const content = {
       num: resopnse.num,
       name: resopnse.name,
       company: resopnse.company,
       department: resopnse.department,
-      permission: resopnse.level,
-      status: resopnse.state,
+      permission: resopnse.level, //admin manager normal
+      status: transstate, // activate,lock
       note: resopnse.note,
       lastlogin: resopnse.last_time
     };
+
     const originalDateString = content.lastlogin;
     const originalDate = new Date(originalDateString);
     const year = originalDate.getFullYear();
@@ -120,7 +133,11 @@ router.get("/account/personalinfo/log", async (req, res) => {
     let log = []
     for (let i = 0; i < response.docs.length; i++) {
       let temp = response.docs[i]
-      log.push({Time: temp.time, description: temp.content})
+      inputtime = temp.time;
+      const formattedTime = moment(inputtime).format(
+        "YYYY/MM/DD HH:mm:ss:SSS"
+      );
+      log.push({Time:formattedTime, description: temp.content})
     }
     res.json(log)
   }
