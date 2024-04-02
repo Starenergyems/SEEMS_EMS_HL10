@@ -2766,6 +2766,7 @@ function update_trigger_alarms_batch(
                       let error_element = error_result[_id];
                       // console.log(error_result[_id]["_id"])
                       if (!null_tags.includes(tag)) {
+                        // console.log(doc._id, doc.value)
                         if (doc.value.toString() !== error_element["value"].toString()) {
                           error_element["_rev"] = doc._rev;
                           error_element["read"] = doc.read;
@@ -3068,13 +3069,15 @@ let SBSPM_arr = [];
 // Function to perform FIFO push operation
 function fifoPush(element) {
   // Add the element to the end of the array
-  SBSPM_arr.push(element);
-  
-  // If the length of the array exceeds the maximum length, remove the first element
-  if (SBSPM_arr.length > 4) {
-    SBSPM_arr = SBSPM_arr.slice(1);
-  };
-  // console.log(SBSPM_arr)
+  if (element !== null ) {
+    SBSPM_arr.push(element);
+    
+    // If the length of the array exceeds the maximum length, remove the first element
+    if (SBSPM_arr.length > 4) {
+      SBSPM_arr = SBSPM_arr.slice(1);
+    };
+    // console.log(SBSPM_arr)
+  }
 }
 
 function alarm_processor(
