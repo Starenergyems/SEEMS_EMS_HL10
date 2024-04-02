@@ -21,4 +21,4 @@ WORKDIR /usr/src/app/router
 
 # Define the command to run your app
 CMD ["node", "app.js"]
-#CMD ["tail", "-f", "/dev/null"]
+# CMD ["tail", "-f", "/dev/null"]

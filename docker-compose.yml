@@ -1,9 +1,7 @@
-version: "3.8"
-
 services:
   ems-service:
     # restart: always
-    image: ems-service_v8
+    image: ems-service_v9
     build:
       context: .
       dockerfile: Dockerfile

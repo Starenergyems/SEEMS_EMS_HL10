@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   ems-dev:
     # restart: always
@@ -7,12 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # no_cache: true
     # container_name: ems-dev
     environment:
       - TZ=Asia/Taipei
     volumes:
       # - ./router:/usr/src/app/router # Mount the <local directory>:<container directory>
-      - .:/usr/src/app
+      - ./router:/usr/src/app/router
     ports:
       - "3030-3036:3000"
     # environment:
