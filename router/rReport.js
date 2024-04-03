@@ -605,13 +605,9 @@ function Conversionpercentage(randomNumber) {
 //日報讀值
 async function getDayData() {
   try {
+    let average45 = 0;
     //取得86403秒的SPM的數值********************************************************************* */
     // 計算大前天的時間範圍
-    // console.log("in getDayData specified_date_clone" + specified_date_clone);
-    // console.log(
-    //   "in getDayData specified_date_clone" +
-    //     specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
-    // );
     const dayBeforeYesterdayStart = specified_date_clone1
       .subtract(2, "days") //改時間 原本是2
       .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間為 23:59:59.999
@@ -724,12 +720,12 @@ async function getDayData() {
       }
     }
     console.log("初始Data陣列的86403筆資料", data.length);
-    console.log("原本獲得的Data :", data);
+    console.log("原本獲得的Data :", data); 
 
     //取得大前天+昨天的實際得標容量******************************************************************** */
     //大前天的最後一筆
-    var Daybeforyesterday = yesterdayEnd;
-    const endOfDaybeforyesterday = moment(Daybeforyesterday)
+    var Daybeforyesterday = yesterdayEnd; //yesterdayEnd:昨天 Daybeforyesterday
+    const endOfDaybeforyesterday = moment(Daybeforyesterday) //endOfDaybeforyesterday:大前天 23:59:59
       .subtract(1, "days") //改時間 原本是1
       .endOf("day")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
@@ -737,7 +733,8 @@ async function getDayData() {
     const filter_acrossthenightyesterday = {
       selector: {
         time: {
-          $gte: endOfDaybeforyesterday // 等於當天的結束時間
+          $gte: endOfDaybeforyesterday, //大前天 23:59:59~昨天00:00:00
+          $lte: Daybeforyesterday
         }
       },
       limit: 1 // 搜尋一筆資料
@@ -791,7 +788,7 @@ async function getDayData() {
       },
       limit: 1 // 搜尋一筆資料
     };
-    console.log("endOfDay" + endOfDay);
+    console.log("endOfDay:" + endOfDay);
 
     const ScheduleData = await gcDb.find(filter_acrossthenight);
     const scheduleTodayValues = [];
@@ -803,7 +800,7 @@ async function getDayData() {
       });
     });
 
-    console.log("昨天的實際得標容量長度:", scheduleTodayValues.length);
+    console.log("昨天實際得標容量長度(檢查有沒有正確的數量):", scheduleTodayValues.length);
     console.log("昨天實際得標容量 :", scheduleTodayValues);
 
     const maxData = [];
@@ -825,11 +822,14 @@ async function getDayData() {
     let globalMax = Number.NEGATIVE_INFINITY; // 初始化全局最大值為負無窮大
     let globalMin = Number.POSITIVE_INFINITY; // 初始化全局最小值為正無窮大
 
+
     for (let q = 0; q < 86400; q++) {
+      //判斷最大值
       if (maxData[q] > globalMax) {
         globalMax = maxData[q];
         maxIndex = q;
       }
+      //判斷最小值
       if (maxData[q] < globalMin) {
         globalMin = maxData[q];
         minIndex = q; // 設定 minIndex 變數
@@ -840,6 +840,9 @@ async function getDayData() {
     console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
     console.log("最小值存入 globalMin 的位置:", minIndex);
     console.log("取出最小位置的數值:", maxData[minIndex]);
+    console.log("最大值存入 globalMin 的位置:", maxIndex);
+    console.log("取出最大位置的數值:", maxData[maxIndex]);
+
 
     var no_Execution_period_calculation = 0; //計算沒有在執行的時段(最大96 一個時段15分鐘)
     var Execution_period_calculation = 0; //計算實際上有在執行的時段(最大96 一個時段15分鐘)
@@ -850,12 +853,13 @@ async function getDayData() {
         no_Execution_period_calculation++;
       }
     }
+
     var period_calculation =
       no_Execution_period_calculation + Execution_period_calculation;
 
-    console.log("沒有執行的時段總數" + no_Execution_period_calculation);
-    console.log("有執行的時段總數" + Execution_period_calculation);
-    console.log("時段總數:" + period_calculation);
+    console.log("沒有執行的時段總數:" + no_Execution_period_calculation);
+    console.log("有執行的時段總數:" + Execution_period_calculation);
+    console.log("加總的時段總數(應為96筆)):" + period_calculation);
 
     let sum = 0;
     let total_count = 0;
@@ -863,56 +867,74 @@ async function getDayData() {
     for (let k = 0; k < 86400; k++) {
       const intervalIndex = Math.floor(k / 900); //intervalIndex用來取出區間的並判斷是否要計算平均?
       if (scheduleTodayValues[intervalIndex] === 0) {
-        maxData_processed[k] = 999999; //如果該小時沒有調度 則直接給一個超大的值去排除
+        maxData_processed[k] = "#"; //如果該小時沒有調度 則直接給一個超大的值去排除
       } else {
         maxData_processed[k] = maxData[k];
       }
     }
     //console.log("如果有停止執行的時候處理過的陣列內容" + maxData_processed);
-
+//改到這~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
     for (let r = 0; r < maxData_processed.length; r++) {
-      if (maxData_processed[r] <= 10000) {
+      if (maxData_processed[r] !=="#") {
         //可以計算的必須是調度的範圍(0-10000)
         sum += maxData[r]; // 將 maxData 陣列中的數值加總}
         total_count++;
       }
+
+
+      if(total_count===0){
+        average45 = 0;
+        console.log("average45 :", average45);
+      }
+      else{    
+        const averageoriginal = sum / total_count; // 計算平均值並四捨五入到整數 eg94.99
+        const averagefloor = Math.floor(sum / total_count); // 計算平均值且捨去小數部分
+        average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數 eg94.99
+        // console.log("averageoriginal :", averageoriginal);
+        console.log("average45 :", average45);
+        // console.log("averagefloor :", averagefloor);}
+      }
     }
-    console.log("加總所有的spm: " + sum);
-    console.log("總共有幾個可以進行加法的數值:" + total_count);
-    //獲得平均值
-    const averageoriginal = sum / total_count; // 計算平均值並四捨五入到整數 eg94.99
-    const average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數 eg94.99
-    const averagefloor = Math.floor(sum / total_count); // 計算平均值且捨去小數部分
-
-    // console.log("averageoriginal :", averageoriginal);
-    console.log("average45 :", average45);
-    // console.log("averagefloor :", averagefloor);
-
+    console.log("全部時段SPM進行加總的結果: " + sum);
+    console.log("總共有幾個可以進行計算的時段總數:" + total_count);
     //******************************************************************* */
     //開始針對每個小時取出最大最小值，並給與該小時的執行率
     //取得每小時的最小SBSPM
     const minValues = []; // 存儲每個小時中的最小值
     const maxValues = []; // 存儲每個小時中的最大值
     const averageValues = []; // 存儲小時中的平均值
-
+    var flag = 0;
+    
     for (let l = 0; l < maxData_processed.length; l += 3600) {
+
       const group = maxData_processed.slice(l, l + 3600); // 取出每個分組的數據
-
-      // 找出每個分組中的最小值
-      const min = Math.min(...group);
-
-      // 找出每個分組中的最大值
-      const max = Math.max(...group);
-
-      // 計算每個分組中的平均值
-      const sum = group.reduce((acc, val) => acc + val, 0);
-      const average = sum / group.length;
-
-      // 將計算結果存入相應的陣列中
-      minValues.push(min);
-      maxValues.push(max);
-      averageValues.push(average);
+    
+      // 檢查分組中是否全部都是 "#"
+      const allHashes = group.every(val => val === "#");
+    
+      if (allHashes) {
+        // 如果分組中全部都是 "#"
+        minValues.push(0.0);
+        maxValues.push(0.0);
+        averageValues.push(0.0);
+      } else {
+        // 找出每個分組中的最小值
+        const min = Math.min(...group);
+    
+        // 找出每個分組中的最大值
+        const max = Math.max(...group);
+    
+        // 計算每個分組中的平均值
+        const sum = group.reduce((acc, val) => acc + val, 0);
+        const average = sum / group.length;
+    
+        // 將計算結果存入相應的陣列中
+        minValues.push(min);
+        maxValues.push(max);
+        averageValues.push(average);
+      }
     }
+    
     console.log("minValues :", minValues);
     console.log("maxValues :", minValues);
     console.log("averageValues :", minValues);
@@ -931,7 +953,7 @@ async function getDayData() {
     for (let m = 0; m < minValues.length; m++) {
       const hour_min = minValues[m];
       // const hour_min = minValues[m] / 100;
-      if (hour_min >= 999999) {
+      if (hour_min ==="#") {
         quality_val = 0;
         hour_final[m][5] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
@@ -1121,16 +1143,13 @@ async function getDayData() {
     });
     //獲取系統當前時間的前一天日期;
     const Date = specified_date_clone9.subtract(1, "days").format("YYYY-MM-DD");
-
     return {
       Date: Date,
       hour_final: hour_final,
       elsedata1: elsedata1,
       elsedata2: elsedata2
     };
-
-    //return Date, hour_final, elsedata; //回傳時間、整天的資料、下面統計完的資料
-  } catch (error) {
+  }catch (error) {
     console.error("Error fetching data from CouchDB:", error);
   }
 }
@@ -2073,7 +2092,7 @@ function updateExcel2DHorizon(workbook, queryData, sheetNum, excelStart) {
           // Calculate the target cell based on the starting cell and indices
           const targetCell =
             colLetter + (parseInt(startCell.slice(1)) + rowIndex);
-          console.log("targetCell:" + targetCell);
+          //console.log("targetCell:" + targetCell);
           // Write the value to the target cell
           sheet.cell(targetCell).value(cellValue);
         });

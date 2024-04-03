@@ -55,24 +55,26 @@ router.get("/account/personalinfo", async (req, res) => {
   try {
     const token = req.cookies.token;
     const resopnse = await findaccount(inmail="", intoken=token );
-    //還沒改好唷
     let transstate ="";
-    if(resopnse.state==="admin"){
-      transstate="最高權限";
-    }
-    else if(resopnse.state==="manager"){
-      transstate="系統管理者";
+    if(resopnse.state==="activate"){
+      transstate = "正常";
     }
     else{
-      transstate="一般使用者";
+      transstate = "停用";
     }
-    
+    if(resopnse.level==="admin"){
+      translevel = "最高權限"
+    } else if(resopnse.level==="manager"){
+      translevel = "系統管理者"
+    } else if(resopnse.level==="viewer"){
+      translevel = "一般用戶"
+    }
     const content = {
       num: resopnse.num,
       name: resopnse.name,
       company: resopnse.company,
       department: resopnse.department,
-      permission: resopnse.level, //admin manager normal
+      permission: translevel, //admin manager viewer
       status: transstate, // activate,lock
       note: resopnse.note,
       lastlogin: resopnse.last_time
@@ -178,7 +180,7 @@ router.get("/account/system/accounts", async(req, res) => {
 router.post("/account/system/accounts", async(req, res) => {
   // Create new user.  Change or delete exist user.
   console.log("modify accounts")
-  console.log(req.body)
+  // console.log(req.body)
   try {
   let response = await alldoc(db.account);
   response = await response.json();
@@ -191,9 +193,17 @@ router.post("/account/system/accounts", async(req, res) => {
   const body = req.body
   const bottom = body.bottom
 
+  if (body["status"] === "normal"){
+    body["status"] = "activate"
+  } else if(body["status"] === "lock"){
+    body["status"] = "deactivate"
+  }
+
   if (allid.includes(body.num) === true && bottom === "addupdate"){
     console.log(`id exist, id:${body.num} will be update`)
     let iddata = await getbyid(body.num)
+    // console.log("body",body)
+    // console.log("before",iddata)
     iddata["time"] = datetime()
     iddata["user"]["num"] = body.num
     iddata["user"]["mail"] = body.email
@@ -201,10 +211,12 @@ router.post("/account/system/accounts", async(req, res) => {
     iddata["user"]["company"] = body.company
     iddata["user"]["department"] = body.department
     iddata["user"]["level"] = body.permission
-    iddata["user"]["state"] = body.status
-    iddata["user"]["note"] = body.note === undefined || ""? "" : body.note
-    iddata["user"]["password"] = body.password === undefined ||"" ? iddata.password : body.password
-    console.log(iddata)
+    iddata["user"]["state"] = body.status === undefined ||body.status === ""?iddata["user"]["state"]:body.status
+    iddata["user"]["note"] = body.note === undefined ||body.note === ""? "" : body.note
+    // console.log(777,body.password === undefined ||body.password === "", iddata.user.password)
+    // body.password === undefined || body.password === "" ? iddata.user.password : body.password
+    iddata["user"]["password"] = body.password === undefined ||body.password ==="" ? iddata.user.password : body.password
+    // console.log("after",iddata)
     await updateaccount(iddata._id, "", "", [iddata])
   } else if (allid.includes(body.num) === false && bottom === "addupdate"){
         console.log("id nottttt exist, create")

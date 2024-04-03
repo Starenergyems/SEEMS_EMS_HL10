@@ -81,12 +81,51 @@ app.get("/login", async (req, res) => {
   res.clearCookie("token");
   const response = await getconfig();
   let logintext = response["logintext"]
+  getData();
+    const Values = await getLatestValuesFromDatabase();
+    //沒有計算 純粹讀取+換算
+    const Values2 = await getLatestValuesFromDatabaseforother();
+
+    var latestValues = {
+      permission: req.body.permission,
+      userAccount: req.body.id,
+      totalAlarmNum: Values[0],
+      AlarmNum_Sys: Values[1], //新增`
+      AlarmNum_Bat: Values[2],
+      AlarmNum_PCS: Values[3],
+      AlarmNum_FF: Values[4],
+      AlarmNum_Env: Values[5],
+      AlarmNum_Meter: Values[6],
+      //
+      totalWarningNum: Values[7],
+      WarningNum_Sys: Values[8], //新增
+      WarningNum_Bat: Values[9],
+      WarningNum_PCS: Values[10],
+      WarningNum_FF: Values[11],
+      WarningNum_Env: Values[12],
+      WarningNum_Meter: Values[13]
+    };
+
+    var latestValues2 = {
+      L_M_systemMode: Values2[0],
+      L_M_freq: Values2[1],
+      L_M_activeP: Values2[2],
+      L_M_reactiveP: Values2[3],
+      L_M_voltage: Values2[4],
+      L_M_current: Values2[5],
+      L_M_powerFactor: Values2[6],
+      L_M_avgSOC: Values2[7],
+      L_M_minSOH: Values2[8],
+      L_M_SBSPM: Values2[9],
+      L_M_chgEtoday: Values2[10],
+      L_M_dcgEtoday: Values2[11]
+    };
   // const response["logintext"] === undefined? logintext="" : logintext=response["logintext"];
   console.log(logintext);
   const context = {
     logintext: `${logintext}`
   };
-  res.render("Login", { context: context });
+  res.render("Login", { context: context,latestValues, latestValues2 });
 });
 
 app.get(["/", "/signin"], (req, res) => {

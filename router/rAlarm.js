@@ -627,9 +627,9 @@ function alarm_processor_call() {
       other_alarm_promise,
       gc_alarm_promise,
     ])
-      .then(() => {
-        console.log("All alarm_processor: Suc!");
-      })
+      // .then(() => {
+      //   console.log("All alarm_processor: Suc!");
+      // })
       .catch((error) => {
         console.log(error);
       });
