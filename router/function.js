@@ -119,7 +119,7 @@ function mapworkMode_page(decimalValue) {
 
   return statuses[indexOfOne] || "Unknown status";
 }
-function mapgridStatus_page() {}
+function mapgridStatus_page() { }
 //***************************************************************************** */
 //PCSWorkingStatus
 function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
@@ -189,7 +189,7 @@ function mapPCSWorkingstatus(input1, input2) {
   // 將參數轉換為二進制並填補為固定長度為32
   const binary1 = input1.toString(2).padStart(32, "0");
   const binary2 = input2.toString(2).padStart(32, "0");
-ode_MT
+  ode_MT
   // 定義對應的狀態
   const statusMap1 = {
     0: "Running",
@@ -666,6 +666,19 @@ function Determine_status_of_sbyCmd(
   } else {
     return { indicator: "Standby", status: "待命中", bgColor: "standby" };
   }
+}
+
+function get_Log_Time() {
+  let rawDateTime = new Date();
+  let yy = rawDateTime.getFullYear();
+  let mm = String(rawDateTime.getMonth() + 1).padStart(2, '0');
+  let dd = String(rawDateTime.getDate()).padStart(2, '0');
+  let hh = String(rawDateTime.getHours()).padStart(2, '0');
+  let m = String(rawDateTime.getMinutes()).padStart(2, '0');
+  let ss = String(rawDateTime.getSeconds()).padStart(2, '0');
+  let SSS = String(rawDateTime.getMilliseconds()).padStart(3, '0');
+
+  return `${yy}-${mm}-${dd}T${hh}:${m}:${ss}.${SSS}+08:00`;
 }
 
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
@@ -1193,6 +1206,7 @@ module.exports = {
   Determine_statusL_of_ACB,
   Determine_status_of_exeCmd,
   Determine_status_of_sbyCmd,
+  get_Log_Time,
   workStatuschange,
   calculateAdd,
   //****************** */
@@ -1379,6 +1393,8 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 // console.log(st_2);
 // const uv_2 = Determine_status_of_sbyCmd(unixTime_Now, startTime, endTime);
 // console.log(uv_2);
+
+// console.log(get_Log_Time());
 
 /////////////////////////////////////////////////////////////////////////
 

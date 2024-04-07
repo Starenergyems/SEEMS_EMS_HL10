@@ -25,7 +25,8 @@ const {
   Convert_unixTime_to_dateTime,
   Convert_socRef_kWh_to_pct,
   Determine_status_of_exeCmd,
-  Determine_status_of_sbyCmd
+  Determine_status_of_sbyCmd,
+  get_Log_Time
 } = require("./function");
 
 // const otherrf01nanoDb = nano.use("other_rf01");
@@ -36,6 +37,8 @@ const GC10nanoDb = nano.use(gc_rf10);
 const GC01nanoDb = nano.use(gc_rf01);
 const dwctrl = "dwctrl";
 const dwctrlnanoDb = nano.use(dwctrl);
+
+const createNanoInstance = (dbName) => nano.db.use(dbName);
 
 //app.use(myMiddleware);
 
@@ -54,7 +57,9 @@ const dwctrlnanoDb = nano.use(dwctrl);
 //app=router要記得改
 //導向童話面作法同於METER
 
-var sysctrl_variables;
+/************************************************************************************ */
+
+let SysCtrl_KeyValuePairs;
 
 const sysCtrl_1_MT = {
   0: { 0: "不動作", 1: "切換" },
@@ -92,7 +97,7 @@ const ss234_Status_MT = {
   6: { 0: "停止", 1: "運行中" }
 };
 
-async function query_Syscrtl_variables() {
+async function query_SysCtrl_KeyValuePairs() {
   const indexDef = {
     index: { fields: ["time"] },
     name: "time_index"
@@ -118,36 +123,17 @@ async function query_Syscrtl_variables() {
     const GC01Data = result01.docs[0];
     // console.log("Value[400107]:", GC01Data.IEC61850[400107]);
 
-    const sysCtrl1_rBitS = Convert_UInt_to_revBitString(
-      GC10Data.System[400076],
-      16
-    );
-    const ss1_Status_rBitS = Convert_UInt_to_revBitString(
-      GC10Data.System[400078],
-      16
-    );
-    const ss2_Status_rBitS = Convert_UInt_to_revBitString(
-      GC10Data.System[400079],
-      16
-    );
-    const ss3_Status_rBitS = Convert_UInt_to_revBitString(
-      GC10Data.System[400080],
-      16
-    );
-    const ss4_Status_rBitS = Convert_UInt_to_revBitString(
-      GC10Data.System[400081],
-      16
-    );
+    const sysCtrl1_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400076], 16);
+    const ss1_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400078], 16);
+    const ss2_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400079], 16);
+    const ss3_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400080], 16);
+    const ss4_Status_rBitS = Convert_UInt_to_revBitString(GC10Data.System[400081], 16);
 
-    sysctrl_variables = {
+    SysCtrl_KeyValuePairs = {
       permission: "manager",
 
       sysAvailability: mapBitStatus(ss1_Status_rBitS, ss1_Status_MT, 15),
-      SOC: Scale_Data(
-        GC01Data.IEC61850[400129],
-        ((0.01 * 1) / (4472 * 7)) * 100,
-        1
-      ),
+      SOC: Scale_Data(GC01Data.IEC61850[400129], ((0.01 * 1) / (4472 * 7)) * 100, 1),
       SBSPM: Scale_Data(GC01Data.IEC61850[400133], 0.01, 1),
 
       sysMode: "不動作",
@@ -226,34 +212,6 @@ async function query_Syscrtl_variables() {
   }
 }
 
-// async function query_Syscrtl_variables() {
-//   const indexDef = {
-//     index: { fields: ["time"] },
-//     name: "time_index",
-//   };
-//   await GCnanoDb.createIndex(indexDef);
-
-//   const mangoQuery = {
-//     selector: {
-//       time: { $exists: true },
-//     },
-//     sort: [{ time: "desc" }],
-//     limit: 1,
-//   };
-
-//   await GCnanoDb.find(mangoQuery, async (err, body) => {
-//     if (err) {
-//       console.error("Error:", err);
-//       res.status(500).send("Internal Server Error");
-//       return;
-//     }
-
-//     const GCData = body.docs[0]; // 取得數據的第一個元素
-//     console.log("test" + GCData.System[400078]);
-
-//   });
-// }
-
 router.get("/mode", (req, res) => {
   // 在這裡修改重定向的方式，可以直接將 URL 修改為 "/mode/sysctrl"
   // 如果需要傳遞額外資訊，可以使用查詢字串或 session 等機制
@@ -262,15 +220,26 @@ router.get("/mode", (req, res) => {
 
 //系統模式控制頁面切換
 router.get("/mode/sysctrl", async (req, res) => {
-  await query_Syscrtl_variables();
-  //console.log(sysctrl_variables);
-  res.render("Mode_SysCtrl", sysctrl_variables);
+  try {
+    await query_SysCtrl_KeyValuePairs();
+    //console.log(SysCtrl_KeyValuePairs);
+
+    res.render("Mode_SysCtrl", SysCtrl_KeyValuePairs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/mode/sysctrl/:data", async (req, res) => {
-  await query_Syscrtl_variables();
-  //console.log(sysctrl_variables);
-  res.json(sysctrl_variables);
+  try {
+    await query_SysCtrl_KeyValuePairs();
+
+    res.json(SysCtrl_KeyValuePairs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 /************************************************************************************ */
@@ -491,7 +460,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
         delete newdwctrlData._rev;
         await nano.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
 
-        const createNanoInstance = (dbName) => nano.db.use(dbName);
         //log紀錄
         const logDb = createNanoInstance("log");
 
@@ -507,7 +475,7 @@ router.post("/set_freqVsP_Data", async (req, res) => {
           doc[i] = {
             tag: `system.${freqVsP_MT[Object.keys(freqVsP_MT)[i]].dataID}`,
             time: isoString,
-            category: "系統模式04",
+            category: "系統模式10",
             device: "GC",
             username: "SE0008",
             content: `將${freqVsP_MT[Object.keys(freqVsP_MT)[i]].log_dataName}設為${log_dataValue[i]} ${freqVsP_MT[Object.keys(freqVsP_MT)[i]].unit}`
@@ -738,7 +706,6 @@ router.post("/set_socRef_Data", async (req, res) => {
         await nano.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
         // console.log(newdwctrlData.system);
 
-        const createNanoInstance = (dbName) => nano.db.use(dbName);
         //log紀錄
         const logDb = createNanoInstance("log");
 
@@ -754,7 +721,7 @@ router.post("/set_socRef_Data", async (req, res) => {
           doc[i] = {
             tag: `system.${socRef_MT[Object.keys(socRef_MT)[i]].dataID}`,
             time: isoString,
-            category: "系統模式05",
+            category: "系統模式11",
             device: "GC",
             username: "SE0008",
             content: `將${socRef_MT[Object.keys(socRef_MT)[i]].log_dataName}設為${log_dataValue[i]} ${socRef_MT[Object.keys(socRef_MT)[i]].unit}`
@@ -2181,6 +2148,149 @@ router.post("/change_dateNumber", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+/************************************************************************************ */
+
+let Date_of_Schd_set = "Today";
+
+router.post("/record_Date_of_Schedule_to_be_set", async (req, res) => {
+  try {
+    const Date_of_Schedule_set = req.body.Date_of_Schedule_set.slice(0, 4);
+    console.log(req.body.Date_of_Schedule_set);
+    console.log(Date_of_Schedule_set);
+
+    if (Date_of_Schedule_set === "明日排程") {
+      Date_of_Schd_set = "Tomorrow";
+    } else {
+      Date_of_Schd_set = "Today";
+    }
+
+    res.json(Date_of_Schd_set);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+
+router.post("/set_Schedule_Data", async (req, res) => {
+  try {
+    const setV_P_schd_raw = req.body.setValue_P_schd;
+    const setV_P_cmd_raw = req.body.setValue_P_cmd;
+
+    let response;
+
+    let check_num = 0;
+    let i;
+
+    for (i = 0; i < setV_P_schd_raw.length; i++) {
+      if (setV_P_schd_raw[i] !== "" && !Number.isNaN(Number(setV_P_schd_raw[i]))) {
+        check_num++;
+      }
+      if (setV_P_cmd_raw[i] !== "" && !Number.isNaN(Number(setV_P_cmd_raw[i]))) {
+        check_num++;
+      }
+    }
+
+    if (check_num === 192) {
+      const P_schd_scale = 0.01;
+      const P_cmd_scale = 1;
+
+      let setV_P_schd = [];
+      let setV_P_cmd = [];
+
+      for (i = 0; i < setV_P_schd_raw.length; i++) {
+        setV_P_schd.push(Math.round(Number(setV_P_schd_raw[i]) / P_schd_scale));
+        setV_P_cmd.push(Math.round(Number(setV_P_cmd_raw[i]) / P_cmd_scale));
+      }
+
+      const P_schd_minLimit = 0;
+      const P_schd_maxLimit = 1000;
+      const P_cmd_minLimit = -10000;
+      const P_cmd_maxLimit = 10000;
+
+      for (i = 0; i < setV_P_schd.length; i++) {
+        if (setV_P_schd[i] >= P_schd_minLimit && setV_P_schd[i] <= P_schd_maxLimit) {
+          check_num++;
+        }
+        if (setV_P_cmd[i] >= P_cmd_minLimit && setV_P_cmd[i] <= P_cmd_maxLimit) {
+          check_num++;
+        }
+      }
+
+      if (check_num === 384) {
+        const indexDef = {
+          index: { fields: ["time"] },
+          name: "time_index"
+        };
+        await dwctrlnanoDb.createIndex(indexDef);
+
+        const mangoQuery = {
+          selector: {
+            time: { $exists: true }
+          },
+          sort: [{ time: "desc" }],
+          limit: 1
+        };
+
+        const dataGot = await dwctrlnanoDb.find(mangoQuery);
+
+        const dwctrlData = dataGot.docs[0];
+
+        const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+        for (i = 0; i < setV_P_schd.length; i++) {
+          newdwctrlData["schedule"][Date_of_Schd_set]["W" + (401001 + i)] = setV_P_schd[i];
+          newdwctrlData["API"][Date_of_Schd_set]["W" + (400201 + i * 2)] = setV_P_cmd[i];
+        }
+
+        //const accountDb = createNanoInstance("account");
+        const logTime = get_Log_Time();
+
+        // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+        newdwctrlData.time = logTime;
+        delete newdwctrlData._id;
+        delete newdwctrlData._rev;
+        await nano.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+        // console.log(newdwctrlData.API);
+        // console.log(newdwctrlData.schedule);
+
+        //log紀錄
+        const logDb = createNanoInstance("log");
+
+        let schedule_MT = { Today: "今日排程", Tomorrow: "明日排程" };
+
+        const doc = {
+          tag: `schedule.${Date_of_Schd_set} & API.${Date_of_Schd_set}`,
+          time: logTime,
+          category: "系統模式12",
+          device: "GC",
+          username: req.body.id,
+          //username: "SE0008"
+          content: `修改${schedule_MT[Date_of_Schd_set]}得標量、電能移轉量設定值}`
+        }
+        // console.log(doc);
+
+        const result = await logDb.insert(doc); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+
+        response = { status: "ok", alertMessage: "NA" };
+      } else {
+        console.log("數值範圍有誤@@@###");
+        response = { status: "error", alertMessage: "數值範圍有誤！" };
+      }
+    } else {
+      console.log("數值型式有誤~~~!!!");
+      response = { status: "error", alertMessage: "數值型式有誤！" };
+    }
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+/************************************************************************************ */
 
 module.exports = router;
 // app.listen(port, () => {

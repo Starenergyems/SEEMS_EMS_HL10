@@ -32,7 +32,8 @@ const {
   mapworkMode_page,
   mapworkStatus_page,
   mapgridStatus_page,
-  Scale_Data
+  Scale_Data,
+  get_Log_Time,
 } = require("./function");
 
 app.set("view engine", "ejs");
@@ -213,18 +214,18 @@ async function queryPcsSum(req) {
 
     totalP: scaleProcess(
       lc1Data.System[402055] +
-        lc2Data.System[402055] +
-        lc3Data.System[402055] +
-        lc4Data.System[402055],
+      lc2Data.System[402055] +
+      lc3Data.System[402055] +
+      lc4Data.System[402055],
       0.1,
       1
     ),
 
     totalQ: scaleProcess(
       lc1Data.System[402057] +
-        lc2Data.System[402057] +
-        lc3Data.System[402057] +
-        lc4Data.System[402057],
+      lc2Data.System[402057] +
+      lc3Data.System[402057] +
+      lc4Data.System[402057],
       0.1,
       1
     ),
@@ -233,36 +234,36 @@ async function queryPcsSum(req) {
 
     today_E_chg: scaleProcess(
       lc1Data.System[402060] +
-        lc2Data.System[402060] +
-        lc3Data.System[402060] +
-        lc4Data.System[402060] -
-        total_imp,
+      lc2Data.System[402060] +
+      lc3Data.System[402060] +
+      lc4Data.System[402060] -
+      total_imp,
       0.01,
       1
     ),
     today_E_dcg: scaleProcess(
       lc1Data.System[402062] +
-        lc2Data.System[402062] +
-        lc3Data.System[402062] +
-        lc4Data.System[402062] -
-        total_exp,
+      lc2Data.System[402062] +
+      lc3Data.System[402062] +
+      lc4Data.System[402062] -
+      total_exp,
       0.1,
       1
     ),
 
     tot_E_chg: scaleProcess(
       lc1Data.System[402060] +
-        lc2Data.System[402060] +
-        lc3Data.System[402060] +
-        lc4Data.System[402060],
+      lc2Data.System[402060] +
+      lc3Data.System[402060] +
+      lc4Data.System[402060],
       0.001,
       2
     ), //單位是MWh
     tot_E_dcg: scaleProcess(
       lc1Data.System[402062] +
-        lc2Data.System[402062] +
-        lc3Data.System[402062] +
-        lc4Data.System[402062],
+      lc2Data.System[402062] +
+      lc3Data.System[402062] +
+      lc4Data.System[402062],
       0.001,
       2
     ), //單位是MWh
@@ -783,6 +784,8 @@ router.get("/operateinfo/pcs/alarm/:pageNumber/:data", async (req, res) => {
   }
 });
 
+//************************************************************************************************************** */
+
 let dVS_Data_dataName;
 let dVS_Data_numInDataGroup;
 let dVS_Data_scale;
@@ -870,7 +873,7 @@ router.post("/get_dVS_Data_WhenClicking", async (req, res) => {
 
     const getData_raw =
       allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
-        data_AfM.dataID
+      data_AfM.dataID
       ];
     const response = {
       originData: Scale_Data(getData_raw, data_AfM.scale, data_AfM.decPlace),
@@ -946,24 +949,14 @@ router.post("/set_dVS_Data", async (req, res) => {
         const allData = await Promise.all(dataPromises);
         const dwctrlData = allData[4];
         const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
-        console.log("qaz123qaz");
-        console.log(dwctrlData);
-        console.log(typeof dwctrlData);
-        console.log(newdwctrlData);
-        console.log(typeof newdwctrlData);
-        console.log("wsx456wsx");
 
         newdwctrlData[data_AfM.dicName][data_AfM.dataID] = setValue;
 
         //const accountDb = createNanoInstance("account");
-        //存入資料庫的時區問題
-        const currentDate = new Date();
-        const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
-        const localTime = new Date(currentDate - timezoneOffset);
-        const isoString = localTime.toISOString().replace("Z", "+08:00");
+        const logTime = get_Log_Time();
 
         // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
-        newdwctrlData.time = isoString;
+        newdwctrlData.time = logTime;
         delete newdwctrlData._id;
         delete newdwctrlData._rev;
         await nano.use("dwctrl").insert(newdwctrlData);
@@ -974,7 +967,7 @@ router.post("/set_dVS_Data", async (req, res) => {
 
         const doc = {
           tag: `${data_AfM.dicName}.${data_AfM.dataID}`,
-          time: isoString,
+          time: logTime,
           category: data_AfM.category,
           device: data_AfM.device,
           username: req.body.id,
@@ -1010,6 +1003,8 @@ router.post("/set_dVS_Data", async (req, res) => {
   }
 });
 
+//************************************************************************************************************** */
+
 let dSS_Data_dataName;
 let dSS_Data_numInDataGroup;
 let dSS_Data_bitNum;
@@ -1023,51 +1018,42 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
 
     const data_MT = {
       setBut_modeAP: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407010,
-        bitNum: 999,
-        status_MT: { " 0": "主動", " 1": "被動" }
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407010, bitNum: 999, status_MT: { " 0": "主動", " 1": "被動" }
       },
       setBut_modeQctrl: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407011,
-        bitNum: 999,
-        status_MT: {
-          " 162": "功率(kVar)模式",
-          " 161": "功因模式",
-          " 85": "關閉"
-        }
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407011, bitNum: 999, status_MT: { " 162": "功率(kVar)模式", " 161": "功因模式", " 85": "關閉" }
       },
       setBut_standbyCmd: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407012,
-        bitNum: 999,
-        status_MT: { " 170": "待機", " 85": "停止待機" }
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407012, bitNum: 999, status_MT: { " 170": "待機", " 85": "停止待機" }
       },
       setBut_modeLR: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407013,
-        bitNum: 999,
-        status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" }
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407013, bitNum: 999, status_MT: { " 0": "本地 & 遠端", " 1": "遠端", " 2": "本地" }
       },
       setBut_acuOnOff: {
-        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`,
-        dicName: "Ctrl",
-        dataID: 407018,
-        bitNum: 999,
-        status_MT: { " 1": "啟動", " 0": "停止" }
+        dbName_gD: `lc${dSS_Data_numInDataGroup}_rf10`, dicName: "Ctrl", dataID: 407018, bitNum: 999, status_MT: { " 1": "啟動", " 0": "停止" }
       },
       setBut_AutoMan_SS: {
-        dbName_gD: `gc_rf10`,
-        dicName: "System",
-        dataID: 400076,
-        bitNum: dSS_Data_numInDataGroup,
-        status_MT: { " 1": "自動", " 0": "手動" }
-      }
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400076, bitNum: dSS_Data_numInDataGroup, status_MT: { " 1": "自動", " 0": "手動" }
+      },
+
+      setBut_freqSource: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 0, status_MT: { " 0": "頻率表", " 1": "測試用頻率" }
+      },
+      setBut_use_Freq_Cmd: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 1, status_MT: { " 1": "是", " 0": "否" }
+      },
+      setBut_use_P_schd: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 2, status_MT: { " 1": "是", " 0": "否" }
+      },
+      setBut_use_P_LS: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 3, status_MT: { " 1": "是", " 0": "否" }
+      },
+      setBut_use_MTE_P_96Q: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 6, status_MT: { " 1": "是", " 0": "否" }
+      },
+      setBut_use_MTE_API: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 7, status_MT: { " 1": "是", " 0": "否" }
+      },
       //
       //
     };
@@ -1086,10 +1072,7 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
 
     const allData = await Promise.all(dataPromises);
 
-    const getData_raw =
-      allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][
-        data_AfM.dataID
-      ];
+    const getData_raw = allData[databases.indexOf(data_AfM.dbName_gD)][data_AfM.dicName][data_AfM.dataID];
 
     let getData;
     if (data_AfM.bitNum === 999) {
@@ -1116,47 +1099,47 @@ router.post("/set_dSS_Data", async (req, res) => {
 
     const data_MT = {
       setBut_modeAP: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407010",
-        category: "設備控制",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407010",
+        category: "設備控制", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}主/被動模式`
       },
       setBut_modeQctrl: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407011",
-        category: "設備控制9101",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407011",
+        category: "設備控制9101", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}虛功模式`
       },
       setBut_standbyCmd: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407012",
-        category: "設備控制2531",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407012",
+        category: "設備控制2531", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}PCS待機指令`
       },
       setBut_modeLR: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407013",
-        category: "設備控制4587",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407013",
+        category: "設備控制4587", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}本地/遠端模式`
       },
       setBut_acuOnOff: {
-        dicName: `lc${dSS_Data_numInDataGroup}`,
-        dataID: "W407018",
-        category: "設備控制7096",
-        device: `LC${dSS_Data_numInDataGroup}`,
-        log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`
+        dicName: `lc${dSS_Data_numInDataGroup}`, dataID: "W407018",
+        category: "設備控制7096", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`
       },
       setBut_AutoMan_SS: {
-        dicName: `system`,
-        dataID: "W400076",
-        category: "系統模式03",
-        device: `GC`,
-        log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`
-      }
+        dicName: `system`, dataID: "W400076", category: "系統模式03", device: `GC`, log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`
+      },
+
+      setBut_freqSource: {
+        dicName: `system`, dataID: "W400077", category: "系統模式04", device: `GC`, log_dataName: `頻率資料來源`
+      },
+      setBut_use_Freq_Cmd: {
+        dicName: `system`, dataID: "W400077", category: "系統模式05", device: `GC`, log_dataName: `使用電力交易平台頻率移動基準值`
+      },
+      setBut_use_P_schd: {
+        dicName: `system`, dataID: "W400077", category: "系統模式06", device: `GC`, log_dataName: `使用排程得標量`
+      },
+      setBut_use_P_LS: {
+        dicName: `system`, dataID: "W400077", category: "系統模式07", device: `GC`, log_dataName: `使用排程電能移轉量`
+      },
+      setBut_use_MTE_P_96Q: {
+        dicName: `system`, dataID: "W400077", category: "系統模式08", device: `GC`, log_dataName: `使用電力交易平台得標量資料`
+      },
+      setBut_use_MTE_API: {
+        dicName: `system`, dataID: "W400077", category: "系統模式09", device: `GC`, log_dataName: `使用電力交易平台電能移轉量、SOC參考值資料`
+      },
       //
       //
     };
@@ -1176,15 +1159,9 @@ router.post("/set_dSS_Data", async (req, res) => {
     if (dSS_Data_bitNum === 999) {
       setValue = Number(setValue_raw);
     } else {
-      let setValue_old = Convert_UInt_to_BitString(
-        newdwctrlData[data_AfM.dicName][data_AfM.dataID],
-        32
-      ).bitString;
+      let setValue_old = Convert_UInt_to_BitString(newdwctrlData[data_AfM.dicName][data_AfM.dataID], 32).bitString;
       console.log(setValue_old);
-      setValue_old =
-        setValue_old.slice(0, 31 - dSS_Data_bitNum) +
-        setValue_raw.slice(1) +
-        setValue_old.slice(31 - dSS_Data_bitNum + 1);
+      setValue_old = setValue_old.slice(0, 31 - dSS_Data_bitNum) + setValue_raw.slice(1) + setValue_old.slice(31 - dSS_Data_bitNum + 1);
       console.log(setValue_old);
       setValue = parseInt(setValue_old, 2);
     }
@@ -1193,14 +1170,10 @@ router.post("/set_dSS_Data", async (req, res) => {
     newdwctrlData[data_AfM.dicName][data_AfM.dataID] = setValue;
 
     //const accountDb = createNanoInstance("account");
-    //存入資料庫的時區問題
-    const currentDate = new Date();
-    const timezoneOffset = currentDate.getTimezoneOffset() * 60000; // Offset in milliseconds
-    const localTime = new Date(currentDate - timezoneOffset);
-    const isoString = localTime.toISOString().replace("Z", "+08:00");
+    const logTime = get_Log_Time();
 
     // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
-    newdwctrlData.time = isoString;
+    newdwctrlData.time = logTime;
     delete newdwctrlData._id;
     delete newdwctrlData._rev;
     await nano.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
@@ -1210,7 +1183,7 @@ router.post("/set_dSS_Data", async (req, res) => {
 
     const doc = {
       tag: `${data_AfM.dicName}.${data_AfM.dataID}`,
-      time: isoString,
+      time: logTime,
       category: data_AfM.category,
       device: data_AfM.device,
       username: req.body.id,

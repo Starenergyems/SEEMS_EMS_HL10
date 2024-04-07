@@ -471,3 +471,25 @@ body {
 .popUpWindow.dataStatus_Set .titlePUW {
     margin: 25px 11px 0px;
 }
+
+.popUpWindow.alert_WrongDataSet {
+    height: 200px;
+    width: 320px;
+    left: 560px;
+    top: 280px;
+}
+
+.alert_WrongDataSet p {
+    margin: 0px 35px;
+    font-size: 24px;
+    line-height: 30px;
+    color: #FF0000;
+}
+
+.alert_WrongDataSet #alertMessage {
+    margin-top: 40px;
+}
+
+.alert_WrongDataSet #closeWB_No {
+    margin: 25px 130px 0px;
+}
