@@ -611,7 +611,7 @@ async function getDayData() {
     const dayBeforeYesterdayStart = specified_date_clone1
       .subtract(2, "days") //改時間 原本是2
       .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間為 23:59:59.999
-      .subtract(2, "seconds") // 減去2秒到23:59:57
+      .subtract(3, "seconds") // 減去2秒到23:59:57
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -627,7 +627,6 @@ async function getDayData() {
 
     // 初始化存儲數值的陣列
     let data = [];
-    let dataforSchedule = [];
 
     // 定義篩選器條件，查詢大前天的數據
     const filterDayBeforeYesterday = {
@@ -664,63 +663,126 @@ async function getDayData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-    // 新增一個陣列暫存每個小時的資料
-    const tempData = [];
+    // // 新增一個陣列暫存每個小時的資料
+    // const tempData = [];
 
-    // 依序讀取後續的資料，每次增加一小時
-    for (let i = 0; i < 24; i++) {
-      // 計算時間段的起始時間和結束時間
-      const intervalStart = moment(yesterdayStart)
-        .add(i - 8, "hours")
-        .startOf(0, "hour")
-        .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-      const intervalEnd = moment(yesterdayEnd)
-        .add(i - 8 + 1, "hours")
-        .startOf("hour")
-        .add(59, "minutes")
-        .add(59, "seconds")
-        .add(999, "milliseconds")
-        .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    // // 依序讀取後續的資料，每次增加一小時
+    // for (let i = 0; i < 24; i++) {
+    //   // 計算時間段的起始時間和結束時間
+    //   const intervalStart = moment(yesterdayStart)
+    //     .add(i - 8, "hours")
+    //     .startOf(0, "hour")
+    //     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    //   const intervalEnd = moment(yesterdayEnd)
+    //     .add(i - 8 + 1, "hours")
+    //     .startOf("hour")
+    //     .add(59, "minutes")
+    //     .add(59, "seconds")
+    //     .add(999, "milliseconds")
+    //     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-      console.log("intervalStart : " + intervalStart);
-      console.log("intervalEnd   : " + intervalEnd);
+    //   console.log("intervalStart : " + intervalStart);
+    //   console.log("intervalEnd   : " + intervalEnd);
 
-      // 定義篩選器條件，查詢該時間段的數據
-      const filterInterval = {
-        selector: {
-          time: {
-            $gte: intervalStart, // 開始時間
-            $lte: intervalEnd // 結束時間
-          }
-        },
-        limit: 3600 // 每個時間段讀取3600
-      };
+    //   // 定義篩選器條件，查詢該時間段的數據
+    //   const filterInterval = {
+    //     selector: {
+    //       time: {
+    //         $gte: intervalStart, // 開始時間
+    //         $lte: intervalEnd // 結束時間
+    //       }
+    //     },
+    //     limit: 3600 // 每個時間段讀取3600
+    //   };
 
-      // 每個小時的資料分24次每次一小時存進tempData陣列裡面
-      const intervalData = await gcDb.find(filterInterval);
-      tempData.push(...intervalData.docs.map((doc) => doc.System["400037"]));
+    //   // 每個小時的資料分24次每次一小時存進tempData陣列裡面
+    //   const intervalData = await gcDb.find(filterInterval);
+    //   tempData.push(...intervalData.docs.map((doc) => doc.System["400037"]));
 
-      console.log(
-        "Data fetched for interval:",
-        intervalStart + "+08:00",
-        "-",
-        intervalEnd + "+08:00-",
-        "Pushed",
-        tempData.length,
-        "items."
-      );
+    //   console.log(
+    //     "Data fetched for interval:",
+    //     intervalStart + "+08:00",
+    //     "-",
+    //     intervalEnd + "+08:00-",
+    //     "Pushed",
+    //     tempData.length,
+    //     "items."
+    //   );
 
-      // 檢查每秒是否都有數值，不足的補0
-      for (let j = 0; j < 3600; j++) {
-        if (!tempData[i * 3600 + j]) {
-          data.push(0);
-        } else {
-          data.push(tempData[i * 3600 + j]);
-        }
+    //   // 檢查每秒是否都有數值，不足的補0
+    //   for (let j = 0; j < 3600; j++) {
+    //     if (!tempData[i * 3600 + j]) {
+    //       data.push(0);
+    //     } else {
+    //       data.push(tempData[i * 3600 + j]);
+    //     }
+    //   }
+    // //輸出每個小時的數值
+    
+    // }
+
+
+    // console.log("初始Data陣列的86403筆資料", data.length);
+    // console.log("原本獲得的Data :", data); 
+// 新增一個陣列暫存每個小時的資料
+// 新增一個陣列暫存每個小時的資料
+const tempData = [];
+
+// 依序讀取後續的資料，每次增加一小時
+for (let i = 0; i < 24; i++) {
+  // 計算時間段的起始時間和結束時間
+  const intervalStart = moment(yesterdayStart)
+    .add(i - 8, "hours")
+    .startOf("hour"); // 將起始時間設定為每小時的開始
+  const intervalEnd = intervalStart.clone().add(1, "hour").subtract(1, "second"); // 將結束時間設定為每小時的結束前一秒
+
+  console.log("intervalStart : " + intervalStart.format());
+  console.log("intervalEnd   : " + intervalEnd.format());
+
+  // 定義篩選器條件，查詢該時間段的數據
+  const filterInterval = {
+    selector: {
+      time: {
+        $gte: intervalStart.toISOString(), // 開始時間
+        $lte: intervalEnd.toISOString() // 結束時間
       }
+    },
+    limit: 3600 // 每個時間段讀取3600
+  };
+
+  // 每個小時的資料分24次每次一小時存進tempData陣列裡面
+  const intervalData = await gcDb.find(filterInterval);
+  const hourData = [];
+
+  for (let j = 0; j < 3600; j++) {
+    // 檢查每秒是否都有數值，不足的補0
+    if (intervalData.docs[j]) {
+      const secondData = intervalData.docs[j].System["400037"];
+      hourData.push(secondData);
+    } else {
+      hourData.push(0);
     }
-    console.log("初始Data陣列的86403筆資料", data.length);
-    console.log("原本獲得的Data :", data); 
+  }
+
+  tempData.push(...hourData);
+
+  console.log(
+    "Data fetched for interval:",
+    intervalStart.format() + "+08:00",
+    "-",
+    intervalEnd.format() + "+08:00-",
+    "Pushed",
+    hourData.length,
+    "items."
+  );
+}
+
+// 將每小時的資料合併到 data 陣列中
+data.push(...tempData);
+
+console.log("初始Data陣列的86403筆資料", data.length);
+console.log("原本獲得的Data :", data);
+
 
     //取得大前天+昨天的實際得標容量******************************************************************** */
     //大前天的最後一筆
@@ -814,7 +876,7 @@ async function getDayData() {
       }
     }
 
-    console.log("取出四秒滾動最大值的長度(應該要是86400):", maxData.length);
+    console.log("取出四秒滾動最大值的長度(86400):", maxData.length);
     console.log("取出四秒滾動最大值的陣列:", maxData);
 
     let minIndex; // 在此定義 minIndex 變數
@@ -872,29 +934,22 @@ async function getDayData() {
         maxData_processed[k] = maxData[k];
       }
     }
-    //console.log("如果有停止執行的時候處理過的陣列內容" + maxData_processed);
-//改到這~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-    for (let r = 0; r < maxData_processed.length; r++) {
+    //console.log("處理過的陣列內容(判斷有沒有停止執行)" + maxData_processed);
+    //用來計算平均值
+    for (let r = 0; r < maxData.length; r++) {
       if (maxData_processed[r] !=="#") {
-        //可以計算的必須是調度的範圍(0-10000)
-        sum += maxData[r]; // 將 maxData 陣列中的數值加總}
+        // 可以計算的必須是調度的範圍(0-10000)
+        sum += maxData[r]; // 將 maxData 陣列中的數值加總
         total_count++;
-      }
-
-
-      if(total_count===0){
-        average45 = 0;
-        console.log("average45 :", average45);
-      }
-      else{    
-        const averageoriginal = sum / total_count; // 計算平均值並四捨五入到整數 eg94.99
-        const averagefloor = Math.floor(sum / total_count); // 計算平均值且捨去小數部分
-        average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數 eg94.99
-        // console.log("averageoriginal :", averageoriginal);
-        console.log("average45 :", average45);
-        // console.log("averagefloor :", averagefloor);}
+        average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數
       }
     }
+    
+    // 在計算平均值之前，先檢查 total_count 是否為 0
+    if (total_count === 0) {
+      average45 = 0;
+    }
+
     console.log("全部時段SPM進行加總的結果: " + sum);
     console.log("總共有幾個可以進行計算的時段總數:" + total_count);
     //******************************************************************* */
@@ -914,10 +969,12 @@ async function getDayData() {
     
       if (allHashes) {
         // 如果分組中全部都是 "#"
-        minValues.push(0.0);
-        maxValues.push(0.0);
-        averageValues.push(0.0);
-      } else {
+        minValues.push(0);
+        maxValues.push(0);
+        averageValues.push(0);
+      } 
+
+      else {
         // 找出每個分組中的最小值
         const min = Math.min(...group);
     
@@ -926,13 +983,19 @@ async function getDayData() {
     
         // 計算每個分組中的平均值
         const sum = group.reduce((acc, val) => acc + val, 0);
-        const average = sum / group.length;
-    
+        //const average = sum / group.length;
         // 將計算結果存入相應的陣列中
+        
+      // 計算非 '#' 的數量和加總
+        const grouptotal = group.filter(val => val !== "#").length;
+        const groupsum = group.filter(val => val !== "#").reduce((acc, val) => acc + val, 0);
+        const average = groupsum / grouptotal;
+
         minValues.push(min);
         maxValues.push(max);
         averageValues.push(average);
       }
+
     }
     
     console.log("minValues :", minValues);
@@ -950,7 +1013,7 @@ async function getDayData() {
       .map(() => Array(numCols).fill(0));
     //const hour_final = Array(7).fill(0);
     let quality_val = 0;
-    for (let m = 0; m < minValues.length; m++) {
+    for (let m = 0; m <= minValues.length; m++) {
       const hour_min = minValues[m];
       // const hour_min = minValues[m] / 100;
       if (hour_min ==="#") {
