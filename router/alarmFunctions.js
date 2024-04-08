@@ -575,54 +575,55 @@ const LC_Rack_error_table = {
 };
 
 const LC_BSC_406001 = {
-  0: "BSP AC Breaker Disconnect 2 Fault",
-  1: "Emergency Shutdowm Fault",
-  2: "BSP Lightening Protection Failure Fault",
-  3: "BSP-UPS Grid Power Disconnect Fault",
-  4: "BCP Internal Overtemperature Fault",
-  5: "BSP Power Supply Overtemperature Fault",
-  6: "FFS System Fault",
-  7: "FFS Fire Fault",
-  8: "FFS Gas Release Fault",
-  9: "BSP Transformer Overtemperature Fault",
-  10: "BCP1-1 DC Lightening Protection Falut",
-  11: "BCP1-1 Fuse Fault",
-  12: "BCP1-2 DC Lightening Protection Falut",
-  13: "BCP1-2 Fuse Fault",
-  14: "System Compartment Door Open Fault",
-  15: "N/A",
+  0: "BSP AC Contactor open",
+  1: "System EPO",
+  2: "BSP AC SPD",
+  3: "BSP UPS utility fail",
+  4: "BCP internal over temperature",
+  5: "BSP power supply over temperature",
+  6: "FFS fault",
+  7: "FFS fire alarm",
+  8: "FFS spray",
+  9: "Container door open",
+  10: "BCP1-1 DC SPD",
+  11: "BCP1-1 fuse",
+  12: "BCP1-2 fuse",
+  15: "BSP transformer over temperature",
   24: "UPS fault",
   25: "BSC-UPS communication fault",
   26: "Low combustible gas concentration alarm",
-  27: "High combustible gas concentration alarm",
+  27: "High combustible gas concentration alarm"
+  
 };
 
 const LC_BSC_406003 = {
-  0: "Node 1 alarm",
-  1: "Node 2 alarm",
-  2: "Node 3 alarm",
-  3: "Node 4 alarm",
-  4: "Node 5 alarm",
-  5: "Node 6 alarm",
-  6: "Node 7 alarm",
-  7: "Node 8 alarm",
-  8: "Node 9 alarm",
-  9: "Node 10 alarm",
-  10: "Node 11 alarm",
-  11: "Node 12 alarm",
-  12: "Node 13 alarm",
-  13: "Node 14 alarm",
-  14: "Node 15 alarm",
-  15: "Node 16 alarm",
+  0: "BSP AC Contactor open",
+  1: "System EPO",
+  2: "BSP AC SPD",
+  3: "BSP UPS utility fail",
+  4: "BCP internal over temperature",
+  5: "BSP power supply over temperature",
+  6: "FFS fault",
+  7: "FFS fire alarm(消防水霧啟動)",
+  8: "FFS spray",
+  9: "Container door open",
+  10: "BCP1-1 DC SPD",
+  11: "BCP1-1 fuse",
+  12: "BCP1-2 fuse",
+  15: "BSP transformer over temperature",
   23: "Humiture sensor communication alarm",
   25: "Ammeter communication alarm",
   26: "HVAC alarm",
-  27: "HVAC communication alarm",
+  27: "HVAC communication alarm"
+
 };
 
 const LC_BSC_406005 = {
-  0: "FFS alarm 1_Smoke or Temperature",
-  1: "FFS alarm 2_Smoke and Temperature",
+  // 0: "FFS alarm 1_Smoke or Temperature",
+  // 1: "FFS alarm 2_Smoke and Temperature",
+  // 2: "FFS fault",
+  0: "FFS alarm 1_可燃氣體",
+  1: "FFS alarm 2_可燃氣體",
   2: "FFS fault",
 };
 
@@ -642,149 +643,149 @@ const LC_BSC_406009 = {
   85: "Not configured",
 };
 
-const LC_BSC_406011 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406011 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406013 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406013 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406015 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406015 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406017 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406017 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406019 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406019 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406021 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406021 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406023 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406023 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406025 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406025 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406027 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406027 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406029 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406029 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406031 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406031 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406033 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406033 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406035 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406035 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406037 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406037 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406039 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406039 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406041 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406041 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406043 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406043 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406045 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406045 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
 const LC_BSC_406047 = {
   min: -100,
@@ -825,7 +826,7 @@ const LC_BSC_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
-    category: "special", //ENV?
+    category: "FFS", //ENV?
   },
   406005: {
     name: "FFS status",
@@ -833,7 +834,7 @@ const LC_BSC_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: false,
-    category: "special",
+    category: "FFS",
   },
   406007: {
     name: "HVAC_1 running status",
@@ -3013,13 +3014,14 @@ function update_trigger_alarms_batch(
 
 function sendLineNotify(error_result_item) {
   const message = `
-    ID:   ${error_result_item["_id"]} 
-    Level:   ${error_result_item["level"]} 
-    Location:   ${error_result_item["location"]}
-    Device:   ${error_result_item["device"]}
-    Value:   ${error_result_item["value"]}
-    Warning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
-    Recover is ${error_result_item["recover"]}
+  ID: ${error_result_item["_id"]} 
+  Level: ${error_result_item["level"]} 
+  Location: ${error_result_item["location"]}
+  Device: ${error_result_item["device"]}
+  Value: ${error_result_item["value"]}
+  Warning:
+    ${error_result_item["content"].replace(/\[|\]/g, "_")}
+  Recover is ${error_result_item["recover"]}
   `;
   const request = {
     method: "post",
