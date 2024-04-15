@@ -23,7 +23,8 @@ const {
   maponGridStatus,
   workStatus_LC,
   maponGridStatus_LC,
-  mapBMSMode
+  mapBMSMode,
+  calculateAdd
 } = require("./function");
 
 const { Console } = require("console");

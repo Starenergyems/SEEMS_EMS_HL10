@@ -215,14 +215,14 @@ let flag = 0;
 
 async function getData() {
   const now = moment();
-  const startOfDay = moment().startOf("day");
+  const startOfDay = moment().startOf("day").add(1, 'second'); // 當天的第二秒
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
       .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 })
+      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 }) 
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -237,10 +237,10 @@ async function getData() {
     };
 
     const midnightData = await rf01Db.find(filterTime);
-    console.log("midnightData", midnightData);
+    //console.log("midnightData", midnightData);
 
     //discharge capacity
-    for(let i = 0; i < 5; i++) {
+    for(let i = 0; i < 10; i++) {
       if(midnightData.docs[i] && midnightData.docs[i].Freq["408030"] !== null) {
         const expValue = midnightData.docs[i].Freq["408030"];
         //console.log("i: " , i);
