@@ -53,26 +53,6 @@ router.get("/report/report", (req, res) => {
   res.render("Rpt_Report");
 });
 
-// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
-//const templatePath = path.join(__dirname, '..', 'public/report', 'Report.xlsx');//模板的位置
-// const DayTemPath = path.join(
-//   __dirname,
-//   "..",
-//   "public/report",
-//   "DayReport.xlsx"
-// );
-// const MonthTemPath = path.join(
-//   __dirname,
-//   "..",
-//   "public/report",
-//   "MonthReport.xlsx"
-// );
-// const YearTemPath = path.join(
-//   __dirname,
-//   "..",
-//   "public/report",
-//   "YearReport.xlsx"
-// );
 
 var specified_date; // 指定要撈哪天(會撈前一天) / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
 var specified_date_clone1;
@@ -110,45 +90,20 @@ var specified_date_clone23;
 
 // console.log("specified_date: " + specified_date.format("YYYY-MM-DD HH:mm:ss"));
 
-// const specified_date_clone1 = specified_date.clone();
-// const specified_date_clone2 = specified_date.clone();
-// const specified_date_clone3 = specified_date.clone();
-// const specified_date_clone4 = specified_date.clone();
-// const specified_date_clone5 = specified_date.clone();
-// const specified_date_clone6 = specified_date.clone();
-// const specified_date_clone7 = specified_date.clone();
-// const specified_date_clone8 = specified_date.clone();
-// const specified_date_clone9 = specified_date.clone();
-// const specified_date_clone10 = specified_date.clone();
-// const specified_date_clone11 = specified_date.clone();
-// const specified_date_clone12 = specified_date.clone();
-// const specified_date_clone13 = specified_date.clone();
-// const specified_date_clone14 = specified_date.clone();
-// const specified_date_clone15 = specified_date.clone();
-// const specified_date_clone16 = specified_date.clone();
-// const specified_date_clone17 = specified_date.clone();
-// const specified_date_clone18 = specified_date.clone();
-// const specified_date_clone19 = specified_date.clone();
-// const specified_date_clone20 = specified_date.clone();
-// const specified_date_clone21 = specified_date.clone();
-// const specified_date_clone22 = specified_date.clone();
-// const specified_date_clone23 = specified_date.clone();
-// console.log(
-//   "specified_date_clone: " + specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
-// );
-
 /*************************************************************************************************** */
 
 
 router.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
+    console.log("手動下載開始")
     await queryReport(req, res)
   } catch (error) {
     console.error("Error generating Excel file:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 /***************************************************************************************************** */
 var click_year, click_month, click_day
 const queryReport = async (req, res) => {//撈資料放入對應excel表格for前端手動下載
@@ -188,12 +143,12 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
   //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
   const workbook = await xlsx.fromFileAsync(templatePath);
   var couchData; //插入excel的數值
-  tempFilePath = path.join( //站存檔位址
-    __dirname,
-    "C",
-    "report",
-    "temp",
-    "temp.xlsx");
+  // tempFilePath = path.join( //站存檔位址
+  //   __dirname,
+  //   "C",
+  //   "report",
+  //   "temp",
+  //   "temp.xlsx");
   // Fetch data from MongoDB
   if (reportType === "年報") {
     couchData = await getYearData();
@@ -277,24 +232,22 @@ divideFileName(fileName); //將獨到的日期拆分為y, m, d
     ); //下載後存在哪，要跟getReport api同步
 
   } else if (reportType === "日報") {
-    // directoryPath = path.join(
+    directoryPath = path.join(
+      "C",
+      "report",
+    `${click_year}`,
+    `${click_month}`
+  ); //下載後存在哪，要跟getReport api同步
+
+    //   directoryPath = path.join( 測試未成功
     //   //在linux中測試
     //   "/",
     //   "home",
-    //   "hl10_4-1",
+    //   "seems",
     //   "report",
-    //   `${yesterdayY}`,
-    //   `${yesterdayM}`
-    // ); 
-      directoryPath = path.join(
-      //在linux中測試
-      "/",
-      "home",
-      "seems",
-      "report",
-      `${click_year}`,
-      `${click_month}` //這個有成功存在"router" "/C/report/2024/3"
-    ); //下載後存在哪，要跟getReport api同步
+    //   `${click_year}`,
+    //   `${click_month}` //這個有成功存在"router" "/C/report/2024/3"
+    // ); //下載後存在哪，要跟getReport api同步
 
   } else {
     console.log("參數設置錯誤，報表種類應為年報/月報/日報");
@@ -605,6 +558,7 @@ function Conversionpercentage(randomNumber) {
 //日報讀值
 async function getDayData() {
   try {
+    console.log("日報-正在讀取資料庫資料....");
     let average45 = 0;
     //取得86403秒的SPM的數值********************************************************************* */
     // 計算大前天的時間範圍
@@ -902,7 +856,7 @@ console.log("原本獲得的Data :", data);
     console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
     console.log("最小值存入 globalMin 的位置:", minIndex);
     console.log("取出最小位置的數值:", maxData[minIndex]);
-    console.log("最大值存入 globalMin 的位置:", maxIndex);
+    console.log("最大值存入 globalMax 的位置:", maxIndex);
     console.log("取出最大位置的數值:", maxData[maxIndex]);
 
 
@@ -952,6 +906,7 @@ console.log("原本獲得的Data :", data);
 
     console.log("全部時段SPM進行加總的結果: " + sum);
     console.log("總共有幾個可以進行計算的時段總數:" + total_count);
+    
     //******************************************************************* */
     //開始針對每個小時取出最大最小值，並給與該小時的執行率
     //取得每小時的最小SBSPM
@@ -994,13 +949,17 @@ console.log("原本獲得的Data :", data);
         minValues.push(min);
         maxValues.push(max);
         averageValues.push(average);
+
+        console.log("min: ",min);
+        console.log("max: ",min);
+        console.log("min: ",min);
       }
 
     }
     
     console.log("minValues :", minValues);
-    console.log("maxValues :", minValues);
-    console.log("averageValues :", minValues);
+    console.log("maxValues :", maxValues);
+    console.log("averageValues :", averageValues);
 
     //換算獲得服務品質指標
     const quality = [];
@@ -1077,7 +1036,9 @@ console.log("原本獲得的Data :", data);
       }
       //console.log("Time:" + m + " / quality_val :", quality_val);
     }
-
+    var hour_final_max=0;
+    var hour_final_min=0;
+    var hour_final_avg=0;
     for (let n = 0; n <= 23; n++) {
       hour_final[24][0] += hour_final[n][0];
       hour_final[24][1] += hour_final[n][1];
@@ -1086,11 +1047,34 @@ console.log("原本獲得的Data :", data);
       hour_final[24][4] += hour_final[n][4];
       hour_final[24][5] += hour_final[n][5];
       hour_final[24][6] += hour_final[n][6];
+      hour_final_max += hour_final[n][7];
+      hour_final_avg += hour_final[n][8];
+      hour_final_min += hour_final[n][9];
     }
 
-    hour_final[24][7] = Conversionpercentage(globalMax);
-    hour_final[24][8] = Conversionpercentage(average45);
-    hour_final[24][9] = Conversionpercentage(globalMin);
+    //最後統計的最大最小平均
+    if(hour_final_max===0){
+      hour_final[24][7] = Conversionpercentage(0);
+    }
+    else{
+      hour_final[24][7] = Conversionpercentage(hour_final_max/24);
+    }
+
+    if(hour_final_avg===0){
+      hour_final[24][8] = Conversionpercentage(0);
+    }
+    else{
+      hour_final[24][8] = Conversionpercentage(hour_final_avg/24);
+    }
+
+    if(hour_final_min===0){
+      hour_final[24][9] = Conversionpercentage(0);
+    }
+    else{
+      hour_final[24][9] = Conversionpercentage(hour_final_min/24);
+    }
+
+
     console.log("the qualityis :", quality);
     console.log("counthourstop:" + counthourstop);
     console.log("the hour_final :", hour_final);

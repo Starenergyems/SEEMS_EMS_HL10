@@ -218,11 +218,11 @@ async function getData() {
   const startOfDay = moment().startOf("day");
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -233,25 +233,33 @@ async function getData() {
           $lte: nightoneseconds
         }
       },
-      limit: 1
+      limit: 10
     };
 
     const midnightData = await rf01Db.find(filterTime);
+    console.log("midnightData", midnightData);
 
     //discharge capacity
-    const expValue = midnightData.docs[0].Freq["408030"];
+    for(let i = 0; i < 5; i++) {
+      if(midnightData.docs[i] && midnightData.docs[i].Freq["408030"] !== null) {
+        const expValue = midnightData.docs[i].Freq["408030"];
+        //console.log("i: " , i);
+        //console.log("expValue: " , expValue);
+        //charge capacity
+        const impValue = midnightData.docs[i].Freq["408028"];
+        //console.log("impValue: " , impValue);
+        // 更新全域變數
+        ChgEtoday0 = impValue; //408028 充電
+        DcgEtoday0 = expValue; //408030 放電
+        //console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
+        // 退出迴圈
+        break;
+      }
+    }
 
-    //charge capacity
-    const impValue = midnightData.docs[0].Freq["408028"];
-
-    // 更新全域變數
-    ChgEtoday0 = impValue; //408028 充電
-    DcgEtoday0 = expValue; //408030 放電
-
-    //console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
+    //console.log("呼叫getdata");
+    flag = 1;
   }
-  //console.log("呼叫getdata");
-  flag = 1;
 }
 
 /************************************************************************* */
@@ -277,7 +285,7 @@ app.get("/navbar", async (req, res) => {
       permission: req.body.permission,
       userAccount: req.body.id,
       totalAlarmNum: Values[0],
-      AlarmNum_Sys: Values[1], //新增`
+      AlarmNum_Sys: Values[1], //新增
       AlarmNum_Bat: Values[2],
       AlarmNum_PCS: Values[3],
       AlarmNum_FF: Values[4],

@@ -582,7 +582,7 @@ const LC_BSC_406001 = {
   4: "BCP internal over temperature",
   5: "BSP power supply over temperature",
   6: "FFS fault",
-  7: "FFS fire alarm",
+  7: "FFS fire alarm(消防水霧啟動)",
   8: "FFS spray",
   9: "Container door open",
   10: "BCP1-1 DC SPD",

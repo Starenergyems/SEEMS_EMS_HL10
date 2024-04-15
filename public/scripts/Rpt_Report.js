@@ -298,7 +298,7 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
             console.error("報表類型錯誤: 應為年報/月報/日報");
             return
         };
-
+        console.log("Manual download", templateUrl);
         fetch(templateUrl)
           .then(response => response.blob())
           .then(blob => {

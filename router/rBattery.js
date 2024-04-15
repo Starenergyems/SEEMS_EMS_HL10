@@ -256,7 +256,7 @@ async function querySumData(req) {
       1
     ),
     current_LC1: scaleProcess(
-      calculateAverage(lc1Data.BMS1["404003"], lc1Data.BMS1["404003"]),
+      calculateAdd(lc1Data.BMS1["404003"], lc1Data.BMS1["404003"]),
       0.1,
       1
     ),
@@ -339,7 +339,7 @@ async function querySumData(req) {
       1
     ),
     current_LC2: scaleProcess(
-      calculateAverage(lc2Data.BMS1["404003"], lc2Data.BMS1["404003"]),
+      calculateAdd(lc2Data.BMS1["404003"], lc2Data.BMS1["404003"]),
       0.1,
       1
     ),
@@ -422,7 +422,7 @@ async function querySumData(req) {
       1
     ),
     current_LC3: scaleProcess(
-      calculateAverage(lc3Data.BMS1["404003"], lc3Data.BMS1["404003"]),
+      calculateAdd(lc3Data.BMS1["404003"], lc3Data.BMS1["404003"]),
       0.1,
       1
     ),
@@ -501,7 +501,7 @@ async function querySumData(req) {
 
     voltage_LC4: calculateAverage(scaleProcess(lc4Data.BMS1["404002"], 0.1, 1)),
     current_LC4: scaleProcess(
-      calculateAverage(lc4Data.BMS1["404003"], lc4Data.BMS1["404003"]),
+      calculateAdd(lc4Data.BMS1["404003"], lc4Data.BMS1["404003"]),
       0.1,
       1
     ),
