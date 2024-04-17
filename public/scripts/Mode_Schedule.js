@@ -51,11 +51,6 @@ function Set_Schedule() {
     window_setSchedule.classList.add("appear");
     title_setSchdedule.textContent = `${dateOfSchedule.textContent[0]}日排程設定`;
 
-    // qSelectAll_P_schd = document.querySelectorAll(".schedule .P_schd");
-    // qSelectAll_P_cmd = document.querySelectorAll(".schedule .P_cmd");
-    // qSelectAll_P_schd_set = document.querySelectorAll(".setScheduleW .P_schd_set");
-    // qSelectAll_P_cmd_set = document.querySelectorAll(".setScheduleW .P_cmd_set");
-
     for (i = 0; i < qSelectAll_P_schd.length; i++) {
         qSelectAll_P_schd_set[i].value = qSelectAll_P_schd[i].textContent;
         qSelectAll_P_cmd_set[i].value = qSelectAll_P_cmd[i].textContent;
@@ -84,13 +79,44 @@ async function record_Date_of_Schedule_to_be_set(Date_of_Schedule_set) {
 
 /////////////////////////////////////////////////////////////////////////
 
+const setBut_goToAnotherDay = document.querySelector("#goToAnotherDay");
+setBut_goToAnotherDay.addEventListener("click", Go_to_another_day);
+async function Go_to_another_day() {
+    let getData = await change_dateNumber();
+    console.log(getData);
+
+    // dateOfSchedule.textContent = getData.scheduleDate;
+    setBut_goToAnotherDay.textContent = getData.KVPairs.goToAnotherDay;
+
+    updateData_Scedule(getData.KVPairs);
+    // console.log("點擊時觸發更新");
+}
+
+async function change_dateNumber() {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/change_dateNumber", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(),
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////
+
 const setBut_winAllBid = document.querySelector(".setScheduleW #winAllBid");
 const setBut_winNoBid = document.querySelector(".setScheduleW #winNoBid");
 
 setBut_winAllBid.addEventListener("click", Set_WinAllBid);
 function Set_WinAllBid() {
-    // qSelectAll_P_schd_set = document.querySelectorAll(".setScheduleW .P_schd_set");
-
     for (i = 0; i < qSelectAll_P_schd_set.length; i++) {
         qSelectAll_P_schd_set[i].value = "10.00";
     }
@@ -98,8 +124,6 @@ function Set_WinAllBid() {
 
 setBut_winNoBid.addEventListener("click", Set_WinNoBid);
 function Set_WinNoBid() {
-    // qSelectAll_P_schd_set = document.querySelectorAll(".setScheduleW .P_schd_set");
-
     for (i = 0; i < qSelectAll_P_schd_set.length; i++) {
         qSelectAll_P_schd_set[i].value = "0.00";
     }
@@ -136,11 +160,6 @@ async function closePopup_setSchedule_Yes() {
         setV_P_cmd.push(qSelectAll_P_cmd_set[i].value);
     }
 
-    // console.log("qaz123qaz");
-    // console.log(setV_P_schd);
-    // console.log(setV_P_cmd);
-    // console.log("qaz456qaz");
-
     let getData = await set_Schedule_Data(setV_P_schd, setV_P_cmd);
     console.log(getData);
 
@@ -151,21 +170,6 @@ async function closePopup_setSchedule_Yes() {
         window_WrongDataSet.classList.add("appear");
     }
 }
-
-// const closeWB_Yes_freqVsP = document.querySelector(".freqVsP_Set #closeWB_Yes");
-// closeWB_Yes_freqVsP.addEventListener("click", close_freqVsP_Yes);
-// async function close_freqVsP_Yes() {
-//     let getData = await set_freqVsP_Data([freq_A_Set.value, freq_B_Set.value, freq_C_Set.value, freq_D_Set.value, freq_E_Set.value, freq_F_Set.value],
-//         [p_t_Set.value, p_u_Set.value, p_v_Set.value, p_w_Set.value, p_x_Set.value, p_y_Set.value]);
-//     console.log(getData);
-
-//     if (getData.status === "ok") {
-//         window_freqVsP_Set.classList.remove("appear");
-//     } else {
-//         alertMessage.textContent = getData.alertMessage;
-//         window_WrongDataSet.classList.add("appear");
-//     }
-// }
 
 const closeWB_No_setSchedule = document.querySelector(".setScheduleW #closeWB_No");
 closeWB_No_setSchedule.addEventListener("click", closePopup_setSchedule_No);
@@ -181,21 +185,18 @@ function close_WrongDataSet() {
 
 /////////////////////////////////////////////////////////////////////////
 
-const window_dataStatus_Set = document.querySelector(".dataStatus_Set");
-const title_dataStatus_Set = document.querySelector(".dataStatus_Set .titlePUW");
-const option1_dataStatus_Set = document.querySelector(".dataStatus_Set #option_1");
-const option2_dataStatus_Set = document.querySelector(".dataStatus_Set #option_2");
-const radioOption1 = document.querySelector(".dataStatus_Set #radioOpt_1");
-const radioOption2 = document.querySelector(".dataStatus_Set #radioOpt_2");
-const alertInfo_dataStatus_Set = document.querySelector(".dataStatus_Set .alertInfo");
-let valNow_dataStatus_Set;
-let valLightNow_dataStatus_Set;
-let option1_Description;
-let option2_Description;
+const window_dataStatus_Set = document.querySelector(".dataStatus_Set.general");
+const title_dataStatus_Set = document.querySelector(".dataStatus_Set.general .titlePUW");
+const option1_dataStatus_Set = document.querySelector(".dataStatus_Set.general #option_1");
+const option2_dataStatus_Set = document.querySelector(".dataStatus_Set.general #option_2");
+const radioOption1 = document.querySelector(".dataStatus_Set.general #radioOpt_1");
+const radioOption2 = document.querySelector(".dataStatus_Set.general #radioOpt_2");
+const alertInfo_dataStatus_Set = document.querySelector(".dataStatus_Set.general .alertInfo");
 let optionChecked_dataStatus_Set;
+let dataName;
 
-let qSelectAll_option = document.querySelectorAll(".dataStatus_Set .option");
-let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set .radioOpt");
+let qSelectAll_option = document.querySelectorAll(".dataStatus_Set.general .option");
+let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set.general .radioOpt");
 
 function clearCheckedRadioOption() {
     radioOption1.checked = false;
@@ -209,6 +210,7 @@ async function Set_use_P_schd() {
 
     title_dataStatus_Set.textContent = `使用排程得標量`;
     window_dataStatus_Set.classList.add("appear");
+    window_SOC_Logic_Set.classList.remove("appear");
     clearCheckedRadioOption();
 
     let getData = await get_dSS_Data_WhenClicking(dataName, 99);
@@ -242,6 +244,7 @@ async function Set_use_P_LS() {
 
     title_dataStatus_Set.textContent = `使用排程移轉量`;
     window_dataStatus_Set.classList.add("appear");
+    window_SOC_Logic_Set.classList.remove("appear");
     clearCheckedRadioOption();
 
     let getData = await get_dSS_Data_WhenClicking(dataName, 99);
@@ -259,27 +262,6 @@ async function Set_use_P_LS() {
     alertInfo_dataStatus_Set.textContent = "";
 }
 
-const setBut_use_SOC_ref = document.querySelector("#setBut_use_SOC_ref");
-setBut_use_SOC_ref.addEventListener("click", Set_use_SOC_ref);
-function Set_use_SOC_ref() {
-    title_dataStatus_Set.textContent = "使用排程SOC參考值";
-    window_dataStatus_Set.classList.add("appear");
-    clearCheckedRadioOption();
-    option1_dataStatus_Set.textContent = "是";
-    option2_dataStatus_Set.textContent = "否";
-}
-
-const setBut_autoCal_SOC_ideal = document.querySelector("#setBut_autoCal_SOC_ideal");
-setBut_autoCal_SOC_ideal.addEventListener("click", Set_autoCal_SOC_ideal);
-function Set_autoCal_SOC_ideal() {
-    title_dataStatus_Set.textContent = "依排程計算SOC理想值";
-    title_dataStatus_Set.style.margin = "25px 11px 0px";
-    window_dataStatus_Set.classList.add("appear");
-    clearCheckedRadioOption();
-    option1_dataStatus_Set.textContent = "是";
-    option2_dataStatus_Set.textContent = "否";
-}
-
 const setBut_use_MTE_P_96Q = document.querySelector("#setBut_use_MTE_P_96Q");
 setBut_use_MTE_P_96Q.addEventListener("click", Set_use_MTE_P_96Q);
 async function Set_use_MTE_P_96Q() {
@@ -287,6 +269,7 @@ async function Set_use_MTE_P_96Q() {
 
     title_dataStatus_Set.textContent = `使用ETP得標量資料`;
     window_dataStatus_Set.classList.add("appear");
+    window_SOC_Logic_Set.classList.remove("appear");
     clearCheckedRadioOption();
 
     let getData = await get_dSS_Data_WhenClicking(dataName, 99);
@@ -311,6 +294,7 @@ async function Set_use_MTE_API() {
 
     title_dataStatus_Set.textContent = `使用ETP移轉量資料`;
     window_dataStatus_Set.classList.add("appear");
+    window_SOC_Logic_Set.classList.remove("appear");
     clearCheckedRadioOption();
 
     let getData = await get_dSS_Data_WhenClicking(dataName, 99);
@@ -335,6 +319,7 @@ async function Set_use_Freq_Cmd() {
 
     title_dataStatus_Set.textContent = `使用ETP頻率目標值`;
     window_dataStatus_Set.classList.add("appear");
+    window_SOC_Logic_Set.classList.remove("appear");
     clearCheckedRadioOption();
 
     let getData = await get_dSS_Data_WhenClicking(dataName, 99);
@@ -359,6 +344,7 @@ async function Set_freqSource() {
 
     title_dataStatus_Set.textContent = `頻率資料來源設定`;
     window_dataStatus_Set.classList.add("appear");
+    window_SOC_Logic_Set.classList.remove("appear");
     clearCheckedRadioOption();
 
     let getData = await get_dSS_Data_WhenClicking(dataName, 99);
@@ -378,11 +364,11 @@ async function Set_freqSource() {
 
 /////////////////////////////////////////////////////////////////////////
 
-const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
+const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set.general #closeWB_Yes");
 closeWB_Yes_dSS.addEventListener("click", closePopup_dSS_Yes);
 function closePopup_dSS_Yes() {
     if ((radioOption1.checked === true) || (radioOption2.checked === true)) {
-        optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set [name=dataStatus]:checked");
+        optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set.general [name=dataStatus]:checked");
 
         set_dSS_Data(optionChecked_dataStatus_Set.value);
 
@@ -391,7 +377,7 @@ function closePopup_dSS_Yes() {
     window_dataStatus_Set.classList.remove("appear");
 }
 
-const closeWB_No_dSS = document.querySelector(".dataStatus_Set #closeWB_No");
+const closeWB_No_dSS = document.querySelector(".dataStatus_Set.general #closeWB_No");
 closeWB_No_dSS.addEventListener("click", closePopup_dSS_No);
 function closePopup_dSS_No() {
     radioOption1.checked = false;
@@ -401,35 +387,106 @@ function closePopup_dSS_No() {
 
 /////////////////////////////////////////////////////////////////////////
 
-const setBut_goToAnotherDay = document.querySelector("#goToAnotherDay");
-setBut_goToAnotherDay.addEventListener("click", Go_to_another_day);
-async function Go_to_another_day() {
-    let getData = await change_dateNumber();
+const window_SOC_Logic_Set = document.querySelector(".dataStatus_Set.set_SOC_Cal_Logic");
+const title_SOC_Logic_Set = document.querySelector(".dataStatus_Set.set_SOC_Cal_Logic .titlePUW");
+const radioOption_SOC_Logic1 = document.querySelector(".dataStatus_Set.set_SOC_Cal_Logic #radioOpt_SOC_Logic1");
+const radioOption_SOC_Logic2 = document.querySelector(".dataStatus_Set.set_SOC_Cal_Logic #radioOpt_SOC_Logic2");
+const alertInfo_SOC_Logic_Set = document.querySelector(".dataStatus_Set.set_SOC_Cal_Logic .alertInfo");
+let optionChecked_SOC_Logic_Set;
+
+let qSelectAll_option_SOC_Logic = document.querySelectorAll(".dataStatus_Set.set_SOC_Cal_Logic .option");
+let qSelectAll_radioOpt_SOC_Logic = document.querySelectorAll(".dataStatus_Set.set_SOC_Cal_Logic .radioOpt");
+
+const setBut_use_SOC_ref = document.querySelector("#setBut_use_SOC_ref");
+setBut_use_SOC_ref.addEventListener("click", Set_use_SOC_ref);
+async function Set_use_SOC_ref() {
+    dataName = "setBut_use_SOC_ref";
+
+    title_SOC_Logic_Set.textContent = `使用排程SOC參考值`;
+    window_SOC_Logic_Set.classList.add("appear");
+    window_dataStatus_Set.classList.remove("appear");
+    radioOption_SOC_Logic1.checked = false;
+    radioOption_SOC_Logic2.checked = false;
+
+    let getData = await get_dSS_Data_WhenClicking(dataName, 99);
     console.log(getData);
 
-    // dateOfSchedule.textContent = getData.scheduleDate;
-    setBut_goToAnotherDay.textContent = getData.KVPairs.goToAnotherDay;
+    for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+        qSelectAll_option_SOC_Logic[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+        qSelectAll_radioOpt_SOC_Logic[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
 
-    updateData_Scedule(getData.KVPairs);
-    // console.log("點擊時觸發更新");
+        if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+            qSelectAll_radioOpt_SOC_Logic[i].checked = true;
+        }
+    }
+
+    alertInfo_SOC_Logic_Set.textContent = "";
 }
 
-async function change_dateNumber() {
+const setBut_autoCal_SOC_ideal = document.querySelector("#setBut_autoCal_SOC_ideal");
+setBut_autoCal_SOC_ideal.addEventListener("click", Set_autoCal_SOC_ideal);
+async function Set_autoCal_SOC_ideal() {
+    dataName = "setBut_autoCal_SOC_ideal";
+
+    title_SOC_Logic_Set.textContent = `依排程計算SOC理想值`;
+    window_SOC_Logic_Set.classList.add("appear");
+    window_dataStatus_Set.classList.remove("appear");
+    radioOption_SOC_Logic1.checked = false;
+    radioOption_SOC_Logic2.checked = false;
+
+    let getData = await get_dSS_Data_WhenClicking(dataName, 99);
+    console.log(getData);
+
+    for (i = 0; i < Object.keys(getData.status_MT).length; i++) {
+        qSelectAll_option_SOC_Logic[i].textContent = getData.status_MT[Object.keys(getData.status_MT)[i]];
+        qSelectAll_radioOpt_SOC_Logic[i].setAttribute("value", Object.keys(getData.status_MT)[i]);
+
+        if (Object.keys(getData.status_MT)[i].slice(1) === getData.originData) {
+            qSelectAll_radioOpt_SOC_Logic[i].checked = true;
+        }
+    }
+
+    alertInfo_SOC_Logic_Set.textContent = "";
+}
+
+async function set_SOC_Logic(setValue) {
     try {
         console.log("嘗試向後端發出請求");
-        const response = await fetch("/change_dateNumber", {
+        const response = await fetch("/set_SOC_Logic", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(),
+            body: JSON.stringify({ setValue }),
         });
 
         const data = await response.json();
-        return data;
+        console.log(data);
     } catch (error) {
         console.error("Error fetching data:", error);
     }
+}
+
+const closeWB_Yes_SOC_Logic = document.querySelector(".dataStatus_Set #closeWB_SOC_Logic_Yes");
+closeWB_Yes_SOC_Logic.addEventListener("click", closePopup_SOC_Logic_Yes);
+function closePopup_SOC_Logic_Yes() {
+    if ((radioOption_SOC_Logic1.checked === true) || (radioOption_SOC_Logic2.checked === true)) {
+        optionChecked_SOC_Logic_Set = document.querySelector(".dataStatus_Set [name=SOC_Logic]:checked");
+        console.log(optionChecked_SOC_Logic_Set.value);
+
+        set_SOC_Logic(optionChecked_SOC_Logic_Set.value);
+
+        optionChecked_SOC_Logic_Set.checked = false;
+    }
+    window_SOC_Logic_Set.classList.remove("appear");
+}
+
+const closeWB_No_SOC_Logic = document.querySelector(".dataStatus_Set #closeWB_SOC_Logic_No");
+closeWB_No_SOC_Logic.addEventListener("click", closePopup_SOC_Logic_No);
+function closePopup_SOC_Logic_No() {
+    radioOption_SOC_Logic1.checked = false;
+    radioOption_SOC_Logic2.checked = false;
+    window_SOC_Logic_Set.classList.remove("appear");
 }
 
 /////////////////////////////////////////////////////////////////////////

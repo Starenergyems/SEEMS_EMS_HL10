@@ -288,6 +288,14 @@ body {
     margin-top: 50px;
 }
 
+.ctrlElement {
+    display: none;
+}
+
+.ctrlElement.appear {
+    display: inline-block;
+}
+
 .T_Main {
     background-color: #032C0E;
     box-sizing: border-box;

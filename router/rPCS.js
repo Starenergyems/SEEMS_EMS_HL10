@@ -68,6 +68,21 @@ const lc4_rf10 = "lc4_rf10";
 const lc04Db = nano.use(lc4_rf10);
 const gc_rf10 = "gc_rf10";
 const gcDb = nano.use(gc_rf10);
+const dwctrl = "dwctrl";
+const dwctrlnanoDb = nano.use(dwctrl);
+
+const indexDef = {
+  index: { fields: ["time"] },
+  name: "time_index"
+};
+
+const mangoQuery = {
+  selector: {
+    time: { $exists: true }
+  },
+  sort: [{ time: "desc" }],
+  limit: 1
+};
 
 // 定義全域變數 記錄當天晚上的紀錄
 let total_exp = 0;
@@ -1035,7 +1050,6 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
       setBut_AutoMan_SS: {
         dbName_gD: `gc_rf10`, dicName: "System", dataID: 400076, bitNum: dSS_Data_numInDataGroup, status_MT: { " 1": "自動", " 0": "手動" }
       },
-
       setBut_freqSource: {
         dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 0, status_MT: { " 0": "頻率表", " 1": "測試用頻率" }
       },
@@ -1047,6 +1061,12 @@ router.post("/get_dSS_Data_WhenClicking", async (req, res) => {
       },
       setBut_use_P_LS: {
         dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 3, status_MT: { " 1": "是", " 0": "否" }
+      },
+      setBut_use_SOC_ref: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 4, status_MT: { "_1": "是", "_0": "否" }
+      },
+      setBut_autoCal_SOC_ideal: {
+        dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 5, status_MT: { "_1": "是", "_0": "否" }
       },
       setBut_use_MTE_P_96Q: {
         dbName_gD: `gc_rf10`, dicName: "System", dataID: 400077, bitNum: 6, status_MT: { " 1": "是", " 0": "否" }
@@ -1121,7 +1141,6 @@ router.post("/set_dSS_Data", async (req, res) => {
       setBut_AutoMan_SS: {
         dicName: `system`, dataID: "W400076", category: "系統模式03", device: `GC`, log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`
       },
-
       setBut_freqSource: {
         dicName: `system`, dataID: "W400077", category: "系統模式04", device: `GC`, log_dataName: `頻率資料來源`
       },
@@ -1188,6 +1207,98 @@ router.post("/set_dSS_Data", async (req, res) => {
       device: data_AfM.device,
       username: req.body.id,
       //username: "SE0008"
+      content: `將${data_AfM.log_dataName}設為${dSS_Data_status_MT[setValue_raw]}`
+    };
+    console.log(doc);
+
+    // if (selectedValue != 0) {
+    const result = await logDb.insert(doc); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+    //console.log(result);
+    // }
+
+    //console.log("Document added to database. ID: " + result.id);
+    let response = {
+      ststus: ok,
+      alarmCMU_rawD: 314159,
+      faultCMU_rawD: 6626,
+      DL_of_statusHW: 1602
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+
+/************************************************************************************ */
+
+router.post("/set_SOC_Logic", async (req, res) => {
+  try {
+    const setValue_raw = req.body.setValue;
+
+    const data_MT = {
+      setBut_use_SOC_ref: {
+        dicName: `system`, dataID: "W400077", category: "系統模式13", device: `GC`, log_dataName: `使用排程SOC參考值`, _1: "01"
+      },
+      setBut_autoCal_SOC_ideal: {
+        dicName: `system`, dataID: "W400077", category: "系統模式14", device: `GC`, log_dataName: `使用電能移轉量計算SOC理想值`, _1: "10"
+      }
+    };
+
+    const data_AfM = data_MT[dSS_Data_dataName];
+
+    await dwctrlnanoDb.createIndex(indexDef);
+    const dataGot = await dwctrlnanoDb.find(mangoQuery);
+    const dwctrlData = dataGot.docs[0];
+    const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+    // const dataPromises = databases.map(async (dbName) => {
+    //   const nano = createNanoInstance(dbName);
+    //   return getLatestDocument(nano);
+    // });
+
+    // const allData = await Promise.all(dataPromises);
+    // const dwctrlData = allData[4];
+    // const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+    let setValue;
+    if (setValue_raw === "_0") {
+      let setValue_old = Convert_UInt_to_BitString(newdwctrlData[data_AfM.dicName][data_AfM.dataID], 32).bitString;
+      console.log(setValue_old);
+      setValue_old = setValue_old.slice(0, 31 - dSS_Data_bitNum) + setValue_raw.slice(1) + setValue_old.slice(31 - dSS_Data_bitNum + 1);
+      console.log(setValue_old);
+      setValue = parseInt(setValue_old, 2);
+    } else {
+      let setValue_old = Convert_UInt_to_BitString(newdwctrlData[data_AfM.dicName][data_AfM.dataID], 32).bitString;
+      console.log(setValue_old);
+      setValue_old = setValue_old.slice(0, 31 - 5) + data_AfM[setValue_raw] + setValue_old.slice(31 - 4 + 1);
+      console.log(setValue_old);
+      setValue = parseInt(setValue_old, 2);
+    }
+
+    console.log(setValue);
+    newdwctrlData[data_AfM.dicName][data_AfM.dataID] = setValue;
+
+    //const accountDb = createNanoInstance("account");
+    const logTime = get_Log_Time();
+
+    // 刪除_id 屬性，CouchDB 會自動生成 且更新時間為目前電腦系統時間
+    newdwctrlData.time = logTime;
+    delete newdwctrlData._id;
+    delete newdwctrlData._rev;
+    await nano.use("dwctrl").insert(newdwctrlData); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))
+
+    //log紀錄
+    const logDb = createNanoInstance("log");
+
+    const doc = {
+      tag: `${data_AfM.dicName}.${data_AfM.dataID}`,
+      time: logTime,
+      category: data_AfM.category,
+      device: data_AfM.device,
+      username: req.body.id,
       content: `將${data_AfM.log_dataName}設為${dSS_Data_status_MT[setValue_raw]}`
     };
     console.log(doc);

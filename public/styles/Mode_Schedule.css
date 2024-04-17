@@ -308,9 +308,7 @@ body {
 }
 
 .schedule .setButton {
-    /* background: linear-gradient(170deg, #F9E06C, #FFFFFF, #F9E06C); */
     background: linear-gradient(170deg, #BBBBBB, #FFFFFF, #BBBBBB);
-    /* background-color: #EEEEEE; */
     box-sizing: border-box;
     height: 30px;
     width: 120px;
@@ -470,6 +468,17 @@ body {
 
 .popUpWindow.dataStatus_Set .titlePUW {
     margin: 25px 11px 0px;
+}
+
+.dataStatus_Set #radioOpt_SOC_Logic1:checked~#checkBoxOpt_SOC_Logic1::after,
+.dataStatus_Set #radioOpt_SOC_Logic2:checked~#checkBoxOpt_SOC_Logic2::after {
+    display: block;
+}
+
+.popUpWindow #closeWB_SOC_Logic_Yes {
+    background-color: #FF0000;
+    margin-left: 100px;
+    color: #FFFFFF;
 }
 
 .popUpWindow.alert_WrongDataSet {

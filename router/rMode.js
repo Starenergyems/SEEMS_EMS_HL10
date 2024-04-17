@@ -40,6 +40,19 @@ const dwctrlnanoDb = nano.use(dwctrl);
 
 const createNanoInstance = (dbName) => nano.db.use(dbName);
 
+const indexDef = {
+  index: { fields: ["time"] },
+  name: "time_index"
+};
+
+const mangoQuery = {
+  selector: {
+    time: { $exists: true }
+  },
+  sort: [{ time: "desc" }],
+  limit: 1
+};
+
 //app.use(myMiddleware);
 
 //const { authentication } = require("./authMiddleware");
@@ -98,20 +111,8 @@ const ss234_Status_MT = {
 };
 
 async function query_SysCtrl_KeyValuePairs() {
-  const indexDef = {
-    index: { fields: ["time"] },
-    name: "time_index"
-  };
   await GC10nanoDb.createIndex(indexDef);
   await GC01nanoDb.createIndex(indexDef);
-
-  const mangoQuery = {
-    selector: {
-      time: { $exists: true }
-    },
-    sort: [{ time: "desc" }],
-    limit: 1
-  };
 
   try {
     const result10 = await GC10nanoDb.find(mangoQuery);
@@ -304,24 +305,6 @@ router.post("/set_freqVsP_Data", async (req, res) => {
       }
 
       if (check_num === 24) {
-        const indexDef = {
-          index: { fields: ["time"] },
-          name: "time_index"
-        };
-        await dwctrlnanoDb.createIndex(indexDef);
-
-        const mangoQuery = {
-          selector: {
-            time: { $exists: true }
-          },
-          sort: [{ time: "desc" }],
-          limit: 1
-        };
-
-        const dataGot = await dwctrlnanoDb.find(mangoQuery);
-
-        const dwctrlData = dataGot.docs[0];
-
         // const dataPromises = databases.map(async (dbName) => {
         //   const nano = createNanoInstance(dbName);
         //   return getLatestDocument(nano);
@@ -330,6 +313,9 @@ router.post("/set_freqVsP_Data", async (req, res) => {
         // const allData = await Promise.all(dataPromises);
         // const dwctrlData = allData[4];
 
+        await dwctrlnanoDb.createIndex(indexDef);
+        const dataGot = await dwctrlnanoDb.find(mangoQuery);
+        const dwctrlData = dataGot.docs[0];
         const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
 
         freqVsP_MT = {
@@ -506,22 +492,10 @@ router.post("/set_freqVsP_Data", async (req, res) => {
 
 router.post("/get_socRef_Data", async (req, res) => {
   try {
-    // let response;
-    const indexDef = {
-      index: { fields: ["time"] },
-      name: "time_index"
-    };
     await GC10nanoDb.createIndex(indexDef);
 
-    const mangoQuery = {
-      selector: {
-        time: { $exists: true }
-      },
-      sort: [{ time: "desc" }],
-      limit: 1
-    };
-
     const dataGot = await GC10nanoDb.find(mangoQuery);
+
     const GC10Data = dataGot.docs[0];
 
     const response = {
@@ -598,20 +572,7 @@ router.post("/set_socRef_Data", async (req, res) => {
       }
 
       if (check_num === 16) {
-        const indexDef = {
-          index: { fields: ["time"] },
-          name: "time_index"
-        };
         await dwctrlnanoDb.createIndex(indexDef);
-
-        const mangoQuery = {
-          selector: {
-            time: { $exists: true }
-          },
-          sort: [{ time: "desc" }],
-          limit: 1
-        };
-
         const dataGot = await dwctrlnanoDb.find(mangoQuery);
         const dwctrlData = dataGot.docs[0];
         const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
@@ -770,20 +731,8 @@ const sysCtrl_2_MT = {
   10: { 0: "禁用", 1: "啟用" }
 };
 
-async function query_Schd_KeyValuePairs() {
-  const indexDef = {
-    index: { fields: ["time"] },
-    name: "time_index"
-  };
+async function query_Schd_KeyValuePairs(req) {
   await GC10nanoDb.createIndex(indexDef);
-
-  const mangoQuery = {
-    selector: {
-      time: { $exists: true }
-    },
-    sort: [{ time: "desc" }],
-    limit: 1
-  };
 
   try {
     const result = await GC10nanoDb.find(mangoQuery);
@@ -813,7 +762,8 @@ async function query_Schd_KeyValuePairs() {
     );
 
     Schd_KeyValuePairs = {
-      permission: "manager",
+      // permission: "manager",
+      permission: req.body.permission,
 
       use_P_schd: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 2),
       use_P_LS: mapBitStatus(sysCtrl2_rBitS, sysCtrl_2_MT, 3),
@@ -2104,7 +2054,7 @@ async function query_Schd_KeyValuePairs() {
 
 router.get("/mode/schedule", async (req, res) => {
   try {
-    await query_Schd_KeyValuePairs();
+    await query_Schd_KeyValuePairs(req);
     //console.log(Schd_KeyValuePairs);
 
     res.render("Mode_Schedule", Schd_KeyValuePairs);
@@ -2116,7 +2066,7 @@ router.get("/mode/schedule", async (req, res) => {
 
 router.get("/mode/schedule/:data", async (req, res) => {
   try {
-    await query_Schd_KeyValuePairs();
+    await query_Schd_KeyValuePairs(req);
 
     res.json(Schd_KeyValuePairs);
   } catch (error) {
@@ -2135,7 +2085,7 @@ router.post("/change_dateNumber", async (req, res) => {
       dateNumber = 0;
     }
 
-    await query_Schd_KeyValuePairs();
+    await query_Schd_KeyValuePairs(req);
 
     const response = {
       dateNumber: dateNumber,
@@ -2191,6 +2141,7 @@ router.post("/set_Schedule_Data", async (req, res) => {
         check_num++;
       }
     }
+    console.log(check_num);
 
     if (check_num === 192) {
       const P_schd_scale = 0.01;
@@ -2217,26 +2168,12 @@ router.post("/set_Schedule_Data", async (req, res) => {
           check_num++;
         }
       }
+      console.log(check_num);
 
       if (check_num === 384) {
-        const indexDef = {
-          index: { fields: ["time"] },
-          name: "time_index"
-        };
         await dwctrlnanoDb.createIndex(indexDef);
-
-        const mangoQuery = {
-          selector: {
-            time: { $exists: true }
-          },
-          sort: [{ time: "desc" }],
-          limit: 1
-        };
-
         const dataGot = await dwctrlnanoDb.find(mangoQuery);
-
         const dwctrlData = dataGot.docs[0];
-
         const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
 
         for (i = 0; i < setV_P_schd.length; i++) {
@@ -2267,8 +2204,8 @@ router.post("/set_Schedule_Data", async (req, res) => {
           device: "GC",
           username: req.body.id,
           //username: "SE0008"
-          content: `修改${schedule_MT[Date_of_Schd_set]}得標量、電能移轉量設定值}`
-        }
+          content: `修改${schedule_MT[Date_of_Schd_set]}得標量、電能移轉量設定值`
+        };
         // console.log(doc);
 
         const result = await logDb.insert(doc); // ~~~~~~!!!!!!!!@@@@@@@@@@@@@########$$$$$$$$$%%%%%%%%%^^^^^^^^^&&&&&&&*********((((((((()))))))))

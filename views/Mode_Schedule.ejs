@@ -24,28 +24,28 @@
                     <h2>【邏輯功能設定】</h2>
     
                     <div class="DS_Line">使用排程得標量<label class="dataStatus" id="use_P_schd"><%=use_P_schd%></label>
-                        <button class="setButton" id="setBut_use_P_schd">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_use_P_schd">Set</button>
                     </div>
                     <div class="DS_Line">使用排程移轉量<label class="dataStatus" id="use_P_LS"><%=use_P_LS%></label>
-                        <button class="setButton" id="setBut_use_P_LS">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_use_P_LS">Set</button>
                     </div>
                     <div class="DS_Line">使用排程SOC參考值<label class="dataStatus" id="use_SOC_ref"><%=use_SOC_ref%></label>
-                        <button class="setButton" id="setBut_use_SOC_ref">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_use_SOC_ref">Set</button>
                     </div>
                     <div class="DS_Line">使用移轉量計算SOC理想值<label class="dataStatus" id="autoCal_SOC_ideal"><%=autoCal_SOC_ideal%></label>
-                        <button class="setButton" id="setBut_autoCal_SOC_ideal">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_autoCal_SOC_ideal">Set</button>
                     </div>
                     <div class="DS_Line">使用交易平台得標量資料<label class="dataStatus" id="use_MTE_P_96Q"><%=use_MTE_P_96Q%></label>
-                        <button class="setButton" id="setBut_use_MTE_P_96Q">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_use_MTE_P_96Q">Set</button>
                     </div>
                     <div class="DS_Line">使用交易平台移轉量、SOC資料<label class="dataStatus" id="use_MTE_API"><%=use_MTE_API%></label>
-                        <button class="setButton" id="setBut_use_MTE_API">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_use_MTE_API">Set</button>
                     </div>
                     <div class="DS_Line">使用交易平台頻率移動目標值<label class="dataStatus" id="use_Freq_Cmd"><%=use_Freq_Cmd%></label>
-                        <button class="setButton" id="setBut_use_Freq_Cmd">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_use_Freq_Cmd">Set</button>
                     </div>
                     <div class="DS_Line">頻率資料來源<label class="dataStatus" id="freqSource"><%=freqSource%></label>
-                        <button class="setButton" id="setBut_freqSource">Set</button>
+                        <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_freqSource">Set</button>
                     </div>
                     <div class="DV_Line">測試用頻率<label class="dataValue" id="Freq_test"><%=Freq_test%></label>
                         <p class="dataUnit">Hz</p>
@@ -102,7 +102,7 @@
     
                 <div class="subTitle">
                     <label id="schdDate"><%=schdDate%></label>
-                    <button class="setButton" id="setBut_Schedule">排程設定</button>
+                    <button class="setButton ctrlElement <%=permission==='manager'?'appear':''%>" id="setBut_Schedule">排程設定</button>
                     <button class="setButton" id="goToAnotherDay"><%=goToAnotherDay%></button>
                 </div>
                 <table>
@@ -781,8 +781,8 @@
                 <button class="closeWindowButton" id="closeWB_Yes">確認</button>
                 <button class="closeWindowButton" id="closeWB_No">取消</button>
             </div>
-    
-            <div class="popUpWindow dataStatus_Set">
+
+            <div class="popUpWindow dataStatus_Set general">
                 <h2 class="titlePUW">頻率資料來源</h2>
     
                 <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">Yes</label>
@@ -800,23 +800,23 @@
                 <button class="closeWindowButton" id="closeWB_No">取消</button>
             </div>
 
-            <!-- <div class="popUpWindow dataStatus_Set">
-                <h2 class="titlePUW">頻率資料來源</h2>
+            <div class="popUpWindow dataStatus_Set set_SOC_Cal_Logic">
+                <h2 class="titlePUW">SOC</h2>
     
-                <div class="setToOpt setToOpt_1"><label for="radioOpt_1" class="option" id="option_1">Yes</label>
-                    <input type="radio" name="dataStatus" value="1" class="radioOpt" id="radioOpt_1">
-                    <div class="checkBox" id="checkBoxOpt_1"></div>
+                <div class="setToOpt setToOpt_1"><label for="radioOpt_SOC_Logic1" class="option" id="option_SOC_Logic1">Yes</label>
+                    <input type="radio" name="SOC_Logic" value="1" class="radioOpt" id="radioOpt_SOC_Logic1">
+                    <div class="checkBox" id="checkBoxOpt_SOC_Logic1"></div>
                 </div>
-                <div class="setToOpt setToOpt_2"><label for="radioOpt_2" class="option" id="option_2">No</label>
-                    <input type="radio" name="dataStatus" value="2" class="radioOpt" id="radioOpt_2">
-                    <div class="checkBox" id="checkBoxOpt_2"></div>
+                <div class="setToOpt setToOpt_2"><label for="radioOpt_SOC_Logic2" class="option" id="option_SOC_Logic2">No</label>
+                    <input type="radio" name="SOC_Logic" value="2" class="radioOpt" id="radioOpt_SOC_Logic2">
+                    <div class="checkBox" id="checkBoxOpt_SOC_Logic2"></div>
                 </div>
     
                 <p class="alertInfo"></p>
     
-                <button class="closeWindowButton" id="closeWB_Yes">確認</button>
-                <button class="closeWindowButton" id="closeWB_No">取消</button>
-            </div> -->
+                <button class="closeWindowButton" id="closeWB_SOC_Logic_Yes">確認</button>
+                <button class="closeWindowButton" id="closeWB_SOC_Logic_No">取消</button>
+            </div>
 
             <div class="popUpWindow alert_WrongDataSet">
                 <p id="alertMessage">數值輸入有誤！</p>
