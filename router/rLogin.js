@@ -21,6 +21,7 @@
 const config = require("./config");
 const couchdbConfig = config.database;
 const db = couchdbConfig
+const moment = require("moment");
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
@@ -224,7 +225,7 @@ async function getconfig() {
       : (special = parseInt(data.special));
     data.num === undefined ? (num = 1) : (num = parseInt(data.num));
     data.locktimes === undefined
-      ? (locktimes = 3)
+      ? (locktimes = 4)
       : (locktimes = parseInt(data.locktimes));
     data.suspendtime === undefined
       ? (suspendtime = "永久")
@@ -521,10 +522,12 @@ async function submit(EMAIL, PASSWORD) {
       // keyin password is incorrect.
       errcount += 1;
       response["result"] = false;
+      // response["text"] =
+      //   `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
       response["text"] =
-        `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
+      `登入失敗 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`;
       if (suspendtime !== "永久") {
-        response["text"] += `"${suspendtime}" hours.`;
+        response["text"] += ` ${suspendtime} 小時`;
       } else {
         response["text"] += ".";
       }
@@ -534,14 +537,18 @@ async function submit(EMAIL, PASSWORD) {
       validtime = "";
       state = "lock";
       response["text"] =
-        `Continuous loginfail up to ${locktimes} times, the user locked`;
+        `超過嘗試登入次數 ${locktimes} 次, 此帳號已被鎖定!`;
+      // response["text"] =
+      //   `Continuous loginfail up to ${locktimes} times, the user locked`;
       if (suspendtime !== "永久") {
-        bantill = datetime(parseFloat(suspendtime));
-        response["text"] += `untill${bantill}.`;
+        formattedDateTime = datetime(parseFloat(suspendtime));
+        let bantill= moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss");
+        response["text"] += 
+        `\n解鎖時間為: ${bantill}`;
       } else {
         suspendtime === "永久";
         bantill = "";
-        response["text"] += ".";
+        response["text"] += "永久";
       }
     }
   }

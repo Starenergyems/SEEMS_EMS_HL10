@@ -144,19 +144,21 @@ body {
 
 .loginWindow #warning {
     display: block;
-    background-color: #FFFFFF;
+    background-color: #fffb00;
     box-sizing: border-box;
-    border: 3px solid #B6B6B6;
-    margin: 30px 0 0 0;
-    font-size: 36px;
+    border: 3px solid #FFFFFF;
+    margin: 50px 0 0 100PX;
+    font-size: 28PX;
     color: #000000;
     text-decoration: none;
-    line-height: 64px;
+    line-height: 32px;
     font-weight: bold;
-    border-radius: 35px;
+    border-radius: 15px;
     cursor: pointer;
     visibility: hidden;
-}   
+    white-space: pre-line;
+    WIDTH: 600px;
+}
 
 #warning{
     visibility: hidden;
