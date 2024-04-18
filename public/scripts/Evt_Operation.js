@@ -140,6 +140,7 @@ function hideFiltOptions(clickItem) {
     if (clickItem.target.id === "filtNone") {
       filterOpType.textContent = "操作類別";
       filterDevice.textContent = "設備";
+      _onInputEvent();//更新表格，隱藏不相關欄位
     } else if (
       clickItem.target.id === "opTypeFO_01" ||
       clickItem.target.id === "opTypeFO_02" ||
@@ -148,6 +149,7 @@ function hideFiltOptions(clickItem) {
       clickItem.target.id === "opTypeFO_05"
     ) {
       filterOpType.textContent = clickItem.target.textContent;
+      _onInputEvent();//更新表格，隱藏不相關欄位
     } else if (
       clickItem.target.id === "deviceFO_01" ||
       clickItem.target.id === "deviceFO_02" ||
@@ -159,6 +161,7 @@ function hideFiltOptions(clickItem) {
       clickItem.target.id === "deviceFO_08"
     ) {
       filterDevice.textContent = clickItem.target.textContent;
+      _onInputEvent();//更新表格，隱藏不相關欄位
     }
 
     filtOpTypeOpts.classList.remove("appear");
@@ -650,3 +653,112 @@ function b_test_02() {
   console.log(st.value.length);
   console.log(typeof st.value.length);
 }
+
+// 下拉選單篩選 //////////////////////////////////////////////////////////////////////////////////////////
+
+// //關鍵字
+// (function(document) {
+// 	'use strict';
+  
+// 	// 建立 LightTableFilter
+// 	var LightTableFilter = (function(Arr) {
+
+//     var val_1, val_2
+  
+// 	  // 資料輸入事件處理函數
+// 	  function _onInputEvent() {
+
+//     val_1 = filterOpType.textContent;
+//     val_2 = filterDevice.textContent;
+//     console.log(val_1, val_2);
+
+// 		var tables = $('#evtTable');
+// 		Arr.forEach.call(tables, function(table) {
+// 		  Arr.forEach.call(table.tBodies, function(tbody) {
+// 			Arr.forEach.call(tbody.rows, _filter);
+// 		  });
+// 		});
+// 	  }
+  
+// 	  // 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
+// 	  function _filter(row) {
+ 
+// 		var text_1 = row.querySelectorAll('td')[1].textContent; //篩選操作類別
+//     var text_2 = row.querySelectorAll('td')[2].textContent; //篩選設備名稱
+//     // var text_2 = row.querySelectorAll('td')[2].textContent.toLowerCase(), val_2 = filterDevice.value.toLowerCase();
+
+//     if (val_1 != "操作類別" && val_2 != "設備"){ //2個都有目標值
+//       row.style.display = text_1.indexOf(val_1) === -1 && text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //2個都沒有就設成None
+//     } else if (val_1 === "操作類別"){ //1沒有值, 只判斷2
+//       row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
+//     } else if (val_2 === "設備"){ //2沒有值, 只判斷1
+//       row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
+//     } 
+
+		
+// 	  }
+  
+// 	  return {
+// 		// 初始化函數
+// 		init: function() {
+// 		  var inputs = document.querySelectorAll('.filtOpt, .clickBut');
+// 		  Arr.forEach.call(inputs, function(input) {
+// 			input.onclick = _onInputEvent;
+// 		  });
+// 		}
+// 	  };
+// 	})(Array.prototype);
+  
+// 	// 網頁載入完成後，啟動 LightTableFilter
+// 	document.addEventListener('readystatechange', function() {
+// 	  if (document.readyState === 'complete') {
+// 		LightTableFilter.init();
+// 	  }
+// 	});
+  
+//   })(document);
+
+    var val_1, val_2
+    var Arr = Array.prototype;
+
+	  // 資料輸入事件處理函數
+	  function _onInputEvent() {
+
+    val_1 = filterOpType.textContent;
+    val_2 = filterDevice.textContent;
+    console.log(val_1, val_2);
+
+		var tables = $('#evtTable');
+		Arr.forEach.call(tables, function(table) {
+		  Arr.forEach.call(table.tBodies, function(tbody) {
+			Arr.forEach.call(tbody.rows, _filter);
+		  });
+		});
+	  }
+  
+	  // 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
+	  function _filter(row) {
+ 
+		var text_1 = row.querySelectorAll('td')[1].textContent; //篩選操作類別
+    var text_2 = row.querySelectorAll('td')[2].textContent; //篩選設備名稱
+    // var text_2 = row.querySelectorAll('td')[2].textContent.toLowerCase(), val_2 = filterDevice.value.toLowerCase();
+    if (val_1 === "操作類別" && val_2 === "設備"){
+      console.log(0)
+      row.style.display =  'table-row'; //如果沒有1就設成None
+    } else {
+      if (val_1 != "操作類別" && val_2 != "設備"){ //2個都有目標值
+        console.log(1);
+        console.log(text_1.indexOf(val_1),  text_2.indexOf(val_2));
+        row.style.display = text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0 ? 'table-row':'none' ; //2個都有就設成可看
+      } else if (val_1 === "操作類別"){ //1沒有值, 只判斷2
+        console.log(2);
+        row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
+      } else if (val_2 === "設備"){ //2沒有值, 只判斷1
+        console.log(3);
+        row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
+      } 
+    }
+		
+	  }
+  
+	 
