@@ -53,7 +53,8 @@
 }
 
 .singleLineD .status_CB.ErrData {
-    background-color: #9D653D;
+    /* background-color: #9D653D; */
+    background-color: #000000;
 }
 
 .singleLineD .ctrlableSign {
@@ -149,7 +150,8 @@
 .singleLineD .status_Rly,
 .singleLineD .status_Recloser {
     display: inline-block;
-    background-color: #B6B6B6;
+    /* background-color: #B6B6B6; */
+    background-color: #236E37;
     box-sizing: border-box;
     height: 20px;
     width: 20px;
@@ -165,7 +167,8 @@
 
 .singleLineD .status_Rly.ErrData,
 .singleLineD .status_Recloser.ErrData {
-    background-color: #9D653D;
+    /* background-color: #9D653D; */
+    background-color: #000000;
 }
 
 .singleLineD #Rly_MVCB {
@@ -204,7 +207,6 @@
 }
 
 .legend {
-    /* box-sizing: border-box; */
     /* border-radius: 5px; */
     position: absolute;
     right:0px;
@@ -307,27 +309,6 @@
     bottom: 19px;
     right: 33px;
 }
-
-/* /////////////////////////////////////////////////// */
-.oilTemp #thermoBar_TR2 {
-    background-color: #236E37;
-    height: 2px;
-}
-
-.oilTemp #thermoBot_TR2 {
-    background-color: #236E37;
-}
-
-.oilTemp #thermoBar_TR3 {
-    background-color: #E53935;
-    height: 32px;
-}
-
-.oilTemp #thermoBot_TR3 {
-    background-color: #E53935;
-}
-
-/* /////////////////////////////////////////////////// */
 
 .oilTemp .temp_of_TR {
     background-color: #CBE19880;

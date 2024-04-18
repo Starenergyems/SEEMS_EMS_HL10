@@ -1,15 +1,21 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
-var permission = "manager";
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", afterLoadDCM);
+function afterLoadDCM() {
+  asdfg = "DOM加载了! 哈哈\n阿哈哈~";
+  console.log(asdfg);
 
-  console.log("start reading js");
+  const defaultBut_navBar = document.querySelector("#nB_Operation");
+  defaultBut_navBar.classList.add("default_nB");
+
   routineWork();
-});
+}
 
 setInterval(routineWork, 500);
+
 //////////////////////////////////////////////////////////////////////////////
+
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");
 const ssNavBar_sNB_02 = document.querySelector(".subNavBar #sNB_02 .ssNavBar");
 const ssNavBar_sNB_03 = document.querySelector(".subNavBar #sNB_03 .ssNavBar");
@@ -141,15 +147,11 @@ dataLight_Rly_VCB_aux.addEventListener("click", function () { show_info_RelayVCB
 
 const window_dataStatus_Set = document.querySelector(".dataStatus_Set");
 const title_dataStatus_Set = document.querySelector(".dataStatus_Set .titlePUW");
-const option1_dataStatus_Set = document.querySelector(".dataStatus_Set #option_1");
-const option2_dataStatus_Set = document.querySelector(".dataStatus_Set #option_2");
+// const option1_dataStatus_Set = document.querySelector(".dataStatus_Set #option_1");
+// const option2_dataStatus_Set = document.querySelector(".dataStatus_Set #option_2");
 const radioOption1 = document.querySelector(".dataStatus_Set #radioOpt_1");
 const radioOption2 = document.querySelector(".dataStatus_Set #radioOpt_2");
 const alertInfo_dataStatus_Set = document.querySelector(".dataStatus_Set .alertInfo");
-// let valNow_dataStatus_Set;
-let valLightNow_dataStatus_Set;
-// let option1_Description;
-// let option2_Description;
 let optionChecked_dataStatus_Set;
 
 function clearCheckedRadioOption() {
@@ -165,16 +167,35 @@ function clearCheckedRadioOption() {
 //   alertInfo_dataStatus_Set.textContent = "";
 // }
 
-function Set_CB(numOfCB, CBlabel) {
+async function Set_CB(numOfCB, CBlabel) {
   console.log(CBlabel.id);
   if (CBlabel.classList.contains("ctrlable")) {
     window_dataStatus_Set.classList.add("appear");
     clearCheckedRadioOption();
-    option1_dataStatus_Set.textContent = "投入";
-    option2_dataStatus_Set.textContent = "切離";
     alertInfo_dataStatus_Set.textContent = "";
 
     title_dataStatus_Set.textContent = `A${numOfCB[0]}-ACB-${numOfCB[2]}`;
+
+    let getData = await record_num_of_CB(numOfCB);
+    console.log(getData);
+  }
+}
+
+async function record_num_of_CB(num_of_CB) {
+  try {
+    console.log("嘗試向後端發出請求");
+    const response = await fetch("/record_num_of_CB", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ num_of_CB }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
   }
 }
 
@@ -185,89 +206,52 @@ setACB_1_1.addEventListener("click", function (e) {
   Set_CB("1_1", this);
 });
 
-
-// setACB_1_1.addEventListener("click", Set_ACB_1_1);
-// function Set_ACB_1_1() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A1-ACB-1";
-//   // valNow_dataStatus_Set = document.querySelector(".sysInfo #sysMode");
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_1");
-// }
-
 const setACB_1_2 = document.querySelector(".singleLineD #ACB_1_2");
 setACB_1_2.addEventListener("click", function (e) { Set_CB("1_2", this); });
 
 const setACB_1_3 = document.querySelector(".singleLineD #ACB_1_3");
 setACB_1_3.addEventListener("click", function (e) { Set_CB("1_3", this); });
-// setACB_1_3.addEventListener("click", Set_ACB_1_3);
-// function Set_ACB_1_3() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A1-ACB-3";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_1_3");
-// }
 
 const setACB_2_1 = document.querySelector(".singleLineD #ACB_2_1");
 setACB_2_1.addEventListener("click", function (e) { Set_CB("2_1", this); });
-// setACB_2_1.addEventListener("click", Set_ACB_2_1);
-// function Set_ACB_2_1() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A2-ACB-1";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_2_1");
-// }
 
 const setACB_2_2 = document.querySelector(".singleLineD #ACB_2_2");
 setACB_2_2.addEventListener("click", function (e) { Set_CB("2_2", this); });
-// setACB_2_2.addEventListener("click", Set_ACB_2_2);
-// function Set_ACB_2_2() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A2-ACB-2";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_2_2");
-// }
 
 const setACB_2_3 = document.querySelector(".singleLineD #ACB_2_3");
 setACB_2_3.addEventListener("click", function (e) { Set_CB("2_3", this); });
-// setACB_2_3.addEventListener("click", Set_ACB_2_3);
-// function Set_ACB_2_3() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A2-ACB-3";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_2_3");
-// }
 
 const setACB_3_1 = document.querySelector(".singleLineD #ACB_3_1");
 setACB_3_1.addEventListener("click", function (e) { Set_CB("3_1", this); });
-// setACB_3_1.addEventListener("click", Set_ACB_3_1);
-// function Set_ACB_3_1() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A3-ACB-1";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_3_1");
-// }
 
 const setACB_3_2 = document.querySelector(".singleLineD #ACB_3_2");
 setACB_3_2.addEventListener("click", function (e) { Set_CB("3_2", this); });
-// setACB_3_2.addEventListener("click", Set_ACB_3_2);
-// function Set_ACB_3_2() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A3-ACB-2";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_3_2");
-// }
 
 const setACB_3_3 = document.querySelector(".singleLineD #ACB_3_3");
 setACB_3_3.addEventListener("click", function (e) { Set_CB("3_3", this); });
-// setACB_3_3.addEventListener("click", Set_ACB_3_3);
-// function Set_ACB_3_3() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A3-ACB-3";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_3_3");
-// }
 
 const setACB_4_1 = document.querySelector(".singleLineD #ACB_4_1");
 setACB_4_1.addEventListener("click", function (e) { Set_CB("4_1", this); });
-// setACB_4_1.addEventListener("click", Set_ACB_4_1);
-// function Set_ACB_4_1() {
-//   Set_ACB();
-//   title_dataStatus_Set.textContent = "A4-ACB-1";
-//   valLightNow_dataStatus_Set = document.querySelector(".singleLineD #ACB_4_1");
-// }
+
+/////////////////////////////////////////////////////////////////////////
+
+async function set_CB_Data(setValue) {
+  try {
+    console.log("嘗試向後端發出請求");
+    const response = await fetch("/set_CB_Data", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ setValue }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 
 const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
 closeWB_Yes_dSS.addEventListener("click", closePopup_dSS_Yes);
@@ -275,13 +259,7 @@ function closePopup_dSS_Yes() {
   if (radioOption1.checked === true || radioOption2.checked === true) {
     optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set [name=dataStatus]:checked");
 
-    if (optionChecked_dataStatus_Set.value === "1") {
-      // valNow_dataStatus_Set.textContent = option1_Description;
-      valLightNow_dataStatus_Set.classList.add("setToClose");
-    } else if (optionChecked_dataStatus_Set.value === "2") {
-      // valNow_dataStatus_Set.textContent = option2_Description;
-      valLightNow_dataStatus_Set.classList.remove("setToClose");
-    }
+    set_CB_Data(optionChecked_dataStatus_Set.value);
 
     optionChecked_dataStatus_Set.checked = false;
   }
@@ -297,19 +275,6 @@ function closePopup_dSS_No() {
 }
 
 /////////////////////////////////////////////////////////////////////////
-
-document.addEventListener("DOMContentLoaded", afterLoadDCM);
-function afterLoadDCM() {
-  asdfg = "DOM加载了! 哈哈\n阿哈哈~";
-  console.log(asdfg);
-
-  const defaultBut_navBar = document.querySelector("#nB_Operation");
-  defaultBut_navBar.classList.add("default_nB");
-
-  updateData();
-}
-
-
 
 async function updateData() {                                   // 更新資料 ajax
   var router = window.location.href + "/data";
@@ -464,8 +429,10 @@ function animation_of_Thermometer(transformerID, oilTemp) {
   const thermoBottom = document.querySelector(`#thermoBot_${transformerID}`);
 
   if (oilTemp === "#*#") {
-    thermoBar.style.background = "#9D653D";
-    thermoBottom.style.background = "#9D653D";
+    // thermoBar.style.background = "#9D653D";
+    // thermoBottom.style.background = "#9D653D";
+    thermoBar.style.background = "#000000";
+    thermoBottom.style.background = "#000000";
     thermoBar.style.height = "32px";
   } else {
     const temp_min = 0;

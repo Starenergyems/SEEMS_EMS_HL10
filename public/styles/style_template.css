@@ -43,26 +43,29 @@ body {
 }
 
 .dataLight.RG_L,
-.dataLight.OG_L {
-  background-color: #236E37;
+.dataLight.OG_L,
+.dataLight.GG_L {
+    background-color: #236E37;
 }
 
 .dataLight.RB_L.setToClose,
 .dataLight.RG_L.setToClose {
-  background-color: #FF0000;
+    background-color: #FF0000;
 }
 
 .dataLight.OB_L.setToClose,
 .dataLight.OG_L.setToClose {
-  background-color: #FFAA00;
+    background-color: #FFAA00;
 }
 
-.dataLight.GB_L.setToClose {
-  background-color: #00FF75;
+.dataLight.GB_L.setToClose,
+.dataLight.GG_L.setToClose {
+    background-color: #00FF75;
 }
 
 .dataLight.ErrData {
-    background-color: #9D653D;
+    /* background-color: #9D653D; */
+    background-color: #000000;
 }
 
 /****by YC*********************/

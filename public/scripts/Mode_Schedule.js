@@ -1,13 +1,16 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
-var permission = "manager";
-$(document).ready(function () {
-    console.log("start reading js");
 
-    classAdd("#nB_Mode", "default_nB");
+document.addEventListener("DOMContentLoaded", afterLoadDCM);
+function afterLoadDCM() {
+    asdfg = "DOM加载了! 哈哈\n阿哈哈~";
+    console.log(asdfg);
+
+    const defaultBut_navBar = document.querySelector("#nB_Mode");
+    defaultBut_navBar.classList.add("default_nB");
 
     routineWork();
-});
+}
 
 setInterval(routineWork, 1000);    // ~~~~~~~~~!!!!!!!@@@@@@@@@@###########$$$$$$$$$$$$%%%%%%%%%%%^^^^^^^^^&&&&&&&&&&&************
 

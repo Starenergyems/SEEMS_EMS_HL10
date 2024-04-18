@@ -256,9 +256,9 @@ function light_color(data, target, normal_value, green_class, fault_value, red_c
     }
 }
 
-function hyperlink(addUrl){ //區塊超連結
-    window.location.href= window.location.href+addUrl;
-  }
+function hyperlink(addUrl) { //區塊超連結
+    window.location.href = window.location.href + addUrl;
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 function assign_TextContent_To_SpID(SpID, assignContent) {
     const element = document.querySelector(SpID);
