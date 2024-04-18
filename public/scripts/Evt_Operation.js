@@ -3,7 +3,23 @@
 
 $(document).ready(async function () {
   classAdd("#nB_Event", "default_nB"); //側欄按鈕綠色
-
+  generateDropOptions(//生成下拉選單
+    '#filtOpType', 
+    ['操作類別','系統模式', '設備控制', '環境控制', '保護邏輯', '帳號設定'], 
+    'filtOpt', 
+    null, 
+    ['操作類別','系統模式', '設備控制', '環境控制', '保護邏輯', '帳號設定'], 
+    '操作類別'
+  ) 
+  generateDropOptions(//生成下拉選單
+    '#filtDevice', 
+    ['設備','GC','ACB', 'LC', 'EMS'], 
+    'filtOpt', 
+    null, 
+    ['設備','GC','ACB', 'LC', 'EMS'], 
+    '設備'
+  )  
+  updateTable(); //讀取預設的時間區段
   updateTable(); //讀取預設的時間區段
 
 });
@@ -655,69 +671,6 @@ function b_test_02() {
 }
 
 // 下拉選單篩選 //////////////////////////////////////////////////////////////////////////////////////////
-
-// //關鍵字
-// (function(document) {
-// 	'use strict';
-  
-// 	// 建立 LightTableFilter
-// 	var LightTableFilter = (function(Arr) {
-
-//     var val_1, val_2
-  
-// 	  // 資料輸入事件處理函數
-// 	  function _onInputEvent() {
-
-//     val_1 = filterOpType.textContent;
-//     val_2 = filterDevice.textContent;
-//     console.log(val_1, val_2);
-
-// 		var tables = $('#evtTable');
-// 		Arr.forEach.call(tables, function(table) {
-// 		  Arr.forEach.call(table.tBodies, function(tbody) {
-// 			Arr.forEach.call(tbody.rows, _filter);
-// 		  });
-// 		});
-// 	  }
-  
-// 	  // 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
-// 	  function _filter(row) {
- 
-// 		var text_1 = row.querySelectorAll('td')[1].textContent; //篩選操作類別
-//     var text_2 = row.querySelectorAll('td')[2].textContent; //篩選設備名稱
-//     // var text_2 = row.querySelectorAll('td')[2].textContent.toLowerCase(), val_2 = filterDevice.value.toLowerCase();
-
-//     if (val_1 != "操作類別" && val_2 != "設備"){ //2個都有目標值
-//       row.style.display = text_1.indexOf(val_1) === -1 && text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //2個都沒有就設成None
-//     } else if (val_1 === "操作類別"){ //1沒有值, 只判斷2
-//       row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
-//     } else if (val_2 === "設備"){ //2沒有值, 只判斷1
-//       row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
-//     } 
-
-		
-// 	  }
-  
-// 	  return {
-// 		// 初始化函數
-// 		init: function() {
-// 		  var inputs = document.querySelectorAll('.filtOpt, .clickBut');
-// 		  Arr.forEach.call(inputs, function(input) {
-// 			input.onclick = _onInputEvent;
-// 		  });
-// 		}
-// 	  };
-// 	})(Array.prototype);
-  
-// 	// 網頁載入完成後，啟動 LightTableFilter
-// 	document.addEventListener('readystatechange', function() {
-// 	  if (document.readyState === 'complete') {
-// 		LightTableFilter.init();
-// 	  }
-// 	});
-  
-//   })(document);
-
     var val_1, val_2
     var Arr = Array.prototype;
 
@@ -760,5 +713,6 @@ function b_test_02() {
     }
 		
 	  }
-  
+
+
 	 

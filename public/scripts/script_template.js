@@ -259,6 +259,22 @@ function light_color(data, target, normal_value, green_class, fault_value, red_c
 function hyperlink(addUrl){ //區塊超連結
     window.location.href= window.location.href+addUrl;
   }
+
+
+function generateDropOptions(target, options, class_options, id, value, default_value) { //動態生成下拉選單
+    var selectElement = document.querySelector(target);
+
+    for (var i = 0; i < options.length; i++) {
+        var optionElement = document.createElement("option");
+        optionElement.classList.add(class_options);
+        optionElement.setAttribute("id", id + i); // You can adjust this ID generation as needed
+        optionElement.setAttribute("value", value[i]); // Set the value attribute
+        optionElement.textContent = value[i];
+        selectElement.appendChild(optionElement);
+    }
+    selectElement.value = default_value;
+}
+    
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 function assign_TextContent_To_SpID(SpID, assignContent) {
     const element = document.querySelector(SpID);

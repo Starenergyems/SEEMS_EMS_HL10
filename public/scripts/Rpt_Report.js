@@ -1,6 +1,6 @@
 $(document).ready(function () {
     classAdd('#nB_Report', 'default_nB');
-    generateYearOptions();
+    generateYearOptions();//動態生成年份下拉選單
 
     // Attach an event listener to the dropdown change event
     document.getElementById("yearDropdown").addEventListener("change", function () {

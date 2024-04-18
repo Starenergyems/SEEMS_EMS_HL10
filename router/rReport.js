@@ -2460,7 +2460,7 @@ cron.schedule("0 2 1 1 *", async () => {
   }
 });
 
-cron.schedule("56 15 27 * *", async () => {
+cron.schedule("30 1 1 * *", async () => {
   // 秒 分 時 日 月 星期幾 由右到左對照，每月1日1:30執行產出前一月月報
   try {
     console.log("Cron job: month report download start");
