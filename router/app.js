@@ -597,11 +597,11 @@ async function getLatestValuesFromDatabaseforother() {
       1
     ); //408030 kWh_Export
 
-    // console.log("現在充電: " + L_M_chgEtoday);
+    //console.log("現在充電: " + L_M_chgEtoday);
     // console.log("零時充電: " + ChgEtoday0);
     // console.log("當日充電: " + otherrf01Data.Freq["408028"]);
 
-    // console.log("現在放電: " + L_M_dcgEtoday);
+    //console.log("現在放電: " + L_M_dcgEtoday);
     // console.log("零時放電: " + DcgEtoday0);
     // console.log("當日放電: " + otherrf01Data.Freq["408030"]);
     return [
@@ -620,7 +620,7 @@ async function getLatestValuesFromDatabaseforother() {
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
-    throw error; // 把錯誤向外傳遞
+    throw error; // 把錯誤向外傳遞ogin fail
   }
 }
 
