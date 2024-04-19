@@ -3,6 +3,8 @@
 
 $(document).ready(async function () {
   classAdd("#nB_Event", "default_nB"); //側欄按鈕綠色
+
+  ///////////////////////////////////////////////////////////////////////////////////////
   generateDropOptions(//生成下拉選單
     '#filtOpType', 
     ['操作類別','系統模式', '設備控制', '環境控制', '保護邏輯', '帳號設定'], 
@@ -13,13 +15,23 @@ $(document).ready(async function () {
   ) 
   generateDropOptions(//生成下拉選單
     '#filtDevice', 
-    ['設備','GC','ACB', 'LC', 'EMS'], 
+    ['設備名稱','GC','ACB', 'LC', 'EMS'], 
     'filtOpt', 
     null, 
-    ['設備','GC','ACB', 'LC', 'EMS'], 
-    '設備'
+    ['設備名稱','GC','ACB', 'LC', 'EMS'], 
+    '設備名稱'
   )  
-  updateTable(); //讀取預設的時間區段
+
+  $('#filtOpType, #filtDevice').change(function(){ //設定有哪些篩選器，對應哪個TABLE的哪一行
+    _onInputEvent('#evtTable','#filtOpType', 1, '操作類別', '#filtDevice', 2, '設備名稱', null, null, null);
+  });
+  $('#filtNone').click(function(){ //指定哪個按鈕可以恢復預設篩選條件
+    back_default(['#filtOpType', '#filtDevice'], ['操作類別', '設備名稱']);//改欄位顯示值
+    $('#evtTable input').val(null); //關鍵字清空
+    _onInputEvent('#evtTable','#filtOpType', 1, '操作類別', '#filtDevice', 2, '設備名稱', null, null, null);//重新篩選
+  });
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   updateTable(); //讀取預設的時間區段
 
 });
@@ -131,14 +143,14 @@ const filtOpTypeOpts = document.querySelector(".filtOpType .filtOptions");
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
 
 const dDL_filtOpT = document.querySelector(".title #dDL_filtOpType");
-dDL_filtOpT.addEventListener("click", showHide_filtOpTOpts);
+// dDL_filtOpT.addEventListener("click", showHide_filtOpTOpts);
 function showHide_filtOpTOpts() {
   filtOpTypeOpts.classList.toggle("appear");
   filtDeviceOpts.classList.remove("appear");
 }
 
 const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
-dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
+// dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
 function showHide_filtDevOpts() {
   filtDeviceOpts.classList.toggle("appear");
   filtOpTypeOpts.classList.remove("appear");
@@ -147,7 +159,7 @@ function showHide_filtDevOpts() {
 const filterOpType = document.querySelector(".title .filtOpType p");
 const filterDevice = document.querySelector(".title .filtDevice p");
 
-document.addEventListener("click", hideFiltOptions);
+// document.addEventListener("click", hideFiltOptions);
 function hideFiltOptions(clickItem) {
   if (
     clickItem.target.id !== "dDL_filtOpType" &&
@@ -669,50 +681,6 @@ function b_test_02() {
   console.log(st.value.length);
   console.log(typeof st.value.length);
 }
-
-// 下拉選單篩選 //////////////////////////////////////////////////////////////////////////////////////////
-    var val_1, val_2
-    var Arr = Array.prototype;
-
-	  // 資料輸入事件處理函數
-	  function _onInputEvent() {
-
-    val_1 = filterOpType.textContent;
-    val_2 = filterDevice.textContent;
-    console.log(val_1, val_2);
-
-		var tables = $('#evtTable');
-		Arr.forEach.call(tables, function(table) {
-		  Arr.forEach.call(table.tBodies, function(tbody) {
-			Arr.forEach.call(tbody.rows, _filter);
-		  });
-		});
-	  }
-  
-	  // 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
-	  function _filter(row) {
- 
-		var text_1 = row.querySelectorAll('td')[1].textContent; //篩選操作類別
-    var text_2 = row.querySelectorAll('td')[2].textContent; //篩選設備名稱
-    // var text_2 = row.querySelectorAll('td')[2].textContent.toLowerCase(), val_2 = filterDevice.value.toLowerCase();
-    if (val_1 === "操作類別" && val_2 === "設備"){
-      console.log(0)
-      row.style.display =  'table-row'; //如果沒有1就設成None
-    } else {
-      if (val_1 != "操作類別" && val_2 != "設備"){ //2個都有目標值
-        console.log(1);
-        console.log(text_1.indexOf(val_1),  text_2.indexOf(val_2));
-        row.style.display = text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0 ? 'table-row':'none' ; //2個都有就設成可看
-      } else if (val_1 === "操作類別"){ //1沒有值, 只判斷2
-        console.log(2);
-        row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
-      } else if (val_2 === "設備"){ //2沒有值, 只判斷1
-        console.log(3);
-        row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
-      } 
-    }
-		
-	  }
 
 
 	 

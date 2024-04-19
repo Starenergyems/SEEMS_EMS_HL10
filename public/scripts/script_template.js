@@ -260,8 +260,59 @@ function hyperlink(addUrl){ //區塊超連結
     window.location.href= window.location.href+addUrl;
   }
 
+// 下拉選單篩選 //////////////////////////////////////////////////////////////////////////////////////////
+// 資料輸入事件處理函數
+function _onInputEvent(table, filter1, column1, default1, filter2, column2, default2, filter3, column3, default3) {
+var Arr = Array.prototype;
+var val_1 = $(filter1).val();
+var val_2 = $(filter2).val();
+var val_3 = $(filter3).val();
+console.log(val_1, val_2);
 
+    var tables = $(table);
+Arr.forEach.call(tables, function(table) {
+    Arr.forEach.call(table.tBodies, function(tbody) {
+    Arr.forEach.call(tbody.rows, function(row) {
+        _filter(row, val_1, column1, default1, val_2, column2, default2);
+    });
+    });
+});
+}
+
+// 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
+function _filter(row, val_1, column1, default1, val_2, column2, default2) {
+
+var text_1 = row.querySelectorAll('td')[column1].textContent; //篩選操作類別
+var text_2 = row.querySelectorAll('td')[column2].textContent; //篩選設備名稱
+// var text_2 = row.querySelectorAll('td')[2].textContent.toLowerCase(), val_2 = filterDevice.value.toLowerCase();
+if (val_1 === default1 && val_2 === default2){
+    console.log(0)
+    row.style.display =  'table-row'; //如果沒有1就設成None
+} else {
+    if (val_1 != default1 && val_2 != default2){ //2個都有目標值
+    console.log(1);
+    console.log(text_1.indexOf(val_1),  text_2.indexOf(val_2));
+    row.style.display = text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0 ? 'table-row':'none' ; //2個都有就設成可看
+    } else if (val_1 === default1){ //1沒有值, 只判斷2
+    console.log(2);
+    row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
+    } else if (val_2 === default2){ //2沒有值, 只判斷1
+    console.log(3);
+    row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
+    } 
+}
+    
+}
+
+function back_default(filter, default_val){ //input恢復預設值
+for (var i=0; i < filter.length; i++){
+    $(filter[i]).val(default_val[i]);
+};
+}
+  
+  
 function generateDropOptions(target, options, class_options, id, value, default_value) { //動態生成下拉選單
+                        //目標<select>, 哪些選項, 選項套用的class, 各選項的id(id+i), 預設值 
     var selectElement = document.querySelector(target);
 
     for (var i = 0; i < options.length; i++) {
