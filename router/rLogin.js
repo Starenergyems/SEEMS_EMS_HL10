@@ -1,6 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
+// How JavaScript URL works.
+// window.location.href = 'https://domain/path';   // absolute
+// window.location.href = '//domain/path';         // relative to current schema
+// window.location.href = 'path';                  // relative to current path
+// window.location.href = '/path';                 // relative to domain
+// window.location.href = '../';                   // one level up
+////////////////////////////////////////////////////////////////////////////////////////
 // Node.js setting, do not change.
-
 // const express = require("express");
 // const path = require("path");
 // const methodOverride = require("method-override");
@@ -14,15 +20,14 @@
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(path.join(__dirname, "../public")));
 // app.use(cors());
-//const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
 ////////////////////////////////////////////////////////////////////////////////////////
 // Need change.
-//如果要換資料庫的host 改掉".database"
+//如果要換資料庫的host改掉".database"
 const config = require("./config");
 const couchdbConfig = config.database;
 const db = couchdbConfig
 const moment = require("moment");
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
 const db_USERNAME = couchdbConfig.username; // Couchdb username use for login db.
@@ -38,152 +43,6 @@ const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database func
 // const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
 const CREDENTIALS = Buffer.from(`${db_USERNAME}:${db_PASSWORD}`).toString('base64');
 const AUTHORIZATION = "Basic " + CREDENTIALS;
-
-
-// Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
-// async function ggg() {
-//   const URL = `${db_URL}/${db_account}/${doc_CONFIG}`;
-//   response = await fetch(URL, {
-//       method: "GET",
-//       headers: { Authorization: AUTHORIZATION },
-//       credentials: "include",
-//     })
-//     console.log(1,response)
-//   return await response.json()
-//   // const data = await response.json();
-  
-  
-// }
-
-// ggg()
-
-// a = fetchData("http://localhost:3000/account/system/accounts", {"cookie":"734235b0-4efd-47d3-a76a-32a6a510673a"})
-// console.log(a)
-// Function to perform a GET request
-
-
-// Function to perform a GET request with headers
-// function fetchData(url, headers) {
-//   return fetch(url, {
-//     method: 'GET',
-//     headers: new Headers(headers), // Pass the headers object here
-//     mode: 'cors',
-//     cache: 'no-cache'
-//   })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok ' + response.statusText);
-//     }
-//     return response.json();
-//   })
-//   .then(data => console.log(data))
-//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
-// }
-
-// Example usage:
-// fetchDataWithHeaders('https://api.example.com/data', { 'Content-Type': 'application/json', 'Authorization': 'Bearer your-token-here' });
-
-
-
-
-// function fetchData(url) {
-//   return fetch(url)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error('Network response was not ok ' + response.statusText);
-//       }
-//       return response.json();
-//     })
-//     .then(data => console.log(data))
-//     .catch(error => console.error('There has been a problem with your fetch operation:', error));
-// }
-
-// Function to perform a POST request
-// function postData(url, data) {
-//   return fetch(url, {
-//     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-//     mode: 'cors', // no-cors, *cors, same-origin
-//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-//     credentials: 'same-origin', // include, *same-origin, omit
-//     headers: {
-//       'Content-Type': 'application/json'
-//       // 'Content-Type': 'application/x-www-form-urlencoded',
-//     },
-//     redirect: 'follow', // manual, *follow, error
-//     referrerPolicy: 'no-referrer', // no-referrer, *client
-//     body: JSON.stringify(data) // body data type must match "Content-Type" header
-//   })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok ' + response.statusText);
-//     }
-//     return response.json();
-//   })
-//   .then(data => console.log(data))
-//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
-// }
-
-// Example usage:
-// fetchData('https://api.example.com/data');
-// postData('https://api.example.com/submit', { answer: 42 });
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-// async function XX(url) {
-// fetch(url, {
-//   method: 'GET',
-//   // body: JSON.stringify(data),
-//   headers: new Headers({
-//     'Content-Type': 'application/json',
-//     "cookie":"6fe314f5-4c5a-459b-b0e8-3fa4fb73bf06",
-//     credentials: 'include'
-//   })
-// }).then(res => res.json())
-// .catch(error => console.error('Error:', error))
-// .then(response => console.log('Success:', response));
-// }
-
-// XX("http://localhost:3000/account/system/accounts")
-
-
-// function fetchData(url) {
-//   // Make a fetch request to the specified URL
-//   return fetch(url)
-//     .then(response => {
-//       // Check if the response is successful (status code in the range 200-299)
-//       if (!response.ok) {
-//         // If not successful, throw an error with the status text
-//         throw new Error(`Error: ${response.statusText}`);
-//       }
-//       // If successful, parse the response as JSON and return it
-//       return response.json();
-//     })
-//     .catch(error => {
-//       // Catch any errors that occur during the fetch request
-//       console.error('Error fetching data:', error);
-//       // Optionally re-throw the error to propagate it further
-//       throw error;
-//     });
-// }
-
-// // Example usage:
-// const url = 'https://api.example.com/data';
-// fetchData(url)
-//   .then(data => {
-//     // Handle the fetched data
-//     console.log('Fetched data:', data);
-//   })
-//   .catch(error => {
-//     // Handle any errors that occurred during the fetch request
-//     console.error('Fetch error:', error);
-//   });
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare, config data.
 
@@ -685,7 +544,7 @@ async function authentication(req) {
     let browser_token = ""
     req.cookies.token === undefined ? browser_token = "" : browser_token = req.cookies.token
     if (browser_token === "" || browser_token === undefined){
-        console.log("The token is not exist in browser's cookie.")
+        // console.log("The token is not exist in browser's cookie.")
         return false
     }
     else if (browser_token !== ""){
@@ -726,3 +585,148 @@ module.exports = {
   authentication,
   // ggg
 };
+
+
+
+// Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
+// async function ggg() {
+//   const URL = `${db_URL}/${db_account}/${doc_CONFIG}`;
+//   response = await fetch(URL, {
+//       method: "GET",
+//       headers: { Authorization: AUTHORIZATION },
+//       credentials: "include",
+//     })
+//     console.log(1,response)
+//   return await response.json()
+//   // const data = await response.json();
+  
+  
+// }
+
+// ggg()
+
+// a = fetchData("http://localhost:3000/account/system/accounts", {"cookie":"734235b0-4efd-47d3-a76a-32a6a510673a"})
+// console.log(a)
+// Function to perform a GET request
+
+
+// Function to perform a GET request with headers
+// function fetchData(url, headers) {
+//   return fetch(url, {
+//     method: 'GET',
+//     headers: new Headers(headers), // Pass the headers object here
+//     mode: 'cors',
+//     cache: 'no-cache'
+//   })
+//   .then(response => {
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok ' + response.statusText);
+//     }
+//     return response.json();
+//   })
+//   .then(data => console.log(data))
+//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
+// }
+
+// Example usage:
+// fetchDataWithHeaders('https://api.example.com/data', { 'Content-Type': 'application/json', 'Authorization': 'Bearer your-token-here' });
+
+
+
+
+// function fetchData(url) {
+//   return fetch(url)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok ' + response.statusText);
+//       }
+//       return response.json();
+//     })
+//     .then(data => console.log(data))
+//     .catch(error => console.error('There has been a problem with your fetch operation:', error));
+// }
+
+// Function to perform a POST request
+// function postData(url, data) {
+//   return fetch(url, {
+//     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//     mode: 'cors', // no-cors, *cors, same-origin
+//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: 'same-origin', // include, *same-origin, omit
+//     headers: {
+//       'Content-Type': 'application/json'
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: 'follow', // manual, *follow, error
+//     referrerPolicy: 'no-referrer', // no-referrer, *client
+//     body: JSON.stringify(data) // body data type must match "Content-Type" header
+//   })
+//   .then(response => {
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok ' + response.statusText);
+//     }
+//     return response.json();
+//   })
+//   .then(data => console.log(data))
+//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
+// }
+
+// Example usage:
+// fetchData('https://api.example.com/data');
+// postData('https://api.example.com/submit', { answer: 42 });
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// async function XX(url) {
+// fetch(url, {
+//   method: 'GET',
+//   // body: JSON.stringify(data),
+//   headers: new Headers({
+//     'Content-Type': 'application/json',
+//     "cookie":"6fe314f5-4c5a-459b-b0e8-3fa4fb73bf06",
+//     credentials: 'include'
+//   })
+// }).then(res => res.json())
+// .catch(error => console.error('Error:', error))
+// .then(response => console.log('Success:', response));
+// }
+
+// XX("http://localhost:3000/account/system/accounts")
+
+
+// function fetchData(url) {
+//   // Make a fetch request to the specified URL
+//   return fetch(url)
+//     .then(response => {
+//       // Check if the response is successful (status code in the range 200-299)
+//       if (!response.ok) {
+//         // If not successful, throw an error with the status text
+//         throw new Error(`Error: ${response.statusText}`);
+//       }
+//       // If successful, parse the response as JSON and return it
+//       return response.json();
+//     })
+//     .catch(error => {
+//       // Catch any errors that occur during the fetch request
+//       console.error('Error fetching data:', error);
+//       // Optionally re-throw the error to propagate it further
+//       throw error;
+//     });
+// }
+
+// // Example usage:
+// const url = 'https://api.example.com/data';
+// fetchData(url)
+//   .then(data => {
+//     // Handle the fetched data
+//     console.log('Fetched data:', data);
+//   })
+//   .catch(error => {
+//     // Handle any errors that occurred during the fetch request
+//     console.error('Fetch error:', error);
+//   });

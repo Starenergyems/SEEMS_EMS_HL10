@@ -554,7 +554,6 @@ function alarm_processor_call() {
   //   // console.log('b')
   // }
   // console.log("alarm_processor_call", alarm_db_event_lock)
-
   if (!alarm_db_event_lock) {
     const mangoQuery_latest_rawdata = {
       selector: {

@@ -76,6 +76,33 @@ alarmnanoDb.createIndex(indexDef);
 //***************************************************************************************************************** */
 
 //////////////////////////////////////////////////////////////////////////////
+app.get("/test", async (req, res) => { 
+  const CREDENTIALS = Buffer.from(`${couchdbConfig.username}:${couchdbConfig.password}`).toString('base64');
+  const AUTHORIZATION = "Basic " + CREDENTIALS;
+  const URL = `http://${couchdbConfig.host}:${couchdbConfig.port}/${couchdbConfig.account}/_all_docs?include_docs=true`
+  const response = await fetch(URL, {
+    method: "GET",
+    headers: { Authorization: AUTHORIZATION },
+    credentials: "include",
+  });
+  data = await response.json()
+  console.log(typeof(data))
+  // for (let i =0 )
+  let rrr = []
+  // 
+  for (let i = 0; i < 4; i++){
+    rrrr = {}
+  for (const [key, value] of Object.entries(data.rows[i].doc)) 
+{
+  rrrr[key] = value
+}
+rrr.push(rrrr)
+}
+console.log(rrr)
+})
+
+
+
 // Login page. URL = "/login", LOGIN_URL can redirect.
 app.get("/login", async (req, res) => {
   res.clearCookie("token");
@@ -177,7 +204,7 @@ app.use("*", async (req, res, next) => {
     const authenticated = await authentication(req);
     if (authenticated === false) {
       return res.redirect(302, "/login");
-      return res.status(401).send("Unauthorized");
+      // return res.status(401).send("Unauthorized");
 
       // res.redirect('login');
       // res.clearCookie("token");

@@ -195,3 +195,16 @@ const state = { disconnectedTimes: 0 };
 
 // 執行主函數
 main(state);
+
+
+function alarm_HeartBeatGC_DC (){
+    // 400086: {
+    //     name: "HeartBeat b/w GC/DC",
+    //     status: GC_400086,
+    //     type: "bit_bidirection",
+    //     location: "Control Room",
+    //     line: true,
+    //     category: "system",
+    //   },
+
+}
