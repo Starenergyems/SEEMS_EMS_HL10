@@ -89,7 +89,8 @@
 }
 
 .title .timeRangeQuery {
-    display: inline-block;
+    float: right;
+    margin-right: 20px;
 }
 
 .title .timeRangeQuery p {

@@ -65,39 +65,42 @@ let lang = {
   },
 };
 async function updateTable() {
+  try {
+    // Fetch data asynchronously
+    var dataset = await getData(window.location.href+"/edit");
+    
+    // Initialize DataTable
+    $("#evtTable").DataTable({
+      lengthMenu: [10, 20, 25, 50, 100],
+      scrollY: "660px",
+      paging: false, // Disable pagination
+      destroy: true,
+      language: lang, // Make sure lang is properly defined
+      autoWidth: false,
+      processing: false,
+      orderMulti: false,
+      ordering: false,
+      pagingType: "simple_numbers",
+      responsive: true,
+      data: dataset, // Data fetched from getData function
+      columns: [
+        { data: "index" },
+        { data: "category" },
+        { data: "device" },
+        { data: "time" },
+        { data: "username" },
+        { data: "content" },
+      ],
+      // Set the width of the last column and align its content to the left
+      columnDefs: [{ targets: [5], width: "50%", className: "text-align-left" }],
+    });
 
-  var dataset = await getData(window.location.href+"/edit");
-  console.log(dataset);
-
-  $("#evtTable").DataTable({
-    lengthMenu: [10, 20, 25, 50, 100],
-    scrollY: "660px",
-
-    destroy: true,
-    language: lang, //提示資訊
-    autoWidth: false, //禁用自動調整列寬
-    // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
-    processing: false, //隱藏載入提示,自行處理
-    //serverSide: true, //啟用伺服器端分頁
-    //searching: false, //禁用原生搜尋
-    orderMulti: false, //啟用多列排序
-    ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
-    //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
-    pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
-    responsive: true,
-
-    data: dataset,
-    columns: [
-      { data: "index" },
-      { data: "category" },
-      { data: "device" },
-      { data: "time" },
-      { data: "username" },
-      { data: "content" },
-    ],
-    columnDefs: [{ targets: [5], width: "50%", className: "text-align-left" }],
-  });
-  createIndex("#evtTable");
+    // Call a function to create index if needed
+    createIndex("#evtTable");
+  } catch (error) {
+    console.error("Error fetching or processing data:", error);
+    // Handle error gracefully, such as displaying an error message to the user
+  }
 }
 
 async function updateTable_post(data) {

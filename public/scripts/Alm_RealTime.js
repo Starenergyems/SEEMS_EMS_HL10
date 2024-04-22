@@ -12,9 +12,44 @@ $(document).ready(function () {
     .on("change", function () {
       appear();
     });
+  //////////////////////////////////////////////////////////////////////////////
+  generateDropOptions(//生成下拉選單
+  '#device_filter', 
+  ['設備','System', 'Recloser', 'VCB', 'BMS', 'BSC', 'LC', 'MVCB', 'UPS', 'GC', 'HVAC','Rack'], 
+  'filtOpt', 
+  null, 
+  ['設備','System', 'Recloser', 'VCB', 'BMS', 'BSC', 'LC', 'MVCB', 'UPS', 'GC', 'HVAC','Rack'], 
+  '設備'
+  ); 
+  generateDropOptions(//生成下拉選單
+  '#location_filter', 
+  ['地點', 'Control Room', 'VCB', 'ESS','AUX','ACP','UPS'], 
+  'filtOpt', 
+  null, 
+  ['地點', 'Control Room', 'VCB', 'ESS','AUX','ACP','UPS'], 
+  '地點'
+  ); 
+  generateDropOptions(//生成下拉選單
+  '#level_filter', 
+  ['等級', 'Alarm','Fault'], 
+  'filtOpt', 
+  null, 
+  ['等級', 'Alarm','Fault'], 
+  '等級'
+  ); 
+  $('#device_filter, #location_filter, #level_filter').change(function(){ //設定有哪些篩選器，對應哪個TABLE的哪一行
+    _onInputEvent('#almTable', '#location_filter', 2, '地點','#device_filter', 3, '設備', '#level_filter', 4, '等級');
+  });
+  $('#filtNone').click(function(){ //指定哪個按鈕可以恢復預設篩選條件
+    back_default(['#device_filter', '#location_filter', '#level_filter'], ['設備', '地點','等級']);//改欄位顯示值
+    $('#almTable input').val(null); //關鍵字清空
+    _onInputEvent('#almTable', '#location_filter', 2, '地點','#device_filter', 3, '設備', '#level_filter', 4, '等級');
+  });
+  ///////////////////////////////////////////////////////////////////////////////////////////////
 });
 
 setInterval(updateNavbar,1000);
+setInterval(updateTable, 30000);
 /********************************************************************* */
 //const { check } = require("prettier");
 
@@ -23,80 +58,80 @@ const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
 const filtLevelOpts = document.querySelector(".filtLevel .filtOptions");
 
 const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
-dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
-function showHide_filtDevOpts() {
-  filtDeviceOpts.classList.toggle("appear");
-  filtLocationOpts.classList.remove("appear");
-  filtLevelOpts.classList.remove("appear");
-}
+// dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
+// function showHide_filtDevOpts() {
+//   filtDeviceOpts.classList.toggle("appear");
+//   filtLocationOpts.classList.remove("appear");
+//   filtLevelOpts.classList.remove("appear");
+// }
 
 const dDL_filtLoc = document.querySelector(".title #dDL_filtLocation");
-dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
-function showHide_filtLocOpts() {
-  filtLocationOpts.classList.toggle("appear");
-  filtDeviceOpts.classList.remove("appear");
-  filtLevelOpts.classList.remove("appear");
-}
+// dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
+// function showHide_filtLocOpts() {
+//   filtLocationOpts.classList.toggle("appear");
+//   filtDeviceOpts.classList.remove("appear");
+//   filtLevelOpts.classList.remove("appear");
+// }
 
 const dDL_filtLev = document.querySelector(".title #dDL_filtLevel");
-dDL_filtLev.addEventListener("click", showHide_filtLevOpts);
-function showHide_filtLevOpts() {
-  filtLevelOpts.classList.toggle("appear");
-  filtDeviceOpts.classList.remove("appear");
-  filtLocationOpts.classList.remove("appear");
-}
+// dDL_filtLev.addEventListener("click", showHide_filtLevOpts);
+// function showHide_filtLevOpts() {
+//   filtLevelOpts.classList.toggle("appear");
+//   filtDeviceOpts.classList.remove("appear");
+//   filtLocationOpts.classList.remove("appear");
+// }
 
 const filterDevice = document.querySelector(".title .filtDevice p");
 const filterLocation = document.querySelector(".title .filtLocation p");
 const filterLevel = document.querySelector(".title .filtLevel p");
 
-document.addEventListener("click", hideFiltOptions);
-function hideFiltOptions(clickItem) {
-  if (
-    clickItem.target.id !== "dDL_filtDevice" &&
-    clickItem.target.id !== "dDL_filtLocation" &&
-    clickItem.target.id !== "dDL_filtLevel"
-  ) {
-    if (clickItem.target.id === "filtNone") {
-      filterDevice.textContent = "設備";
-      filterLocation.textContent = "地點";
-      filterLevel.textContent = "等級";
-    } else if (
-      clickItem.target.id === "deviceFO_01" ||
-      clickItem.target.id === "deviceFO_02" ||
-      clickItem.target.id === "deviceFO_03" ||
-      clickItem.target.id === "deviceFO_04" ||
-      clickItem.target.id === "deviceFO_05" ||
-      clickItem.target.id === "deviceFO_06" ||
-      clickItem.target.id === "deviceFO_07" ||
-      clickItem.target.id === "deviceFO_08"
-    ) {
-      filterDevice.textContent = clickItem.target.textContent;
-    } else if (
-      clickItem.target.id === "locationFO_01" ||
-      clickItem.target.id === "locationFO_02" ||
-      clickItem.target.id === "locationFO_03" ||
-      clickItem.target.id === "locationFO_04" ||
-      clickItem.target.id === "locationFO_05" ||
-      clickItem.target.id === "locationFO_06" ||
-      clickItem.target.id === "locationFO_07" ||
-      clickItem.target.id === "locationFO_08" ||
-      clickItem.target.id === "locationFO_09" ||
-      clickItem.target.id === "locationFO_10"
-    ) {
-      filterLocation.textContent = clickItem.target.textContent;
-    } else if (
-      clickItem.target.id === "levelFO_01" ||
-      clickItem.target.id === "levelFO_02"
-    ) {
-      filterLevel.textContent = clickItem.target.textContent;
-    }
+// document.addEventListener("click", hideFiltOptions);
+// function hideFiltOptions(clickItem) {
+//   if (
+//     clickItem.target.id !== "dDL_filtDevice" &&
+//     clickItem.target.id !== "dDL_filtLocation" &&
+//     clickItem.target.id !== "dDL_filtLevel"
+//   ) {
+//     if (clickItem.target.id === "filtNone") {
+//       filterDevice.textContent = "設備";
+//       filterLocation.textContent = "地點";
+//       filterLevel.textContent = "等級";
+//     } else if (
+//       clickItem.target.id === "deviceFO_01" ||
+//       clickItem.target.id === "deviceFO_02" ||
+//       clickItem.target.id === "deviceFO_03" ||
+//       clickItem.target.id === "deviceFO_04" ||
+//       clickItem.target.id === "deviceFO_05" ||
+//       clickItem.target.id === "deviceFO_06" ||
+//       clickItem.target.id === "deviceFO_07" ||
+//       clickItem.target.id === "deviceFO_08"
+//     ) {
+//       filterDevice.textContent = clickItem.target.textContent;
+//     } else if (
+//       clickItem.target.id === "locationFO_01" ||
+//       clickItem.target.id === "locationFO_02" ||
+//       clickItem.target.id === "locationFO_03" ||
+//       clickItem.target.id === "locationFO_04" ||
+//       clickItem.target.id === "locationFO_05" ||
+//       clickItem.target.id === "locationFO_06" ||
+//       clickItem.target.id === "locationFO_07" ||
+//       clickItem.target.id === "locationFO_08" ||
+//       clickItem.target.id === "locationFO_09" ||
+//       clickItem.target.id === "locationFO_10"
+//     ) {
+//       filterLocation.textContent = clickItem.target.textContent;
+//     } else if (
+//       clickItem.target.id === "levelFO_01" ||
+//       clickItem.target.id === "levelFO_02"
+//     ) {
+//       filterLevel.textContent = clickItem.target.textContent;
+//     }
 
-    filtDeviceOpts.classList.remove("appear");
-    filtLocationOpts.classList.remove("appear");
-    filtLevelOpts.classList.remove("appear");
-  }
-}
+//     filtDeviceOpts.classList.remove("appear");
+//     filtLocationOpts.classList.remove("appear");
+//     filtLevelOpts.classList.remove("appear");
+//   }
+// }
 
 //////////////////與後端互動/////////////////////////////////////////////
 
@@ -156,9 +191,8 @@ let lang = {
 var dataset = [];
 
 async function updateTable() {
-  
-  console.log(window.location.href+"/edit");
-  dataset = await dataGet(window.location.href+"/edit"); //port改端口要改
+  console.log(window.location.href + "/edit");
+  dataset = await dataGet(window.location.href + "/edit"); //port改端口要改
   console.log(dataset);
   var permission = await dataGet("/getPermission");
 
@@ -169,25 +203,11 @@ async function updateTable() {
     destroy: true,
     language: lang, //提示資訊
     autoWidth: false, //禁用自動調整列寬
-    // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
     processing: false, //隱藏載入提示,自行處理
-    //serverSide: true, //啟用伺服器端分頁
-    //searching: false, //禁用原生搜尋
     orderMulti: false, //啟用多列排序
     ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
-    //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
-    pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
-    pageLength: 15, // 預設為'10'，若需更改初始每頁顯示筆數，才需設定
+    paging: false, // Disable pagination
     responsive: true,
-
-    /*"ajax": {
-      "url": "http://localhost:3200/alarm/realtime/edit", // Replace with your server-side script
-      "dataSrc": "data",
-    "success": function(data) {
-      console.log(data[0]); // Print the data to the console
-  }
-     },*/
-
     data: dataset,
     columns: [
       //要再加一欄index
@@ -200,11 +220,8 @@ async function updateTable() {
       {
         data: "read",
         render: function (data, type, row) {
-          var rowIndex = row.index; // Get the index from the row object
-          //var checkboxId = "chb_Ack_" + rowIndex;
-
+          var rowIndex = row.index;
           if (permission.permission === "manager") {
-            //管理者才可打勾
             if (data === true) {
               return '<input type="checkbox" checked class="chb_Ack">';
             } else {
@@ -233,8 +250,6 @@ async function updateTable() {
     ],
   });
 
-  // Set the DataTable to the previously obtained page index
-  table.page(currentPageIndex).draw("page");
   createIndex("#almTable");
   readCheck(); //監測所有已讀是否打勾
 }

@@ -267,40 +267,71 @@ var Arr = Array.prototype;
 var val_1 = $(filter1).val();
 var val_2 = $(filter2).val();
 var val_3 = $(filter3).val();
-console.log(val_1, val_2);
+console.log(val_1, val_2, val_3);
 
-    var tables = $(table);
+var tables = $(table);
 Arr.forEach.call(tables, function(table) {
     Arr.forEach.call(table.tBodies, function(tbody) {
     Arr.forEach.call(tbody.rows, function(row) {
-        _filter(row, val_1, column1, default1, val_2, column2, default2);
+        _filter(row, val_1, column1, default1, val_2, column2, default2, val_3, column3, default3);
     });
     });
 });
 }
 
 // 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
-function _filter(row, val_1, column1, default1, val_2, column2, default2) {
+function _filter(row, val_1, column1, default1, val_2, column2, default2, val_3, column3, default3) {
 
-var text_1 = row.querySelectorAll('td')[column1].textContent; //篩選操作類別
-var text_2 = row.querySelectorAll('td')[column2].textContent; //篩選設備名稱
-// var text_2 = row.querySelectorAll('td')[2].textContent.toLowerCase(), val_2 = filterDevice.value.toLowerCase();
-if (val_1 === default1 && val_2 === default2){
-    console.log(0)
-    row.style.display =  'table-row'; //如果沒有1就設成None
-} else {
-    if (val_1 != default1 && val_2 != default2){ //2個都有目標值
-    console.log(1);
-    console.log(text_1.indexOf(val_1),  text_2.indexOf(val_2));
-    row.style.display = text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0 ? 'table-row':'none' ; //2個都有就設成可看
-    } else if (val_1 === default1){ //1沒有值, 只判斷2
-    console.log(2);
-    row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
-    } else if (val_2 === default2){ //2沒有值, 只判斷1
-    console.log(3);
-    row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
-    } 
+var text_1 = row.querySelectorAll('td')[column1].textContent; //篩選第幾欄
+var text_2 = row.querySelectorAll('td')[column2].textContent; //篩選第幾欄
+if (typeof column3 === "number") { //有第3個篩選欄位
+    var text_3 = row.querySelectorAll('td')[column3].textContent; //篩選第幾欄
+    if (val_1 === default1 && val_2 === default2 && val_3 === default3){
+        console.log(0)
+        row.style.display =  'table-row'; //都是預設值, 設為都可看
+    } else {
+        if (val_1 != default1 && val_2 != default2){ //3個都有目標值
+            console.log(1);
+            row.style.display = text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0 && text_3.indexOf(val_3) === 0 ? 'table-row':'none' ; //3個都有就設成可看
+        } else if (val_2 === default2 && val_3 === default3){ //只有1有值, 只判斷1
+            console.log(2);
+            row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
+        } else if (val_1 === default1 && val_3 === default3){ //只有2有值, 只判斷2
+            console.log(3);
+            row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
+        } else if (val_1 === default1 && val_2 === default2){ //只有3有值, 只判斷3
+            console.log(4);
+            row.style.display =  text_3.indexOf(val_3) === -1 ? 'none' : 'table-row'; //如果沒有3就設成None
+        } else if (val_1 != default1 && val_2 != default2){ //1, 2有值
+            console.log(5);
+            row.style.display =  text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0? 'table-row':'none'; 
+        } else if (val_2 != default2 && val_3 != default3){ //2, 3有值
+            console.log(6);
+            row.style.display =  text_2.indexOf(val_2) === 0 && text_3.indexOf(val_3) === 0? 'table-row':'none'; 
+        } else if (val_1 != default1 && val_3 != default3){ //1, 3有值
+            console.log(7);
+            row.style.display =  text_1.indexOf(val_1) === 0 && text_3.indexOf(val_3) === 0? 'table-row':'none'; 
+        } 
+    }
+} else { //2個篩選欄位
+    if (val_1 === default1 && val_2 === default2){
+        console.log(0)
+        row.style.display =  'table-row'; //都是預設值, 設為都可看
+    } else {
+        if (val_1 != default1 && val_2 != default2){ //2個都有目標值
+        console.log(1);
+        row.style.display = text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0 ? 'table-row':'none' ; //2個都有就設成可看
+        } else if (val_1 === default1){ //1沒有值, 只判斷2
+        console.log(2);
+        row.style.display =  text_2.indexOf(val_2) === -1 ? 'none' : 'table-row'; //如果沒有2就設成None
+        } else if (val_2 === default2){ //2沒有值, 只判斷1
+        console.log(3);
+        row.style.display =  text_1.indexOf(val_1) === -1 ? 'none' : 'table-row'; //如果沒有1就設成None
+        } 
+    }
 }
+
+
     
 }
 

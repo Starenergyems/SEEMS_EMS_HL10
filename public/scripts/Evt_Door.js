@@ -103,19 +103,19 @@ async function updateTable_post(data) {
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
 const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
 
-const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
-dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
-function showHide_filtDevOpts() {
-  filtDeviceOpts.classList.toggle("appear");
-  filtLocationOpts.classList.remove("appear");
-}
+// const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
+// dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
+// function showHide_filtDevOpts() {
+//   filtDeviceOpts.classList.toggle("appear");
+//   filtLocationOpts.classList.remove("appear");
+// }
 
-const dDL_filtLoc = document.querySelector(".title #dDL_filtLocation");
-dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
-function showHide_filtLocOpts() {
-  filtLocationOpts.classList.toggle("appear");
-  filtDeviceOpts.classList.remove("appear");
-}
+// const dDL_filtLoc = document.querySelector(".title #dDL_filtLocation");
+// dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
+// function showHide_filtLocOpts() {
+//   filtLocationOpts.classList.toggle("appear");
+//   filtDeviceOpts.classList.remove("appear");
+// }
 
 const filterDevice = document.querySelector(".title .filtDevice p");
 const filterLocation = document.querySelector(".title .filtLocation p");
