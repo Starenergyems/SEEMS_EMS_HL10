@@ -290,7 +290,7 @@ if (typeof column3 === "number") { //有第3個篩選欄位
         console.log(0)
         row.style.display =  'table-row'; //都是預設值, 設為都可看
     } else {
-        if (val_1 != default1 && val_2 != default2){ //3個都有目標值
+        if (val_1 != default1 && val_2 != default2 && val_3 != default3){ //3個都有目標值
             console.log(1);
             row.style.display = text_1.indexOf(val_1) === 0 && text_2.indexOf(val_2) === 0 && text_3.indexOf(val_3) === 0 ? 'table-row':'none' ; //3個都有就設成可看
         } else if (val_2 === default2 && val_3 === default3){ //只有1有值, 只判斷1
