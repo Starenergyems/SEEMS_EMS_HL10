@@ -53,26 +53,6 @@ router.get("/report/report", (req, res) => {
   res.render("Rpt_Report");
 });
 
-// ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((()))))))) */
-//const templatePath = path.join(__dirname, '..', 'public/report', 'Report.xlsx');//模板的位置
-// const DayTemPath = path.join(
-//   __dirname,
-//   "..",
-//   "public/report",
-//   "DayReport.xlsx"
-// );
-// const MonthTemPath = path.join(
-//   __dirname,
-//   "..",
-//   "public/report",
-//   "MonthReport.xlsx"
-// );
-// const YearTemPath = path.join(
-//   __dirname,
-//   "..",
-//   "public/report",
-//   "YearReport.xlsx"
-// );
 
 var specified_date; // 指定要撈哪天(會撈前一天) / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
 var specified_date_clone1;
@@ -110,45 +90,20 @@ var specified_date_clone23;
 
 // console.log("specified_date: " + specified_date.format("YYYY-MM-DD HH:mm:ss"));
 
-// const specified_date_clone1 = specified_date.clone();
-// const specified_date_clone2 = specified_date.clone();
-// const specified_date_clone3 = specified_date.clone();
-// const specified_date_clone4 = specified_date.clone();
-// const specified_date_clone5 = specified_date.clone();
-// const specified_date_clone6 = specified_date.clone();
-// const specified_date_clone7 = specified_date.clone();
-// const specified_date_clone8 = specified_date.clone();
-// const specified_date_clone9 = specified_date.clone();
-// const specified_date_clone10 = specified_date.clone();
-// const specified_date_clone11 = specified_date.clone();
-// const specified_date_clone12 = specified_date.clone();
-// const specified_date_clone13 = specified_date.clone();
-// const specified_date_clone14 = specified_date.clone();
-// const specified_date_clone15 = specified_date.clone();
-// const specified_date_clone16 = specified_date.clone();
-// const specified_date_clone17 = specified_date.clone();
-// const specified_date_clone18 = specified_date.clone();
-// const specified_date_clone19 = specified_date.clone();
-// const specified_date_clone20 = specified_date.clone();
-// const specified_date_clone21 = specified_date.clone();
-// const specified_date_clone22 = specified_date.clone();
-// const specified_date_clone23 = specified_date.clone();
-// console.log(
-//   "specified_date_clone: " + specified_date_clone.format("YYYY-MM-DD HH:mm:ss")
-// );
-
 /*************************************************************************************************** */
 
 
 router.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
+    console.log("手動下載開始")
     await queryReport(req, res)
   } catch (error) {
     console.error("Error generating Excel file:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 /***************************************************************************************************** */
 var click_year, click_month, click_day
 const queryReport = async (req, res) => {//撈資料放入對應excel表格for前端手動下載
@@ -188,12 +143,12 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
   //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
   const workbook = await xlsx.fromFileAsync(templatePath);
   var couchData; //插入excel的數值
-  tempFilePath = path.join( //站存檔位址
-    __dirname,
-    "C",
-    "report",
-    "temp",
-    "temp.xlsx");
+  // tempFilePath = path.join( //站存檔位址
+  //   __dirname,
+  //   "C",
+  //   "report",
+  //   "temp",
+  //   "temp.xlsx");
   // Fetch data from MongoDB
   if (reportType === "年報") {
     couchData = await getYearData();
@@ -277,24 +232,22 @@ divideFileName(fileName); //將獨到的日期拆分為y, m, d
     ); //下載後存在哪，要跟getReport api同步
 
   } else if (reportType === "日報") {
-    // directoryPath = path.join(
+    directoryPath = path.join(
+      "C",
+      "report",
+    `${click_year}`,
+    `${click_month}`
+  ); //下載後存在哪，要跟getReport api同步
+
+    //   directoryPath = path.join( 測試未成功
     //   //在linux中測試
     //   "/",
     //   "home",
-    //   "hl10_4-1",
+    //   "seems",
     //   "report",
-    //   `${yesterdayY}`,
-    //   `${yesterdayM}`
-    // ); 
-      directoryPath = path.join(
-      //在linux中測試
-      "/",
-      "home",
-      "seems",
-      "report",
-      `${click_year}`,
-      `${click_month}` //這個有成功存在"router" "/C/report/2024/3"
-    ); //下載後存在哪，要跟getReport api同步
+    //   `${click_year}`,
+    //   `${click_month}` //這個有成功存在"router" "/C/report/2024/3"
+    // ); //下載後存在哪，要跟getReport api同步
 
   } else {
     console.log("參數設置錯誤，報表種類應為年報/月報/日報");
@@ -605,13 +558,14 @@ function Conversionpercentage(randomNumber) {
 //日報讀值
 async function getDayData() {
   try {
+    console.log("日報-正在讀取資料庫資料....");
     let average45 = 0;
     //取得86403秒的SPM的數值********************************************************************* */
     // 計算大前天的時間範圍
     const dayBeforeYesterdayStart = specified_date_clone1
       .subtract(2, "days") //改時間 原本是2
       .set({ hour: 23, minute: 59, second: 59, millisecond: 999 }) // 設置結束時間為 23:59:59.999
-      .subtract(2, "seconds") // 減去2秒到23:59:57
+      .subtract(3, "seconds") // 減去2秒到23:59:57
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -627,7 +581,6 @@ async function getDayData() {
 
     // 初始化存儲數值的陣列
     let data = [];
-    let dataforSchedule = [];
 
     // 定義篩選器條件，查詢大前天的數據
     const filterDayBeforeYesterday = {
@@ -664,63 +617,126 @@ async function getDayData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-    // 新增一個陣列暫存每個小時的資料
-    const tempData = [];
+    // // 新增一個陣列暫存每個小時的資料
+    // const tempData = [];
 
-    // 依序讀取後續的資料，每次增加一小時
-    for (let i = 0; i < 24; i++) {
-      // 計算時間段的起始時間和結束時間
-      const intervalStart = moment(yesterdayStart)
-        .add(i - 8, "hours")
-        .startOf(0, "hour")
-        .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-      const intervalEnd = moment(yesterdayEnd)
-        .add(i - 8 + 1, "hours")
-        .startOf("hour")
-        .add(59, "minutes")
-        .add(59, "seconds")
-        .add(999, "milliseconds")
-        .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    // // 依序讀取後續的資料，每次增加一小時
+    // for (let i = 0; i < 24; i++) {
+    //   // 計算時間段的起始時間和結束時間
+    //   const intervalStart = moment(yesterdayStart)
+    //     .add(i - 8, "hours")
+    //     .startOf(0, "hour")
+    //     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    //   const intervalEnd = moment(yesterdayEnd)
+    //     .add(i - 8 + 1, "hours")
+    //     .startOf("hour")
+    //     .add(59, "minutes")
+    //     .add(59, "seconds")
+    //     .add(999, "milliseconds")
+    //     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-      console.log("intervalStart : " + intervalStart);
-      console.log("intervalEnd   : " + intervalEnd);
+    //   console.log("intervalStart : " + intervalStart);
+    //   console.log("intervalEnd   : " + intervalEnd);
 
-      // 定義篩選器條件，查詢該時間段的數據
-      const filterInterval = {
-        selector: {
-          time: {
-            $gte: intervalStart, // 開始時間
-            $lte: intervalEnd // 結束時間
-          }
-        },
-        limit: 3600 // 每個時間段讀取3600
-      };
+    //   // 定義篩選器條件，查詢該時間段的數據
+    //   const filterInterval = {
+    //     selector: {
+    //       time: {
+    //         $gte: intervalStart, // 開始時間
+    //         $lte: intervalEnd // 結束時間
+    //       }
+    //     },
+    //     limit: 3600 // 每個時間段讀取3600
+    //   };
 
-      // 每個小時的資料分24次每次一小時存進tempData陣列裡面
-      const intervalData = await gcDb.find(filterInterval);
-      tempData.push(...intervalData.docs.map((doc) => doc.System["400037"]));
+    //   // 每個小時的資料分24次每次一小時存進tempData陣列裡面
+    //   const intervalData = await gcDb.find(filterInterval);
+    //   tempData.push(...intervalData.docs.map((doc) => doc.System["400037"]));
 
-      console.log(
-        "Data fetched for interval:",
-        intervalStart + "+08:00",
-        "-",
-        intervalEnd + "+08:00-",
-        "Pushed",
-        tempData.length,
-        "items."
-      );
+    //   console.log(
+    //     "Data fetched for interval:",
+    //     intervalStart + "+08:00",
+    //     "-",
+    //     intervalEnd + "+08:00-",
+    //     "Pushed",
+    //     tempData.length,
+    //     "items."
+    //   );
 
-      // 檢查每秒是否都有數值，不足的補0
-      for (let j = 0; j < 3600; j++) {
-        if (!tempData[i * 3600 + j]) {
-          data.push(0);
-        } else {
-          data.push(tempData[i * 3600 + j]);
-        }
+    //   // 檢查每秒是否都有數值，不足的補0
+    //   for (let j = 0; j < 3600; j++) {
+    //     if (!tempData[i * 3600 + j]) {
+    //       data.push(0);
+    //     } else {
+    //       data.push(tempData[i * 3600 + j]);
+    //     }
+    //   }
+    // //輸出每個小時的數值
+    
+    // }
+
+
+    // console.log("初始Data陣列的86403筆資料", data.length);
+    // console.log("原本獲得的Data :", data); 
+// 新增一個陣列暫存每個小時的資料
+// 新增一個陣列暫存每個小時的資料
+const tempData = [];
+
+// 依序讀取後續的資料，每次增加一小時
+for (let i = 0; i < 24; i++) {
+  // 計算時間段的起始時間和結束時間
+  const intervalStart = moment(yesterdayStart)
+    .add(i - 8, "hours")
+    .startOf("hour"); // 將起始時間設定為每小時的開始
+  const intervalEnd = intervalStart.clone().add(1, "hour").subtract(1, "second"); // 將結束時間設定為每小時的結束前一秒
+
+  console.log("intervalStart : " + intervalStart.format());
+  console.log("intervalEnd   : " + intervalEnd.format());
+
+  // 定義篩選器條件，查詢該時間段的數據
+  const filterInterval = {
+    selector: {
+      time: {
+        $gte: intervalStart.toISOString(), // 開始時間
+        $lte: intervalEnd.toISOString() // 結束時間
       }
+    },
+    limit: 3600 // 每個時間段讀取3600
+  };
+
+  // 每個小時的資料分24次每次一小時存進tempData陣列裡面
+  const intervalData = await gcDb.find(filterInterval);
+  const hourData = [];
+
+  for (let j = 0; j < 3600; j++) {
+    // 檢查每秒是否都有數值，不足的補0
+    if (intervalData.docs[j]) {
+      const secondData = intervalData.docs[j].System["400037"];
+      hourData.push(secondData);
+    } else {
+      hourData.push(0);
     }
-    console.log("初始Data陣列的86403筆資料", data.length);
-    console.log("原本獲得的Data :", data); 
+  }
+
+  tempData.push(...hourData);
+
+  console.log(
+    "Data fetched for interval:",
+    intervalStart.format() + "+08:00",
+    "-",
+    intervalEnd.format() + "+08:00-",
+    "Pushed",
+    hourData.length,
+    "items."
+  );
+}
+
+// 將每小時的資料合併到 data 陣列中
+data.push(...tempData);
+
+console.log("初始Data陣列的86403筆資料", data.length);
+console.log("原本獲得的Data :", data);
+
 
     //取得大前天+昨天的實際得標容量******************************************************************** */
     //大前天的最後一筆
@@ -814,7 +830,7 @@ async function getDayData() {
       }
     }
 
-    console.log("取出四秒滾動最大值的長度(應該要是86400):", maxData.length);
+    console.log("取出四秒滾動最大值的長度(86400):", maxData.length);
     console.log("取出四秒滾動最大值的陣列:", maxData);
 
     let minIndex; // 在此定義 minIndex 變數
@@ -840,7 +856,7 @@ async function getDayData() {
     console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
     console.log("最小值存入 globalMin 的位置:", minIndex);
     console.log("取出最小位置的數值:", maxData[minIndex]);
-    console.log("最大值存入 globalMin 的位置:", maxIndex);
+    console.log("最大值存入 globalMax 的位置:", maxIndex);
     console.log("取出最大位置的數值:", maxData[maxIndex]);
 
 
@@ -872,31 +888,25 @@ async function getDayData() {
         maxData_processed[k] = maxData[k];
       }
     }
-    //console.log("如果有停止執行的時候處理過的陣列內容" + maxData_processed);
-//改到這~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-    for (let r = 0; r < maxData_processed.length; r++) {
+    //console.log("處理過的陣列內容(判斷有沒有停止執行)" + maxData_processed);
+    //用來計算平均值
+    for (let r = 0; r < maxData.length; r++) {
       if (maxData_processed[r] !=="#") {
-        //可以計算的必須是調度的範圍(0-10000)
-        sum += maxData[r]; // 將 maxData 陣列中的數值加總}
+        // 可以計算的必須是調度的範圍(0-10000)
+        sum += maxData[r]; // 將 maxData 陣列中的數值加總
         total_count++;
-      }
-
-
-      if(total_count===0){
-        average45 = 0;
-        console.log("average45 :", average45);
-      }
-      else{    
-        const averageoriginal = sum / total_count; // 計算平均值並四捨五入到整數 eg94.99
-        const averagefloor = Math.floor(sum / total_count); // 計算平均值且捨去小數部分
-        average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數 eg94.99
-        // console.log("averageoriginal :", averageoriginal);
-        console.log("average45 :", average45);
-        // console.log("averagefloor :", averagefloor);}
+        average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數
       }
     }
+    
+    // 在計算平均值之前，先檢查 total_count 是否為 0
+    if (total_count === 0) {
+      average45 = 0;
+    }
+
     console.log("全部時段SPM進行加總的結果: " + sum);
     console.log("總共有幾個可以進行計算的時段總數:" + total_count);
+    
     //******************************************************************* */
     //開始針對每個小時取出最大最小值，並給與該小時的執行率
     //取得每小時的最小SBSPM
@@ -914,10 +924,12 @@ async function getDayData() {
     
       if (allHashes) {
         // 如果分組中全部都是 "#"
-        minValues.push(0.0);
-        maxValues.push(0.0);
-        averageValues.push(0.0);
-      } else {
+        minValues.push(0);
+        maxValues.push(0);
+        averageValues.push(0);
+      } 
+
+      else {
         // 找出每個分組中的最小值
         const min = Math.min(...group);
     
@@ -926,18 +938,28 @@ async function getDayData() {
     
         // 計算每個分組中的平均值
         const sum = group.reduce((acc, val) => acc + val, 0);
-        const average = sum / group.length;
-    
+        //const average = sum / group.length;
         // 將計算結果存入相應的陣列中
+        
+      // 計算非 '#' 的數量和加總
+        const grouptotal = group.filter(val => val !== "#").length;
+        const groupsum = group.filter(val => val !== "#").reduce((acc, val) => acc + val, 0);
+        const average = groupsum / grouptotal;
+
         minValues.push(min);
         maxValues.push(max);
         averageValues.push(average);
+
+        console.log("min: ",min);
+        console.log("max: ",min);
+        console.log("min: ",min);
       }
+
     }
     
     console.log("minValues :", minValues);
-    console.log("maxValues :", minValues);
-    console.log("averageValues :", minValues);
+    console.log("maxValues :", maxValues);
+    console.log("averageValues :", averageValues);
 
     //換算獲得服務品質指標
     const quality = [];
@@ -950,7 +972,7 @@ async function getDayData() {
       .map(() => Array(numCols).fill(0));
     //const hour_final = Array(7).fill(0);
     let quality_val = 0;
-    for (let m = 0; m < minValues.length; m++) {
+    for (let m = 0; m <= minValues.length; m++) {
       const hour_min = minValues[m];
       // const hour_min = minValues[m] / 100;
       if (hour_min ==="#") {
@@ -1014,7 +1036,9 @@ async function getDayData() {
       }
       //console.log("Time:" + m + " / quality_val :", quality_val);
     }
-
+    var hour_final_max=0;
+    var hour_final_min=0;
+    var hour_final_avg=0;
     for (let n = 0; n <= 23; n++) {
       hour_final[24][0] += hour_final[n][0];
       hour_final[24][1] += hour_final[n][1];
@@ -1023,11 +1047,34 @@ async function getDayData() {
       hour_final[24][4] += hour_final[n][4];
       hour_final[24][5] += hour_final[n][5];
       hour_final[24][6] += hour_final[n][6];
+      hour_final_max += hour_final[n][7];
+      hour_final_avg += hour_final[n][8];
+      hour_final_min += hour_final[n][9];
     }
 
-    hour_final[24][7] = Conversionpercentage(globalMax);
-    hour_final[24][8] = Conversionpercentage(average45);
-    hour_final[24][9] = Conversionpercentage(globalMin);
+    //最後統計的最大最小平均
+    if(hour_final_max===0){
+      hour_final[24][7] = Conversionpercentage(0);
+    }
+    else{
+      hour_final[24][7] = Conversionpercentage(hour_final_max/24);
+    }
+
+    if(hour_final_avg===0){
+      hour_final[24][8] = Conversionpercentage(0);
+    }
+    else{
+      hour_final[24][8] = Conversionpercentage(hour_final_avg/24);
+    }
+
+    if(hour_final_min===0){
+      hour_final[24][9] = Conversionpercentage(0);
+    }
+    else{
+      hour_final[24][9] = Conversionpercentage(hour_final_min/24);
+    }
+
+
     console.log("the qualityis :", quality);
     console.log("counthourstop:" + counthourstop);
     console.log("the hour_final :", hour_final);
@@ -2413,7 +2460,7 @@ cron.schedule("0 2 1 1 *", async () => {
   }
 });
 
-cron.schedule("56 15 27 * *", async () => {
+cron.schedule("30 1 1 * *", async () => {
   // 秒 分 時 日 月 星期幾 由右到左對照，每月1日1:30執行產出前一月月報
   try {
     console.log("Cron job: month report download start");

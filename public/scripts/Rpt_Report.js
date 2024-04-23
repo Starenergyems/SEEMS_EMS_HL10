@@ -1,6 +1,6 @@
 $(document).ready(function () {
     classAdd('#nB_Report', 'default_nB');
-    generateYearOptions();
+    generateYearOptions();//動態生成年份下拉選單
 
     // Attach an event listener to the dropdown change event
     document.getElementById("yearDropdown").addEventListener("change", function () {
@@ -298,7 +298,7 @@ function downloadExcel(fileName, folderPath, reportType) { //尋找對應的檔�
             console.error("報表類型錯誤: 應為年報/月報/日報");
             return
         };
-
+        console.log("Manual download", templateUrl);
         fetch(templateUrl)
           .then(response => response.blob())
           .then(blob => {

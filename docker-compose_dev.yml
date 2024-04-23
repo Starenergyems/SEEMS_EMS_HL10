@@ -12,6 +12,8 @@ services:
     volumes:
       # - ./router:/usr/src/app/router # Mount the <local directory>:<container directory>
       - ./router:/usr/src/app/router
+      - ./public:/usr/src/app/public
+      - ./views:/usr/src/app/views
     ports:
       - "3030-3036:3000"
     # environment:

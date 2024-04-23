@@ -30,60 +30,6 @@ const alarmnanoDb = nano.use(alarm);
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
 router.use(cors());
-//************************************************************* */
-// 創建 http 伺服器
-// const server = http.createServer((req, res) => {
-//   res.writeHead(200, { "Content-Type": "text/plain" });
-//   res.end("okay");
-// });
-
-// 使用 WebSocket 連接伺服器
-//const io = socket(server);
-
-// 在資料庫連線時建立 changeStream
-// mongoose.connection.once("open", () => {
-//   const lc01ChangeStream = Lc01.watch();
-//   const lc02ChangeStream = Lc02.watch();
-//   const lc03ChangeStream = Lc03.watch();
-//   const lc04ChangeStream = Lc04.watch();
-//   const dcChangeStream = Dc.watch();
-//   const gcChangeStream = Gc.watch();
-
-//   // 監聽 change event
-//   lc01ChangeStream.on("change", (change) => {
-//     io.emit("refreshData", { tableId: "lc01Table" });
-//   });
-
-//   lc02ChangeStream.on("change", (change) => {
-//     io.emit("refreshData", { tableId: "lc02Table" });
-//   });
-
-//   lc03ChangeStream.on("change", (change) => {
-//     io.emit("refreshData", { tableId: "lc03Table" });
-//   });
-
-//   lc04ChangeStream.on("change", (change) => {
-//     io.emit("refreshData", { tableId: "lc04Table" });
-//   });
-
-//   dcChangeStream.on("change", (change) => {
-//     io.emit("refreshData", { tableId: "dcTable" });
-//   });
-
-//   gcChangeStream.on("change", (change) => {
-//     io.emit("refreshData", { tableId: "gcTable" });
-//   });
-// });
-
-// Socket.io 事件監聽
-// io.on("connection", (socket) => {
-//   console.log("alarmFun : A user connected");
-
-//   // 斷開連接
-//   socket.on("disconnect", () => {
-//     console.log("User disconnected");
-//   });
-// });
 
 // Alarm //--------------------------------------------------------------------------------
 const LC_System_402013 = {
@@ -575,54 +521,55 @@ const LC_Rack_error_table = {
 };
 
 const LC_BSC_406001 = {
-  0: "BSP AC Breaker Disconnect 2 Fault",
-  1: "Emergency Shutdowm Fault",
-  2: "BSP Lightening Protection Failure Fault",
-  3: "BSP-UPS Grid Power Disconnect Fault",
-  4: "BCP Internal Overtemperature Fault",
-  5: "BSP Power Supply Overtemperature Fault",
-  6: "FFS System Fault",
-  7: "FFS Fire Fault",
-  8: "FFS Gas Release Fault",
-  9: "BSP Transformer Overtemperature Fault",
-  10: "BCP1-1 DC Lightening Protection Falut",
-  11: "BCP1-1 Fuse Fault",
-  12: "BCP1-2 DC Lightening Protection Falut",
-  13: "BCP1-2 Fuse Fault",
-  14: "System Compartment Door Open Fault",
-  15: "N/A",
+  0: "BSP AC Contactor open",
+  1: "System EPO",
+  2: "BSP AC SPD",
+  3: "BSP UPS utility fail",
+  4: "BCP internal over temperature",
+  5: "BSP power supply over temperature",
+  6: "FFS fault",
+  7: "FFS fire alarm(消防水霧啟動)",
+  8: "FFS spray",
+  9: "Container door open",
+  10: "BCP1-1 DC SPD",
+  11: "BCP1-1 fuse",
+  12: "BCP1-2 fuse",
+  15: "BSP transformer over temperature",
   24: "UPS fault",
   25: "BSC-UPS communication fault",
   26: "Low combustible gas concentration alarm",
-  27: "High combustible gas concentration alarm",
+  27: "High combustible gas concentration alarm"
+  
 };
 
 const LC_BSC_406003 = {
-  0: "Node 1 alarm",
-  1: "Node 2 alarm",
-  2: "Node 3 alarm",
-  3: "Node 4 alarm",
-  4: "Node 5 alarm",
-  5: "Node 6 alarm",
-  6: "Node 7 alarm",
-  7: "Node 8 alarm",
-  8: "Node 9 alarm",
-  9: "Node 10 alarm",
-  10: "Node 11 alarm",
-  11: "Node 12 alarm",
-  12: "Node 13 alarm",
-  13: "Node 14 alarm",
-  14: "Node 15 alarm",
-  15: "Node 16 alarm",
+  0: "BSP AC Contactor open",
+  1: "System EPO",
+  2: "BSP AC SPD",
+  3: "BSP UPS utility fail",
+  4: "BCP internal over temperature",
+  5: "BSP power supply over temperature",
+  6: "FFS fault",
+  7: "FFS fire alarm(消防水霧啟動)",
+  8: "FFS spray",
+  9: "Container door open",
+  10: "BCP1-1 DC SPD",
+  11: "BCP1-1 fuse",
+  12: "BCP1-2 fuse",
+  15: "BSP transformer over temperature",
   23: "Humiture sensor communication alarm",
   25: "Ammeter communication alarm",
   26: "HVAC alarm",
-  27: "HVAC communication alarm",
+  27: "HVAC communication alarm"
+
 };
 
 const LC_BSC_406005 = {
-  0: "FFS alarm 1_Smoke or Temperature",
-  1: "FFS alarm 2_Smoke and Temperature",
+  // 0: "FFS alarm 1_Smoke or Temperature",
+  // 1: "FFS alarm 2_Smoke and Temperature",
+  // 2: "FFS fault",
+  0: "FFS alarm 1_可燃氣體",
+  1: "FFS alarm 2_可燃氣體",
   2: "FFS fault",
 };
 
@@ -642,149 +589,149 @@ const LC_BSC_406009 = {
   85: "Not configured",
 };
 
-const LC_BSC_406011 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406011 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406013 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406013 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406015 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406015 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406017 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406017 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406019 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406019 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406021 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406021 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406023 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406023 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406025 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406025 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406027 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406027 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406029 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406029 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406031 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406031 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406033 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406033 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406035 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406035 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406037 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406037 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406039 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406039 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406041 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406041 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406043 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406043 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
-const LC_BSC_406045 = {
-  0: "Comm error",
-  1: "Stop",
-  2: "Running",
-  3: "Fault",
-  85: "Not configured",
-};
+// const LC_BSC_406045 = {
+//   0: "Comm error",
+//   1: "Stop",
+//   2: "Running",
+//   3: "Fault",
+//   85: "Not configured",
+// };
 
 const LC_BSC_406047 = {
   min: -100,
@@ -825,7 +772,7 @@ const LC_BSC_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: true,
-    category: "special", //ENV?
+    category: "FFS", //ENV?
   },
   406005: {
     name: "FFS status",
@@ -833,7 +780,7 @@ const LC_BSC_error_table = {
     type: "bit",
     location: "ESS?x-1",
     line: false,
-    category: "special",
+    category: "FFS",
   },
   406007: {
     name: "HVAC_1 running status",
@@ -1646,6 +1593,25 @@ const GC_error_table = {
     location: "Control Room",
     line: true,
     category: "system",
+  },
+};
+
+const Heartbeat_error_table = {
+  409101: {
+    name: "LC_Comm_Error",
+    status: 1,
+    type: "int_bit",
+    location: "Control Room",
+    line: true,
+    category: "system",
+  },
+  409103: {
+    name: "Freq-M_Comm_Error",
+    status: 1,
+    type: "int_bit",
+    location: "Control Room",
+    line: true,
+    category: "meter",
   },
 };
 
@@ -3013,13 +2979,14 @@ function update_trigger_alarms_batch(
 
 function sendLineNotify(error_result_item) {
   const message = `
-    ID:   ${error_result_item["_id"]} 
-    Level:   ${error_result_item["level"]} 
-    Location:   ${error_result_item["location"]}
-    Device:   ${error_result_item["device"]}
-    Value:   ${error_result_item["value"]}
-    Warning:   ${error_result_item["content"].replace(/\[|\]/g, "_")}
-    Recover is ${error_result_item["recover"]}
+  ID: ${error_result_item["_id"]} 
+  Level: ${error_result_item["level"]} 
+  Location: ${error_result_item["location"]}
+  Device: ${error_result_item["device"]}
+  Value: ${error_result_item["value"]}
+  Warning:
+    ${error_result_item["content"].replace(/\[|\]/g, "_")}
+  Recover is ${error_result_item["recover"]}
   `;
   const request = {
     method: "post",
@@ -3249,131 +3216,7 @@ router.use(async (req, res, next) => {
   next(); // 繼續執行後續的中間件或路由處理
 });
 
-// router.use(async (req, res, next) => {
-//   try {
-//     // 中間件的內容
 
-//     // 假設你已經處理了數據並將結果存儲在 data 中
-//     res.json({ success: true, data }); // 將數據以 JSON 格式發送到客戶端
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, error: "Internal Server Error" });
-//   }
-// });
-
-//************************************************************* */
-// async function getAllData() {
-//   try {
-//     // 使用 find 方法來取得整個 Lc01 Collection 的數據
-//     const allData = await lc01Data.find({});
-//     console.log("All Lc01 Collection Data:", allData);
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// }
-// // 呼叫函數以取得整個 Collection 的數據
-// getAllData();
-
-//************************************************************* */
-// async function getSpecificDocumentById(documentId) {
-//   try {
-//     // 使用 findById 方法來取得"指定"文檔的數據
-//     const specificDocument = await lc01Data.findById(documentId);
-//     console.log("Specific Lc01 Document Data:", specificDocument);
-//   } catch (error) {
-//     console.error("Error fetching specific document:", error);
-//   }
-// }
-
-// // 呼叫函數以取得指定文檔的數據，替換 'yourDocumentId' 為實際的文檔 ID
-// getSpecificDocumentById("yourDocumentId");
-
-//************************************************************* */
-//取得最新的一筆數據，並且只擷取 PCS1 中的 403001 欄位
-// async function getLatestData() {
-//   try {
-//     // 使用 findOne 方法來取得"最新的" Lc01 文檔
-//     const latestData = await lc01Data.findOne(
-//       {},
-//       {},
-//       { sort: { time_log: -1 } }
-//     );
-
-//     // 檢查是否有找到文檔
-//     if (latestData) {
-//       // 取出指定的欄位，可選的鏈接運算符 ? 在取得值之前檢查 PCS1 是否存在
-//       const pcs1Value = latestData.PCS1?.["403001"];
-
-//       // 輸出結果
-//       console.log("Latest Data - PCS1 403001:", pcs1Value);
-//     } else {
-//       console.log("No data found");
-//     }
-//   } catch (error) {
-//     console.error("Error fetching latest data:", error);
-//   }
-// }
-
-// 呼叫函數以取得最新的文檔中的指定欄位
-//getLatestData();
-
-//************************************************************* */
-// async function processData(data, latestAlarmData, Alarm, error_table) {
-//   // 創建一個 Set 來存儲已經存在於 Alarm 中的文檔的 _id
-//   //console.log("A New data in Data:", data);
-//   //console.log("B New data in Data:", latestAlarmData);
-//   const existingIds = new Set(
-//     latestAlarmData.map((item) => item._id.toString())
-//   );
-
-//   // 遍歷 data，將不在 Alarm 中的文檔加入 Alarm，或更新已存在的文檔
-//   for (const item of data) {
-//     //console.log('here')
-//     //console.log(item)
-
-//     const idString = item._id.toString();
-//     const existingDoc = latestAlarmData.find(
-//       (doc) => doc._id.toString() === idString
-//     );
-
-//     console.log(error_result_gen(item, error_table));
-
-//     if (!existingDoc) {
-//       // 如果 Alarm 中沒有該文檔，則新增
-//       if (item.value > 50000) {
-//         await Alarm.create({
-//           _id: item._id,
-//           value: item.value,
-//           timestamp: item.timestamp,
-//         });
-
-//         // 添加 console.log 语句以输出 lc01Data 中的数值
-//         //console.log("New data in Data:", item.value);
-//       }
-//     } else {
-//       // 如果 Alarm 中已經存在該文檔，則更新數值或刪除
-//       if (item.value > 50000) {
-//         // 更新數值
-//         if (existingDoc.value !== item.value) {
-//           await Alarm.findByIdAndUpdate(existingDoc._id, {
-//             value: item.value,
-//             timestamp: item.timestamp,
-//           });
-
-//           // 添加 console.log 语句以输出 lc01Data 中的数值
-//           //console.log("Updated data in lc01Data:", item.value);
-//         }
-//       } else {
-//         // 小於等於 50000 則刪除
-//         await Alarm.findByIdAndDelete(existingDoc._id);
-
-//         // 添加 console.log 语句以输出 lc01Data 中的数值
-//         //console.log("Deleted data in lc01Data:", item.value);
-//       }
-//     }
-//     existingIds.add(idString);
-//   }
-// }
 
 router.get("/testforalarm", (req, res) => {
   // 在這裡定義渲染 middleware 頁面的邏輯

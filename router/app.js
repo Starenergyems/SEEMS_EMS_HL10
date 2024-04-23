@@ -76,6 +76,33 @@ alarmnanoDb.createIndex(indexDef);
 //***************************************************************************************************************** */
 
 //////////////////////////////////////////////////////////////////////////////
+app.get("/test", async (req, res) => { 
+  const CREDENTIALS = Buffer.from(`${couchdbConfig.username}:${couchdbConfig.password}`).toString('base64');
+  const AUTHORIZATION = "Basic " + CREDENTIALS;
+  const URL = `http://${couchdbConfig.host}:${couchdbConfig.port}/${couchdbConfig.account}/_all_docs?include_docs=true`
+  const response = await fetch(URL, {
+    method: "GET",
+    headers: { Authorization: AUTHORIZATION },
+    credentials: "include",
+  });
+  data = await response.json()
+  console.log(typeof(data))
+  // for (let i =0 )
+  let rrr = []
+  // 
+  for (let i = 0; i < 4; i++){
+    rrrr = {}
+  for (const [key, value] of Object.entries(data.rows[i].doc)) 
+{
+  rrrr[key] = value
+}
+rrr.push(rrrr)
+}
+console.log(rrr)
+})  
+
+
+
 // Login page. URL = "/login", LOGIN_URL can redirect.
 app.get("/login", async (req, res) => {
   res.clearCookie("token");
@@ -177,7 +204,7 @@ app.use("*", async (req, res, next) => {
     const authenticated = await authentication(req);
     if (authenticated === false) {
       return res.redirect(302, "/login");
-      return res.status(401).send("Unauthorized");
+      // return res.status(401).send("Unauthorized");
 
       // res.redirect('login');
       // res.clearCookie("token");
@@ -215,14 +242,14 @@ let flag = 0;
 
 async function getData() {
   const now = moment();
-  const startOfDay = moment().startOf("day");
+  const startOfDay = moment().startOf("day").add(1, 'second'); // 當天的第二秒
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 }) 
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -233,25 +260,33 @@ async function getData() {
           $lte: nightoneseconds
         }
       },
-      limit: 1
+      limit: 10
     };
 
     const midnightData = await rf01Db.find(filterTime);
+    //console.log("midnightData", midnightData);
 
     //discharge capacity
-    const expValue = midnightData.docs[0].Freq["408030"];
+    for(let i = 0; i < 10; i++) {
+      if(midnightData.docs[i] && midnightData.docs[i].Freq["408030"] !== null) {
+        const expValue = midnightData.docs[i].Freq["408030"];
+        //console.log("i: " , i);
+        //console.log("expValue: " , expValue);
+        //charge capacity
+        const impValue = midnightData.docs[i].Freq["408028"];
+        //console.log("impValue: " , impValue);
+        // 更新全域變數
+        ChgEtoday0 = impValue; //408028 充電
+        DcgEtoday0 = expValue; //408030 放電
+        //console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
+        // 退出迴圈
+        break;
+      }
+    }
 
-    //charge capacity
-    const impValue = midnightData.docs[0].Freq["408028"];
-
-    // 更新全域變數
-    ChgEtoday0 = impValue; //408028 充電
-    DcgEtoday0 = expValue; //408030 放電
-
-    //console.log("零時的用電度數: " + ChgEtoday0 + " / " + DcgEtoday0);
+    //console.log("呼叫getdata");
+    flag = 1;
   }
-  //console.log("呼叫getdata");
-  flag = 1;
 }
 
 /************************************************************************* */
@@ -277,7 +312,7 @@ app.get("/navbar", async (req, res) => {
       permission: req.body.permission,
       userAccount: req.body.id,
       totalAlarmNum: Values[0],
-      AlarmNum_Sys: Values[1], //新增`
+      AlarmNum_Sys: Values[1], //新增
       AlarmNum_Bat: Values[2],
       AlarmNum_PCS: Values[3],
       AlarmNum_FF: Values[4],
@@ -589,11 +624,11 @@ async function getLatestValuesFromDatabaseforother() {
       1
     ); //408030 kWh_Export
 
-    // console.log("現在充電: " + L_M_chgEtoday);
+    //console.log("現在充電: " + L_M_chgEtoday);
     // console.log("零時充電: " + ChgEtoday0);
     // console.log("當日充電: " + otherrf01Data.Freq["408028"]);
 
-    // console.log("現在放電: " + L_M_dcgEtoday);
+    //console.log("現在放電: " + L_M_dcgEtoday);
     // console.log("零時放電: " + DcgEtoday0);
     // console.log("當日放電: " + otherrf01Data.Freq["408030"]);
     return [
@@ -612,7 +647,7 @@ async function getLatestValuesFromDatabaseforother() {
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
-    throw error; // 把錯誤向外傳遞
+    throw error; // 把錯誤向外傳遞ogin fail
   }
 }
 

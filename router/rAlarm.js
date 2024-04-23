@@ -451,7 +451,7 @@ router.get("/alarm/history/edit", (req, res) => {
         hisalarm_db_array.push(item);
       }
       // console.log("alarm_db_array");
-      console.log(hisalarm_db_array);
+      //console.log(hisalarm_db_array);
       res.send(hisalarm_db_array);
     })
     .catch((err) => {
@@ -554,7 +554,6 @@ function alarm_processor_call() {
   //   // console.log('b')
   // }
   // console.log("alarm_processor_call", alarm_db_event_lock)
-
   if (!alarm_db_event_lock) {
     const mangoQuery_latest_rawdata = {
       selector: {

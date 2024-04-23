@@ -5,6 +5,40 @@ $(document).ready(function () {
 
     classAdd('#nB_Alarm', "default_nB");
     updateTable();//讀取今日的歷史告警
+
+    ///////////////////////////////////////////////////////////////////////
+    generateDropOptions(//生成下拉選單
+    '#device_filter', 
+    ['設備','System', 'Recloser', 'VCB', 'BMS', 'BSC', 'LC', 'MVCB', 'UPS', 'GC', 'HVAC','Rack'], 
+    'filtOpt', 
+    null, 
+    ['設備','System', 'Recloser', 'VCB', 'BMS', 'BSC', 'LC', 'MVCB', 'UPS', 'GC', 'HVAC','Rack'], 
+    '設備'
+    ); 
+    generateDropOptions(//生成下拉選單
+    '#location_filter', 
+    ['地點', 'Control Room', 'VCB', 'ESS','AUX','ACP','UPS'], 
+    'filtOpt', 
+    null, 
+    ['地點', 'Control Room', 'VCB', 'ESS','AUX','ACP','UPS'], 
+    '地點'
+    ); 
+    generateDropOptions(//生成下拉選單
+    '#level_filter', 
+    ['等級', 'Alarm','Fault'], 
+    'filtOpt', 
+    null, 
+    ['等級', 'Alarm','Fault'], 
+    '等級'
+    ); 
+    $('#device_filter, #location_filter, #level_filter').change(function(){ //設定有哪些篩選器，對應哪個TABLE的哪一行
+      _onInputEvent('#almTable', '#location_filter', 2, '地點','#device_filter', 3, '設備', '#level_filter', 4, '等級');
+    });
+    $('#filtNone').click(function(){ //指定哪個按鈕可以恢復預設篩選條件
+      back_default(['#device_filter', '#location_filter', '#level_filter'], ['設備', '地點','等級']);//改欄位顯示值
+      $('#almTable input').val(null); //關鍵字清空
+      _onInputEvent('#almTable', '#location_filter', 2, '地點','#device_filter', 3, '設備', '#level_filter', 4, '等級');
+    });
     // block_temp
     // btn_test_01
     // inText_test_01
@@ -67,28 +101,28 @@ const filtLocationOpts = document.querySelector(".filtLocation .filtOptions");
 const filtLevelOpts = document.querySelector(".filtLevel .filtOptions");
 
 const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
-dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
-function showHide_filtDevOpts() {
-    filtDeviceOpts.classList.toggle("appear");
-    filtLocationOpts.classList.remove("appear");
-    filtLevelOpts.classList.remove("appear");
-}
+// dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
+// function showHide_filtDevOpts() {
+//     filtDeviceOpts.classList.toggle("appear");
+//     filtLocationOpts.classList.remove("appear");
+//     filtLevelOpts.classList.remove("appear");
+// }
 
 const dDL_filtLoc = document.querySelector(".title #dDL_filtLocation");
-dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
-function showHide_filtLocOpts() {
-    filtLocationOpts.classList.toggle("appear");
-    filtDeviceOpts.classList.remove("appear");
-    filtLevelOpts.classList.remove("appear");
-}
+// dDL_filtLoc.addEventListener("click", showHide_filtLocOpts);
+// function showHide_filtLocOpts() {
+//     filtLocationOpts.classList.toggle("appear");
+//     filtDeviceOpts.classList.remove("appear");
+//     filtLevelOpts.classList.remove("appear");
+// }
 
 const dDL_filtLev = document.querySelector(".title #dDL_filtLevel");
-dDL_filtLev.addEventListener("click", showHide_filtLevOpts);
-function showHide_filtLevOpts() {
-    filtLevelOpts.classList.toggle("appear");
-    filtDeviceOpts.classList.remove("appear");
-    filtLocationOpts.classList.remove("appear");
-}
+// dDL_filtLev.addEventListener("click", showHide_filtLevOpts);
+// function showHide_filtLevOpts() {
+//     filtLevelOpts.classList.toggle("appear");
+//     filtDeviceOpts.classList.remove("appear");
+//     filtLocationOpts.classList.remove("appear");
+// }
 
 const filterDevice = document.querySelector(".title .filtDevice p");
 const filterLocation = document.querySelector(".title .filtLocation p");
@@ -530,8 +564,8 @@ function close_WrongDataSet_No() {
 
 var dataset=[];
 
-async function updateTable(){
-    dataset = await getData(window.location.href+"/edit");
+async function updateTable() {
+    dataset = await getData(window.location.href + "/edit");
     console.log(dataset);
     let lang = {
         sProcessing: "處理中...",
@@ -567,13 +601,10 @@ async function updateTable(){
         destroy: true,
         language: lang, //提示資訊
         autoWidth: false, //禁用自動調整列寬
-        // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
         processing: false, //隱藏載入提示,自行處理
-        //serverSide: true, //啟用伺服器端分頁
-        //searching: false, //禁用原生搜尋
         orderMulti: false, //啟用多列排序
         ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
-        //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
+        paging: false, // Disable pagination
         pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
         pageLength: 15, // 預設為'10'，若需更改初始每頁顯示筆數，才需設定
         responsive: true,
@@ -585,37 +616,39 @@ async function updateTable(){
             { data: "location" },
             { data: "device" },
             { data: "level" },
-            { data: "content",
-            render: function(data, type, row) {
-                // Ensure the content is treated as HTML
-                return $('<div/>').html(data).text();
-            }},
             {
-              data: "read",
-              render: function (data, type, row) {
-                var rowIndex = row.index; // Get the index from the row object
-                //var checkboxId = "chb_Ack_" + rowIndex;
-                  if (data === true) {
-                    return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
-                  } else {
-                    return "";
-                  }
-              },
+                data: "content",
+                render: function (data, type, row) {
+                    // Ensure the content is treated as HTML
+                    return $('<div/>').html(data).text();
+                }
             },
             {
-              data: "recover",
-              render: function (data, type, row) {
-                if (data === true) {
-                  return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
-                } else {
-                  return "";
-                }
-              },
+                data: "read",
+                render: function (data, type, row) {
+                    var rowIndex = row.index; // Get the index from the row object
+                    //var checkboxId = "chb_Ack_" + rowIndex;
+                    if (data === true) {
+                        return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                    } else {
+                        return "";
+                    }
+                },
+            },
+            {
+                data: "recover",
+                render: function (data, type, row) {
+                    if (data === true) {
+                        return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+                    } else {
+                        return "";
+                    }
+                },
             },
             { data: "recover_time" },
-          ],
+        ],
 
-    })
+    });
     createIndex('#almTable');
 }
 

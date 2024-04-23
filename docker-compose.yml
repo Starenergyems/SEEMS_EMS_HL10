@@ -1,7 +1,7 @@
 services:
   ems-service:
     # restart: always
-    image: ems-service_v9
+    image: ems-service_v12
     build:
       context: .
       dockerfile: Dockerfile
@@ -21,9 +21,9 @@ services:
     deploy:
       replicas: 1 # Set the desired number of replicas
       restart_policy:
-        condition: on-failure
+        condition: unless-stopped
         delay: 5s
-        max_attempts: 3
+        # max_attempts: 3
         window: 120s
     healthcheck:
       test: ["CMD", "curl", "-fs", "http://localhost:3000/health"]

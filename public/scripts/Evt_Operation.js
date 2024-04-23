@@ -4,6 +4,34 @@
 $(document).ready(async function () {
   classAdd("#nB_Event", "default_nB"); //側欄按鈕綠色
 
+  ///////////////////////////////////////////////////////////////////////////////////////
+  generateDropOptions(//生成下拉選單
+    '#filtOpType', 
+    ['操作類別','系統模式', '設備控制', '環境控制', '保護邏輯', '帳號設定'], 
+    'filtOpt', 
+    null, 
+    ['操作類別','系統模式', '設備控制', '環境控制', '保護邏輯', '帳號設定'], 
+    '操作類別'
+  ) 
+  generateDropOptions(//生成下拉選單
+    '#filtDevice', 
+    ['設備名稱','GC','ACB', 'LC', 'EMS'], 
+    'filtOpt', 
+    null, 
+    ['設備名稱','GC','ACB', 'LC', 'EMS'], 
+    '設備名稱'
+  )  
+
+  $('#filtOpType, #filtDevice').change(function(){ //設定有哪些篩選器，對應哪個TABLE的哪一行
+    _onInputEvent('#evtTable','#filtOpType', 1, '操作類別', '#filtDevice', 2, '設備名稱', null, null, null);
+  });
+  $('#filtNone').click(function(){ //指定哪個按鈕可以恢復預設篩選條件
+    back_default(['#filtOpType', '#filtDevice'], ['操作類別', '設備名稱']);//改欄位顯示值
+    $('#evtTable input').val(null); //關鍵字清空
+    _onInputEvent('#evtTable','#filtOpType', 1, '操作類別', '#filtDevice', 2, '設備名稱', null, null, null);//重新篩選
+  });
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   updateTable(); //讀取預設的時間區段
 
 });
@@ -37,39 +65,42 @@ let lang = {
   },
 };
 async function updateTable() {
+  try {
+    // Fetch data asynchronously
+    var dataset = await getData(window.location.href+"/edit");
+    
+    // Initialize DataTable
+    $("#evtTable").DataTable({
+      lengthMenu: [10, 20, 25, 50, 100],
+      scrollY: "660px",
+      paging: false, // Disable pagination
+      destroy: true,
+      language: lang, // Make sure lang is properly defined
+      autoWidth: false,
+      processing: false,
+      orderMulti: false,
+      ordering: false,
+      pagingType: "simple_numbers",
+      responsive: true,
+      data: dataset, // Data fetched from getData function
+      columns: [
+        { data: "index" },
+        { data: "category" },
+        { data: "device" },
+        { data: "time" },
+        { data: "username" },
+        { data: "content" },
+      ],
+      // Set the width of the last column and align its content to the left
+      columnDefs: [{ targets: [5], width: "50%", className: "text-align-left" }],
+    });
 
-  var dataset = await getData(window.location.href+"/edit");
-  console.log(dataset);
-
-  $("#evtTable").DataTable({
-    lengthMenu: [10, 20, 25, 50, 100],
-    scrollY: "660px",
-
-    destroy: true,
-    language: lang, //提示資訊
-    autoWidth: false, //禁用自動調整列寬
-    // stripeClasses: [], //為奇偶行加上樣式，相容不支援CSS偽類的場合
-    processing: false, //隱藏載入提示,自行處理
-    //serverSide: true, //啟用伺服器端分頁
-    //searching: false, //禁用原生搜尋
-    orderMulti: false, //啟用多列排序
-    ordering: false, //取消預設排序查詢,否則核取方塊一列會出現小箭頭
-    //renderer: "bootstrap", //渲染樣式：Bootstrap和jquery-ui
-    pagingType: "simple_numbers", //分頁樣式：simple,simple_numbers,full,full_numbers
-    responsive: true,
-
-    data: dataset,
-    columns: [
-      { data: "index" },
-      { data: "category" },
-      { data: "device" },
-      { data: "time" },
-      { data: "username" },
-      { data: "content" },
-    ],
-    columnDefs: [{ targets: [5], width: "50%", className: "text-align-left" }],
-  });
-  createIndex("#evtTable");
+    // Call a function to create index if needed
+    createIndex("#evtTable");
+  } catch (error) {
+    console.error("Error fetching or processing data:", error);
+    // Handle error gracefully, such as displaying an error message to the user
+  }
 }
 
 async function updateTable_post(data) {
@@ -115,14 +146,14 @@ const filtOpTypeOpts = document.querySelector(".filtOpType .filtOptions");
 const filtDeviceOpts = document.querySelector(".filtDevice .filtOptions");
 
 const dDL_filtOpT = document.querySelector(".title #dDL_filtOpType");
-dDL_filtOpT.addEventListener("click", showHide_filtOpTOpts);
+// dDL_filtOpT.addEventListener("click", showHide_filtOpTOpts);
 function showHide_filtOpTOpts() {
   filtOpTypeOpts.classList.toggle("appear");
   filtDeviceOpts.classList.remove("appear");
 }
 
 const dDL_filtDev = document.querySelector(".title #dDL_filtDevice");
-dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
+// dDL_filtDev.addEventListener("click", showHide_filtDevOpts);
 function showHide_filtDevOpts() {
   filtDeviceOpts.classList.toggle("appear");
   filtOpTypeOpts.classList.remove("appear");
@@ -131,7 +162,7 @@ function showHide_filtDevOpts() {
 const filterOpType = document.querySelector(".title .filtOpType p");
 const filterDevice = document.querySelector(".title .filtDevice p");
 
-document.addEventListener("click", hideFiltOptions);
+// document.addEventListener("click", hideFiltOptions);
 function hideFiltOptions(clickItem) {
   if (
     clickItem.target.id !== "dDL_filtOpType" &&
@@ -140,6 +171,7 @@ function hideFiltOptions(clickItem) {
     if (clickItem.target.id === "filtNone") {
       filterOpType.textContent = "操作類別";
       filterDevice.textContent = "設備";
+      _onInputEvent();//更新表格，隱藏不相關欄位
     } else if (
       clickItem.target.id === "opTypeFO_01" ||
       clickItem.target.id === "opTypeFO_02" ||
@@ -148,6 +180,7 @@ function hideFiltOptions(clickItem) {
       clickItem.target.id === "opTypeFO_05"
     ) {
       filterOpType.textContent = clickItem.target.textContent;
+      _onInputEvent();//更新表格，隱藏不相關欄位
     } else if (
       clickItem.target.id === "deviceFO_01" ||
       clickItem.target.id === "deviceFO_02" ||
@@ -159,6 +192,7 @@ function hideFiltOptions(clickItem) {
       clickItem.target.id === "deviceFO_08"
     ) {
       filterDevice.textContent = clickItem.target.textContent;
+      _onInputEvent();//更新表格，隱藏不相關欄位
     }
 
     filtOpTypeOpts.classList.remove("appear");
@@ -650,3 +684,6 @@ function b_test_02() {
   console.log(st.value.length);
   console.log(typeof st.value.length);
 }
+
+
+	 

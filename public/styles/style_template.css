@@ -949,3 +949,33 @@ table.dataTable tbody td {
 .click_block_1:hover, .click_block_2:hover{
     cursor: pointer;
 }
+
+/* 下拉選單 *****************************************************/
+select.filter{
+    display: inline-block;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    width: 6%;
+    height:40px;
+    border: 2px solid #808080;
+    margin: 5px 0px 0px 5px;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+    border-radius: 10px;
+    vertical-align: top;
+    position: relative;
+    width: 150px;
+    padding-right: 15px;
+    text-align: center;
+}
+
+select.filter .filtOpt {
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    height: 35px;
+    width: 135px;
+    border: 0.5px solid #D9D9D9;
+    border-top: none;
+    font-size: 20px;
+}
