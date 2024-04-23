@@ -11,6 +11,20 @@ const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
+
+//set
+app.set("view engine", "ejs");
+// 設定視圖目錄為 C:\Test\SEEMS_EMS\views
+app.set("views", path.join(__dirname, "../views"));
+//use
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.use("/public", express.static(path.join(__dirname, "../public")));
+//app.use(myMiddleware);
+const {
+  Scale_Data
+} = require("./function");
+
 //確認回傳的內容有那些
 // freq hl_4-1_10MW.Other_RF01.Freq.408026
 // active prower hl_4-1_10MW.Other_RF01.Freq.408019
@@ -27,15 +41,7 @@ const gc01Db = nano.use(gc_rf01); // 請注意這裡使用 nano.use() 來設定�
 const gc_rf10 = "gc_rf10";
 const gc10Db = nano.use(gc_rf10); // 請注意這裡使用 nano.use() 來設定數據庫
 
-//set
-app.set("view engine", "ejs");
-// 設定視圖目錄為 C:\Test\SEEMS_EMS\views
-app.set("views", path.join(__dirname, "../views"));
-//use
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.use("/public", express.static(path.join(__dirname, "../public")));
-//app.use(myMiddleware);
+/************************************************************************************ */
 
 //以下app要改回router
 router.get("/chart", (req, res) => {
@@ -111,6 +117,8 @@ router.get("/chart/realtime/edit", async (req, res) => {
   }
 });
 
+/************************************************************************************ */
+
 router.get("/chart/history", (req, res) => {
   res.render("Cht_History");
 });
@@ -123,7 +131,7 @@ router.get("/chart/history/edit", async (req, res) => {
     SOC: []
   };
 
-  const startTime = "2024-03-24 20:55:10";
+  const startTime = "2024-04-21 17:27:53";
   const lengthOfTime = 100;
   // const startTime = req.query.startTime; // 從查詢參數中獲取 startTime
   // const lengthOfTime = parseInt(req.query.lengthOfTime); // 從查詢參數中獲取 lengthOfTime
@@ -198,6 +206,109 @@ router.get("/chart/history/edit", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
+router.post("/query_HistoryChart_Data", async (req, res) => {
+  try {
+    const start_DT_chartT = req.body.start_DT;
+    const end_DT_chartT = req.body.end_DT;
+
+    console.log(start_DT_chartT);
+    console.log(end_DT_chartT);
+
+    let start_DT_queryT = `${start_DT_chartT.slice(0, 10)}T${start_DT_chartT.slice(11, 23)}+08:00`;
+    let end_DT_queryT = `${end_DT_chartT.slice(0, 10)}T${end_DT_chartT.slice(11, 23)}+08:00`;
+
+    console.log(start_DT_queryT);
+    console.log(end_DT_queryT);
+
+    const queryCondition = {
+      selector: {
+        time: {
+          $gte: start_DT_queryT,
+          $lte: end_DT_queryT
+        }
+      },
+      // sort: [{time: "desc"}],
+      limit: 10000                  // 限制每次查詢的數量
+    };
+
+    let regData_MT = {
+      Freq: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400121, scale: 0.01, decPlace: 2 },
+      ActivePower: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400123, scale: 0.01, decPlace: 2 },
+      ExecuteRate: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400133, scale: 0.01, decPlace: 1 },
+      SOC: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400129, scale: 1 / 4472 / 7, decPlace: 1 }
+    }
+
+    let queryDB = [];
+    queryDB.push("gc_rf01");
+    // queryDB.push("gc_rf10");
+    // console.log(queryDB);
+
+    let queryNanoDB = [];
+    let queryResult = [];
+
+    for (let i = 0; i < queryDB.length; i++) {
+      queryNanoDB.push(nano.use(queryDB[i]));
+      queryResult.push(await queryNanoDB[i].find(queryCondition));
+    }
+    // console.log(queryResult[0].docs);
+    // for (let i = 0; i < queryResult[1].docs.length; i++) {
+    //   console.log(queryResult[1].docs[i].System);
+    // }
+
+    let response = { Freq: [], ActivePower: [], ExecuteRate: [], SOC: [] };
+
+    for (let i = 0; i < queryResult[0].docs.length; i++) {
+      let dataT_queryT = queryResult[0].docs[i].time;
+      let dataT_chartT = `${dataT_queryT.slice(0, 10)} ${dataT_queryT.slice(11, 23)}`;
+
+      let v_Freq = Scale_Data(queryResult[0].docs[i][regData_MT["Freq"].dicName][regData_MT["Freq"].dataID], regData_MT["Freq"].scale, regData_MT["Freq"].decPlace);
+      let v_ActivePower = Scale_Data(queryResult[0].docs[i][regData_MT["ActivePower"].dicName][regData_MT["ActivePower"].dataID], regData_MT["ActivePower"].scale, regData_MT["ActivePower"].decPlace);
+      let v_ExecuteRate = Scale_Data(queryResult[0].docs[i][regData_MT["ExecuteRate"].dicName][regData_MT["ExecuteRate"].dataID], regData_MT["ExecuteRate"].scale, regData_MT["ExecuteRate"].decPlace);
+      let v_SOC = Scale_Data(queryResult[0].docs[i][regData_MT["SOC"].dicName][regData_MT["SOC"].dataID], regData_MT["SOC"].scale, regData_MT["SOC"].decPlace);
+
+      response.Freq.push({ x: dataT_chartT, y: v_Freq });
+      response.ActivePower.push({ x: dataT_chartT, y: v_ActivePower });
+      response.ExecuteRate.push({ x: dataT_chartT, y: v_ExecuteRate });
+      response.SOC.push({ x: dataT_chartT, y: v_SOC });
+    }
+
+
+
+    // const gc_rf10 = "gc_rf10";
+    // const gc_rf01 = "gc_rf01";
+    // const GC10nanoDb = nano.use(gc_rf10);
+    // const GC01nanoDb = nano.use(gc_rf01);
+
+    // await GC10nanoDb.createIndex(indexDef);
+    // await GC01nanoDb.createIndex(indexDef);
+
+    //   const result10 = await GC10nanoDb.find(mangoQuery);
+    //   const result01 = await GC01nanoDb.find(mangoQuery);
+
+    //   const GC10Data = result10.docs[0];
+    //   const GC01Data = result01.docs[0];
+
+    // const gc_rf01 = "gc_rf01";
+    // const gc01Db = nano.use(gc_rf01); // 請注意這裡使用 nano.use() 來設定數據庫
+    // const doc = await gc01Db.find(filter);
+
+
+
+    // await dwctrlnanoDb.createIndex(indexDef);
+    // const dataGot = await dwctrlnanoDb.find(mangoQuery);
+    // const dwctrlData = dataGot.docs[0];
+    // const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+/************************************************************************************ */
 
 module.exports = router;
 
