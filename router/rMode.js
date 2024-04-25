@@ -417,18 +417,18 @@ router.post("/set_freqVsP_Data", async (req, res) => {
           }
         };
 
-        newdwctrlData["system"]["W400016"] = setV_Freq[0];
-        newdwctrlData["system"]["W400017"] = setV_Freq[1];
-        newdwctrlData["system"]["W400018"] = setV_Freq[2];
-        newdwctrlData["system"]["W400019"] = setV_Freq[3];
-        newdwctrlData["system"]["W400020"] = setV_Freq[4];
-        newdwctrlData["system"]["W400021"] = setV_Freq[5];
-        newdwctrlData["system"]["W400022"] = setV_P[0];
-        newdwctrlData["system"]["W400023"] = setV_P[1];
-        newdwctrlData["system"]["W400024"] = setV_P[2];
-        newdwctrlData["system"]["W400025"] = setV_P[3];
-        newdwctrlData["system"]["W400026"] = setV_P[4];
-        newdwctrlData["system"]["W400027"] = setV_P[5];
+        newdwctrlData["System"]["W400016"] = setV_Freq[0];
+        newdwctrlData["System"]["W400017"] = setV_Freq[1];
+        newdwctrlData["System"]["W400018"] = setV_Freq[2];
+        newdwctrlData["System"]["W400019"] = setV_Freq[3];
+        newdwctrlData["System"]["W400020"] = setV_Freq[4];
+        newdwctrlData["System"]["W400021"] = setV_Freq[5];
+        newdwctrlData["System"]["W400022"] = setV_P[0];
+        newdwctrlData["System"]["W400023"] = setV_P[1];
+        newdwctrlData["System"]["W400024"] = setV_P[2];
+        newdwctrlData["System"]["W400025"] = setV_P[3];
+        newdwctrlData["System"]["W400026"] = setV_P[4];
+        newdwctrlData["System"]["W400027"] = setV_P[5];
 
         //const accountDb = createNanoInstance("account");
         //存入資料庫的時區問題
@@ -644,14 +644,14 @@ router.post("/set_socRef_Data", async (req, res) => {
           }
         };
 
-        newdwctrlData["system"]["W400006"] = setV_SOC[0];
-        newdwctrlData["system"]["W400007"] = setV_SOC[1];
-        newdwctrlData["system"]["W400032"] = setV_SOC[2];
-        newdwctrlData["system"]["W400033"] = setV_SOC[3];
-        newdwctrlData["system"]["W400008"] = setV_Volt[0];
-        newdwctrlData["system"]["W400009"] = setV_Volt[1];
-        newdwctrlData["system"]["W400034"] = setV_Volt[2];
-        newdwctrlData["system"]["W400035"] = setV_Volt[3];
+        newdwctrlData["System"]["W400006"] = setV_SOC[0];
+        newdwctrlData["System"]["W400007"] = setV_SOC[1];
+        newdwctrlData["System"]["W400032"] = setV_SOC[2];
+        newdwctrlData["System"]["W400033"] = setV_SOC[3];
+        newdwctrlData["System"]["W400008"] = setV_Volt[0];
+        newdwctrlData["System"]["W400009"] = setV_Volt[1];
+        newdwctrlData["System"]["W400034"] = setV_Volt[2];
+        newdwctrlData["System"]["W400035"] = setV_Volt[3];
 
         //const accountDb = createNanoInstance("account");
         //存入資料庫的時區問題
@@ -2177,7 +2177,7 @@ router.post("/set_Schedule_Data", async (req, res) => {
         const newdwctrlData = JSON.parse(JSON.stringify(dwctrlData));
 
         for (i = 0; i < setV_P_schd.length; i++) {
-          newdwctrlData["schedule"][Date_of_Schd_set]["W" + (401001 + i)] = setV_P_schd[i];
+          newdwctrlData["Schedule"][Date_of_Schd_set]["W" + (401001 + i)] = setV_P_schd[i];
           newdwctrlData["API"][Date_of_Schd_set]["W" + (400201 + i * 2)] = setV_P_cmd[i];
         }
 

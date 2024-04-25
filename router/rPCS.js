@@ -915,14 +915,14 @@ router.post("/set_dVS_Data", async (req, res) => {
     if (setValue_raw !== "" && !Number.isNaN(Number(setValue_raw))) {
       const data_MT = {
         setBut_P_Project: {
-          dicName: `system`,
+          dicName: `System`,
           dataID: "W400001",
           category: "系統模式01",
           device: `GC`,
           log_dataName: `額定功率`
         },
         setBut_P_LoadShift: {
-          dicName: `system`,
+          dicName: `System`,
           dataID: "W400002",
           category: "系統模式02",
           device: `GC`,
@@ -1139,25 +1139,25 @@ router.post("/set_dSS_Data", async (req, res) => {
         category: "設備控制7096", device: `LC${dSS_Data_numInDataGroup}`, log_dataName: `LC${dSS_Data_numInDataGroup}空調啟停`
       },
       setBut_AutoMan_SS: {
-        dicName: `system`, dataID: "W400076", category: "系統模式03", device: `GC`, log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`
+        dicName: `System`, dataID: "W400076", category: "系統模式03", device: `GC`, log_dataName: `子系統${dSS_Data_numInDataGroup}運作模式`
       },
       setBut_freqSource: {
-        dicName: `system`, dataID: "W400077", category: "系統模式04", device: `GC`, log_dataName: `頻率資料來源`
+        dicName: `System`, dataID: "W400077", category: "系統模式04", device: `GC`, log_dataName: `頻率資料來源`
       },
       setBut_use_Freq_Cmd: {
-        dicName: `system`, dataID: "W400077", category: "系統模式05", device: `GC`, log_dataName: `使用電力交易平台頻率移動基準值`
+        dicName: `System`, dataID: "W400077", category: "系統模式05", device: `GC`, log_dataName: `使用電力交易平台頻率移動基準值`
       },
       setBut_use_P_schd: {
-        dicName: `system`, dataID: "W400077", category: "系統模式06", device: `GC`, log_dataName: `使用排程得標量`
+        dicName: `System`, dataID: "W400077", category: "系統模式06", device: `GC`, log_dataName: `使用排程得標量`
       },
       setBut_use_P_LS: {
-        dicName: `system`, dataID: "W400077", category: "系統模式07", device: `GC`, log_dataName: `使用排程電能移轉量`
+        dicName: `System`, dataID: "W400077", category: "系統模式07", device: `GC`, log_dataName: `使用排程電能移轉量`
       },
       setBut_use_MTE_P_96Q: {
-        dicName: `system`, dataID: "W400077", category: "系統模式08", device: `GC`, log_dataName: `使用電力交易平台得標量資料`
+        dicName: `System`, dataID: "W400077", category: "系統模式08", device: `GC`, log_dataName: `使用電力交易平台得標量資料`
       },
       setBut_use_MTE_API: {
-        dicName: `system`, dataID: "W400077", category: "系統模式09", device: `GC`, log_dataName: `使用電力交易平台電能移轉量、SOC參考值資料`
+        dicName: `System`, dataID: "W400077", category: "系統模式09", device: `GC`, log_dataName: `使用電力交易平台電能移轉量、SOC參考值資料`
       },
       //
       //
@@ -1240,10 +1240,10 @@ router.post("/set_SOC_Logic", async (req, res) => {
 
     const data_MT = {
       setBut_use_SOC_ref: {
-        dicName: `system`, dataID: "W400077", category: "系統模式13", device: `GC`, log_dataName: `使用排程SOC參考值`, _1: "01"
+        dicName: `System`, dataID: "W400077", category: "系統模式13", device: `GC`, log_dataName: `使用排程SOC參考值`, _1: "01"
       },
       setBut_autoCal_SOC_ideal: {
-        dicName: `system`, dataID: "W400077", category: "系統模式14", device: `GC`, log_dataName: `使用電能移轉量計算SOC理想值`, _1: "10"
+        dicName: `System`, dataID: "W400077", category: "系統模式14", device: `GC`, log_dataName: `使用電能移轉量計算SOC理想值`, _1: "10"
       }
     };
 

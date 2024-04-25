@@ -681,6 +681,17 @@ function get_Log_Time() {
   return `${yy}-${mm}-${dd}T${hh}:${m}:${ss}.${SSS}+08:00`;
 }
 
+function Convert_rawDT_to_queryDT_floorToSec(rawDateTime) {
+  let yy = String(rawDateTime.getFullYear()).padStart(4, "0");
+  let mm = String(rawDateTime.getMonth() + 1).padStart(2, "0");
+  let dd = String(rawDateTime.getDate()).padStart(2, "0");
+  let hh = String(rawDateTime.getHours()).padStart(2, "0");
+  let m = String(rawDateTime.getMinutes()).padStart(2, "0");
+  let ss = String(rawDateTime.getSeconds()).padStart(2, "0");
+
+  return `${yy}-${mm}-${dd}T${hh}:${m}:${ss}.000+08:00`;
+}
+
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
 function checkValuesFault(v1, v2, v3) {
@@ -1207,6 +1218,7 @@ module.exports = {
   Determine_status_of_exeCmd,
   Determine_status_of_sbyCmd,
   get_Log_Time,
+  Convert_rawDT_to_queryDT_floorToSec,
   workStatuschange,
   calculateAdd,
   //****************** */
@@ -1395,5 +1407,8 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 // console.log(uv_2);
 
 // console.log(get_Log_Time());
+
+// let raw_DT_now = new Date();
+// console.log(Convert_rawDT_to_queryDT_floorToSec(raw_DT_now));
 
 /////////////////////////////////////////////////////////////////////////

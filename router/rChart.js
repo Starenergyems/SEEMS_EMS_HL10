@@ -8,9 +8,7 @@ const cors = require("cors");
 const moment = require("moment");
 const config = require("./config");
 const couchdbConfig = config.database;
-const nano = require("nano")(
-  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
-);
+const nano = require("nano")(`http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`);
 
 //set
 app.set("view engine", "ejs");
@@ -22,7 +20,8 @@ app.use(methodOverride("_method"));
 app.use("/public", express.static(path.join(__dirname, "../public")));
 //app.use(myMiddleware);
 const {
-  Scale_Data
+  Scale_Data,
+  Convert_rawDT_to_queryDT_floorToSec
 } = require("./function");
 
 //確認回傳的內容有那些
@@ -117,6 +116,116 @@ router.get("/chart/realtime/edit", async (req, res) => {
   }
 });
 
+let RTchart_startQueryDT = "2024-01-01T12:34:56+08:00";
+let RTchart_endQueryDT = "2024-01-01T12:35:56+08:00";
+let RTchart_Duration = 60000;
+
+router.post("/query_RealTimeChart_Data", async (req, res) => {
+  try {
+    const firstQuery = req.body.firstQuery;
+
+    RTchart_startQueryDT = RTchart_endQueryDT;
+
+    let raw_DT_now = new Date();
+    RTchart_endQueryDT = Convert_rawDT_to_queryDT_floorToSec(raw_DT_now);
+
+    if (firstQuery) {
+      RTchart_startQueryDT = Convert_rawDT_to_queryDT_floorToSec(new Date(raw_DT_now.getTime() - 1000 * 1));   // ~~~~~~~~!!!!!!!!!!@@@@@@@@#########$$$$$%%%%%%%%%^^^^^^^&&&&&&&&****
+      console.log("設定第一次起始時間~");
+    }
+
+    const queryCondition = {
+      selector: {
+        time: {
+          $gte: RTchart_startQueryDT,
+          $lte: RTchart_endQueryDT
+        }
+      },
+      // sort: [{time: "desc"}],
+      // limit: 10000                  // 限制每次查詢的數量
+    };
+    console.log(`${RTchart_startQueryDT}_~!@_${RTchart_endQueryDT}`);
+
+    let regData_MT = {
+      Freq: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400121, scale: 0.01, decPlace: 2 },
+      ActivePower: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400123, scale: 0.01, decPlace: 2 },
+      ExecuteRate: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400133, scale: 0.01, decPlace: 1 },
+      SOC: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400129, scale: 1 / 4472 / 7, decPlace: 1 }
+    }
+
+    let queryDB = [];
+    queryDB.push("gc_rf01");
+    // queryDB.push("gc_rf10");
+    // console.log(queryDB);
+
+    let queryNanoDB = [];
+    let queryResult = [];
+
+    for (let i = 0; i < queryDB.length; i++) {
+      queryNanoDB.push(nano.use(queryDB[i]));
+      queryResult.push(await queryNanoDB[i].find(queryCondition));
+    }
+    // // console.log(queryResult[0].docs);
+    // // for (let i = 0; i < queryResult[1].docs.length; i++) {
+    // //   console.log(queryResult[1].docs[i].System);
+    // // }
+
+    let RTchart_xMin_queryDT = Convert_rawDT_to_queryDT_floorToSec(new Date(raw_DT_now.getTime() - RTchart_Duration));
+
+    let response = {
+      Freq: [], ActivePower: [], ExecuteRate: [], SOC: [],
+      xMin: `${RTchart_xMin_queryDT.slice(0, 10)} ${RTchart_xMin_queryDT.slice(11, 23)}`,
+      xMax: `${RTchart_endQueryDT.slice(0, 10)} ${RTchart_endQueryDT.slice(11, 23)}`
+    };
+
+    console.log(queryResult[0].docs.length);
+    for (let i = 0; i < queryResult[0].docs.length; i++) {
+      let dataT_queryT = queryResult[0].docs[i].time;
+      let dataT_chartT = `${dataT_queryT.slice(0, 10)} ${dataT_queryT.slice(11, 23)}`;
+
+      let v_Freq = Scale_Data(queryResult[0].docs[i][regData_MT["Freq"].dicName][regData_MT["Freq"].dataID], regData_MT["Freq"].scale, regData_MT["Freq"].decPlace);
+      let v_ActivePower = Scale_Data(queryResult[0].docs[i][regData_MT["ActivePower"].dicName][regData_MT["ActivePower"].dataID], regData_MT["ActivePower"].scale, regData_MT["ActivePower"].decPlace);
+      let v_ExecuteRate = Scale_Data(queryResult[0].docs[i][regData_MT["ExecuteRate"].dicName][regData_MT["ExecuteRate"].dataID], regData_MT["ExecuteRate"].scale, regData_MT["ExecuteRate"].decPlace);
+      let v_SOC = Scale_Data(queryResult[0].docs[i][regData_MT["SOC"].dicName][regData_MT["SOC"].dataID], regData_MT["SOC"].scale, regData_MT["SOC"].decPlace);
+
+      response.Freq.push({ x: dataT_chartT, y: v_Freq });
+      response.ActivePower.push({ x: dataT_chartT, y: v_ActivePower });
+      response.ExecuteRate.push({ x: dataT_chartT, y: v_ExecuteRate });
+      response.SOC.push({ x: dataT_chartT, y: v_SOC });
+    }
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.post("/update_RealTimeChart_Duration", async (req, res) => {
+  try {
+    RTchart_Duration = req.body.Duration;
+
+    let yy_end = Number(RTchart_endQueryDT.slice(0, 4));
+    let mm_end = Number(RTchart_endQueryDT.slice(5, 7)) - 1;
+    let dd_end = Number(RTchart_endQueryDT.slice(8, 10));
+    let hh_end = Number(RTchart_endQueryDT.slice(11, 13));
+    let m_end = Number(RTchart_endQueryDT.slice(14, 16));
+    let ss_end = Number(RTchart_endQueryDT.slice(17, 19));
+    let rawDT_end = new Date(yy_end, mm_end, dd_end, hh_end, m_end, ss_end);
+
+    let startQueryDT = Convert_rawDT_to_queryDT_floorToSec(new Date(rawDT_end.getTime() - RTchart_Duration));;
+
+    response = {
+      xMin: `${startQueryDT.slice(0, 10)} ${startQueryDT.slice(11, 23)}`,
+      xMax: `${RTchart_endQueryDT.slice(0, 10)} ${RTchart_endQueryDT.slice(11, 23)}`
+    };
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
 /************************************************************************************ */
 
 router.get("/chart/history", (req, res) => {
@@ -206,7 +315,6 @@ router.get("/chart/history/edit", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 router.post("/query_HistoryChart_Data", async (req, res) => {
   try {
