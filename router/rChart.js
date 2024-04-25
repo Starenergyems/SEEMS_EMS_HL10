@@ -142,7 +142,7 @@ router.post("/query_RealTimeChart_Data", async (req, res) => {
         }
       },
       // sort: [{time: "desc"}],
-      // limit: 10000                  // 限制每次查詢的數量
+      limit: 10000                  // 限制每次查詢的數量
     };
     console.log(`${RTchart_startQueryDT}_~!@_${RTchart_endQueryDT}`);
 
@@ -158,13 +158,16 @@ router.post("/query_RealTimeChart_Data", async (req, res) => {
     // queryDB.push("gc_rf10");
     // console.log(queryDB);
 
-    let queryNanoDB = [];
+    // let queryNanoDB = [];
     let queryResult = [];
+    let queryNanoDB = nano.use("gc_rf01");
+    queryResult[0] = await queryNanoDB.find(queryCondition);
 
-    for (let i = 0; i < queryDB.length; i++) {
-      queryNanoDB.push(nano.use(queryDB[i]));
-      queryResult.push(await queryNanoDB[i].find(queryCondition));
-    }
+    // for (let i = 0; i < queryDB.length; i++) {
+    //   queryNanoDB.push(nano.use(queryDB[i]));
+    //   queryResult.push(await queryNanoDB[i].find(queryCondition));
+    // }
+
     // // console.log(queryResult[0].docs);
     // // for (let i = 0; i < queryResult[1].docs.length; i++) {
     // //   console.log(queryResult[1].docs[i].System);
