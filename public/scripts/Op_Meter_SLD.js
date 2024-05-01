@@ -154,6 +154,8 @@ const radioOption2 = document.querySelector(".dataStatus_Set #radioOpt_2");
 const alertInfo_dataStatus_Set = document.querySelector(".dataStatus_Set .alertInfo");
 let optionChecked_dataStatus_Set;
 
+const window_WrongDataSet = document.querySelector(".alert_WrongDataSet");
+
 function clearCheckedRadioOption() {
   radioOption1.checked = false;
   radioOption2.checked = false;
@@ -178,6 +180,8 @@ async function Set_CB(numOfCB, CBlabel) {
 
     let getData = await record_num_of_CB(numOfCB);
     console.log(getData);
+  } else {
+    window_WrongDataSet.classList.add("appear");
   }
 }
 
@@ -232,6 +236,12 @@ setACB_3_3.addEventListener("click", function (e) { Set_CB("3_3", this); });
 
 const setACB_4_1 = document.querySelector(".singleLineD #ACB_4_1");
 setACB_4_1.addEventListener("click", function (e) { Set_CB("4_1", this); });
+
+const button_WrongDataSet = document.querySelector(".alert_WrongDataSet button");
+button_WrongDataSet.addEventListener("click", close_WrongDataSet);
+function close_WrongDataSet() {
+  window_WrongDataSet.classList.remove("appear");
+}
 
 /////////////////////////////////////////////////////////////////////////
 

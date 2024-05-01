@@ -100,51 +100,61 @@
 .singleLineD #ACB_1_1 {
     left: 131px;
     top: 419px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_1_2 {
     left: 69px;
     top: 503px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_1_3 {
     left: 193px;
     top: 503px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_2_1 {
     left: 364px;
     top: 419px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_2_2 {
     left: 302px;
     top: 503px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_2_3 {
     left: 426px;
     top: 503px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_3_1 {
     left: 597px;
     top: 419px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_3_2 {
     left: 535px;
     top: 503px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_3_3 {
     left: 659px;
     top: 503px;
+    cursor: pointer;
 }
 
 .singleLineD #ACB_4_1 {
     left: 815px;
     top: 419px;
+    cursor: pointer;
 }
 
 .singleLineD .status_Rly,
@@ -158,6 +168,7 @@
     border: 1px solid #000000;
     border-radius: 50%;
     position: absolute;
+    cursor: pointer;
 }
 
 .singleLineD .status_Rly.setToClose,
@@ -518,4 +529,22 @@
 
 .info_RelayVCB .closeWindowButton {
     margin: 20px 0px 0px 255px;
+}
+
+.popUpWindow.alert_WrongDataSet {
+    height: 200px;
+    width: 320px;
+    left: 560px;
+    top: 280px;
+}
+
+.alert_WrongDataSet #alertMessage {
+    margin: 35px 40px 0px;
+    font-size: 24px;
+    line-height: 30px;
+    color: #FF0000;
+}
+
+.alert_WrongDataSet #closeWB_No {
+    margin: 20px 130px 0px;
 }

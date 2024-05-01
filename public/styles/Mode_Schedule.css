@@ -65,6 +65,7 @@ body {
     position: absolute;
     right: 0px;
     top: 2px;
+    cursor: pointer;
 }
 
 .logicCtrl .DV_Line {
@@ -318,6 +319,7 @@ body {
     line-height: 28px;
     border-radius: 10px;
     vertical-align: top;
+    cursor: pointer;
 }
 
 .schedule #goToAnotherDay {
@@ -421,6 +423,7 @@ body {
     position: absolute;
     right: 20px;
     top: 1px;
+    cursor: pointer;
 }
 
 .setScheduleW .title_setBut #winAllBid {
