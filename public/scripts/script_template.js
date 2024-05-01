@@ -365,8 +365,8 @@ function _filter(
         console.log(1);
         row.style.display =
           text_1.indexOf(val_1) === 0 &&
-          text_2.indexOf(val_2) === 0 &&
-          text_3.indexOf(val_3) === 0
+            text_2.indexOf(val_2) === 0 &&
+            text_3.indexOf(val_3) === 0
             ? "table-row"
             : "none"; //3個都有就設成可看
       } else if (val_2 === default2 && val_3 === default3) {
@@ -468,11 +468,7 @@ function assign_TextContent_To_SpID(SpID, assignContent) {
 
 // let i;
 
-function assign_ClassD_to_StatusOfDL_with_SpID(
-  SpID,
-  classData,
-  classCollection
-) {
+function assign_ClassD_to_StatusOfDL_with_SpID(SpID, classData, classCollection) {
   const element = document.querySelector(SpID);
 
   for (let i = 0; i < classCollection.length; i++) {

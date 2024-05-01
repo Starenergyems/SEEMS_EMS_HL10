@@ -474,6 +474,16 @@ function Convert_socRef_kWh_to_pct(rawData) {
   ).toFixed(1);
 }
 
+function Scale_Diff_of_Data(Data1, Data2, scale, decPlace) {
+  if (Data1 === null || Data2 === null) {
+    return "#*#";
+  }
+
+  let scaledData = (Data1 - Data2) * scale;
+
+  return scaledData.toFixed(decPlace);
+}
+
 function Determine_BGC_of_VcMaxDiff(data_maxV, data_minV) {
   if (data_maxV === null || data_minV === null) {
     return "bgc_ErrData";
@@ -1204,6 +1214,7 @@ module.exports = {
   Calculate_Tr_oilTemp,
   Count_SpecificClosedBit,
   Convert_socRef_kWh_to_pct,
+  Scale_Diff_of_Data,
   Determine_BGC_of_VcMaxDiff,
   Determine_BGC_of_TcMaxDiff,
   Determine_DL_of_RackHWStatus,
@@ -1410,5 +1421,9 @@ const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
 
 // let raw_DT_now = new Date();
 // console.log(Convert_rawDT_to_queryDT_floorToSec(raw_DT_now));
+
+// const rawData1 = 112358;
+// const rawData2 = 100000;
+// console.log(Scale_Diff_of_Data(rawData1, rawData2, 0.1, 2));
 
 /////////////////////////////////////////////////////////////////////////

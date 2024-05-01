@@ -124,7 +124,7 @@ async function change_num_of_RelayVCB(num_of_RelayVCB) {
 }
 
 const dataLight_Rly_VCB_1 = document.querySelector("#Rly_VCB_1");
-dataLight_Rly_VCB_1.addEventListener("click", function () { show_info_RelayVCB(1) });
+dataLight_Rly_VCB_1.addEventListener("click", function () { show_info_RelayVCB(1); });
 // dataLight_Rly_VCB_1.addEventListener("click", show_info_RelayVCB1);
 // function show_info_RelayVCB1() {
 //   title_info_RelayVCB.textContent = "VCB盤1保護電驛";
@@ -132,16 +132,16 @@ dataLight_Rly_VCB_1.addEventListener("click", function () { show_info_RelayVCB(1
 // }
 
 const dataLight_Rly_VCB_2 = document.querySelector("#Rly_VCB_2");
-dataLight_Rly_VCB_2.addEventListener("click", function () { show_info_RelayVCB(2) });
+dataLight_Rly_VCB_2.addEventListener("click", function () { show_info_RelayVCB(2); });
 
 const dataLight_Rly_VCB_3 = document.querySelector("#Rly_VCB_3");
-dataLight_Rly_VCB_3.addEventListener("click", function () { show_info_RelayVCB(3) });
+dataLight_Rly_VCB_3.addEventListener("click", function () { show_info_RelayVCB(3); });
 
 const dataLight_Rly_VCB_4 = document.querySelector("#Rly_VCB_4");
-dataLight_Rly_VCB_4.addEventListener("click", function () { show_info_RelayVCB(4) });
+dataLight_Rly_VCB_4.addEventListener("click", function () { show_info_RelayVCB(4); });
 
 const dataLight_Rly_VCB_aux = document.querySelector("#Rly_VCB_aux");
-dataLight_Rly_VCB_aux.addEventListener("click", function () { show_info_RelayVCB(5) });
+dataLight_Rly_VCB_aux.addEventListener("click", function () { show_info_RelayVCB(5); });
 
 /////////////////////////////////////////////////////////////////////////
 

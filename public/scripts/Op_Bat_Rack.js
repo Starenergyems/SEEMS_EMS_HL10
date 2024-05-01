@@ -1,5 +1,6 @@
-//var permission="viewer"; //需讀權限
-var permission = "manager";
+// var myHeading = document.querySelector("h1");
+// myHeading.textContent = "Hello world!";
+
 $(document).ready(function () {
 
   console.log("start reading js");
@@ -10,8 +11,7 @@ $(document).ready(function () {
 
 setInterval(routineWork, 1000);
 
-// var myHeading = document.querySelector("h1");
-// myHeading.textContent = "Hello world!";
+/////////////////////////////////////////////////////////////////////////
 
 const ssNavBar_sNB_01 = document.querySelector(".subNavBar #sNB_01 .ssNavBar");
 const ssNavBar_sNB_02 = document.querySelector(".subNavBar #sNB_02 .ssNavBar");
@@ -43,11 +43,7 @@ function showHide_ssNavBar3() {
 
 document.addEventListener("click", hide_ssNavBar);
 function hide_ssNavBar(clickItem) {
-  if (
-    clickItem.target.id !== "dDL_sNB_01" &&
-    clickItem.target.id !== "dDL_sNB_02" &&
-    clickItem.target.id !== "dDL_sNB_03"
-  ) {
+  if (clickItem.target.id !== "dDL_sNB_01" && clickItem.target.id !== "dDL_sNB_02" && clickItem.target.id !== "dDL_sNB_03") {
     ssNavBar_sNB_01.classList.remove("appear");
     ssNavBar_sNB_02.classList.remove("appear");
     ssNavBar_sNB_03.classList.remove("appear");
@@ -55,208 +51,93 @@ function hide_ssNavBar(clickItem) {
 }
 
 ///////////////////////////////////////////////////////////////////////
-// //找到所有 openRackAlm 元素
-// const openRackAlmElements = document.querySelectorAll(".openRackAlm");
-
-// // 監聽每個 openRackAlm 元素的點擊事件
-// openRackAlmElements.forEach((element) => {
-//   element.addEventListener("click", () => {
-//     const id = element.id.replace("openRackAlm_", ""); // 取得點擊的元素 ID，例如 'R01'
-
-//     // 發送 ID 到後端
-//     fetch(`/operateinfo/battery/rack/:rackId?rackId=${id}`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     })
-//       .then((response) => response.json())
-//       .then((data) => {
-//         // 處理後端返回的數據，假設你有一個處理數據的函數 updatePopupUI
-//         updatePopupUI(data);
-//       })
-//       .catch((error) => {
-//         console.error("請求失敗", error);
-//       });
-//   });
-// });
-
-// // 根據後端返回的數據更新彈出視窗的函數
-// function updatePopupUI(data) {
-//   // 在這裡根據後端返回的 data 更新你的彈出視窗的 UI
-//   // 假設你有一個 ID 為 popupContent 的元素用於顯示數據
-//   const popupContent = document.getElementById("popupContent");
-
-//   // 假設 data 是一個包含需要顯示的數據的物件
-//   // 你需要根據實際的數據結構進行處理
-//   popupContent.textContent = JSON.stringify(data);
-// }
 
 const window_info_RackAlm = document.querySelector(".info_RackAlm");
 const title_AlarmCMU = document.querySelector(".info_RackAlm .titleAlarmCMU");
 const title_FaultCMU = document.querySelector(".info_RackAlm .titleFaultCMU");
 const title_StatusHW = document.querySelector(".info_RackAlm .titleStatusHW");
 
-const closeWB_info_RackAlm = document.querySelector(
-  ".info_RackAlm #closeWB_No"
-);
+const closeWB_info_RackAlm = document.querySelector(".info_RackAlm #closeWB_No");
 closeWB_info_RackAlm.addEventListener("click", closePopup_info_RackAlm);
 function closePopup_info_RackAlm() {
   window_info_RackAlm.classList.remove("appear");
 }
 
-function show_info_RackAlm() {
+async function show_info_RackAlm(num_of_Rack) {
   window_info_RackAlm.classList.add("appear");
+  title_AlarmCMU.textContent = `Rack${num_of_Rack} CMU告警`;
+  title_FaultCMU.textContent = `Rack${num_of_Rack} CMU故障`;
+  title_StatusHW.textContent = `Rack${num_of_Rack} 硬體狀態`;
+
+  let getData = await change_num_of_Rack(num_of_Rack);
+  console.log(getData);
+
+  updateData_RackAlarm(getData.alarmCMU, getData.faultCMU, getData.statusHW);
+  // console.log("點擊時觸發更新");
 }
 
-const OpenRackAlm_R01 = document.querySelector("#openRackAlm_R01");
-OpenRackAlm_R01.addEventListener("click", show_info_RackAlm_R01);
-function show_info_RackAlm_R01() {
-  title_AlarmCMU.textContent = "Rack01 CMU告警";
-  title_FaultCMU.textContent = "Rack01 CMU故障";
-  title_StatusHW.textContent = "Rack01 硬體狀態";
-  block(1);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R02 = document.querySelector("#openRackAlm_R02");
-OpenRackAlm_R02.addEventListener("click", show_info_RackAlm_R02);
-function show_info_RackAlm_R02() {
-  title_AlarmCMU.textContent = "Rack02 CMU告警";
-  title_FaultCMU.textContent = "Rack02 CMU故障";
-  title_StatusHW.textContent = "Rack02 硬體狀態";
-  block(2);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R03 = document.querySelector("#openRackAlm_R03");
-OpenRackAlm_R03.addEventListener("click", show_info_RackAlm_R03);
-function show_info_RackAlm_R03() {
-  title_AlarmCMU.textContent = "Rack03 CMU告警";
-  title_FaultCMU.textContent = "Rack03 CMU故障";
-  title_StatusHW.textContent = "Rack03 硬體狀態";
-  block(3);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R04 = document.querySelector("#openRackAlm_R04");
-OpenRackAlm_R04.addEventListener("click", show_info_RackAlm_R04);
-function show_info_RackAlm_R04() {
-  title_AlarmCMU.textContent = "Rack04 CMU告警";
-  title_FaultCMU.textContent = "Rack04 CMU故障";
-  title_StatusHW.textContent = "Rack04 硬體狀態";
-  block(4);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R05 = document.querySelector("#openRackAlm_R05");
-OpenRackAlm_R05.addEventListener("click", show_info_RackAlm_R05);
-function show_info_RackAlm_R05() {
-  title_AlarmCMU.textContent = "Rack05 CMU告警";
-  title_FaultCMU.textContent = "Rack05 CMU故障";
-  title_StatusHW.textContent = "Rack05 硬體狀態";
-  block(5);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R06 = document.querySelector("#openRackAlm_R06");
-OpenRackAlm_R06.addEventListener("click", show_info_RackAlm_R06);
-function show_info_RackAlm_R06() {
-  title_AlarmCMU.textContent = "Rack06 CMU告警";
-  title_FaultCMU.textContent = "Rack06 CMU故障";
-  title_StatusHW.textContent = "Rack06 硬體狀態";
-  block(6);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R07 = document.querySelector("#openRackAlm_R07");
-OpenRackAlm_R07.addEventListener("click", show_info_RackAlm_R07);
-function show_info_RackAlm_R07() {
-  title_AlarmCMU.textContent = "Rack07 CMU告警";
-  title_FaultCMU.textContent = "Rack07 CMU故障";
-  title_StatusHW.textContent = "Rack07 硬體狀態";
-  block(7);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R08 = document.querySelector("#openRackAlm_R08");
-OpenRackAlm_R08.addEventListener("click", show_info_RackAlm_R08);
-function show_info_RackAlm_R08() {
-  title_AlarmCMU.textContent = "Rack08 CMU告警";
-  title_FaultCMU.textContent = "Rack08 CMU故障";
-  title_StatusHW.textContent = "Rack08 硬體狀態";
-  block(8);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R09 = document.querySelector("#openRackAlm_R09");
-OpenRackAlm_R09.addEventListener("click", show_info_RackAlm_R09);
-function show_info_RackAlm_R09() {
-  title_AlarmCMU.textContent = "Rack09 CMU告警";
-  title_FaultCMU.textContent = "Rack09 CMU故障";
-  title_StatusHW.textContent = "Rack09 硬體狀態";
-  block(9);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R10 = document.querySelector("#openRackAlm_R10");
-OpenRackAlm_R10.addEventListener("click", show_info_RackAlm_R10);
-function show_info_RackAlm_R10() {
-  title_AlarmCMU.textContent = "Rack10 CMU告警";
-  title_FaultCMU.textContent = "Rack10 CMU故障";
-  title_StatusHW.textContent = "Rack10 硬體狀態";
-  block(10);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R11 = document.querySelector("#openRackAlm_R11");
-OpenRackAlm_R11.addEventListener("click", show_info_RackAlm_R11);
-function show_info_RackAlm_R11() {
-  title_AlarmCMU.textContent = "Rack11 CMU告警";
-  title_FaultCMU.textContent = "Rack11 CMU故障";
-  title_StatusHW.textContent = "Rack11 硬體狀態";
-  block(11);
-  show_info_RackAlm();
-}
-
-const OpenRackAlm_R12 = document.querySelector("#openRackAlm_R12");
-OpenRackAlm_R12.addEventListener("click", show_info_RackAlm_R12);
-function show_info_RackAlm_R12() {
-  title_AlarmCMU.textContent = "Rack12 CMU告警";
-  title_FaultCMU.textContent = "Rack12 CMU故障";
-  title_StatusHW.textContent = "Rack12 硬體狀態";
-  block(12);
-  show_info_RackAlm();
-}
-
-//獲取該區塊id rack彈跳視窗
-
-async function block(blockId) {
+async function change_num_of_Rack(num_of_Rack) {
   try {
     console.log("嘗試向後端發出請求");
-    const response = await fetch("/getData", {
+    const response = await fetch("/change_num_of_Rack", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ blockId }),
+      body: JSON.stringify({ num_of_Rack }),
     });
 
     const data = await response.json();
-    console.log(data);
+    return data;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 }
 
+const OpenRackAlm_R01 = document.querySelector("#openRackAlm_R01");
+OpenRackAlm_R01.addEventListener("click", function () { show_info_RackAlm("01"); });
 
-async function updateData(){ 
-  var router = window.location.href+"data";
+const OpenRackAlm_R02 = document.querySelector("#openRackAlm_R02");
+OpenRackAlm_R02.addEventListener("click", function () { show_info_RackAlm("02"); });
+
+const OpenRackAlm_R03 = document.querySelector("#openRackAlm_R03");
+OpenRackAlm_R03.addEventListener("click", function () { show_info_RackAlm("03"); });
+
+const OpenRackAlm_R04 = document.querySelector("#openRackAlm_R04");
+OpenRackAlm_R04.addEventListener("click", function () { show_info_RackAlm("04"); });
+
+const OpenRackAlm_R05 = document.querySelector("#openRackAlm_R05");
+OpenRackAlm_R05.addEventListener("click", function () { show_info_RackAlm("05"); });
+
+const OpenRackAlm_R06 = document.querySelector("#openRackAlm_R06");
+OpenRackAlm_R06.addEventListener("click", function () { show_info_RackAlm("06"); });
+
+const OpenRackAlm_R07 = document.querySelector("#openRackAlm_R07");
+OpenRackAlm_R07.addEventListener("click", function () { show_info_RackAlm("07"); });
+
+const OpenRackAlm_R08 = document.querySelector("#openRackAlm_R08");
+OpenRackAlm_R08.addEventListener("click", function () { show_info_RackAlm("08"); });
+
+const OpenRackAlm_R09 = document.querySelector("#openRackAlm_R09");
+OpenRackAlm_R09.addEventListener("click", function () { show_info_RackAlm("09"); });
+
+const OpenRackAlm_R10 = document.querySelector("#openRackAlm_R10");
+OpenRackAlm_R10.addEventListener("click", function () { show_info_RackAlm("10"); });
+
+const OpenRackAlm_R11 = document.querySelector("#openRackAlm_R11");
+OpenRackAlm_R11.addEventListener("click", function () { show_info_RackAlm("11"); });
+
+const OpenRackAlm_R12 = document.querySelector("#openRackAlm_R12");
+OpenRackAlm_R12.addEventListener("click", function () { show_info_RackAlm("12"); });
+
+/////////////////////////////////////////////////////////////////////////
+
+async function updateData() {
+  var router = window.location.href + "data";
   const response = await fetch(router);
   const data = await response.json();
   console.log(data);
 
-  /*工作狀態***************************************** */
   $('#Mode_R01').text(data.Mode_R01);
   $('#Mode_R02').text(data.Mode_R02);
   $('#Mode_R03').text(data.Mode_R03);
@@ -269,7 +150,6 @@ async function updateData(){
   $('#Mode_R10').text(data.Mode_R10);
   $('#Mode_R11').text(data.Mode_R11);
   $('#Mode_R12').text(data.Mode_R12);
-/*電壓******************************************* */
   $('#V_rack_R01').text(data.V_rack_R01);
   $('#V_rack_R02').text(data.V_rack_R02);
   $('#V_rack_R03').text(data.V_rack_R03);
@@ -282,8 +162,6 @@ async function updateData(){
   $('#V_rack_R10').text(data.V_rack_R10);
   $('#V_rack_R11').text(data.V_rack_R11);
   $('#V_rack_R12').text(data.V_rack_R12);
-
-/*電流******************************************* */
   $('#I_rack_R01').text(data.I_rack_R01);
   $('#I_rack_R02').text(data.I_rack_R02);
   $('#I_rack_R03').text(data.I_rack_R03);
@@ -296,8 +174,6 @@ async function updateData(){
   $('#I_rack_R10').text(data.I_rack_R10);
   $('#I_rack_R11').text(data.I_rack_R11);
   $('#I_rack_R12').text(data.I_rack_R12);
-
-/*SOC******************************************* */
   $('#SOC_R01').text(data.SOC_R01);
   $('#SOC_R02').text(data.SOC_R02);
   $('#SOC_R03').text(data.SOC_R03);
@@ -310,8 +186,6 @@ async function updateData(){
   $('#SOC_R10').text(data.SOC_R10);
   $('#SOC_R11').text(data.SOC_R11);
   $('#SOC_R12').text(data.SOC_R12);
-
-/*SOH******************************************* */
   $('#SOH_R01').text(data.SOH_R01);
   $('#SOH_R02').text(data.SOH_R02);
   $('#SOH_R03').text(data.SOH_R03);
@@ -324,9 +198,6 @@ async function updateData(){
   $('#SOH_R10').text(data.SOH_R10);
   $('#SOH_R11').text(data.SOH_R11);
   $('#SOH_R12').text(data.SOH_R12);
-
-/*絕緣阻抗******************************************* */
-
   $('#Impedance_R01').text(data.Impedance_R01);
   $('#Impedance_R02').text(data.Impedance_R02);
   $('#Impedance_R03').text(data.Impedance_R03);
@@ -340,7 +211,6 @@ async function updateData(){
   $('#Impedance_R11').text(data.Impedance_R11);
   $('#Impedance_R12').text(data.Impedance_R12);
 
-/*最高電芯電壓******************************************* */
   $('#V_cell_Max_R01').text(data.V_cell_Max_R01);
   $('#V_cell_Max_R02').text(data.V_cell_Max_R02);
   $('#V_cell_Max_R03').text(data.V_cell_Max_R03);
@@ -353,45 +223,30 @@ async function updateData(){
   $('#V_cell_Max_R10').text(data.V_cell_Max_R10);
   $('#V_cell_Max_R11').text(data.V_cell_Max_R11);
   $('#V_cell_Max_R12').text(data.V_cell_Max_R12);
-
-/*位置******************************************* */
   $('#No_BMU_VcMax_R01').text(data.bmucellNoVcMax_R01.hiByte);
   $('#No_Cell_VcMax_R01').text(data.bmucellNoVcMax_R01.loByte);
-
   $('#No_BMU_VcMax_R02').text(data.bmucellNoVcMax_R02.hiByte);
   $('#No_Cell_VcMax_R02').text(data.bmucellNoVcMax_R02.loByte);
-
   $('#No_BMU_VcMax_R03').text(data.bmucellNoVcMax_R03.hiByte);
   $('#No_Cell_VcMax_R03').text(data.bmucellNoVcMax_R03.loByte);
-
   $('#No_BMU_VcMax_R04').text(data.bmucellNoVcMax_R04.hiByte);
   $('#No_Cell_VcMax_R04').text(data.bmucellNoVcMax_R04.loByte);
-
   $('#No_BMU_VcMax_R05').text(data.bmucellNoVcMax_R05.hiByte);
   $('#No_Cell_VcMax_R05').text(data.bmucellNoVcMax_R05.loByte);
-
   $('#No_BMU_VcMax_R06').text(data.bmucellNoVcMax_R06.hiByte);
   $('#No_Cell_VcMax_R06').text(data.bmucellNoVcMax_R06.loByte);
-
   $('#No_BMU_VcMax_R07').text(data.bmucellNoVcMax_R07.hiByte);
   $('#No_Cell_VcMax_R07').text(data.bmucellNoVcMax_R07.loByte);
-
   $('#No_BMU_VcMax_R08').text(data.bmucellNoVcMax_R08.hiByte);
   $('#No_Cell_VcMax_R08').text(data.bmucellNoVcMax_R08.loByte);
-
   $('#No_BMU_VcMax_R09').text(data.bmucellNoVcMax_R09.hiByte);
   $('#No_Cell_VcMax_R09').text(data.bmucellNoVcMax_R09.loByte);
-
   $('#No_BMU_VcMax_R10').text(data.bmucellNoVcMax_R10.hiByte);
   $('#No_Cell_VcMax_R10').text(data.bmucellNoVcMax_R10.loByte);
-
   $('#No_BMU_VcMax_R11').text(data.bmucellNoVcMax_R11.hiByte);
   $('#No_Cell_VcMax_R11').text(data.bmucellNoVcMax_R11.loByte);
-
   $('#No_BMU_VcMax_R12').text(data.bmucellNoVcMax_R12.hiByte);
   $('#No_Cell_VcMax_R12').text(data.bmucellNoVcMax_R12.loByte);
-
-  /*最低電芯電壓*********************************************** */
   $('#V_cell_Min_R01').text(data.V_cell_Min_R01);
   $('#V_cell_Min_R02').text(data.V_cell_Min_R02);
   $('#V_cell_Min_R03').text(data.V_cell_Min_R03);
@@ -404,47 +259,30 @@ async function updateData(){
   $('#V_cell_Min_R10').text(data.V_cell_Min_R10);
   $('#V_cell_Min_R11').text(data.V_cell_Min_R11);
   $('#V_cell_Min_R12').text(data.V_cell_Min_R12);
-
-  /*位置******************************************************** */
-
   $('#No_BMU_VcMin_R01').text(data.bmucellNoVcMin_R01.hiByte);
   $('#No_Cell_VcMin_R01').text(data.bmucellNoVcMin_R01.loByte);
-
   $('#No_BMU_VcMin_R02').text(data.bmucellNoVcMin_R02.hiByte);
   $('#No_Cell_VcMin_R02').text(data.bmucellNoVcMin_R02.loByte);
-
   $('#No_BMU_VcMin_R03').text(data.bmucellNoVcMin_R03.hiByte);
   $('#No_Cell_VcMin_R03').text(data.bmucellNoVcMin_R03.loByte);
-
   $('#No_BMU_VcMin_R04').text(data.bmucellNoVcMin_R04.hiByte);
   $('#No_Cell_VcMin_R04').text(data.bmucellNoVcMin_R04.loByte);
-
   $('#No_BMU_VcMin_R05').text(data.bmucellNoVcMin_R05.hiByte);
   $('#No_Cell_VcMin_R05').text(data.bmucellNoVcMin_R05.loByte);
-
   $('#No_BMU_VcMin_R06').text(data.bmucellNoVcMin_R06.hiByte);
   $('#No_Cell_VcMin_R06').text(data.bmucellNoVcMin_R06.loByte);
-
   $('#No_BMU_VcMin_R07').text(data.bmucellNoVcMin_R07.hiByte);
   $('#No_Cell_VcMin_R07').text(data.bmucellNoVcMin_R07.loByte);
-
   $('#No_BMU_VcMin_R08').text(data.bmucellNoVcMin_R08.hiByte);
   $('#No_Cell_VcMin_R08').text(data.bmucellNoVcMin_R08.loByte);
-
   $('#No_BMU_VcMin_R09').text(data.bmucellNoVcMin_R09.hiByte);
   $('#No_Cell_VcMin_R09').text(data.bmucellNoVcMin_R09.loByte);
-
   $('#No_BMU_VcMin_R10').text(data.bmucellNoVcMin_R10.hiByte);
   $('#No_Cell_VcMin_R10').text(data.bmucellNoVcMin_R10.loByte);
-
   $('#No_BMU_VcMin_R11').text(data.bmucellNoVcMin_R11.hiByte);
   $('#No_Cell_VcMin_R11').text(data.bmucellNoVcMin_R11.loByte);
-
   $('#No_BMU_VcMin_R12').text(data.bmucellNoVcMin_R12.hiByte);
   $('#No_Cell_VcMin_R12').text(data.bmucellNoVcMin_R12.loByte);
-
-/*最大電芯壓差*************************************************************************** */
-
   $('#V_cell_MaxDiff_R01').text(data.V_cell_MaxDiff_R01);
   $('#V_cell_MaxDiff_R02').text(data.V_cell_MaxDiff_R02);
   $('#V_cell_MaxDiff_R03').text(data.V_cell_MaxDiff_R03);
@@ -458,58 +296,55 @@ async function updateData(){
   $('#V_cell_MaxDiff_R11').text(data.V_cell_MaxDiff_R11);
   $('#V_cell_MaxDiff_R12').text(data.V_cell_MaxDiff_R12);
 
-  /*最高電芯溫度************************************************************** */
-  $('#T_cell_Max__R01').text(data.T_cell_Max__R01);
-  $('#T_cell_Max__R02').text(data.T_cell_Max__R02);
-  $('#T_cell_Max__R03').text(data.T_cell_Max__R03);
-  $('#T_cell_Max__R04').text(data.T_cell_Max__R04);
-  $('#T_cell_Max__R05').text(data.T_cell_Max__R05);
-  $('#T_cell_Max__R06').text(data.T_cell_Max__R06);
-  $('#T_cell_Max__R07').text(data.T_cell_Max__R07);
-  $('#T_cell_Max__R08').text(data.T_cell_Max__R08);
-  $('#T_cell_Max__R09').text(data.T_cell_Max__R09);
-  $('#T_cell_Max__R10').text(data.T_cell_Max__R10);
-  $('#T_cell_Max__R11').text(data.T_cell_Max__R11);
-  $('#T_cell_Max__R12').text(data.T_cell_Max__R12);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R01', data.V_cell_MaxDiff_R01);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R02', data.V_cell_MaxDiff_R02);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R03', data.V_cell_MaxDiff_R03);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R04', data.V_cell_MaxDiff_R04);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R05', data.V_cell_MaxDiff_R05);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R06', data.V_cell_MaxDiff_R06);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R07', data.V_cell_MaxDiff_R07);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R08', data.V_cell_MaxDiff_R08);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R09', data.V_cell_MaxDiff_R09);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R10', data.V_cell_MaxDiff_R10);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R11', data.V_cell_MaxDiff_R11);
+  Determine_BGC_of_VcMaxDiff('#V_cell_MaxDiff_R12', data.V_cell_MaxDiff_R12);
 
-  /*位置************************************************************************* */
+  $('#T_cell_Max_R01').text(data.T_cell_Max_R01);
+  $('#T_cell_Max_R02').text(data.T_cell_Max_R02);
+  $('#T_cell_Max_R03').text(data.T_cell_Max_R03);
+  $('#T_cell_Max_R04').text(data.T_cell_Max_R04);
+  $('#T_cell_Max_R05').text(data.T_cell_Max_R05);
+  $('#T_cell_Max_R06').text(data.T_cell_Max_R06);
+  $('#T_cell_Max_R07').text(data.T_cell_Max_R07);
+  $('#T_cell_Max_R08').text(data.T_cell_Max_R08);
+  $('#T_cell_Max_R09').text(data.T_cell_Max_R09);
+  $('#T_cell_Max_R10').text(data.T_cell_Max_R10);
+  $('#T_cell_Max_R11').text(data.T_cell_Max_R11);
+  $('#T_cell_Max_R12').text(data.T_cell_Max_R12);
   $('#No_BMU_TcMax_R01').text(data.bmucellNoTcMax_R01.hiByte);
   $('#No_Cell_TcMax_R01').text(data.bmucellNoTcMax_R01.loByte);
-
   $('#No_BMU_TcMax_R02').text(data.bmucellNoTcMax_R02.hiByte);
   $('#No_Cell_TcMax_R02').text(data.bmucellNoTcMax_R02.loByte);
-
   $('#No_BMU_TcMax_R03').text(data.bmucellNoTcMax_R03.hiByte);
   $('#No_Cell_TcMax_R03').text(data.bmucellNoTcMax_R03.loByte);
-
   $('#No_BMU_TcMax_R04').text(data.bmucellNoTcMax_R04.hiByte);
   $('#No_Cell_TcMax_R04').text(data.bmucellNoTcMax_R04.loByte);
-
   $('#No_BMU_TcMax_R05').text(data.bmucellNoTcMax_R05.hiByte);
   $('#No_Cell_TcMax_R05').text(data.bmucellNoTcMax_R05.loByte);
-
   $('#No_BMU_TcMax_R06').text(data.bmucellNoTcMax_R06.hiByte);
   $('#No_Cell_TcMax_R06').text(data.bmucellNoTcMax_R06.loByte);
-
   $('#No_BMU_TcMax_R07').text(data.bmucellNoTcMax_R07.hiByte);
   $('#No_Cell_TcMax_R07').text(data.bmucellNoTcMax_R07.loByte);
-
   $('#No_BMU_TcMax_R08').text(data.bmucellNoTcMax_R08.hiByte);
   $('#No_Cell_TcMax_R08').text(data.bmucellNoTcMax_R08.loByte);
-
   $('#No_BMU_TcMax_R09').text(data.bmucellNoTcMax_R09.hiByte);
   $('#No_Cell_TcMax_R09').text(data.bmucellNoTcMax_R09.loByte);
-
   $('#No_BMU_TcMax_R10').text(data.bmucellNoTcMax_R10.hiByte);
   $('#No_Cell_TcMax_R10').text(data.bmucellNoTcMax_R10.loByte);
-
   $('#No_BMU_TcMax_R11').text(data.bmucellNoTcMax_R11.hiByte);
   $('#No_Cell_TcMax_R11').text(data.bmucellNoTcMax_R11.loByte);
-
   $('#No_BMU_TcMax_R12').text(data.bmucellNoTcMax_R12.hiByte);
   $('#No_Cell_TcMax_R12').text(data.bmucellNoTcMax_R12.loByte);
-
-  /*最低電芯溫度************************************************************** */
   $('#T_cell_Min_R01').text(data.T_cell_Min_R01);
   $('#T_cell_Min_R02').text(data.T_cell_Min_R02);
   $('#T_cell_Min_R03').text(data.T_cell_Min_R03);
@@ -522,45 +357,30 @@ async function updateData(){
   $('#T_cell_Min_R10').text(data.T_cell_Min_R10);
   $('#T_cell_Min_R11').text(data.T_cell_Min_R11);
   $('#T_cell_Min_R12').text(data.T_cell_Min_R12);
-
-/*位置****************************************************************************** */
   $('#No_BMU_TcMin_R01').text(data.bmucellNoTcMin_R01.hiByte);
   $('#No_Cell_TcMin_R01').text(data.bmucellNoTcMin_R01.loByte);
-
   $('#No_BMU_TcMin_R02').text(data.bmucellNoTcMin_R02.hiByte);
   $('#No_Cell_TcMin_R02').text(data.bmucellNoTcMin_R02.loByte);
-
   $('#No_BMU_TcMin_R03').text(data.bmucellNoTcMin_R03.hiByte);
   $('#No_Cell_TcMin_R03').text(data.bmucellNoTcMin_R03.loByte);
-
   $('#No_BMU_TcMin_R04').text(data.bmucellNoTcMin_R04.hiByte);
   $('#No_Cell_TcMin_R04').text(data.bmucellNoTcMin_R04.loByte);
-
   $('#No_BMU_TcMin_R05').text(data.bmucellNoTcMin_R05.hiByte);
   $('#No_Cell_TcMin_R05').text(data.bmucellNoTcMin_R05.loByte);
-
   $('#No_BMU_TcMin_R06').text(data.bmucellNoTcMin_R06.hiByte);
   $('#No_Cell_TcMin_R06').text(data.bmucellNoTcMin_R06.loByte);
-
   $('#No_BMU_TcMin_R07').text(data.bmucellNoTcMin_R07.hiByte);
   $('#No_Cell_TcMin_R07').text(data.bmucellNoTcMin_R07.loByte);
-
   $('#No_BMU_TcMin_R08').text(data.bmucellNoTcMin_R08.hiByte);
   $('#No_Cell_TcMin_R08').text(data.bmucellNoTcMin_R08.loByte);
-
   $('#No_BMU_TcMin_R09').text(data.bmucellNoTcMin_R09.hiByte);
   $('#No_Cell_TcMin_R09').text(data.bmucellNoTcMin_R09.loByte);
-
   $('#No_BMU_TcMin_R10').text(data.bmucellNoTcMin_R10.hiByte);
   $('#No_Cell_TcMin_R10').text(data.bmucellNoTcMin_R10.loByte);
-
   $('#No_BMU_TcMin_R11').text(data.bmucellNoTcMin_R11.hiByte);
   $('#No_Cell_TcMin_R11').text(data.bmucellNoTcMin_R11.loByte);
-
   $('#No_BMU_TcMin_R12').text(data.bmucellNoTcMin_R12.hiByte);
   $('#No_Cell_TcMin_R12').text(data.bmucellNoTcMin_R12.loByte);
-
-/*最大電芯電壓***************************************************************** */
   $('#T_cell_MaxDiff_R01').text(data.T_cell_MaxDiff_R01);
   $('#T_cell_MaxDiff_R02').text(data.T_cell_MaxDiff_R02);
   $('#T_cell_MaxDiff_R03').text(data.T_cell_MaxDiff_R03);
@@ -574,118 +394,146 @@ async function updateData(){
   $('#T_cell_MaxDiff_R11').text(data.T_cell_MaxDiff_R11);
   $('#T_cell_MaxDiff_R12').text(data.T_cell_MaxDiff_R12);
 
-/*CMU告警**************************************************************************** */  
-  light_color(data.alarmCMU_R01_rawD, '#alarmCMU_R01', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R02_rawD, '#alarmCMU_R02', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R03_rawD, '#alarmCMU_R03', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R04_rawD, '#alarmCMU_R04', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R05_rawD, '#alarmCMU_R05', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R06_rawD, '#alarmCMU_R06', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R07_rawD, '#alarmCMU_R07', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R08_rawD, '#alarmCMU_R08', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R09_rawD, '#alarmCMU_R09', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R10_rawD, '#alarmCMU_R10', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R11_rawD, '#alarmCMU_R11', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.alarmCMU_R12_rawD, '#alarmCMU_R12', 0, 'setToOpen', 1, "setToClose");
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R01', data.T_cell_MaxDiff_R01);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R02', data.T_cell_MaxDiff_R02);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R03', data.T_cell_MaxDiff_R03);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R04', data.T_cell_MaxDiff_R04);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R05', data.T_cell_MaxDiff_R05);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R06', data.T_cell_MaxDiff_R06);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R07', data.T_cell_MaxDiff_R07);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R08', data.T_cell_MaxDiff_R08);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R09', data.T_cell_MaxDiff_R09);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R10', data.T_cell_MaxDiff_R10);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R11', data.T_cell_MaxDiff_R11);
+  Determine_BGC_of_TcMaxDiff('#T_cell_MaxDiff_R12', data.T_cell_MaxDiff_R12);
 
-  /*CMU故障***************************************************** */
-  light_color(data.faultCMU_R01_rawD, '#faultCMU_R01', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R02_rawD, '#faultCMU_R02', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R03_rawD, '#faultCMU_R03', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R04_rawD, '#faultCMU_R04', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R05_rawD, '#faultCMU_R05', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R06_rawD, '#faultCMU_R06', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R07_rawD, '#faultCMU_R07', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R08_rawD, '#faultCMU_R08', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R09_rawD, '#faultCMU_R09', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R10_rawD, '#faultCMU_R10', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R11_rawD, '#faultCMU_R11', 0, 'setToOpen', 1, "setToClose");
-  light_color(data.faultCMU_R12_rawD, '#faultCMU_R12', 0, 'setToOpen', 1, "setToClose");
+  const classCollection_DL = ["setToClose", "ErrData"];
 
-  /*硬體狀態******************************************************************* */
-  light_color(data.DL_of_statusHW_R01, '#statusHW_R01', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R02, '#statusHW_R02', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R03, '#statusHW_R03', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R04, '#statusHW_R04', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R05, '#statusHW_R05', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R06, '#statusHW_R06', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R07, '#statusHW_R07', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R08, '#statusHW_R08', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R09, '#statusHW_R09', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R10, '#statusHW_R10', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R11, '#statusHW_R11', "", 'setToOpen', "setToClose", "setToClose");
-  light_color(data.DL_of_statusHW_R12, '#statusHW_R12', "", 'setToOpen', "setToClose", "setToClose");
-  if (data.DL_of_statusHW_R01 === "setToClose"){
-    classAdd('#statusHW_R01', 'setToClose');
-  } else {
-    classRemove('#statusHW_R01', 'setToClose');
-  }
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R01", data.DL_of_alarmCMU_R01, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R02", data.DL_of_alarmCMU_R02, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R03", data.DL_of_alarmCMU_R03, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R04", data.DL_of_alarmCMU_R04, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R05", data.DL_of_alarmCMU_R05, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R06", data.DL_of_alarmCMU_R06, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R07", data.DL_of_alarmCMU_R07, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R08", data.DL_of_alarmCMU_R08, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R09", data.DL_of_alarmCMU_R09, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R10", data.DL_of_alarmCMU_R10, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R11", data.DL_of_alarmCMU_R11, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#alarmCMU_R12", data.DL_of_alarmCMU_R12, classCollection_DL);
 
-  if (data.DL_of_statusHW_R02 === "setToClose"){
-    classAdd('#statusHW_R02', 'setToClose');
-  } else {
-    classRemove('#statusHW_R02', 'setToClose');
-  }
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R01", data.DL_of_faultCMU_R01, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R02", data.DL_of_faultCMU_R02, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R03", data.DL_of_faultCMU_R03, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R04", data.DL_of_faultCMU_R04, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R05", data.DL_of_faultCMU_R05, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R06", data.DL_of_faultCMU_R06, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R07", data.DL_of_faultCMU_R07, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R08", data.DL_of_faultCMU_R08, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R09", data.DL_of_faultCMU_R09, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R10", data.DL_of_faultCMU_R10, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R11", data.DL_of_faultCMU_R11, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#faultCMU_R12", data.DL_of_faultCMU_R12, classCollection_DL);
 
-  if (data.DL_of_statusHW_R03 === "setToClose"){
-    classAdd('#statusHW_R03', 'setToClose');
-  } else {
-    classRemove('#statusHW_R03', 'setToClose');
-  }
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R01", data.DL_of_statusHW_R01, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R02", data.DL_of_statusHW_R02, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R03", data.DL_of_statusHW_R03, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R04", data.DL_of_statusHW_R04, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R05", data.DL_of_statusHW_R05, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R06", data.DL_of_statusHW_R06, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R07", data.DL_of_statusHW_R07, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R08", data.DL_of_statusHW_R08, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R09", data.DL_of_statusHW_R09, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R10", data.DL_of_statusHW_R10, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R11", data.DL_of_statusHW_R11, classCollection_DL);
+  assign_ClassD_to_StatusOfDL_with_SpID("#statusHW_R12", data.DL_of_statusHW_R12, classCollection_DL);
 
-  if (data.DL_of_statusHW_R04 === "setToClose"){
-    classAdd('#statusHW_R04', 'setToClose');
-  } else {
-    classRemove('#statusHW_R04', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R05 === "setToClose"){
-    classAdd('#statusHW_R05', 'setToClose');
-  } else {
-    classRemove('#statusHW_R05', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R06 === "setToClose"){
-    classAdd('#statusHW_R06', 'setToClose');
-  } else {
-    classRemove('#statusHW_R06', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R07 === "setToClose"){
-    classAdd('#statusHW_R07', 'setToClose');
-  } else {
-    classRemove('#statusHW_R07', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R08 === "setToClose"){
-    classAdd('#statusHW_R08', 'setToClose');
-  } else {
-    classRemove('#statusHW_R08', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R09 === "setToClose"){
-    classAdd('#statusHW_R09', 'setToClose');
-  } else {
-    classRemove('#statusHW_R09', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R10 === "setToClose"){
-    classAdd('#statusHW_R10', 'setToClose');
-  } else {
-    classRemove('#statusHW_R10', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R11 === "setToClose"){
-    classAdd('#statusHW_R11', 'setToClose');
-  } else {
-    classRemove('#statusHW_R11', 'setToClose');
-  }
-
-  if (data.DL_of_statusHW_R12 === "setToClose"){
-    classAdd('#statusHW_R12', 'setToClose');
-  } else {
-    classRemove('#statusHW_R12', 'setToClose');
-  }
-  
-console.log("data updated");
+  updateData_RackAlarm(data.alarmCMU_rBitS, data.faultCMU_rBitS, data.statusHW_rBitS);
+  // console.log("定時更新");
 };
+
+function updateData_RackAlarm(alarmCMU_rBitS, faultCMU_rBitS, statusHW_rBitS) {
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_0", alarmCMU_rBitS[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_1", alarmCMU_rBitS[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_2", alarmCMU_rBitS[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_3", alarmCMU_rBitS[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_4", alarmCMU_rBitS[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_5", alarmCMU_rBitS[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_6", alarmCMU_rBitS[6]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_8", alarmCMU_rBitS[8]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_9", alarmCMU_rBitS[9]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_10", alarmCMU_rBitS[10]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_11", alarmCMU_rBitS[11]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_12", alarmCMU_rBitS[12]);
+  assign_BitD_to_StatusOfDL_with_SpID("#alarmCMU_bit_20", alarmCMU_rBitS[20]);
+
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_0", faultCMU_rBitS[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_1", faultCMU_rBitS[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_2", faultCMU_rBitS[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_3", faultCMU_rBitS[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_4", faultCMU_rBitS[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_5", faultCMU_rBitS[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_7", faultCMU_rBitS[7]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_9", faultCMU_rBitS[9]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_10", faultCMU_rBitS[10]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_12", faultCMU_rBitS[12]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_13", faultCMU_rBitS[13]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_14", faultCMU_rBitS[14]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_15", faultCMU_rBitS[15]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_17", faultCMU_rBitS[17]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_18", faultCMU_rBitS[18]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_20", faultCMU_rBitS[20]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_21", faultCMU_rBitS[21]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_22", faultCMU_rBitS[22]);
+  assign_BitD_to_StatusOfDL_with_SpID("#faultCMU_bit_23", faultCMU_rBitS[23]);
+
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_0", statusHW_rBitS[0]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_1", statusHW_rBitS[1]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_2", statusHW_rBitS[2]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_3", statusHW_rBitS[3]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_4", statusHW_rBitS[4]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_5", statusHW_rBitS[5]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_6", statusHW_rBitS[6]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_7", statusHW_rBitS[7]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_8", statusHW_rBitS[8]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_9", statusHW_rBitS[9]);
+  assign_BitD_to_StatusOfDL_with_SpID("#statusHW_bit_12", statusHW_rBitS[12]);
+}
+
+function Determine_BGC_of_VcMaxDiff(ID, maxDiff) {
+  const element = document.querySelector(ID);
+
+  if (maxDiff === "#*#") {
+    // element.style.background = "#9D653D";
+    element.style.background = "#000000";
+  } else {
+    if (maxDiff >= 50) {
+      element.style.background = "#FF0000";
+    } else if (maxDiff >= 40) {
+      element.style.background = "#EF860F";
+    } else if (maxDiff >= 30) {
+      element.style.background = "#FFFF00";
+    } else {
+      element.style.background = "none";
+    }
+  }
+}
+
+function Determine_BGC_of_TcMaxDiff(ID, maxDiff) {
+  const element = document.querySelector(ID);
+
+  if (maxDiff === "#*#") {
+    // element.style.background = "#9D653D";
+    element.style.background = "#000000";
+  } else {
+    if (maxDiff >= 6) {
+      element.style.background = "#FF0000";
+    } else if (maxDiff >= 4) {
+      element.style.background = "#EF860F";
+    } else if (maxDiff >= 2) {
+      element.style.background = "#FFFF00";
+    } else {
+      element.style.background = "none";
+    }
+  }
+}

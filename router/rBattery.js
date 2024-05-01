@@ -14,8 +14,9 @@ const {
   mapWordStatus,
   getHighLowByte,
   Calculate_BMS_energy,
-  Determine_BGC_of_VcMaxDiff,
-  Determine_BGC_of_TcMaxDiff,
+  Scale_Data,
+  Scale_Diff_of_Data,
+  Determine_DL_of_AlarmWord,
   Determine_DL_of_RackHWStatus,
   checkValuesalarm,
   checkValuesFault,
@@ -70,6 +71,15 @@ router.use(
 
 router.use(cors());
 //***************************************************************************************************************** */
+
+const mangoQuery = {
+  selector: {
+    time: { $exists: true }
+  },
+  sort: [{ time: "desc" }],
+  limit: 1
+};
+
 // 定義 CouchDB 資料庫名稱
 const databases = [
   "lc1_rf10", //0
@@ -119,12 +129,6 @@ const getLatestDocument = async (nanoDb) => {
 
 //***************************************************************************************************************** */
 
-router.get("/operateinfo", (req, res) => {
-  //以下app要改回router
-  res.redirect("/operateinfo/battery");
-});
-
-//
 var batterySum_variables;
 
 async function querySumData(req) {
@@ -902,6 +906,9 @@ router.get(
 );
 // //***************************************************************************************** */
 // //BMS的RACK詳細資料
+
+var batteryRack_variables;
+let num_Rack = "01";
 const rackWorkStatus_MT = {
   1: "開機",
   2: "自檢測",
@@ -912,7 +919,7 @@ const rackWorkStatus_MT = {
   64: "ADC校正",
   128: "測試"
 };
-var batteryRack_variables;
+
 async function queryRackData(req) {
   //req.session.pageNumber = pageNumber;
   //const collectionNames = Object.keys(collections);
@@ -926,23 +933,17 @@ async function queryRackData(req) {
     5: "Lc03",
     6: "Lc03",
     7: "Lc04"
-    // 8: "Lc04", // 如果需要處理 8，可以取消註解
   };
 
   let selectedCollection = collectionMap[pageNumber];
-  // console.log("-------------------------------------------------------");
-  // console.log("頁數 pageNumber: " + pageNumber);
-  // console.log("selectedCollection: " + selectedCollection);
 
   if (!selectedCollection) {
     throw new Error("rack : Invalid pageNumber");
   }
 
-  const baseNumber = Math.ceil(pageNumber / 2); // 取天花板值
+  const baseNumber = Math.ceil(pageNumber / 2);
   const subNumber = pageNumber % 2 === 0 ? 2 : 1;
   const No_of_BMS = `${baseNumber}-${subNumber}`;
-
-  // 根據選擇的集合名稱查詢資料
 
   const dataPromises = databases.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
@@ -951,458 +952,290 @@ async function queryRackData(req) {
 
   const allData = await Promise.all(dataPromises);
 
-  const num = baseNumber - 1; //因為陣列位置從零開始存 所以要少一
+  const num = baseNumber - 1;
   const lcData = allData[num];
-  // console.log("num: " + num);
-  // console.log("對應資料庫要抓到哪個-baseNumber: " + baseNumber);
-  //console.log("baseNumber:" + baseNumber);
 
   if (!lcData) {
     throw new Error("No data found");
   }
 
-  //let processedPageNumber;
-
   const isEvenPage = pageNumber % 2 === 0;
   const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
-  // console.log("判斷isEvenPage??" + isEvenPage);
-  // console.log("Lc_RackGroup: " + Lc_RackGroup);
+
   batteryRack_variables = {
     permission: req.body.permission,
     pageNumber,
     No_of_BMS,
+
     Mode_R01: mapWordStatus(Lc_RackGroup.Rack01[405009], rackWorkStatus_MT),
-    V_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405005], 0.1, 1),
-    I_rack_R01: scaleProcess(Lc_RackGroup.Rack01[405002], 0.1, 1),
-    SOC_R01: scaleProcess(Lc_RackGroup.Rack01[405006], 0.01, 2),
-    SOH_R01: scaleProcess(Lc_RackGroup.Rack01[405004], 0.01, 2),
-    Impedance_R01: scaleProcess(Lc_RackGroup.Rack01[405020], 0.1, 1),
-    //
-    V_cell_Max_R01: scaleProcess(Lc_RackGroup.Rack01[405010], 0.0001, 4),
+    V_rack_R01: Scale_Data(Lc_RackGroup.Rack01[405005], 0.1, 1),
+    I_rack_R01: Scale_Data(Lc_RackGroup.Rack01[405002], 0.1, 1),
+    SOC_R01: Scale_Data(Lc_RackGroup.Rack01[405006], 0.01, 2),
+    SOH_R01: Scale_Data(Lc_RackGroup.Rack01[405004], 0.01, 2),
+    Impedance_R01: Scale_Data(Lc_RackGroup.Rack01[405020], 0.1, 1),
+
+    V_cell_Max_R01: Scale_Data(Lc_RackGroup.Rack01[405010], 0.0001, 4),
     bmucellNoVcMax_R01: getHighLowByte(Lc_RackGroup.Rack01[405011]),
-    V_cell_Min_R01: scaleProcess(Lc_RackGroup.Rack01[405012], 0.0001, 4),
+    V_cell_Min_R01: Scale_Data(Lc_RackGroup.Rack01[405012], 0.0001, 4),
     bmucellNoVcMin_R01: getHighLowByte(Lc_RackGroup.Rack01[405013]),
-    V_cell_MaxDiff_R01: scaleProcess(
-      Lc_RackGroup.Rack01[405010] - Lc_RackGroup.Rack01[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R01: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack01[405010] - Lc_RackGroup.Rack01[405012]
-    ),
-    T_cell_Max_R01: scaleProcess(Lc_RackGroup.Rack01[405014], 0.1, 1),
+    V_cell_MaxDiff_R01: Scale_Diff_of_Data(Lc_RackGroup.Rack01[405010], Lc_RackGroup.Rack01[405012], 0.1, 1),
+    // bgc_VcMaxDiff_R01: Determine_BGC_of_VcMaxDiff(Lc_RackGroup.Rack01[405010], Lc_RackGroup.Rack01[405012]),
+    T_cell_Max_R01: Scale_Data(Lc_RackGroup.Rack01[405014], 0.1, 1),
     bmucellNoTcMax_R01: getHighLowByte(Lc_RackGroup.Rack01[405015]),
-    T_cell_Min_R01: scaleProcess(Lc_RackGroup.Rack01[405016], 0.1, 1),
+    T_cell_Min_R01: Scale_Data(Lc_RackGroup.Rack01[405016], 0.1, 1),
     bmucellNoTcMin_R01: getHighLowByte(Lc_RackGroup.Rack01[405017]),
-    T_cell_MaxDiff_R01: scaleProcess(
-      Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack01[405014] - Lc_RackGroup.Rack01[405016]
-    ),
-    alarmCMU_R01_rawD: Lc_RackGroup.Rack01[405028],
-    faultCMU_R01_rawD: Lc_RackGroup.Rack01[405030],
-    DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack01[405032]
-    ),
+    T_cell_MaxDiff_R01: Scale_Diff_of_Data(Lc_RackGroup.Rack01[405014], Lc_RackGroup.Rack01[405016], 0.1, 1),
+    // bgc_TcMaxDiff_R01: Determine_BGC_of_TcMaxDiff(Lc_RackGroup.Rack01[405014], Lc_RackGroup.Rack01[405016]),
+
+    DL_of_alarmCMU_R01: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack01[405028]),
+    DL_of_faultCMU_R01: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack01[405030]),
+    DL_of_statusHW_R01: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack01[405032]),
 
     Mode_R02: mapWordStatus(Lc_RackGroup.Rack02[405009], rackWorkStatus_MT),
-    V_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405005], 0.1, 1),
-    I_rack_R02: scaleProcess(Lc_RackGroup.Rack02[405002], 0.1, 1),
-    SOC_R02: scaleProcess(Lc_RackGroup.Rack02[405006], 0.01, 2),
-    SOH_R02: scaleProcess(Lc_RackGroup.Rack02[405004], 0.01, 2),
-    Impedance_R02: scaleProcess(Lc_RackGroup.Rack02[405020], 0.1, 1),
-    V_cell_Max_R02: scaleProcess(Lc_RackGroup.Rack02[405010], 0.0001, 4),
+    V_rack_R02: Scale_Data(Lc_RackGroup.Rack02[405005], 0.1, 1),
+    I_rack_R02: Scale_Data(Lc_RackGroup.Rack02[405002], 0.1, 1),
+    SOC_R02: Scale_Data(Lc_RackGroup.Rack02[405006], 0.01, 2),
+    SOH_R02: Scale_Data(Lc_RackGroup.Rack02[405004], 0.01, 2),
+    Impedance_R02: Scale_Data(Lc_RackGroup.Rack02[405020], 0.1, 1),
+
+    V_cell_Max_R02: Scale_Data(Lc_RackGroup.Rack02[405010], 0.0001, 4),
     bmucellNoVcMax_R02: getHighLowByte(Lc_RackGroup.Rack02[405011]),
-    V_cell_Min_R02: scaleProcess(Lc_RackGroup.Rack02[405012], 0.0001, 4),
+    V_cell_Min_R02: Scale_Data(Lc_RackGroup.Rack02[405012], 0.0001, 4),
     bmucellNoVcMin_R02: getHighLowByte(Lc_RackGroup.Rack02[405013]),
-    V_cell_MaxDiff_R02: scaleProcess(
-      Lc_RackGroup.Rack02[405010] - Lc_RackGroup.Rack02[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R02: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack02[405010] - Lc_RackGroup.Rack02[405012]
-    ),
-    T_cell_Max_R02: scaleProcess(Lc_RackGroup.Rack02[405014], 0.1, 1),
+    V_cell_MaxDiff_R02: Scale_Diff_of_Data(Lc_RackGroup.Rack02[405010], Lc_RackGroup.Rack02[405012], 0.1, 1),
+    T_cell_Max_R02: Scale_Data(Lc_RackGroup.Rack02[405014], 0.1, 1),
     bmucellNoTcMax_R02: getHighLowByte(Lc_RackGroup.Rack02[405015]),
-    T_cell_Min_R02: scaleProcess(Lc_RackGroup.Rack02[405016], 0.1, 1),
+    T_cell_Min_R02: Scale_Data(Lc_RackGroup.Rack02[405016], 0.1, 1),
     bmucellNoTcMin_R02: getHighLowByte(Lc_RackGroup.Rack02[405017]),
-    T_cell_MaxDiff_R02: scaleProcess(
-      Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R02: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack02[405014] - Lc_RackGroup.Rack02[405016]
-    ),
-    alarmCMU_R02_rawD: Lc_RackGroup.Rack02[405028],
-    faultCMU_R02_rawD: Lc_RackGroup.Rack02[405030],
-    DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack02[405032]
-    ),
+    T_cell_MaxDiff_R02: Scale_Diff_of_Data(Lc_RackGroup.Rack02[405014], Lc_RackGroup.Rack02[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R02: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack02[405028]),
+    DL_of_faultCMU_R02: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack02[405030]),
+    DL_of_statusHW_R02: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack02[405032]),
 
     Mode_R03: mapWordStatus(Lc_RackGroup.Rack03[405009], rackWorkStatus_MT),
-    V_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405005], 0.1, 1),
-    I_rack_R03: scaleProcess(Lc_RackGroup.Rack03[405002], 0.1, 1),
-    SOC_R03: scaleProcess(Lc_RackGroup.Rack03[405006], 0.01, 2),
-    SOH_R03: scaleProcess(Lc_RackGroup.Rack03[405004], 0.01, 2),
-    Impedance_R03: scaleProcess(Lc_RackGroup.Rack03[405020], 0.1, 1),
-    V_cell_Max_R03: scaleProcess(Lc_RackGroup.Rack03[405010], 0.0001, 4),
+    V_rack_R03: Scale_Data(Lc_RackGroup.Rack03[405005], 0.1, 1),
+    I_rack_R03: Scale_Data(Lc_RackGroup.Rack03[405002], 0.1, 1),
+    SOC_R03: Scale_Data(Lc_RackGroup.Rack03[405006], 0.01, 2),
+    SOH_R03: Scale_Data(Lc_RackGroup.Rack03[405004], 0.01, 2),
+    Impedance_R03: Scale_Data(Lc_RackGroup.Rack03[405020], 0.1, 1),
+
+    V_cell_Max_R03: Scale_Data(Lc_RackGroup.Rack03[405010], 0.0001, 4),
     bmucellNoVcMax_R03: getHighLowByte(Lc_RackGroup.Rack03[405011]),
-    V_cell_Min_R03: scaleProcess(Lc_RackGroup.Rack03[405012], 0.0001, 4),
+    V_cell_Min_R03: Scale_Data(Lc_RackGroup.Rack03[405012], 0.0001, 4),
     bmucellNoVcMin_R03: getHighLowByte(Lc_RackGroup.Rack03[405013]),
-    V_cell_MaxDiff_R03: scaleProcess(
-      Lc_RackGroup.Rack03[405010] - Lc_RackGroup.Rack03[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R03: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack03[405010] - Lc_RackGroup.Rack03[405012]
-    ),
-    T_cell_Max_R03: scaleProcess(Lc_RackGroup.Rack03[405014], 0.1, 1),
+    V_cell_MaxDiff_R03: Scale_Diff_of_Data(Lc_RackGroup.Rack03[405010], Lc_RackGroup.Rack03[405012], 0.1, 1),
+    T_cell_Max_R03: Scale_Data(Lc_RackGroup.Rack03[405014], 0.1, 1),
     bmucellNoTcMax_R03: getHighLowByte(Lc_RackGroup.Rack03[405015]),
-    T_cell_Min_R03: scaleProcess(Lc_RackGroup.Rack03[405016], 0.1, 1),
+    T_cell_Min_R03: Scale_Data(Lc_RackGroup.Rack03[405016], 0.1, 1),
     bmucellNoTcMin_R03: getHighLowByte(Lc_RackGroup.Rack03[405017]),
-    T_cell_MaxDiff_R03: scaleProcess(
-      Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R03: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack03[405014] - Lc_RackGroup.Rack03[405016]
-    ),
-    alarmCMU_R03_rawD: Lc_RackGroup.Rack03[405028],
-    faultCMU_R03_rawD: Lc_RackGroup.Rack03[405030],
-    DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack03[405032]
-    ),
+    T_cell_MaxDiff_R03: Scale_Diff_of_Data(Lc_RackGroup.Rack03[405014], Lc_RackGroup.Rack03[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R03: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack03[405028]),
+    DL_of_faultCMU_R03: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack03[405030]),
+    DL_of_statusHW_R03: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack03[405032]),
 
     Mode_R04: mapWordStatus(Lc_RackGroup.Rack04[405009], rackWorkStatus_MT),
-    V_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405005], 0.1, 1),
-    I_rack_R04: scaleProcess(Lc_RackGroup.Rack04[405002], 0.1, 1),
-    SOC_R04: scaleProcess(Lc_RackGroup.Rack04[405006], 0.01, 2),
-    SOH_R04: scaleProcess(Lc_RackGroup.Rack04[405004], 0.01, 2),
-    Impedance_R04: scaleProcess(Lc_RackGroup.Rack04[405020], 0.1, 1),
-    V_cell_Max_R04: scaleProcess(Lc_RackGroup.Rack04[405010], 0.0001, 4),
+    V_rack_R04: Scale_Data(Lc_RackGroup.Rack04[405005], 0.1, 1),
+    I_rack_R04: Scale_Data(Lc_RackGroup.Rack04[405002], 0.1, 1),
+    SOC_R04: Scale_Data(Lc_RackGroup.Rack04[405006], 0.01, 2),
+    SOH_R04: Scale_Data(Lc_RackGroup.Rack04[405004], 0.01, 2),
+    Impedance_R04: Scale_Data(Lc_RackGroup.Rack04[405020], 0.1, 1),
+
+    V_cell_Max_R04: Scale_Data(Lc_RackGroup.Rack04[405010], 0.0001, 4),
     bmucellNoVcMax_R04: getHighLowByte(Lc_RackGroup.Rack04[405011]),
-    V_cell_Min_R04: scaleProcess(Lc_RackGroup.Rack04[405012], 0.0001, 4),
+    V_cell_Min_R04: Scale_Data(Lc_RackGroup.Rack04[405012], 0.0001, 4),
     bmucellNoVcMin_R04: getHighLowByte(Lc_RackGroup.Rack04[405013]),
-    V_cell_MaxDiff_R04: scaleProcess(
-      Lc_RackGroup.Rack04[405010] - Lc_RackGroup.Rack04[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R04: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack04[405010] - Lc_RackGroup.Rack04[405012]
-    ),
-    T_cell_Max_R04: scaleProcess(Lc_RackGroup.Rack04[405014], 0.1, 1),
+    V_cell_MaxDiff_R04: Scale_Diff_of_Data(Lc_RackGroup.Rack04[405010], Lc_RackGroup.Rack04[405012], 0.1, 1),
+    T_cell_Max_R04: Scale_Data(Lc_RackGroup.Rack04[405014], 0.1, 1),
     bmucellNoTcMax_R04: getHighLowByte(Lc_RackGroup.Rack04[405015]),
-    T_cell_Min_R04: scaleProcess(Lc_RackGroup.Rack04[405016], 0.1, 1),
+    T_cell_Min_R04: Scale_Data(Lc_RackGroup.Rack04[405016], 0.1, 1),
     bmucellNoTcMin_R04: getHighLowByte(Lc_RackGroup.Rack04[405017]),
-    T_cell_MaxDiff_R04: scaleProcess(
-      Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R04: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack04[405014] - Lc_RackGroup.Rack04[405016]
-    ),
-    alarmCMU_R04_rawD: Lc_RackGroup.Rack04[405028],
-    faultCMU_R04_rawD: Lc_RackGroup.Rack04[405030],
-    DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack04[405032]
-    ),
+    T_cell_MaxDiff_R04: Scale_Diff_of_Data(Lc_RackGroup.Rack04[405014], Lc_RackGroup.Rack04[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R04: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack04[405028]),
+    DL_of_faultCMU_R04: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack04[405030]),
+    DL_of_statusHW_R04: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack04[405032]),
 
     Mode_R05: mapWordStatus(Lc_RackGroup.Rack05[405009], rackWorkStatus_MT),
-    V_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405005], 0.1, 1),
-    I_rack_R05: scaleProcess(Lc_RackGroup.Rack05[405002], 0.1, 1),
-    SOC_R05: scaleProcess(Lc_RackGroup.Rack05[405006], 0.01, 2),
-    SOH_R05: scaleProcess(Lc_RackGroup.Rack05[405004], 0.01, 2),
-    Impedance_R05: scaleProcess(Lc_RackGroup.Rack05[405020], 0.1, 1),
-    V_cell_Max_R05: scaleProcess(Lc_RackGroup.Rack05[405010], 0.0001, 4),
+    V_rack_R05: Scale_Data(Lc_RackGroup.Rack05[405005], 0.1, 1),
+    I_rack_R05: Scale_Data(Lc_RackGroup.Rack05[405002], 0.1, 1),
+    SOC_R05: Scale_Data(Lc_RackGroup.Rack05[405006], 0.01, 2),
+    SOH_R05: Scale_Data(Lc_RackGroup.Rack05[405004], 0.01, 2),
+    Impedance_R05: Scale_Data(Lc_RackGroup.Rack05[405020], 0.1, 1),
+
+    V_cell_Max_R05: Scale_Data(Lc_RackGroup.Rack05[405010], 0.0001, 4),
     bmucellNoVcMax_R05: getHighLowByte(Lc_RackGroup.Rack05[405011]),
-    V_cell_Min_R05: scaleProcess(Lc_RackGroup.Rack05[405012], 0.0001, 4),
+    V_cell_Min_R05: Scale_Data(Lc_RackGroup.Rack05[405012], 0.0001, 4),
     bmucellNoVcMin_R05: getHighLowByte(Lc_RackGroup.Rack05[405013]),
-    V_cell_MaxDiff_R05: scaleProcess(
-      Lc_RackGroup.Rack05[405010] - Lc_RackGroup.Rack05[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R05: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack05[405010] - Lc_RackGroup.Rack05[405012]
-    ),
-    T_cell_Max_R05: scaleProcess(Lc_RackGroup.Rack05[405014], 0.1, 1),
+    V_cell_MaxDiff_R05: Scale_Diff_of_Data(Lc_RackGroup.Rack05[405010], Lc_RackGroup.Rack05[405012], 0.1, 1),
+    T_cell_Max_R05: Scale_Data(Lc_RackGroup.Rack05[405014], 0.1, 1),
     bmucellNoTcMax_R05: getHighLowByte(Lc_RackGroup.Rack05[405015]),
-    T_cell_Min_R05: scaleProcess(Lc_RackGroup.Rack05[405016], 0.1, 1),
+    T_cell_Min_R05: Scale_Data(Lc_RackGroup.Rack05[405016], 0.1, 1),
     bmucellNoTcMin_R05: getHighLowByte(Lc_RackGroup.Rack05[405017]),
-    T_cell_MaxDiff_R05: scaleProcess(
-      Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R05: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack05[405014] - Lc_RackGroup.Rack05[405016]
-    ),
-    alarmCMU_R05_rawD: Lc_RackGroup.Rack05[405028],
-    faultCMU_R05_rawD: Lc_RackGroup.Rack05[405030],
-    DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack05[405032]
-    ),
+    T_cell_MaxDiff_R05: Scale_Diff_of_Data(Lc_RackGroup.Rack05[405014], Lc_RackGroup.Rack05[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R05: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack05[405028]),
+    DL_of_faultCMU_R05: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack05[405030]),
+    DL_of_statusHW_R05: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack05[405032]),
 
     Mode_R06: mapWordStatus(Lc_RackGroup.Rack06[405009], rackWorkStatus_MT),
-    V_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405005], 0.1, 1),
-    I_rack_R06: scaleProcess(Lc_RackGroup.Rack06[405002], 0.1, 1),
-    SOC_R06: scaleProcess(Lc_RackGroup.Rack06[405006], 0.01, 2),
-    SOH_R06: scaleProcess(Lc_RackGroup.Rack06[405004], 0.01, 2),
-    Impedance_R06: scaleProcess(Lc_RackGroup.Rack06[405020], 0.1, 1),
-    V_cell_Max_R06: scaleProcess(Lc_RackGroup.Rack06[405010], 0.0001, 4),
+    V_rack_R06: Scale_Data(Lc_RackGroup.Rack06[405005], 0.1, 1),
+    I_rack_R06: Scale_Data(Lc_RackGroup.Rack06[405002], 0.1, 1),
+    SOC_R06: Scale_Data(Lc_RackGroup.Rack06[405006], 0.01, 2),
+    SOH_R06: Scale_Data(Lc_RackGroup.Rack06[405004], 0.01, 2),
+    Impedance_R06: Scale_Data(Lc_RackGroup.Rack06[405020], 0.1, 1),
+
+    V_cell_Max_R06: Scale_Data(Lc_RackGroup.Rack06[405010], 0.0001, 4),
     bmucellNoVcMax_R06: getHighLowByte(Lc_RackGroup.Rack06[405011]),
-    V_cell_Min_R06: scaleProcess(Lc_RackGroup.Rack06[405012], 0.0001, 4),
+    V_cell_Min_R06: Scale_Data(Lc_RackGroup.Rack06[405012], 0.0001, 4),
     bmucellNoVcMin_R06: getHighLowByte(Lc_RackGroup.Rack06[405013]),
-    V_cell_MaxDiff_R06: scaleProcess(
-      Lc_RackGroup.Rack06[405010] - Lc_RackGroup.Rack06[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R06: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack06[405010] - Lc_RackGroup.Rack06[405012]
-    ),
-    T_cell_Max_R06: scaleProcess(Lc_RackGroup.Rack06[405014], 0.1, 1),
+    V_cell_MaxDiff_R06: Scale_Diff_of_Data(Lc_RackGroup.Rack06[405010], Lc_RackGroup.Rack06[405012], 0.1, 1),
+    T_cell_Max_R06: Scale_Data(Lc_RackGroup.Rack06[405014], 0.1, 1),
     bmucellNoTcMax_R06: getHighLowByte(Lc_RackGroup.Rack06[405015]),
-    T_cell_Min_R06: scaleProcess(Lc_RackGroup.Rack06[405016], 0.1, 1),
+    T_cell_Min_R06: Scale_Data(Lc_RackGroup.Rack06[405016], 0.1, 1),
     bmucellNoTcMin_R06: getHighLowByte(Lc_RackGroup.Rack06[405017]),
-    T_cell_MaxDiff_R06: scaleProcess(
-      Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R06: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack06[405014] - Lc_RackGroup.Rack06[405016]
-    ),
-    alarmCMU_R06_rawD: Lc_RackGroup.Rack06[405028],
-    faultCMU_R06_rawD: Lc_RackGroup.Rack06[405030],
-    DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack06[405032]
-    ),
+    T_cell_MaxDiff_R06: Scale_Diff_of_Data(Lc_RackGroup.Rack06[405014], Lc_RackGroup.Rack06[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R06: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack06[405028]),
+    DL_of_faultCMU_R06: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack06[405030]),
+    DL_of_statusHW_R06: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack06[405032]),
 
     Mode_R07: mapWordStatus(Lc_RackGroup.Rack07[405009], rackWorkStatus_MT),
-    V_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405005], 0.1, 1),
-    I_rack_R07: scaleProcess(Lc_RackGroup.Rack07[405002], 0.1, 1),
-    SOC_R07: scaleProcess(Lc_RackGroup.Rack07[405006], 0.01, 2),
-    SOH_R07: scaleProcess(Lc_RackGroup.Rack07[405004], 0.01, 2),
-    Impedance_R07: scaleProcess(Lc_RackGroup.Rack07[405020], 0.1, 1),
-    V_cell_Max_R07: scaleProcess(Lc_RackGroup.Rack07[405010], 0.0001, 4),
+    V_rack_R07: Scale_Data(Lc_RackGroup.Rack07[405005], 0.1, 1),
+    I_rack_R07: Scale_Data(Lc_RackGroup.Rack07[405002], 0.1, 1),
+    SOC_R07: Scale_Data(Lc_RackGroup.Rack07[405006], 0.01, 2),
+    SOH_R07: Scale_Data(Lc_RackGroup.Rack07[405004], 0.01, 2),
+    Impedance_R07: Scale_Data(Lc_RackGroup.Rack07[405020], 0.1, 1),
+
+    V_cell_Max_R07: Scale_Data(Lc_RackGroup.Rack07[405010], 0.0001, 4),
     bmucellNoVcMax_R07: getHighLowByte(Lc_RackGroup.Rack07[405011]),
-    V_cell_Min_R07: scaleProcess(Lc_RackGroup.Rack07[405012], 0.0001, 4),
+    V_cell_Min_R07: Scale_Data(Lc_RackGroup.Rack07[405012], 0.0001, 4),
     bmucellNoVcMin_R07: getHighLowByte(Lc_RackGroup.Rack07[405013]),
-    V_cell_MaxDiff_R07: scaleProcess(
-      Lc_RackGroup.Rack07[405010] - Lc_RackGroup.Rack07[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R07: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack07[405010] - Lc_RackGroup.Rack07[405012]
-    ),
-    T_cell_Max_R07: scaleProcess(Lc_RackGroup.Rack07[405014], 0.1, 1),
+    V_cell_MaxDiff_R07: Scale_Diff_of_Data(Lc_RackGroup.Rack07[405010], Lc_RackGroup.Rack07[405012], 0.1, 1),
+    T_cell_Max_R07: Scale_Data(Lc_RackGroup.Rack07[405014], 0.1, 1),
     bmucellNoTcMax_R07: getHighLowByte(Lc_RackGroup.Rack07[405015]),
-    T_cell_Min_R07: scaleProcess(Lc_RackGroup.Rack07[405016], 0.1, 1),
+    T_cell_Min_R07: Scale_Data(Lc_RackGroup.Rack07[405016], 0.1, 1),
     bmucellNoTcMin_R07: getHighLowByte(Lc_RackGroup.Rack07[405017]),
-    T_cell_MaxDiff_R07: scaleProcess(
-      Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R07: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack07[405014] - Lc_RackGroup.Rack07[405016]
-    ),
-    alarmCMU_R07_rawD: Lc_RackGroup.Rack07[405028],
-    faultCMU_R07_rawD: Lc_RackGroup.Rack07[405030],
-    DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack07[405032]
-    ),
+    T_cell_MaxDiff_R07: Scale_Diff_of_Data(Lc_RackGroup.Rack07[405014], Lc_RackGroup.Rack07[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R07: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack07[405028]),
+    DL_of_faultCMU_R07: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack07[405030]),
+    DL_of_statusHW_R07: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack07[405032]),
 
     Mode_R08: mapWordStatus(Lc_RackGroup.Rack08[405009], rackWorkStatus_MT),
-    V_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405005], 0.1, 1),
-    I_rack_R08: scaleProcess(Lc_RackGroup.Rack08[405002], 0.1, 1),
-    SOC_R08: scaleProcess(Lc_RackGroup.Rack08[405006], 0.01, 2),
-    SOH_R08: scaleProcess(Lc_RackGroup.Rack08[405004], 0.01, 2),
-    Impedance_R08: scaleProcess(Lc_RackGroup.Rack08[405020], 0.1, 1),
-    V_cell_Max_R08: scaleProcess(Lc_RackGroup.Rack08[405010], 0.0001, 4),
+    V_rack_R08: Scale_Data(Lc_RackGroup.Rack08[405005], 0.1, 1),
+    I_rack_R08: Scale_Data(Lc_RackGroup.Rack08[405002], 0.1, 1),
+    SOC_R08: Scale_Data(Lc_RackGroup.Rack08[405006], 0.01, 2),
+    SOH_R08: Scale_Data(Lc_RackGroup.Rack08[405004], 0.01, 2),
+    Impedance_R08: Scale_Data(Lc_RackGroup.Rack08[405020], 0.1, 1),
+
+    V_cell_Max_R08: Scale_Data(Lc_RackGroup.Rack08[405010], 0.0001, 4),
     bmucellNoVcMax_R08: getHighLowByte(Lc_RackGroup.Rack08[405011]),
-    V_cell_Min_R08: scaleProcess(Lc_RackGroup.Rack08[405012], 0.0001, 4),
+    V_cell_Min_R08: Scale_Data(Lc_RackGroup.Rack08[405012], 0.0001, 4),
     bmucellNoVcMin_R08: getHighLowByte(Lc_RackGroup.Rack08[405013]),
-    V_cell_MaxDiff_R08: scaleProcess(
-      Lc_RackGroup.Rack08[405010] - Lc_RackGroup.Rack08[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R08: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack08[405010] - Lc_RackGroup.Rack08[405012]
-    ),
-    T_cell_Max_R08: scaleProcess(Lc_RackGroup.Rack08[405014], 0.1, 1),
+    V_cell_MaxDiff_R08: Scale_Diff_of_Data(Lc_RackGroup.Rack08[405010], Lc_RackGroup.Rack08[405012], 0.1, 1),
+    T_cell_Max_R08: Scale_Data(Lc_RackGroup.Rack08[405014], 0.1, 1),
     bmucellNoTcMax_R08: getHighLowByte(Lc_RackGroup.Rack08[405015]),
-    T_cell_Min_R08: scaleProcess(Lc_RackGroup.Rack08[405016], 0.1, 1),
+    T_cell_Min_R08: Scale_Data(Lc_RackGroup.Rack08[405016], 0.1, 1),
     bmucellNoTcMin_R08: getHighLowByte(Lc_RackGroup.Rack08[405017]),
-    T_cell_MaxDiff_R08: scaleProcess(
-      Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R08: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack08[405014] - Lc_RackGroup.Rack08[405016]
-    ),
-    alarmCMU_R08_rawD: Lc_RackGroup.Rack08[405028],
-    faultCMU_R08_rawD: Lc_RackGroup.Rack08[405030],
-    DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack08[405032]
-    ),
+    T_cell_MaxDiff_R08: Scale_Diff_of_Data(Lc_RackGroup.Rack08[405014], Lc_RackGroup.Rack08[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R08: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack08[405028]),
+    DL_of_faultCMU_R08: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack08[405030]),
+    DL_of_statusHW_R08: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack08[405032]),
 
     Mode_R09: mapWordStatus(Lc_RackGroup.Rack09[405009], rackWorkStatus_MT),
-    V_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405005], 0.1, 1),
-    I_rack_R09: scaleProcess(Lc_RackGroup.Rack09[405002], 0.1, 1),
-    SOC_R09: scaleProcess(Lc_RackGroup.Rack09[405006], 0.01, 2),
-    SOH_R09: scaleProcess(Lc_RackGroup.Rack09[405004], 0.01, 2),
-    Impedance_R09: scaleProcess(Lc_RackGroup.Rack09[405020], 0.1, 1),
-    V_cell_Max_R09: scaleProcess(Lc_RackGroup.Rack09[405010], 0.0001, 4),
+    V_rack_R09: Scale_Data(Lc_RackGroup.Rack09[405005], 0.1, 1),
+    I_rack_R09: Scale_Data(Lc_RackGroup.Rack09[405002], 0.1, 1),
+    SOC_R09: Scale_Data(Lc_RackGroup.Rack09[405006], 0.01, 2),
+    SOH_R09: Scale_Data(Lc_RackGroup.Rack09[405004], 0.01, 2),
+    Impedance_R09: Scale_Data(Lc_RackGroup.Rack09[405020], 0.1, 1),
+
+    V_cell_Max_R09: Scale_Data(Lc_RackGroup.Rack09[405010], 0.0001, 4),
     bmucellNoVcMax_R09: getHighLowByte(Lc_RackGroup.Rack09[405011]),
-    V_cell_Min_R09: scaleProcess(Lc_RackGroup.Rack09[405012], 0.0001, 4),
+    V_cell_Min_R09: Scale_Data(Lc_RackGroup.Rack09[405012], 0.0001, 4),
     bmucellNoVcMin_R09: getHighLowByte(Lc_RackGroup.Rack09[405013]),
-    V_cell_MaxDiff_R09: scaleProcess(
-      Lc_RackGroup.Rack09[405010] - Lc_RackGroup.Rack09[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R09: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack09[405010] - Lc_RackGroup.Rack09[405012]
-    ),
-    T_cell_Max_R09: scaleProcess(Lc_RackGroup.Rack09[405014], 0.1, 1),
+    V_cell_MaxDiff_R09: Scale_Diff_of_Data(Lc_RackGroup.Rack09[405010], Lc_RackGroup.Rack09[405012], 0.1, 1),
+    T_cell_Max_R09: Scale_Data(Lc_RackGroup.Rack09[405014], 0.1, 1),
     bmucellNoTcMax_R09: getHighLowByte(Lc_RackGroup.Rack09[405015]),
-    T_cell_Min_R09: scaleProcess(Lc_RackGroup.Rack09[405016], 0.1, 1),
+    T_cell_Min_R09: Scale_Data(Lc_RackGroup.Rack09[405016], 0.1, 1),
     bmucellNoTcMin_R09: getHighLowByte(Lc_RackGroup.Rack09[405017]),
-    T_cell_MaxDiff_R09: scaleProcess(
-      Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R09: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack09[405014] - Lc_RackGroup.Rack09[405016]
-    ),
-    alarmCMU_R09_rawD: Lc_RackGroup.Rack09[405028],
-    faultCMU_R09_rawD: Lc_RackGroup.Rack09[405030],
-    DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack09[405032]
-    ),
+    T_cell_MaxDiff_R09: Scale_Diff_of_Data(Lc_RackGroup.Rack09[405014], Lc_RackGroup.Rack09[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R09: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack09[405028]),
+    DL_of_faultCMU_R09: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack09[405030]),
+    DL_of_statusHW_R09: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack09[405032]),
 
     Mode_R10: mapWordStatus(Lc_RackGroup.Rack10[405009], rackWorkStatus_MT),
-    V_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405005], 0.1, 1),
-    I_rack_R10: scaleProcess(Lc_RackGroup.Rack10[405002], 0.1, 1),
-    SOC_R10: scaleProcess(Lc_RackGroup.Rack10[405006], 0.01, 2),
-    SOH_R10: scaleProcess(Lc_RackGroup.Rack10[405004], 0.01, 2),
-    Impedance_R10: scaleProcess(Lc_RackGroup.Rack10[405020], 0.1, 1),
-    V_cell_Max_R10: scaleProcess(Lc_RackGroup.Rack10[405010], 0.0001, 4),
+    V_rack_R10: Scale_Data(Lc_RackGroup.Rack10[405005], 0.1, 1),
+    I_rack_R10: Scale_Data(Lc_RackGroup.Rack10[405002], 0.1, 1),
+    SOC_R10: Scale_Data(Lc_RackGroup.Rack10[405006], 0.01, 2),
+    SOH_R10: Scale_Data(Lc_RackGroup.Rack10[405004], 0.01, 2),
+    Impedance_R10: Scale_Data(Lc_RackGroup.Rack10[405020], 0.1, 1),
+
+    V_cell_Max_R10: Scale_Data(Lc_RackGroup.Rack10[405010], 0.0001, 4),
     bmucellNoVcMax_R10: getHighLowByte(Lc_RackGroup.Rack10[405011]),
-    V_cell_Min_R10: scaleProcess(Lc_RackGroup.Rack10[405012], 0.0001, 4),
+    V_cell_Min_R10: Scale_Data(Lc_RackGroup.Rack10[405012], 0.0001, 4),
     bmucellNoVcMin_R10: getHighLowByte(Lc_RackGroup.Rack10[405013]),
-    V_cell_MaxDiff_R10: scaleProcess(
-      Lc_RackGroup.Rack10[405010] - Lc_RackGroup.Rack10[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R10: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack10[405010] - Lc_RackGroup.Rack10[405012]
-    ),
-    T_cell_Max_R10: scaleProcess(Lc_RackGroup.Rack10[405014], 0.1, 1),
+    V_cell_MaxDiff_R10: Scale_Diff_of_Data(Lc_RackGroup.Rack10[405010], Lc_RackGroup.Rack10[405012], 0.1, 1),
+    T_cell_Max_R10: Scale_Data(Lc_RackGroup.Rack10[405014], 0.1, 1),
     bmucellNoTcMax_R10: getHighLowByte(Lc_RackGroup.Rack10[405015]),
-    T_cell_Min_R10: scaleProcess(Lc_RackGroup.Rack10[405016], 0.1, 1),
+    T_cell_Min_R10: Scale_Data(Lc_RackGroup.Rack10[405016], 0.1, 1),
     bmucellNoTcMin_R10: getHighLowByte(Lc_RackGroup.Rack10[405017]),
-    T_cell_MaxDiff_R10: scaleProcess(
-      Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R10: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack10[405014] - Lc_RackGroup.Rack10[405016]
-    ),
-    alarmCMU_R10_rawD: Lc_RackGroup.Rack10[405028],
-    faultCMU_R10_rawD: Lc_RackGroup.Rack10[405030],
-    DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack10[405032]
-    ),
+    T_cell_MaxDiff_R10: Scale_Diff_of_Data(Lc_RackGroup.Rack10[405014], Lc_RackGroup.Rack10[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R10: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack10[405028]),
+    DL_of_faultCMU_R10: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack10[405030]),
+    DL_of_statusHW_R10: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack10[405032]),
 
     Mode_R11: mapWordStatus(Lc_RackGroup.Rack11[405009], rackWorkStatus_MT),
-    V_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405005], 0.1, 1),
-    I_rack_R11: scaleProcess(Lc_RackGroup.Rack11[405002], 0.1, 1),
-    SOC_R11: scaleProcess(Lc_RackGroup.Rack11[405006], 0.01, 2),
-    SOH_R11: scaleProcess(Lc_RackGroup.Rack11[405004], 0.01, 2),
-    Impedance_R11: scaleProcess(Lc_RackGroup.Rack11[405020], 0.1, 1),
-    V_cell_Max_R11: scaleProcess(Lc_RackGroup.Rack11[405010], 0.0001, 4),
+    V_rack_R11: Scale_Data(Lc_RackGroup.Rack11[405005], 0.1, 1),
+    I_rack_R11: Scale_Data(Lc_RackGroup.Rack11[405002], 0.1, 1),
+    SOC_R11: Scale_Data(Lc_RackGroup.Rack11[405006], 0.01, 2),
+    SOH_R11: Scale_Data(Lc_RackGroup.Rack11[405004], 0.01, 2),
+    Impedance_R11: Scale_Data(Lc_RackGroup.Rack11[405020], 0.1, 1),
+
+    V_cell_Max_R11: Scale_Data(Lc_RackGroup.Rack11[405010], 0.0001, 4),
     bmucellNoVcMax_R11: getHighLowByte(Lc_RackGroup.Rack11[405011]),
-    V_cell_Min_R11: scaleProcess(Lc_RackGroup.Rack11[405012], 0.0001, 4),
+    V_cell_Min_R11: Scale_Data(Lc_RackGroup.Rack11[405012], 0.0001, 4),
     bmucellNoVcMin_R11: getHighLowByte(Lc_RackGroup.Rack11[405013]),
-    V_cell_MaxDiff_R11: scaleProcess(
-      Lc_RackGroup.Rack11[405010] - Lc_RackGroup.Rack11[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R11: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack11[405010] - Lc_RackGroup.Rack11[405012]
-    ),
-    T_cell_Max_R11: scaleProcess(Lc_RackGroup.Rack11[405014], 0.1, 1),
+    V_cell_MaxDiff_R11: Scale_Diff_of_Data(Lc_RackGroup.Rack11[405010], Lc_RackGroup.Rack11[405012], 0.1, 1),
+    T_cell_Max_R11: Scale_Data(Lc_RackGroup.Rack11[405014], 0.1, 1),
     bmucellNoTcMax_R11: getHighLowByte(Lc_RackGroup.Rack11[405015]),
-    T_cell_Min_R11: scaleProcess(Lc_RackGroup.Rack11[405016], 0.1, 1),
+    T_cell_Min_R11: Scale_Data(Lc_RackGroup.Rack11[405016], 0.1, 1),
     bmucellNoTcMin_R11: getHighLowByte(Lc_RackGroup.Rack11[405017]),
-    T_cell_MaxDiff_R11: scaleProcess(
-      Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R11: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack11[405014] - Lc_RackGroup.Rack11[405016]
-    ),
-    alarmCMU_R11_rawD: Lc_RackGroup.Rack11[405028],
-    faultCMU_R11_rawD: Lc_RackGroup.Rack11[405030],
-    DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack11[405032]
-    ),
+    T_cell_MaxDiff_R11: Scale_Diff_of_Data(Lc_RackGroup.Rack11[405014], Lc_RackGroup.Rack11[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R11: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack11[405028]),
+    DL_of_faultCMU_R11: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack11[405030]),
+    DL_of_statusHW_R11: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack11[405032]),
 
     Mode_R12: mapWordStatus(Lc_RackGroup.Rack12[405009], rackWorkStatus_MT),
-    V_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405005], 0.1, 1),
-    I_rack_R12: scaleProcess(Lc_RackGroup.Rack12[405002], 0.1, 1),
-    SOC_R12: scaleProcess(Lc_RackGroup.Rack12[405006], 0.01, 2),
-    SOH_R12: scaleProcess(Lc_RackGroup.Rack12[405004], 0.01, 2),
-    Impedance_R12: scaleProcess(Lc_RackGroup.Rack12[405020], 0.1, 1),
-    V_cell_Max_R12: scaleProcess(Lc_RackGroup.Rack12[405010], 0.0001, 4),
+    V_rack_R12: Scale_Data(Lc_RackGroup.Rack12[405005], 0.1, 1),
+    I_rack_R12: Scale_Data(Lc_RackGroup.Rack12[405002], 0.1, 1),
+    SOC_R12: Scale_Data(Lc_RackGroup.Rack12[405006], 0.01, 2),
+    SOH_R12: Scale_Data(Lc_RackGroup.Rack12[405004], 0.01, 2),
+    Impedance_R12: Scale_Data(Lc_RackGroup.Rack12[405020], 0.1, 1),
+
+    V_cell_Max_R12: Scale_Data(Lc_RackGroup.Rack12[405010], 0.0001, 4),
     bmucellNoVcMax_R12: getHighLowByte(Lc_RackGroup.Rack12[405011]),
-    V_cell_Min_R12: scaleProcess(Lc_RackGroup.Rack12[405012], 0.0001, 4),
+    V_cell_Min_R12: Scale_Data(Lc_RackGroup.Rack12[405012], 0.0001, 4),
     bmucellNoVcMin_R12: getHighLowByte(Lc_RackGroup.Rack12[405013]),
-    V_cell_MaxDiff_R12: scaleProcess(
-      Lc_RackGroup.Rack12[405010] - Lc_RackGroup.Rack12[405012],
-      0.1,
-      1
-    ),
-    bgc_VcMaxDiff_R12: Determine_BGC_of_VcMaxDiff(
-      Lc_RackGroup.Rack12[405010] - Lc_RackGroup.Rack12[405012]
-    ),
-    T_cell_Max_R12: scaleProcess(Lc_RackGroup.Rack12[405014], 0.1, 1),
+    V_cell_MaxDiff_R12: Scale_Diff_of_Data(Lc_RackGroup.Rack12[405010], Lc_RackGroup.Rack12[405012], 0.1, 1),
+    T_cell_Max_R12: Scale_Data(Lc_RackGroup.Rack12[405014], 0.1, 1),
     bmucellNoTcMax_R12: getHighLowByte(Lc_RackGroup.Rack12[405015]),
-    T_cell_Min_R12: scaleProcess(Lc_RackGroup.Rack12[405016], 0.1, 1),
+    T_cell_Min_R12: Scale_Data(Lc_RackGroup.Rack12[405016], 0.1, 1),
     bmucellNoTcMin_R12: getHighLowByte(Lc_RackGroup.Rack12[405017]),
-    T_cell_MaxDiff_R12: scaleProcess(
-      Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016],
-      0.1,
-      1
-    ),
-    bgc_TcMaxDiff_R12: Determine_BGC_of_TcMaxDiff(
-      Lc_RackGroup.Rack12[405014] - Lc_RackGroup.Rack12[405016]
-    ),
-    alarmCMU_R12_rawD: Lc_RackGroup.Rack12[405028],
-    faultCMU_R12_rawD: Lc_RackGroup.Rack12[405030],
-    DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(
-      Lc_RackGroup.Rack12[405032]
-    )
+    T_cell_MaxDiff_R12: Scale_Diff_of_Data(Lc_RackGroup.Rack12[405014], Lc_RackGroup.Rack12[405016], 0.1, 1),
+
+    DL_of_alarmCMU_R12: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack12[405028]),
+    DL_of_faultCMU_R12: Determine_DL_of_AlarmWord(Lc_RackGroup.Rack12[405030]),
+    DL_of_statusHW_R12: Determine_DL_of_RackHWStatus(Lc_RackGroup.Rack12[405032]),
+
+    alarmCMU_rBitS: Convert_UInt_to_revBitString(lcData[`RackSub${subNumber}`][`Rack${num_Rack}`][405028], 32),
+    faultCMU_rBitS: Convert_UInt_to_revBitString(lcData[`RackSub${subNumber}`][`Rack${num_Rack}`][405030], 32),
+    statusHW_rBitS: Convert_UInt_to_revBitString(lcData[`RackSub${subNumber}`][`Rack${num_Rack}`][405032], 16)
   };
 }
 
@@ -1433,71 +1266,41 @@ router.get("/operateinfo/battery/rack/:pageNumber/:data", async (req, res) => {
 // //***************************************************************************************** */
 router.use(bodyParser.json());
 
-//各rack單獨彈出視窗
-router.post("/getData", async (req, res) => {
+router.post("/change_num_of_Rack", async (req, res) => {
   try {
-    console.log("接收到前端請求");
-    const blockId = req.body.blockId;
-    console.log("blockId:" + blockId);
+    //console.log("接收到前端請求");
+    num_Rack = req.body.num_of_Rack;
+    console.log(pageNumber);
+    console.log(num_Rack);
 
-    console.log("globalPageNumber:" + globalPageNumber);
-
-    const dataPromises = databases.map(async (dbName) => {
-      const nanoDb = createNanoInstance(dbName);
-      return getLatestDocument(nanoDb);
-    });
-
-    const allData = await Promise.all(dataPromises);
-    const baseNumber = Math.ceil(globalPageNumber / 2);
-    const isEvenPage = globalPageNumber % 2 === 0;
-    const num = baseNumber - 1;
-    const lcData = allData[num];
-    //console.log("num: " + num);
-    const Lc_RackGroup = isEvenPage ? lcData.RackSub2 : lcData.RackSub1;
-    //console.log("判斷isEvenPage??" + isEvenPage);
-    //console.log("Lc_RackGroup: " + Lc_RackGroup);
-
-    const collectionMap = {
-      1: "Rack01",
-      2: "Rack02",
-      3: "Rack03",
-      4: "Rack04",
-      5: "Rack05",
-      6: "Rack06",
-      7: "Rack07",
-      8: "Rack08",
-      9: "Rack09",
-      10: "Rack10",
-      11: "Rack11",
-      12: "Rack12"
+    const dataDB_MT = {
+      1: "lc1_rf10",
+      2: "lc1_rf10",
+      3: "lc2_rf10",
+      4: "lc2_rf10",
+      5: "lc3_rf10",
+      6: "lc3_rf10",
+      7: "lc4_rf10",
     };
 
-    //判斷帶入哪個rack
-    let selectedCollection = collectionMap[blockId];
-    const alarmCMU_rawD = Lc_RackGroup[selectedCollection][405028];
-    const faultCMU_rawD = Lc_RackGroup[selectedCollection][405030];
-    const DL_of_statusHW = Lc_RackGroup[selectedCollection][405032];
+    const num_of_BMS_in_LC = 2 - (pageNumber % 2);
+    // console.log(num_of_BMS_in_LC);
 
-    // console.log("alarmCMU_rawD: " + alarmCMU_rawD);
-    // console.log("faultCMU_rawD: " + faultCMU_rawD);
-    // console.log("DL_of_statusHW: " + DL_of_statusHW);
-    // console.log("selectedCollection: " + selectedCollection);
+    const rackData_nanoDb = nano.use(dataDB_MT[pageNumber]);
+    const dataGot = await rackData_nanoDb.find(mangoQuery);
+    const rackData = dataGot.docs[0];
+    // console.log(rackData.RackSub1.Rack02);
 
-    //回傳數值到前端 尚未帶點
-    const data = {
-      alarmCMU_rawD: alarmCMU_rawD.toString(2),
-      faultCMU_rawD: faultCMU_rawD.toString(2),
-      DL_of_statusHW: DL_of_statusHW.toString(2)
+    const response = {
+      alarmCMU: Convert_UInt_to_revBitString(rackData[`RackSub${num_of_BMS_in_LC}`][`Rack${num_Rack}`][405028], 32),
+      faultCMU: Convert_UInt_to_revBitString(rackData[`RackSub${num_of_BMS_in_LC}`][`Rack${num_Rack}`][405030], 32),
+      statusHW: Convert_UInt_to_revBitString(rackData[`RackSub${num_of_BMS_in_LC}`][`Rack${num_Rack}`][405032], 16)
     };
 
-    res.json(data);
-
-    if (!lcData) {
-      throw new Error("No data found");
-    }
+    res.json(response);
   } catch (error) {
     console.error(error);
-    res.status(500).send("伺服器錯誤");
+    res.status(500).send("Server Error");
   }
 });
 
