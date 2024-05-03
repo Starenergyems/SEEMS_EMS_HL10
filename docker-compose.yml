@@ -1,7 +1,7 @@
 services:
   ems-service:
     # restart: always
-    image: ems-service_v13
+    image: ems-service_v14
     build:
       context: .
       dockerfile: Dockerfile

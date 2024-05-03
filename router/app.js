@@ -107,6 +107,7 @@ console.log(rrr)
 app.get("/login", async (req, res) => {
   res.clearCookie("token");
   const response = await getconfig();
+
   let logintext = response["logintext"]
   getData();
     const Values = await getLatestValuesFromDatabase();
