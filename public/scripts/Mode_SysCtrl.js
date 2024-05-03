@@ -1,23 +1,6 @@
 // var myHeading = document.querySelector("h1");
 // myHeading.textContent = "Hello world!";
 
-
-// const setBut_P_Project = document.querySelector(".sysInfo #P_Project_set");
-// const P_Project = document.querySelector(".sysInfo #P_Project");
-// setBut_P_Project.addEventListener("click", Set_P_Project);
-// function Set_P_Project() {
-//     let value_set_raw = prompt("請輸入設定值(0~10000)：");
-//     if ((value_set_raw) && (value_set_raw !== null)) {
-//         let value_set = Math.round(Number(value_set_raw));
-//         if (value_set >= 0 && value_set <= 10000) {
-//             P_Project.textContent = value_set;
-//         }
-//     }
-// }
-
-//var permission="viewer"; //需讀權限
-var permission = "manager";
-
 document.addEventListener("DOMContentLoaded", afterLoadDCM);
 function afterLoadDCM() {
     asdfg = "DOM加载了! 哈哈\n阿哈哈~";
@@ -30,6 +13,7 @@ function afterLoadDCM() {
 }
 
 setInterval(routineWork, 1000);
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 const window_dataValue_Set = document.querySelector(".dataValue_Set");
@@ -39,9 +23,10 @@ const unit_origin_dataValue_Set = document.querySelector(".dataValue_Set .valOri
 const unit_new_dataValue_Set = document.querySelector(".dataValue_Set .valNew .data_unit");
 const range_info_dataValue_Set = document.querySelector(".dataValue_Set .rangeInfo");
 const val_new_dataValue_Set = document.querySelector(".dataValue_Set #valueNew");
+let dVS_Data_dataName;
 
 const setBut_P_Project = document.querySelector(".sysInfo #P_Project_set");
-setBut_P_Project.addEventListener("click", function () { Set_P_Project(99) });
+setBut_P_Project.addEventListener("click", function () { Set_P_Project(99); });
 async function Set_P_Project(numInDataGroup) {
     dVS_Data_dataName = "setBut_P_Project";
 
@@ -60,7 +45,7 @@ async function Set_P_Project(numInDataGroup) {
 }
 
 const setBut_P_LoadShift = document.querySelector(".sysInfo #P_LoadShift_set");
-setBut_P_LoadShift.addEventListener("click", Set_P_LoadShift);
+setBut_P_LoadShift.addEventListener("click", function () { Set_P_LoadShift(99); });
 async function Set_P_LoadShift(numInDataGroup) {
     dVS_Data_dataName = "setBut_P_LoadShift";
 
@@ -98,81 +83,34 @@ function closePopup_dVS_No() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-const window_dataStatus_Set = document.querySelector(".dataStatus_Set");
-const title_dataStatus_Set = document.querySelector(".dataStatus_Set .titlePUW");
-const option1_dataStatus_Set = document.querySelector(".dataStatus_Set #option_1");
-const option2_dataStatus_Set = document.querySelector(".dataStatus_Set #option_2");
-const radioOption1 = document.querySelector(".dataStatus_Set #radioOpt_1");
-const radioOption2 = document.querySelector(".dataStatus_Set #radioOpt_2");
-const alertInfo_dataStatus_Set = document.querySelector(".dataStatus_Set .alertInfo");
-let valNow_dataStatus_Set;
-let valLightNow_dataStatus_Set;
-let option1_Description;
-let option2_Description;
+const window_dataStatus_Set = document.querySelector(".dataStatus_Set.general");
+const title_dataStatus_Set = document.querySelector(".dataStatus_Set.general .titlePUW");
+const option1_dataStatus_Set = document.querySelector(".dataStatus_Set.general #option_1");
+const option2_dataStatus_Set = document.querySelector(".dataStatus_Set.general #option_2");
+const radioOption1 = document.querySelector(".dataStatus_Set.general #radioOpt_1");
+const radioOption2 = document.querySelector(".dataStatus_Set.general #radioOpt_2");
+const alertInfo_dataStatus_Set = document.querySelector(".dataStatus_Set.general .alertInfo");
 let optionChecked_dataStatus_Set;
+let dSS_Data_dataName;
 
 function clearCheckedRadioOption() {
     radioOption1.checked = false;
     radioOption2.checked = false;
 }
 
-const setBut_sysMode = document.querySelector(".sysInfo #sysMode_set");
-setBut_sysMode.addEventListener("click", Set_sysMode);
-function Set_sysMode() {
-    window_dataStatus_Set.classList.add("appear");
-    clearCheckedRadioOption();
-    title_dataStatus_Set.textContent = "子系統運作模式設定";
-    option1_dataStatus_Set.textContent = "全部自動";
-    option2_dataStatus_Set.textContent = "全部手動";
-    alertInfo_dataStatus_Set.textContent = "";
-    valNow_dataStatus_Set = document.querySelector(".sysInfo #sysMode");
-    valLightNow_dataStatus_Set = document.querySelector(".block_temp #spare_Light");
-    option1_Description = "全部自動";
-    option2_Description = "全部手動";
-}
-
-const setBut_statusAllPCS = document.querySelector(".sysInfo #statusAllPCS_set");
-setBut_statusAllPCS.addEventListener("click", Set_statusAllPCS);
-function Set_statusAllPCS() {
-    window_dataStatus_Set.classList.add("appear");
-    clearCheckedRadioOption();
-    title_dataStatus_Set.textContent = "PCS狀態設定";
-    option1_dataStatus_Set.textContent = "全部投入";
-    option2_dataStatus_Set.textContent = "全部切離";
-    alertInfo_dataStatus_Set.textContent = "";
-    valNow_dataStatus_Set = document.querySelector(".sysInfo #statusAllPCS");
-    valLightNow_dataStatus_Set = document.querySelector(".block_temp #spare_Light");
-    option1_Description = "全部投入";
-    option2_Description = "全部切離";
-}
-
-const setBut_statusAllBMS = document.querySelector(".sysInfo #statusAllBMS_set");
-setBut_statusAllBMS.addEventListener("click", Set_statusAllBMS);
-function Set_statusAllBMS() {
-    window_dataStatus_Set.classList.add("appear");
-    clearCheckedRadioOption();
-    title_dataStatus_Set.textContent = "電池狀態設定";
-    option1_dataStatus_Set.textContent = "全部投入";
-    option2_dataStatus_Set.textContent = "全部切離";
-    alertInfo_dataStatus_Set.textContent = "";
-    valNow_dataStatus_Set = document.querySelector(".sysInfo #statusAllBMS");
-    valLightNow_dataStatus_Set = document.querySelector(".block_temp #spare_Light");
-    option1_Description = "全部投入";
-    option2_Description = "全部切離";
-}
-
-let qSelectAll_option = document.querySelectorAll(".dataStatus_Set .option");
-let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set .radioOpt");
+let qSelectAll_option = document.querySelectorAll(".dataStatus_Set.general .option");
+let qSelectAll_radioOpt = document.querySelectorAll(".dataStatus_Set.general .radioOpt");
 let i;
 
 async function Set_AutoMan_SS(numInDataGroup) {
-    dataName = "setBut_AutoMan_SS";
+    dSS_Data_dataName = "setBut_AutoMan_SS";
 
     title_dataStatus_Set.textContent = `子系統${numInDataGroup}運作模式`;
     window_dataStatus_Set.classList.add("appear");
+    window_dSS_specific_Set.classList.remove("appear");
     clearCheckedRadioOption();
 
-    let getData = await get_dSS_Data_WhenClicking(dataName, numInDataGroup);
+    let getData = await get_dSS_Data_WhenClicking(dSS_Data_dataName, numInDataGroup);
     console.log(getData);
     // console.log(getData.status_MT);
     // console.log(Object.keys(getData.status_MT));
@@ -208,11 +146,11 @@ setBut_AutoMan_SS3.addEventListener("click", function () { Set_AutoMan_SS(3); })
 const setBut_AutoMan_SS4 = document.querySelector(".subSysInfo #AutoMan_SS4_set");
 setBut_AutoMan_SS4.addEventListener("click", function () { Set_AutoMan_SS(4); });
 
-const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set #closeWB_Yes");
+const closeWB_Yes_dSS = document.querySelector(".dataStatus_Set.general #closeWB_Yes");
 closeWB_Yes_dSS.addEventListener("click", closePopup_dSS_Yes);
 function closePopup_dSS_Yes() {
     if (radioOption1.checked === true || radioOption2.checked === true) {
-        optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set [name=dataStatus]:checked");
+        optionChecked_dataStatus_Set = document.querySelector(".dataStatus_Set.general [name=dataStatus]:checked");
 
         set_dSS_Data(optionChecked_dataStatus_Set.value);
 
@@ -222,12 +160,131 @@ function closePopup_dSS_Yes() {
     window_dataStatus_Set.classList.remove("appear");
 }
 
-const closeWB_No_dSS = document.querySelector(".dataStatus_Set #closeWB_No");
+const closeWB_No_dSS = document.querySelector(".dataStatus_Set.general #closeWB_No");
 closeWB_No_dSS.addEventListener("click", closePopup_dSS_No);
 function closePopup_dSS_No() {
     radioOption1.checked = false;
     radioOption2.checked = false;
     window_dataStatus_Set.classList.remove("appear");
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+const window_dSS_specific_Set = document.querySelector(".dataStatus_Set.specific");
+const title_dSS_specific_Set = document.querySelector(".dataStatus_Set.specific .titlePUW");
+const option_specific1 = document.querySelector(".dataStatus_Set.specific #option_specific1");
+const option_specific2 = document.querySelector(".dataStatus_Set.specific #option_specific2");
+const radioOption_specific1 = document.querySelector(".dataStatus_Set.specific #radioOpt_specific1");
+const radioOption_specific2 = document.querySelector(".dataStatus_Set.specific #radioOpt_specific2");
+const alertInfo_dSS_specific_Set = document.querySelector(".dataStatus_Set.specific .alertInfo");
+let optionChecked_dSS_specific_Set;
+let specific_dataName;
+
+async function record_specific_dataName_to_be_set(dataName) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/record_specific_dataName_to_be_set", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ dataName }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+const setBut_sysMode = document.querySelector(".sysInfo #sysMode_set");
+setBut_sysMode.addEventListener("click", Set_sysMode);
+function Set_sysMode() {
+    window_dSS_specific_Set.classList.add("appear");
+    window_dataStatus_Set.classList.remove("appear");
+    radioOption_specific1.checked = false;
+    radioOption_specific2.checked = false;
+    title_dSS_specific_Set.textContent = "子系統運作模式設定";
+    option_specific1.textContent = "全部自動";
+    option_specific2.textContent = "全部手動";
+    alertInfo_dSS_specific_Set.textContent = "";
+
+    specific_dataName = "sysMode";
+    record_specific_dataName_to_be_set(specific_dataName);
+}
+
+const setBut_statusAllPCS = document.querySelector(".sysInfo #statusAllPCS_set");
+setBut_statusAllPCS.addEventListener("click", Set_statusAllPCS);
+function Set_statusAllPCS() {
+    window_dSS_specific_Set.classList.add("appear");
+    window_dataStatus_Set.classList.remove("appear");
+    radioOption_specific1.checked = false;
+    radioOption_specific2.checked = false;
+    title_dSS_specific_Set.textContent = "PCS狀態設定";
+    option_specific1.textContent = "全部投入";
+    option_specific2.textContent = "全部切離";
+    alertInfo_dSS_specific_Set.textContent = "";
+
+    specific_dataName = "statusAllPCS";
+    record_specific_dataName_to_be_set(specific_dataName);
+}
+
+const setBut_statusAllBMS = document.querySelector(".sysInfo #statusAllBMS_set");
+setBut_statusAllBMS.addEventListener("click", Set_statusAllBMS);
+function Set_statusAllBMS() {
+    window_dSS_specific_Set.classList.add("appear");
+    window_dataStatus_Set.classList.remove("appear");
+    radioOption_specific1.checked = false;
+    radioOption_specific2.checked = false;
+    title_dSS_specific_Set.textContent = "電池狀態設定";
+    option_specific1.textContent = "全部投入";
+    option_specific2.textContent = "全部切離";
+    alertInfo_dSS_specific_Set.textContent = "";
+
+    specific_dataName = "statusAllBMS";
+    record_specific_dataName_to_be_set(specific_dataName);
+}
+
+async function set_specific_dataStatus(setValue) {
+    try {
+        console.log("嘗試向後端發出請求");
+        const response = await fetch("/set_specific_dataStatus", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ setValue }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+const closeWB_Yes_specific = document.querySelector(".dataStatus_Set #closeWB_specific_Yes");
+closeWB_Yes_specific.addEventListener("click", closePopup_specific_dS_Yes);
+function closePopup_specific_dS_Yes() {
+    if ((radioOption_specific1.checked === true) || (radioOption_specific2.checked === true)) {
+        optionChecked_dSS_specific_Set = document.querySelector(".dataStatus_Set [name=dSS_specific]:checked");
+        console.log(optionChecked_dSS_specific_Set.value);
+
+        set_specific_dataStatus(optionChecked_dSS_specific_Set.value);
+
+        optionChecked_dSS_specific_Set.checked = false;
+    }
+
+    window_dSS_specific_Set.classList.remove("appear");
+}
+
+const closeWB_No_specific = document.querySelector(".dataStatus_Set #closeWB_specific_No");
+closeWB_No_specific.addEventListener("click", closePopup_specific_dS_No);
+function closePopup_specific_dS_No() {
+    radioOption_specific1.checked = false;
+    radioOption_specific2.checked = false;
+    window_dSS_specific_Set.classList.remove("appear");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,20 +320,26 @@ const alertMessage = document.querySelector("#alertMessage");
 const setBut_freqVsP = document.querySelector(".EdReg #FvsP_set");
 setBut_freqVsP.addEventListener("click", Set_freqVsP);
 function Set_freqVsP() {
-    window_freqVsP_Set.classList.add("appear");
-    freq_A_Set.value = freq_A.textContent;
-    freq_B_Set.value = freq_B.textContent;
-    freq_C_Set.value = freq_C.textContent;
-    freq_D_Set.value = freq_D.textContent;
-    freq_E_Set.value = freq_E.textContent;
-    freq_F_Set.value = freq_F.textContent;
-    p_t_Set.value = p_t.textContent;
-    p_u_Set.value = p_u.textContent;
-    p_v_Set.value = p_v.textContent;
-    p_w_Set.value = p_w.textContent;
-    p_x_Set.value = p_x.textContent;
-    p_y_Set.value = p_y.textContent;
-    freq_A_Set.focus();
+    if (setBut_freqVsP.classList.contains("ctrlable")) {
+        window_freqVsP_Set.classList.add("appear");
+        freq_A_Set.value = freq_A.textContent;
+        freq_B_Set.value = freq_B.textContent;
+        freq_C_Set.value = freq_C.textContent;
+        freq_D_Set.value = freq_D.textContent;
+        freq_E_Set.value = freq_E.textContent;
+        freq_F_Set.value = freq_F.textContent;
+        p_t_Set.value = p_t.textContent;
+        p_u_Set.value = p_u.textContent;
+        p_v_Set.value = p_v.textContent;
+        p_w_Set.value = p_w.textContent;
+        p_x_Set.value = p_x.textContent;
+        p_y_Set.value = p_y.textContent;
+        freq_A_Set.focus();
+    } else {
+        window_WrongDataSet.classList.add("appear");
+        alertMessage.innerHTML = "權限不符！<br>僅系統管理者可進行此設定。";
+        button_WrongDataSet.style.marginTop = "15px";
+    }
 }
 
 async function set_freqVsP_Data(setValue_Freq, setValue_P) {
@@ -307,7 +370,7 @@ async function close_freqVsP_Yes() {
     if (getData.status === "ok") {
         window_freqVsP_Set.classList.remove("appear");
     } else {
-        alertMessage.textContent = getData.alertMessage;
+        alertMessage.innerHTML = `${getData.alertMessage}<br>請再次確認設定值。`;
         window_WrongDataSet.classList.add("appear");
     }
 }
@@ -346,6 +409,20 @@ async function Set_socRef() {
     voltUpperB.value = getData.voltUpperB;
     voltLowerB.value = getData.voltLowerB;
     voltMinLimit.value = getData.voltMin;
+
+    if (!setBut_socRef.classList.contains("ctrlable")) {
+        console.log("socRef 不可控!!!");
+        socMaxLimit.disabled = true;
+        socUpperB.disabled = true;
+        socLowerB.disabled = true;
+        socMinLimit.disabled = true;
+        voltMaxLimit.disabled = true;
+        voltUpperB.disabled = true;
+        voltLowerB.disabled = true;
+        voltMinLimit.disabled = true;
+        closeWB_Yes_socRef.style.display = "none";
+        closeWB_No_socRef.style.marginLeft = "190px";
+    }
 }
 
 async function get_socRef_Data() {
@@ -394,7 +471,7 @@ async function close_socRef_Yes() {
     if (getData.status === "ok") {
         window_socRef_Set.classList.remove("appear");
     } else {
-        alertMessage.textContent = getData.alertMessage;
+        alertMessage.innerHTML = `${getData.alertMessage}<br>請再次確認設定值。`;
         window_WrongDataSet.classList.add("appear");
     }
 }
@@ -413,12 +490,18 @@ function close_WrongDataSet() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// 
-// 
-// 
-// 
-// 
-// 
+// const setBut_P_Project = document.querySelector(".sysInfo #P_Project_set");
+// const P_Project = document.querySelector(".sysInfo #P_Project");
+// setBut_P_Project.addEventListener("click", Set_P_Project);
+// function Set_P_Project() {
+//     let value_set_raw = prompt("請輸入設定值(0~10000)：");
+//     if ((value_set_raw) && (value_set_raw !== null)) {
+//         let value_set = Math.round(Number(value_set_raw));
+//         if (value_set >= 0 && value_set <= 10000) {
+//             P_Project.textContent = value_set;
+//         }
+//     }
+// }
 
 // const Freq_A_set = document.querySelector(".EdReg #Freq_A");
 // Freq_A_set.onclick = function () {
@@ -432,44 +515,44 @@ function close_WrongDataSet() {
 //     }
 // }
 
-const Freq_A_set = document.querySelector(".EdReg #Freq_A");
-Freq_A_set.addEventListener("click", Set_Freq_A);
-function Set_Freq_A() {
-    let value_set_raw = prompt("請輸入設定值(58.00~61.00)：");
-    if ((value_set_raw) && (value_set_raw !== null)) {               // value_set_raw !== (null || "") 有時會有問題
-        let value_set = Math.round(Number(value_set_raw) * 100);
-        if (value_set >= 5800 && value_set <= 6100) {
-            let val = value_set / 100;
-            Freq_A_set.textContent = val.toFixed(2);
-        }
-    }
-}
+// const Freq_A_set = document.querySelector(".EdReg #Freq_A");
+// Freq_A_set.addEventListener("click", Set_Freq_A);
+// function Set_Freq_A() {
+//     let value_set_raw = prompt("請輸入設定值(58.00~61.00)：");
+//     if ((value_set_raw) && (value_set_raw !== null)) {               // value_set_raw !== (null || "") 有時會有問題
+//         let value_set = Math.round(Number(value_set_raw) * 100);
+//         if (value_set >= 5800 && value_set <= 6100) {
+//             let val = value_set / 100;
+//             Freq_A_set.textContent = val.toFixed(2);
+//         }
+//     }
+// }
 
-const Freq_B_set = document.querySelector(".EdReg #Freq_B");
-Freq_B_set.addEventListener("click", Set_Freq_B);
-function Set_Freq_B() {
-    let value_set_raw = prompt("請輸入設定值(58.00~61.00)：");
-    if ((value_set_raw) && (value_set_raw !== null)) {
-        let value_set = Math.round(Number(value_set_raw) * 100);
-        if (value_set >= 5800 && value_set <= 6100) {
-            let val = value_set / 100;
-            Freq_B_set.textContent = val.toFixed(2);
-        }
-    }
-}
+// const Freq_B_set = document.querySelector(".EdReg #Freq_B");
+// Freq_B_set.addEventListener("click", Set_Freq_B);
+// function Set_Freq_B() {
+//     let value_set_raw = prompt("請輸入設定值(58.00~61.00)：");
+//     if ((value_set_raw) && (value_set_raw !== null)) {
+//         let value_set = Math.round(Number(value_set_raw) * 100);
+//         if (value_set >= 5800 && value_set <= 6100) {
+//             let val = value_set / 100;
+//             Freq_B_set.textContent = val.toFixed(2);
+//         }
+//     }
+// }
 
-const P_t_set = document.querySelector(".EdReg #P_t");
-P_t_set.addEventListener("click", Set_P_t);
-function Set_P_t() {
-    let value_set_raw = prompt("請輸入設定值(-100.0~100.0)：");
-    if ((value_set_raw) && (value_set_raw !== null)) {
-        let value_set = Math.round(Number(value_set_raw) * 10);
-        if (value_set >= -1000 && value_set <= 1000) {
-            let val = value_set / 10;
-            P_t_set.textContent = val.toFixed(1);
-        }
-    }
-}
+// const P_t_set = document.querySelector(".EdReg #P_t");
+// P_t_set.addEventListener("click", Set_P_t);
+// function Set_P_t() {
+//     let value_set_raw = prompt("請輸入設定值(-100.0~100.0)：");
+//     if ((value_set_raw) && (value_set_raw !== null)) {
+//         let value_set = Math.round(Number(value_set_raw) * 10);
+//         if (value_set >= -1000 && value_set <= 1000) {
+//             let val = value_set / 10;
+//             P_t_set.textContent = val.toFixed(1);
+//         }
+//     }
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -608,60 +691,6 @@ const cht_freqVsP = new Chart(cht_fVsP_Canvus, {
     }
     ],
 });
-
-////////////////////////////////////////////////////////////////////////////////
-
-// let refreshRate = 0.5;
-// document.addEventListener("DOMContentLoaded", afterLoadDCM);
-// function afterLoadDCM() {
-//     let schedule_02 = setInterval(update_freqVsP_Location, refreshRate * 1000);
-//     function update_freqVsP_Location() {
-//         const freq_t_1 = document.querySelector(".block_temp #spareVal_Freq");
-//         const power_t = document.querySelector(".block_temp #spareVal_P");
-
-//         let x_min = 59500;
-//         let x_max = 60500;
-//         let y_min = -1000;
-//         let y_max = 1000;
-//         const deltaFreq = 10;
-//         const deltaP = -40;
-
-//         let valFreq_t_1 = Number(freq_t_1.textContent);
-//         let valPower_t = Number(power_t.textContent);
-//         let Val_Freq;
-//         let Val_Power;
-
-//         if (valFreq_t_1 <= (x_max - deltaFreq)) {
-//             Val_Freq = valFreq_t_1 + deltaFreq;
-//         } else {
-//             Val_Freq = x_min;
-//         }
-//         if (valPower_t >= (y_min - deltaP)) {
-//             Val_Power = valPower_t + deltaP;
-//         } else {
-//             Val_Power = y_max;
-//         }
-
-//         if (Val_Freq < x_min) {
-//             Val_Freq = x_min;
-//         } else if (Val_Freq > x_max) {
-//             Val_Freq = x_max;
-//         }
-//         if (Val_Power < y_min) {
-//             Val_Power = y_min;
-//         } else if (Val_Power > y_max) {
-//             Val_Power = y_max;
-//         }
-
-//         freq_t_1.textContent = "" + Val_Freq;
-//         power_t.textContent = "" + Val_Power;
-
-//         cht_freqVsP.data.datasets[0].data[0].x = Val_Freq / 1000;
-//         cht_freqVsP.data.datasets[0].data[0].y = Val_Power / 10;
-
-//         cht_freqVsP.update();
-//     }
-// }
 
 ////////////////////////////////////////////////////////////////////////////////
 

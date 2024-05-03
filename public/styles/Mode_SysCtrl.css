@@ -142,6 +142,7 @@
     position: absolute;
     right: 0px;
     top: 0px;
+    cursor: pointer;
 }
 
 .sysInfo table .dataLight {
@@ -236,6 +237,7 @@
     font-size: 14px;
     border-radius: 50%;
     vertical-align: top;
+    cursor: pointer;
 }
 
 .EdReg .row_08 p {
@@ -339,7 +341,6 @@
 }
 
 .subSysInfo .row_relative button {
-    display: inline-block;
     background-color: #FFFFFF;
     box-sizing: border-box;
     height: 32px;
@@ -349,11 +350,23 @@
     border-radius: 50%;
     position: absolute;
     right: 10px;
-    top: 3px
+    top: 3px;
+    cursor: pointer;
 }
 
 .subSysInfo .row_last {
     border-bottom: none;
+}
+
+.dataStatus_Set #radioOpt_specific1:checked~#checkBoxOpt_specific1::after,
+.dataStatus_Set #radioOpt_specific2:checked~#checkBoxOpt_specific2::after {
+    display: block;
+}
+
+.popUpWindow #closeWB_specific_Yes {
+    background-color: #FF0000;
+    margin-left: 100px;
+    color: #FFFFFF;
 }
 
 .popUpWindow.freqVsP_Set {
@@ -520,14 +533,10 @@
 }
 
 .alert_WrongDataSet p {
-    margin: 0px 35px;
+    margin: 40px 40px 0px;
     font-size: 24px;
     line-height: 30px;
     color: #FF0000;
-}
-
-.alert_WrongDataSet #alertMessage {
-    margin-top: 40px;
 }
 
 .alert_WrongDataSet #closeWB_No {
