@@ -107,8 +107,9 @@ console.log(rrr)
 app.get("/login", async (req, res) => {
   res.clearCookie("token");
   const response = await getconfig();
-
-  let logintext = response["logintext"]
+  //console.log(response);
+  let logintext = response["logintext"];
+  //let logintext = "hi";
   getData();
     const Values = await getLatestValuesFromDatabase();
     //沒有計算 純粹讀取+換算
