@@ -245,6 +245,7 @@ async function updateNavbar(url = "/navbar") {
   $("#WarningNum_Meter").text(data.latestValues.WarningNum_Meter);
 
   /////////////////////////////////////////////////
+  // $("#L_M_systemMode").text("部分服務中");
   $("#L_M_systemMode").text(data.latestValues2.L_M_systemMode);
   $("#L_M_freq").text(data.latestValues2.L_M_freq);
   $("#L_M_activeP").text(data.latestValues2.L_M_activeP);
