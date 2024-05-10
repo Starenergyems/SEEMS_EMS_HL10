@@ -160,10 +160,13 @@ async function findaccount(inmail = "", intoken = "") {
     data = await data.json();
     // console.log(data)
     if (data.docs.length === 1) {
+      
       id = data.docs[0]._id; // Impossible  undefined.
       rev = data.docs[0]._rev; // Impossible  undefined.
       time = datetime(); // function findaccount execute time.
       user = data.docs[0].user; // data from doc become doc.user.
+
+      // console.log(user.errcount, user.errcount === (undefined || "" || "NaN"))
       user.num === undefined ? (employeenum = "") : (employeenum = user.num);
       mail = user.mail; // Impossible  undefined.
       user.name === undefined ? (namee = "") : (namee = user.name);
@@ -171,9 +174,9 @@ async function findaccount(inmail = "", intoken = "") {
       user.department === undefined
         ? (department = "")
         : (department = user.department);
-      user.level === undefined ? (level = "general") : (level = user.level);
+      user.level === undefined ? (level = "viewer") : (level = user.level);
       user.state === undefined ? (state = "deactivate") : (state = user.state);
-      user.errcount === undefined
+      user.errcount === (undefined || "" || "NaN")
         ? (errcount = 0)
         : (errcount = parseInt(user.errcount));
       user.note === undefined ? (note = "") : (note = user.note);
@@ -221,9 +224,16 @@ async function findaccount(inmail = "", intoken = "") {
 
 async function updateaccount(id, configdata="", passwordd="", createdata="") {
   const URL = `${db_URL}/${db_account}/${id}`;
-  if (passwordd !== "") {
+  console.log(`${passwordd}`)
+  if (passwordd !== "" ){
     password = passwordd
   }
+
+  // if (passwordd === undefined || "NaN") {
+  //   console.log("修改密碼為id")
+  //   password = id
+  // }
+  
   const updatedDoc = {
     _id: `${id}`,
     _rev: `${rev}`,
@@ -276,6 +286,7 @@ async function updateaccount(id, configdata="", passwordd="", createdata="") {
 // Generate datetime string default now, offset for back or forward hours.
 
 function datetime(offset = 0) {
+  // console.log(`offset${offset}`)
   return new Date(new Date().getTime() + offset * 60 * 60 * 1000).toISOString();
 }
 
@@ -319,7 +330,8 @@ async function uuid() {
 // The function for login page submit.
 
 async function submit(EMAIL, PASSWORD) {
-  let response = {
+  
+  let response = { // Empty response.
     result: "",
     text: "",
     mail: "",
@@ -327,93 +339,164 @@ async function submit(EMAIL, PASSWORD) {
     validtime: "",
     permission: "",
   };
-  await getconfig();
-  await findaccount(EMAIL,"").then((temp) => {
-    console.log(temp);
-  });
-  // According login page submit mail to select account data
-  // console.log(response)
 
-  if (errcount === "NaN" || errcount === "") {
-    errcount = 0;
+  // SuperUser Login.
+  if (EMAIL===process.env.superuser_account && PASSWORD ===process.env.superuser_password){
+    response["result"] = true;
+    response["token"] = process.env.LineNotifyToken;
+    response["text"] = `Superuser Login Success`;
+    response["level"] = `admin`
+    return response
+    }
+  
+  await getconfig();
+  await findaccount(EMAIL,"");
+  // console.log(`submit ${errcount}`)
+  // await findaccount(EMAIL,"").then((temp) => {
+  //   // console.log(temp);
+  // });
+  // console.log(`${moment(time).format("YYYY/MM/DD HH:mm:ss").isAfter(bantill)}, ${bantill}, ${moment(time,"YYYY/MM/DD HH:mm:ss").isAfter(bantill)}`)
+// console.log(`${moment(time).format("YYYY/MM/DD HH:mm:ss")}, ${bantill}, ${toTimestamp(moment(time).format("YYYY/MM/DD HH:mm:ss"))}`)
+// console.log(`${new Date().getTime()}`)
+// console.log(`${moment(time).format("YYYY/MM/DD HH:mm:ss")}, ${new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime()}`)
+// console.log(`~${bantill}, ${new Date(bantill).getTime()}`)
+
+  // console.log(1,moment(time).isAfter(bantill))
+  // console.log(1, moment(time).format("YYYY/MM/DD HH:mm:ss").isAfter(moment(bantill)))
+  // console.log(2,moment(time).isBefore(moment(bantill)))
+  // moment(time).format("YYYY/MM/DD HH:mm:ss")
+  // console.log(bantill, moment(time).format("YYYY/MM/DD HH:mm:ss"))
+  // console.log(Date.parse(bantill) < Date.parse(moment(time).format("YYYY/MM/DD HH:mm:ss")))
+  // console.log(Date.parse(bantill).getTime())
+  // if (Date.parse(bantill) < moment(time).format("YYYY/MM/DD HH:mm:ss") && state === "lock" && suspendtime !== "永久" && errcount >= locktimes){
+  // console.log(new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime(), new Date(bantill).getTime())  
+  // console.log(1111,new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime() < new Date(bantill).getTime())
+  if (new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime() > new Date(bantill).getTime() && state === "lock" && suspendtime !== "永久" && errcount >= locktimes){
+    console.log("解鎖")
+    state = "activate" // lock and bantime passed.
+    errcount = 0
   }
-  if (
-    Date.parse(bantill) > Date.parse(time) ||
-    (state === "lock" && suspendtime !== "永久")
-  ) {
-    console.log(`bantill：${bantill}, state:${state}`);
-    errcount = 0;
-    bantill = "";
-    state = "activate";
-  }
-  if (
-    errcount >= locktimes ||
-    Date.parse(bantill) > Date.parse(time) ||
-    state === "lock"
-  ) {
-    console.log(
-      `errcount:${errcount}, locktimes:${locktimes}, bantill：${bantill}, state:${state}`
-    );
-    token = "";
-    validtime = "";
-    state = "lock";
-  }
-  if (
-    state === "activate" &&
-    (errcount === "" || errcount < locktimes) &&
-    (bantill === "" || Date.parse(bantill) < Date.parse(time))
-  ) {
-    console.log(`User ${mail} is loginable.`);
-    if (password === PASSWORD) {
+
+  if (state === "activate"){ 
+    if (PASSWORD === password){
       errcount = 0;
       bantill = "";
       last_time = datetime();
       token = await uuid();
       validtime = datetime(duration);
       response["result"] = true;
-      response["text"] = `User ${mail} Login Success.`;
+      response["text"] = `${mail} Login Success.`;
       response["id"] = id;
       response["mail"] = mail;
       response["token"] = token;
       response["validtime"] = validtime;
       response["permission"] = level;
-    } else if (errcount < locktimes - 1) {
-      // keyin password is incorrect.
-      errcount += 1;
+    } else if(PASSWORD !== password){
+      // console.log(`password error aaaa ${errcount}`)
+      errcount += 1
       response["result"] = false;
-      // response["text"] =
-      //   `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
-      response["text"] =
-      `登入失敗 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`;
-      if (suspendtime !== "永久") {
-        response["text"] += ` ${suspendtime} 小時`;
-      } else {
-        response["text"] += ".";
-      }
-    } else if (errcount === locktimes - 1) {
-      errcount += 1;
-      token = "";
-      validtime = "";
-      state = "lock";
-      response["text"] =
-        `超過嘗試登入次數 ${locktimes} 次, 此帳號已被鎖定!`;
-      // response["text"] =
-      //   `Continuous loginfail up to ${locktimes} times, the user locked`;
-      if (suspendtime !== "永久") {
-        formattedDateTime = datetime(parseFloat(suspendtime));
-        let bantill= moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss");
-        response["text"] += 
-        `\n解鎖時間為: ${bantill}`;
-      } else {
-        suspendtime === "永久";
-        bantill = "";
-        response["text"] += "永久";
-      }
+      response["text"] = `登入失敗 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`
+      // `Login failed ${errcount} time. If continuous login fail up to ${locktimes} the user will be lock.`
+      response["id"] = id;
+      response["mail"] = mail;
+      response["token"] = token;
+      response["validtime"] = validtime;
+      response["permission"] = level;
+      // console.log(`password error ${errcount}`)
     }
   }
+
+  if (errcount === locktimes){
+    state = "lock"
+    response["text"] = `The user is locked. Please contact system manager.`
+    if (suspendtime !== "永久"){
+      // console.log(suspendtime)
+      formattedDateTime = datetime(parseFloat(suspendtime));
+      bantill= moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss")
+      response["text"] = `超過嘗試登入次數 ${locktimes} 次, 此帳號已被鎖定!`
+      // `The user is locked until ${bantill}.`
+    }
+  }
+
+  // Update user data.
   await updateaccount(id,"","","");
-  console.log(response["text"]);
   return response;
+
+
+
+  // if (Date.parse(bantill) > Date.parse(time)
+  //    || (state === "activate" && suspendtime !== "永久")) {
+  //   console.log(`User ${EMAIL} state is ${state}, and bantill ${bantill}.`);
+  //   errcount = 0;
+  //   bantill = "";
+  //   state = "activate";
+  // }
+  // if (errcount >= locktimes || Date.parse(bantill) < Date.parse(time) ||
+  //   state === "lock"
+  // ) {
+  //   console.log(
+  //     `errcount:${errcount}, locktimes:${locktimes}, bantill：${bantill}, state:${state}`
+  //   );
+  //   token = "";
+  //   validtime = "";
+  //   state = "lock";
+  // }
+  // if (
+  //   state === "activate" &&
+  //   (errcount === "" || errcount < locktimes) &&
+  //   (bantill === "" || Date.parse(bantill) < Date.parse(time))
+  // ) {
+  //   console.log(`User ${mail} is loginable.`);
+  //   if (password === PASSWORD) {
+  //     errcount = 0;
+  //     bantill = "";
+  //     last_time = datetime();
+  //     token = await uuid();
+  //     validtime = datetime(duration);
+  //     response["result"] = true;
+  //     response["text"] = `User ${mail} Login Success.`;
+  //     response["id"] = id;
+  //     response["mail"] = mail;
+  //     response["token"] = token;
+  //     response["validtime"] = validtime;
+  //     response["permission"] = level;
+  //   } else if (errcount < locktimes - 1) {
+  //     // keyin password is incorrect.
+  //     errcount += 1;
+  //     response["result"] = false;
+  //     // response["text"] =
+  //     //   `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
+  //     response["text"] =
+  //     `登入失敗 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`;
+  //     if (suspendtime !== "永久") {
+  //       response["text"] += ` ${suspendtime} 小時`;
+  //     } else {
+  //       response["text"] += ".";
+  //     }
+  //   } else if (errcount === locktimes - 1) {
+  //     errcount += 1;
+  //     token = "";
+  //     validtime = "";
+  //     state = "lock";
+  //     response["text"] =
+  //       `超過嘗試登入次數 ${locktimes} 次, 此帳號已被鎖定!`;
+  //     // response["text"] =
+  //     //   `Continuous loginfail up to ${locktimes} times, the user locked`;
+  //     if (suspendtime !== "永久") {
+  //       formattedDateTime = datetime(parseFloat(suspendtime));
+  //       let bantill= moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss");
+  //       response["text"] += 
+  //       `\n解鎖時間為: ${bantill}`;
+  //     } else {
+  //       suspendtime === "永久";
+  //       bantill = "";
+  //       response["text"] += "永久";
+  //     }
+  //   }
+  // }
+  // await updateaccount(id,"","","");
+  // console.log(response["text"]);
+  // return response;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -543,6 +626,10 @@ async function authentication(req) {
     let token = ""
     let browser_token = ""
     req.cookies.token === undefined ? browser_token = "" : browser_token = req.cookies.token
+    if (browser_token === process.env.LineNotifyToken){
+      // console.log("The token is not exist in browser's cookie.")
+      return true
+    }
     if (browser_token === "" || browser_token === undefined){
         // console.log("The token is not exist in browser's cookie.")
         return false
@@ -730,3 +817,38 @@ module.exports = {
 //     // Handle any errors that occurred during the fetch request
 //     console.error('Fetch error:', error);
 //   });
+
+
+
+
+// 新增帳號的彈出視窗
+// 描述要改成 新增帳戶
+// 必填項目:
+// 工號、姓名、公司、部門、信箱、權限、狀態、密碼(預設)
+
+// 新增帳號必須要限制必須填入哪些項目
+// 可以設置的權限文字描述要改成:
+// 帳號管理者(對應的英文?)
+// 系統管理者(對應的英文?)
+// 一般使用者(對應的英文?)
+
+// 增加一個超級管理員(隱藏版)不能被刪掉(且只有一個)
+
+//  必須要確保帳號管理員不會少於1個
+//  帳號登入的鎖定沒有真的被鎖住，且次數沒有繼續增加，修改權限還是異常
+//  新增帳戶的時候，需要限制哪些項目必填，且需要預設密碼
+// 第一次登入的帳號需要自己改密碼
+// 信箱要檢查是不是@hdre的網域
+
+// 帳戶修改的內容有些也要鎖定
+// 除了密碼&權限可以重設以外(密碼改的話也會是預設密碼)
+// 姓名+信箱不可以改掉
+// 可以用附註來記錄是不是新建帳戶
+
+// -------------------------------------------
+// 新增帳號的彈出視窗
+// 描述要改成 新增帳戶
+// 必填項目:
+// 工號、姓名、公司、部門、信箱、權限、狀態、密碼(預設)
+
+// 密碼欄位將為預設數值:Se91012531

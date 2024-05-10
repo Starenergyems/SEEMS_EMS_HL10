@@ -63,11 +63,11 @@ router.get("/account/personalinfo", async (req, res) => {
       transstate = "停用";
     }
     if(resopnse.level==="admin"){
-      translevel = "最高權限"
+      translevel = "帳號管理者"
     } else if(resopnse.level==="manager"){
       translevel = "系統管理者"
     } else if(resopnse.level==="viewer"){
-      translevel = "一般用戶"
+      translevel = "一般使用者"
     }
     const content = {
       num: resopnse.num,
@@ -178,6 +178,7 @@ router.get("/account/system/accounts", async(req, res) => {
 
 
 router.post("/account/system/accounts", async(req, res) => {
+  // console.log(req)
   // Create new user.  Change or delete exist user.
   console.log("modify accounts")
   // console.log(req.body)
@@ -191,6 +192,7 @@ router.post("/account/system/accounts", async(req, res) => {
     }
   }
   const body = req.body
+  console.log(body)
   const bottom = body.bottom
 
   if (body["status"] === "normal"){
@@ -213,6 +215,7 @@ router.post("/account/system/accounts", async(req, res) => {
     iddata["user"]["level"] = body.permission
     iddata["user"]["state"] = body.status === undefined ||body.status === ""?iddata["user"]["state"]:body.status
     iddata["user"]["note"] = body.note === undefined ||body.note === ""? "" : body.note
+    console.log(body.permission)
     // console.log(777,body.password === undefined ||body.password === "", iddata.user.password)
     // body.password === undefined || body.password === "" ? iddata.user.password : body.password
     iddata["user"]["password"] = body.password === undefined ||body.password ==="" ? iddata.user.password : body.password

@@ -9,6 +9,7 @@ services:
     # container_name: ems-dev
     environment:
       - TZ=Asia/Taipei
+      - HOST_IP=192.168.1.12
     volumes:
       # - ./router:/usr/src/app/router # Mount the <local directory>:<container directory>
       - ./router:/usr/src/app/router

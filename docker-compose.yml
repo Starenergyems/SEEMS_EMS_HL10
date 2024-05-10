@@ -8,13 +8,14 @@ services:
     # container_name: ems-service
     environment:
       - TZ=Asia/Taipei
+      - HOST_IP=192.168.1.12
     # volumes:
     # - ./router:/usr/src/app/router # Mount the <local directory>:<container directory>
     # - .:/usr/src/app
     ports:
       - "3000:3000"
     # environment:
-    # - POSTGRES_NAME=postgres
+    # - POSTGRES_NAME=postgres  
     # - POSTGRES_USER=postgres
     # - POSTGRES_PASSWORD=postgres
     command: ["node", "app.js"]

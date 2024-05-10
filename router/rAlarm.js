@@ -1,5 +1,3 @@
-// testforalarm.js
-//const port = 3005;
 const express = require("express");
 const path = require("path");
 const config = require("./config");

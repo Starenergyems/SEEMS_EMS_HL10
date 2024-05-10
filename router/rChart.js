@@ -89,8 +89,8 @@ router.get("/chart/realtime/edit", async (req, res) => {
       }
     };
 
-    console.log("lasttime_record " + lasttime_record);
-    console.log("this_second " + this_second);
+    //console.log("lasttime_record " + lasttime_record);
+    //console.log("this_second " + this_second);
 
     const doc = await gc01Db.find(filter_now);
     //console.log("gc01Db.find() result:", doc);
@@ -131,7 +131,7 @@ router.post("/query_RealTimeChart_Data", async (req, res) => {
 
     if (firstQuery) {
       RTchart_startQueryDT = Convert_rawDT_to_queryDT_floorToSec(new Date(raw_DT_now.getTime() - 1000 * 1));   // ~~~~~~~~!!!!!!!!!!@@@@@@@@#########$$$$$%%%%%%%%%^^^^^^^&&&&&&&&****
-      console.log("設定第一次起始時間~");
+      //console.log("設定第一次起始時間~");
     }
 
     const queryCondition = {
@@ -144,7 +144,7 @@ router.post("/query_RealTimeChart_Data", async (req, res) => {
       // sort: [{time: "desc"}],
       limit: 10000                  // 限制每次查詢的數量
     };
-    console.log(`${RTchart_startQueryDT}_~!@_${RTchart_endQueryDT}`);
+    //console.log(`${RTchart_startQueryDT}_~!@_${RTchart_endQueryDT}`);
 
     let regData_MT = {
       Freq: { dbName: "gc_rf01", dicName: "IEC61850", dataID: 400121, scale: 0.01, decPlace: 2 },
@@ -181,7 +181,7 @@ router.post("/query_RealTimeChart_Data", async (req, res) => {
       xMax: `${RTchart_endQueryDT.slice(0, 10)} ${RTchart_endQueryDT.slice(11, 23)}`
     };
 
-    console.log(queryResult[0].docs.length);
+    //console.log(queryResult[0].docs.length);
     for (let i = 0; i < queryResult[0].docs.length; i++) {
       let dataT_queryT = queryResult[0].docs[i].time;
       let dataT_chartT = `${dataT_queryT.slice(0, 10)} ${dataT_queryT.slice(11, 23)}`;
@@ -262,7 +262,7 @@ router.get("/chart/history/edit", async (req, res) => {
 
     // 使用迴圈分次尋找每1000秒的數值
     while (moment(currentStartTime).isBefore(endTime)) {
-      console.log("撈取資料中...... :");
+     // console.log("撈取資料中...... :");
       let currentEndTime = moment(currentStartTime).add(
         intervalSeconds,
         "seconds"
@@ -297,8 +297,8 @@ router.get("/chart/history/edit", async (req, res) => {
         console.error("Error: No document found.");
         return res.status(404).send("Not Found");
       }
-      console.log("formattedCurrentStartTime: " + formattedCurrentStartTime);
-      console.log("formattedCurrentEndTime: " + formattedCurrentEndTime);
+      //console.log("formattedCurrentStartTime: " + formattedCurrentStartTime);
+      //console.log("formattedCurrentEndTime: " + formattedCurrentEndTime);
       // 將查詢到的資料加入Data物件
       doc.docs.forEach((doc) => {
         const timestamp = doc.time;
@@ -324,14 +324,14 @@ router.post("/query_HistoryChart_Data", async (req, res) => {
     const start_DT_chartT = req.body.start_DT;
     const end_DT_chartT = req.body.end_DT;
 
-    console.log(start_DT_chartT);
-    console.log(end_DT_chartT);
+    //console.log(start_DT_chartT);
+    //console.log(end_DT_chartT);
 
     let start_DT_queryT = `${start_DT_chartT.slice(0, 10)}T${start_DT_chartT.slice(11, 23)}+08:00`;
     let end_DT_queryT = `${end_DT_chartT.slice(0, 10)}T${end_DT_chartT.slice(11, 23)}+08:00`;
 
-    console.log(start_DT_queryT);
-    console.log(end_DT_queryT);
+    //console.log(start_DT_queryT);
+    //console.log(end_DT_queryT);
 
     const queryCondition = {
       selector: {

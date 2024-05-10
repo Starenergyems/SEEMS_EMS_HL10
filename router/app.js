@@ -17,6 +17,7 @@ const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
 const {autoDownload} = require("./rReport")
+const axios = require("axios");
 //const fetch = require("node-fetch");
 //如果要換資料庫的host 改掉".database"
 
@@ -74,8 +75,6 @@ lc3nanoDb.createIndex(indexDef);
 lc4nanoDb.createIndex(indexDef);
 alarmnanoDb.createIndex(indexDef);
 //***************************************************************************************************************** */
-
-//////////////////////////////////////////////////////////////////////////////
 app.get("/test", async (req, res) => { 
   const CREDENTIALS = Buffer.from(`${couchdbConfig.username}:${couchdbConfig.password}`).toString('base64');
   const AUTHORIZATION = "Basic " + CREDENTIALS;
@@ -86,7 +85,7 @@ app.get("/test", async (req, res) => {
     credentials: "include",
   });
   data = await response.json()
-  console.log(typeof(data))
+  //console.log(typeof(data))
   // for (let i =0 )
   let rrr = []
   // 
@@ -98,13 +97,14 @@ app.get("/test", async (req, res) => {
 }
 rrr.push(rrrr)
 }
-console.log(rrr)
+//console.log(rrr)
 })  
 
 
 
 // Login page. URL = "/login", LOGIN_URL can redirect.
 app.get("/login", async (req, res) => {
+  // console.log("login lalala")
   res.clearCookie("token");
   const response = await getconfig();
   //console.log(response);
@@ -150,7 +150,8 @@ app.get("/login", async (req, res) => {
       L_M_dcgEtoday: Values2[11]
     };
   // const response["logintext"] === undefined? logintext="" : logintext=response["logintext"];
-  console.log(logintext);
+  // console.log(logintext);
+  // console.log("eee")
   const context = {
     logintext: `${logintext}`
   };
@@ -167,17 +168,22 @@ app.post("/login", async (req, res) => {
   try {
     const email = req.body["username"];
     const password = req.body["password"];
-    console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
+    //console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
     // const config = await getconfig()
     // console.log(config.duration*3600)
     const response = await submit(email, password);
     if (response["result"] === true) {
-      console.log(response["text"]);
+      //console.log(response["text"]);
       res.cookie("token", response["token"]);
       //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
-      res.json({ redirect: `http://localhost:${port}/mode` });
+      //const localhost = "localhost";
+      const HOST_IP = process.env.HOST_IP;
+      console.log("Client IP Address:", HOST_IP);
+      // console.log(`http://${HOST_IP}:${port}/mode`);
+      // res.json({ redirect: `http://localhost:${port}/mode` });
+      res.json({ redirect: `http://${HOST_IP}:${port}/mode` });
     } else {
       res.json({ text: response["text"] });
       // res.status(401).send(response["text"]);
@@ -697,11 +703,13 @@ app.get("/error", (req, res) => {
 
 server.listen(port, () => {
   console.log(`app.js 應用程式正在監聽端口 ${port}`);
+  sendLineNotify();
 });
 
 // 在應用程式結束時，關閉伺服器
 process.on("SIGINT", () => {
   server.close(() => {
+    
     console.log("Server closed");
     process.exit(0);
   });
@@ -716,3 +724,33 @@ app.get("/getPermission", (req, res) => {
   var permission = req.body.permission;
   res.send({permission:permission});
 });
+
+
+function sendLineNotify() {
+  const HOST_IP = process.env.HOST_IP;
+  const message = `EMS程式重新啟動，主機IP為：${HOST_IP}`;
+  const request = {
+    method: "post",
+    //url: 'http://192.168.8.112/line-notify',
+    url: "https://notify-api.line.me/api/notify",
+    headers: {
+      Authorization: `Bearer ${process.env.LineNotifyToken}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    params: {
+      message: message,
+    },
+  };
+
+  axios(request)
+    .then((resp) => {
+      console.log(resp.data);
+    })
+    .catch((err) => {
+      console.error(
+        "Line Notify Error",
+        err.response.data,
+        err.response.request.path
+      );
+    });
+}

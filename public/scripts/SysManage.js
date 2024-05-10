@@ -97,7 +97,7 @@ async function dataPost(form, url) {//提交表單
 	return new Promise((resolve, reject) => {
 		$(form).off('submit').submit(function (e) {
 			e.preventDefault();
-			// console.log('POST')
+			console.log('POST');
 			// console.log(23232)
 			// console.log(777, typeof($(form).serialize()),$(form).serialize())
 			// console.log(5454)
@@ -107,6 +107,7 @@ async function dataPost(form, url) {//提交表單
 			// console.log(222,typeof(data),data)
 			// data["bottom"] = bottom
 			data = `${data}&bottom=${bottom}`
+			console.log(data);
 			// console.log(333,typeof(data),data)
 			// console.log(777, bottom)
 			hideEdit();//隱藏編輯框
@@ -233,11 +234,11 @@ async function dataTable(){
 					{data:"permission",
                     render:  function (data, type, row) {
 						if(data==="admin"){
-                            return '最高權限'
+                            return '帳號管理者'
                         } else if (data==="manager"){
-                            return '管理者'
+                            return '系統管理者'
                         } else if (data==="viewer"){
-                            return '一般用戶'
+                            return '一般使用者'
                         } else {
                             return ''
                         }
@@ -295,12 +296,16 @@ function showEdit(encodedRow) {
 
     // Now rowData should have the correct structure, and you can access rowData.id
     // Populate input fields with data from the selected row
+	$("#eRDNum").off("change");
     $('#eRDNum').val(rowData.employeeno);
+	// $('#eRDNum').prop("readonly",true);//工號不可更改，操作紀錄以功號為指標
+	$("#eRDNum").prop("readonly", true);
     $('#eRDName').val(rowData.name);
     $('#eRDCom').val(rowData.company);
     $('#eRDDep').val(rowData.department);
     $('#eRDMail').val(rowData.email);
-	$('#eRDMail').prop("readonly",true);//信箱不可更改，資料庫以信箱為登入指標
+	$("#eRDMail").prop("readonly", true);
+	// $('#eRDMail').prop("readonly",true);//信箱不可更改，資料庫以信箱為登入指標
     $('#eRDAuth').val(rowData.permission);
     $('#eRDStatus').val(rowData.status);
 	$('#eRDNote').val(rowData.note);
@@ -308,6 +313,7 @@ function showEdit(encodedRow) {
 	$('#btn_deleteEditRD').css('display','inline-block'); 
 	$('#btn_updateEditRD').text('確認修改');
 	$('#eRDPass').val('');
+	$('#eRDPass').prop("readonly", false);
 
 
 
@@ -317,7 +323,14 @@ function showEdit(encodedRow) {
 }
 
 function addUser(){
+	$("#eRDNum").off("change").on("change", function() { //預設密碼為工號
+        // Get the input's value
+        var inputValue = $(this).val();
+        // Call defaultPW function with input ID and default password
+        defaultPW("eRDPass", inputValue);
+    });
 	$('#eRDNum').val('');
+	$('#eRDNum').prop("readonly",false);
     $('#eRDName').val('');
     $('#eRDCom').val('');
     $('#eRDDep').val('');
@@ -329,9 +342,15 @@ function addUser(){
 	$('#editTitle').text('新增帳戶');
 	$('#btn_deleteEditRD').css('display','none'); //隱藏刪除按鈕
 	$('#btn_updateEditRD').text('確認新增');
-	$('#eRDPass').val('');
+	// $('#eRDPass').val('');
+	$('#eRDPass').prop("readonly",true);
     // Show the edit block
     $('#edit').addClass('appear');
 }
 
+function defaultPW(input_id, default_PW){
+	console.log("password set");
+	console.log(default_PW);
+	$('#'+input_id).val(default_PW);
+}
 

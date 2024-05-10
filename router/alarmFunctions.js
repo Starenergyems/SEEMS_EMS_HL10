@@ -1,7 +1,5 @@
-// testforalarm.js
 const express = require("express");
 const router = express.Router();
-//const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const cors = require("cors");
 const socket = require("socket.io");
@@ -1616,6 +1614,7 @@ const Heartbeat_error_table = {
 };
 
 // Alarm DB //--------------------------------------------------------------------------------
+//各別名稱產生錯誤對照表
 const Alarm_DB_config = {
   lc1_rf10_System: LC_System_error_table,
   lc1_rf10_BMS1: LC_BMS_error_table,
@@ -1746,6 +1745,7 @@ const Alarm_DB_config = {
   gc_rf10: GC_error_table,
 };
 
+//根據錯誤類別產生對應告警文件(存進資料庫) <- 這段由dc完成
 function creat_Alarm_DB_docs(nanoDB) {
   let alarm_doc_array = [];
   for (let [key, value] of Object.entries(Alarm_DB_config)) {
@@ -1801,11 +1801,11 @@ function creat_Alarm_DB_docs(nanoDB) {
   return alarm_doc_array;
 }
 
-// Function to initialize the database
+// 初始化資料庫的函數 (Function to initialize the database)
 function init_Alarm_DB(nanoDB) {
   const alarm_doc_array = creat_Alarm_DB_docs(nanoDB);
 
-  // Bulk insert initial documents
+//批次插入初始文檔(Bulk insert initial documents)
   nanoDB
     .bulk({ docs: alarm_doc_array })
     .then((response) => {
@@ -2976,7 +2976,7 @@ function update_trigger_alarms_batch(
     //     });
   });
 }
-
+// 
 function sendLineNotify(error_result_item) {
   const message = `
   ID: ${error_result_item["_id"]} 
@@ -2988,6 +2988,7 @@ function sendLineNotify(error_result_item) {
     ${error_result_item["content"].replace(/\[|\]/g, "_")}
   Recover is ${error_result_item["recover"]}
   `;
+  
   const request = {
     method: "post",
     //url: 'http://192.168.8.112/line-notify',

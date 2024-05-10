@@ -99,7 +99,7 @@ cursor: pointer;
     margin-bottom: 3%;
     position: relative;
 }
-.submit{
+form input.submit{
     display: block;
     margin-top: 5%;
     margin-left: auto;
@@ -107,15 +107,10 @@ cursor: pointer;
     border-radius: 3px;
     border: 2px solid #808080;
     line-height: 18px;
-
-    /*background-color: #FFFFFF;
-    box-sizing: border-box;
-    width: 100px;
-    border: 2px solid #808080;
-    margin: 10px 3.5% 0px 0px;
-    font-size: 20px;
-    line-height: 36px;
-    border-radius: 10px;*/
+    color: #000000;
+}
+form input.submit:hover{
+    cursor: pointer;
 }
 
 .titlePUW{
@@ -198,7 +193,7 @@ cursor: pointer;
     display: block;
     margin: 0 auto;
 }
-.btnCommon{
+form input.btnCommon, .btnCommon{
     display: inline-block;
     background-color: #D9D9D9;
     box-sizing: border-box;
@@ -211,7 +206,9 @@ cursor: pointer;
     vertical-align: top;
     cursor: pointer;
     line-height: 3px;
+    color: black;
 }
+
 .constEditRD{
     box-sizing: border-box;
     width: 220px;
@@ -223,4 +220,11 @@ cursor: pointer;
     position: absolute;
     right: 10px;
     display: inline-block;
+}
+/*********************/
+input:read-only {
+    cursor: default;
+    background-color: #d9d9d9;
+    color: light-dark(rgb(84, 84, 84), rgb(170, 170, 170));
+    border-color: rgba(118, 118, 118, 0.3);
 }
