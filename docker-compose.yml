@@ -1,7 +1,7 @@
 services:
   ems-service:
     # restart: always
-    image: ems-service_v14
+    image: ems-service_v15
     build:
       context: .
       dockerfile: Dockerfile
@@ -18,7 +18,7 @@ services:
     # - POSTGRES_NAME=postgres  
     # - POSTGRES_USER=postgres
     # - POSTGRES_PASSWORD=postgres
-    command: ["node", "app.js"]
+    command: ["node", "app.js","line.js"]
     deploy:
       replicas: 1 # Set the desired number of replicas
       restart_policy:
