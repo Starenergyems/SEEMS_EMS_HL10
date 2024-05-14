@@ -32,14 +32,19 @@ const lc3nanoDb = nano.use("lc3_rf10");
 const lc4nanoDb = nano.use("lc4_rf10");
 const dcnanoDb = nano.use("dc_rf10");
 const gcnanoDb = nano.use("gc_rf10"); //新增
+
 const otherrf01nanoDb = nano.use("other_rf01");
 const otherrf10nanoDb = nano.use("other_rf10");
 const alarmnanoDb = nano.use("alarm");
 const hisalarmnanoDb = nano.use("hisalarm");
 
+const test_alarm = "test_alarm";
+const test_alarm_nanoDb = nano.use(test_alarm);
+const test_hisalarm = "test_hisalarm";
+const test_hisalarm_nanoDb = nano.use(test_hisalarm);
+
 let alarm_db_event_lock = false;
 // const alarm_test_nanoDb = nano.use("alarm_test");
-
 [
   lc1nanoDb,
   lc2nanoDb,
@@ -48,6 +53,8 @@ let alarm_db_event_lock = false;
   dcnanoDb,
   gcnanoDb,
   otherrf10nanoDb,
+  test_alarm_nanoDb,
+  test_hisalarm_nanoDb
 ].forEach((element) => {
   element.get("_design/" + "rAlarm_ddoc", (err, body) => {
     // console.log(body)
@@ -148,36 +155,6 @@ hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
   }
 });
 
-// alarm_test_nanoDb.fetch({keys: []}).then((resp)=>console.log(resp))
-// alarm_test_nanoDb.find({ selector: {} }).then((resp)=>console.log(resp))
-
-// const alarmDB_trigger_index = {
-//   index: { fields: ["trigger"] },
-//   name: "alarmDB_trigger_index",
-// };
-// alarm_test_nanoDb.createIndex(alarmDB_trigger_index);
-
-// // Check if the initialization flag document exists
-// alarm_test_nanoDb
-//   .get("init_flag")
-//   .then((initFlag) => {
-//     // Initialization flag document exists, do not reinitialize
-//     if (initFlag.initialized) {
-//       console.log("Database already initialized. Skipping initialization.");
-//     } else {
-//       init_Alarm_DB(alarm_test_nanoDb);
-//     }
-//   })
-//   .catch((err) => {
-//     if (err.statusCode === 404) {
-//       // Initialization flag document does not exist, proceed with initialization
-//       init_Alarm_DB(alarm_test_nanoDb);
-//     } else {
-//       // Handle other errors
-//       console.error("Error checking initialization flag:", err);
-//     }
-//   });
-//************************************************************* */
 
 //set
 app.set("view engine", "ejs");
