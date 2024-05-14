@@ -26,7 +26,7 @@ const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
 const { mapL_M_systemMode, scaleProcess, mapminSOH } = require("./function");
-
+const { sendLineNotify } = require("./line")
 // Middleware
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -703,14 +703,22 @@ app.get("/error", (req, res) => {
 
 server.listen(port, () => {
   console.log(`app.js 應用程式正在監聽端口 ${port}`);
-  sendLineNotify();
+  const HOST_IP = process.env.HOST_IP;
+  const message = `
+EMS主程式重新啟動 !!
+主機IP為：${HOST_IP}`;
+  sendLineNotify(message);
 });
 
 // 在應用程式結束時，關閉伺服器
 process.on("SIGINT", () => {
   server.close(() => {
-    
     console.log("Server closed");
+    const HOST_IP = process.env.HOST_IP;
+    const message = `
+  EMS主程式已停止運作 !!
+  主機IP為：${HOST_IP}`;
+    sendLineNotify(message);
     process.exit(0);
   });
 });
@@ -724,33 +732,3 @@ app.get("/getPermission", (req, res) => {
   var permission = req.body.permission;
   res.send({permission:permission});
 });
-
-
-function sendLineNotify() {
-  const HOST_IP = process.env.HOST_IP;
-  const message = `EMS程式重新啟動，主機IP為：${HOST_IP}`;
-  const request = {
-    method: "post",
-    //url: 'http://192.168.8.112/line-notify',
-    url: "https://notify-api.line.me/api/notify",
-    headers: {
-      Authorization: `Bearer ${process.env.LineNotifyToken}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    params: {
-      message: message,
-    },
-  };
-
-  axios(request)
-    .then((resp) => {
-      console.log(resp.data);
-    })
-    .catch((err) => {
-      console.error(
-        "Line Notify Error",
-        err.response.data,
-        err.response.request.path
-      );
-    });
-}
