@@ -115,14 +115,27 @@ async function processDocs() {
               //const trimmedMessage = message.trim();    
               // 傳送資料至Line Notify
               await sendLineNotify(message);
-              //更新資料庫中的line_notify屬性為true
-              doc.line_notify = true;
-              await test_alarm_nanoDb.insert(doc);
+
+              //await test_alarm_nanoDb.insert(doc);
+              // 更新資料庫中的line_notify屬性為true，使用版本控制
+              let insertAttempt = false;
+              while (!insertAttempt) {
+                try {
+                  // 重新讀取最新的文檔版本
+                  const latestDoc = await test_alarm_nanoDb.get(doc._id);
+                  latestDoc.line_notify = true; // 更新line_notify屬性
+                  await test_alarm_nanoDb.insert(latestDoc); // 插入新版本的文檔
+                  insertAttempt = true; // 插入成功，跳出循環
+                } catch (conflictError) {
+                  console.log('更新文檔時發生衝突，正在重新讀取最新版本並重試更新...');
+                }
+              }
               //console.log('已修改"line_notify"發送狀態');
               sended = true;
               return sended;
               }
       }
+      
        if(flag === 0){
       //   console.log('目前所有的line通知已發送');
         return sended;
@@ -134,7 +147,6 @@ async function processDocs() {
   }
 }
 
-//processDocs();
 let requestCount = 0; // 初始化請求次數計數器
 const maxRequestsPerHour = 999; // 每小時請求上限
 const intervalTime = 3000; // 計時器間隔時間，單位：毫秒（這裡設定為每三秒執行一次）
