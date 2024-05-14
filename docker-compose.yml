@@ -26,7 +26,7 @@ services:
         delay: 5s
         # max_attempts: 3
         window: 120s
-    healthcheck:
+    healthcheck: #需要再確認是否是因為健康檢查導致停機
       test: ["CMD", "curl", "-fs", "http://localhost:3000/health"]
       interval: 30s
       timeout: 10s
