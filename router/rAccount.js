@@ -105,6 +105,7 @@ try {
   const config = await getconfig()
   const token = req.cookies.token
   const response = req.body
+  console.log(11,response)
   const old = response.old
   const newa = response.newa
   const newb = response.newb
@@ -181,7 +182,7 @@ router.post("/account/system/accounts", async(req, res) => {
   // console.log(req)
   // Create new user.  Change or delete exist user.
   console.log("modify accounts")
-  // console.log(req.body)
+  console.log(req.body)
   try {
   let response = await alldoc(db.account);
   response = await response.json();
