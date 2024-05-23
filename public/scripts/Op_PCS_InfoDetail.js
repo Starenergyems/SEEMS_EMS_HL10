@@ -131,11 +131,11 @@ function Determine_bgColor_of_workStatus(elementID, dataStatus) {
   const element = document.querySelector(elementID);
 
   if (dataStatus === "停止-Key stop"||dataStatus ==="停止-錯誤"||dataStatus ==="降載運作"||dataStatus ==="通訊異常") {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (dataStatus === "運作中") {
       element.style.background = "#CBE198"; //綠
   } else if (dataStatus === "準備中"||dataStatus === "啟動中"||dataStatus === "運作-告警") {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色
   } else {
       element.style.background = "#000000";
   }
@@ -154,11 +154,11 @@ function Determine_bgColor_of_workMode(elementID, dataStatus) {
   const element = document.querySelector(elementID);
 
   if (dataStatus === "離網") {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (dataStatus === "併網") {
       element.style.background = "#CBE198"; //綠
   } else if (dataStatus === "併網恆流" || dataStatus === "併網恆壓" ||dataStatus === "併網恆定功率(AC)" ||dataStatus ==="併網恆定功率(DC)" ||dataStatus === "VSG") {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色
   } else {
       element.style.background = "#000000";
   }
@@ -178,7 +178,7 @@ function Determine_bgColor_of_chargeStatus(elementID, dataStatus) {
   if (dataStatus === "充電"||dataStatus ==="放電") {
       element.style.background = "#CBE198"; //綠
   } else if (dataStatus === "非工作狀態") {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色
   } else {
       element.style.background = "#000000";
   }

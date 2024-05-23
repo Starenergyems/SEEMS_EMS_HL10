@@ -179,7 +179,7 @@ function Determine_bgColor_of_BMSMode(elementID, dataStatus) {
   const element = document.querySelector(elementID);
 
   if (dataStatus === "停機中") {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (dataStatus === "運轉中") {
       element.style.background = "#CBE198"; //綠
   }  else {
@@ -191,11 +191,11 @@ function Determine_bgColor_of_onlineNum(elementID, Num) {
   const element = document.querySelector(elementID);
 
   if (Num === 0) {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (Num === 12) {
       element.style.background = "#CBE198"; //綠
   } else if (Num >=1 && Num <=11 ) {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色 FF8A00
   } else {
       element.style.background = "#000000";
   }

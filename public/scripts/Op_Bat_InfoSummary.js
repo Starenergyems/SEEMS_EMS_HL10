@@ -374,11 +374,11 @@ function Determine_bgColor_of_workStatus(elementID, dataStatus) {
   const element = document.querySelector(elementID);
 
   if (dataStatus === "停機") {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (dataStatus === "正常") {
       element.style.background = "#CBE198"; //綠
   } else if (dataStatus === "部分運作" ) {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色
   } else {
       element.style.background = "#000000";
   }
@@ -388,11 +388,11 @@ function Determine_bgColor_of_onGridStatus(elementID, dataStatus) {
   const element = document.querySelector(elementID);
 
   if (dataStatus === "離網") {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (dataStatus === "併網") {
       element.style.background = "#CBE198"; //綠
   } else if (dataStatus === "部分併網" ) {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色
   } else {
       element.style.background = "#000000";
   }
@@ -402,11 +402,11 @@ function Determine_bgColor_of_onlineNum(elementID, Num) {
   const element = document.querySelector(elementID);
 
   if (Num === 0) {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (Num === 7) {
       element.style.background = "#CBE198"; //綠
   } else if (Num >=1 && Num <=6 ) {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色
   } else {
       element.style.background = "#000000";
   }

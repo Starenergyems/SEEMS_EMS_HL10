@@ -502,11 +502,11 @@ function Determine_bgColor_of_L_M_systemMode(elementID, dataStatus) {
   const element = document.querySelector(elementID);
 
   if (dataStatus === "暫停服務") {
-      element.style.background = "#FF0000";//紅
+      element.style.background = "#E53935";//紅
   } else if (dataStatus === "調頻服務中") {
       element.style.background = "#CBE198"; //綠
   } else if (dataStatus === "部分服務中" ) {
-      element.style.background = "#EF860F"; //橘色
+      element.style.background = "#FF8A00"; //橘色
   } else {
       element.style.background = "#000000";
   }
