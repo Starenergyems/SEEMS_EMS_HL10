@@ -2677,9 +2677,6 @@ function update_trigger_alarms_batch(
   null_tags,
   line_flag = false
 ) {
-  // console.log(data_item.System["402001"]);
-  // console.log(error_result)
-  // console.log(compare_result)
   return new Promise((resolve, reject) => {
     let remain_result = [];
     let income_result = [];
@@ -2687,10 +2684,7 @@ function update_trigger_alarms_batch(
 
     Promise.resolve("Initial data")
       .then(() => {
-        // update for the remain alarms (Recongnized as an error from the filter func which also is the error remian in the AlarmDB)
-        // console.log("remain_promises");
         if (compare_result.remain.length > 0) {
-          // fetch an array of _id from the AlarmDB
           remain_result = nanoDB
             .fetch({ keys: compare_result.remain })
             .then((resp) => {
@@ -2698,12 +2692,9 @@ function update_trigger_alarms_batch(
               let hisAlarm_batch = [];
               try {
                 resp.rows.forEach((element) => {
-                  // In case, the _id has not yet inserted in the DB
-                  // then line notify + insert to DB
                   if (element.hasOwnProperty("error")) {
                     const _id = element.key;
                     const tag = error_result[_id]["tag"];
-                    // const tag = _id.split(":")[2]
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
                     if (!null_tags.includes(tag)) {
@@ -2711,88 +2702,71 @@ function update_trigger_alarms_batch(
                         sendLineNotify(error_result[_id]);
                       }
                       docs_batch.push(error_result[_id]);
-  
+
                       const obj = error_result[_id];
                       const newObj = { ...obj };
                       delete newObj["_id"];
                       hisAlarm_batch.push(newObj);
-                    };
-
-                    // The cases which the _id has been inserted into the DB once
+                    }
                   } else if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     const tag = error_result[_id]["tag"];
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
-                    // Case 1: it remains in the DB correctly
-                    // Then, update the doc with current status and values
-                    // the read boolean should follow the current setting from the DB
                     if (element.doc) {
                       let doc = element.doc;
                       let error_element = error_result[_id];
-                      // console.log(error_result[_id]["_id"])
                       if (!null_tags.includes(tag)) {
-                        // console.log(doc._id, doc.value)
-                        if (doc.value.toString() !== error_element["value"].toString()) {
-                          error_element["_rev"] = doc._rev;
-                          error_element["read"] = doc.read;
-                          // error_element["recover"] = false;
-                          if (line_flag && line) {
-                            sendLineNotify(error_element);
-                          }
-                          docs_batch.push(error_element);
-  
-                          const obj = error_element[_id];
-                          const newObj = { ...obj };
-                          delete newObj["_id"];
-                          hisAlarm_batch.push(newObj);
-                        };
-                      };
+                        if (doc && error_element && doc.value && error_element["value"]) {
+                          if (doc.value.toString() !== error_element["value"].toString()) {
+                            error_element["_rev"] = doc._rev;
+                            error_element["read"] = doc.read;
+                            if (line_flag && line) {
+                              sendLineNotify(error_element);
+                            }
+                            docs_batch.push(error_element);
 
-                      // Case 2: it has been deleted before and not existed in the db currently
-                      // then line notify + insert to DB
+                            const obj = error_element;
+                            const newObj = { ...obj };
+                            delete newObj["_id"];
+                            hisAlarm_batch.push(newObj);
+                          }
+                        }
+                      }
                     } else {
                       if (!null_tags.includes(tag)) {
                         if (line_flag && line) {
                           sendLineNotify(error_result[_id]);
                         }
                         docs_batch.push(error_result[_id]);
-  
+
                         const obj = error_result[_id];
                         const newObj = { ...obj };
                         delete newObj["_id"];
                         hisAlarm_batch.push(newObj);
-                      };
+                      }
                     }
                   }
                 });
               } catch (error) {
-                console.log(error);
+                console.error('Error in remain processing:', error);
               }
-              // console.log(docs_batch)
               return Promise.all([
                 nanoDB.bulk({ docs: docs_batch }),
                 hisnanoDB.bulk({ docs: hisAlarm_batch }),
               ]);
             });
-          // console.log("remain_result");
         }
       })
       .then(() => {
-        // update for the new income alarms (Recongnized as an error from the filter func which also is not yet an error in the AlarmDB)
-        // console.log("income_promises");
         if (compare_result.income.length > 0) {
-          // fetch an array of _id from the AlarmDB
           income_result = nanoDB
             .fetch({ keys: compare_result.income })
             .then((resp) => {
-              // console.log(resp.rows)
               let docs_batch = [];
               let hisAlarm_batch = [];
               try {
                 resp.rows.forEach((element) => {
-                  // In case, the _id has not yet inserted in the DB
-                  // then line notify + insert to DB
                   if (element.hasOwnProperty("error")) {
                     const _id = element.key;
                     const tag = error_result[_id]["tag"];
@@ -2803,77 +2777,64 @@ function update_trigger_alarms_batch(
                         sendLineNotify(error_result[_id]);
                       }
                       docs_batch.push(error_result[_id]);
-  
+
                       const obj = error_result[_id];
                       const newObj = { ...obj };
                       delete newObj["_id"];
                       hisAlarm_batch.push(newObj);
-                    };
-
-                    // The cases which the _id has been inserted into the DB once
+                    }
                   } else if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     const tag = error_result[_id]["tag"];
                     const line = error_result[_id]["line"];
                     delete error_result[_id]["line"];
-                    // Case 1: it is somehow remain in the DB although it should be a newcomer
-                    // Then, update the doc with current status and values
-                    // the read boolean should follow the current setting from the DB
                     if (element.doc) {
-                      // console.log(element.doc);
                       let doc = element.doc;
                       let error_element = error_result[_id];
                       if (!null_tags.includes(tag)) {
-                        if (doc.value.toString() !== error_element["value"].toString()) {
-                          error_element["_rev"] = doc._rev;
-                          error_element["read"] = doc.read;
-                          if (line_flag && line) {
-                            sendLineNotify(error_element);
-                          }
-                          docs_batch.push(error_element);
-  
-                          const obj = error_element[_id];
-                          const newObj = { ...obj };
-                          delete newObj["_id"];
-                          hisAlarm_batch.push(newObj);
-                        };
-                      };
+                        if (doc && error_element && doc.value && error_element["value"]) {
+                          if (doc.value.toString() !== error_element["value"].toString()) {
+                            error_element["_rev"] = doc._rev;
+                            error_element["read"] = doc.read;
+                            if (line_flag && line) {
+                              sendLineNotify(error_element);
+                            }
+                            docs_batch.push(error_element);
 
-                      // Case 2: it has been deleted before and not existed in the db currently
-                      // then line notify + insert to DB
+                            const obj = error_element;
+                            const newObj = { ...obj };
+                            delete newObj["_id"];
+                            hisAlarm_batch.push(newObj);
+                          }
+                        }
+                      }
                     } else {
                       if (!null_tags.includes(tag)) {
                         if (line_flag && line) {
                           sendLineNotify(error_result[_id]);
                         }
                         docs_batch.push(error_result[_id]);
-  
+
                         const obj = error_result[_id];
                         const newObj = { ...obj };
                         delete newObj["_id"];
                         hisAlarm_batch.push(newObj);
-                      };
+                      }
                     }
                   }
                 });
               } catch (error) {
-                console.log(error);
+                console.error('Error in income processing:', error);
               }
-              // console.log(docs_batch)
               return Promise.all([
                 nanoDB.bulk({ docs: docs_batch }),
                 hisnanoDB.bulk({ docs: hisAlarm_batch }),
               ]);
             });
-          // console.log("income_result");
         }
       })
       .then(() => {
-        // update for the recover alarms (Not recongnized as an error from the filter func which also is currently an error in the AlarmDB)
-        // console.log("recover_promises");
-        // console.log(compare_result.recover)
         if (compare_result.recover.length > 0) {
-          // fetch an array of _id from the AlarmDB
           recover_result = nanoDB
             .fetch({ keys: compare_result.recover })
             .then((resp) => {
@@ -2881,39 +2842,22 @@ function update_trigger_alarms_batch(
               let hisAlarm_batch = [];
               try {
                 resp.rows.forEach((element) => {
-                  // As the _id is fetched in the DB
-                  // Do nothing if _id is not found in the DB
                   if (element.hasOwnProperty("doc")) {
                     const _id = element.id;
                     let doc = element.doc;
-                    // console.log(_id.split(':'))
                     const _device = _id.split(':')[1];
                     const _tag = _id.split(':')[2];
                     const _bit = _id.split(':')[3];
-                    // console.log(_device, _tag, _bit)
                     let _value = undefined;
                     if (_bit) {
                       _value = '0';
-                      // console.log(_value)
                     } else {
-                      // console.log(_id);
-                      // console.log(doc);
-                      // console.log(data_item);
-                      // console.log(_tag);
-                      // console.log(_device);
                       _value = data_item[_device][_tag];
-                      // console.log(_value)
                     }
-
-                    // console.log(doc)
-                    // const line = error_result[_id]["line"];
-                    // delete error_result[_id]["line"];
                     if (!doc.recover) {
-                      // Set the recover boolean as true and the time to the current time as it is not an error now
                       doc.value = _value;
                       doc.recover = true;
                       doc.recover_time = current_locale_time();
-                      // if the recover and read boolean are both true: del the doc
                       if (line_flag) {
                         sendLineNotify(doc);
                       }
@@ -2928,29 +2872,19 @@ function update_trigger_alarms_batch(
                       delete newObj["_deleted"];
                       hisAlarm_batch.push(newObj);
                     }
-                    else {
-                      // do nothing
-                    };
                   }
                 });
               } catch (error) {
-                console.log(error);
+                console.error('Error in recover processing:', error);
               }
-              // console.log(docs_batch)
               return Promise.all([
                 nanoDB.bulk({ docs: docs_batch }),
                 hisnanoDB.bulk({ docs: hisAlarm_batch }),
               ]);
             });
-          // console.log("recover_result");
         }
       })
       .then(() => {
-        // console.log({
-        //   remain_result,
-        //   income_result,
-        //   recover_result,
-        // });
         resolve({
           remain_result,
           income_result,
@@ -2958,24 +2892,12 @@ function update_trigger_alarms_batch(
         });
       })
       .catch((error) => {
+        console.error('Error in update_trigger_alarms_batch:', error);
         reject(error);
       });
-    // const promises = [
-    //   remain_promises,
-    //   income_promises,
-    //   recover_promises,
-    // ];
-    // console.log(promises);
-    // // Use Promise.all to wait for all promises to resolve
-    // Promise.all(promises)
-    //     .then(() => {
-    //         console.log("Promise.all in update_trigger_alarms: Suc!");
-    //     })
-    //     .catch(err => {
-    //         console.error('Error in Promise.all in update_trigger_alarms:', err);
-    //     });
   });
 }
+
 // 
 function sendLineNotify(error_result_item) {
   const message = `
