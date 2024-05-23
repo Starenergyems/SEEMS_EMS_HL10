@@ -530,7 +530,10 @@ async function updateData() {
   var data = await getData(router);
   console.log(data);
   $("#workStatus").text(data.workStatus);
+  Determine_bgColor_of_workStatus("#BG_workStatus",data.workStatus);
   $("#onlineNum").text(data.onlineNum);
+  Determine_bgColor_of_onlineNum("#BG_onlineNum",data.onlineNum);
+
   $("#totalP").text(data.totalP);
   $("#totalQ").text(data.totalQ);
   $("#totalRatedP").text(data.totalRatedP);
@@ -671,4 +674,32 @@ async function updateData() {
   $("#modeQctrl_LC4").text(data.modeQctrl_LC4);
   $("#standbyCmd_LC4").text(data.standbyCmd_LC4);
   $("#modeLR_LC4").text(data.modeLR_LC4);
+}
+
+function Determine_bgColor_of_workStatus(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "停機") {
+      element.style.background = "#FF0000";//紅
+  } else if (dataStatus === "運轉中") {
+      element.style.background = "#CBE198"; //綠
+  } else if (dataStatus === "部分運轉中" ) {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}
+
+function Determine_bgColor_of_onlineNum(elementID, Num) {
+  const element = document.querySelector(elementID);
+
+  if (Num === 0) {
+      element.style.background = "#FF0000";//紅
+  } else if (Num === 7) {
+      element.style.background = "#CBE198"; //綠
+  } else if (Num >=1 && Num <=6 ) {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
 }

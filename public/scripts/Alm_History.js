@@ -25,10 +25,10 @@ $(document).ready(function () {
     ); 
     generateDropOptions(//生成下拉選單
     '#level_filter', 
-    ['等級', 'Alarm','Fault'], 
+    ['等級', 'Alarm','Fault','Event'], 
     'filtOpt', 
     null, 
-    ['等級', 'Alarm','Fault'], 
+    ['等級', 'Alarm','Fault','Event'], 
     '等級'
     ); 
     $('#device_filter, #location_filter, #level_filter').change(function(){ //設定有哪些篩選器，對應哪個TABLE的哪一行
@@ -623,18 +623,18 @@ async function updateTable() {
                     return $('<div/>').html(data).text();
                 }
             },
-            {
-                data: "read",
-                render: function (data, type, row) {
-                    var rowIndex = row.index; // Get the index from the row object
-                    //var checkboxId = "chb_Ack_" + rowIndex;
-                    if (data === true) {
-                        return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
-                    } else {
-                        return "";
-                    }
-                },
-            },
+            // {
+            //     data: "read",
+            //     render: function (data, type, row) {
+            //         var rowIndex = row.index; // Get the index from the row object
+            //         //var checkboxId = "chb_Ack_" + rowIndex;
+            //         if (data === true) {
+            //             return '<img src="/public/images/Recover_Logo_v1.png" alt="復歸圖示">';
+            //         } else {
+            //             return "";
+            //         }
+            //     },
+            // },
             {
                 data: "recover",
                 render: function (data, type, row) {

@@ -1,6 +1,6 @@
 const { timeLog, Console } = require("console");
 const readline = require("readline");
-//-------------------------------------------------------------------------------------------------
+//
 // 定義計算平均值的函數
 function calculateAverage(...numbers) {
   if (numbers.length === 0) {
@@ -18,7 +18,7 @@ function calculateAdd(...numbers) {
   const sum = numbers.reduce((acc, num) => acc + num, 0);
   return sum;
 }
-//-------------------------------------------------------------------------------------------------
+//
 //單位轉換
 function scaleProcess(decimalValue, scale, point) {
   // 檢查輸入是否合法
@@ -34,7 +34,7 @@ function scaleProcess(decimalValue, scale, point) {
   return result;
 }
 
-//-------------------------------------------------------------------------------------------------
+//
 //chargeStatus pcs充放電狀態
 function mapchargeStatus(decimalValue) {
   const binaryString =
@@ -55,7 +55,7 @@ function mapchargeStatus(decimalValue) {
     return "Non-working state";
   }
 }
-//***************************************************************************** */
+//
 function mapworkStatus_page(decimalValue) {
   // 將十進制數值轉換為二進制字串
   if (decimalValue === "undefined") {
@@ -81,20 +81,6 @@ function mapworkStatus_page(decimalValue) {
   return statuses[indexOfOne] || "@@@";
 }
 
-// // 範例使用
-// const decimalValue = 8; // 這裡使用8作為範例，代表第四位元為1
-// const status = mapworkStatus_page(decimalValue);
-// console.log(status); // 輸出目前的狀態
-
-// bit 0: Running
-// bit 3: Key stop
-// bit 4: Standby
-// bit 6: Starting
-// bit 9: Fault stop
-// bit 10: Alarm running
-// bit 11: Derated running
-// bit 15: Communication exception
-//***************************************************************************** */
 
 function mapworkMode_page(decimalValue) {
   // 將十進制數值轉換為二進制字串
@@ -120,7 +106,7 @@ function mapworkMode_page(decimalValue) {
   return statuses[indexOfOne] || "Unknown status";
 }
 function mapgridStatus_page() { }
-//***************************************************************************** */
+//
 //PCSWorkingStatus
 function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
   //console.log("#1;" + lc1 + "#2;" + lc2 + "#3;" + lc3 + "#4;" + lc4);
@@ -178,7 +164,7 @@ function mapModeLR(input) {
     return "#*#";
   }
 }
-//***************************************************************************** */
+//
 //PCSWorkingMode
 function mapPCSWorkingstatus(input1, input2) {
   // 檢查參數是否為 undefined
@@ -260,13 +246,11 @@ function countPCSAlarmAndFault(input1, input2, input3) {
   return count;
 }
 
-//***************************************************************************** */
+//
 //gridStatus
 function mapgridStatus(decimalValue) {
   // 將十進制數值轉換為二進制字符串
   const binaryString = decimalValue.toString(2);
-
-  // 對照表
 
   if (decimalValue >= 2) {
     return "Error";
@@ -277,12 +261,6 @@ function mapgridStatus(decimalValue) {
   }
 }
 
-// 使用例子;
-// const decimalValue = 0; // 試試不同的數值
-// const result = mapgridStatus(decimalValue);
-// console.log(result);
-
-//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
 let i;
 let j;
@@ -702,7 +680,7 @@ function Convert_rawDT_to_queryDT_floorToSec(rawDateTime) {
   return `${yy}-${mm}-${dd}T${hh}:${m}:${ss}.000+08:00`;
 }
 
-//* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
+//
 
 function checkValuesFault(v1, v2, v3) {
   // 轉換數值為二進制並填補為 32 位元
@@ -827,7 +805,7 @@ function workStatuschange(var1, var2, var3, var4, var5, var6, var7) {
 // 測試函數
 // const result = workStatuschange(8448, 8448, 8448, 8448, 8448, 8448, 8448);
 // console.log(result); // 這將輸出符合條件的總和
-//******************************************************************************* */
+//
 function workStatus_LC(input) {
   if (input === 0) {
     return "併網";
@@ -836,10 +814,10 @@ function workStatus_LC(input) {
   }
 }
 
-// "0: Grid mode
-// 1: Off-grid mode"
+// 0: Grid mode
+// 1: Off-grid mode
 
-//******************************************************************************* */
+//
 function maponGridStatus(input1, input2, input3, input4) {
   const sum = input1 + input2 + input3 + input4;
   if (sum === 0) {
@@ -851,7 +829,7 @@ function maponGridStatus(input1, input2, input3, input4) {
   }
 }
 
-//******************************************************************************* */
+//
 function mapBMSMode(input) {
   const binary = input.toString(2).padStart(32, "0");
   //console.log("binary:" + binary);
@@ -882,7 +860,7 @@ function mapBMSMode(input) {
 // bit 13: Main switch on[CMD]
 // bit 14: Discharge mode
 // bit 15: Charge mode
-//******************************************************************************* */
+//
 //側邊欄位
 //最上面的狀態顯示轉換
 function mapL_M_systemMode(var1, var2, var3, var4) {
@@ -938,7 +916,7 @@ function mapL_M_systemMode(var1, var2, var3, var4) {
   }
 }
 //mapL_M_systemMode(32895, 127, 0, 127);
-//******************************************************************************* */
+//
 function mapminSOH(...input) {
   if (input.length === 0) {
     throw new Error("至少需要提供一個數值作為參數");
@@ -955,7 +933,7 @@ function mapminSOH(...input) {
 
   return min;
 }
-//@*******************************************************************************@ */
+//
 //模式控制頁面相關
 //對照系統可用性
 function mapSysMode(SysMode) {
@@ -976,7 +954,7 @@ function mapSysMode(SysMode) {
 
 // mapSysMode(0);
 // mapSysMode(32768);
-//******************************************************************************* */
+//
 
 function mapStatusAllPCS(pcs1, pcs2, pcs3, pcs4) {
   const pcs1_binary = pcs1.toString(2).padStart(32, "0");
@@ -1014,7 +992,7 @@ function mapStatusAllPCS(pcs1, pcs2, pcs3, pcs4) {
   }
 }
 //mapStatusAllPCS(0, 0, 0, 0);
-//******************************************************************************* */
+//
 
 function mapStatusAllBMS(bms1, bms2, bms3, bms4) {
   const bms1_binary = bms1.toString(2).padStart(32, "0");
@@ -1061,7 +1039,9 @@ function mapStatusAllBMS(bms1, bms2, bms3, bms4) {
     return "全部切離";
   }
 }
-//******************************************************************************* */
+////
+
+
 function mapSysAvailability(SysAvailability) {
   const SysAvailability_binary = SysAvailability.toString(2).padStart(32, "0");
   //console.log("SysAvailability_binary:" + SysAvailability_binary);
@@ -1076,6 +1056,7 @@ function mapSysAvailability(SysAvailability) {
     return "正常";
   }
 }
+//
 
 function mapStopCHGsched(StopCHGsched) {
   //bit 14: Force P_LS to 0 ( 0: No, 1: Yes )
@@ -1092,7 +1073,6 @@ function mapStopCHGsched(StopCHGsched) {
   }
 }
 
-//******************************************************************************* */
 function mapAutoMan(input, bit) {
   //( 0: Manual, 1: Auto )
   const input_binary = input.toString(2).padStart(32, "0");
@@ -1105,7 +1085,7 @@ function mapAutoMan(input, bit) {
     return "自動";
   }
 }
-//******************************************************************************* *///******************************************************************************* */
+
 //bit 3: ESS & PCS Availability ( 0: Not Available, 1: Available )
 function mapBMSPCSstatus(input) {
   const input_binary = input.toString(2).padStart(32, "0");
@@ -1118,7 +1098,7 @@ function mapBMSPCSstatus(input) {
     return "正常";
   }
 }
-//******************************************************************************* *///******************************************************************************* */
+
 function mapAvail_SS(input) {
   const input_binary = input.toString(2).padStart(32, "0");
   const bits4 = 31 - 4;
@@ -1130,7 +1110,7 @@ function mapAvail_SS(input) {
     return "正常";
   }
 }
-//******************************************************************************* *///******************************************************************************* */
+//
 function mapAvail_SS(input) {
   const input_binary = input.toString(2).padStart(32, "0");
   const bits4 = 31 - 4;
@@ -1142,7 +1122,7 @@ function mapAvail_SS(input) {
     return "正常";
   }
 }
-//******************************************************************************* *///******************************************************************************* */
+//
 //bit 5: E-dReg ( 0: Stop, 1: Running )
 function mapEdReg_SS(input) {
   const input_binary = input.toString(2).padStart(32, "0");
@@ -1155,9 +1135,7 @@ function mapEdReg_SS(input) {
     return "正常";
   }
 }
-
-//******************************************************************************* *///******************************************************************************* */
-
+//
 function mapUPSwarning(inputs, checkbit) {
   if (inputs === "" || inputs === null) {
     return "inputisnull";
@@ -1187,14 +1165,7 @@ function mapUPSwarning(inputs, checkbit) {
     return result;
   }
 }
-
-// mapUPSwarning(512, 9);
-// mapUPSwarning(1024, 10);
-// mapUPSwarning(10, 1);
-// mapUPSwarning(2, 1);
-
-//******************************************************************************* *///******************************************************************************* */
-
+//
 module.exports = {
   calculateAverage,
   mapchargeStatus,
@@ -1232,7 +1203,7 @@ module.exports = {
   Convert_rawDT_to_queryDT_floorToSec,
   workStatuschange,
   calculateAdd,
-  //****************** */
+  //******* */
   mapL_M_systemMode,
   mapminSOH,
   mapModeActPas,
@@ -1240,7 +1211,7 @@ module.exports = {
   mapStandbyCmd,
   mapModeLR,
   mapPCSWorkingstatus,
-  //****************** */
+  //******* */
   mapSysMode,
   mapStatusAllBMS,
   mapStatusAllPCS,
@@ -1250,7 +1221,7 @@ module.exports = {
   mapBMSPCSstatus,
   mapAvail_SS,
   mapEdReg_SS,
-  //****************** */
+  //******* */
   mapUPSwarning,
   mapworkMode_page,
   mapworkStatus_page,
@@ -1264,46 +1235,7 @@ module.exports = {
   mapBMSMode
 };
 
-// //***************************************************************************** */
-// //轉換存陣列
-// const decimalToBinaryArray = (decimal) => {
-//   // 檢查是否為有效的十進制數字
-//   if (isNaN(decimal)) {
-//     throw new Error("Invalid input. Please provide a valid decimal number.");
-//   }
-
-//   // 將十進制轉換為二進制字符串
-//   const binaryString = decimal.toString(2);
-
-//   // 確保二進制字符串的長度為32字元，不足的部分補0
-//   const paddedBinaryString =
-//     "00000000000000000000000000000000".slice(-32) + binaryString;
-
-//   // 將二進制字符串轉換為數字陣列，按照bit0開始的順序
-//   const binaryArray = Array.from(paddedBinaryString).map(Number);
-//   //binaryArray 反過來存放 這樣個別對應的位元才會是他的位置
-//   const reversedBinaryArray = Array.from(paddedBinaryString)
-//     .map(Number)
-//     .reverse();
-
-//   return reversedBinaryArray;
-// };
-
-// module.exports = { decimalToBinaryArray };
-
-// // // 使用範例
-// // const decimalValue = 32;
-
-// // try {
-// //   const binaryResult = decimalToBinaryArray(decimalValue);
-// //   console.log("Binary Result:", binaryResult);
-// //   console.log("Binary Result:", binaryResult.join(" "));
-// //   console.log("Binary [i]:", binaryResult[i]);
-// // } catch (error) {
-// //   console.error("Error:", error.message);
-// // };
-
-// //********************************************************************************************************** */
+// //*********************************************************************************************** */
 
 const rawData = 0;
 const NumberOfDigit = 16;
@@ -1321,109 +1253,5 @@ const sysCtrl_2_MT = {
   10: { 0: "正常", 1: "通訊異常" },
   13: { 0: "SOC", 1: "Volt" }
 };
+
 const pcsWorkStatus_spBitList = [0, 1, 2, 5, 6, 10, 13, 14, 17, 20, 22];
-
-// let ab = Scale_Data(rawData, 0.01, 1);
-// console.log(ab);
-
-// let cd_BitString = Convert_UInt_to_revBitString(rawData, NumberOfDigit);
-// console.log(cd_BitString);
-
-// let ef = Convert_UInt_to_BitString(rawData, NumberOfDigit);
-// console.log(ef);
-// console.log(ef.bitString);
-// console.log(typeof ef.bitString);
-// console.log(ef.num_ClosedBit);
-// console.log(typeof ef.num_ClosedBit);
-
-// let gh = mapWordStatus(rawData, pcsCHGStatus_MT);
-// console.log(gh);
-
-// const ij = mapBitStatus(cd_BitString, sysCtrl_2_MT, 6);
-// console.log(ij);
-
-// const kl = getHighLowByte(rawData);
-// console.log(kl);
-// console.log(kl["hiByte"]);
-// console.log(kl.loByte);
-
-// const mn = Convert_unixTime_to_dateTime(rawData);
-// console.log(mn);
-
-// const E_G = 123;
-// const E_M = 987;
-// const E_k = 456;
-// const op = Calculate_BMS_energy(E_G, E_M, E_k);
-// console.log(op);
-
-// const qr = Calculate_CPM10_energy(E_G, E_M, E_k);
-// console.log(qr);
-
-// const st = Calculate_N1450_PF(rawData);
-// console.log(st);
-
-// const uv = Calculate_Tr_oilTemp(rawData);
-// console.log(uv);
-
-// const wx = Count_SpecificClosedBit(rawData, NumberOfDigit, pcsWorkStatus_spBitList);
-// console.log(wx);
-
-// const maxData = 276;
-// const minData = 256;
-// const yz = Determine_BGC_of_TcMaxDiff(maxData, minData);
-// console.log(yz);
-
-// const ab_2 = Determine_DL_of_RackHWStatus(rawData);
-// console.log(ab_2);
-
-// const cd_2 = Determine_DL_of_upsStatus2(rawData);
-// console.log(cd_2);
-
-// const ef_2 = Determine_DL_of_CommDevice(rawData);
-// console.log(ef_2);
-
-// let CommLC = 0;
-// let CommPCSBMS = "1";
-// const ef_2 = Determine_DL_of_CommPCSBMS(CommLC, CommPCSBMS);
-// console.log(ef_2);
-
-// const rawData1 = 1;
-// const rawData2 = 1;
-// const rawData3 = 0;
-// const rawData4 = 0;
-// const rawData5 = 0;
-// const gh_2 = Determine_statusL_of_recloser(rawData1, rawData2);
-// console.log(gh_2);
-
-// const data3 = "10011";
-// const ij_2 = Determine_statusL_of_VCB(data3[0], data3[1], data3[2]);
-// console.log(ij_2);
-// const kl_2 = Determine_statusL_of_ACB(data3[3], data3[4]);
-// console.log(kl_2);
-
-// const mn_2 = Determine_DL_of_AlarmWord(rawData1);
-// console.log(mn_2);
-// const op_2 = Determine_DL_of_AlarmWords([rawData1, rawData2, rawData3, rawData4]);
-// console.log(op_2);
-
-// const qr_2 = Convert_socRef_kWh_to_pct(rawData);
-// console.log(qr_2);
-
-// const unixTime_Now = 13;
-// const startTime = 15;
-// const endTime = 19;
-// const st_2 = Determine_status_of_exeCmd(unixTime_Now, startTime, endTime);
-// console.log(st_2);
-// const uv_2 = Determine_status_of_sbyCmd(unixTime_Now, startTime, endTime);
-// console.log(uv_2);
-
-// console.log(get_Log_Time());
-
-// let raw_DT_now = new Date();
-// console.log(Convert_rawDT_to_queryDT_floorToSec(raw_DT_now));
-
-// const rawData1 = 112358;
-// const rawData2 = 100000;
-// console.log(Scale_Diff_of_Data(rawData1, rawData2, 0.1, 2));
-
-/////////////////////////////////////////////////////////////////////////

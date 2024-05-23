@@ -213,15 +213,16 @@ router.post("/account/system/accounts", async(req, res) => {
     iddata["user"]["name"] = body.name
     iddata["user"]["company"] = body.company
     iddata["user"]["department"] = body.department
-    iddata["user"]["level"] = body.permission
+    iddata["user"]["level"] = body.permissions
     iddata["user"]["state"] = body.status === undefined ||body.status === ""?iddata["user"]["state"]:body.status
     iddata["user"]["note"] = body.note === undefined ||body.note === ""? "" : body.note
-    console.log(body.permission)
+    console.log(body.permissions)
     // console.log(777,body.password === undefined ||body.password === "", iddata.user.password)
     // body.password === undefined || body.password === "" ? iddata.user.password : body.password
     iddata["user"]["password"] = body.password === undefined ||body.password ==="" ? iddata.user.password : body.password
     // console.log("after",iddata)
     await updateaccount(iddata._id, "", "", [iddata])
+    res.status(200)
   } else if (allid.includes(body.num) === false && bottom === "addupdate"){
         console.log("id nottttt exist, create")
         let data = [{
@@ -233,7 +234,7 @@ router.post("/account/system/accounts", async(req, res) => {
             name: `${body.name}`,
             company: `${body.company}`,
             department: `${body.department}`,
-            level: `${body.permission}`,
+            level: `${body.permissions}`,
             state: `${body.status}`,
             errcount: "0",
             note: `${body.note === undefined? "" : body.note}`,
@@ -245,6 +246,7 @@ router.post("/account/system/accounts", async(req, res) => {
           }}]
           console.log(data)
           await updateaccount(data[0]._id, "", "", data)
+          res.status(200)
           }
   
 if (allid.includes(body.num) === true && bottom === "delete") {

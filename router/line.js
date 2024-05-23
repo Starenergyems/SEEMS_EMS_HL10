@@ -41,8 +41,8 @@ function sendLineNotify(message) {
 
   return axios(request)
   .then((resp) => {
-    console.log("New Notify:",
-    resp.data);
+    // console.log("New Notify:",
+    // resp.data);
   })
   .catch((err) => {
     console.error(
@@ -107,15 +107,13 @@ async function processDocs() {
      ${formattedTime}
 ● 告警等級 : ${trans_level}
 ● 設備狀態 :  ${recoverstatus}
-● 告警描述 :
+● 告警內容 :
      ${doc.content}
-● 目前數值 :  ${doc.value}
-● 設備位置 :  ${doc.location}`;
+● 目前數值 :  ${doc.value}`;
 
               //const trimmedMessage = message.trim();    
               // 傳送資料至Line Notify
               await sendLineNotify(message);
-
               //await test_alarm_nanoDb.insert(doc);
               // 更新資料庫中的line_notify屬性為true，使用版本控制
               let insertAttempt = false;
@@ -143,39 +141,76 @@ async function processDocs() {
       
   } catch (error) {
       //console.log("**********************************************************");
-      console.error('處理資料時發生錯誤:', error);
+      console.error('processDocs 處理資料時發生錯誤:', error);
   }
 }
 
-let requestCount = 0; // 初始化請求次數計數器
-const maxRequestsPerHour = 999; // 每小時請求上限
-const intervalTime = 3000; // 計時器間隔時間，單位：毫秒（這裡設定為每三秒執行一次）
+async function delprocessDocs() {
+  try {
+    // 查詢所有資料
+    const response = await test_alarm_nanoDb.list({ include_docs: true });
+    const docs = response.rows.map(row => row.doc);
+    let flag = 0;
+    for (const doc of docs) {
+      if (doc._id.startsWith('_design/')) {
+        continue;
+      }
+      if (doc.read === true && doc.recover === true && doc.line_notify === true) {
+        // 如果符合條件，直接刪除文檔
+        try {
+          await test_alarm_nanoDb.destroy(doc._id, doc._rev);
+          flag++;
+        } catch (error) {
+          console.error('刪除文檔時發生錯誤:', error);
+        }
+      }
+    }
+    // 回傳符合條件文檔的數量
+    return flag;
+  } catch (error) {
+    console.error('刪除已讀且復歸資料時發生錯誤:', error);
+  }
+}
 
-// 設置計時器
+const maxRequestsPerHour = 1000;
+let requestCount = 0;
+const intervalTime = 1000; // 每1秒執行一次
+
+const resetRequestCount = () => {
+  const now = new Date();
+  const millisecondsUntilNextHour = (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000 - now.getMilliseconds();
+  
+  setTimeout(() => {
+    requestCount = 0;
+    resetRequestCount(); // 設置下一次重置計數
+  }, millisecondsUntilNextHour);
+};
+
 const timer = setInterval(async () => {
   const now = new Date();
   
-   // 在每個小時的零分零秒時將 requestCount 設置為 0
-   if (now.getMinutes() === 0 && now.getSeconds() === 0) {
-    requestCount = 0;
-}
-    if (requestCount >= maxRequestsPerHour) {
-        clearInterval(timer); // 如果超過每小時請求上限，停止計時器
-        //console.log('已達到每小時請求上限，暫停發送通知。');
-        const message = `
+  if (requestCount >= maxRequestsPerHour) {
+    clearInterval(timer); // 如果超過每小時請求上限，停止計時器
+    const message = `
 ${now}:
 已達到每小時請求上限1000則訊息，已暫停發送通知 !
 請注意該小時系統情況，待整點後恢復Line告警功能`;
-        sendLineNotify(message);
-        return;
-    }
-    // 每三秒執行一次processDocs()功能
-    const sended = await processDocs();
+    sendLineNotify(message);
+    return;
+  }
 
-    if(sended === true){
-      requestCount++; // 每次執行processDocs()時增加請求計數
-    }
+  // 每三秒執行一次processDocs()功能
+  const sended = await processDocs();
+
+  if (sended === true) {
+    requestCount++; // 每次執行processDocs()時增加請求計數
+  }
 }, intervalTime);
+
+// 初始設置重置計數
+resetRequestCount();
+
+setInterval(delprocessDocs,5000);
 
 // 修改為：
 module.exports = {

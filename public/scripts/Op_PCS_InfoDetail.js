@@ -56,16 +56,19 @@ async function updateData() {
   var router = window.location.href + "/data";
   console.log(router);
   var data = await getData(router);
-  const pageNumber = 1
+  //const pageNumber = 1
   // var data = await getData(`operateinfo/pcs/infodetail/${pageNumber}/data/`)
   // var data = await getData(`data/`)
-  console.log(data);
+  //console.log(data);
   $("#chargeStatus").text(data.chargeStatus);
+  Determine_bgColor_of_chargeStatus("#BG_chargeStatus",data.chargeStatus)
   $("#tot_E_chg").text(data.tot_E_chg); //畫面顯示MWh
   $("#tot_E_dcg").text(data.tot_E_dcg); //畫面顯示MWh
-
+ 
   $("#workStatus").text(data.workStatus);
+  Determine_bgColor_of_workStatus("#BG_workStatus",data.workStatus)
   $("#workMode").text(data.workMode);
+  Determine_bgColor_of_workMode("#BG_workMode",data.workMode)
 
   /*輸出限制************************************* */
   // $('#max_P_chg').text(data.max_P_chg);
@@ -122,3 +125,64 @@ async function updateData() {
   $("#moduleTemp2").text(data.moduleTemp2);
   $("#moduleTemp3").text(data.moduleTemp3);
 }
+
+
+function Determine_bgColor_of_workStatus(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "停止-Key stop"||dataStatus ==="停止-錯誤"||dataStatus ==="降載運作"||dataStatus ==="通訊異常") {
+      element.style.background = "#FF0000";//紅
+  } else if (dataStatus === "運作中") {
+      element.style.background = "#CBE198"; //綠
+  } else if (dataStatus === "準備中"||dataStatus === "啟動中"||dataStatus === "運作-告警") {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}
+
+// 0: "運作中",
+// 3: "停止-Key stop",
+// 4: "準備中",
+// 6: "啟動中",
+// 9: "停止-錯誤",
+// 10: "運作-告警",
+// 11: "降載運作",
+// 15: "通訊異常"
+
+function Determine_bgColor_of_workMode(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "離網") {
+      element.style.background = "#FF0000";//紅
+  } else if (dataStatus === "併網") {
+      element.style.background = "#CBE198"; //綠
+  } else if (dataStatus === "併網恆流" || dataStatus === "併網恆壓" ||dataStatus === "併網恆定功率(AC)" ||dataStatus ==="併網恆定功率(DC)" ||dataStatus === "VSG") {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}
+// 0: "併網恆流", //"On-grid constant current"
+// 1: "併網恆壓", //"On-grid constant voltage"
+// 2: "併網恆定功率(AC)", //"On-grid constant power (AC)"
+// 3: "併網恆定功率(DC)", //"On-grid constant power (DC)"
+// 9: "併網", //"On-grid mode"
+// 10: "離網", //"Off-grid mode"
+// 11: "VSG" //"VSG mode"\
+
+
+function Determine_bgColor_of_chargeStatus(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "充電"||dataStatus ==="放電") {
+      element.style.background = "#CBE198"; //綠
+  } else if (dataStatus === "非工作狀態") {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}
+
+//#*#
+//0: "充電", 1: "放電", 2: "非工作狀態" 

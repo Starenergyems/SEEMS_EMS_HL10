@@ -49,13 +49,15 @@ function hide_ssNavBar(clickItem) {
     }
 }
 
-async function updateData(){ //更新資料
+async function updateData(){ 
     var router = window.location.href+"data";
     console.log(router);
     var data = await getData(router);
     console.log(data);
-    $('#BMSMode').text(data.BMSMode);  //沒有這個資料
-    $('#onlineNum').text(data.onlineNum); //沒有
+    $('#BMSMode').text(data.BMSMode);
+    Determine_bgColor_of_BMSMode("#BG_BMSModes",data.BMSMode);
+    $('#onlineNum').text(data.onlineNum)
+    Determine_bgColor_of_onlineNum("#BG_onlineNum",data.onlineNum);
     $('#onlineV').text(data.onlineV);
     $('#BMSsystemV').text(data.BMSsystemV);
     $('#BMSsystemI').text(data.BMSsystemI);
@@ -173,3 +175,28 @@ async function updateData(){ //更新資料
 
 
 
+function Determine_bgColor_of_BMSMode(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "停機中") {
+      element.style.background = "#FF0000";//紅
+  } else if (dataStatus === "運轉中") {
+      element.style.background = "#CBE198"; //綠
+  }  else {
+      element.style.background = "#000000";
+  }
+}
+
+function Determine_bgColor_of_onlineNum(elementID, Num) {
+  const element = document.querySelector(elementID);
+
+  if (Num === 0) {
+      element.style.background = "#FF0000";//紅
+  } else if (Num === 12) {
+      element.style.background = "#CBE198"; //綠
+  } else if (Num >=1 && Num <=11 ) {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}

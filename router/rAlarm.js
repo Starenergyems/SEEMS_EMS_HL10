@@ -67,9 +67,9 @@ let alarm_db_event_lock = false;
       } else {
         console.error("Error:", err);
       }
-    } else {
-      console.log("Design document exists:", Object.keys(body.views));
-    }
+    // } else {
+    //   console.log("Design document exists:", Object.keys(body.views));
+     }
   });
 });
 
@@ -128,9 +128,10 @@ alarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
     Promise.all([alarmdb_create_index_promise]).then((resolve, reject) =>
       console.log(resolve, reject)
     );
-  } else {
-    console.log("alarmnanoDb Design document exists:", Object.keys(body.views));
-  }
+  } 
+  // else {
+  //   console.log("alarmnanoDb Design document exists:", Object.keys(body.views));
+  // }
 });
 
 hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
@@ -146,12 +147,13 @@ hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
     } else {
       console.error("Error:", err);
     }
-  } else {
-    console.log(
-      "hisalarmnanoDb Design document exists:",
-      Object.keys(body.views)
-    );
-  }
+  } 
+  // else {
+  //   console.log(
+  //     "hisalarmnanoDb Design document exists:",
+  //     Object.keys(body.views)
+  //   );
+  // }
 });
 ////////////////////////////////////////////////////////////////////////////////////
 //test index
@@ -183,7 +185,7 @@ function create_test_alarmdb_index() {
         return test_alarmnanoDb.createIndex(indexDef_occurrence_time);
       })
       .then(() => {
-        resolve("Resolved create_test_alarmdb_index");
+        //resolve("Resolved create_test_alarmdb_index");
         // console.log('Resolved create_test_alarmdb_index');
       })
       .catch((error) => {
@@ -208,9 +210,10 @@ test_alarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
     Promise.all([create_test_alarmdb_index_promise]).then((resolve, reject) =>
       console.log(resolve, reject)
     );
-  } else {
-    console.log("test_alarmnanoDb Design document exists:", Object.keys(body.views));
-  }
+  } 
+  // else {
+  //   console.log("test_alarmnanoDb Design document exists:", Object.keys(body.views));
+  // }
 });
 
 test_hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
@@ -226,12 +229,13 @@ test_hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
     } else {
       console.error("Error:", err);
     }
-  } else {
-    console.log(
-      "test_hisalarmnanoDb Design document exists:",
-      Object.keys(body.views)
-    );
-  }
+  } 
+  // else {
+  //   console.log(
+  //     "test_hisalarmnanoDb Design document exists:",
+  //     Object.keys(body.views)
+  //   );
+  // }
 });
 
 ////////////////////////////////////////////////////////////////////////////////////

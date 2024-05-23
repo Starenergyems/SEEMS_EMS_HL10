@@ -31,10 +31,10 @@ $(document).ready(function () {
   ); 
   generateDropOptions(//生成下拉選單
   '#level_filter', 
-  ['等級', 'Alarm','Fault'], 
+  ['等級', 'Alarm','Fault','Event'], 
   'filtOpt', 
   null, 
-  ['等級', 'Alarm','Fault'], 
+  ['等級', 'Alarm','Fault','Event'], 
   '等級'
   ); 
   $('#device_filter, #location_filter, #level_filter').change(function(){ //設定有哪些篩選器，對應哪個TABLE的哪一行

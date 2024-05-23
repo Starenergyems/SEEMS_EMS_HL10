@@ -247,6 +247,7 @@ async function updateNavbar(url = "/navbar") {
   /////////////////////////////////////////////////
   // $("#L_M_systemMode").text("部分服務中");
   $("#L_M_systemMode").text(data.latestValues2.L_M_systemMode);
+  Determine_bgColor_of_L_M_systemMode("#L_M_systemMode",data.latestValues2.L_M_systemMode);
   $("#L_M_freq").text(data.latestValues2.L_M_freq);
   $("#L_M_activeP").text(data.latestValues2.L_M_activeP);
   $("#L_M_reactiveP").text(data.latestValues2.L_M_reactiveP);
@@ -493,5 +494,20 @@ function assign_BitD_to_StatusOfDL_with_SpID(SpID, bitData) {
   } else {
     element.classList.remove("setToClose");
     element.classList.add("ErrData");
+  }
+}
+
+
+function Determine_bgColor_of_L_M_systemMode(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "暫停服務") {
+      element.style.background = "#FF0000";//紅
+  } else if (dataStatus === "調頻服務中") {
+      element.style.background = "#CBE198"; //綠
+  } else if (dataStatus === "部分服務中" ) {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
   }
 }

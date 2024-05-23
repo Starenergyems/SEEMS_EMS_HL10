@@ -815,7 +815,7 @@ function Set_SOC_Ref() {
 async function updateData() {   //更新資料
     var router = window.location.href + "/data";
     var data = await getData(router);
-    console.log(data);
+    //console.log(data);
 
     assign_TextContent_To_SpID("#sysAvailability", data.sysAvailability);
     assign_TextContent_To_SpID("#SOC", data.SOC);
@@ -906,9 +906,9 @@ function Determine_bgColor_of_sysAvail(elementID, dataStatus) {
     const element = document.querySelector(elementID);
 
     if (dataStatus === "不可用") {
-        element.style.background = "#FF0000";
+        element.style.background = "#FF0000";//紅
     } else if (dataStatus === "可用") {
-        element.style.background = "#CBE198";
+        element.style.background = "#CBE198"; //綠
     } else {
         element.style.background = "#000000";
     }
@@ -925,7 +925,7 @@ function Determine_bgColor_of_SOC(elementID, SOC) {
     if (SOC >= 95) {
         element.style.background = "#FF0000";
     } else if (SOC >= 90) {
-        element.style.background = "#EF860F";
+        element.style.background = "#EF860F"; //橘色
     } else if (SOC > 10) {
         element.style.background = "#CBE198";
     } else if (SOC > 5) {

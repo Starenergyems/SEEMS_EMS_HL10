@@ -240,8 +240,14 @@ async function updateData() {
   console.log(data);
 
   $('#workStatus').text(data.workStatus);
+  Determine_bgColor_of_workStatus("#BG_workStatus",data.workStatus);
+  
   $('#onGridStatus').text(data.onGridStatus);
+  Determine_bgColor_of_onGridStatus("#BG_onGridStatus",data.onGridStatus);
+
   $('#onlineNume').text(data.onlineNum);
+  Determine_bgColor_of_onlineNum("#BG_onlineNum",data.onlineNum);
+
   $('#systemV').text(data.systemV);
   $('#systemI').text(data.systemI);
   $('#systemSOC').text(data.systemSOC);
@@ -362,3 +368,46 @@ BMS4_1_alarm.onclick = function(){
   hyperlink('/rack/7');
 }
 
+
+
+function Determine_bgColor_of_workStatus(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "停機") {
+      element.style.background = "#FF0000";//紅
+  } else if (dataStatus === "正常") {
+      element.style.background = "#CBE198"; //綠
+  } else if (dataStatus === "部分運作" ) {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}
+
+function Determine_bgColor_of_onGridStatus(elementID, dataStatus) {
+  const element = document.querySelector(elementID);
+
+  if (dataStatus === "離網") {
+      element.style.background = "#FF0000";//紅
+  } else if (dataStatus === "併網") {
+      element.style.background = "#CBE198"; //綠
+  } else if (dataStatus === "部分併網" ) {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}
+
+function Determine_bgColor_of_onlineNum(elementID, Num) {
+  const element = document.querySelector(elementID);
+
+  if (Num === 0) {
+      element.style.background = "#FF0000";//紅
+  } else if (Num === 7) {
+      element.style.background = "#CBE198"; //綠
+  } else if (Num >=1 && Num <=6 ) {
+      element.style.background = "#EF860F"; //橘色
+  } else {
+      element.style.background = "#000000";
+  }
+}
