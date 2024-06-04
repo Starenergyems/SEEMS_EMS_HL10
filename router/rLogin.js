@@ -134,6 +134,7 @@ var password; // User's system password.
 var bantill; // New var, use for record if user is locked when to unlock.
 var token; // New var, when user login success, system will random generate for validation.
 var validtime; // New var, the token will be validate to validtime.
+var repwd
 
 async function findaccount(inmail = "", intoken = "") {
   // use login page submit email or token to search account db.
@@ -158,8 +159,8 @@ async function findaccount(inmail = "", intoken = "") {
       body: JSON.stringify(mangoQuery),
     });
     data = await data.json();
-    // console.log(data)
-    if (data.docs.length === 1) {
+    // console.log("545645314DDD",data)
+    if (data.docs) {
       
       id = data.docs[0]._id; // Impossible  undefined.
       rev = data.docs[0]._rev; // Impossible  undefined.
@@ -175,6 +176,7 @@ async function findaccount(inmail = "", intoken = "") {
         ? (department = "")
         : (department = user.department);
       user.level === undefined ? (level = "viewer") : (level = user.level);
+      user.permission === undefined ? (level = "viewer") : (level = user.permission);
       user.state === undefined ? (state = "deactivate") : (state = user.state);
       user.errcount === (undefined || "" || "NaN")
         ? (errcount = 0)
@@ -191,6 +193,9 @@ async function findaccount(inmail = "", intoken = "") {
       user.validtime === undefined
         ? (validtime = "")
         : (validtime = user.validtime);
+      user.repwd === undefined
+        ? (repwd = "")
+        : (repwd = user.repwd);
     }
     if (inmail !== "" && intoken === "" && data.docs.length !== 1) {
       response = `Keyin user mail or password is incorrect.`;
@@ -207,7 +212,9 @@ async function findaccount(inmail = "", intoken = "") {
         state : state,
         note : note,
         last_time: last_time,
-        password: password
+        password: password,
+        repwd:repwd
+        
       };
     } else {
       response = `Error findaccount token.`;
@@ -220,20 +227,23 @@ async function findaccount(inmail = "", intoken = "") {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// Use _id updata account doc. put method need content, if not will be null.
+// Use _id update account doc. put method need content, if not will be null.
 
-async function updateaccount(id, configdata="", passwordd="", createdata="") {
+async function updateaccount(id, configdata="", passwordd="", createdata="", repwdd="") {
   const URL = `${db_URL}/${db_account}/${id}`;
-  console.log(`${passwordd}`)
+  
+  findaccount(inmail = "", intoken = "")
+
   if (passwordd !== "" ){
     password = passwordd
+    repwd = 1
   }
 
-  // if (passwordd === undefined || "NaN") {
-  //   console.log("修改密碼為id")
-  //   password = id
-  // }
-  
+  if (repwd !== "" ){
+    repwd = repwdd
+    // repwd = 0
+  }
+
   const updatedDoc = {
     _id: `${id}`,
     _rev: `${rev}`,
@@ -244,6 +254,7 @@ async function updateaccount(id, configdata="", passwordd="", createdata="") {
       name: `${namee}`,
       company: `${company}`,
       department: `${department}`,
+      permission: `${level}`,
       level: `${level}`,
       state: `${state}`,
       errcount: `${errcount}`,
@@ -253,12 +264,13 @@ async function updateaccount(id, configdata="", passwordd="", createdata="") {
       bantill: `${bantill}`,
       token: `${token}`,
       validtime: `${validtime}`,
+      repwd: `${repwd}`
     },
   };
+  // console.log(updatedDoc)
   let bodyy 
   if (id === doc_CONFIG) {
     bodyy = JSON.stringify(configdata[0])
-    // console.log(bodyy)
   } else if (createdata.length === 1) {
     bodyy = JSON.stringify(createdata[0])
   }else {
@@ -286,7 +298,6 @@ async function updateaccount(id, configdata="", passwordd="", createdata="") {
 // Generate datetime string default now, offset for back or forward hours.
 
 function datetime(offset = 0) {
-  // console.log(`offset${offset}`)
   return new Date(new Date().getTime() + offset * 60 * 60 * 1000).toISOString();
 }
 
@@ -330,7 +341,7 @@ async function uuid() {
 // The function for login page submit.
 
 async function submit(EMAIL, PASSWORD) {
-  
+
   let response = { // Empty response.
     result: "",
     text: "",
@@ -338,7 +349,14 @@ async function submit(EMAIL, PASSWORD) {
     token: "",
     validtime: "",
     permission: "",
+    repwd:""
   };
+  
+  if (!EMAIL.includes("@hdrenewables.com")) {
+    response["result"] = false;
+    response["text"] = `帳號或密碼錯誤 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`
+    return response
+  }
 
   // SuperUser Login.
   if (EMAIL===process.env.superuser_account && PASSWORD ===process.env.superuser_password){
@@ -351,26 +369,7 @@ async function submit(EMAIL, PASSWORD) {
   
   await getconfig();
   await findaccount(EMAIL,"");
-  // console.log(`submit ${errcount}`)
-  // await findaccount(EMAIL,"").then((temp) => {
-  //   // console.log(temp);
-  // });
-  // console.log(`${moment(time).format("YYYY/MM/DD HH:mm:ss").isAfter(bantill)}, ${bantill}, ${moment(time,"YYYY/MM/DD HH:mm:ss").isAfter(bantill)}`)
-// console.log(`${moment(time).format("YYYY/MM/DD HH:mm:ss")}, ${bantill}, ${toTimestamp(moment(time).format("YYYY/MM/DD HH:mm:ss"))}`)
-// console.log(`${new Date().getTime()}`)
-// console.log(`${moment(time).format("YYYY/MM/DD HH:mm:ss")}, ${new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime()}`)
-// console.log(`~${bantill}, ${new Date(bantill).getTime()}`)
 
-  // console.log(1,moment(time).isAfter(bantill))
-  // console.log(1, moment(time).format("YYYY/MM/DD HH:mm:ss").isAfter(moment(bantill)))
-  // console.log(2,moment(time).isBefore(moment(bantill)))
-  // moment(time).format("YYYY/MM/DD HH:mm:ss")
-  // console.log(bantill, moment(time).format("YYYY/MM/DD HH:mm:ss"))
-  // console.log(Date.parse(bantill) < Date.parse(moment(time).format("YYYY/MM/DD HH:mm:ss")))
-  // console.log(Date.parse(bantill).getTime())
-  // if (Date.parse(bantill) < moment(time).format("YYYY/MM/DD HH:mm:ss") && state === "lock" && suspendtime !== "永久" && errcount >= locktimes){
-  // console.log(new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime(), new Date(bantill).getTime())  
-  // console.log(1111,new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime() < new Date(bantill).getTime())
   if (new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime() > new Date(bantill).getTime() && state === "lock" && suspendtime !== "永久" && errcount >= locktimes){
     console.log("解鎖")
     state = "activate" // lock and bantime passed.
@@ -392,111 +391,67 @@ async function submit(EMAIL, PASSWORD) {
       response["validtime"] = validtime;
       response["permission"] = level;
     } else if(PASSWORD !== password){
-      // console.log(`password error aaaa ${errcount}`)
       errcount += 1
       response["result"] = false;
-      response["text"] = `登入失敗 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`
+      response["text"] = `帳號或密碼錯誤 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`
       // `Login failed ${errcount} time. If continuous login fail up to ${locktimes} the user will be lock.`
       response["id"] = id;
       response["mail"] = mail;
       response["token"] = token;
       response["validtime"] = validtime;
       response["permission"] = level;
-      // console.log(`password error ${errcount}`)
     }
+    // await updateaccount(id,"","","");
   }
 
   if (errcount === locktimes){
     state = "lock"
     response["text"] = `The user is locked. Please contact system manager.`
     if (suspendtime !== "永久"){
-      // console.log(suspendtime)
       formattedDateTime = datetime(parseFloat(suspendtime));
       bantill= moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss")
-      response["text"] = `超過嘗試登入次數 ${locktimes} 次, 此帳號已被鎖定!`
+      response["text"] = `登入失敗次數達 ${locktimes} 次, 此帳號已被鎖定!`
       // `The user is locked until ${bantill}.`
     }
   }
 
-  // Update user data.
-  await updateaccount(id,"","","");
-  return response;
-
-
-
-  // if (Date.parse(bantill) > Date.parse(time)
-  //    || (state === "activate" && suspendtime !== "永久")) {
-  //   console.log(`User ${EMAIL} state is ${state}, and bantill ${bantill}.`);
-  //   errcount = 0;
-  //   bantill = "";
-  //   state = "activate";
-  // }
-  // if (errcount >= locktimes || Date.parse(bantill) < Date.parse(time) ||
-  //   state === "lock"
-  // ) {
-  //   console.log(
-  //     `errcount:${errcount}, locktimes:${locktimes}, bantill：${bantill}, state:${state}`
-  //   );
-  //   token = "";
-  //   validtime = "";
-  //   state = "lock";
-  // }
-  // if (
-  //   state === "activate" &&
-  //   (errcount === "" || errcount < locktimes) &&
-  //   (bantill === "" || Date.parse(bantill) < Date.parse(time))
-  // ) {
-  //   console.log(`User ${mail} is loginable.`);
-  //   if (password === PASSWORD) {
-  //     errcount = 0;
-  //     bantill = "";
-  //     last_time = datetime();
-  //     token = await uuid();
-  //     validtime = datetime(duration);
-  //     response["result"] = true;
-  //     response["text"] = `User ${mail} Login Success.`;
-  //     response["id"] = id;
-  //     response["mail"] = mail;
-  //     response["token"] = token;
-  //     response["validtime"] = validtime;
-  //     response["permission"] = level;
-  //   } else if (errcount < locktimes - 1) {
-  //     // keyin password is incorrect.
-  //     errcount += 1;
-  //     response["result"] = false;
-  //     // response["text"] =
-  //     //   `Login fail "${errcount}" times. If continuous fail "${locktimes}" times, the user will be lock`;
-  //     response["text"] =
-  //     `登入失敗 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`;
-  //     if (suspendtime !== "永久") {
-  //       response["text"] += ` ${suspendtime} 小時`;
-  //     } else {
-  //       response["text"] += ".";
-  //     }
-  //   } else if (errcount === locktimes - 1) {
-  //     errcount += 1;
-  //     token = "";
-  //     validtime = "";
-  //     state = "lock";
-  //     response["text"] =
-  //       `超過嘗試登入次數 ${locktimes} 次, 此帳號已被鎖定!`;
-  //     // response["text"] =
-  //     //   `Continuous loginfail up to ${locktimes} times, the user locked`;
-  //     if (suspendtime !== "永久") {
-  //       formattedDateTime = datetime(parseFloat(suspendtime));
-  //       let bantill= moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss");
-  //       response["text"] += 
-  //       `\n解鎖時間為: ${bantill}`;
-  //     } else {
-  //       suspendtime === "永久";
-  //       bantill = "";
-  //       response["text"] += "永久";
-  //     }
-  //   }
-  // }
   // await updateaccount(id,"","","");
-  // console.log(response["text"]);
-  // return response;
+
+  if (response["result"] === true) {
+  // judge password format
+
+  let digitCount = 0;
+  let upperCaseCount = 0;
+  let lowerCaseCount = 0;
+  let specialCharCount = 0;
+
+  for (let i = 0; i < password.length; i++) {
+      const char = password[i];
+      if (/[0-9]/.test(char)) {
+          digitCount++;
+      } else if (/[A-Z]/.test(char)) {
+          upperCaseCount++;
+      } else if (/[a-z]/.test(char)) {
+          lowerCaseCount++;
+      } else {
+          specialCharCount++;
+      }
+  }
+  // console.log(digitCount, upperCaseCount, lowerCaseCount, specialCharCount)
+  if (digitCount < num || upperCaseCount < upper || lowerCaseCount < lower || specialCharCount < special || password.length < atleast || password.length > atmost){
+    repwd = "1"
+    // console.log("repwd",repwd)
+  } else {
+    repwd = "0"
+  }
+
+  if (repwd === 1 || password === id ) {
+    response["repwd"] = repwd
+    // console.log(repwd)
+  }
+  }
+  await updateaccount(id,"","","",repwd);
+  return response;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -511,8 +466,6 @@ async function alldoc(database) {
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
-  // console.log("login", typeof(response))
-  // console.log(await response.json())
   return  response
 }
 
@@ -526,19 +479,14 @@ async function getbyid(id) {
     credentials: "include",
   });
   data = await response.json()
-  // for (let i =0 )
   let rrr = {}
   for (const [key, value] of Object.entries(data)) 
 {
   rrr[key] = value
 } 
-// console.log(rrr)
-  // console.log(33333333, Object.keys(data.user))
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
-  // console.log("login", typeof(response))
-  // console.log(await response.json())
   // 
   return await rrr
 }
@@ -547,7 +495,6 @@ async function getbyid(id) {
 // Delete account specify user.
 async function deleteuser(docid) {
   const rr = await getbyid(docid)
-  // console.log()
   const URL = `${db_URL}/${db.account}/${docid}/?rev=${rr._rev}`
   fetch(URL, {
     method: 'DELETE',
@@ -566,19 +513,11 @@ async function deleteuser(docid) {
   //   throw new Error(`Request failed with status ${response.status}`);
   // }
 }
-
-// deleteuser("SE0077")
-// async function ttttt(){
-// const a = await getbyid("SE0077")
-// console.log(a)
-// }
-// ttttt()
 ////////////////////////////////////////////////////////////////////////////////////////
 // User log.
 async function userlog(userid) {
   const URL = `${db_URL}/${db.log}/_find`
   const mangoQuery = { selector: { "username": { $eq: userid } } };
-  // console.log(mangoQuery)
   logdata = await fetch(URL, {
     method: 'POST',
     headers: { 
@@ -596,31 +535,10 @@ async function userlog(userid) {
   //   })
   // }
   logdata = await logdata.json();
-  // console.log(logdata)
   return logdata
   }
-  // This middleware is use for check authorization.
-// input toekn
-// output reslut permission id
 
-// const express = require("express");
-// const path = require("path");
-// const methodOverride = require("method-override");
-// const router = express.Router();
-// const app = express();
-// const cors = require("cors");
-
-// app.set("view engine", "ejs");
-// app.set("views", path.join(__dirname, "../views"));
-// app.use(methodOverride("_method"));
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, "../public")));
-// app.use(cors());
-
-// const cookieParser = require('cookie-parser');
-// app.use(cookieParser());
-
-// const { findaccount } = require("./rLogin")
+////////////////////////////////////////////////////////////////////////////////////////
 
 async function authentication(req) {
     let token = ""
@@ -636,16 +554,46 @@ async function authentication(req) {
     }
     else if (browser_token !== ""){
         await findaccount("", browser_token).then(temp => {
-            // console.log(temp)
             id = temp['id']
             token = temp['token']
             level = temp['level']
+            repwd = temp['repwd']
+            passwordddd = temp.password
         })
-        const res = `\ncookie's token is ${browser_token}\naccount token is ${token}`
-        if (token === browser_token) {
-            // console.log("Authentication is OK.", res)
-            // console.log({"id": id, "permission": level})
-            return {"id": id, "permission": level}
+        // const res = `\ncookie's token is ${browser_token}\naccount token is ${token}`
+
+        const config = await getconfig()
+        // const token = req.cookies.token
+        // const account = await findaccount("", token);
+        // const id = account.id
+        // let password = account.password
+        let digitCount = 0;
+        let upperCaseCount = 0;
+        let lowerCaseCount = 0;
+        let specialCharCount = 0;
+        for (let i = 0; i < passwordddd.length; i++) {
+            const char = passwordddd[i];
+            if (/[0-9]/.test(char)) {
+                digitCount++;
+            } else if (/[A-Z]/.test(char)) {
+                upperCaseCount++;
+            } else if (/[a-z]/.test(char)) {
+                lowerCaseCount++;
+            } else {
+                specialCharCount++;
+            }
+        }
+
+        if (digitCount < config["number"] || upperCaseCount < config["upper"] || lowerCaseCount < config["lower"] || specialCharCount < config["special"]) {
+        return 1 
+        }
+        
+        if (token === browser_token && repwd !== "1") {
+          // console.log("Authentication is OK.", res)
+          // console.log({"id": id, "permission": level})
+          return {"id": id, "permission": level}
+        } else if (token === browser_token && repwd === "1"){
+            return 1;
         } else {
             console.log("Authentication is not OK.", res)
             return false
@@ -653,8 +601,9 @@ async function authentication(req) {
     }
 }
 
-// module.exports = {authentication}
-    
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -670,185 +619,4 @@ module.exports = {
   deleteuser,
   userlog,
   authentication,
-  // ggg
 };
-
-
-
-// Use to get couchdb CONFIG doc. Purpose for getting CONFIG doc.
-// async function ggg() {
-//   const URL = `${db_URL}/${db_account}/${doc_CONFIG}`;
-//   response = await fetch(URL, {
-//       method: "GET",
-//       headers: { Authorization: AUTHORIZATION },
-//       credentials: "include",
-//     })
-//     console.log(1,response)
-//   return await response.json()
-//   // const data = await response.json();
-  
-  
-// }
-
-// ggg()
-
-// a = fetchData("http://localhost:3000/account/system/accounts", {"cookie":"734235b0-4efd-47d3-a76a-32a6a510673a"})
-// console.log(a)
-// Function to perform a GET request
-
-
-// Function to perform a GET request with headers
-// function fetchData(url, headers) {
-//   return fetch(url, {
-//     method: 'GET',
-//     headers: new Headers(headers), // Pass the headers object here
-//     mode: 'cors',
-//     cache: 'no-cache'
-//   })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok ' + response.statusText);
-//     }
-//     return response.json();
-//   })
-//   .then(data => console.log(data))
-//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
-// }
-
-// Example usage:
-// fetchDataWithHeaders('https://api.example.com/data', { 'Content-Type': 'application/json', 'Authorization': 'Bearer your-token-here' });
-
-
-
-
-// function fetchData(url) {
-//   return fetch(url)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error('Network response was not ok ' + response.statusText);
-//       }
-//       return response.json();
-//     })
-//     .then(data => console.log(data))
-//     .catch(error => console.error('There has been a problem with your fetch operation:', error));
-// }
-
-// Function to perform a POST request
-// function postData(url, data) {
-//   return fetch(url, {
-//     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-//     mode: 'cors', // no-cors, *cors, same-origin
-//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-//     credentials: 'same-origin', // include, *same-origin, omit
-//     headers: {
-//       'Content-Type': 'application/json'
-//       // 'Content-Type': 'application/x-www-form-urlencoded',
-//     },
-//     redirect: 'follow', // manual, *follow, error
-//     referrerPolicy: 'no-referrer', // no-referrer, *client
-//     body: JSON.stringify(data) // body data type must match "Content-Type" header
-//   })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok ' + response.statusText);
-//     }
-//     return response.json();
-//   })
-//   .then(data => console.log(data))
-//   .catch(error => console.error('There has been a problem with your fetch operation:', error));
-// }
-
-// Example usage:
-// fetchData('https://api.example.com/data');
-// postData('https://api.example.com/submit', { answer: 42 });
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-// async function XX(url) {
-// fetch(url, {
-//   method: 'GET',
-//   // body: JSON.stringify(data),
-//   headers: new Headers({
-//     'Content-Type': 'application/json',
-//     "cookie":"6fe314f5-4c5a-459b-b0e8-3fa4fb73bf06",
-//     credentials: 'include'
-//   })
-// }).then(res => res.json())
-// .catch(error => console.error('Error:', error))
-// .then(response => console.log('Success:', response));
-// }
-
-// XX("http://localhost:3000/account/system/accounts")
-
-
-// function fetchData(url) {
-//   // Make a fetch request to the specified URL
-//   return fetch(url)
-//     .then(response => {
-//       // Check if the response is successful (status code in the range 200-299)
-//       if (!response.ok) {
-//         // If not successful, throw an error with the status text
-//         throw new Error(`Error: ${response.statusText}`);
-//       }
-//       // If successful, parse the response as JSON and return it
-//       return response.json();
-//     })
-//     .catch(error => {
-//       // Catch any errors that occur during the fetch request
-//       console.error('Error fetching data:', error);
-//       // Optionally re-throw the error to propagate it further
-//       throw error;
-//     });
-// }
-
-// // Example usage:
-// const url = 'https://api.example.com/data';
-// fetchData(url)
-//   .then(data => {
-//     // Handle the fetched data
-//     console.log('Fetched data:', data);
-//   })
-//   .catch(error => {
-//     // Handle any errors that occurred during the fetch request
-//     console.error('Fetch error:', error);
-//   });
-
-
-
-
-// 新增帳號的彈出視窗
-// 描述要改成 新增帳戶
-// 必填項目:
-// 工號、姓名、公司、部門、信箱、權限、狀態、密碼(預設)
-
-// 新增帳號必須要限制必須填入哪些項目
-// 可以設置的權限文字描述要改成:
-// 帳號管理者(對應的英文?)
-// 系統管理者(對應的英文?)
-// 一般使用者(對應的英文?)
-
-// 增加一個超級管理員(隱藏版)不能被刪掉(且只有一個)
-
-//  必須要確保帳號管理員不會少於1個
-//  帳號登入的鎖定沒有真的被鎖住，且次數沒有繼續增加，修改權限還是異常
-//  新增帳戶的時候，需要限制哪些項目必填，且需要預設密碼
-// 第一次登入的帳號需要自己改密碼
-// 信箱要檢查是不是@hdre的網域
-
-// 帳戶修改的內容有些也要鎖定
-// 除了密碼&權限可以重設以外(密碼改的話也會是預設密碼)
-// 姓名+信箱不可以改掉
-// 可以用附註來記錄是不是新建帳戶
-
-// -------------------------------------------
-// 新增帳號的彈出視窗
-// 描述要改成 新增帳戶
-// 必填項目:
-// 工號、姓名、公司、部門、信箱、權限、狀態、密碼(預設)
-
-// 密碼欄位將為預設數值:Se91012531

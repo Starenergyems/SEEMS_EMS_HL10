@@ -100,25 +100,44 @@ router.get("/account/personalinfo", async (req, res) => {
 router.post("/account/personalinfo", async (req, res) => {
 // Change password.
 // Judge function should be write.
-console.log("Change password function execute.")
+// console.log("Change password function execute.")
 try {
   const config = await getconfig()
   const token = req.cookies.token
   const response = req.body
-  console.log(11,response)
   const old = response.old
   const newa = response.newa
   const newb = response.newb
   const account = await findaccount("", token);
   const id = account.id
   let password = account.password
-  if (password !== old || old === newa || newa !== newb || old === "" || newa === "" || newb === "") {
+  let digitCount = 0;
+  let upperCaseCount = 0;
+  let lowerCaseCount = 0;
+  let specialCharCount = 0;
+
+  for (let i = 0; i < newa.length; i++) {
+      const char = newa[i];
+      if (/[0-9]/.test(char)) {
+          digitCount++;
+      } else if (/[A-Z]/.test(char)) {
+          upperCaseCount++;
+      } else if (/[a-z]/.test(char)) {
+          lowerCaseCount++;
+      } else {
+          specialCharCount++;
+      }
+  }
+  console.log(password, old, newa, newb)
+  console.log(digitCount, upperCaseCount, lowerCaseCount, specialCharCount)
+  console.log(config["number"], config["upper"], config["lower"], config["special"])
+
+  if (password !== old || old === newa || newa !== newb || old === "" || newa === "" || newb === "" || digitCount < config["number"] || upperCaseCount < config["upper"] || lowerCaseCount < config["lower"] || specialCharCount < config["special"]) {
     console.log("Input data error.")
   } else {
-    console.log("Change password success.")
-    // if ( 
     password = newa
     await updateaccount(id,"",password)
+    console.log("Change password success.")
   }
 } 
 catch (error) {
@@ -213,10 +232,10 @@ router.post("/account/system/accounts", async(req, res) => {
     iddata["user"]["name"] = body.name
     iddata["user"]["company"] = body.company
     iddata["user"]["department"] = body.department
-    iddata["user"]["level"] = body.permissions
+    iddata["user"]["level"] = body.repermission
     iddata["user"]["state"] = body.status === undefined ||body.status === ""?iddata["user"]["state"]:body.status
     iddata["user"]["note"] = body.note === undefined ||body.note === ""? "" : body.note
-    console.log(body.permissions)
+    console.log(body.repermission)
     // console.log(777,body.password === undefined ||body.password === "", iddata.user.password)
     // body.password === undefined || body.password === "" ? iddata.user.password : body.password
     iddata["user"]["password"] = body.password === undefined ||body.password ==="" ? iddata.user.password : body.password

@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
-const { getconfig, submit, authentication } = require("./rLogin");
+const { getconfig, submit, authentication, findaccount,updateaccount } = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
@@ -172,18 +172,17 @@ app.post("/login", async (req, res) => {
     // const config = await getconfig()
     // console.log(config.duration*3600)
     const response = await submit(email, password);
-    if (response["result"] === true) {
-      //console.log(response["text"]);
+    if (response["result"] === true && response["repwd"] !== 1 ) {
       res.cookie("token", response["token"]);
       //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
       //const localhost = "localhost";
       const HOST_IP = process.env.HOST_IP;
-      console.log("Client IP Address:", HOST_IP);
-      // console.log(`http://${HOST_IP}:${port}/mode`);
-      // res.json({ redirect: `http://localhost:${port}/mode` });
-      res.json({ redirect: `http://${HOST_IP}:${port}/mode` });
+      res.json({ redirect: `/mode` });
+    } else if (response["result"] === true && response["repwd"] === 1){  
+      res.cookie("token", response["token"]);
+      res.json({ redirect: `/repassword` });
     } else {
       res.json({ text: response["text"] });
       // res.status(401).send(response["text"]);
@@ -193,6 +192,61 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+//////////////////////////////////////////////////////////////////////////////
+app.get("/repassword", async (req, res) => {
+  // console.log("repassword")
+  res.render("repassword")})
+
+app.post("/repassword", async (req, res) => {
+  console.log("repassword")
+  try {
+    const config = await getconfig()
+    // const token = req.cookies.token
+    const response = req.body
+    const old = response.old
+    const newa = response.newa
+    const newb = response.newb
+    const token = req.cookies.token
+    const account = await findaccount("", token);
+    const id = account.id
+    let password = account.password
+    let digitCount = 0;
+    let upperCaseCount = 0;
+    let lowerCaseCount = 0;
+    let specialCharCount = 0;
+    // console.log("gagaaga")
+    for (let i = 0; i < newa.length; i++) {
+        const char = newa[i];
+        if (/[0-9]/.test(char)) {
+            digitCount++;
+        } else if (/[A-Z]/.test(char)) {
+            upperCaseCount++;
+        } else if (/[a-z]/.test(char)) {
+            lowerCaseCount++;
+        } else {
+            specialCharCount++;
+        }
+    }
+    // console.log(password, old, newa, newb)
+    // console.log(digitCount, upperCaseCount, lowerCaseCount, specialCharCount)
+    // console.log(config["number"], config["upper"], config["lower"], config["special"])
+  
+    if (password !== old || old === newa || newa !== newb || old === "" || newa === "" || newb === "" || digitCount < config["number"] || upperCaseCount < config["upper"] || lowerCaseCount < config["lower"] || specialCharCount < config["special"]) {
+      console.log("Input data error.")
+    } else {
+      password = newa
+      await updateaccount(id,"",password,"",repwd=0)
+      console.log("Change password success.")
+      return {"redirect":"/mode"}
+      return res.redirect(302, "/mode");
+      console.log("跳轉失敗")
+    }
+  } 
+  catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Internal Server Error");
+  }})
 //////////////////////////////////////////////////////////////////////////////
 
 app.get("/health", (req, res) => {
@@ -204,19 +258,14 @@ app.get("/health", (req, res) => {
   }
 });
 
-
-
 //身分驗證
 app.use("*", async (req, res, next) => {
   try {
     const authenticated = await authentication(req);
     if (authenticated === false) {
       return res.redirect(302, "/login");
-      // return res.status(401).send("Unauthorized");
-
-      // res.redirect('login');
-      // res.clearCookie("token");
-      //
+    } else if (authenticated === 1) {
+      return res.redirect(302, "/repassword");
     } else {
       req.customData = authenticated;
       req.body.id = authenticated.id;

@@ -10,14 +10,14 @@ const router = express.Router();
 const app = express();
 const cors = require("cors");
 const moment = require("moment");
-const {
-  LC_error_result_gen,
-  DC_error_result_gen,
-  Other_error_result_gen,
-  GC_error_result_gen,
-  alarm_processor,
-} = require("./alarmFunctions");
-const { rejects } = require("assert");
+// const {
+//   LC_error_result_gen,
+//   DC_error_result_gen,
+//   Other_error_result_gen,
+//   GC_error_result_gen,
+//   alarm_processor,
+// } = require("./alarmFunctions");
+//const { rejects } = require("assert");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -26,217 +26,217 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(cors());
 //************************************************************* */
-const lc1nanoDb = nano.use("lc1_rf10");
-const lc2nanoDb = nano.use("lc2_rf10");
-const lc3nanoDb = nano.use("lc3_rf10");
-const lc4nanoDb = nano.use("lc4_rf10");
-const dcnanoDb = nano.use("dc_rf10");
-const gcnanoDb = nano.use("gc_rf10"); //新增
+// const lc1nanoDb = nano.use("lc1_rf10");
+// const lc2nanoDb = nano.use("lc2_rf10");
+// const lc3nanoDb = nano.use("lc3_rf10");
+// const lc4nanoDb = nano.use("lc4_rf10");
+// const dcnanoDb = nano.use("dc_rf10");
+// const gcnanoDb = nano.use("gc_rf10"); //新增
 
-const otherrf01nanoDb = nano.use("other_rf01");
-const otherrf10nanoDb = nano.use("other_rf10");
-const alarmnanoDb = nano.use("alarm");
-const hisalarmnanoDb = nano.use("hisalarm");
+// const otherrf01nanoDb = nano.use("other_rf01");
+// const otherrf10nanoDb = nano.use("other_rf10");
+// const alarmnanoDb = nano.use("alarm");
+// const hisalarmnanoDb = nano.use("hisalarm");
 const test_alarmnanoDb = nano.use("test_alarm");
 const test_hisalarmnanoDb = nano.use("test_hisalarm");
 
-let alarm_db_event_lock = false;
-// const alarm_test_nanoDb = nano.use("alarm_test");
-[
-  lc1nanoDb,
-  lc2nanoDb,
-  lc3nanoDb,
-  lc4nanoDb,
-  dcnanoDb,
-  gcnanoDb,
-  otherrf10nanoDb,
-  test_alarmnanoDb,
-  test_hisalarmnanoDb
-].forEach((element) => {
-  element.get("_design/" + "rAlarm_ddoc", (err, body) => {
-    // console.log(body)
-    if (err) {
-      if (err.statusCode === 404) {
-        console.log("Design document does not exist. Creating...");
-        const indexDef_time = {
-          index: { fields: ["time"] },
-          ddoc: "rAlarm_ddoc",
-          name: "time_index",
-        };
-        element.createIndex(indexDef_time);
-      } else {
-        console.error("Error:", err);
-      }
-    // } else {
-    //   console.log("Design document exists:", Object.keys(body.views));
-     }
-  });
-});
+// let alarm_db_event_lock = false;
+// // const alarm_test_nanoDb = nano.use("alarm_test");
+// [
+//   lc1nanoDb,
+//   lc2nanoDb,
+//   lc3nanoDb,
+//   lc4nanoDb,
+//   dcnanoDb,
+//   gcnanoDb,
+//   otherrf10nanoDb,
+//   test_alarmnanoDb,
+//   test_hisalarmnanoDb
+// ].forEach((element) => {
+//   element.get("_design/" + "rAlarm_ddoc", (err, body) => {
+//     // console.log(body)
+//     if (err) {
+//       if (err.statusCode === 404) {
+//         console.log("Design document does not exist. Creating...");
+//         const indexDef_time = {
+//           index: { fields: ["time"] },
+//           ddoc: "rAlarm_ddoc",
+//           name: "time_index",
+//         };
+//         element.createIndex(indexDef_time);
+//       } else {
+//         console.error("Error:", err);
+//       }
+//     // } else {
+//     //   console.log("Design document exists:", Object.keys(body.views));
+//      }
+//   });
+// });
 
-////////////////////////////////////////////////////////////////////////////////////
-//原始
-function alarmdb_create_index() {
-  return new Promise((resolve, reject) => {
-    Promise.resolve("Design document does not exist. Creating...")
-      .then(() => {
-        const indexDef_read = {
-          index: { fields: ["read"] },
-          ddoc: "rAlarm_ddoc",
-          name: "read_index",
-        };
-        return alarmnanoDb.createIndex(indexDef_read);
-      })
-      .then(() => {
-        const indexDef_db_name_recover = {
-          index: { fields: ["db_name"] },
-          ddoc: "rAlarm_ddoc",
-          name: "db_name_recover_index",
-        };
-        return alarmnanoDb.createIndex(indexDef_db_name_recover);
-      })
-      .then(() => {
-        const indexDef_occurrence_time = {
-          index: { fields: ["occurrence_time"] },
-          ddoc: "rAlarm_ddoc",
-          name: "occurrence_time_index",
-        };
-        return alarmnanoDb.createIndex(indexDef_occurrence_time);
-      })
-      .then(() => {
-        resolve("Resolved alarmdb_create_index");
-        // console.log('Resolved alarmdb_create_index');
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
+// ////////////////////////////////////////////////////////////////////////////////////
+// //原始
+// function alarmdb_create_index() {
+//   return new Promise((resolve, reject) => {
+//     Promise.resolve("Design document does not exist. Creating...")
+//       .then(() => {
+//         const indexDef_read = {
+//           index: { fields: ["read"] },
+//           ddoc: "rAlarm_ddoc",
+//           name: "read_index",
+//         };
+//         return alarmnanoDb.createIndex(indexDef_read);
+//       })
+//       .then(() => {
+//         const indexDef_db_name_recover = {
+//           index: { fields: ["db_name"] },
+//           ddoc: "rAlarm_ddoc",
+//           name: "db_name_recover_index",
+//         };
+//         return alarmnanoDb.createIndex(indexDef_db_name_recover);
+//       })
+//       .then(() => {
+//         const indexDef_occurrence_time = {
+//           index: { fields: ["occurrence_time"] },
+//           ddoc: "rAlarm_ddoc",
+//           name: "occurrence_time_index",
+//         };
+//         return alarmnanoDb.createIndex(indexDef_occurrence_time);
+//       })
+//       .then(() => {
+//         resolve("Resolved alarmdb_create_index");
+//         // console.log('Resolved alarmdb_create_index');
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   });
+// }
 
-alarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
-  if (err) {
-    if (err.statusCode === 404) {
-      let alarmdb_create_index_promise = alarmdb_create_index();
-      Promise.all([alarmdb_create_index_promise]).then((resolve, reject) =>
-        console.log(resolve, reject)
-      );
-    } else {
-      console.error("Error:", err);
-    }
-  } else if (Object.keys(body.views).length < 3) {
-    // console.log(Object.keys(body.views));
-    let alarmdb_create_index_promise = alarmdb_create_index();
-    Promise.all([alarmdb_create_index_promise]).then((resolve, reject) =>
-      console.log(resolve, reject)
-    );
-  } 
-  // else {
-  //   console.log("alarmnanoDb Design document exists:", Object.keys(body.views));
-  // }
-});
+// alarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
+//   if (err) {
+//     if (err.statusCode === 404) {
+//       let alarmdb_create_index_promise = alarmdb_create_index();
+//       Promise.all([alarmdb_create_index_promise]).then((resolve, reject) =>
+//         console.log(resolve, reject)
+//       );
+//     } else {
+//       console.error("Error:", err);
+//     }
+//   } else if (Object.keys(body.views).length < 3) {
+//     // console.log(Object.keys(body.views));
+//     let alarmdb_create_index_promise = alarmdb_create_index();
+//     Promise.all([alarmdb_create_index_promise]).then((resolve, reject) =>
+//       console.log(resolve, reject)
+//     );
+//   } 
+//   // else {
+//   //   console.log("alarmnanoDb Design document exists:", Object.keys(body.views));
+//   // }
+// });
 
-hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
-  if (err) {
-    if (err.statusCode === 404) {
-      console.log("Design document does not exist. Creating...");
-      const indexDef_occurrence_time = {
-        index: { fields: ["occurrence_time"] },
-        ddoc: "rAlarm_ddoc",
-        name: "occurrence_time_index",
-      };
-      hisalarmnanoDb.createIndex(indexDef_occurrence_time);
-    } else {
-      console.error("Error:", err);
-    }
-  } 
-  // else {
-  //   console.log(
-  //     "hisalarmnanoDb Design document exists:",
-  //     Object.keys(body.views)
-  //   );
-  // }
-});
-////////////////////////////////////////////////////////////////////////////////////
-//test index
-function create_test_alarmdb_index() {
-  return new Promise((resolve, reject) => {
-    Promise.resolve("Design document does not exist. Creating...")
-      .then(() => {
-        const indexDef_read = {
-          index: { fields: ["read"] },
-          ddoc: "rAlarm_ddoc",
-          name: "read_index",
-        };
-        return test_alarmnanoDb.createIndex(indexDef_read);
-      })
-      .then(() => {
-        const indexDef_db_name_recover = {
-          index: { fields: ["db_name"] },
-          ddoc: "rAlarm_ddoc",
-          name: "db_name_recover_index",
-        };
-        return test_alarmnanoDb.createIndex(indexDef_db_name_recover);
-      })
-      .then(() => {
-        const indexDef_occurrence_time = {
-          index: { fields: ["occurrence_time"] },
-          ddoc: "rAlarm_ddoc",
-          name: "occurrence_time_index",
-        };
-        return test_alarmnanoDb.createIndex(indexDef_occurrence_time);
-      })
-      .then(() => {
-        //resolve("Resolved create_test_alarmdb_index");
-        // console.log('Resolved create_test_alarmdb_index');
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
+// hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
+//   if (err) {
+//     if (err.statusCode === 404) {
+//       console.log("Design document does not exist. Creating...");
+//       const indexDef_occurrence_time = {
+//         index: { fields: ["occurrence_time"] },
+//         ddoc: "rAlarm_ddoc",
+//         name: "occurrence_time_index",
+//       };
+//       hisalarmnanoDb.createIndex(indexDef_occurrence_time);
+//     } else {
+//       console.error("Error:", err);
+//     }
+//   } 
+//   // else {
+//   //   console.log(
+//   //     "hisalarmnanoDb Design document exists:",
+//   //     Object.keys(body.views)
+//   //   );
+//   // }
+// });
+// ////////////////////////////////////////////////////////////////////////////////////
+// //test index
+// function create_test_alarmdb_index() {
+//   return new Promise((resolve, reject) => {
+//     Promise.resolve("Design document does not exist. Creating...")
+//       .then(() => {
+//         const indexDef_read = {
+//           index: { fields: ["read"] },
+//           ddoc: "rAlarm_ddoc",
+//           name: "read_index",
+//         };
+//         return test_alarmnanoDb.createIndex(indexDef_read);
+//       })
+//       .then(() => {
+//         const indexDef_db_name_recover = {
+//           index: { fields: ["db_name"] },
+//           ddoc: "rAlarm_ddoc",
+//           name: "db_name_recover_index",
+//         };
+//         return test_alarmnanoDb.createIndex(indexDef_db_name_recover);
+//       })
+//       .then(() => {
+//         const indexDef_occurrence_time = {
+//           index: { fields: ["occurrence_time"] },
+//           ddoc: "rAlarm_ddoc",
+//           name: "occurrence_time_index",
+//         };
+//         return test_alarmnanoDb.createIndex(indexDef_occurrence_time);
+//       })
+//       .then(() => {
+//         //resolve("Resolved create_test_alarmdb_index");
+//         // console.log('Resolved create_test_alarmdb_index');
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   });
+// }
 
-test_alarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
-  if (err) {
-    if (err.statusCode === 404) {
-      let create_test_alarmdb_index_promise = create_test_alarmdb_index();
-      Promise.all([create_test_alarmdb_index_promise]).then((resolve, reject) =>
-        console.log(resolve, reject)
-      );
-    } else {
-      console.error("Error:", err);
-    }
-  } else if (Object.keys(body.views).length < 3) {
-    // console.log(Object.keys(body.views));
-    let create_test_alarmdb_index_promise = create_test_alarmdb_index();
-    Promise.all([create_test_alarmdb_index_promise]).then((resolve, reject) =>
-      console.log(resolve, reject)
-    );
-  } 
-  // else {
-  //   console.log("test_alarmnanoDb Design document exists:", Object.keys(body.views));
-  // }
-});
+// test_alarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
+//   if (err) {
+//     if (err.statusCode === 404) {
+//       let create_test_alarmdb_index_promise = create_test_alarmdb_index();
+//       Promise.all([create_test_alarmdb_index_promise]).then((resolve, reject) =>
+//         console.log(resolve, reject)
+//       );
+//     } else {
+//       console.error("Error:", err);
+//     }
+//   } else if (Object.keys(body.views).length < 3) {
+//     // console.log(Object.keys(body.views));
+//     let create_test_alarmdb_index_promise = create_test_alarmdb_index();
+//     Promise.all([create_test_alarmdb_index_promise]).then((resolve, reject) =>
+//       console.log(resolve, reject)
+//     );
+//   } 
+//   // else {
+//   //   console.log("test_alarmnanoDb Design document exists:", Object.keys(body.views));
+//   // }
+// });
 
-test_hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
-  if (err) {
-    if (err.statusCode === 404) {
-      console.log("Design document does not exist. Creating...");
-      const indexDef_occurrence_time = {
-        index: { fields: ["occurrence_time"] },
-        ddoc: "rAlarm_ddoc",
-        name: "occurrence_time_index",
-      };
-      test_hisalarmnanoDb.createIndex(indexDef_occurrence_time);
-    } else {
-      console.error("Error:", err);
-    }
-  } 
-  // else {
-  //   console.log(
-  //     "test_hisalarmnanoDb Design document exists:",
-  //     Object.keys(body.views)
-  //   );
-  // }
-});
+// test_hisalarmnanoDb.get("_design/" + "rAlarm_ddoc", (err, body) => {
+//   if (err) {
+//     if (err.statusCode === 404) {
+//       console.log("Design document does not exist. Creating...");
+//       const indexDef_occurrence_time = {
+//         index: { fields: ["occurrence_time"] },
+//         ddoc: "rAlarm_ddoc",
+//         name: "occurrence_time_index",
+//       };
+//       test_hisalarmnanoDb.createIndex(indexDef_occurrence_time);
+//     } else {
+//       console.error("Error:", err);
+//     }
+//   } 
+//   // else {
+//   //   console.log(
+//   //     "test_hisalarmnanoDb Design document exists:",
+//   //     Object.keys(body.views)
+//   //   );
+//   // }
+// });
 
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -944,99 +944,99 @@ router.post("/alarm/history/edit", (req, res) => {
 
 
 //告警內容判斷執行
-function alarm_processor_call() {
-  // alarm_db_event_lock = true;
-  // while (alarm_db_event_lock) {
-  //   // console.log("a")
-  //   setTimeout(()=>{console.log("Hi")}, 3000);
-  //   // console.log("b")
-  //   console.log('a')
-  //   // await new Promise(resolve => setTimeout(resolve, 3000));  // Wait for a short time
-  //   // console.log('b')
-  // }
-  // console.log("alarm_processor_call", alarm_db_event_lock)
-  if (!alarm_db_event_lock) {
-    const mangoQuery_latest_rawdata = {
-      selector: {
-        time: { $exists: true },
-      },
-      sort: [{ time: "desc" }],
-      limit: 1,
-      use_index: ["rAlarm_ddoc", "time_index"],
-    };
+// function alarm_processor_call() {
+//   // alarm_db_event_lock = true;
+//   // while (alarm_db_event_lock) {
+//   //   // console.log("a")
+//   //   setTimeout(()=>{console.log("Hi")}, 3000);
+//   //   // console.log("b")
+//   //   console.log('a')
+//   //   // await new Promise(resolve => setTimeout(resolve, 3000));  // Wait for a short time
+//   //   // console.log('b')
+//   // }
+//   // console.log("alarm_processor_call", alarm_db_event_lock)
+//   if (!alarm_db_event_lock) {
+//     const mangoQuery_latest_rawdata = {
+//       selector: {
+//         time: { $exists: true },
+//       },
+//       sort: [{ time: "desc" }],
+//       limit: 1,
+//       use_index: ["rAlarm_ddoc", "time_index"],
+//     };
 
-    const lc1_alarm_promise = alarm_processor(
-      lc1nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
-    const lc2_alarm_promise = alarm_processor(
-      lc2nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
-    const lc3_alarm_promise = alarm_processor(
-      lc3nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
-    const lc4_alarm_promise = alarm_processor(
-      lc4nanoDb,
-      mangoQuery_latest_rawdata,
-      LC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
+//     const lc1_alarm_promise = alarm_processor(
+//       lc1nanoDb,
+//       mangoQuery_latest_rawdata,
+//       LC_error_result_gen,
+//       alarmnanoDb,
+//       hisalarmnanoDb
+//     );
+//     const lc2_alarm_promise = alarm_processor(
+//       lc2nanoDb,
+//       mangoQuery_latest_rawdata,
+//       LC_error_result_gen,
+//       alarmnanoDb,
+//       hisalarmnanoDb
+//     );
+//     const lc3_alarm_promise = alarm_processor(
+//       lc3nanoDb,
+//       mangoQuery_latest_rawdata,
+//       LC_error_result_gen,
+//       alarmnanoDb,
+//       hisalarmnanoDb
+//     );
+//     const lc4_alarm_promise = alarm_processor(
+//       lc4nanoDb,
+//       mangoQuery_latest_rawdata,
+//       LC_error_result_gen,
+//       alarmnanoDb,
+//       hisalarmnanoDb
+//     );
 
-    const dc_alarm_promise = alarm_processor(
-      dcnanoDb,
-      mangoQuery_latest_rawdata,
-      DC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
+//     const dc_alarm_promise = alarm_processor(
+//       dcnanoDb,
+//       mangoQuery_latest_rawdata,
+//       DC_error_result_gen,
+//       alarmnanoDb,
+//       hisalarmnanoDb
+//     );
 
-    const other_alarm_promise = alarm_processor(
-      otherrf10nanoDb,
-      mangoQuery_latest_rawdata,
-      Other_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
+//     const other_alarm_promise = alarm_processor(
+//       otherrf10nanoDb,
+//       mangoQuery_latest_rawdata,
+//       Other_error_result_gen,
+//       alarmnanoDb,
+//       hisalarmnanoDb
+//     );
 
-    const gc_alarm_promise = alarm_processor(
-      gcnanoDb,
-      mangoQuery_latest_rawdata,
-      GC_error_result_gen,
-      alarmnanoDb,
-      hisalarmnanoDb
-    );
+//     const gc_alarm_promise = alarm_processor(
+//       gcnanoDb,
+//       mangoQuery_latest_rawdata,
+//       GC_error_result_gen,
+//       alarmnanoDb,
+//       hisalarmnanoDb
+//     );
 
-    Promise.all([
-      lc1_alarm_promise,
-      lc2_alarm_promise,
-      lc3_alarm_promise,
-      lc4_alarm_promise,
-      dc_alarm_promise,
-      other_alarm_promise,
-      gc_alarm_promise,
-    ])
-      // .then(() => {
-      //   console.log("All alarm_processor: Suc!");
-      // })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-}
-// Set up the interval to make the API call regularly
-setInterval(alarm_processor_call, 3000);
+//     Promise.all([
+//       lc1_alarm_promise,
+//       lc2_alarm_promise,
+//       lc3_alarm_promise,
+//       lc4_alarm_promise,
+//       dc_alarm_promise,
+//       other_alarm_promise,
+//       gc_alarm_promise,
+//     ])
+//       // .then(() => {
+//       //   console.log("All alarm_processor: Suc!");
+//       // })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   }
+// }
+// // Set up the interval to make the API call regularly
+// setInterval(alarm_processor_call, 3000);
 
 module.exports = router;
 

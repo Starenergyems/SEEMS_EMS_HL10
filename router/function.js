@@ -335,6 +335,7 @@ function mapWordStatus(rawData, mapTable) {
   return `Not found(${rawData})`;
 }
 
+
 function mapBitStatus(bitString, mapTable, NumberOfBit) {
   if (bitString[0] === "#") {
     return "#*#";

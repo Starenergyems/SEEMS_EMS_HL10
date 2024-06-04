@@ -17,19 +17,20 @@ require('dotenv').config();
 
 const test_alarm = "test_alarm";
 const test_alarm_nanoDb = nano.use(test_alarm);
+
 //********************************************************************************* */
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
 //********************************************************************************* */
 //發訊息通用
-const accessToken = '7brkubEfNqOzx8Y4PEgiwrRXqU7sdMwXBWgfoLHwWI6'; //測試用的token
+//const accessToken = '7brkubEfNqOzx8Y4PEgiwrRXqU7sdMwXBWgfoLHwWI6'; //測試用的token
 
 function sendLineNotify(message) {
   const request = {
       method: "post",
       url: "https://notify-api.line.me/api/notify",
       headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${process.env.LineNotifyToken}`,
           //Authorization: `Bearer ${process.env.LineNotifyToken}`, //正式token
           "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -57,91 +58,105 @@ function sendLineNotify(message) {
 
 async function processDocs() {
   try {
-      // 查詢所有資料
+    // 查詢所有資料
     const response = await test_alarm_nanoDb.list({ include_docs: true });
     const docs = response.rows.map(row => row.doc);
-    //console.log(docs);
-    //const doc = docs[2];
-    //console.log(docs[2]);
+    
     let sended = false;
     let flag = 0;
-    let trans_level ;
+    let trans_level;
+
+    // 要忽略的 _id 列表
+    const ignoreIds = [
+      'lc1_rf10.BMS1.404011:14',
+      'lc2_rf10.BMS1.404011:14',
+      'lc3_rf10.BMS1.404011:14',
+      'lc4_rf10.BMS1.404011:14',
+      'lc1_rf10.BMS2.404011:14',
+      'lc2_rf10.BMS2.404011:14',
+      'lc3_rf10.BMS2.404011:14',
+      'lc4_rf10.BMS2.404011:14',
+      'lc1_rf10.BMS1.404011:15',
+      'lc2_rf10.BMS1.404011:15',
+      'lc3_rf10.BMS1.404011:15',
+      'lc4_rf10.BMS1.404011:15',
+      'lc1_rf10.BMS2.404011:15',
+      'lc2_rf10.BMS2.404011:15',
+      'lc3_rf10.BMS2.404011:15',
+      'lc4_rf10.BMS2.404011:15',
+      'lc1_rf10.System.402013',
+      'lc2_rf10.System.402013',
+      'lc3_rf10.System.402013',
+      'lc4_rf10.System.402013'
+    ];
+
     for (const doc of docs) {
-      // for (let i = 0; i < Math.min(docs.length, 10); i++) {
-        //const doc = docs[i];
-         if (doc._id.startsWith('_design/')) {
-             continue;
-         }
-          if (!doc.line_notify) { // 如果line_notify屬性為false
-            flag++;
-            //console.log("目前處理的資料是: ", doc);
-            const formattedTime = moment(doc.occurrence_time).format("YYYY/MM/DD - HH時mm分ss秒");
-            if(doc.level ==="Event"){
-              recoverstatus = "狀態改變";
-              trans_level = "事件";
-         }
-         else if(doc.level ==="Fault"){
-          trans_level = "Fault";
-            if(doc.recover == true){
+      if (doc._id.startsWith('_design/')) {
+        continue;
+      }
+      if(!ignoreIds.includes(doc._id)){
+        if (!doc.line_notify) { // 如果 line_notify 屬性為 false
+          flag++;
+          const formattedTime = moment(doc.occurrence_time).format("YYYY/MM/DD-HH時mm分ss秒");
+  
+          if (doc.level === "Event") {
+            recoverstatus = "狀態改變";
+            trans_level = "事件";
+          } else if (doc.level === "Fault") {
+            trans_level = "Fault";
+            if (doc.recover) {
               recoverstatus = "復歸";
-            }
-            else{
+            } else {
               recoverstatus = "觸發";
             }
-        }
-          else { 
-              trans_level = "Alarm";
- 
-              if(doc.recover == true){
-                recoverstatus = "復歸";
-              }
-              else{
-                recoverstatus = "觸發";
-              }
+          } else {
+            trans_level = "Alarm";
+            if (doc.recover) {
+              recoverstatus = "復歸";
+            } else {
+              recoverstatus = "觸發";
+            }
           }
-
-            const message = ` 案場狀態通知
-● 設備名稱 : ${doc.device}
-  ( ID : ${doc._id} )
-● 發生時間 :
-     ${formattedTime}
-● 告警等級 : ${trans_level}
-● 設備狀態 :  ${recoverstatus}
-● 告警內容 :
-     ${doc.content}
-● 目前數值 :  ${doc.value}`;
-
-              //const trimmedMessage = message.trim();    
-              // 傳送資料至Line Notify
-              await sendLineNotify(message);
-              //await test_alarm_nanoDb.insert(doc);
-              // 更新資料庫中的line_notify屬性為true，使用版本控制
-              let insertAttempt = false;
-              while (!insertAttempt) {
-                try {
-                  // 重新讀取最新的文檔版本
-                  const latestDoc = await test_alarm_nanoDb.get(doc._id);
-                  latestDoc.line_notify = true; // 更新line_notify屬性
-                  await test_alarm_nanoDb.insert(latestDoc); // 插入新版本的文檔
-                  insertAttempt = true; // 插入成功，跳出循環
-                } catch (conflictError) {
-                  console.log('更新文檔時發生衝突，正在重新讀取最新版本並重試更新...');
-                }
-              }
-              //console.log('已修改"line_notify"發送狀態');
-              sended = true;
-              return sended;
-              }
+  
+        const message = `
+${formattedTime}
+設備 : ${doc.device}
+ID : ${doc._id}
+內容 :${doc.content}
+數值 : ${doc.value}`;
+  
+  
+          // 傳送資料至 Line Notify
+          await sendLineNotify(message);
+  
+          // 更新資料庫中的 line_notify 屬性為 true，使用版本控制
+          let insertAttempt = false;
+          while (!insertAttempt) {
+            try {
+              // 重新讀取最新的文檔版本
+              const latestDoc = await test_alarm_nanoDb.get(doc._id);
+              latestDoc.line_notify = true; // 更新 line_notify 屬性
+              await test_alarm_nanoDb.insert(latestDoc); // 插入新版本的文檔
+              insertAttempt = true; // 插入成功，跳出循環
+            } catch (conflictError) {
+              console.log('更新文檔時發生衝突，正在重新讀取最新版本並重試更新...');
+            }
+          }
+  
+          sended = true;
+          return sended;
+        }
       }
-      
-       if(flag === 0){
-      //   console.log('目前所有的line通知已發送');
-        return sended;
-       }
-      
+
+    }
+
+    if (flag === 0) {
+      // 所有的 line 通知已發送
+      return sended;
+    }
+
   } catch (error) {
-      //console.log("**********************************************************");
-      console.error('processDocs 處理資料時發生錯誤:', error);
+    console.error('processDocs:處理資料時發生錯誤:', error);
   }
 }
 
@@ -193,7 +208,7 @@ const timer = setInterval(async () => {
     clearInterval(timer); // 如果超過每小時請求上限，停止計時器
     const message = `
 ${now}:
-已達到每小時請求上限1000則訊息，已暫停發送通知 !
+已達到每小時上限1000則訊息，已暫停發送通知 !
 請注意該小時系統情況，待整點後恢復Line告警功能`;
     sendLineNotify(message);
     return;
@@ -210,7 +225,8 @@ ${now}:
 // 初始設置重置計數
 resetRequestCount();
 
-setInterval(delprocessDocs,5000);
+setInterval(delprocessDocs,3000);
+
 
 // 修改為：
 module.exports = {

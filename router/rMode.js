@@ -52,19 +52,6 @@ const mangoQuery = {
   limit: 1
 };
 
-//app.use(myMiddleware);
-
-//const { authentication } = require("./authMiddleware");
-
-// app.get('*', (req, res, next) => {
-//   // Assuming `authentication` returns true if authenticated, false otherwise
-//   if (!authentication(req)) {
-//     // If authentication fails, you may send a response or perform some other action
-//     console.log("doaihdihas")
-//     return res.status(401).send('Unauthorized');
-//   }
-//   // If authenticated, continue to the next middleware or route handler
-// });
 
 /************************************************************************************ */
 
@@ -620,7 +607,7 @@ router.post("/set_freqVsP_Data", async (req, res) => {
           doc[i] = {
             tag: `system.${freqVsP_MT[Object.keys(freqVsP_MT)[i]].dataID}`,
             time: logTime,
-            category: "系統模式10",
+            category: "系統模式",
             device: "GC",
             username: "SE0008",
             content: `將${freqVsP_MT[Object.keys(freqVsP_MT)[i]].log_dataName}設為${log_dataValue[i]} ${freqVsP_MT[Object.keys(freqVsP_MT)[i]].unit}`
@@ -833,7 +820,7 @@ router.post("/set_socRef_Data", async (req, res) => {
           doc[i] = {
             tag: `system.${socRef_MT[Object.keys(socRef_MT)[i]].dataID}`,
             time: logTime,
-            category: "系統模式11",
+            category: "系統模式",
             device: "GC",
             username: "SE0008",
             content: `將${socRef_MT[Object.keys(socRef_MT)[i]].log_dataName}設為${log_dataValue[i]} ${socRef_MT[Object.keys(socRef_MT)[i]].unit}`
@@ -1377,7 +1364,7 @@ router.post("/set_Schedule_Data", async (req, res) => {
         const doc = {
           tag: `schedule.${Date_of_Schd_set} & API.${Date_of_Schd_set}`,
           time: logTime,
-          category: "系統模式12",
+          category: "系統模式",
           device: "GC",
           username: req.body.id,
           //username: "SE0008"
