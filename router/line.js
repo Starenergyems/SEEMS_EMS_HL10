@@ -97,7 +97,8 @@ async function processDocs() {
       if(!ignoreIds.includes(doc._id)){
         if (!doc.line_notify) { // 如果 line_notify 屬性為 false
           flag++;
-          const formattedTime = moment(doc.occurrence_time).format("YYYY/MM/DD-HH時mm分ss秒");
+          const formattedDate = moment(doc.occurrence_time).format("YYYY/MM/DD");
+          const formattedTime = moment(doc.occurrence_time).format("HH時mm分ss秒");
   
           if (doc.level === "Event") {
             recoverstatus = "狀態改變";
@@ -119,7 +120,8 @@ async function processDocs() {
           }
   
         const message = `
-${formattedTime}
+日期 : ${formattedDate}
+時間 : ${formattedTime}
 設備 : ${doc.device}
 ID : ${doc._id}
 內容 :${doc.content}
