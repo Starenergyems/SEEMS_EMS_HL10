@@ -101,7 +101,7 @@ async function update(database, doc, data){
 }
 
 async function del(database, doc=null){
-  res = await httpRequest(url = `http://192.168.1.12:5984/${database}/${doc}`, method="DELETE", data=data)
+  res = await httpRequest(url = `http://192.168.1.10:5984/${database}/${doc}`, method="DELETE", data=data)
   return res
 }
 
