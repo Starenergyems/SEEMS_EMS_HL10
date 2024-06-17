@@ -74,11 +74,12 @@ router.get("/account/personalinfo", async (req, res) => {
       name: resopnse.name,
       company: resopnse.company,
       department: resopnse.department,
-      permission: translevel, //admin manager viewer
+      permission: resopnse.level, //admin manager viewer
       status: transstate, // activate,lock
       note: resopnse.note,
       lastlogin: resopnse.last_time
     };
+    // console.log(content)
 
     const originalDateString = content.lastlogin;
     const originalDate = new Date(originalDateString);
@@ -170,7 +171,8 @@ router.get("/account/personalinfo/log", async (req, res) => {
 
 
 router.get("/account/system", (req, res) => {
-  res.render("SysManage");
+  let permission = req.body.permission;
+  res.render("SysManage", {permission:permission});
 });
 
 

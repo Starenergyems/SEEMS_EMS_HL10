@@ -45,12 +45,14 @@ app.use(cors());
 //報表
 router.get("/report", (req, res) => {
   // num與fun
-  res.render("Rpt_Report");
+  let permission = req.body.permission;
+  res.render("Rpt_Report", {permission:permission});
 });
 
 router.get("/report/report", (req, res) => {
   // num與fun
-  res.render("Rpt_Report");
+  let permission = req.body.permission;
+  res.render("Rpt_Report", {permission:permission});
 });
 
 

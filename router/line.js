@@ -195,28 +195,29 @@ const intervalTime = 1000; // 每1秒執行一次
 
 const resetRequestCount = () => {
   const now = new Date();
-  const millisecondsUntilNextHour = (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000 - now.getMilliseconds();
+  const nextHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0, 0, 0);
+  const millisecondsUntilNextHour = nextHour - now;
   
   setTimeout(() => {
     requestCount = 0;
+    console.log(`Request count reset at ${new Date()}`);
     resetRequestCount(); // 設置下一次重置計數
   }, millisecondsUntilNextHour);
 };
 
 const timer = setInterval(async () => {
   const now = new Date();
-  
   if (requestCount >= maxRequestsPerHour) {
     clearInterval(timer); // 如果超過每小時請求上限，停止計時器
     const message = `
 ${now}:
-已達到每小時上限1000則訊息，已暫停發送通知 !
+已達到每小時上限1000則訊息，已暫停發送通知!
 請注意該小時系統情況，待整點後恢復Line告警功能`;
     sendLineNotify(message);
     return;
   }
 
-  // 每三秒執行一次processDocs()功能
+  // 每一秒執行一次processDocs()功能
   const sended = await processDocs();
 
   if (sended === true) {
@@ -227,7 +228,9 @@ ${now}:
 // 初始設置重置計數
 resetRequestCount();
 
-setInterval(delprocessDocs,3000);
+// 假設delprocessDocs函數每3秒執行一次
+setInterval(delprocessDocs, 3000);
+
 
 
 // 修改為：

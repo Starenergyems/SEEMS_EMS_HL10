@@ -155,7 +155,7 @@ app.get("/login", async (req, res) => {
   const context = {
     logintext: `${logintext}`
   };
-  res.render("Login", { context: context,latestValues, latestValues2 });
+  res.render("Login", { context: context, latestValues, latestValues2 });
 });
 
 app.get(["/", "/signin"], (req, res) => {
@@ -173,7 +173,10 @@ app.post("/login", async (req, res) => {
     // console.log(config.duration*3600)
     const response = await submit(email, password);
     if (response["result"] === true && response["repwd"] !== 1 ) {
-      res.cookie("token", response["token"]);
+      res.cookie("token", response["token"],{ 
+        maxAge: 3600000, // 1 hour in milliseconds
+        httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
+      });
       //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
       // if cookies add this the cookies will live 10s, and will not abandon after close browser.
@@ -181,7 +184,10 @@ app.post("/login", async (req, res) => {
       const HOST_IP = process.env.HOST_IP;
       res.json({ redirect: `/mode` });
     } else if (response["result"] === true && response["repwd"] === 1){  
-      res.cookie("token", response["token"]);
+      res.cookie("token", response["token"],{ 
+        maxAge: 3600000, // 1 hour in milliseconds
+        httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
+      });
       res.json({ redirect: `/repassword` });
     } else {
       res.json({ text: response["text"] });
@@ -306,7 +312,7 @@ async function getData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 }) 
+      .set({ hour: 00, minute: 01, second: 00, millisecond: 0 }) 
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -723,6 +729,7 @@ const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");
 const login = require("./rLogin");
+const { permission } = require("process");
 // const { authentication } = require("./authMiddleware");
 //***************************************************************************************************************** */
 // 使用這些路由

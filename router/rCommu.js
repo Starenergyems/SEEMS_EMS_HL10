@@ -84,7 +84,7 @@ router.get("/systeminfo", (req, res) => {
 
 let Comm_KeyValuePairs;
 
-async function query_Comm_KeyValuePairs() {
+async function query_Comm_KeyValuePairs(req) {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nano = createNanoInstance(dbName);
@@ -110,6 +110,7 @@ async function query_Comm_KeyValuePairs() {
 
 
   Comm_KeyValuePairs = {
+    permission: req.body.permission,
     Comm_EMS_1: "setToClose",
     Comm_EMS_2: "setToClose",
     Comm_DC: "setToClose",        //dc的存活要利用心跳去判斷
@@ -176,7 +177,8 @@ async function query_Comm_KeyValuePairs() {
 
 router.get("/systeminfo/comm", async (req, res) => {
   try {
-    await query_Comm_KeyValuePairs();
+    // let permission = req.body.permission;
+    await query_Comm_KeyValuePairs(req);
     res.render("Sys_Comm", Comm_KeyValuePairs);
   } catch (error) {
     console.error(error);

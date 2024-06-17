@@ -204,7 +204,7 @@ router.get("/operateinfo/singlelinediagram", async (req, res) => {
   try {
     await query_SLD_KeyValuePairs(req);
     //console.log(SLD_KeyValuePairs);
-
+    let permission = req.body.permission;
     res.render("Op_Meter_SLD", SLD_KeyValuePairs);
   } catch (error) {
     console.error(error);
@@ -457,7 +457,7 @@ const databases_AuxM = [
 
 let AuxM_KeyValuePairs;
 
-async function query_AuxM_KeyValuePairs() {
+async function query_AuxM_KeyValuePairs(req) {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases_AuxM.map(async (dbName) => {
     const nanoDb = createNanoInstance(dbName);
@@ -468,7 +468,8 @@ async function query_AuxM_KeyValuePairs() {
   const other10Data = allData[0];
 
   AuxM_KeyValuePairs = {
-    permission: "manager",
+    // permission:"manager",
+    permission: req.body.permission,
 
     V_Aux_total: Scale_Data(other10Data.AuxMtot1[408069], 0.1, 1),
     I_Aux_total: Scale_Data(other10Data.AuxMtot1[408071], 0.001, 2),
@@ -524,9 +525,9 @@ async function query_AuxM_KeyValuePairs() {
 
 router.get("/operateinfo/auxmeter", async (req, res) => {
   try {
-    await query_AuxM_KeyValuePairs();
+    await query_AuxM_KeyValuePairs(req);
     //console.log(AuxM_KeyValuePairs);
-
+    // let permission = req.body.permission;
     res.render("Op_Meter_AuxMeter", AuxM_KeyValuePairs);
   } catch (error) {
     console.error(error);
@@ -536,7 +537,7 @@ router.get("/operateinfo/auxmeter", async (req, res) => {
 
 router.get("/operateinfo/auxmeter/:data", async (req, res) => {
   try {
-    await query_AuxM_KeyValuePairs();
+    await query_AuxM_KeyValuePairs(req);
 
     res.json(AuxM_KeyValuePairs);
   } catch (error) {
