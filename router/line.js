@@ -41,17 +41,12 @@ function sendLineNotify(message) {
   };
 
   return axios(request)
-  .then((resp) => {
-    // console.log("New Notify:",
-    // resp.data);
-  })
-  .catch((err) => {
-    console.error(
-      //"Line Notify Error",
-      err.response.data,
-      err.response.request.path
-    );
-  });
+    .then((resp) => {
+      console.log("New Notify:", resp.data);
+    })
+    .catch((err) => {
+      console.error("Line Notify Error:", err.response.data, err.response.request.path);
+    });
 }
 //********************************************************************************* */
 //執行判斷

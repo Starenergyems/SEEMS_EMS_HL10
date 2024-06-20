@@ -201,8 +201,17 @@ app.post("/login", async (req, res) => {
 
 //////////////////////////////////////////////////////////////////////////////
 app.get("/repassword", async (req, res) => {
-  // console.log("repassword")
-  res.render("repassword")})
+  const config = await getconfig()
+  // console.log(config)
+  const content = {
+    minTotal: config.atleast,
+    maxTotal: config.atmost,
+    minUpper: config.upper,
+    minLower: config.lower,
+    minSpe: config.special,
+    minNum: config.number
+  }
+  res.render("repassword", content)})
 
 app.post("/repassword", async (req, res) => {
   console.log("repassword")
@@ -240,13 +249,14 @@ app.post("/repassword", async (req, res) => {
   
     if (password !== old || old === newa || newa !== newb || old === "" || newa === "" || newb === "" || digitCount < config["number"] || upperCaseCount < config["upper"] || lowerCaseCount < config["lower"] || specialCharCount < config["special"]) {
       console.log("Input data error.")
+      res.json({ text: `輸入資料錯誤` })
     } else {
       password = newa
       await updateaccount(id,"",password,"",repwd=0)
       console.log("Change password success.")
-      return {"redirect":"/mode"}
-      return res.redirect(302, "/mode");
-      console.log("跳轉失敗")
+      res.json({ redirect: `/mode` })
+      // return res.redirect(302, "/mode");
+      // console.log("跳轉失敗")
     }
   } 
   catch (error) {

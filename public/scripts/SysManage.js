@@ -98,18 +98,8 @@ async function dataPost(form, url) {//提交表單
 		$(form).off('submit').submit(function (e) {
 			e.preventDefault();
 			console.log('POST');
-			// console.log(23232)
-			// console.log(777, typeof($(form).serialize()),$(form).serialize())
-			// console.log(5454)
-			// console.log(111,$(this))
 			let data = $(this).serialize()
-			// console.log(555,data)
-			// console.log(222,typeof(data),data)
-			// data["bottom"] = bottom
 			data = `${data}&bottom=${bottom}`
-			console.log(data);
-			// console.log(333,typeof(data),data)
-			// console.log(777, bottom)
 			hideEdit();//隱藏編輯框
 			$.ajax({
 				type: 'POST',
