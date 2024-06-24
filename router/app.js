@@ -12,11 +12,17 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 require("dotenv").config();
-const { getconfig, submit, authentication, findaccount,updateaccount } = require("./rLogin");
+const {
+  getconfig,
+  submit,
+  authentication,
+  findaccount,
+  updateaccount
+} = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
-const {autoDownload} = require("./rReport")
+const { autoDownload } = require("./rReport");
 const axios = require("axios");
 //const fetch = require("node-fetch");
 //如果要換資料庫的host 改掉".database"
@@ -26,7 +32,7 @@ const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
 const { mapL_M_systemMode, scaleProcess, mapminSOH } = require("./function");
-const { sendLineNotify } = require("./line")
+const { sendLineNotify } = require("./line");
 // Middleware
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -75,32 +81,31 @@ lc3nanoDb.createIndex(indexDef);
 lc4nanoDb.createIndex(indexDef);
 alarmnanoDb.createIndex(indexDef);
 //***************************************************************************************************************** */
-app.get("/test", async (req, res) => { 
-  const CREDENTIALS = Buffer.from(`${couchdbConfig.username}:${couchdbConfig.password}`).toString('base64');
+app.get("/test", async (req, res) => {
+  const CREDENTIALS = Buffer.from(
+    `${couchdbConfig.username}:${couchdbConfig.password}`
+  ).toString("base64");
   const AUTHORIZATION = "Basic " + CREDENTIALS;
-  const URL = `http://${couchdbConfig.host}:${couchdbConfig.port}/${couchdbConfig.account}/_all_docs?include_docs=true`
+  const URL = `http://${couchdbConfig.host}:${couchdbConfig.port}/${couchdbConfig.account}/_all_docs?include_docs=true`;
   const response = await fetch(URL, {
     method: "GET",
     headers: { Authorization: AUTHORIZATION },
-    credentials: "include",
+    credentials: "include"
   });
-  data = await response.json()
+  data = await response.json();
   //console.log(typeof(data))
   // for (let i =0 )
-  let rrr = []
-  // 
-  for (let i = 0; i < 4; i++){
-    rrrr = {}
-  for (const [key, value] of Object.entries(data.rows[i].doc)) 
-{
-  rrrr[key] = value
-}
-rrr.push(rrrr)
-}
-//console.log(rrr)
-})  
-
-
+  let rrr = [];
+  //
+  for (let i = 0; i < 4; i++) {
+    rrrr = {};
+    for (const [key, value] of Object.entries(data.rows[i].doc)) {
+      rrrr[key] = value;
+    }
+    rrr.push(rrrr);
+  }
+  //console.log(rrr)
+});
 
 // Login page. URL = "/login", LOGIN_URL can redirect.
 app.get("/login", async (req, res) => {
@@ -111,44 +116,44 @@ app.get("/login", async (req, res) => {
   let logintext = response["logintext"];
   //let logintext = "hi";
   getData();
-    const Values = await getLatestValuesFromDatabase();
-    //沒有計算 純粹讀取+換算
-    const Values2 = await getLatestValuesFromDatabaseforother();
+  const Values = await getLatestValuesFromDatabase();
+  //沒有計算 純粹讀取+換算
+  const Values2 = await getLatestValuesFromDatabaseforother();
 
-    var latestValues = {
-      permission: req.body.permission,
-      userAccount: req.body.id,
-      totalAlarmNum: Values[0],
-      AlarmNum_Sys: Values[1], //新增`
-      AlarmNum_Bat: Values[2],
-      AlarmNum_PCS: Values[3],
-      AlarmNum_FF: Values[4],
-      AlarmNum_Env: Values[5],
-      AlarmNum_Meter: Values[6],
-      //
-      totalWarningNum: Values[7],
-      WarningNum_Sys: Values[8], //新增
-      WarningNum_Bat: Values[9],
-      WarningNum_PCS: Values[10],
-      WarningNum_FF: Values[11],
-      WarningNum_Env: Values[12],
-      WarningNum_Meter: Values[13]
-    };
+  var latestValues = {
+    permission: req.body.permission,
+    userAccount: req.body.id,
+    totalAlarmNum: Values[0],
+    AlarmNum_Sys: Values[1], //新增`
+    AlarmNum_Bat: Values[2],
+    AlarmNum_PCS: Values[3],
+    AlarmNum_FF: Values[4],
+    AlarmNum_Env: Values[5],
+    AlarmNum_Meter: Values[6],
+    //
+    totalWarningNum: Values[7],
+    WarningNum_Sys: Values[8], //新增
+    WarningNum_Bat: Values[9],
+    WarningNum_PCS: Values[10],
+    WarningNum_FF: Values[11],
+    WarningNum_Env: Values[12],
+    WarningNum_Meter: Values[13]
+  };
 
-    var latestValues2 = {
-      L_M_systemMode: Values2[0],
-      L_M_freq: Values2[1],
-      L_M_activeP: Values2[2],
-      L_M_reactiveP: Values2[3],
-      L_M_voltage: Values2[4],
-      L_M_current: Values2[5],
-      L_M_powerFactor: Values2[6],
-      L_M_avgSOC: Values2[7],
-      L_M_minSOH: Values2[8],
-      L_M_SBSPM: Values2[9],
-      L_M_chgEtoday: Values2[10],
-      L_M_dcgEtoday: Values2[11]
-    };
+  var latestValues2 = {
+    L_M_systemMode: Values2[0],
+    L_M_freq: Values2[1],
+    L_M_activeP: Values2[2],
+    L_M_reactiveP: Values2[3],
+    L_M_voltage: Values2[4],
+    L_M_current: Values2[5],
+    L_M_powerFactor: Values2[6],
+    L_M_avgSOC: Values2[7],
+    L_M_minSOH: Values2[8],
+    L_M_SBSPM: Values2[9],
+    L_M_chgEtoday: Values2[10],
+    L_M_dcgEtoday: Values2[11]
+  };
   // const response["logintext"] === undefined? logintext="" : logintext=response["logintext"];
   // console.log(logintext);
   // console.log("eee")
@@ -166,15 +171,15 @@ app.get(["/", "/signin"], (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    console.log(req.ip)
+    console.log(req.ip);
     const email = req.body["username"];
     const password = req.body["password"];
     //console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
     // const config = await getconfig()
     // console.log(config.duration*3600)
     const response = await submit(email, password);
-    if (response["result"] === true && response["repwd"] !== 1 ) {
-      res.cookie("token", response["token"],{ 
+    if (response["result"] === true && response["repwd"] !== 1) {
+      res.cookie("token", response["token"], {
         maxAge: 3600000, // 1 hour in milliseconds
         httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
       });
@@ -184,8 +189,8 @@ app.post("/login", async (req, res) => {
       //const localhost = "localhost";
       const HOST_IP = process.env.HOST_IP;
       res.json({ redirect: `/mode` });
-    } else if (response["result"] === true && response["repwd"] === 1){  
-      res.cookie("token", response["token"],{ 
+    } else if (response["result"] === true && response["repwd"] === 1) {
+      res.cookie("token", response["token"], {
         maxAge: 3600000, // 1 hour in milliseconds
         httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
       });
@@ -202,7 +207,7 @@ app.post("/login", async (req, res) => {
 
 //////////////////////////////////////////////////////////////////////////////
 app.get("/repassword", async (req, res) => {
-  const config = await getconfig()
+  const config = await getconfig();
   // console.log(config)
   const content = {
     minTotal: config.atleast,
@@ -211,59 +216,71 @@ app.get("/repassword", async (req, res) => {
     minLower: config.lower,
     minSpe: config.special,
     minNum: config.number
-  }
-  res.render("repassword", content)})
+  };
+  res.render("repassword", content);
+});
 
 app.post("/repassword", async (req, res) => {
-  console.log("repassword")
+  console.log("repassword");
   try {
-    const config = await getconfig()
+    const config = await getconfig();
     // const token = req.cookies.token
-    const response = req.body
-    const old = response.old
-    const newa = response.newa
-    const newb = response.newb
-    const token = req.cookies.token
+    const response = req.body;
+    const old = response.old;
+    const newa = response.newa;
+    const newb = response.newb;
+    const token = req.cookies.token;
     const account = await findaccount("", token);
-    const id = account.id
-    let password = account.password
+    const id = account.id;
+    let password = account.password;
     let digitCount = 0;
     let upperCaseCount = 0;
     let lowerCaseCount = 0;
     let specialCharCount = 0;
     // console.log("gagaaga")
     for (let i = 0; i < newa.length; i++) {
-        const char = newa[i];
-        if (/[0-9]/.test(char)) {
-            digitCount++;
-        } else if (/[A-Z]/.test(char)) {
-            upperCaseCount++;
-        } else if (/[a-z]/.test(char)) {
-            lowerCaseCount++;
-        } else {
-            specialCharCount++;
-        }
+      const char = newa[i];
+      if (/[0-9]/.test(char)) {
+        digitCount++;
+      } else if (/[A-Z]/.test(char)) {
+        upperCaseCount++;
+      } else if (/[a-z]/.test(char)) {
+        lowerCaseCount++;
+      } else {
+        specialCharCount++;
+      }
     }
     // console.log(password, old, newa, newb)
     // console.log(digitCount, upperCaseCount, lowerCaseCount, specialCharCount)
     // console.log(config["number"], config["upper"], config["lower"], config["special"])
-  
-    if (password !== old || old === newa || newa !== newb || old === "" || newa === "" || newb === "" || digitCount < config["number"] || upperCaseCount < config["upper"] || lowerCaseCount < config["lower"] || specialCharCount < config["special"]) {
-      console.log("Input data error.")
-      res.json({ text: `輸入資料錯誤` })
+
+    if (
+      password !== old ||
+      old === newa ||
+      newa !== newb ||
+      old === "" ||
+      newa === "" ||
+      newb === "" ||
+      digitCount < config["number"] ||
+      upperCaseCount < config["upper"] ||
+      lowerCaseCount < config["lower"] ||
+      specialCharCount < config["special"]
+    ) {
+      console.log("Input data error.");
+      res.json({ text: `輸入資料錯誤` });
     } else {
-      password = newa
-      await updateaccount(id,"",password,"",repwd=0)
-      console.log("Change password success.")
-      res.json({ redirect: `/mode` })
+      password = newa;
+      await updateaccount(id, "", password, "", (repwd = 0));
+      console.log("Change password success.");
+      res.json({ redirect: `/mode` });
       // return res.redirect(302, "/mode");
       // console.log("跳轉失敗")
     }
-  } 
-  catch (error) {
-      console.error("Error:", error);
-      res.status(500).send("Internal Server Error");
-  }})
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 //////////////////////////////////////////////////////////////////////////////
 
 app.get("/health", (req, res) => {
@@ -316,14 +333,14 @@ let flag = 0;
 
 async function getData() {
   const now = moment();
-  const startOfDay = moment().startOf("day").add(1, 'second'); // 當天的第二秒
+  const startOfDay = moment().startOf("day").add(1, "second"); // 當天的第二秒
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
       .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 01, second: 00, millisecond: 0 }) 
+      .set({ hour: 00, minute: 01, second: 00, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -341,8 +358,11 @@ async function getData() {
     //console.log("midnightData", midnightData);
 
     //discharge capacity
-    for(let i = 0; i < 10; i++) {
-      if(midnightData.docs[i] && midnightData.docs[i].Freq["408030"] !== null) {
+    for (let i = 0; i < 10; i++) {
+      if (
+        midnightData.docs[i] &&
+        midnightData.docs[i].Freq["408030"] !== null
+      ) {
         const expValue = midnightData.docs[i].Freq["408030"];
         //console.log("i: " , i);
         //console.log("expValue: " , expValue);
@@ -770,9 +790,10 @@ app.get("/error", (req, res) => {
 
 server.listen(port, () => {
   console.log(`app.js 應用程式正在監聽端口 ${port}`);
+  const emsnumber = process.env.EMS_NUM;
   const HOST_IP = process.env.HOST_IP;
   const message = `
-EMS主程式重新啟動 !!
+EMS${emsnumber}主程式重新啟動 !!
 主機IP為：${HOST_IP}`;
   sendLineNotify(message);
 });
@@ -781,9 +802,10 @@ EMS主程式重新啟動 !!
 process.on("SIGINT", () => {
   server.close(() => {
     console.log("Server closed");
+    const emsnumber = process.env.EMS_NUM;
     const HOST_IP = process.env.HOST_IP;
     const message = `
-  EMS主程式已停止運作 !!
+  EMS${emsnumber}主程式已停止運作 !!
   主機IP為：${HOST_IP}`;
     sendLineNotify(message);
     process.exit(0);
@@ -797,5 +819,5 @@ function updateDataPeriodically() {
 //module.exports = { nano };
 app.get("/getPermission", (req, res) => {
   var permission = req.body.permission;
-  res.send({permission:permission});
+  res.send({ permission: permission });
 });

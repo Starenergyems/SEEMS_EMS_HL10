@@ -13,7 +13,7 @@ const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
 
-require('dotenv').config();
+require("dotenv").config();
 
 const test_alarm = "test_alarm";
 const test_alarm_nanoDb = nano.use(test_alarm);
@@ -27,17 +27,17 @@ router.use(methodOverride("_method"));
 
 function sendLineNotify(message) {
   const request = {
-      method: "post",
-      url: "https://notify-api.line.me/api/notify",
-      headers: {
-          Authorization: `Bearer ${process.env.LineNotifyToken}`,
-          //Authorization: `Bearer ${process.env.LineNotifyToken}`, //正式token
-          "Content-Type": "application/x-www-form-urlencoded",
-      },
-      params: {
-          message: message,
-      },
-      "data": {},
+    method: "post",
+    url: "https://notify-api.line.me/api/notify",
+    headers: {
+      Authorization: `Bearer ${process.env.LineNotifyToken}`,
+      //Authorization: `Bearer ${process.env.LineNotifyToken}`, //正式token
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    params: {
+      message: message
+    },
+    data: {}
   };
 
   return axios(request)
@@ -45,7 +45,11 @@ function sendLineNotify(message) {
       console.log("New Notify:", resp.data);
     })
     .catch((err) => {
-      console.error("Line Notify Error:", err.response.data, err.response.request.path);
+      console.error(
+        "Line Notify Error:",
+        err.response.data,
+        err.response.request.path
+      );
     });
 }
 //********************************************************************************* */
@@ -55,46 +59,51 @@ async function processDocs() {
   try {
     // 查詢所有資料
     const response = await test_alarm_nanoDb.list({ include_docs: true });
-    const docs = response.rows.map(row => row.doc);
-    
+    const docs = response.rows.map((row) => row.doc);
+
     let sended = false;
     let flag = 0;
     let trans_level;
 
     // 要忽略的 _id 列表
     const ignoreIds = [
-      'lc1_rf10.BMS1.404011:14',
-      'lc2_rf10.BMS1.404011:14',
-      'lc3_rf10.BMS1.404011:14',
-      'lc4_rf10.BMS1.404011:14',
-      'lc1_rf10.BMS2.404011:14',
-      'lc2_rf10.BMS2.404011:14',
-      'lc3_rf10.BMS2.404011:14',
-      'lc4_rf10.BMS2.404011:14',
-      'lc1_rf10.BMS1.404011:15',
-      'lc2_rf10.BMS1.404011:15',
-      'lc3_rf10.BMS1.404011:15',
-      'lc4_rf10.BMS1.404011:15',
-      'lc1_rf10.BMS2.404011:15',
-      'lc2_rf10.BMS2.404011:15',
-      'lc3_rf10.BMS2.404011:15',
-      'lc4_rf10.BMS2.404011:15',
-      'lc1_rf10.System.402013',
-      'lc2_rf10.System.402013',
-      'lc3_rf10.System.402013',
-      'lc4_rf10.System.402013'
+      "lc1_rf10.BMS1.404011:14",
+      "lc2_rf10.BMS1.404011:14",
+      "lc3_rf10.BMS1.404011:14",
+      "lc4_rf10.BMS1.404011:14",
+      "lc1_rf10.BMS2.404011:14",
+      "lc2_rf10.BMS2.404011:14",
+      "lc3_rf10.BMS2.404011:14",
+      "lc4_rf10.BMS2.404011:14",
+      "lc1_rf10.BMS1.404011:15",
+      "lc2_rf10.BMS1.404011:15",
+      "lc3_rf10.BMS1.404011:15",
+      "lc4_rf10.BMS1.404011:15",
+      "lc1_rf10.BMS2.404011:15",
+      "lc2_rf10.BMS2.404011:15",
+      "lc3_rf10.BMS2.404011:15",
+      "lc4_rf10.BMS2.404011:15",
+      "lc1_rf10.System.402013",
+      "lc2_rf10.System.402013",
+      "lc3_rf10.System.402013",
+      "lc4_rf10.System.402013"
     ];
 
     for (const doc of docs) {
-      if (doc._id.startsWith('_design/')) {
+      if (doc._id.startsWith("_design/")) {
         continue;
       }
-      if(!ignoreIds.includes(doc._id)){
-        if (!doc.line_notify) { // 如果 line_notify 屬性為 false
+      if (!ignoreIds.includes(doc._id)) {
+        if (!doc.line_notify) {
+          // 如果 line_notify 屬性為 false
           flag++;
-          const formattedDate = moment(doc.occurrence_time).format("YYYY/MM/DD");
-          const formattedTime = moment(doc.occurrence_time).format("HH時mm分ss秒");
-  
+          const formattedDate = moment(doc.occurrence_time).format(
+            "YYYY/MM/DD"
+          );
+          const formattedTime = moment(doc.occurrence_time).format(
+            "HH時mm分ss秒"
+          );
+
           if (doc.level === "Event") {
             recoverstatus = "狀態改變";
             trans_level = "事件";
@@ -113,19 +122,18 @@ async function processDocs() {
               recoverstatus = "觸發";
             }
           }
-  
-        const message = `
+
+          const message = `
 日期 : ${formattedDate}
 時間 : ${formattedTime}
 設備 : ${doc.device}
 ID : ${doc._id}
 內容 :${doc.content}
 數值 : ${doc.value}`;
-  
-  
+
           // 傳送資料至 Line Notify
           await sendLineNotify(message);
-  
+
           // 更新資料庫中的 line_notify 屬性為 true，使用版本控制
           let insertAttempt = false;
           while (!insertAttempt) {
@@ -136,24 +144,24 @@ ID : ${doc._id}
               await test_alarm_nanoDb.insert(latestDoc); // 插入新版本的文檔
               insertAttempt = true; // 插入成功，跳出循環
             } catch (conflictError) {
-              console.log('更新文檔時發生衝突，正在重新讀取最新版本並重試更新...');
+              console.log(
+                "更新文檔時發生衝突，正在重新讀取最新版本並重試更新..."
+              );
             }
           }
-  
+
           sended = true;
           return sended;
         }
       }
-
     }
 
     if (flag === 0) {
       // 所有的 line 通知已發送
       return sended;
     }
-
   } catch (error) {
-    console.error('processDocs:處理資料時發生錯誤:', error);
+    console.error("processDocs:處理資料時發生錯誤:", error);
   }
 }
 
@@ -161,26 +169,30 @@ async function delprocessDocs() {
   try {
     // 查詢所有資料
     const response = await test_alarm_nanoDb.list({ include_docs: true });
-    const docs = response.rows.map(row => row.doc);
+    const docs = response.rows.map((row) => row.doc);
     let flag = 0;
     for (const doc of docs) {
-      if (doc._id.startsWith('_design/')) {
+      if (doc._id.startsWith("_design/")) {
         continue;
       }
-      if (doc.read === true && doc.recover === true && doc.line_notify === true) {
+      if (
+        doc.read === true &&
+        doc.recover === true &&
+        doc.line_notify === true
+      ) {
         // 如果符合條件，直接刪除文檔
         try {
           await test_alarm_nanoDb.destroy(doc._id, doc._rev);
           flag++;
         } catch (error) {
-          console.error('刪除文檔時發生錯誤:', error);
+          console.error("刪除文檔時發生錯誤:", error);
         }
       }
     }
     // 回傳符合條件文檔的數量
     return flag;
   } catch (error) {
-    console.error('刪除已讀且復歸資料時發生錯誤:', error);
+    console.error("刪除已讀且復歸資料時發生錯誤:", error);
   }
 }
 
@@ -190,9 +202,17 @@ const intervalTime = 1000; // 每1秒執行一次
 
 const resetRequestCount = () => {
   const now = new Date();
-  const nextHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0, 0, 0);
+  const nextHour = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    now.getHours() + 1,
+    0,
+    0,
+    0
+  );
   const millisecondsUntilNextHour = nextHour - now;
-  
+
   setTimeout(() => {
     requestCount = 0;
     console.log(`Request count reset at ${new Date()}`);
@@ -226,10 +246,8 @@ resetRequestCount();
 // 假設delprocessDocs函數每3秒執行一次
 setInterval(delprocessDocs, 3000);
 
-
-
 // 修改為：
 module.exports = {
-    router,
-    sendLineNotify,
-  };
+  router,
+  sendLineNotify
+};

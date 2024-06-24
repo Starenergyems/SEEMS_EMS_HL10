@@ -46,15 +46,14 @@ app.use(cors());
 router.get("/report", (req, res) => {
   // num與fun
   let permission = req.body.permission;
-  res.render("Rpt_Report", {permission:permission});
+  res.render("Rpt_Report", { permission: permission });
 });
 
 router.get("/report/report", (req, res) => {
   // num與fun
   let permission = req.body.permission;
-  res.render("Rpt_Report", {permission:permission});
+  res.render("Rpt_Report", { permission: permission });
 });
-
 
 var specified_date; // 指定要撈哪天(會撈前一天) / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
 var specified_date_clone1;
@@ -94,12 +93,11 @@ var specified_date_clone23;
 
 /*************************************************************************************************** */
 
-
 router.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
-    console.log("手動下載開始")
-    await queryReport(req, res)
+    console.log("手動下載開始");
+    await queryReport(req, res);
   } catch (error) {
     console.error("Error generating Excel file:", error);
     res.status(500).send("Internal Server Error");
@@ -107,8 +105,9 @@ router.get("/report/download-excel", async (req, res) => {
 });
 
 /***************************************************************************************************** */
-var click_year, click_month, click_day
-const queryReport = async (req, res) => {//撈資料放入對應excel表格for前端手動下載
+var click_year, click_month, click_day;
+const queryReport = async (req, res) => {
+  //撈資料放入對應excel表格for前端手動下載
   const { templatePath, reportType, fileName } = req.query; //url要帶參數，fileName是從畫面上讀取的
   if (!templatePath) {
     return res.status(400).send("Missing templatePath parameter");
@@ -155,38 +154,43 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
   if (reportType === "年報") {
     couchData = await getYearData();
     const transformedDataforyear = transformData(couchData.dataforyear); //整理資料為陣列
-    const transformedTot = transformOtherSumTotal(couchData.otherSumTotal, couchData.totMWHTotal);
-    const transformedDataLast = transformDataLastDataYear(couchData.datayear_before_last);
+    const transformedTot = transformOtherSumTotal(
+      couchData.otherSumTotal,
+      couchData.totMWHTotal
+    );
+    const transformedDataLast = transformDataLastDataYear(
+      couchData.datayear_before_last
+    );
 
     updateExcel1DHorizon(workbook, transformedDataforyear[0][1], 0, "D6"); //1月
-    updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6");
     updateExcel1DHorizon(workbook, transformedDataforyear[1][1], 0, "D7"); //2月
-    updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7");
     updateExcel1DHorizon(workbook, transformedDataforyear[2][1], 0, "D8"); //3月
-    updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8");
     updateExcel1DHorizon(workbook, transformedDataforyear[3][1], 0, "D9"); //4月
-    updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9");
     updateExcel1DHorizon(workbook, transformedDataforyear[4][1], 0, "D10"); //5月
-    updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10");
     updateExcel1DHorizon(workbook, transformedDataforyear[5][1], 0, "D11"); //6月
-    updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11");
     updateExcel1DHorizon(workbook, transformedDataforyear[6][1], 0, "D12"); //7月
-    updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12");
     updateExcel1DHorizon(workbook, transformedDataforyear[7][1], 0, "D13"); //8月
-    updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13");
     updateExcel1DHorizon(workbook, transformedDataforyear[8][1], 0, "D14"); //9月
-    updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14");
     updateExcel1DHorizon(workbook, transformedDataforyear[9][1], 0, "D15"); //10月
-    updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15");
     updateExcel1DHorizon(workbook, transformedDataforyear[10][1], 0, "D16"); //11月
-    updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16");
     updateExcel1DHorizon(workbook, transformedDataforyear[11][1], 0, "D17"); //12月
-    updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17");
 
     updateExcel1DHorizon(workbook, couchData.sumArrayTotal, 0, "D18"); //總共
-    updateExcel1DHorizon(workbook, transformedTot, 0, "K18"); 
+    updateExcel1DHorizon(workbook, transformedTot, 0, "K18");
     updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
-    updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19"); 
+    updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19");
 
     // await workbook.toFileAsync(tempFilePath);
   } else if (reportType === "月報") {
@@ -217,29 +221,14 @@ const queryReport = async (req, res) => {//撈資料放入對應excel表格for�
   } else {
     console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
   }
-//************後端將excel存於本機指定位置/////////////////////////////////////////////////////////
-divideFileName(fileName); //將獨到的日期拆分為y, m, d
+  //************後端將excel存於本機指定位置/////////////////////////////////////////////////////////
+  divideFileName(fileName); //將獨到的日期拆分為y, m, d
   if (reportType === "年報") {
-    directoryPath = path.join(
-      "C",
-      "report",
-      `${click_year}`
-    ); //下載後存在哪，要跟getReport api同步
-
+    directoryPath = path.join("C", "report", `${click_year}`); //下載後存在哪，要跟getReport api同步
   } else if (reportType === "月報") {
-        directoryPath = path.join(
-        "C",
-        "report",
-      `${click_year}`
-    ); //下載後存在哪，要跟getReport api同步
-
+    directoryPath = path.join("C", "report", `${click_year}`); //下載後存在哪，要跟getReport api同步
   } else if (reportType === "日報") {
-    directoryPath = path.join(
-      "C",
-      "report",
-    `${click_year}`,
-    `${click_month}`
-  ); //下載後存在哪，要跟getReport api同步
+    directoryPath = path.join("C", "report", `${click_year}`, `${click_month}`); //下載後存在哪，要跟getReport api同步
 
     //   directoryPath = path.join( 測試未成功
     //   //在linux中測試
@@ -250,7 +239,6 @@ divideFileName(fileName); //將獨到的日期拆分為y, m, d
     //   `${click_year}`,
     //   `${click_month}` //這個有成功存在"router" "/C/report/2024/3"
     // ); //下載後存在哪，要跟getReport api同步
-
   } else {
     console.log("參數設置錯誤，報表種類應為年報/月報/日報");
   }
@@ -268,12 +256,10 @@ divideFileName(fileName); //將獨到的日期拆分為y, m, d
     }
   }
 
-
-
   await workbook.toFileAsync(filePath);
   console.log("報表儲存於", filePath);
 
-//回覆給前端/////////////////////////////////////////////////////////
+  //回覆給前端/////////////////////////////////////////////////////////
   // Set up response headers for Excel file download
   res.setHeader(
     "Content-Type",
@@ -290,30 +276,30 @@ divideFileName(fileName); //將獨到的日期拆分為y, m, d
   // fileStream.on("end", () => {
   //   fs.unlinkSync(tempFilePath);
   // });
+};
 
-}
+const queryReport_auto = async (template) => {
+  //撈資料放入對應excel表格for後端自動下載呼叫
 
-const queryReport_auto = async (template) => {//撈資料放入對應excel表格for後端自動下載呼叫
-  
   if (!template) {
     return res.status(400).send("Missing templatePath parameter");
   }
   let directoryPath, filePath, reportType;
 
-    if (template === "YearReport"){
-      reportType = "年報";
-    } else if (template === "MonthReport"){
-      reportType = "月報"
-    } else if (template === "DayReport"){
-      reportType = "日報"
-    } else {
-      console.error("報表模板檔名異常,應為YearReport, MonthReport, DayReport")
-    }
-    let today =  formatedDate(new Date());//今天幾號
-    let queryDate = removeDatePart(template, today); //
-    //console.log("today", today);
+  if (template === "YearReport") {
+    reportType = "年報";
+  } else if (template === "MonthReport") {
+    reportType = "月報";
+  } else if (template === "DayReport") {
+    reportType = "日報";
+  } else {
+    console.error("報表模板檔名異常,應為YearReport, MonthReport, DayReport");
+  }
+  let today = formatedDate(new Date()); //今天幾號
+  let queryDate = removeDatePart(template, today); //
+  //console.log("today", today);
 
-    yesterday(); //昨天幾年幾月幾日
+  yesterday(); //昨天幾年幾月幾日
   //console.log("queryDate:" + queryDate);
   specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
 
@@ -351,38 +337,43 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
   if (reportType === "年報") {
     couchData = await getYearData();
     const transformedDataforyear = transformData(couchData.dataforyear); //整理資料為陣列
-    const transformedTot = transformOtherSumTotal(couchData.otherSumTotal, couchData.totMWHTotal);
-    const transformedDataLast = transformDataLastDataYear(couchData.datayear_before_last);
+    const transformedTot = transformOtherSumTotal(
+      couchData.otherSumTotal,
+      couchData.totMWHTotal
+    );
+    const transformedDataLast = transformDataLastDataYear(
+      couchData.datayear_before_last
+    );
 
     updateExcel1DHorizon(workbook, transformedDataforyear[0][1], 0, "D6"); //1月
-    updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6");
     updateExcel1DHorizon(workbook, transformedDataforyear[1][1], 0, "D7"); //2月
-    updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7");
     updateExcel1DHorizon(workbook, transformedDataforyear[2][1], 0, "D8"); //3月
-    updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8");
     updateExcel1DHorizon(workbook, transformedDataforyear[3][1], 0, "D9"); //4月
-    updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9");
     updateExcel1DHorizon(workbook, transformedDataforyear[4][1], 0, "D10"); //5月
-    updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10");
     updateExcel1DHorizon(workbook, transformedDataforyear[5][1], 0, "D11"); //6月
-    updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11");
     updateExcel1DHorizon(workbook, transformedDataforyear[6][1], 0, "D12"); //7月
-    updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12");
     updateExcel1DHorizon(workbook, transformedDataforyear[7][1], 0, "D13"); //8月
-    updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13");
     updateExcel1DHorizon(workbook, transformedDataforyear[8][1], 0, "D14"); //9月
-    updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14");
     updateExcel1DHorizon(workbook, transformedDataforyear[9][1], 0, "D15"); //10月
-    updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15");
     updateExcel1DHorizon(workbook, transformedDataforyear[10][1], 0, "D16"); //11月
-    updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16");
     updateExcel1DHorizon(workbook, transformedDataforyear[11][1], 0, "D17"); //12月
-    updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17"); 
+    updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17");
 
     updateExcel1DHorizon(workbook, couchData.sumArrayTotal, 0, "D18"); //總共
-    updateExcel1DHorizon(workbook, transformedTot, 0, "K18"); 
+    updateExcel1DHorizon(workbook, transformedTot, 0, "K18");
     updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
-    updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19"); 
+    updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19");
 
     // tempFilePath = path.join(__dirname, "temp.xlsx");
     // await workbook.toFileAsync(tempFilePath);
@@ -426,11 +417,7 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     //   "report",
     //   `${yesterdayY}`
     // ); //下載後存在哪，要跟getReport api同步
-    directoryPath = path.join(
-      "C",
-      "report",
-      `${yesterdayY}`
-    ); //下載後存在哪，要跟getReport api同步
+    directoryPath = path.join("C", "report", `${yesterdayY}`); //下載後存在哪，要跟getReport api同步
     filePath = path.join(directoryPath, yesterdayY + "y.xlsx"); //檔名叫什麼
   } else if (template === "MonthReport") {
     // directoryPath = path.join(
@@ -441,17 +428,12 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     //   "report",
     //   `${yesterdayY}`
     // ); //下載後存在哪，要跟getReport api同步
-        directoryPath = path.join(
-        "C",
-        "report",
-      `${yesterdayY}`
-    ); //下載後存在哪，要跟getReport api同步
+    directoryPath = path.join("C", "report", `${yesterdayY}`); //下載後存在哪，要跟getReport api同步
 
     filePath = path.join(
       directoryPath,
       `${yesterdayY}` + "y" + `${yesterdayM}` + "m.xlsx"
     ); //檔名叫什麼
-
   } else if (template === "DayReport") {
     // directoryPath = path.join(
     //   //在linux中測試
@@ -461,8 +443,8 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     //   "report",
     //   `${yesterdayY}`,
     //   `${yesterdayM}`
-    // ); 
-      directoryPath = path.join(
+    // );
+    directoryPath = path.join(
       //在linux中測試
       "C",
       "report",
@@ -482,12 +464,7 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
 
     filePath = path.join(
       directoryPath,
-      `${yesterdayY}` +
-        "y" +
-        `${yesterdayM}` +
-        "m" +
-        `${yesterdayD}` +
-        "d.xlsx"
+      `${yesterdayY}` + "y" + `${yesterdayM}` + "m" + `${yesterdayD}` + "d.xlsx"
     ); //檔名叫什麼
   } else {
     console.log("參數設置錯誤");
@@ -505,20 +482,26 @@ const queryReport_auto = async (template) => {//撈資料放入對應excel表格
     }
   }
 
-
-
   await workbook.toFileAsync(filePath);
   console.log("報表儲存於", filePath);
-}
+};
 // Function to transform the data
-function transformData(data) { //年報用，每月值整理成陣列
+function transformData(data) {
+  //年報用，每月值整理成陣列
   const transformedData = [];
 
   for (let i = 0; i < data.length; i += 8) {
     const monthData = [
       [data[i]], // Month string
       data[i + 1], // Numerical data
-      [data[i + 2], data[i + 3], data[i + 4], data[i + 5], data[i + 6], data[i + 7]] // Financial data
+      [
+        data[i + 2],
+        data[i + 3],
+        data[i + 4],
+        data[i + 5],
+        data[i + 6],
+        data[i + 7]
+      ] // Financial data
     ];
     transformedData.push(monthData);
   }
@@ -526,9 +509,10 @@ function transformData(data) { //年報用，每月值整理成陣列
   return transformedData;
 }
 
-function transformDataLastDataYear(data, data1) { //年報用，上期資料整理成陣列
+function transformDataLastDataYear(data, data1) {
+  //年報用，上期資料整理成陣列
   const transformedData = [
-    data[0], 
+    data[0],
     [data[1], data[2], data[3], data[4], data[5], data[6], data1] // Financial data
   ];
 
@@ -540,14 +524,9 @@ function transformDataLastDataYear(data, data1) { //年報用，上期資料整�
 //   return parseFloat(result);
 // }
 
-function transformOtherSumTotal(data) { //整理順序格式為陣列
-  const transformedData = [      
-    data[3], 
-    data[0], 
-    data[1],
-    data[2], 
-    data[5]
-  ];
+function transformOtherSumTotal(data) {
+  //整理順序格式為陣列
+  const transformedData = [data[3], data[0], data[1], data[2], data[5]];
 
   return transformedData;
 }
@@ -601,9 +580,9 @@ async function getDayData() {
       ...dayBeforeYesterdayData.docs.map((doc) => doc.System["400037"])
     );
 
-  //console.log("Data length fetched for day before yesterday:", data.length);
-  //console.log("Data fetched for day before yesterday:", data);
-  //console.log("********************************************");
+    //console.log("Data length fetched for day before yesterday:", data.length);
+    //console.log("Data fetched for day before yesterday:", data);
+    //console.log("********************************************");
 
     // 計算昨天的時間範圍
     const yesterdayStart = specified_date_clone3
@@ -674,71 +653,72 @@ async function getDayData() {
     //     }
     //   }
     // //輸出每個小時的數值
-    
+
     // }
 
+    // console.log("初始Data陣列的86403筆資料", data.length);
+    // console.log("原本獲得的Data :", data);
+    // 新增一個陣列暫存每個小時的資料
+    // 新增一個陣列暫存每個小時的資料
+    const tempData = [];
+
+    // 依序讀取後續的資料，每次增加一小時
+    for (let i = 0; i < 24; i++) {
+      // 計算時間段的起始時間和結束時間
+      const intervalStart = moment(yesterdayStart)
+        .add(i - 8, "hours")
+        .startOf("hour"); // 將起始時間設定為每小時的開始
+      const intervalEnd = intervalStart
+        .clone()
+        .add(1, "hour")
+        .subtract(1, "second"); // 將結束時間設定為每小時的結束前一秒
+
+      //console.log("intervalStart : " + intervalStart.format());
+      //console.log("intervalEnd   : " + intervalEnd.format());
+
+      // 定義篩選器條件，查詢該時間段的數據
+      const filterInterval = {
+        selector: {
+          time: {
+            $gte: intervalStart.toISOString(), // 開始時間
+            $lte: intervalEnd.toISOString() // 結束時間
+          }
+        },
+        limit: 3600 // 每個時間段讀取3600
+      };
+
+      // 每個小時的資料分24次每次一小時存進tempData陣列裡面
+      const intervalData = await gcDb.find(filterInterval);
+      const hourData = [];
+
+      for (let j = 0; j < 3600; j++) {
+        // 檢查每秒是否都有數值，不足的補0
+        if (intervalData.docs[j]) {
+          const secondData = intervalData.docs[j].System["400037"];
+          hourData.push(secondData);
+        } else {
+          hourData.push(0);
+        }
+      }
+
+      tempData.push(...hourData);
+
+      // console.log(
+      //   "Data fetched for interval:",
+      //   intervalStart.format() + "+08:00",
+      //   "-",
+      //   intervalEnd.format() + "+08:00-",
+      //   "Pushed",
+      //   hourData.length,
+      //   "items."
+      // );
+    }
+
+    // 將每小時的資料合併到 data 陣列中
+    data.push(...tempData);
 
     // console.log("初始Data陣列的86403筆資料", data.length);
-    // console.log("原本獲得的Data :", data); 
-// 新增一個陣列暫存每個小時的資料
-// 新增一個陣列暫存每個小時的資料
-const tempData = [];
-
-// 依序讀取後續的資料，每次增加一小時
-for (let i = 0; i < 24; i++) {
-  // 計算時間段的起始時間和結束時間
-  const intervalStart = moment(yesterdayStart)
-    .add(i - 8, "hours")
-    .startOf("hour"); // 將起始時間設定為每小時的開始
-  const intervalEnd = intervalStart.clone().add(1, "hour").subtract(1, "second"); // 將結束時間設定為每小時的結束前一秒
-
-  //console.log("intervalStart : " + intervalStart.format());
-  //console.log("intervalEnd   : " + intervalEnd.format());
-
-  // 定義篩選器條件，查詢該時間段的數據
-  const filterInterval = {
-    selector: {
-      time: {
-        $gte: intervalStart.toISOString(), // 開始時間
-        $lte: intervalEnd.toISOString() // 結束時間
-      }
-    },
-    limit: 3600 // 每個時間段讀取3600
-  };
-
-  // 每個小時的資料分24次每次一小時存進tempData陣列裡面
-  const intervalData = await gcDb.find(filterInterval);
-  const hourData = [];
-
-  for (let j = 0; j < 3600; j++) {
-    // 檢查每秒是否都有數值，不足的補0
-    if (intervalData.docs[j]) {
-      const secondData = intervalData.docs[j].System["400037"];
-      hourData.push(secondData);
-    } else {
-      hourData.push(0);
-    }
-  }
-
-  tempData.push(...hourData);
-
-  // console.log(
-  //   "Data fetched for interval:",
-  //   intervalStart.format() + "+08:00",
-  //   "-",
-  //   intervalEnd.format() + "+08:00-",
-  //   "Pushed",
-  //   hourData.length,
-  //   "items."
-  // );
-}
-
-// 將每小時的資料合併到 data 陣列中
-data.push(...tempData);
-
-// console.log("初始Data陣列的86403筆資料", data.length);
-// console.log("原本獲得的Data :", data);
-
+    // console.log("原本獲得的Data :", data);
 
     //取得大前天+昨天的實際得標容量******************************************************************** */
     //大前天的最後一筆
@@ -840,7 +820,6 @@ data.push(...tempData);
     let globalMax = Number.NEGATIVE_INFINITY; // 初始化全局最大值為負無窮大
     let globalMin = Number.POSITIVE_INFINITY; // 初始化全局最小值為正無窮大
 
-
     for (let q = 0; q < 86400; q++) {
       //判斷最大值
       if (maxData[q] > globalMax) {
@@ -860,7 +839,6 @@ data.push(...tempData);
     // console.log("取出最小位置的數值:", maxData[minIndex]);
     // console.log("最大值存入 globalMax 的位置:", maxIndex);
     // console.log("取出最大位置的數值:", maxData[maxIndex]);
-
 
     var no_Execution_period_calculation = 0; //計算沒有在執行的時段(最大96 一個時段15分鐘)
     var Execution_period_calculation = 0; //計算實際上有在執行的時段(最大96 一個時段15分鐘)
@@ -893,14 +871,14 @@ data.push(...tempData);
     //console.log("處理過的陣列內容(判斷有沒有停止執行)" + maxData_processed);
     //用來計算平均值
     for (let r = 0; r < maxData.length; r++) {
-      if (maxData_processed[r] !=="#") {
+      if (maxData_processed[r] !== "#") {
         // 可以計算的必須是調度的範圍(0-10000)
         sum += maxData[r]; // 將 maxData 陣列中的數值加總
         total_count++;
         average45 = Math.round(sum / total_count); // 計算平均值並四捨五入到整數
       }
     }
-    
+
     // 在計算平均值之前，先檢查 total_count 是否為 0
     if (total_count === 0) {
       average45 = 0;
@@ -908,7 +886,7 @@ data.push(...tempData);
 
     // console.log("全部時段SPM進行加總的結果: " + sum);
     // console.log("總共有幾個可以進行計算的時段總數:" + total_count);
-    
+
     //******************************************************************* */
     //開始針對每個小時取出最大最小值，並給與該小時的執行率
     //取得每小時的最小SBSPM
@@ -916,52 +894,28 @@ data.push(...tempData);
     const maxValues = []; // 存儲每個小時中的最大值
     const averageValues = []; // 存儲小時中的平均值
     var flag = 0;
-    
-    for (let l = 0; l < maxData_processed.length; l += 3600) {
 
-      const group = maxData_processed.slice(l, l + 3600); // 取出每個分組的數據
-    
-      // 檢查分組中是否全部都是 "#"
-      const allHashes = group.every(val => val === "#");
-    
-      if (allHashes) {
-        // 如果分組中全部都是 "#"
+    for (let l = 0; l < maxData_processed.length; l += 3600) {
+      const group = maxData_processed.slice(l, l + 3600);
+      const validData = group.filter((val) => val !== "#");
+      if (validData.length === 0) {
         minValues.push(0);
         maxValues.push(0);
         averageValues.push(0);
-      } 
-
-      else {
-        // 找出每個分組中的最小值
-        const min = Math.min(...group);
-    
-        // 找出每個分組中的最大值
-        const max = Math.max(...group);
-    
-        // 計算每個分組中的平均值
-        const sum = group.reduce((acc, val) => acc + val, 0);
-        //const average = sum / group.length;
-        // 將計算結果存入相應的陣列中
-        
-      // 計算非 '#' 的數量和加總
-        const grouptotal = group.filter(val => val !== "#").length;
-        const groupsum = group.filter(val => val !== "#").reduce((acc, val) => acc + val, 0);
-        const average = groupsum / grouptotal;
-
+      } else {
+        const min = Math.min(...validData);
+        const max = Math.max(...validData);
+        const average =
+          validData.reduce((acc, val) => acc + val, 0) / validData.length;
         minValues.push(min);
         maxValues.push(max);
         averageValues.push(average);
-
-        // console.log("min: ",min);
-        // console.log("max: ",min);
-        // console.log("min: ",min);
       }
-
     }
-    
-    // console.log("minValues :", minValues);
-    // console.log("maxValues :", maxValues);
-    // console.log("averageValues :", averageValues);
+
+    console.log("minValues :", minValues);
+    console.log("maxValues :", maxValues);
+    console.log("averageValues :", averageValues);
 
     //換算獲得服務品質指標
     const quality = [];
@@ -977,7 +931,7 @@ data.push(...tempData);
     for (let m = 0; m <= minValues.length; m++) {
       const hour_min = minValues[m];
       // const hour_min = minValues[m] / 100;
-      if (hour_min ==="#") {
+      if (hour_min === "#") {
         quality_val = 0;
         hour_final[m][5] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
@@ -990,57 +944,57 @@ data.push(...tempData);
         quality_val = 1;
         hour_final[m][0] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
-        hour_final[m][8] = Conversionpercentage(minValues[m]);
-        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        hour_final[m][9] = Conversionpercentage(minValues[m]);
+        hour_final[m][8] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       } else if (hour_min < 9500 && hour_min >= 9400) {
         quality_val = 0.8;
         hour_final[m][1] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
-        hour_final[m][8] = Conversionpercentage(minValues[m]);
-        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        hour_final[m][9] = Conversionpercentage(minValues[m]);
+        hour_final[m][8] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       } else if (hour_min < 9400 && hour_min >= 9300) {
         quality_val = 0.6;
         hour_final[m][2] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
-        hour_final[m][8] = Conversionpercentage(minValues[m]);
-        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        hour_final[m][9] = Conversionpercentage(minValues[m]);
+        hour_final[m][8] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       } else if (hour_min < 9300 && hour_min >= 9200) {
         quality_val = 0.4;
         hour_final[m][3] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
-        hour_final[m][8] = Conversionpercentage(minValues[m]);
-        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        hour_final[m][9] = Conversionpercentage(minValues[m]);
+        hour_final[m][8] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       } else if (hour_min < 9200 && hour_min >= 9100) {
         quality_val = 0.2;
         hour_final[m][4] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
-        hour_final[m][8] = Conversionpercentage(minValues[m]);
-        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        hour_final[m][9] = Conversionpercentage(minValues[m]);
+        hour_final[m][8] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       } else if (hour_min < 9100 && hour_min >= 7000) {
         quality_val = 0;
         hour_final[m][5] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
-        hour_final[m][8] = Conversionpercentage(minValues[m]);
-        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        hour_final[m][9] = Conversionpercentage(minValues[m]);
+        hour_final[m][8] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       } else if (hour_min < 7000) {
         quality_val = 999;
         hour_final[m][6] = 1;
         hour_final[m][7] = Conversionpercentage(maxValues[m]);
-        hour_final[m][8] = Conversionpercentage(minValues[m]);
-        hour_final[m][9] = Conversionpercentage(averageValues[m]);
+        hour_final[m][9] = Conversionpercentage(minValues[m]);
+        hour_final[m][8] = Conversionpercentage(averageValues[m]);
         quality.push(quality_val);
       }
       //console.log("Time:" + m + " / quality_val :", quality_val);
     }
-    var hour_final_max=0;
-    var hour_final_min=0;
-    var hour_final_avg=0;
+    var hour_final_max = 0;
+    var hour_final_min = 0;
+    var hour_final_avg = 0;
     for (let n = 0; n <= 23; n++) {
       hour_final[24][0] += hour_final[n][0];
       hour_final[24][1] += hour_final[n][1];
@@ -1054,28 +1008,13 @@ data.push(...tempData);
       hour_final_min += hour_final[n][9];
     }
 
-    //最後統計的最大最小平均
-    if(hour_final_max===0){
-      hour_final[24][7] = Conversionpercentage(0);
-    }
-    else{
-      hour_final[24][7] = Conversionpercentage(hour_final_max/24);
-    }
+    // 最後統計的最大最小平均
+    // 最後統計的最大最小平均
+    hour_final[24][7] = hour_final_max !== 0 ? hour_final_max / 24 : 0;
+    hour_final[24][8] = hour_final_avg !== 0 ? hour_final_avg / 24 : 0;
+    hour_final[24][9] = hour_final_min !== 0 ? hour_final_min / 24 : 0;
 
-    if(hour_final_avg===0){
-      hour_final[24][8] = Conversionpercentage(0);
-    }
-    else{
-      hour_final[24][8] = Conversionpercentage(hour_final_avg/24);
-    }
-
-    if(hour_final_min===0){
-      hour_final[24][9] = Conversionpercentage(0);
-    }
-    else{
-      hour_final[24][9] = Conversionpercentage(hour_final_min/24);
-    }
-
+    console.log("hour_final :", hour_final);
 
     // console.log("the qualityis :", quality);
     // console.log("counthourstop:" + counthourstop);
@@ -1198,7 +1137,7 @@ data.push(...tempData);
       elsedata1: elsedata1,
       elsedata2: elsedata2
     };
-  }catch (error) {
+  } catch (error) {
     console.error("Error fetching data from CouchDB:", error);
   }
 }
@@ -1836,7 +1775,6 @@ function count_power(start_H, start_M, start_L, end_H, end_M, end_L) {
   return totalDifference;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 async function getYearData() {
   const last_year = specified_date_clone17
@@ -2040,10 +1978,10 @@ async function getYearData() {
     totMWHTotal: totMWHTotal,
     datayear_before_last: datayear_before_last
   };
-
 }
 
-function convertFileNameToDate(inputFileName) {//將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
+function convertFileNameToDate(inputFileName) {
+  //將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
   // Extract the date parts from the filename using a regular expression
   const regex = /(\d{4})y(?:(\d{1,2})m?(?:(\d{1,2})d)?)?\.xlsx/;
   const match = inputFileName.match(regex);
@@ -2093,7 +2031,8 @@ function convertFileNameToDate(inputFileName) {//將畫面上的名稱轉成搜�
   return formattedDate;
 }
 
-function divideFileName(inputFileName) {//將畫面上的名稱轉成分開的y,m,d, 用於設定手動下載的存檔路徑
+function divideFileName(inputFileName) {
+  //將畫面上的名稱轉成分開的y,m,d, 用於設定手動下載的存檔路徑
   // Extract the date parts from the filename using a regular expression
   const regex = /(\d{4})y(?:(\d{1,2})m?(?:(\d{1,2})d)?)?\.xlsx/;
   const match = inputFileName.match(regex);
@@ -2102,9 +2041,9 @@ function divideFileName(inputFileName) {//將畫面上的名稱轉成分開的y,
   }
   // Extracted date parts
   click_year = match[1];
-  click_month = match[2] 
-  click_day = match[3] 
-  return click_year, click_month, click_day
+  click_month = match[2];
+  click_day = match[3];
+  return click_year, click_month, click_day;
 }
 
 // Update Excel file with MongoDB data
@@ -2268,7 +2207,8 @@ router.get("/report/getFile", (req, res) => {
   });
 });
 
-function yesterday() { //用來控制自動下載的檔名，應為昨天的日期or上個月or去年
+function yesterday() {
+  //用來控制自動下載的檔名，應為昨天的日期or上個月or去年
   // Get the current date and time
   let currentDate = new Date();
 
@@ -2287,34 +2227,36 @@ function yesterday() { //用來控制自動下載的檔名，應為昨天的日�
   );
 }
 
-function formatedDate(date) { //Date格式轉換成2023年1月1日.xlsx
+function formatedDate(date) {
+  //Date格式轉換成2023年1月1日.xlsx
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // Month is zero-based
   const day = date.getDate();
   return `${year}年${month}月${day}日.xlsx`;
 }
-function removeDatePart(template, formattedDate) { //後續會使用是否有"月""日"來判斷要如何搜尋資料，沒有"日"就是月報，沒有"日月"就是年報
+function removeDatePart(template, formattedDate) {
+  //後續會使用是否有"月""日"來判斷要如何搜尋資料，沒有"日"就是月報，沒有"日月"就是年報
   // Regular expression to match both date formats
   const regex = /^(\d{4})年(\d{1,2})月(\d{1,2})日.xlsx$/;
-  
+
   // Extract year and month parts based on the matched format
   const match = formattedDate.match(regex);
   let year, month;
   if (match) {
-      year = match[1];
-      month = match[2];
-      day = match[3];
-      if (template === "YearReport") {
-          return year + "年.xlsx";
-      } else if (template === "MonthReport") {
-          return year + "年" + month + "月.xlsx";
-      } else {
-        return year + "年" + month + "月" + day + "日.xlsx"
-      }
+    year = match[1];
+    month = match[2];
+    day = match[3];
+    if (template === "YearReport") {
+      return year + "年.xlsx";
+    } else if (template === "MonthReport") {
+      return year + "年" + month + "月.xlsx";
+    } else {
+      return year + "年" + month + "月" + day + "日.xlsx";
+    }
   }
-  
+
   // Default filename if the format doesn't match
-  console.error("輸入格式異常, 應為ex:2023年1月1日.xlsx")
+  console.error("輸入格式異常, 應為ex:2023年1月1日.xlsx");
   return "output.xlsx";
 }
 
@@ -2347,7 +2289,7 @@ var yesterdayY, yesterdayM, yesterdayD;
 //     //     ".xlsx&reportType=" +
 //     //     reportType +
 //     //     "&fileName=" +
-//     //     fileName, 
+//     //     fileName,
 //     //   { responseType: "arraybuffer" }
 //     // ); //選擇template撈資料更新excel
 //     const req = {
@@ -2357,7 +2299,7 @@ var yesterdayY, yesterdayM, yesterdayD;
 //           fileName: fileName
 //       }
 //     };
-    
+
 //     // Mimic the response object (you can mock it using tools like Sinon.js if needed)
 //     const res = {
 //         status: function(code) {
