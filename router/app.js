@@ -166,6 +166,7 @@ app.get(["/", "/signin"], (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
+    console.log(req.ip)
     const email = req.body["username"];
     const password = req.body["password"];
     //console.log(`Input Data：\nUSERMAIL = ${email}\nPASSWORD = ${password}`);
