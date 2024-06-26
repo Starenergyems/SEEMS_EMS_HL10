@@ -188,7 +188,7 @@ router.get("/systeminfo/comm", async (req, res) => {
 
 router.get("/systeminfo/comm/:data", async (req, res) => {
   try {
-    await query_Comm_KeyValuePairs();
+    await query_Comm_KeyValuePairs(req);
     res.json(Comm_KeyValuePairs);
   } catch (error) {
     console.error(error);

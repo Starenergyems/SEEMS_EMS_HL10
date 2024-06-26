@@ -70,7 +70,7 @@ function mapworkStatus_page(decimalValue) {
   const statuses = {
     0: "運作中",
     3: "停止-Key stop",
-    4: "準備中",
+    4: "待機",
     6: "啟動中",
     9: "停止-錯誤",
     10: "運作-告警",

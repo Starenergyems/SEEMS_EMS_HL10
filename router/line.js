@@ -90,6 +90,8 @@ async function processDocs() {
     ];
 
     for (const doc of docs) {
+      var formattedDate;
+      var formattedTime;
       if (doc._id.startsWith("_design/")) {
         continue;
       }
@@ -97,39 +99,75 @@ async function processDocs() {
         if (!doc.line_notify) {
           // 如果 line_notify 屬性為 false
           flag++;
-          const formattedDate = moment(doc.occurrence_time).format(
-            "YYYY/MM/DD"
-          );
-          const formattedTime = moment(doc.occurrence_time).format(
-            "HH時mm分ss秒"
-          );
 
           if (doc.level === "Event") {
             recoverstatus = "狀態改變";
             trans_level = "事件";
-          } else if (doc.level === "Fault") {
+            if(doc.recover){
+              formattedDate = moment(doc.recover_time).format(
+                "YYYY/MM/DD"
+              );
+              formattedTime = moment(doc.recover_time).format(
+                "HH時mm分ss秒"
+              );
+            }
+            else{
+              formattedDate = moment(doc.occurrence_time).format(
+                "YYYY/MM/DD"
+              );
+              formattedTime = moment(doc.occurrence_time).format(
+                "HH時mm分ss秒"
+              );
+            }
+          } 
+          else if (doc.level === "Fault") {
             trans_level = "Fault";
             if (doc.recover) {
-              recoverstatus = "復歸";
+              formattedDate = moment(doc.recover_time).format(
+                "YYYY/MM/DD"
+              );
+              formattedTime = moment(doc.recover_time).format(
+                "HH時mm分ss秒"
+              );
+              recoverstatus = "已復歸";
             } else {
+              formattedDate = moment(doc.occurrence_time).format(
+                "YYYY/MM/DD"
+              );
+              formattedTime = moment(doc.occurrence_time).format(
+                "HH時mm分ss秒"
+              );
               recoverstatus = "觸發";
             }
-          } else {
+          } 
+          else {
             trans_level = "Alarm";
             if (doc.recover) {
-              recoverstatus = "復歸";
+              formattedDate = moment(doc.recover_time).format(
+                "YYYY/MM/DD"
+              );
+              formattedTime = moment(doc.recover_time).format(
+                "HH時mm分ss秒"
+              );
+              recoverstatus = "已復歸";
             } else {
+              formattedDate = moment(doc.occurrence_time).format(
+                "YYYY/MM/DD"
+              );
+              formattedTime = moment(doc.occurrence_time).format(
+                "HH時mm分ss秒"
+              );
               recoverstatus = "觸發";
             }
           }
 
-          const message = `
+          const message = `${recoverstatus}
 日期 : ${formattedDate}
 時間 : ${formattedTime}
 設備 : ${doc.device}
 ID : ${doc._id}
 內容 :${doc.content}
-數值 : ${doc.value}`;
+數值 : ${doc.value} `;
 
           // 傳送資料至 Line Notify
           await sendLineNotify(message);

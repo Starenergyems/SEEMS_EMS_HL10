@@ -850,8 +850,7 @@ async function getDayData() {
       }
     }
 
-    var period_calculation =
-      no_Execution_period_calculation + Execution_period_calculation;
+    var period_calculation = no_Execution_period_calculation + Execution_period_calculation;
 
     // console.log("沒有執行的時段總數:" + no_Execution_period_calculation);
     // console.log("有執行的時段總數:" + Execution_period_calculation);
@@ -913,9 +912,9 @@ async function getDayData() {
       }
     }
 
-    console.log("minValues :", minValues);
-    console.log("maxValues :", maxValues);
-    console.log("averageValues :", averageValues);
+    // console.log("minValues :", minValues);
+    // console.log("maxValues :", maxValues);
+    // console.log("averageValues :", averageValues);
 
     //換算獲得服務品質指標
     const quality = [];
@@ -1014,7 +1013,7 @@ async function getDayData() {
     hour_final[24][8] = hour_final_avg !== 0 ? hour_final_avg / 24 : 0;
     hour_final[24][9] = hour_final_min !== 0 ? hour_final_min / 24 : 0;
 
-    console.log("hour_final :", hour_final);
+    //console.log("hour_final :", hour_final);
 
     // console.log("the qualityis :", quality);
     // console.log("counthourstop:" + counthourstop);

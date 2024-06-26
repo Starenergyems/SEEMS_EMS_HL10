@@ -585,7 +585,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
             //時間格式修改
             item["index"] = "";
 
-            const formattedTime = moment(item.time).format(
+            const formattedTime = moment(item.occurrence_time).format(
               "YYYY/MM/DD HH:mm:ss:SSS"
             );
             item.time = formattedTime;
