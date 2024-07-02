@@ -253,7 +253,7 @@ const resetRequestCount = () => {
 
   setTimeout(() => {
     requestCount = 0;
-    console.log(`Request count reset at ${new Date()}`);
+    //console.log(`Request count reset at ${new Date()}`);
     resetRequestCount(); // 設置下一次重置計數
   }, millisecondsUntilNextHour);
 };
