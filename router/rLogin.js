@@ -540,6 +540,39 @@ async function userlog(userid) {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////
+// User log.
+async function addlog(user, content) {
+  const URL = `${db_URL}/${db.log}/`
+  const data = {
+    tag: "account",
+    time: datetime(),
+    category: "帳戶管理",
+    device: "帳戶管理",
+    username: user,
+    content: content
+  }
+  await fetch(URL, {
+    method: 'POST',
+    headers: { 
+      'Content-Type': "application/json",
+      Authorization: AUTHORIZATION,
+    },
+    credentials: "include",
+    body: JSON.stringify(data),
+  }).then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to add userlog');
+      }
+      console.log('User log add successfully');
+    })
+  }
+
+  // addlog("test", "ttt")
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+
 async function authentication(req) {
     let token = ""
     let browser_token = ""
@@ -619,4 +652,5 @@ module.exports = {
   deleteuser,
   userlog,
   authentication,
+  addlog
 };

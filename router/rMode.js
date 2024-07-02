@@ -121,7 +121,6 @@ async function query_SysCtrl_KeyValuePairs(req) {
     SysCtrl_KeyValuePairs = {
       // permission: "manager",
       permission: req.body.permission,
-
       sysAvailability: mapBitStatus(ss1_Status_rBitS, ss1_Status_MT, 15),
       SOC: Scale_Data(GC01Data.IEC61850[400129], ((0.01 * 1) / (4472 * 7)) * 100, 1),
       SBSPM: Scale_Data(GC01Data.IEC61850[400133], 0.01, 1),
@@ -194,10 +193,11 @@ router.get("/mode", (req, res) => {
 });
 
 router.get("/mode/sysctrl", async (req, res) => {
+  // let permission = req.body.permission;
   try {
     await query_SysCtrl_KeyValuePairs(req);
     //console.log(SysCtrl_KeyValuePairs);
-
+    
     res.render("Mode_SysCtrl", SysCtrl_KeyValuePairs);
   } catch (error) {
     console.error(error);
@@ -1221,7 +1221,7 @@ router.get("/mode/schedule", async (req, res) => {
   try {
     await query_Schd_KeyValuePairs(req);
     //console.log(Schd_KeyValuePairs);
-
+    // let permission = req.body.permission;
     res.render("Mode_Schedule", Schd_KeyValuePairs);
   } catch (error) {
     console.error(error);

@@ -542,6 +542,7 @@ router.get("/operateinfo/battery", async (req, res) => {
     await querySumData(req);
     // console.log(batterySum_variables);
     // console.log("**************");
+    // let permission = req.body.permission;
     res.render("Op_Bat_InfoSummary", batterySum_variables);
   } catch (error) {
     console.error(error);
@@ -744,8 +745,8 @@ async function queryDetailData(req) {
     // 偶數頁處理方式 傳遞資料給模板引擎，渲染頁面
     batteryDetail_variables = {
       permission: req.body.permission,
-      pageNumber,
-      No_of_BMS,
+      pageNumber:pageNumber,
+      No_of_BMS:No_of_BMS,
       BMSMode: mapBMSMode(lcData.BMS2[404011]),
       onlineNum: lcData.BMS2[404008],
       onlineV: scaleProcess(lcData.BMS2[404006], 0.1, 1),
@@ -881,6 +882,7 @@ router.get("/operateinfo/battery/infodetail/:pageNumber", async (req, res) => {
     globalPageNumber = parseInt(req.params.pageNumber);
     //console.log(pageNumber);
     await queryDetailData(req);
+    let permission = req.body.permission;
     res.render("Op_Bat_InfoDetail", batteryDetail_variables);
   } catch (error) {
     console.error(error);
@@ -1244,6 +1246,7 @@ router.get("/operateinfo/battery/rack/:pageNumber", async (req, res) => {
     pageNumber = parseInt(req.params.pageNumber);
     globalPageNumber = parseInt(req.params.pageNumber);
     await queryRackData(req);
+    let permission = req.body.permission;
     res.render("Op_Bat_Rack", batteryRack_variables);
   } catch (error) {
     console.error(error);

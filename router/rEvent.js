@@ -42,7 +42,8 @@ router.get("/event", async (req, res) => {
 //* ~~~~~~~!!!!!!!!@@@@@@@@@@##########$$$$$$$$$$$$%%%%%%%%%^^^^^^^^^^^^^^&&&&&&&&&&&*********(((((((())))))))
 
 router.get("/event/operation", (req, res) => {
-  res.render("Evt_Operation");
+  let permission = req.body.permission;
+  res.render("Evt_Operation", {permission:permission});
 });
 
 router.post("/event/operation/edit", async (req, res) => {
@@ -152,7 +153,8 @@ router.get("/event/operation/edit", async (req, res) => {
 
 router.get("/event/door", (req, res) => {
   // num與fun
-  res.render("Evt_Door");
+  let permission = req.body.permission;
+  res.render("Evt_Door", {permission:permission});
 });
 
 router.post("/event/door/edit", async (req, res) => {

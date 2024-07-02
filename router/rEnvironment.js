@@ -323,7 +323,8 @@ async function queryEnv_variables(req) {
 router.get("/systeminfo/environment", async (req, res) => {
   try {
     await queryEnv_variables(req);
-    res.render("Sys_Environment", Env_variables);
+    // let permission = req.body.permission;
+    res.render("Sys_Environment",  Env_variables);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

@@ -96,37 +96,52 @@ async function getData() {
   const startOfDay = moment().startOf("day");
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 00, second: 01, millisecond: 0 }) // 設置結束時間為 23:59:59.999
+      .set({ hour: 00, minute: 01, second: 00, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
     const filterTime = {
       selector: {
         time: {
-          $gte: night, // 開始時間為大前天的 23:59:57
-          $lte: nightoneseconds // 結束時間為大前天的 23:59:59
+          $gte: night, // 開始時間當天的 00:00:00
+          $lte: nightoneseconds // 時間當天的 00:00:01
         }
       },
-      limit: 1
+      limit: 10 //10筆資料
     };
-
+  
     const midnightData1 = await lc01Db.find(filterTime);
     const midnightData2 = await lc02Db.find(filterTime);
     const midnightData3 = await lc03Db.find(filterTime);
     const midnightData4 = await lc04Db.find(filterTime);
+    //console.log("midnightData1",midnightData1);
+    
+    // discharge capacity
+    // const expValue =0;
+    let expValue = 0; // 使用 let 來宣告變數以便重新賦值
+    for(let i = 0; i < 9; i++) { // 使用 let 宣告 i
+      // 檢查每個 System 是否未定義
+      if(midnightData1.docs[i].System === undefined || 
+         midnightData2.docs[i].System === undefined || 
+         midnightData3.docs[i].System === undefined || 
+         midnightData4.docs[i].System === undefined) {
+        continue; // 如果任一 System 未定義，跳過本次迴圈
+      } else {
+        // 累加各 System 的指定屬性值
+        expValue += midnightData1.docs[i].System["402062"] +
+                    midnightData2.docs[i].System["402062"] +
+                    midnightData3.docs[i].System["402062"] +
+                    midnightData4.docs[i].System["402062"];
+      }
+    }
 
-    //discharge capacity
-    const expValue =
-      midnightData1.docs[0].System["402062"] +
-      midnightData2.docs[0].System["402062"] +
-      midnightData3.docs[0].System["402062"] +
-      midnightData4.docs[0].System["402062"];
+      lc4_imp = 0;
+      lc4_exp = 0;
 
-    //charge capacity
     const impValue =
       midnightData1.docs[0].System["402060"] +
       midnightData2.docs[0].System["402060"] +
@@ -135,6 +150,9 @@ async function getData() {
 
     lc4_imp = midnightData4.docs[0].System["402060"];
     lc4_exp = midnightData4.docs[0].System["402062"];
+
+
+
     //today_E_chg_LC4: scaleProcess(lc4Data.System[402060], 0.1, 1),
     //today_E_dcg_LC4: scaleProcess(lc4Data.System[402062], 0.1, 1),
 
@@ -425,6 +443,7 @@ router.get("/operateinfo/pcs", async (req, res) => {
   try {
     await queryPcsSum(req);
     //console.log("workStatus" + workStatus);
+    // let permission = req.body.permission;
     res.render("Op_PCS_InfoSummary", pcs_summary_variables);
   } catch (error) {
     console.error(error);
@@ -633,6 +652,7 @@ router.get("/operateinfo/pcs/infodetail/:pageNumber", async (req, res) => {
     //獲取目前切換的頁數
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsDetail(req, pageNumber);
+    // let permission = req.body.permission;
     if (pageNumber === 7) {
       //console.log("pcsDetail_variables" + pcsDetail_variables);
       res.render("Op_PCS_InfoDetail", pcsDetail_variables);
@@ -777,6 +797,7 @@ router.get("/operateinfo/pcs/alarm/:pageNumber", async (req, res) => {
     //const pageNumber = req.session.pageNumber;
     pageNumber = parseInt(req.params.pageNumber);
     await queryPcsAlarm(req, pageNumber);
+    // let permission = req.body.permission;
     if (pageNumber === 7) {
       res.render("Op_PCS_Alarm", pcsAlarm_variables);
     } else {

@@ -49,7 +49,8 @@ router.get("/chart", (req, res) => {
 });
 
 router.get("/chart/realtime", (req, res) => {
-  res.render("Cht_RealTime");
+  let permission = req.body.permission;
+  res.render("Cht_RealTime", {permission:permission});
 });
 
 let flag = 0; // 初始設定 flag 為 0
@@ -232,7 +233,8 @@ router.post("/update_RealTimeChart_Duration", async (req, res) => {
 /************************************************************************************ */
 
 router.get("/chart/history", (req, res) => {
-  res.render("Cht_History");
+  let permission = req.body.permission;
+  res.render("Cht_History", {permission:permission});
 });
 
 router.get("/chart/history/edit", async (req, res) => {
@@ -262,7 +264,7 @@ router.get("/chart/history/edit", async (req, res) => {
 
     // 使用迴圈分次尋找每1000秒的數值
     while (moment(currentStartTime).isBefore(endTime)) {
-     // console.log("撈取資料中...... :");
+      // console.log("撈取資料中...... :");
       let currentEndTime = moment(currentStartTime).add(
         intervalSeconds,
         "seconds"
@@ -341,7 +343,7 @@ router.post("/query_HistoryChart_Data", async (req, res) => {
         }
       },
       // sort: [{time: "desc"}],
-      limit: 10000                  // 限制每次查詢的數量
+      limit: 40000                  // 限制每次查詢的數量
     };
 
     let regData_MT = {

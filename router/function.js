@@ -70,7 +70,7 @@ function mapworkStatus_page(decimalValue) {
   const statuses = {
     0: "運作中",
     3: "停止-Key stop",
-    4: "準備中",
+    4: "待機",
     6: "啟動中",
     9: "停止-錯誤",
     10: "運作-告警",
@@ -90,7 +90,7 @@ function mapworkMode_page(decimalValue) {
   const binaryString = decimalValue.toString(2).padStart(32, "0");
 
   // 尋找第一個為1的位元的索引
-  const indexOfOne = 32 - binaryString.indexOf("1");
+  const indexOfOne = 31 - binaryString.indexOf("1");
 
   // 根據索引對應的位元，返回相應的狀態
   const statuses = {
@@ -102,6 +102,14 @@ function mapworkMode_page(decimalValue) {
     10: "離網", //"Off-grid mode"
     11: "VSG" //"VSG mode"
   };
+
+  // bit 0: On-grid constant current
+  // bit 1: On-grid constant voltage
+  // bit 2: On-grid constant power (AC)
+  // bit 3: On-grid constant power (DC)
+  // bit 9: On-grid mode
+  // bit 10: Off-grid mode
+  // bit 11: VSG mode
 
   return statuses[indexOfOne] || "Unknown status";
 }

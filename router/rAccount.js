@@ -74,11 +74,12 @@ router.get("/account/personalinfo", async (req, res) => {
       name: resopnse.name,
       company: resopnse.company,
       department: resopnse.department,
-      permission: translevel, //admin manager viewer
+      permission: resopnse.level, //admin manager viewer
       status: transstate, // activate,lock
       note: resopnse.note,
       lastlogin: resopnse.last_time
     };
+    // console.log(content)
 
     const originalDateString = content.lastlogin;
     const originalDate = new Date(originalDateString);
@@ -170,7 +171,8 @@ router.get("/account/personalinfo/log", async (req, res) => {
 
 
 router.get("/account/system", (req, res) => {
-  res.render("SysManage");
+  let permission = req.body.permission;
+  res.render("SysManage", {permission:permission});
 });
 
 
@@ -200,8 +202,8 @@ router.get("/account/system/accounts", async(req, res) => {
 router.post("/account/system/accounts", async(req, res) => {
   // console.log(req)
   // Create new user.  Change or delete exist user.
-  console.log("modify accounts")
-  console.log(req.body)
+  // console.log("modify accounts")
+  // console.log(req.body)
   try {
   let response = await alldoc(db.account);
   response = await response.json();
@@ -212,7 +214,7 @@ router.post("/account/system/accounts", async(req, res) => {
     }
   }
   const body = req.body
-  console.log(body)
+  // console.log(body)
   const bottom = body.bottom
 
   if (body["status"] === "normal"){
@@ -233,15 +235,17 @@ router.post("/account/system/accounts", async(req, res) => {
     iddata["user"]["company"] = body.company
     iddata["user"]["department"] = body.department
     iddata["user"]["level"] = body.repermission
+    iddata["user"]["permission"] = body.repermission
     iddata["user"]["state"] = body.status === undefined ||body.status === ""?iddata["user"]["state"]:body.status
     iddata["user"]["note"] = body.note === undefined ||body.note === ""? "" : body.note
-    console.log(body.repermission)
+    // console.log(body.repermission)
     // console.log(777,body.password === undefined ||body.password === "", iddata.user.password)
     // body.password === undefined || body.password === "" ? iddata.user.password : body.password
     iddata["user"]["password"] = body.password === undefined ||body.password ==="" ? iddata.user.password : body.password
     // console.log("after",iddata)
     await updateaccount(iddata._id, "", "", [iddata])
-    res.status(200)
+    res.redirect(302, "/account/system/accounts")
+    // res.status(200)
   } else if (allid.includes(body.num) === false && bottom === "addupdate"){
         console.log("id nottttt exist, create")
         let data = [{
@@ -253,7 +257,8 @@ router.post("/account/system/accounts", async(req, res) => {
             name: `${body.name}`,
             company: `${body.company}`,
             department: `${body.department}`,
-            level: `${body.permissions}`,
+            level: `${body.repermission}`,
+            permission: `${body.repermission}`,
             state: `${body.status}`,
             errcount: "0",
             note: `${body.note === undefined? "" : body.note}`,
@@ -263,16 +268,17 @@ router.post("/account/system/accounts", async(req, res) => {
             token: "",
             validtime: "",
           }}]
-          console.log(data)
+          // console.log(data)
           await updateaccount(data[0]._id, "", "", data)
-          res.status(200)
+          res.redirect(302, "/account/system/accounts")
+          // res.status(200)
           }
   
 if (allid.includes(body.num) === true && bottom === "delete") {
     // Delete the user.
     console.log(`delete ${body.num}`)
     await deleteuser(body.num)
-    res.status(200)
+    res.redirect(302, "/account/system/accounts")
   }
 
   }catch (error) {console.error("Error:", error.message)}
@@ -301,6 +307,7 @@ router.get("/account/system/passwordsetting", async(req, res) => {
 });
 
 router.post("/account/system/passwordsetting", async(req, res) => {
+  // console.log("密碼強度設置")
   try {
     let response = await getconfig()
     let updatedata = [

@@ -84,7 +84,7 @@ router.get("/systeminfo", (req, res) => {
 
 let Comm_KeyValuePairs;
 
-async function query_Comm_KeyValuePairs() {
+async function query_Comm_KeyValuePairs(req) {
   // 使用 map 遍歷所有資料庫名稱，創建 Nano 實例，並獲取最新文檔的 promise 陣列
   const dataPromises = databases.map(async (dbName) => {
     const nano = createNanoInstance(dbName);
@@ -110,6 +110,7 @@ async function query_Comm_KeyValuePairs() {
 
 
   Comm_KeyValuePairs = {
+    permission: req.body.permission,
     Comm_EMS_1: "setToClose",
     Comm_EMS_2: "setToClose",
     Comm_DC: "setToClose",        //dc的存活要利用心跳去判斷
@@ -122,7 +123,7 @@ async function query_Comm_KeyValuePairs() {
     Comm_UPS_CCTV: Determine_DL_of_CommDevice(dcData.UPS2[409111]),
     Comm_RIO_CtrlRoom: Determine_DL_of_CommDevice(dcData.RIO_CtrlRoom[409121]),
     Comm_FreqMeter: Determine_DL_of_CommDevice(dcData.Freq[409103]),
-    Comm_AuxM_MVCB: Determine_DL_of_CommDevice(dcData.AuxM2[409109]),               // 看能否換個順序
+    Comm_AuxM_MVCB: Determine_DL_of_CommDevice(dcData.AuxM9[409109]),               // 看能否換個順序
     Comm_Relay_MVCB: Determine_DL_of_CommDevice(dcData.RelayMVCB[409117]),
     Comm_UPS_MVCB: Determine_DL_of_CommDevice(dcData.UPS3[409111]),
     Comm_Recloser: Determine_DL_of_CommDevice(dcData.Recloser[409131]),
@@ -136,14 +137,14 @@ async function query_Comm_KeyValuePairs() {
     Comm_Relay_VCB_Aux: Determine_DL_of_CommDevice(dcData.RelayVCB5[409119]),
     Comm_TR_Aux: Determine_DL_of_CommDevice(dcData.TR5[409113]),
     Comm_AuxM_total: Determine_DL_of_CommDevice(dcData.AuxMtot1[409107]),
-    Comm_AuxM_ESS1_1: Determine_DL_of_CommDevice(dcData.AuxM3[409109]),             // 看能否換個順序
-    Comm_AuxM_ESS1_2: Determine_DL_of_CommDevice(dcData.AuxM4[409109]),             // 看能否換個順序
-    Comm_AuxM_ESS2_1: Determine_DL_of_CommDevice(dcData.AuxM5[409109]),             // 看能否換個順序
-    Comm_AuxM_ESS2_2: Determine_DL_of_CommDevice(dcData.AuxM6[409109]),             // 看能否換個順序
-    Comm_AuxM_ESS3_1: Determine_DL_of_CommDevice(dcData.AuxM7[409109]),             // 看能否換個順序
-    Comm_AuxM_ESS3_2: Determine_DL_of_CommDevice(dcData.AuxM8[409109]),             // 看能否換個順序
-    Comm_AuxM_ESS4: Determine_DL_of_CommDevice(dcData.AuxM9[409109]),               // 看能否換個順序
-    Comm_AuxM_CtrlRoom: Determine_DL_of_CommDevice(dcData.AuxM1[409109]),           // 看能否換個順序
+    Comm_AuxM_ESS1_1: Determine_DL_of_CommDevice(dcData.AuxM1[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS1_2: Determine_DL_of_CommDevice(dcData.AuxM2[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS2_1: Determine_DL_of_CommDevice(dcData.AuxM3[409109]),             // 看能否換個順序
+    Comm_AuxM_ESS2_2: Determine_DL_of_CommDevice(dcData.AuxM4[409109]),             
+    Comm_AuxM_ESS3_1: Determine_DL_of_CommDevice(dcData.AuxM5[409109]),             
+    Comm_AuxM_ESS3_2: Determine_DL_of_CommDevice(dcData.AuxM6[409109]),             
+    Comm_AuxM_ESS4: Determine_DL_of_CommDevice(dcData.AuxM7[409109]),               
+    Comm_AuxM_CtrlRoom: Determine_DL_of_CommDevice(dcData.AuxM8[409109]),           
     Comm_TR_1: Determine_DL_of_CommDevice(dcData.TR1[409113]),
     Comm_TR_2: Determine_DL_of_CommDevice(dcData.TR2[409113]),
     Comm_TR_3: Determine_DL_of_CommDevice(dcData.TR3[409113]),
@@ -176,7 +177,8 @@ async function query_Comm_KeyValuePairs() {
 
 router.get("/systeminfo/comm", async (req, res) => {
   try {
-    await query_Comm_KeyValuePairs();
+    // let permission = req.body.permission;
+    await query_Comm_KeyValuePairs(req);
     res.render("Sys_Comm", Comm_KeyValuePairs);
   } catch (error) {
     console.error(error);
@@ -186,7 +188,7 @@ router.get("/systeminfo/comm", async (req, res) => {
 
 router.get("/systeminfo/comm/:data", async (req, res) => {
   try {
-    await query_Comm_KeyValuePairs();
+    await query_Comm_KeyValuePairs(req);
     res.json(Comm_KeyValuePairs);
   } catch (error) {
     console.error(error);

@@ -254,7 +254,7 @@ router.get("/alarm", (req, res) => {
 
 router.get("/alarm/realtime", (req, res) => {
   // num與fun
-  var permission = req.body.permission;
+  let permission = req.body.permission;
   res.render("Alm_RealTime",{permission:permission});
 });
 
@@ -585,7 +585,7 @@ router.get("/alarm/realtime/edit", (req, res) => {
             //時間格式修改
             item["index"] = "";
 
-            const formattedTime = moment(item.time).format(
+            const formattedTime = moment(item.occurrence_time).format(
               "YYYY/MM/DD HH:mm:ss:SSS"
             );
             item.time = formattedTime;
@@ -634,7 +634,8 @@ router.get("/alarm/realtime/edit", (req, res) => {
 //歷史告警
 router.get("/alarm/history", (req, res) => {
   // num與fun
-  res.render("Alm_History");
+  let permission = req.body.permission;
+  res.render("Alm_History", {permission:permission});
 });
 
 //原始版本
