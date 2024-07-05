@@ -336,11 +336,11 @@ async function getData() {
   const startOfDay = moment().startOf("day").add(1, "second"); // 當天的第二秒
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
+      .set({ hour: "00", minute: "00", second: "00", millisecond: "0" })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 01, second: 00, millisecond: 0 })
+      .set({ hour: "00", minute: "01", second: "00", millisecond: "0" })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -793,7 +793,7 @@ server.listen(port, () => {
   const emsnumber = process.env.EMS_NUM;
   const HOST_IP = process.env.HOST_IP;
   const message = `
-EMS${emsnumber}主程式重新啟動 !!
+EMS${emsnumber} 主程式重新啟動 !!
 主機IP為：${HOST_IP}`;
   sendLineNotify(message);
 });
@@ -805,7 +805,7 @@ process.on("SIGINT", () => {
     const emsnumber = process.env.EMS_NUM;
     const HOST_IP = process.env.HOST_IP;
     const message = `
-  EMS${emsnumber}主程式已停止運作 !!
+  EMS${emsnumber} 主程式已停止運作 !!
   主機IP為：${HOST_IP}`;
     sendLineNotify(message);
     process.exit(0);
