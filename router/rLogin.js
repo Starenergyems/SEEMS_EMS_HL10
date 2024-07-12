@@ -560,13 +560,14 @@ async function addlog(user, content) {
     },
     credentials: "include",
     body: JSON.stringify(data),
-  }).then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to add userlog');
-      }
-      console.log('User log add successfully');
-    })
-  }
+  })}
+  // .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error('Failed to add userlog');
+  //     }
+  //     console.log('User log add successfully');
+  //   })
+  // }
 
   // addlog("test", "ttt")
 

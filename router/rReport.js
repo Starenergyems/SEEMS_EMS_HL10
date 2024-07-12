@@ -436,7 +436,7 @@ const queryReport_auto = async (template) => {
     ); //檔名叫什麼
   } else if (template === "DayReport") {
     // directoryPath = path.join(
-    //   //在linux中測試
+    //   在linux中測試
     //   "/",
     //   "home",
     //   "hl10_4-1",
@@ -452,7 +452,7 @@ const queryReport_auto = async (template) => {
       `${yesterdayM}` //這個有成功存在"router" "/C/report/2024/3"
     ); //下載後存在哪，要跟getReport api同步
     // directoryPath = path.join(
-    //   //在linux中測試
+    //   在linux中測試
     //   "/",
     //   "home",
     //   "seems",
@@ -518,11 +518,6 @@ function transformDataLastDataYear(data, data1) {
 
   return transformedData;
 }
-// //百分比對照
-// function Conversionpercentage(randomNumber) {
-//   let result = (randomNumber / 100).toFixed(1);
-//   return parseFloat(result);
-// }
 
 function transformOtherSumTotal(data) {
   //整理順序格式為陣列
@@ -557,8 +552,6 @@ async function getDayData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-    //console.log("Day Before Yesterday Start Time:", dayBeforeYesterdayStart);
-    //console.log("Day Before Yesterday End Time:", dayBeforeYesterdayEnd);
 
     // 初始化存儲數值的陣列
     let data = [];
@@ -598,68 +591,6 @@ async function getDayData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-    // // 新增一個陣列暫存每個小時的資料
-    // const tempData = [];
-
-    // // 依序讀取後續的資料，每次增加一小時
-    // for (let i = 0; i < 24; i++) {
-    //   // 計算時間段的起始時間和結束時間
-    //   const intervalStart = moment(yesterdayStart)
-    //     .add(i - 8, "hours")
-    //     .startOf(0, "hour")
-    //     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-    //   const intervalEnd = moment(yesterdayEnd)
-    //     .add(i - 8 + 1, "hours")
-    //     .startOf("hour")
-    //     .add(59, "minutes")
-    //     .add(59, "seconds")
-    //     .add(999, "milliseconds")
-    //     .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-
-    //   console.log("intervalStart : " + intervalStart);
-    //   console.log("intervalEnd   : " + intervalEnd);
-
-    //   // 定義篩選器條件，查詢該時間段的數據
-    //   const filterInterval = {
-    //     selector: {
-    //       time: {
-    //         $gte: intervalStart, // 開始時間
-    //         $lte: intervalEnd // 結束時間
-    //       }
-    //     },
-    //     limit: 3600 // 每個時間段讀取3600
-    //   };
-
-    //   // 每個小時的資料分24次每次一小時存進tempData陣列裡面
-    //   const intervalData = await gcDb.find(filterInterval);
-    //   tempData.push(...intervalData.docs.map((doc) => doc.System["400037"]));
-
-    //   console.log(
-    //     "Data fetched for interval:",
-    //     intervalStart + "+08:00",
-    //     "-",
-    //     intervalEnd + "+08:00-",
-    //     "Pushed",
-    //     tempData.length,
-    //     "items."
-    //   );
-
-    //   // 檢查每秒是否都有數值，不足的補0
-    //   for (let j = 0; j < 3600; j++) {
-    //     if (!tempData[i * 3600 + j]) {
-    //       data.push(0);
-    //     } else {
-    //       data.push(tempData[i * 3600 + j]);
-    //     }
-    //   }
-    // //輸出每個小時的數值
-
-    // }
-
-    // console.log("初始Data陣列的86403筆資料", data.length);
-    // console.log("原本獲得的Data :", data);
-    // 新增一個陣列暫存每個小時的資料
-    // 新增一個陣列暫存每個小時的資料
     const tempData = [];
 
     // 依序讀取後續的資料，每次增加一小時

@@ -199,6 +199,7 @@ app.post("/login", async (req, res) => {
       res.json({ text: response["text"] });
       // res.status(401).send(response["text"]);
     }
+    // addlog(response["id"],response["text"])
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
@@ -758,7 +759,8 @@ const eventRouter = require("./rEvent");
 const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
-// const { nextTick } = require("process");
+// const { nextTick } = require("process");-**-/*-/*-
+
 const login = require("./rLogin");
 const { permission } = require("process");
 // const { authentication } = require("./authMiddleware");
