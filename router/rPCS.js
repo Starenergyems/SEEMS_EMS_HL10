@@ -96,11 +96,11 @@ async function getData() {
   const startOfDay = moment().startOf("day");
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 01, second: 00, millisecond: 0 })
+      .set({ hour: 0, minute: 1, second: 0, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 

@@ -300,7 +300,7 @@ const queryReport_auto = async (template) => {
   //console.log("today", today);
 
   yesterday(); //昨天幾年幾月幾日
-  //console.log("queryDate:" + queryDate);
+  console.log("queryDate:" + queryDate);
   specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
 
   specified_date_clone1 = specified_date.clone();
@@ -552,7 +552,6 @@ async function getDayData() {
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-
     // 初始化存儲數值的陣列
     let data = [];
 
@@ -682,19 +681,6 @@ async function getDayData() {
       });
     });
 
-    // console.log(
-    //   "Total data fetched scheduleDaybeforyesterdayValues:",
-    //   scheduleDaybeforyesterdayValues.length
-    // );
-    // console.log(
-    //   "scheduleDaybeforyesterdayValues :",
-    //   scheduleDaybeforyesterdayValues
-    // );
-    // console.log(
-    //   "scheduleDaybeforyesterdayValues[95]:",
-    //   scheduleDaybeforyesterdayValues[95] //最後一個小時的資料
-    // );
-
     //如果大前天最後一個時段沒得標則要將spm改為100%
     if (scheduleDaybeforyesterdayValues[95] === 0) {
       data[0] = 10000;
@@ -764,12 +750,12 @@ async function getDayData() {
       }
     }
 
-    // console.log("86400秒裡面最大的sbspm(沒有判斷有沒得標的情況下):", globalMax);
-    // console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
-    // console.log("最小值存入 globalMin 的位置:", minIndex);
-    // console.log("取出最小位置的數值:", maxData[minIndex]);
-    // console.log("最大值存入 globalMax 的位置:", maxIndex);
-    // console.log("取出最大位置的數值:", maxData[maxIndex]);
+    console.log("86400秒裡面最大的sbspm(沒有判斷有沒得標的情況下):", globalMax);
+    console.log("86400秒最小的sbspm(沒有判斷有沒得標的情況下):", globalMin);
+    console.log("最小值存入 globalMin 的位置:", minIndex);
+    console.log("取出最小位置的數值:", maxData[minIndex]);
+    console.log("最大值存入 globalMax 的位置:", maxIndex);
+    console.log("取出最大位置的數值:", maxData[maxIndex]);
 
     var no_Execution_period_calculation = 0; //計算沒有在執行的時段(最大96 一個時段15分鐘)
     var Execution_period_calculation = 0; //計算實際上有在執行的時段(最大96 一個時段15分鐘)
@@ -781,10 +767,11 @@ async function getDayData() {
       }
     }
 
-    var period_calculation = no_Execution_period_calculation + Execution_period_calculation;
+    var period_calculation =
+      no_Execution_period_calculation + Execution_period_calculation;
 
-    // console.log("沒有執行的時段總數:" + no_Execution_period_calculation);
-    // console.log("有執行的時段總數:" + Execution_period_calculation);
+    console.log("沒有執行的時段總數:" + no_Execution_period_calculation);
+    console.log("有執行的時段總數:" + Execution_period_calculation);
     // console.log("加總的時段總數(應為96筆)):" + period_calculation);
 
     let sum = 0;

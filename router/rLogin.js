@@ -355,6 +355,8 @@ async function submit(EMAIL, PASSWORD) {
   if (!EMAIL.includes("@hdrenewables.com")) {
     response["result"] = false;
     response["text"] = `帳號或密碼錯誤 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`
+    const HOST_IP = process.env.HOST_IP;
+    addlog(`不明使用者`,`來自${HOST_IP}不明使用者登入`)
     return response
   }
 
@@ -365,6 +367,7 @@ async function submit(EMAIL, PASSWORD) {
     response["text"] = `Superuser Login Success`;
     response["level"] = `admin`
     return response
+    updateaccount()
     }
   
   await getconfig();

@@ -50,5 +50,9 @@ module.exports = {
       "year_report"
     ]
   },
-  mustdatabase: {}
+  systemInfo: {
+    serviceActivationTime: "2024-06-22",
+    location: "Hualien Heping",
+    DeviceCapacity: 10
+  }
 };
