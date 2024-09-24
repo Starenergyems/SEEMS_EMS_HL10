@@ -17,7 +17,7 @@ const {
   submit,
   authentication,
   findaccount,
-  updateaccount
+  updateaccount,
 } = require("./rLogin");
 const schedule = require("node-schedule");
 const config = require("./config");
@@ -66,7 +66,7 @@ const alarmnanoDb = nano.use("alarm");
 //時間索引
 const indexDef = {
   index: { fields: ["time"] },
-  name: "time_index"
+  name: "time_index",
 };
 //***************************************************************************************************************** */
 // 為每個資料庫創建針對時間的索引
@@ -90,7 +90,7 @@ app.get("/test", async (req, res) => {
   const response = await fetch(URL, {
     method: "GET",
     headers: { Authorization: AUTHORIZATION },
-    credentials: "include"
+    credentials: "include",
   });
   data = await response.json();
   //console.log(typeof(data))
@@ -137,7 +137,7 @@ app.get("/login", async (req, res) => {
     WarningNum_PCS: Values[10],
     WarningNum_FF: Values[11],
     WarningNum_Env: Values[12],
-    WarningNum_Meter: Values[13]
+    WarningNum_Meter: Values[13],
   };
 
   var latestValues2 = {
@@ -152,13 +152,13 @@ app.get("/login", async (req, res) => {
     L_M_minSOH: Values2[8],
     L_M_SBSPM: Values2[9],
     L_M_chgEtoday: Values2[10],
-    L_M_dcgEtoday: Values2[11]
+    L_M_dcgEtoday: Values2[11],
   };
   // const response["logintext"] === undefined? logintext="" : logintext=response["logintext"];
   // console.log(logintext);
   // console.log("eee")
   const context = {
-    logintext: `${logintext}`
+    logintext: `${logintext}`,
   };
   res.render("Login", { context: context, latestValues, latestValues2 });
 });
@@ -181,7 +181,7 @@ app.post("/login", async (req, res) => {
     if (response["result"] === true && response["repwd"] !== 1) {
       res.cookie("token", response["token"], {
         maxAge: 3600000, // 1 hour in milliseconds
-        httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
+        httpOnly: true, // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
       });
       //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
@@ -192,7 +192,7 @@ app.post("/login", async (req, res) => {
     } else if (response["result"] === true && response["repwd"] === 1) {
       res.cookie("token", response["token"], {
         maxAge: 3600000, // 1 hour in milliseconds
-        httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
+        httpOnly: true, // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
       });
       res.json({ redirect: `/repassword` });
     } else {
@@ -216,7 +216,7 @@ app.get("/repassword", async (req, res) => {
     minUpper: config.upper,
     minLower: config.lower,
     minSpe: config.special,
-    minNum: config.number
+    minNum: config.number,
   };
   res.render("repassword", content);
 });
@@ -337,11 +337,11 @@ async function getData() {
   const startOfDay = moment().startOf("day").add(1, "second"); // 當天的第二秒
   if (flag === 0 || now.isSame(startOfDay, "day")) {
     const night = moment()
-      .set({ hour: 00, minute: 00, second: 00, millisecond: 0 })
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
     const nightoneseconds = moment()
-      .set({ hour: 00, minute: 01, second: 00, millisecond: 0 })
+      .set({ hour: 0, minute: 1, second: 0, millisecond: 0 })
       .utcOffset("+0800")
       .format("YYYY-MM-DDTHH:mm:ss.000[Z]");
 
@@ -349,10 +349,10 @@ async function getData() {
       selector: {
         time: {
           $gte: night,
-          $lte: nightoneseconds
-        }
+          $lte: nightoneseconds,
+        },
       },
-      limit: 10
+      limit: 10,
     };
 
     const midnightData = await rf01Db.find(filterTime);
@@ -389,10 +389,10 @@ async function getData() {
 
 const mangoQuery = {
   selector: {
-    time: { $exists: true }
+    time: { $exists: true },
   },
   sort: [{ time: "desc" }],
-  limit: 1
+  limit: 1,
 };
 
 app.get("/navbar", async (req, res) => {
@@ -420,7 +420,7 @@ app.get("/navbar", async (req, res) => {
       WarningNum_PCS: Values[10],
       WarningNum_FF: Values[11],
       WarningNum_Env: Values[12],
-      WarningNum_Meter: Values[13]
+      WarningNum_Meter: Values[13],
     };
 
     var latestValues2 = {
@@ -435,7 +435,7 @@ app.get("/navbar", async (req, res) => {
       L_M_minSOH: Values2[8],
       L_M_SBSPM: Values2[9],
       L_M_chgEtoday: Values2[10],
-      L_M_dcgEtoday: Values2[11]
+      L_M_dcgEtoday: Values2[11],
     };
     //console.log("latestValues",latestValues);
     res.send({ latestValues, latestValues2 });
@@ -452,7 +452,7 @@ async function getLatestValuesFromDatabase() {
     const alarmData = await alarmnanoDb.find({
       selector: { time: { $exists: true } },
       sort: [{ time: "desc" }],
-      limit: 1000
+      limit: 1000,
     });
 
     let Fault_system_num = 0;
@@ -623,7 +623,7 @@ async function getLatestValuesFromDatabase() {
       Alarm_pcs_num,
       Alarm_FFS_num,
       Alarm_ENV_num,
-      Alarm_meter_num
+      Alarm_meter_num,
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
@@ -643,7 +643,7 @@ async function getLatestValuesFromDatabaseforother() {
         lc1nanoDb.createIndex(indexDef).then(() => lc1nanoDb.find(mangoQuery)),
         lc2nanoDb.createIndex(indexDef).then(() => lc2nanoDb.find(mangoQuery)),
         lc3nanoDb.createIndex(indexDef).then(() => lc3nanoDb.find(mangoQuery)),
-        lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery))
+        lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery)),
       ]);
 
     // 取得每個資料庫的第一條資料
@@ -738,7 +738,7 @@ async function getLatestValuesFromDatabaseforother() {
       L_M_minSOH,
       L_M_SBSPM,
       L_M_chgEtoday,
-      L_M_dcgEtoday
+      L_M_dcgEtoday,
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
@@ -817,6 +817,40 @@ process.on("SIGINT", () => {
 function updateDataPeriodically() {
   console.log("app.js : Data updated periodically...");
 }
+
+const { spawn } = require("child_process");
+
+console.log("啟動 app.js...");
+
+// 啟動 mqtt.js 子進程
+const mqttProcess = spawn("node", ["MQTT.js"], {
+  stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
+});
+
+// 處理 mqtt.js 的錯誤和退出事件
+mqttProcess.on("error", (error) => {
+  console.error(`MQTT.js 啟動錯誤: ${error.message}`);
+});
+
+mqttProcess.on("exit", (code, signal) => {
+  console.log(`MQTT.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
+});
+
+// 啟動 lineForPower.js 子進程
+const lineForPowerProcess = spawn("node", ["lineForPower.js"], {
+  stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
+});
+
+// 處理 lineForPower.js 的錯誤和退出事件
+lineForPowerProcess.on("error", (error) => {
+  console.error(`lineForPower.js 啟動錯誤: ${error.message}`);
+});
+
+lineForPowerProcess.on("exit", (code, signal) => {
+  console.log(`lineForPower.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
+});
+
+console.log("MQTT.js 和 lineForPower.js 子進程已同步啟動");
 
 //module.exports = { nano };
 app.get("/getPermission", (req, res) => {
