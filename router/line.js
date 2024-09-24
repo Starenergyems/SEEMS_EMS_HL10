@@ -32,12 +32,12 @@ function sendLineNotify(message) {
     headers: {
       Authorization: `Bearer ${process.env.LineNotifyToken}`,
       //Authorization: `Bearer ${process.env.LineNotifyToken}`, //正式token
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     params: {
-      message: message
+      message: message,
     },
-    data: {}
+    data: {},
   };
 
   return axios(request)
@@ -86,7 +86,13 @@ async function processDocs() {
       "lc1_rf10.System.402013",
       "lc2_rf10.System.402013",
       "lc3_rf10.System.402013",
-      "lc4_rf10.System.402013"
+      "lc4_rf10.System.402013",
+      "lc1_rf10.System.402020",
+      "lc2_rf10.System.402020",
+      "lc3_rf10.System.402020",
+      "lc4_rf10.System.402020",
+      //"gc_rf10.System.400080:5",
+      //"gc_rf10.System.400080:6",
     ];
 
     for (const doc of docs) {
@@ -103,57 +109,36 @@ async function processDocs() {
           if (doc.level === "Event") {
             recoverstatus = "狀態改變";
             trans_level = "事件";
-            if(doc.recover){
-              formattedDate = moment(doc.recover_time).format(
-                "YYYY/MM/DD"
-              );
-              formattedTime = moment(doc.recover_time).format(
-                "HH時mm分ss秒"
-              );
-            }
-            else{
-              formattedDate = moment(doc.occurrence_time).format(
-                "YYYY/MM/DD"
-              );
+            if (doc.recover) {
+              formattedDate = moment(doc.recover_time).format("YYYY/MM/DD");
+              formattedTime = moment(doc.recover_time).format("HH時mm分ss秒");
+            } else {
+              formattedDate = moment(doc.occurrence_time).format("YYYY/MM/DD");
               formattedTime = moment(doc.occurrence_time).format(
                 "HH時mm分ss秒"
               );
             }
-          } 
-          else if (doc.level === "Fault") {
+          } else if (doc.level === "Fault") {
             trans_level = "Fault";
             if (doc.recover) {
-              formattedDate = moment(doc.recover_time).format(
-                "YYYY/MM/DD"
-              );
-              formattedTime = moment(doc.recover_time).format(
-                "HH時mm分ss秒"
-              );
+              formattedDate = moment(doc.recover_time).format("YYYY/MM/DD");
+              formattedTime = moment(doc.recover_time).format("HH時mm分ss秒");
               recoverstatus = "已復歸";
             } else {
-              formattedDate = moment(doc.occurrence_time).format(
-                "YYYY/MM/DD"
-              );
+              formattedDate = moment(doc.occurrence_time).format("YYYY/MM/DD");
               formattedTime = moment(doc.occurrence_time).format(
                 "HH時mm分ss秒"
               );
               recoverstatus = "觸發";
             }
-          } 
-          else {
+          } else {
             trans_level = "Alarm";
             if (doc.recover) {
-              formattedDate = moment(doc.recover_time).format(
-                "YYYY/MM/DD"
-              );
-              formattedTime = moment(doc.recover_time).format(
-                "HH時mm分ss秒"
-              );
+              formattedDate = moment(doc.recover_time).format("YYYY/MM/DD");
+              formattedTime = moment(doc.recover_time).format("HH時mm分ss秒");
               recoverstatus = "已復歸";
             } else {
-              formattedDate = moment(doc.occurrence_time).format(
-                "YYYY/MM/DD"
-              );
+              formattedDate = moment(doc.occurrence_time).format("YYYY/MM/DD");
               formattedTime = moment(doc.occurrence_time).format(
                 "HH時mm分ss秒"
               );
@@ -287,5 +272,5 @@ setInterval(delprocessDocs, 3000);
 // 修改為：
 module.exports = {
   router,
-  sendLineNotify
+  sendLineNotify,
 };
