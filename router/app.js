@@ -55,7 +55,11 @@ const lc2nanoDb = nano.use("lc2_rf10");
 const lc3nanoDb = nano.use("lc3_rf10");
 const lc4nanoDb = nano.use("lc4_rf10");
 const alarmnanoDb = nano.use("alarm");
-
+const report_hourDb = nano.use("report_hour");
+const report_dayDb = nano.use("report_day");
+const powerusageDb = nano.use("powerusage");
+const reportDb = nano.use("report");
+const report_monthlyDb = nano.use("report_monthly");
 // nano.db.list().then((databases) => {
 //   console.log("資料庫列表:", databases);
 // }).catch((error) => {
@@ -80,6 +84,12 @@ lc2nanoDb.createIndex(indexDef);
 lc3nanoDb.createIndex(indexDef);
 lc4nanoDb.createIndex(indexDef);
 alarmnanoDb.createIndex(indexDef);
+report_hourDb.createIndex(indexDef);
+report_dayDb.createIndex(indexDef);
+powerusageDb.createIndex(indexDef);
+reportDb.createIndex(indexDef);
+report_monthlyDb.createIndex(indexDef);
+
 //***************************************************************************************************************** */
 app.get("/test", async (req, res) => {
   const CREDENTIALS = Buffer.from(
@@ -845,7 +855,6 @@ const lineForPowerProcess = spawn("node", ["lineForPower.js"], {
 lineForPowerProcess.on("error", (error) => {
   console.error(`lineForPower.js 啟動錯誤: ${error.message}`);
 });
-
 lineForPowerProcess.on("exit", (code, signal) => {
   console.log(`lineForPower.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
 });
