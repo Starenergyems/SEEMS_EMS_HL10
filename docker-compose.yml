@@ -1,50 +1,43 @@
 services:
   ems-service:
+    # restart: always
     image: ems-service_v16
     build:
       context: .
       dockerfile: Dockerfile
+    # container_name: ems-service
     environment:
       - TZ=Asia/Taipei
       - HOST_IP=192.168.1.12
-      - MQTT_BROKER_URL=mqtt://mqtt:31883
-      - MQTT_USERNAME=XAkypU1zk
-      - MQTT_PASSWORD=ogQetykSLrGesW-y
     volumes:
-      - ./router:/usr/src/app/router # 挂载本地 router 文件夹到容器中
+      # - ./router:/usr/src/app/router # Mount the <local directory>:<container directory>
+      # - ./router:/usr/src/app/router
+      # - ./public:/usr/src/app/public
+      # - ./views:/usr/src/app/views
+       - ./router/C:/usr/src/app/router/C
     ports:
       - "3000:3000"
-    working_dir: /usr/src/app/router # 指定工作目錄為 /usr/src/app/router
-    command:
-      [
-        "node",
-        "app.js",
-        "line.js",
-        "lineForPower.js",
-        "getReportData.js",
-        "MQTT.js",
-      ]
-    depends_on:
-      - mqtt
+    # environment:
+    # - POSTGRES_NAME=postgres  
+    # - POSTGRES_USER=postgres
+    # - POSTGRES_PASSWORD=postgres
+    command: ["node", "app.js","line.js","lineForPower.js"]
     deploy:
-      replicas: 1
+      replicas: 1 # Set the desired number of replicas
       restart_policy:
         condition: unless-stopped
         delay: 5s
+        # max_attempts: 3
         window: 120s
+    # healthcheck: #需要再確認是否是因為健康檢查導致停機
+    #   test: ["CMD", "curl", "-fs", "http://localhost:3000/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 5s
     networks:
       - ems-service-network
 
-  mqtt:
-    image: eclipse-mosquitto
-    ports:
-      - "31883:31883" # MQTT
-      # - "9001:9001" # WebSocket (可選)
-    networks:
-      - ems-service-network # 使用相同網路
-    volumes:
-      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf # 使用自定義的配置檔
-
 networks:
   ems-service-network:
-    driver: bridge # 使用 bridge 網路驅動
+    external: false

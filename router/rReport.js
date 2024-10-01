@@ -500,8 +500,8 @@ function transformData(data) {
         data[i + 4],
         data[i + 5],
         data[i + 6],
-        data[i + 7],
-      ], // Financial data
+        data[i + 7]
+      ] // Financial data
     ];
     transformedData.push(monthData);
   }
@@ -513,7 +513,7 @@ function transformDataLastDataYear(data, data1) {
   //年報用，上期資料整理成陣列
   const transformedData = [
     data[0],
-    [data[1], data[2], data[3], data[4], data[5], data[6], data1], // Financial data
+    [data[1], data[2], data[3], data[4], data[5], data[6], data1] // Financial data
   ];
 
   return transformedData;
@@ -560,10 +560,10 @@ async function getDayData() {
       selector: {
         time: {
           $gte: dayBeforeYesterdayStart, // 開始時間為大前天的 23:59:57
-          $lte: dayBeforeYesterdayEnd, // 結束時間為大前天的 23:59:59
-        },
+          $lte: dayBeforeYesterdayEnd // 結束時間為大前天的 23:59:59
+        }
       },
-      limit: 3, //只讀取最後三秒
+      limit: 3 //只讀取最後三秒
     };
 
     // 使用篩選器查詢大前天的數據
@@ -611,10 +611,10 @@ async function getDayData() {
         selector: {
           time: {
             $gte: intervalStart.toISOString(), // 開始時間
-            $lte: intervalEnd.toISOString(), // 結束時間
-          },
+            $lte: intervalEnd.toISOString() // 結束時間
+          }
         },
-        limit: 3600, // 每個時間段讀取3600
+        limit: 3600 // 每個時間段讀取3600
       };
 
       // 每個小時的資料分24次每次一小時存進tempData陣列裡面
@@ -662,10 +662,10 @@ async function getDayData() {
       selector: {
         time: {
           $gte: endOfDaybeforyesterday, //大前天 23:59:59~昨天00:00:00
-          $lte: Daybeforyesterday,
-        },
+          $lte: Daybeforyesterday
+        }
       },
-      limit: 1, // 搜尋一筆資料
+      limit: 1 // 搜尋一筆資料
     };
     // console.log("------------------------------------");
     // console.log("endOfDaybeforyesterday:" + endOfDaybeforyesterday);
@@ -698,10 +698,10 @@ async function getDayData() {
     const filter_acrossthenight = {
       selector: {
         time: {
-          $gte: endOfDay, // 等於當天的結束時間
-        },
+          $gte: endOfDay // 等於當天的結束時間
+        }
       },
-      limit: 1, // 搜尋一筆資料
+      limit: 1 // 搜尋一筆資料
     };
     // console.log("endOfDay:" + endOfDay);
 
@@ -952,19 +952,19 @@ async function getDayData() {
     const filteryesterdaystart = {
       selector: {
         time: {
-          $gte: yesterdaystart,
-        },
+          $gte: yesterdaystart
+        }
       },
-      limit: 1,
+      limit: 1
     };
 
     const filteryesterdayend = {
       selector: {
         time: {
-          $gte: yesterdayend1,
-        },
+          $gte: yesterdayend1
+        }
       },
-      limit: 1,
+      limit: 1
     };
 
     //使用篩選器查詢前天的電表數據 昨天00:00:00
@@ -1035,7 +1035,7 @@ async function getDayData() {
     const everydayData = {
       time: yesterdayDate,
       exacutive_rate: hour_final[24],
-      other_info: elsedata,
+      other_info: elsedata
     };
 
     // 每天的資料存到 CouchDB 中
@@ -1052,7 +1052,7 @@ async function getDayData() {
       Date: Date,
       hour_final: hour_final,
       elsedata1: elsedata1,
-      elsedata2: elsedata2,
+      elsedata2: elsedata2
     };
   } catch (error) {
     console.error("Error fetching data from CouchDB:", error);
@@ -1093,10 +1093,10 @@ async function getMonthData() {
     selector: {
       time: {
         $gte: MonthsStartStr, // 開始時間當月起始
-        $lte: MonthsEndStr, // 結束時間為當月最後一天
-      },
+        $lte: MonthsEndStr // 結束時間為當月最後一天
+      }
     },
-    limit: numberOfDays, //限制當月天數
+    limit: numberOfDays //限制當月天數
   };
 
   // 使用篩選器查詢大前天的數據
@@ -1160,19 +1160,19 @@ async function getMonthData() {
   const filterMonthstart = {
     selector: {
       time: {
-        $gte: monthstart,
-      },
+        $gte: monthstart
+      }
     },
-    limit: 1,
+    limit: 1
   };
   //當月的最後一天的23:59:59:000
   const filterMonthend = {
     selector: {
       time: {
-        $gte: monthend,
-      },
+        $gte: monthend
+      }
     },
-    limit: 1,
+    limit: 1
   };
 
   //修改整月的RTE數值
@@ -1272,19 +1272,19 @@ async function getMonthData() {
   const filterforMonthStart = {
     selector: {
       time: {
-        $gte: lastMonthstart, // 開始時間當月起始
-      },
+        $gte: lastMonthstart // 開始時間當月起始
+      }
     },
-    limit: 1, //限制當月天數
+    limit: 1 //限制當月天數
   };
 
   const filterforMonthEnd = {
     selector: {
       time: {
-        $gte: thisMonthstart, // 開始時間當月起始
-      },
+        $gte: thisMonthstart // 開始時間當月起始
+      }
     },
-    limit: 1, //限制當月天數
+    limit: 1 //限制當月天數
   };
 
   // console.log("電表搜尋時間起始/lastMonthstart:" + lastMonthstart);
@@ -1570,7 +1570,7 @@ async function getMonthData() {
     averageArray: averageArray, //表格SPM的TOTAL
     other_sum: other_sum, //用電總量(IM/EXP/NET/終止服務/充放電效率)
     power: power,
-    totMWH: powerFor_aux, //輔助用電總量
+    totMWH: powerFor_aux //輔助用電總量
   };
 
   // 每天的資料存到 CouchDB 中
@@ -1598,18 +1598,18 @@ async function getMonthData() {
   const filterlast_month = {
     selector: {
       time: {
-        $eq: last_month, // 時間等於 last_month
-      },
+        $eq: last_month // 時間等於 last_month
+      }
     },
-    limit: 1, // 只讀取一個文檔
+    limit: 1 // 只讀取一個文檔
   };
   const filterlast_year = {
     selector: {
       time: {
-        $eq: last_year, // 時間等於 去年
-      },
+        $eq: last_year // 時間等於 去年
+      }
     },
-    limit: 1, // 只讀取一個文檔
+    limit: 1 // 只讀取一個文檔
   };
   const lastMonthDoc = await monthly_reportDb.find(filterlast_month);
   const lastYearDoc = await monthly_reportDb.find(filterlast_year);
@@ -1628,7 +1628,7 @@ async function getMonthData() {
     const extractedData1 = [
       ...sumArray,
       ...other_sum.map((value) => parseFloat(value)),
-      ...averageArray,
+      ...averageArray
     ];
     data1.push(extractedData1);
   }
@@ -1649,7 +1649,7 @@ async function getMonthData() {
     const extractedData2 = [
       ...sumArray,
       ...other_sum.map((value) => parseFloat(value)),
-      ...averageArray,
+      ...averageArray
     ];
     data2.push(extractedData2);
   }
@@ -1675,7 +1675,7 @@ async function getMonthData() {
     last_month: data1[0], //前期
     last_month_power: data3[0], //前期power
     last_year: data2[0], //去年同期
-    last_year_power: data4[0], //去年同期power
+    last_year_power: data4[0] //去年同期power
   };
 }
 
@@ -1717,10 +1717,10 @@ async function getYearData() {
     selector: {
       time: {
         $gte: last_year_start, // 時間大於或等於 last_year_start
-        $lte: last_year_end, // 時間小於或等於 last_year_end
-      },
+        $lte: last_year_end // 時間小於或等於 last_year_end
+      }
     },
-    limit: 12, // 12個月
+    limit: 12 // 12個月
   };
 
   const lastYearDocs = await monthly_reportDb.find(filter_year);
@@ -1820,7 +1820,7 @@ async function getYearData() {
     otherSumTotal_1: otherSumTotal[1],
     otherSumTotal_2: otherSumTotal[2],
     otherSumTotal_5: otherSumTotal[5],
-    totMWHTotal: totMWHTotal,
+    totMWHTotal: totMWHTotal
   };
   //console.log("我是要存起來的 YearData:", YearData);
 
@@ -1841,10 +1841,10 @@ async function getYearData() {
   const filter_year_before_last = {
     selector: {
       time: {
-        $eq: the_year_before_last, // 時間等於 the_year_before_last
-      },
+        $eq: the_year_before_last // 時間等於 the_year_before_last
+      }
     },
-    limit: 1, // 只讀取一個文檔
+    limit: 1 // 只讀取一個文檔
   };
 
   const lastYearDoc = await monthly_reportDb.find(filter_year_before_last);
@@ -1860,7 +1860,7 @@ async function getYearData() {
       otherSumTotal_1,
       otherSumTotal_2,
       otherSumTotal_5,
-      totMWH,
+      totMWH
     } = lastYearDoc.docs[0];
     datayear_before_last.push(
       sumArray,
@@ -1893,7 +1893,7 @@ async function getYearData() {
     sumArrayTotal: sumArrayTotal,
     otherSumTotal: otherSumTotal,
     totMWHTotal: totMWHTotal,
-    datayear_before_last: datayear_before_last,
+    datayear_before_last: datayear_before_last
   };
 }
 
@@ -2106,7 +2106,7 @@ router.get("/report/getFile", (req, res) => {
     if (err) {
       res.status(404).json({
         status: "error",
-        message: `${fileName} does not exist in ${folderPath}`,
+        message: `${fileName} does not exist in ${folderPath}`
       });
     } else {
       // If the file exists, read and send its content
@@ -2114,7 +2114,7 @@ router.get("/report/getFile", (req, res) => {
         if (readErr) {
           res.status(500).json({
             status: "error",
-            message: `Error reading ${fileName}: ${readErr}`,
+            message: `Error reading ${fileName}: ${readErr}`
           });
         } else {
           res.send(data);
