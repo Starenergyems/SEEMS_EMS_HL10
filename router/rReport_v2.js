@@ -166,7 +166,7 @@ const queryReport = async (req, res) => {
   } else {
     console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
   }
-  
+
   // - 後端將excel存於本機指定位置
   divideFileName(fileName); //將獨到的日期拆分為y, m, d
   if (reportType === "年報") {
@@ -205,7 +205,6 @@ const queryReport = async (req, res) => {
   const fileStream = fs.createReadStream(filePath);
   fileStream.pipe(res);
 };
-
 
 // * 自動下載
 const queryReport_auto = async (template) => {
@@ -309,7 +308,6 @@ const queryReport_auto = async (template) => {
     console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
   }
 
-
   if (template === "YearReport") {
     directoryPath = path.join("C", "report", `${yesterdayY}`); //下載後存在哪，要跟getReport api同步
     filePath = path.join(directoryPath, yesterdayY + "y.xlsx"); //檔名叫什麼
@@ -326,7 +324,7 @@ const queryReport_auto = async (template) => {
       "report",
       `${yesterdayY}`,
       `${yesterdayM}`
-    ); 
+    );
     filePath = path.join(
       directoryPath,
       `${yesterdayY}` + "y" + `${yesterdayM}` + "m" + `${yesterdayD}` + "d.xlsx"

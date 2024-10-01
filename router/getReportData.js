@@ -129,7 +129,6 @@ async function checkBidID(formattedTime) {
 // - 主程式傳入指定時間區間(起始與結束) 並獲取該時間區間內的原始執行率
 // - 檢查是否有缺漏 非3603筆 記得確認這兩個小時有沒有得標!
 async function getHourRange(formattedTimeStart, formattedTimeEnd) {
-  
   try {
     console.log("---------------正在獲取指定小時的原始執行率---------------");
     console.log(
@@ -299,7 +298,9 @@ function getFormattedDate(formattedHour, date) {
 // - (核心) 獲取每小時的執行率 會先判斷是否已存在該小時數值才進行撈取
 // 依據時間範圍查詢資料庫內是否有該小時的數據，若無則透過 getHourRange 進行數據提取，並計算最大、最小和平均執行率，最終將資料存入資料庫。
 async function getSnigleHourValue(date) {
-  console.log("########################################################################");
+  console.log(
+    "########################################################################"
+  );
   console.log("date: ", date);
   try {
     const formattedHour = formatHour(date); // 獲取目前小時
@@ -382,7 +383,9 @@ async function getSnigleHourValue(date) {
 // * 完整日報************************************************************************************************************ *//
 // - 檢查全日完整資料是否已存在
 async function checkDayExists(specifiedTime) {
-  console.log("########################################################################");
+  console.log(
+    "########################################################################"
+  );
   console.log("執行日報檢查");
   const targetDay = formatDate(specifiedTime);
   console.log("日報檢查的目標日期(targetDay): ", targetDay);
@@ -408,7 +411,9 @@ async function checkDayExists(specifiedTime) {
 
 async function check24HourExists(specifiedTime) {
   try {
-    console.log("########################################################################");
+    console.log(
+      "########################################################################"
+    );
     console.log("------ 執行檢查全日24小時的執行率是否存在 ------");
     const targetDay = formatDate(specifiedTime);
     console.log("targetDay: ", targetDay);
@@ -423,7 +428,7 @@ async function check24HourExists(specifiedTime) {
         },
       },
       limit: 24,
-      sort: [{ time: "asc" }] // 確保資料按時間排序
+      sort: [{ time: "asc" }], // 確保資料按時間排序
     };
 
     // 查詢數據庫以獲取現有資料
@@ -451,7 +456,9 @@ async function check24HourExists(specifiedTime) {
       console.log("資料完整，存在 24 筆資料。");
       return { complete: true, result: hourlyDataArray };
     } else {
-      console.log(`資料不完整，缺少的時間段: ${missingTimeIndexes.join(", ")}。`);
+      console.log(
+        `資料不完整，缺少的時間段: ${missingTimeIndexes.join(", ")}。`
+      );
       // 逐一補值，每次只補一個小時，補完再補下一個小時
       for (const Hour of missingTimeIndexes) {
         let targetHourTime = moment.utc(specifiedTime).set({
@@ -492,13 +499,13 @@ async function check24HourExists(specifiedTime) {
   }
 }
 
-
-
 // - 副程式: 獲得全天(日報)電力使用資訊
 async function getFullDayPowerUsage(type, specifiedTime) {
-  console.log("########################################################################");
+  console.log(
+    "########################################################################"
+  );
   console.log("執行日報中電力資訊獲取，執行日期為: ", specifiedTime.format());
- // console.log("類型(type): ", type);
+  // console.log("類型(type): ", type);
   // 設定 startTime 和 endTime 為當天的00:00:00.000和23:59:59.000，並加上時區偏移
   const targetDay = specifiedTime.format("YYYY-MM-DD");
   const startTime = moment(targetDay + "T00:00:00.000+08:00").format(
@@ -680,7 +687,9 @@ async function getFullDayPowerUsage(type, specifiedTime) {
 
 // // - 副程式: 中止服務時間與容量(保留功能 尚未有中止數據)
 async function statisticsOutOfService(specifiedTime) {
-  console.log("########################################################################");
+  console.log(
+    "########################################################################"
+  );
   //console.log("獲取當日中止服務時間與容量(目前尚未有中止數據!)");
   const hours = 0;
   const capacity = 0;
@@ -706,10 +715,9 @@ async function getDailyReportData(specifiedTime) {
     );
     console.log("3.執行檢查日報資料庫，檢查全日日報是否已建立於資料庫。");
     const ischeckDayExists = await checkDayExists(specifiedTime); //檢查全日完整資料是否已存在
-    if (ischeckDayExists.state === false) { //全日資料不存在
-      console.log(
-        "ischeckDayExists: 資料庫內無全日資料!"
-      );
+    if (ischeckDayExists.state === false) {
+      //全日資料不存在
+      console.log("ischeckDayExists: 資料庫內無全日資料!");
       //檢查24小時的數值
       let check24HourExistsValue = await check24HourExists(specifiedTime);
       if (check24HourExistsValue.complete === true) {
@@ -1365,7 +1373,6 @@ getDailyReportData(specifiedTime);
 //   }
 // }
 
-
 // /////////////////////////////////////////////////////////////////////////////////////////////
 // // -日報執行主程式: 定期執行 隔天1點執行
 function startdayCheck() {
@@ -1379,4 +1386,4 @@ function startdayCheck() {
 }
 startdayCheck();
 
- module.exports = { getDailyReportData };
+module.exports = { getDailyReportData };
