@@ -60,6 +60,7 @@ const report_dayDb = nano.use("report_day");
 const powerusageDb = nano.use("powerusage");
 const reportDb = nano.use("report");
 const report_monthlyDb = nano.use("report_monthly");
+
 // nano.db.list().then((databases) => {
 //   console.log("資料庫列表:", databases);
 // }).catch((error) => {
