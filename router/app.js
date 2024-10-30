@@ -806,6 +806,7 @@ server.listen(port, () => {
   const emsnumber = process.env.EMS_NUM;
   const HOST_IP = process.env.HOST_IP;
   const message = `
+(功能測試中，多次重啟是正常情況，勿慌張)
 EMS${emsnumber}主程式重新啟動 !!
 主機IP為：${HOST_IP}`;
   sendLineNotify(message);

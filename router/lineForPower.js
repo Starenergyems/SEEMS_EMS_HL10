@@ -65,7 +65,7 @@ function sendLineNotify(message) {
 }
 
 async function fetchDataAndNotify() {
-  const yesterday = moment().subtract(4, "days").format("YYYY-MM-DD"); // 修正為昨日日期
+  const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD"); // 修正為昨日日期
   try {
     const body = await powerusageDb.find({
       selector: {
@@ -85,7 +85,7 @@ async function fetchDataAndNotify() {
       const message = `花蓮 4-1 案場\nDate: ${data.date}\n輸入電量(Imp): ${data.day_kWh_Import} kWh\n輸出電量(Exp): ${data.day_kWh_Export} kWh\n用電量(Net): ${data.kWh_Net} kWh\nRTE: ${data.kWh_RTE} %`;
       await sendLineNotify(message);
     } else {
-      const yesterdaytime = moment().subtract(4, "days"); // 保持 moment 對象
+      const yesterdaytime = moment().subtract(1, "days"); // 保持 moment 對象
       // 呼叫 getFullDayPowerUsage 函數，傳入參數 type = "D" 和 specifiedTime = yesterday
       const result = await getFullDayPowerUsage("D", yesterdaytime);
 
@@ -103,15 +103,13 @@ async function fetchDataAndNotify() {
   }
 }
 
-// 每五分鐘執行一次
+// 每天八點執行一次
 schedule.scheduleJob("0 8 * * *", () => {
   fetchDataAndNotify();
 });
 
-fetchDataAndNotify();
-
 // 服務啟動時立即發送測試通知
-// sendLineNotify("電量通知服務啟用");
+// sendLineNotify("電量通知服務v.1 啟用中~");
 
 // 測試用立即發送通知
 //message = "Hello!";

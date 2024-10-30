@@ -14,23 +14,15 @@ const axios = require("axios"); //在server執行get
 
 const config = require("./config");
 const { Console } = require("console");
+const {
+  getDailyReportData,
+  getMonthlyReportData,
+  getYearReportData,
+} = require("./getReportData");
 const couchdbConfig = config.database;
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
-const { getDailyReportData } = require("./getReportData");
-const gc_rf10 = "gc_rf10";
-const gcDb = nano.use(gc_rf10);
-const other_rf01 = "other_rf01";
-const other01Db = nano.use(other_rf01);
-const other_rf10 = "other_rf10";
-const other10Db = nano.use(other_rf10);
-const report = "report";
-const reportDb = nano.use(report);
-const monthly_report = "monthly_report";
-const monthly_reportDb = nano.use(monthly_report);
-const year_report = "year_report";
-const Year_reportDb = nano.use(year_report);
 
 //set
 app.set("view engine", "ejs");
@@ -57,6 +49,7 @@ router.get("/report/report", (req, res) => {
 
 var specified_date; // 指定要撈哪天(會撈前一天) / 月(填4月會撈3月) / 年(填2024年會撈2023年)的資料
 
+/*************************************************************************************************** */
 router.get("/report/download-excel", async (req, res) => {
   //定期撈資料供下載存至地端or檔案不存在就自己撈資料
   try {
@@ -70,8 +63,8 @@ router.get("/report/download-excel", async (req, res) => {
 
 /***************************************************************************************************** */
 var click_year, click_month, click_day;
-// * 手動下載
 const queryReport = async (req, res) => {
+  //撈資料放入對應excel表格for前端手動下載
   const { templatePath, reportType, fileName } = req.query; //url要帶參數，fileName是從畫面上讀取的
   if (!templatePath) {
     return res.status(400).send("Missing templatePath parameter");
@@ -83,82 +76,51 @@ const queryReport = async (req, res) => {
   //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
   const workbook = await xlsx.fromFileAsync(templatePath);
   var couchData; //插入excel的數值
+
   if (reportType === "年報") {
-    couchData = await getYearData();
-    const transformedDataforyear = transformData(couchData.dataforyear); //整理資料為陣列
-    const transformedTot = transformOtherSumTotal(
-      couchData.otherSumTotal,
-      couchData.totMWHTotal
+    couchData = await getYearData(specified_date);
+    updateExcel1DHorizon(workbook, couchData.result.sbspm, 0, "D6"); //每個月的數值含每月加總(但不含輔助用電)
+    updateExcel1DHorizon(workbook, couchData.previousYearData.sbspm, 0, "D19");
+    //-輔助用電 垂直放入就好
+    updateExcel1DVertical(workbook, couchData.result.powerUseSum[12], 0, "P6"); //加總
+    updateExcel1DVertical(
+      workbook,
+      couchData.previousYearData.powerUseSum[12],
+      0,
+      "P19"
     );
-    const transformedDataLast = transformDataLastDataYear(
-      couchData.datayear_before_last
-    );
-    const months = [
-      "D6",
-      "K6",
-      "D7",
-      "K7",
-      "D8",
-      "K8",
-      "D9",
-      "K9",
-      "D10",
-      "K10",
-      "D11",
-      "K11",
-      "D12",
-      "K12",
-      "D13",
-      "K13",
-      "D14",
-      "K14",
-      "D15",
-      "K15",
-      "D16",
-      "K16",
-      "D17",
-      "K17",
-    ];
-
-    for (let i = 0; i < 12; i++) {
-      updateExcel1DHorizon(
-        workbook,
-        transformedDataforyear[i][1],
-        0,
-        months[i * 2]
-      );
-      updateExcel1DHorizon(
-        workbook,
-        transformedDataforyear[i][2],
-        0,
-        months[i * 2 + 1]
-      );
-    }
-
-    updateExcel1DHorizon(workbook, couchData.sumArrayTotal, 0, "D18"); //總共
-    updateExcel1DHorizon(workbook, transformedTot, 0, "K18");
-    updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
-    updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19");
-
-    // await workbook.toFileAsync(tempFilePath);
   } else if (reportType === "月報") {
-    couchData = await getMonthData();
-    updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
-    updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 1, "K3"); //日期
-    updateExcel2DHorizon(workbook, couchData.data_exacutive_rate, 1, "D6"); //服務品質指標+SPM
-    updateExcel2DHorizon(workbook, couchData.data_other_info, 1, "N6"); //總用電+中止+充放電效率
-    updateExcel1DHorizon(workbook, couchData.other_sum, 1, "N37"); //total總用電+中止+充放電效率
-    updateExcel1DHorizon(workbook, couchData.sumArray, 1, "D37"); //total服務品質指標
-    updateExcel1DHorizon(workbook, couchData.averageArray, 1, "K37"); //total SPM
-    updateExcel1DHorizon(workbook, couchData.last_month, 1, "D38"); //上期
-    updateExcel1DHorizon(workbook, couchData.last_year, 1, "D39"); //去年同期
+    couchData = await getMonthlyReportData(specified_date);
+    updateExcel2DHorizon(workbook, couchData.date, 0, "H3"); //日期
+    updateExcel2DHorizon(workbook, couchData.date, 1, "K3"); //日期
+    updateExcel2DHorizon(workbook, couchData.thisMonth.sbspm, 1, "D6"); //服務品質指標+SPM
 
-    updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
-    updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
-    updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
-    // await workbook.toFileAsync(tempFilePath);
+    updateExcel1DHorizon(workbook, couchData.lastMonth.sbspm, 1, "D38"); //上期
+    updateExcel1DHorizon(workbook, couchData.lastYear.sbspm, 1, "D39"); //去年同期
+    updateExcel1DHorizon(
+      workbook,
+      couchData.thisMonth.powerUseSum_calculate,
+      0,
+      "D6"
+    );
+    updateExcel1DHorizon(workbook, couchData.thisMonth.auxPower[1], 0, "D6");
+    updateExcel1DHorizon(
+      workbook,
+      couchData.lastMonth.powerUseSum_calculate,
+      0,
+      "D7"
+    );
+    updateExcel1DHorizon(workbook, couchData.lastMonth.auxPower[1], 0, "D7");
+    updateExcel1DHorizon(
+      workbook,
+      couchData.lastYear.powerUseSum_calculate,
+      0,
+      "D8"
+    );
+    updateExcel1DHorizon(workbook, couchData.lastYear.auxPower[1], 0, "D8");
   } else if (reportType === "日報") {
     couchData = await getDailyReportData(specified_date);
+
     updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
     updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
     updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
@@ -167,7 +129,7 @@ const queryReport = async (req, res) => {
     console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
   }
 
-  // - 後端將excel存於本機指定位置
+  //************後端將excel存於本機指定位置/////////////////////////////////////////////////////////
   divideFileName(fileName); //將獨到的日期拆分為y, m, d
   if (reportType === "年報") {
     directoryPath = path.join("C", "report", `${click_year}`); //下載後存在哪，要跟getReport api同步
@@ -178,6 +140,7 @@ const queryReport = async (req, res) => {
   } else {
     console.log("參數設置錯誤，報表種類應為年報/月報/日報");
   }
+
   filePath = path.join(directoryPath, fileName); //檔名叫什麼
   // Check if the directory exists, create it if not
   console.log("Resolved absolute path:", path.resolve(directoryPath));
@@ -190,9 +153,9 @@ const queryReport = async (req, res) => {
       console.error("Error creating directory:", error.message);
     }
   }
+
   await workbook.toFileAsync(filePath);
   console.log("報表儲存於", filePath);
-
   //回覆給前端/////////////////////////////////////////////////////////
   // Set up response headers for Excel file download
   res.setHeader(
@@ -206,13 +169,12 @@ const queryReport = async (req, res) => {
   fileStream.pipe(res);
 };
 
-// * 自動下載
 const queryReport_auto = async (template) => {
-  //撈資料放入對應excel表格for後端自動下載呼叫
   if (!template) {
     return res.status(400).send("Missing templatePath parameter");
   }
   let directoryPath, filePath, reportType;
+
   if (template === "YearReport") {
     reportType = "年報";
   } else if (template === "MonthReport") {
@@ -225,77 +187,64 @@ const queryReport_auto = async (template) => {
   let today = formatedDate(new Date()); //今天幾號
   let queryDate = removeDatePart(template, today); //
   //console.log("today", today);
+
   yesterday(); //昨天幾年幾月幾日
-  //console.log("queryDate:" + queryDate);
+  console.log("queryDate:" + queryDate);
   specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
   var tempFilePath; //暫存的excel資料
+
   //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
   let templatePath = "../public/report/" + template + ".xlsx";
   const workbook = await xlsx.fromFileAsync(templatePath);
   var couchData; //插入excel的數值
   // Fetch data from MongoDB
   if (reportType === "年報") {
-    couchData = await getYearData();
-    const transformedDataforyear = transformData(couchData.dataforyear); //整理資料為陣列
-    const transformedTot = transformOtherSumTotal(
-      couchData.otherSumTotal,
-      couchData.totMWHTotal
+    couchData = await getYearData(specified_date);
+    updateExcel1DHorizon(workbook, couchData.result.sbspm, 0, "D6"); //每個月的數值含每月加總(但不含輔助用電)
+    updateExcel1DHorizon(workbook, couchData.previousYearData.sbspm, 0, "D19");
+    //-輔助用電 垂直放入就好
+    updateExcel1DVertical(workbook, couchData.result.powerUseSum[12], 0, "P6"); //加總
+    updateExcel1DVertical(
+      workbook,
+      couchData.previousYearData.powerUseSum[12],
+      0,
+      "P19"
     );
-    const transformedDataLast = transformDataLastDataYear(
-      couchData.datayear_before_last
-    );
-    updateExcel1DHorizon(workbook, transformedDataforyear[0][1], 0, "D6"); //1月
-    updateExcel1DHorizon(workbook, transformedDataforyear[0][2], 0, "K6");
-    updateExcel1DHorizon(workbook, transformedDataforyear[1][1], 0, "D7"); //2月
-    updateExcel1DHorizon(workbook, transformedDataforyear[1][2], 0, "K7");
-    updateExcel1DHorizon(workbook, transformedDataforyear[2][1], 0, "D8"); //3月
-    updateExcel1DHorizon(workbook, transformedDataforyear[2][2], 0, "K8");
-    updateExcel1DHorizon(workbook, transformedDataforyear[3][1], 0, "D9"); //4月
-    updateExcel1DHorizon(workbook, transformedDataforyear[3][2], 0, "K9");
-    updateExcel1DHorizon(workbook, transformedDataforyear[4][1], 0, "D10"); //5月
-    updateExcel1DHorizon(workbook, transformedDataforyear[4][2], 0, "K10");
-    updateExcel1DHorizon(workbook, transformedDataforyear[5][1], 0, "D11"); //6月
-    updateExcel1DHorizon(workbook, transformedDataforyear[5][2], 0, "K11");
-    updateExcel1DHorizon(workbook, transformedDataforyear[6][1], 0, "D12"); //7月
-    updateExcel1DHorizon(workbook, transformedDataforyear[6][2], 0, "K12");
-    updateExcel1DHorizon(workbook, transformedDataforyear[7][1], 0, "D13"); //8月
-    updateExcel1DHorizon(workbook, transformedDataforyear[7][2], 0, "K13");
-    updateExcel1DHorizon(workbook, transformedDataforyear[8][1], 0, "D14"); //9月
-    updateExcel1DHorizon(workbook, transformedDataforyear[8][2], 0, "K14");
-    updateExcel1DHorizon(workbook, transformedDataforyear[9][1], 0, "D15"); //10月
-    updateExcel1DHorizon(workbook, transformedDataforyear[9][2], 0, "K15");
-    updateExcel1DHorizon(workbook, transformedDataforyear[10][1], 0, "D16"); //11月
-    updateExcel1DHorizon(workbook, transformedDataforyear[10][2], 0, "K16");
-    updateExcel1DHorizon(workbook, transformedDataforyear[11][1], 0, "D17"); //12月
-    updateExcel1DHorizon(workbook, transformedDataforyear[11][2], 0, "K17");
-
-    updateExcel1DHorizon(workbook, couchData.sumArrayTotal, 0, "D18"); //總共
-    updateExcel1DHorizon(workbook, transformedTot, 0, "K18");
-    updateExcel1DHorizon(workbook, transformedDataLast[0], 0, "D19"); //去年同期
-    updateExcel1DHorizon(workbook, transformedDataLast[1], 0, "K19");
-    // tempFilePath = path.join(__dirname, "temp.xlsx");
-    // await workbook.toFileAsync(tempFilePath);
   } else if (reportType === "月報") {
-    couchData = await getMonthData();
-    updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 0, "H3"); //日期
-    updateExcel2DHorizon(workbook, couchData.lastMonthYearMonth, 1, "K3"); //日期
-    updateExcel2DHorizon(workbook, couchData.data_exacutive_rate, 1, "D6"); //服務品質指標+SPM
-    updateExcel2DHorizon(workbook, couchData.data_other_info, 1, "N6"); //總用電+中止+充放電效率
-    updateExcel1DHorizon(workbook, couchData.other_sum, 1, "N37"); //total總用電+中止+充放電效率
-    updateExcel1DHorizon(workbook, couchData.sumArray, 1, "D37"); //total服務品質指標
-    updateExcel1DHorizon(workbook, couchData.averageArray, 1, "K37"); //total SPM
-    updateExcel1DHorizon(workbook, couchData.last_month, 1, "D38"); //上期
-    updateExcel1DHorizon(workbook, couchData.last_year, 1, "D39"); //去年同期
+    couchData = await getMonthlyReportData(specified_date);
+    updateExcel2DHorizon(workbook, couchData.date, 0, "H3"); //日期
+    updateExcel2DHorizon(workbook, couchData.date, 1, "K3"); //日期
 
-    updateExcel1DHorizon(workbook, couchData.power, 0, "D6");
-    updateExcel1DHorizon(workbook, couchData.last_month_power, 0, "D7");
-    updateExcel1DHorizon(workbook, couchData.last_year_power, 0, "D8");
+    updateExcel2DHorizon(workbook, couchData.thisMonth.sbspm, 1, "D6"); //服務品質指標+SPM
+    updateExcel1DHorizon(workbook, couchData.lastMonth.sbspm, 1, "D38"); //上期
+    updateExcel1DHorizon(workbook, couchData.lastYear.sbspm, 1, "D39"); //去年同期
+
+    updateExcel1DHorizon(
+      workbook,
+      couchData.thisMonth.powerUseSum_calculate,
+      0,
+      "D6"
+    );
+    updateExcel1DHorizon(workbook, couchData.thisMonth.auxPower[1], 0, "D6");
+    updateExcel1DHorizon(
+      workbook,
+      couchData.lastMonth.powerUseSum_calculate,
+      0,
+      "D7"
+    );
+    updateExcel1DHorizon(workbook, couchData.lastMonth.auxPower[1], 0, "D7");
+    updateExcel1DHorizon(
+      workbook,
+      couchData.lastYear.powerUseSum_calculate,
+      0,
+      "D8"
+    );
+    updateExcel1DHorizon(workbook, couchData.lastYear.auxPower[1], 0, "D8");
 
     // tempFilePath = path.join(__dirname, "temp.xlsx");
     // await workbook.toFileAsync(tempFilePath);
   } else if (reportType === "日報") {
-    //couchData = await getDayData();
-    couchData = await getReportData(specified_date);
+    couchData = await getDailyReportData(specified_date);
 
     // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
     updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
@@ -313,6 +262,7 @@ const queryReport_auto = async (template) => {
     filePath = path.join(directoryPath, yesterdayY + "y.xlsx"); //檔名叫什麼
   } else if (template === "MonthReport") {
     directoryPath = path.join("C", "report", `${yesterdayY}`); //下載後存在哪，要跟getReport api同步
+
     filePath = path.join(
       directoryPath,
       `${yesterdayY}` + "y" + `${yesterdayM}` + "m.xlsx"
@@ -323,8 +273,9 @@ const queryReport_auto = async (template) => {
       "C",
       "report",
       `${yesterdayY}`,
-      `${yesterdayM}`
+      `${yesterdayM}` //這個有成功存在"router" "/C/report/2024/3"
     );
+
     filePath = path.join(
       directoryPath,
       `${yesterdayY}` + "y" + `${yesterdayM}` + "m" + `${yesterdayD}` + "d.xlsx"
@@ -332,6 +283,7 @@ const queryReport_auto = async (template) => {
   } else {
     console.log("參數設置錯誤");
   }
+
   // Check if the directory exists, create it if not
   console.log("Resolved absolute path:", path.resolve(directoryPath));
   if (!fs.existsSync(directoryPath)) {
@@ -343,47 +295,11 @@ const queryReport_auto = async (template) => {
       console.error("Error creating directory:", error.message);
     }
   }
+
   await workbook.toFileAsync(filePath);
   console.log("報表儲存於", filePath);
 };
-
 // Function to transform the data
-function transformData(data) {
-  //年報用，每月值整理成陣列
-  const transformedData = [];
-
-  for (let i = 0; i < data.length; i += 8) {
-    const monthData = [
-      [data[i]], // Month string
-      data[i + 1], // Numerical data
-      [
-        data[i + 2],
-        data[i + 3],
-        data[i + 4],
-        data[i + 5],
-        data[i + 6],
-        data[i + 7],
-      ], // Financial data
-    ];
-    transformedData.push(monthData);
-  }
-  return transformedData;
-}
-
-function transformDataLastDataYear(data, data1) {
-  //年報用，上期資料整理成陣列
-  const transformedData = [
-    data[0],
-    [data[1], data[2], data[3], data[4], data[5], data[6], data1], // Financial data
-  ];
-  return transformedData;
-}
-
-function transformOtherSumTotal(data) {
-  //整理順序格式為陣列
-  const transformedData = [data[3], data[0], data[1], data[2], data[5]];
-  return transformedData;
-}
 
 function convertFileNameToDate(inputFileName) {
   //將畫面上的名稱轉成搜尋日期(會搜尋昨天/上個月/去年，所以要+1天)
@@ -427,6 +343,7 @@ function convertFileNameToDate(inputFileName) {
   const formattedDate = `${formattedYear}-${formattedMonth}-${formattedDay} 00:00:00`;
   return formattedDate;
 }
+
 function divideFileName(inputFileName) {
   //將畫面上的名稱轉成分開的y,m,d, 用於設定手動下載的存檔路徑
   // Extract the date parts from the filename using a regular expression
@@ -441,17 +358,18 @@ function divideFileName(inputFileName) {
   click_day = match[3];
   return click_year, click_month, click_day;
 }
+
 // Update Excel file with MongoDB data
 function updateExcel2DHorizon(workbook, queryData, sheetNum, excelStart) {
   //(範本位置，插入資料，第幾個分頁，插入位址)
   const sheet = workbook.sheet(sheetNum); //第幾個分頁(第一頁是0)
   //console.log("insert:", queryData);
   if (queryData == undefined) {
-    mongoData = [];
+    couchData = [];
   } else {
-    mongoData = queryData;
+    couchData = queryData;
   }
-  //console.log("mongoData length:", mongoData.length);
+  //console.log("couchDatalength:", mongoData.length);
   const startCell = excelStart; //塞在excel哪裡
 
   if (mongoData.includes("-")) {
@@ -493,17 +411,18 @@ function updateExcel2DHorizon(workbook, queryData, sheetNum, excelStart) {
     });
   }
 }
+
 //一維陣列垂直新增於表格
 function updateExcel1DVertical(workbook, queryData, sheetNum, excelStart) {
   //(範本位置，插入資料，第幾個分頁，插入位址)
   const sheet = workbook.sheet(sheetNum); //第幾個分頁(第一頁是0)
   //console.log("insert:", queryData);
   if (queryData == undefined) {
-    mongoData = [];
+    couchData = [];
   } else {
-    mongoData = queryData;
+    couchData = queryData;
   }
-  //console.log("mongoData length:", mongoData.length);
+  //console.log("couchDatalength:", mongoData.length);
   const startCell = excelStart; //塞在excel哪裡
 
   mongoData.forEach((data, rowIndex) => {
@@ -516,17 +435,18 @@ function updateExcel1DVertical(workbook, queryData, sheetNum, excelStart) {
     sheet.cell(targetCell).value(data);
   });
 }
+
 // 一維矩陣更新excel，橫放
 function updateExcel1DHorizon(workbook, queryData, sheetNum, excelStart) {
   //(範本位置，插入資料，插入位址)
   const sheet = workbook.sheet(sheetNum); //第幾個分頁(第一個為0)
   //console.log("insert:", queryData);
   if (queryData == undefined) {
-    mongoData = [];
+    couchData = [];
   } else {
-    mongoData = queryData;
+    couchData = queryData;
   }
-  //console.log("mongoData length:", mongoData.length);
+  //console.log("couchDatalength:", mongoData.length);
   //console.log("一維矩陣橫向新增");
   const startCell = excelStart; //塞在excel哪裡
 
@@ -552,6 +472,7 @@ function updateExcel1DHorizon(workbook, queryData, sheetNum, excelStart) {
     });
   }
 }
+
 function charToAscii(char) {
   //字母轉成ASCII code
   if (char.length === 1) {
@@ -561,6 +482,7 @@ function charToAscii(char) {
     return null;
   }
 }
+
 /***************************************************************************** */
 router.get("/report/getFile", (req, res) => {
   //點擊尋找已存好的檔案
@@ -571,6 +493,7 @@ router.get("/report/getFile", (req, res) => {
   if (!fileName || !folderPath) {
     return res.status(400).send("Missing parameter");
   }
+
   const filePath = path.join(folderPath, fileName);
   //console.log("目標位置:" + filePath);
   // Check if the file exists
@@ -604,11 +527,13 @@ function yesterday() {
 
   // Calculate yesterday's date
   let yesterdayDate = new Date(currentDate);
-  yesterdayDate.setDate(currentDate.getDate() - 1);
+  yesterdayDate.setDate(currentDate.getDate());
+
   // Separate year, month, and day
   yesterdayY = yesterdayDate.getFullYear();
-  yesterdayM = yesterdayDate.getMonth() + 1; // Months are zero-based in JavaScript
+  yesterdayM = yesterdayDate.getMonth(); // Months are zero-based in JavaScript
   yesterdayD = yesterdayDate.getDate();
+
   // Log the result
   console.log(
     `Yesterday's date was: ${yesterdayY}-${yesterdayM}-${yesterdayD}`
@@ -618,15 +543,15 @@ function yesterday() {
 function formatedDate(date) {
   //Date格式轉換成2023年1月1日.xlsx
   const year = date.getFullYear();
-  const month = date.getMonth() + 1; // Month is zero-based
+  const month = date.getMonth(); // Month is zero-based
   const day = date.getDate();
   return `${year}年${month}月${day}日.xlsx`;
 }
-
 function removeDatePart(template, formattedDate) {
   //後續會使用是否有"月""日"來判斷要如何搜尋資料，沒有"日"就是月報，沒有"日月"就是年報
   // Regular expression to match both date formats
   const regex = /^(\d{4})年(\d{1,2})月(\d{1,2})日.xlsx$/;
+
   // Extract year and month parts based on the matched format
   const match = formattedDate.match(regex);
   let year, month;
@@ -646,9 +571,8 @@ function removeDatePart(template, formattedDate) {
   console.error("輸入格式異常, 應為ex:2023年1月1日.xlsx");
   return "output.xlsx";
 }
-
 var yesterdayY, yesterdayM, yesterdayD;
-// - 使用 cron 來定時執行報表生成
+
 cron.schedule("0 2 1 1 *", async () => {
   // 秒 分 時 日 月 星期幾 由右到左對照，每年1月1日2:00執行產出前一年年報
   try {
@@ -681,3 +605,5 @@ cron.schedule("0 1 * * *", async () => {
     console.error("Cron job: Error generating Excel file:", error);
   }
 });
+
+module.exports = router;
