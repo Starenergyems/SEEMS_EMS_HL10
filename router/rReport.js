@@ -219,31 +219,42 @@ const queryReport_auto = async (template) => {
   if (!template) {
     return res.status(400).send("Missing templatePath parameter");
   }
-  let directoryPath, filePath, reportType;
 
+  let directoryPath, filePath, reportType;
+  let tag;
+
+  // 確定報表類型
   if (template === "YearReport") {
+    tag = "y";
     reportType = "年報";
   } else if (template === "MonthReport") {
+    tag = "m";
     reportType = "月報";
   } else if (template === "DayReport") {
     reportType = "日報";
+    tag = "d";
   } else {
     console.error("報表模板檔名異常,應為YearReport, MonthReport, DayReport");
+    return;
   }
-  let today = formatedDate(new Date()); //今天幾號
-  let queryDate = removeDatePart(template, today); //
-  //console.log("today", today);
 
-  yesterday(); //昨天幾年幾月幾日
-  console.log("queryDate:" + queryDate);
-  specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss"); //設定搜尋日期
-  var tempFilePath; //暫存的excel資料
+  // 使用 `yesterday` 函數取得日期
+  const {
+    year: yesterdayY,
+    month: yesterdayM,
+    day: yesterdayD,
+  } = yesterday(tag);
 
-  //使用xlsx庫從指定的Excel模板路徑讀取工作簿。
-  let templatePath = "../public/report/" + template + ".xlsx";
+  // 組成 `queryDate`
+  const queryDate = `${yesterdayY}-${yesterdayM}-${yesterdayD} 00:00:00`;
+  console.log("queryDate:", queryDate);
+
+  // 設置 `specified_date` 為 `moment` 格式
+  specified_date = moment(queryDate, "YYYY-MM-DD HH:mm:ss");
+  console.log("自動產生報表功能時間:", specified_date);
+  // 設定模板路徑
+  const templatePath = `../public/report/${template}.xlsx`;
   const workbook = await xlsx.fromFileAsync(templatePath);
-  var couchData; //插入excel的數值
-  // Fetch data from MongoDB
   if (reportType === "年報") {
     couchData = await getYearReportData(specified_date);
     updateExcel1DHorizon(workbook, couchData.result.sbspm, 0, "D6"); //每個月的數值含每月加總(但不含輔助用電)
@@ -534,24 +545,26 @@ router.get("/report/getFile", (req, res) => {
   });
 });
 
-function yesterday() {
-  //用來控制自動下載的檔名，應為昨天的日期or上個月or去年
-  // Get the current date and time
+function yesterday(tag) {
   let currentDate = new Date();
+  let resultDate = new Date(currentDate);
 
-  // Calculate yesterday's date
-  let yesterdayDate = new Date(currentDate);
-  yesterdayDate.setDate(currentDate.getDate() - 1);
+  if (tag === "d") {
+    resultDate.setDate(currentDate.getDate() - 1);
+  } else if (tag === "m") {
+    resultDate.setMonth(currentDate.getMonth() - 1);
+  } else if (tag === "y") {
+    resultDate.setFullYear(currentDate.getFullYear() - 1);
+  } else {
+    console.error("Invalid tag. Use 'd', 'm', or 'y'.");
+    return null;
+  }
 
-  // Separate year, month, and day
-  yesterdayY = yesterdayDate.getFullYear();
-  yesterdayM = yesterdayDate.getMonth() + 1; // Months are zero-based in JavaScript
-  yesterdayD = yesterdayDate.getDate();
+  let resultY = resultDate.getFullYear();
+  let resultM = String(resultDate.getMonth() + 1).padStart(2, "0"); // 保持兩位數
+  let resultD = String(resultDate.getDate()).padStart(2, "0"); // 保持兩位數
 
-  // Log the result
-  console.log(
-    `Yesterday's date was: ${yesterdayY}-${yesterdayM}-${yesterdayD}`
-  );
+  return { year: resultY, month: resultM, day: resultD };
 }
 
 function formatedDate(date) {
@@ -586,10 +599,11 @@ function removeDatePart(template, formattedDate) {
   console.error("輸入格式異常, 應為ex:2023年1月1日.xlsx");
   return "output.xlsx";
 }
+
 var yesterdayY, yesterdayM, yesterdayD;
 
-cron.schedule("0 2 1 1 *", async () => {
-  // 秒 分 時 日 月 星期幾 由右到左對照，每年1月1日2:00執行產出前一年年報
+cron.schedule("0 0 3 1 1 *", async () => {
+  // 每年 1 月 1 日 3:00:00 AM 執行產出前一年年報
   try {
     console.log("Cron job: year report download start");
     await queryReport_auto("YearReport");
@@ -599,8 +613,8 @@ cron.schedule("0 2 1 1 *", async () => {
   }
 });
 
-cron.schedule("30 1 1 * *", async () => {
-  // 秒 分 時 日 月 星期幾 由右到左對照，每月1日1:30執行產出前一月月報
+cron.schedule("0 0 2 1 *", async () => {
+  // 每月 1 日的 1:30:00 AM 執行產出前一月的月報
   try {
     console.log("Cron job: month report download start");
     await queryReport_auto("MonthReport");
@@ -610,8 +624,10 @@ cron.schedule("30 1 1 * *", async () => {
   }
 });
 
-cron.schedule("0 1 * * *", async () => {
-  // 秒 分 時 日 月 星期幾 由右到左對照，每日1:00執行產出前一天日報
+//日報 固定一點
+cron.schedule("0 45 11 * * *", async () => {
+  console.log("日報報表執行中");
+  // 每天 10:50:00 AM 執行產出前一天日報
   try {
     console.log("Cron job: day report download start");
     await queryReport_auto("DayReport");
@@ -621,4 +637,16 @@ cron.schedule("0 1 * * *", async () => {
   }
 });
 
+async function test() {
+  console.log("日報報表執行中");
+  // 每天 10:50:00 AM 執行產出前一天日報
+  try {
+    console.log("Cron job: day report download start");
+    await queryReport_auto("DayReport");
+    console.log("Cron job: done");
+  } catch (error) {
+    console.error("Cron job: Error generating Excel file:", error);
+  }
+}
+test();
 module.exports = router;

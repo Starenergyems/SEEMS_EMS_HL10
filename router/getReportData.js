@@ -429,14 +429,11 @@ async function check24HourExists(specifiedTime) {
     // 設定查詢條件，查詢指定日期的 24 小時資料
     const filter = {
       selector: {
-        Date: { $eq: targetDay }, // 確保Date等於targetDay
-        time: {
-          $gte: 0,
-          $lte: 23,
-        },
+        Date: { $eq: targetDay },
+        time: { $gte: 0, $lte: 23 },
       },
       limit: 24,
-      //sort: [{ time: "asc" }], // 確保資料按時間排序
+      sort: [{ time: "asc" }],
     };
 
     // 查詢數據庫以獲取現有資料
@@ -452,7 +449,6 @@ async function check24HourExists(specifiedTime) {
       if (!existingTimeIndexes.has(i)) {
         missingTimeIndexes.push(i);
       } else {
-        // 如果該小時存在，將其直接插入對應位置
         const doc = result.docs.find((d) => d.time === i);
         hourlyDataArray[i] = doc;
       }
@@ -472,7 +468,6 @@ async function check24HourExists(specifiedTime) {
       for (const Hour of missingTimeIndexes) {
         let targetHourTime;
         if (Hour === 0) {
-          // 若缺失的是 0 點的資料，補植當天 0-1 點，傳入當天 1:15
           targetHourTime = moment.utc(specifiedTime).add(1, "days").set({
             hour: 1,
             minute: 15,
@@ -480,7 +475,6 @@ async function check24HourExists(specifiedTime) {
             millisecond: 0,
           });
         } else if (Hour === 23) {
-          // 若缺失的是 23 點的資料，補植當天 23-00 點，傳入隔天 1:15
           targetHourTime = moment.utc(specifiedTime).add(2, "days").set({
             hour: 0,
             minute: 15,
@@ -488,7 +482,6 @@ async function check24HourExists(specifiedTime) {
             millisecond: 0,
           });
         } else {
-          // 其他時段資料，對應補植該小時的下一個小時
           targetHourTime = moment
             .utc(specifiedTime)
             .add(1, "days")
@@ -501,13 +494,23 @@ async function check24HourExists(specifiedTime) {
         }
 
         try {
-          // 呼叫 `getSnigleHourValue` 補齊缺失小時的資料
+          // 再次確認該小時的數據是否存在
+          const recheckDoc = await checkDocumentByDate(targetDay, Hour);
+          if (recheckDoc.found) {
+            hourlyDataArray[Hour] = recheckDoc.documents[0];
+            console.log(`小時 ${Hour} 的數據已存在，跳過補值。`);
+            continue;
+          }
+
+          // 若確實不存在，則進行補值
           console.log(`補值中：小時 ${Hour}, 時間: ${targetHourTime.format()}`);
           const singleHourResult = await getSnigleHourValue(targetHourTime);
           if (singleHourResult) {
-            // 將補齊的資料放入 hourlyDataArray 對應的位置
             hourlyDataArray[Hour] = singleHourResult;
           }
+
+          // 確保資料庫已更新
+          await new Promise((resolve) => setTimeout(resolve, 300));
         } catch (error) {
           console.error(`補值失敗: 小時 ${Hour}，錯誤: `, error);
         }
@@ -539,7 +542,6 @@ async function check24HourExists(specifiedTime) {
     }
   } catch (error) {
     console.error("check24HourExists 出錯: ", error);
-
     return { complete: false, error };
   }
 }
@@ -569,6 +571,7 @@ async function getFullDayPowerUsage(type, specifiedTime) {
   };
 
   const existingData = await powerusageDb.find(filter);
+  console.log("existingData:", existingData);
   if (existingData.docs.length > 0) {
     console.log("已存在相應數據，跳過讀取other01Db，並直接回傳數值。");
     const data = existingData.docs[0];
@@ -762,6 +765,7 @@ async function getDailyReportData(specifiedTime) {
 
     if (ischeckDayExists.state === false) {
       console.log("ischeckDayExists: 資料庫內無全日資料!");
+
       // 檢查24小時的數值
       let check24HourExistsValue = await check24HourExists(specifiedTime);
 
@@ -791,18 +795,32 @@ async function getDailyReportData(specifiedTime) {
           // 處理每個時段的資料
           const data = {
             time: time,
-            serviceQualityArray: doc.serviceQualityArray,
-            hourMax_SBBPM: parseFloat((doc.hourMax_SBBPM / 100).toFixed(2)),
-            hourAvg_SBSPM: parseFloat((doc.hourAvg_SBSPM / 100).toFixed(2)),
-            hourMin_SBBPM: parseFloat((doc.hourMin_SBBPM / 100).toFixed(2)),
+            serviceQualityArray: doc.serviceQualityArray || [
+              0, 0, 0, 0, 0, 0, 0,
+            ], // 若未定義則設置為默認值
+            hourMax_SBBPM:
+              parseFloat((doc.hourMax_SBBPM / 100).toFixed(2)) || 0,
+            hourAvg_SBSPM:
+              parseFloat((doc.hourAvg_SBSPM / 100).toFixed(2)) || 0,
+            hourMin_SBBPM:
+              parseFloat((doc.hourMin_SBBPM / 100).toFixed(2)) || 0,
           };
 
           hourlyDataArray[time] = data;
 
           // 遍歷單層陣列 serviceQualityArray
-          doc.serviceQualityArray.forEach((value, index) => {
-            serviceQualitySums[index] += value;
-          });
+          if (
+            doc.serviceQualityArray &&
+            Array.isArray(doc.serviceQualityArray)
+          ) {
+            doc.serviceQualityArray.forEach((value, index) => {
+              serviceQualitySums[index] += value;
+            });
+          } else {
+            console.log(
+              `Warning: serviceQualityArray is undefined for time ${doc.time}`
+            );
+          }
 
           // 計算最大、最小值
           if (doc.hourMax_SBBPM > maxHourMax_SBBPM) {
@@ -935,12 +953,12 @@ async function getReportsInRange(startDate, endDate) {
   }
 }
 
-// 設定開始和結束日期;
-const startDate = "2024-10-25T00:00:13.816+08:00";
-const endDate = "2024-10-29T00:00:59.999+08:00";
+// // 設定開始和結束日期;
+// const startDate = "2024-10-27T00:00:13.816+08:00";
+// const endDate = "2024-10-29T00:00:59.999+08:00";
 
-//執行範圍內的報告生成;
-getReportsInRange(startDate, endDate);
+// //執行範圍內的報告生成;
+// getReportsInRange(startDate, endDate);
 
 // * ************************************************************ * //
 // * 每小時執行主程式: 定期執行 每小時的五分會進行前一個小時的資料撈取主程式
@@ -1734,6 +1752,32 @@ async function getYearReportData(specifiedTime) {
 
 // const specifiedTime = moment("2024-07-30T00:30:00.000+08:00");
 // getYearReportData(specifiedTime);
+
+// 1. 定期在當天 00:30 執行日報生成，傳入前一天的時間
+cron.schedule("30 0 * * *", async () => {
+  const specifiedTime = moment().subtract(1, "days").startOf("day");
+  console.log(`執行日報生成，傳入時間：${specifiedTime.format()}`);
+  await getDailyReportData(specifiedTime);
+});
+
+// 2. 定期在每月 1 日 01:15 執行月報生成，傳入前一個月的時間並指定為每月1日1:15
+cron.schedule("30 1 1 * *", async () => {
+  const specifiedTime = moment().subtract(1, "months").startOf("month").set({
+    hour: 1,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+  console.log(`執行月報生成，傳入時間：${specifiedTime.format()}`);
+  await getMonthlyReportData(specifiedTime);
+});
+
+// 3. 每年 1 月 1 日 02:00:00 執行年報生成，傳入前一年的時間
+cron.schedule("0 0 2 1 *", async () => {
+  const specifiedTime = moment().subtract(1, "years").startOf("year");
+  console.log(`執行年報生成，傳入時間：${specifiedTime.format()}`);
+  await getYearReportData(specifiedTime);
+});
 
 // /////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
