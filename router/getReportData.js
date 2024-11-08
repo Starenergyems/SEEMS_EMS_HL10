@@ -303,9 +303,9 @@ async function getSnigleHourValue(date) {
     const formattedHour = formatHour(date); // 獲取目前小時
     const oneHourAgo = formattedHour - 1 < 0 ? 23 : formattedHour - 1; // 目標時間往前推一小時
     const formattedDate = getFormattedDate(formattedHour, date); // 若為 0 點，日期要往前推一天
-    console.log("小時執行率獲得之日期 ", formattedDate);
-    console.log("小時執行率獲得之現在小時: ", formattedHour);
-    console.log("小時執行率之目標範圍: ", oneHourAgo);
+    //console.log("小時執行率獲得之日期 ", formattedDate);
+    //console.log("小時執行率獲得之現在小時: ", formattedHour);
+    //console.log("小時執行率之目標範圍: ", oneHourAgo);
     let formattedTimeStart, formattedTimeEnd;
     // 計算時間範圍
     if (formattedHour === 0) {
@@ -374,11 +374,11 @@ async function getSnigleHourValue(date) {
       SBBPM: SbspmValue.decideSBSPMValue,
     };
 
-    console.log("newDocument:", newDocument);
+    //console.log("newDocument:", newDocument);
 
     // 插入新文檔到資料庫
     const result = await report_hourDb.insert(newDocument);
-    console.log("新文檔已建立完畢，文檔內容如下: ", result);
+    //console.log("新文檔已建立完畢，文檔內容如下: ", result);
   } catch (error) {
     console.error("檢查或創建當日資料時發生錯誤:", error);
   }
@@ -396,7 +396,7 @@ async function checkDayExists(specifiedTime) {
   console.log("執行日報檢查，檢查之傳入時間:", specifiedTime);
   const targetDay = formatDate(specifiedTime);
   const today = specifiedTime;
-  console.log("日報檢查的目標日期(targetDay): ", targetDay);
+  //console.log("日報檢查的目標日期(targetDay): ", targetDay);
   const filter = {
     selector: {
       Date: targetDay, // 日期必須等於目標日期
@@ -558,8 +558,8 @@ async function getFullDayPowerUsage(type, specifiedTime) {
   const endTime = moment(targetDay + "T23:59:59.000+08:00").format(
     "YYYY-MM-DDTHH:mm:ss.SSSZ"
   );
-  console.log("全日的電量之startTime: ", startTime);
-  console.log("全日的電量之endTime: ", endTime);
+  //console.log("全日的電量之startTime: ", startTime);
+  //console.log("全日的電量之endTime: ", endTime);
 
   // 在powerusagedb中檢查是否已存在相應的數據
   const filter = {
@@ -571,7 +571,7 @@ async function getFullDayPowerUsage(type, specifiedTime) {
   };
 
   const existingData = await powerusageDb.find(filter);
-  console.log("existingData:", existingData);
+  //console.log("existingData:", existingData);
   if (existingData.docs.length > 0) {
     console.log("已存在相應數據，跳過讀取other01Db，並直接回傳數值。");
     const data = existingData.docs[0];
@@ -715,7 +715,7 @@ async function getFullDayPowerUsage(type, specifiedTime) {
         kWh_RTE: kWh_RTE,
       };
       const saveResult = await powerusageDb.insert(newDoc);
-      console.log("全日用電量數值已存入資料庫，資料內容如下: ", saveResult);
+      //console.log("全日用電量數值已存入資料庫，資料內容如下: ", saveResult);
       return {
         complete: true,
         data: newDoc,
@@ -731,9 +731,9 @@ async function getFullDayPowerUsage(type, specifiedTime) {
 
 // // - 副程式: 中止服務時間與容量(保留功能 尚未有中止數據)
 async function statisticsOutOfService(specifiedTime) {
-  console.log(
-    "########################################################################"
-  );
+  // console.log(
+  //   "########################################################################"
+  // );
   //console.log("獲取當日中止服務時間與容量(目前尚未有中止數據!)");
   const hours = 0;
   const capacity = 0;
@@ -749,18 +749,18 @@ async function getDailyReportData(specifiedTime) {
 
   const now = moment();
   const oneDayBeforeNow = now.clone().subtract(1, "days");
-  console.log("2.執行日報日期檢查，檢查是否晚於正式運作日。");
+  //console.log("2.執行日報日期檢查，檢查是否晚於正式運作日。");
 
   const cutoffDate = moment("2024-05-30"); // 正式運轉日
   if (
     specifiedTime.isBefore(oneDayBeforeNow) &&
     specifiedTime.isAfter(cutoffDate)
   ) {
-    console.log(
-      `指定日期 ${specifiedTime.format()} 早於系統日期 ${now.format()} 的前一天，指定日期之日報可產出。 OK!`
-    );
+    // console.log(
+    //   `指定日期 ${specifiedTime.format()} 早於系統日期 ${now.format()} 的前一天，指定日期之日報可產出。 OK!`
+    // );
 
-    console.log("3.執行檢查日報資料庫，檢查全日日報是否已建立於資料庫。");
+    // console.log("3.執行檢查日報資料庫，檢查全日日報是否已建立於資料庫。");
     const ischeckDayExists = await checkDayExists(specifiedTime); // 檢查全日完整資料是否已存在
 
     if (ischeckDayExists.state === false) {
@@ -770,13 +770,13 @@ async function getDailyReportData(specifiedTime) {
       let check24HourExistsValue = await check24HourExists(specifiedTime);
 
       if (check24HourExistsValue.complete === true) {
-        console.log("日報24小時執行率已存在~");
-        console.log("日期", check24HourExistsValue.result[23].Date);
-        console.log("時間", check24HourExistsValue.result[23].time);
-        console.log(
-          "服務品質指標陣列",
-          check24HourExistsValue.result[23].serviceQualityArray
-        );
+        // console.log("日報24小時執行率已存在~");
+        // console.log("日期", check24HourExistsValue.result[23].Date);
+        // console.log("時間", check24HourExistsValue.result[23].time);
+        // console.log(
+        //   "服務品質指標陣列",
+        //   check24HourExistsValue.result[23].serviceQualityArray
+        // );
 
         // 初始化所有數值
         const hourlyDataArray = new Array(24).fill(null);
@@ -786,7 +786,7 @@ async function getDailyReportData(specifiedTime) {
         let totalHourAvg_SBSPM = 0;
         let validHourCount = 0;
 
-        console.log("進行日報數值計算。");
+        //console.log("進行日報數值計算。");
         // 遍歷雙重陣列
         for (let i = 0; i < check24HourExistsValue.result.length; i++) {
           const doc = check24HourExistsValue.result[i]; // 取得內部的 doc
@@ -843,11 +843,11 @@ async function getDailyReportData(specifiedTime) {
         maxHourMax_SBBPM = parseFloat((maxHourMax_SBBPM / 100).toFixed(2));
         minHourMin_SBBPM = parseFloat((minHourMin_SBBPM / 100).toFixed(2));
 
-        console.log("serviceQualitySums: ", serviceQualitySums);
-        console.log("最大 hourMax_SBBPM: ", maxHourMax_SBBPM);
-        console.log("最小 hourMin_SBBPM: ", minHourMin_SBBPM);
-        console.log("平均 hourAvg_SBSPM: ", averageHourAvg_SBSPM);
-        console.log("當日24小時執行率已存在，將進行用電量查詢!");
+        // console.log("serviceQualitySums: ", serviceQualitySums);
+        // console.log("最大 hourMax_SBBPM: ", maxHourMax_SBBPM);
+        // console.log("最小 hourMin_SBBPM: ", minHourMin_SBBPM);
+        // console.log("平均 hourAvg_SBSPM: ", averageHourAvg_SBSPM);
+        // console.log("當日24小時執行率已存在，將進行用電量查詢!");
 
         // 其他處理邏輯保持不變
         const fullDayPower = await getFullDayPowerUsage("D", specifiedTime);
@@ -878,21 +878,21 @@ async function getDailyReportData(specifiedTime) {
           minHourMin_SBBPM,
         ]);
 
-        console.log("dayTable1:", dayTable1);
+        //console.log("dayTable1:", dayTable1);
 
         const dayTable2 = [
           fullDayPowerData.day_kWh_Import,
           fullDayPowerData.day_kWh_Export,
           fullDayPowerData.kWh_Net,
         ];
-        console.log("dayTable2:", dayTable2);
+        //console.log("dayTable2:", dayTable2);
 
         const dayTable3 = [
           resultOfstatisticsOutOfService.capacity,
           resultOfstatisticsOutOfService.hours,
           fullDayPowerData.kWh_RTE,
         ];
-        console.log("dayTable3:", dayTable3);
+        //console.log("dayTable3:", dayTable3);
 
         const newDoc = {
           Date: formatDate(specifiedTime),
@@ -966,7 +966,7 @@ function startHourlyCheck() {
   cron.schedule("5 * * * *", async () => {
     // 每個小時的第5分鐘
     const now = moment();
-    console.log("正在獲取該小時執行率詳細數據! getSnigleHourValue() 執行中");
+    //console.log("正在獲取該小時執行率詳細數據! getSnigleHourValue() 執行中");
     await getSnigleHourValue(now);
   });
   console.log("已啟動定時任務，每小時的5分鐘執行一次。");
