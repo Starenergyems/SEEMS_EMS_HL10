@@ -97,6 +97,7 @@ async function fetchDataAndNotify() {
 
       console.log(message);
       await sendLineNotify(message);
+      await sendSlackNotification(message);
     }
   } catch (err) {
     console.error("Database Error:", err);

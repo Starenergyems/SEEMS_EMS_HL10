@@ -19,6 +19,7 @@ const {
   findaccount,
   updateaccount,
 } = require("./rLogin");
+const { sendSlackNotification } = require("./slack_api.js");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
@@ -806,10 +807,10 @@ server.listen(port, () => {
   const emsnumber = process.env.EMS_NUM;
   const HOST_IP = process.env.HOST_IP;
   const message = `
-(功能測試中，多次重啟是正常情況，勿慌張)
 EMS${emsnumber}主程式重新啟動 !!
 主機IP為：${HOST_IP}`;
   sendLineNotify(message);
+  sendSlackNotification(message);
 });
 
 // 在應用程式結束時，關閉伺服器
@@ -822,6 +823,7 @@ process.on("SIGINT", () => {
   EMS${emsnumber}主程式已停止運作 !!
   主機IP為：${HOST_IP}`;
     sendLineNotify(message);
+    sendSlackNotification(message);
     process.exit(0);
   });
 });
@@ -835,33 +837,33 @@ const { spawn } = require("child_process");
 console.log("啟動 app.js...");
 
 // 啟動 mqtt.js 子進程
-const mqttProcess = spawn("node", ["MQTT.js"], {
-  stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
-});
+// const mqttProcess = spawn("node", ["MQTT.js"], {
+//   stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
+// });
 
-// 處理 mqtt.js 的錯誤和退出事件
-mqttProcess.on("error", (error) => {
-  console.error(`MQTT.js 啟動錯誤: ${error.message}`);
-});
+// // 處理 mqtt.js 的錯誤和退出事件
+// mqttProcess.on("error", (error) => {
+//   console.error(`MQTT.js 啟動錯誤: ${error.message}`);
+// });
 
-mqttProcess.on("exit", (code, signal) => {
-  console.log(`MQTT.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
-});
+// mqttProcess.on("exit", (code, signal) => {
+//   console.log(`MQTT.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
+// });
 
 // 啟動 lineForPower.js 子進程
-const lineForPowerProcess = spawn("node", ["lineForPower.js"], {
-  stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
-});
+// const lineForPowerProcess = spawn("node", ["lineForPower.js"], {
+//   stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
+// });
 
-// 處理 lineForPower.js 的錯誤和退出事件
-lineForPowerProcess.on("error", (error) => {
-  console.error(`lineForPower.js 啟動錯誤: ${error.message}`);
-});
-lineForPowerProcess.on("exit", (code, signal) => {
-  console.log(`lineForPower.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
-});
+// // 處理 lineForPower.js 的錯誤和退出事件
+// lineForPowerProcess.on("error", (error) => {
+//   console.error(`lineForPower.js 啟動錯誤: ${error.message}`);
+// });
+// lineForPowerProcess.on("exit", (code, signal) => {
+//   console.log(`lineForPower.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
+// });
 
-console.log("MQTT.js 和 lineForPower.js 子進程已同步啟動");
+// console.log("MQTT.js 和 lineForPower.js 子進程已同步啟動");
 
 //module.exports = { nano };
 app.get("/getPermission", (req, res) => {
