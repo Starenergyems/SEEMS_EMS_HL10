@@ -7,6 +7,7 @@ module.exports = {
   //   host: "192.168.8.101",
   //   port: 5984,
   //   username: "admin",
+
   //   password: "ems45877096",
   //   account: "account",
   //   config: "CONFIG",
@@ -47,12 +48,12 @@ module.exports = {
       "other_rf01",
       "other_rf10",
       "report",
-      "year_report"
-    ]
+      "year_report",
+    ],
   },
   systemInfo: {
     serviceActivationTime: "2024-06-22",
     location: "Hualien Heping",
-    DeviceCapacity: 10
-  }
+    DeviceCapacity: 10,
+  },
 };
