@@ -62,12 +62,6 @@ const powerusageDb = nano.use("powerusage");
 const reportDb = nano.use("report");
 const report_monthlyDb = nano.use("report_monthly");
 
-// nano.db.list().then((databases) => {
-//   console.log("資料庫列表:", databases);
-// }).catch((error) => {
-//   console.error("無法列出資料庫:", error);
-// });
-
 //***************************************************************************************************************** */
 //時間索引
 const indexDef = {
@@ -91,7 +85,6 @@ report_dayDb.createIndex(indexDef);
 powerusageDb.createIndex(indexDef);
 reportDb.createIndex(indexDef);
 report_monthlyDb.createIndex(indexDef);
-
 //***************************************************************************************************************** */
 app.get("/test", async (req, res) => {
   const CREDENTIALS = Buffer.from(
@@ -327,7 +320,6 @@ app.use("*", async (req, res, next) => {
 
 //***************************************************************************************************************** */
 //側欄用
-
 const lc1_rf10 = "lc1_rf10";
 const lc01Db = nano.use(lc1_rf10);
 const lc2_rf10 = "lc2_rf10";
@@ -775,7 +767,7 @@ const alarmRouter = require("./rAlarm");
 
 const login = require("./rLogin");
 const { permission } = require("process");
-// const { authentication } = require("./authMiddleware");
+
 //***************************************************************************************************************** */
 // 使用這些路由
 // // app.use(authentication)
@@ -794,10 +786,6 @@ app.use(alarmRouter);
 
 //***************************************************************************************************************** */
 
-// app.get("/login", (req, res) => {
-//   res.render("Login");
-// });
-
 app.get("/error", (req, res) => {
   res.render("error");
 });
@@ -806,11 +794,18 @@ server.listen(port, () => {
   console.log(`app.js 應用程式正在監聽端口 ${port}`);
   const emsnumber = process.env.EMS_NUM;
   const HOST_IP = process.env.HOST_IP;
-  const message = `
-EMS${emsnumber}主程式重新啟動 !!
-主機IP為：${HOST_IP}`;
-  sendLineNotify(message);
-  sendSlackNotification(message);
+  const message = {
+    device: "Server",
+    tag: "Reboot",
+    value: "1",
+    occurrence_time: new Date(),
+    recover: false,
+    level: "Alarm",
+    content: `EMS${emsnumber}主程式重新啟動 !! 主機IP為：${HOST_IP}`,
+  };
+
+  sendLineNotify(message.content); // 只發送文字訊息至 LINE
+  sendSlackNotification(message); // 發送物件到 Slack
 });
 
 // 在應用程式結束時，關閉伺服器
@@ -827,43 +822,6 @@ process.on("SIGINT", () => {
     process.exit(0);
   });
 });
-
-function updateDataPeriodically() {
-  console.log("app.js : Data updated periodically...");
-}
-
-const { spawn } = require("child_process");
-
-console.log("啟動 app.js...");
-
-// 啟動 mqtt.js 子進程
-// const mqttProcess = spawn("node", ["MQTT.js"], {
-//   stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
-// });
-
-// // 處理 mqtt.js 的錯誤和退出事件
-// mqttProcess.on("error", (error) => {
-//   console.error(`MQTT.js 啟動錯誤: ${error.message}`);
-// });
-
-// mqttProcess.on("exit", (code, signal) => {
-//   console.log(`MQTT.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
-// });
-
-// 啟動 lineForPower.js 子進程
-// const lineForPowerProcess = spawn("node", ["lineForPower.js"], {
-//   stdio: "inherit", // 繼承主進程的標準輸入、輸出和錯誤輸出
-// });
-
-// // 處理 lineForPower.js 的錯誤和退出事件
-// lineForPowerProcess.on("error", (error) => {
-//   console.error(`lineForPower.js 啟動錯誤: ${error.message}`);
-// });
-// lineForPowerProcess.on("exit", (code, signal) => {
-//   console.log(`lineForPower.js 子進程退出，代碼: ${code}, 信號: ${signal}`);
-// });
-
-// console.log("MQTT.js 和 lineForPower.js 子進程已同步啟動");
 
 //module.exports = { nano };
 app.get("/getPermission", (req, res) => {

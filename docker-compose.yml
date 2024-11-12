@@ -1,24 +1,30 @@
 services:
   ems-service:
-    image: ems-service_v16
+    image: ems-service_v1
     build:
       context: .
       dockerfile: Dockerfile
     environment:
       - TZ=Asia/Taipei
       - HOST_IP=192.168.1.12
-      - MQTT_BROKER_URL=mqtt://mqtt:31883
-      - MQTT_USERNAME=XAkypU1zk
-      - MQTT_PASSWORD=ogQetykSLrGesW-y
+      # - MQTT_BROKER_URL=mqtt://mqtt:31883
+      # - MQTT_USERNAME=XAkypU1zk
+      # - MQTT_PASSWORD=ogQetykSLrGesW-y
     volumes:
       - ./router:/usr/src/app/router # 挂载本地 router 文件夹到容器中
     ports:
       - "3000:3000"
     working_dir: /usr/src/app/router # 指定工作目錄為 /usr/src/app/router
     command:
-      ["node", "app.js", "line.js", "lineForPower.js", "getReportData.js"]
-    depends_on:
-      - mqtt
+      [
+        "node",
+        "app.js",
+        "alarmFilter.js",
+        "lineForPower.js",
+        "getReportData.js",
+      ]
+    # depends_on:
+    #   - mqtt
     deploy:
       replicas: 1
       restart_policy:
@@ -28,15 +34,15 @@ services:
     networks:
       - ems-service-network
 
-  mqtt:
-    image: eclipse-mosquitto
-    ports:
-      - "31883:31883" # MQTT
-      # - "9001:9001" # WebSocket (可選)
-    networks:
-      - ems-service-network # 使用相同網路
-    volumes:
-      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf # 使用自定義的配置檔
+  # mqtt:
+  #   image: eclipse-mosquitto
+  #   ports:
+  #     - "31883:31883" # MQTT
+  #     # - "9001:9001" # WebSocket (可選)
+  #   networks:
+  #     - ems-service-network # 使用相同網路
+  #   volumes:
+  #     - ./mosquitto.conf:/mosquitto/config/mosquitto.conf # 使用自定義的配置檔
 
 networks:
   ems-service-network:
