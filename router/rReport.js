@@ -637,16 +637,16 @@ cron.schedule("0 45 11 * * *", async () => {
   }
 });
 
-async function test() {
-  console.log("日報報表執行中");
-  // 每天 10:50:00 AM 執行產出前一天日報
-  try {
-    console.log("Cron job: day report download start");
-    await queryReport_auto("DayReport");
-    console.log("Cron job: done");
-  } catch (error) {
-    console.error("Cron job: Error generating Excel file:", error);
-  }
-}
-test();
+// async function test() {
+//   console.log("日報報表執行中");
+//   // 每天 10:50:00 AM 執行產出前一天日報
+//   try {
+//     console.log("Cron job: day report download start");
+//     await queryReport_auto("DayReport");
+//     console.log("Cron job: done");
+//   } catch (error) {
+//     console.error("Cron job: Error generating Excel file:", error);
+//   }
+// }
+// test();
 module.exports = router;
