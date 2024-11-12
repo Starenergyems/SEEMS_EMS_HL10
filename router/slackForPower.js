@@ -13,50 +13,35 @@ const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
 const schedule = require("node-schedule");
-
 require("dotenv").config();
 const powerusage = "powerusage";
 const powerusageDb = nano.use(powerusage);
 const other_rf01 = "other_rf01";
 const other01Db = nano.use(other_rf01);
 
-//********************************************************************************* */
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
-//********************************************************************************* */
 
 console.log("執行lineForPower.js");
 
-function sendLineNotify(message) {
-  const request = {
-    method: "post",
-    url: "https://notify-api.line.me/api/notify",
-    headers: {
-      Authorization: `Bearer ${process.env.LineNotifyToken2}`,
-      //Authorization: `Bearer ${process.env.LineNotifyToken}`, //正式token
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    params: {
-      message: message,
-    },
-    data: {},
-  };
+// 新增 Slack 通知函數
+function sendSlackNotification(message) {
+  const url = process.env.SLACK_WEBHOOK_URL_POWER;
 
-  return axios(request)
+  return axios
+    .post(url, {
+      text: message,
+    })
     .then((resp) => {
-      console.log("New Notify :", resp.data);
+      console.log("Slack Notify:", resp.data);
     })
     .catch((err) => {
-      console.error(
-        "Line Notify Error:",
-        err.response.data,
-        err.response.request.path
-      );
+      console.error("Slack Notify Error:", err.response?.data || err.message);
     });
 }
 
 async function fetchDataAndNotify() {
-  const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD"); // 修正為昨日日期
+  const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
   try {
     const body = await powerusageDb.find({
       selector: {
@@ -74,20 +59,17 @@ async function fetchDataAndNotify() {
     if (body.docs.length > 0) {
       const data = body.docs[0];
       const message = `花蓮 4-1 案場\nDate: ${data.date}\n輸入電量(Imp): ${data.day_kWh_Import} kWh\n輸出電量(Exp): ${data.day_kWh_Export} kWh\n用電量(Net): ${data.kWh_Net} kWh\nRTE: ${data.kWh_RTE} %`;
-      await sendLineNotify(message);
+      await sendSlackNotification(message);
     } else {
-      const yesterdaytime = moment().subtract(1, "days"); // 保持 moment 對象
-      // 呼叫 getFullDayPowerUsage 函數，傳入參數 type = "D" 和 specifiedTime = yesterday
+      const yesterdaytime = moment().subtract(1, "days");
       const result = await getFullDayPowerUsage("D", yesterdaytime);
 
-      // 處理返回的結果，這裡假設 result 包含需要的電量數據，如果 result 是空的，則代表無法獲取數據
       const message =
         result && result.data
           ? `花蓮 4-1 案場\nDate: ${yesterday}\n輸入電量(Imp): ${result.data.day_kWh_Import} kWh\n輸出電量(Exp): ${result.data.day_kWh_Export} kWh\n用電量(Net): ${result.data.kWh_Net} kWh\nRTE: ${result.data.kWh_RTE} %`
           : `花蓮 4-1 案場\nDate: ${yesterday}\n昨日數值不存在`;
 
       console.log(message);
-      await sendLineNotify(message);
       await sendSlackNotification(message);
     }
   } catch (err) {
@@ -100,16 +82,9 @@ schedule.scheduleJob("0 8 * * *", () => {
   fetchDataAndNotify();
 });
 
-// 服務啟動時立即發送測試通知
-// sendLineNotify("電量通知服務v.1 啟用中~");
-
-// 測試用立即發送通知
-//message = "Hello!";
-//sendLineNotify(message);
-
 module.exports = router;
 
-// - 副程式: 獲得全天(日報)電力使用資訊
+// 獲得全天(日報)電力使用資訊的副程式
 async function getFullDayPowerUsage(type, specifiedTime) {
   console.log("執行日報中電力資訊獲取，執行日期為: ", specifiedTime.format());
   console.log("類型(type): ", type);
