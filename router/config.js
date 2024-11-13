@@ -1,6 +1,21 @@
 // 'use strict'
 
 module.exports = {
+  // 資料庫路徑設定
+  // 辦公室用
+  // database: {
+  //   host: "192.168.8.101",
+  //   port: 5984,
+  //   username: "admin",
+
+  //   password: "ems45877096",
+  //   account: "account",
+  //   config: "CONFIG",
+  //   log:"log",
+  //   door:"log_door"
+  // },
+  //改為案場電腦用
+
   app: {
     port: 3000
   },
@@ -33,8 +48,12 @@ module.exports = {
       "other_rf01",
       "other_rf10",
       "report",
-      "year_report"
-    ]
+      "year_report",
+    ],
   },
-  mustdatabase: {}
+  systemInfo: {
+    serviceActivationTime: "2024-06-22",
+    location: "Hualien Heping",
+    DeviceCapacity: 10,
+  },
 };

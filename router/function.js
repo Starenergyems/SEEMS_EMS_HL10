@@ -123,11 +123,11 @@ function mapPCSworkStatus(lc1, lc2, lc3, lc4) {
   }
   const sum = lc1 + lc2 + lc3 + lc4;
   if (sum === 7) {
-    return "運轉中";
+    return "運轉中"; //2
   } else if (sum <= 6 && sum >= 1) {
-    return "部分運轉中";
+    return "部分運轉中"; //1
   } else {
-    return "停機";
+    return "停機"; //0
   }
 }
 

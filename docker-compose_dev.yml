@@ -37,7 +37,17 @@ services:
     #   start_period: 5s
     networks:
       - dev-network
-
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+      - "31883:31883"  # MQTT
+      - "9001:9001"  # WebSocket (可選)
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - dev-network
 networks:
   dev-network:
     external: false

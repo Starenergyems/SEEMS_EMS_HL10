@@ -64,7 +64,6 @@ router.post("/event/operation/edit", async (req, res) => {
 
     console.log("轉換後的 start:", startTime.toISOString());
     console.log("轉換後的 end:", endTime.toISOString());
-    0001;
     const mangoQuery = {
       selector: {
         time: {

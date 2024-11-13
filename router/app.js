@@ -17,8 +17,9 @@ const {
   submit,
   authentication,
   findaccount,
-  updateaccount
+  updateaccount,
 } = require("./rLogin");
+const { sendSlackNotification } = require("./slack_api.js");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
@@ -55,18 +56,17 @@ const lc2nanoDb = nano.use("lc2_rf10");
 const lc3nanoDb = nano.use("lc3_rf10");
 const lc4nanoDb = nano.use("lc4_rf10");
 const alarmnanoDb = nano.use("alarm");
-
-// nano.db.list().then((databases) => {
-//   console.log("資料庫列表:", databases);
-// }).catch((error) => {
-//   console.error("無法列出資料庫:", error);
-// });
+const report_hourDb = nano.use("report_hour");
+const report_dayDb = nano.use("report_day");
+const powerusageDb = nano.use("powerusage");
+const reportDb = nano.use("report");
+const report_monthlyDb = nano.use("report_monthly");
 
 //***************************************************************************************************************** */
 //時間索引
 const indexDef = {
   index: { fields: ["time"] },
-  name: "time_index"
+  name: "time_index",
 };
 //***************************************************************************************************************** */
 // 為每個資料庫創建針對時間的索引
@@ -80,6 +80,11 @@ lc2nanoDb.createIndex(indexDef);
 lc3nanoDb.createIndex(indexDef);
 lc4nanoDb.createIndex(indexDef);
 alarmnanoDb.createIndex(indexDef);
+report_hourDb.createIndex(indexDef);
+report_dayDb.createIndex(indexDef);
+powerusageDb.createIndex(indexDef);
+reportDb.createIndex(indexDef);
+report_monthlyDb.createIndex(indexDef);
 //***************************************************************************************************************** */
 app.get("/test", async (req, res) => {
   const CREDENTIALS = Buffer.from(
@@ -90,7 +95,7 @@ app.get("/test", async (req, res) => {
   const response = await fetch(URL, {
     method: "GET",
     headers: { Authorization: AUTHORIZATION },
-    credentials: "include"
+    credentials: "include",
   });
   data = await response.json();
   //console.log(typeof(data))
@@ -137,7 +142,7 @@ app.get("/login", async (req, res) => {
     WarningNum_PCS: Values[10],
     WarningNum_FF: Values[11],
     WarningNum_Env: Values[12],
-    WarningNum_Meter: Values[13]
+    WarningNum_Meter: Values[13],
   };
 
   var latestValues2 = {
@@ -152,13 +157,13 @@ app.get("/login", async (req, res) => {
     L_M_minSOH: Values2[8],
     L_M_SBSPM: Values2[9],
     L_M_chgEtoday: Values2[10],
-    L_M_dcgEtoday: Values2[11]
+    L_M_dcgEtoday: Values2[11],
   };
   // const response["logintext"] === undefined? logintext="" : logintext=response["logintext"];
   // console.log(logintext);
   // console.log("eee")
   const context = {
-    logintext: `${logintext}`
+    logintext: `${logintext}`,
   };
   res.render("Login", { context: context, latestValues, latestValues2 });
 });
@@ -181,7 +186,7 @@ app.post("/login", async (req, res) => {
     if (response["result"] === true && response["repwd"] !== 1) {
       res.cookie("token", response["token"], {
         maxAge: 3600000, // 1 hour in milliseconds
-        httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
+        httpOnly: true, // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
       });
       //{ maxAge: config.duration*3600, httpOnly: true }
       //, { maxAge: 10, httpOnly: true });
@@ -192,13 +197,14 @@ app.post("/login", async (req, res) => {
     } else if (response["result"] === true && response["repwd"] === 1) {
       res.cookie("token", response["token"], {
         maxAge: 3600000, // 1 hour in milliseconds
-        httpOnly: true // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
+        httpOnly: true, // Optional, makes the cookie accessible only via HTTP(S) requests, not JavaScript
       });
       res.json({ redirect: `/repassword` });
     } else {
       res.json({ text: response["text"] });
       // res.status(401).send(response["text"]);
     }
+    // addlog(response["id"],response["text"])
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
@@ -215,7 +221,7 @@ app.get("/repassword", async (req, res) => {
     minUpper: config.upper,
     minLower: config.lower,
     minSpe: config.special,
-    minNum: config.number
+    minNum: config.number,
   };
   res.render("repassword", content);
 });
@@ -314,7 +320,6 @@ app.use("*", async (req, res, next) => {
 
 //***************************************************************************************************************** */
 //側欄用
-
 const lc1_rf10 = "lc1_rf10";
 const lc01Db = nano.use(lc1_rf10);
 const lc2_rf10 = "lc2_rf10";
@@ -348,10 +353,10 @@ async function getData() {
       selector: {
         time: {
           $gte: night,
-          $lte: nightoneseconds
-        }
+          $lte: nightoneseconds,
+        },
       },
-      limit: 10
+      limit: 10,
     };
 
     const midnightData = await rf01Db.find(filterTime);
@@ -387,10 +392,10 @@ async function getData() {
 
 const mangoQuery = {
   selector: {
-    time: { $exists: true }
+    time: { $exists: true },
   },
   sort: [{ time: "desc" }],
-  limit: 1
+  limit: 1,
 };
 
 app.get("/navbar", async (req, res) => {
@@ -418,7 +423,7 @@ app.get("/navbar", async (req, res) => {
       WarningNum_PCS: Values[10],
       WarningNum_FF: Values[11],
       WarningNum_Env: Values[12],
-      WarningNum_Meter: Values[13]
+      WarningNum_Meter: Values[13],
     };
 
     var latestValues2 = {
@@ -433,7 +438,7 @@ app.get("/navbar", async (req, res) => {
       L_M_minSOH: Values2[8],
       L_M_SBSPM: Values2[9],
       L_M_chgEtoday: Values2[10],
-      L_M_dcgEtoday: Values2[11]
+      L_M_dcgEtoday: Values2[11],
     };
     //console.log("latestValues",latestValues);
     res.send({ latestValues, latestValues2 });
@@ -450,7 +455,7 @@ async function getLatestValuesFromDatabase() {
     const alarmData = await alarmnanoDb.find({
       selector: { time: { $exists: true } },
       sort: [{ time: "desc" }],
-      limit: 1000
+      limit: 1000,
     });
 
     let Fault_system_num = 0;
@@ -621,7 +626,7 @@ async function getLatestValuesFromDatabase() {
       Alarm_pcs_num,
       Alarm_FFS_num,
       Alarm_ENV_num,
-      Alarm_meter_num
+      Alarm_meter_num,
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
@@ -641,7 +646,7 @@ async function getLatestValuesFromDatabaseforother() {
         lc1nanoDb.createIndex(indexDef).then(() => lc1nanoDb.find(mangoQuery)),
         lc2nanoDb.createIndex(indexDef).then(() => lc2nanoDb.find(mangoQuery)),
         lc3nanoDb.createIndex(indexDef).then(() => lc3nanoDb.find(mangoQuery)),
-        lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery))
+        lc4nanoDb.createIndex(indexDef).then(() => lc4nanoDb.find(mangoQuery)),
       ]);
 
     // 取得每個資料庫的第一條資料
@@ -736,7 +741,7 @@ async function getLatestValuesFromDatabaseforother() {
       L_M_minSOH,
       L_M_SBSPM,
       L_M_chgEtoday,
-      L_M_dcgEtoday
+      L_M_dcgEtoday,
     ];
   } catch (error) {
     console.error("Error fetching latest values from alarm database:", error);
@@ -757,10 +762,11 @@ const eventRouter = require("./rEvent");
 const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
-// const { nextTick } = require("process");
+// const { nextTick } = require("process");-**-/*-/*-
+
 const login = require("./rLogin");
 const { permission } = require("process");
-// const { authentication } = require("./authMiddleware");
+
 //***************************************************************************************************************** */
 // 使用這些路由
 // // app.use(authentication)
@@ -779,10 +785,6 @@ app.use(alarmRouter);
 
 //***************************************************************************************************************** */
 
-// app.get("/login", (req, res) => {
-//   res.render("Login");
-// });
-
 app.get("/error", (req, res) => {
   res.render("error");
 });
@@ -791,10 +793,18 @@ server.listen(port, () => {
   console.log(`app.js 應用程式正在監聽端口 ${port}`);
   const emsnumber = process.env.EMS_NUM;
   const HOST_IP = process.env.HOST_IP;
-  const message = `
-EMS${emsnumber}主程式重新啟動 !!
-主機IP為：${HOST_IP}`;
-  sendLineNotify(message);
+  const message = {
+    device: "Server",
+    tag: "Reboot",
+    value: "1",
+    occurrence_time: new Date(),
+    recover: false,
+    level: "Alarm",
+    content: `EMS${emsnumber}主程式重新啟動 !! 主機IP為：${HOST_IP}`,
+  };
+
+  sendLineNotify(message.content); // 只發送文字訊息至 LINE
+  sendSlackNotification(message); // 發送物件到 Slack
 });
 
 // 在應用程式結束時，關閉伺服器
@@ -807,13 +817,10 @@ process.on("SIGINT", () => {
   EMS${emsnumber}主程式已停止運作 !!
   主機IP為：${HOST_IP}`;
     sendLineNotify(message);
+    sendSlackNotification(message);
     process.exit(0);
   });
 });
-
-function updateDataPeriodically() {
-  console.log("app.js : Data updated periodically...");
-}
 
 //module.exports = { nano };
 app.get("/getPermission", (req, res) => {

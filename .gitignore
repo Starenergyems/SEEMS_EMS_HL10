@@ -4,6 +4,6 @@ git.txt
 /router/.env
 /couchdb_docker/couchdb.env
 /couchdb_docker/local.ini
-/router/C
 /models/
 /mongoDBData/
+/router/C

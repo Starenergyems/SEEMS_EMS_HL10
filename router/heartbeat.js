@@ -204,7 +204,6 @@ function getCurrentTime() {
 //main(state);
 
 // 取得最新的兩筆文件
-// 取得最新的兩筆文件
 async function getLatestDocuments() {
     try {
         // 從資料庫中按時間排序取得最新的兩筆document
@@ -225,18 +224,18 @@ async function getLatestDocuments() {
 }
 
 // 比較最新兩筆文件的System屬性中的400086值
-async function compareSystem400086() {
+async function compareSystem400087() {
     try {
         // 取得最新兩筆文件
         const documents = await getLatestDocuments();
         console.log("documents: ",documents)
         if (documents.length >= 2) {
             // 取得兩筆文件中System屬性中的400086值
-            const value1 = documents[0].System['400086'];
+            const value1 = documents[0].System['400087'];
             const value1time = documents[0].time;
-            const value2 = documents[1].System['400086'];
+            const value2 = documents[1].System['400087'];
             const value2time = documents[1].time;
-            const value3 = documents[2].System['400086'];
+            const value3 = documents[2].System['400087'];
             console.log("value1: ",value1)
             console.log("value1time: ",value1time)
             console.log("value2: ",value2)
@@ -260,7 +259,7 @@ async function compareSystem400086() {
 }
 
 // 使用示例
-compareSystem400086();
+compareSystem400087();
 
 
 
