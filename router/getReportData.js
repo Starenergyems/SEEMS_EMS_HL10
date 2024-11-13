@@ -129,14 +129,10 @@ async function getHourRange(formattedTimeStart, formattedTimeEnd) {
     console.log(
       "#############################################################"
     );
-
     console.log("該小時原始執行率搜尋起始時間:", formattedTimeStart);
     console.log("該小時原始執行率搜尋結束時間:", formattedTimeEnd);
 
-    // 判斷該時段該利用哪個ID進行判斷 checkBidIDid1前一個小時最後三秒
     const checkBidIDid1 = await checkBidID(formattedTimeStart);
-    //console.log("checkBidIDid1(時段查詢最後一個ID): ", checkBidIDid1);
-    //checkBidIDid 目標小時 但結束區間要提早一個區間(不然整點會被算到下一個區塊中)
     const checkBidIDsecondIntervalTime = formatTimecount(
       formattedTimeEnd,
       0,
@@ -146,74 +142,63 @@ async function getHourRange(formattedTimeStart, formattedTimeEnd) {
       0
     );
     const checkBidIDid2 = await checkBidID(checkBidIDsecondIntervalTime);
-    //console.log("checkBidIDid2(時段查詢最後一個ID): ", checkBidIDid2);
 
     const filter = {
       selector: {
         time: {
-          $gte: formattedTimeStart, // 開始時間 前一小時最後三秒
-          $lte: formattedTimeEnd, // 結束時間 當小時最後
+          $gte: formattedTimeStart,
+          $lte: formattedTimeEnd,
         },
       },
-      limit: 3603, // 每個時間段讀取最多3603筆資料
+      limit: 3603,
     };
 
-    // 查詢數據庫
     const result = await gcDb.find(filter);
 
-    // 的 Bid 值
+    if (!result.docs || result.docs.length === 0) {
+      console.error("查詢結果無資料，無法進行操作，設為預設值");
+      return { hourRange: Array(3603).fill(0), valueMissingNumber: 3603 };
+    }
+
+    const schedule = result.docs[0].Schedule || {};
+    const todayData = schedule.Today || {};
+
     const checkBidValues = [
-      result.docs[0].Schedule.Today[checkBidIDid1], //0
-      result.docs[0].Schedule.Today[checkBidIDid2 - 3], //1
-      result.docs[0].Schedule.Today[checkBidIDid2 - 2], //2
-      result.docs[0].Schedule.Today[checkBidIDid2 - 1], //3
-      result.docs[0].Schedule.Today[checkBidIDid2],
+      todayData[checkBidIDid1] || 0,
+      todayData[checkBidIDid2 - 3] || 0,
+      todayData[checkBidIDid2 - 2] || 0,
+      todayData[checkBidIDid2 - 1] || 0,
+      todayData[checkBidIDid2] || 0,
     ];
 
     const hourRange = [];
     let valueMissingNumber = 0;
 
-    // 假設數據庫中的 time 字段是按升序排列的
     for (let i = 0; i < 3603; i++) {
       let intervalIndex;
 
-      if (i >= 0 && i <= 3) {
-        intervalIndex = 0;
-      } else if (i >= 4 && i <= 903) {
-        intervalIndex = 1;
-      } else if (i >= 904 && i <= 1803) {
-        intervalIndex = 2;
-      } else if (i >= 1804 && i <= 2703) {
-        intervalIndex = 3;
-      } else if (i >= 2704 && i <= 3603) {
-        intervalIndex = 4;
-      }
+      if (i >= 0 && i <= 3) intervalIndex = 0;
+      else if (i >= 4 && i <= 903) intervalIndex = 1;
+      else if (i >= 904 && i <= 1803) intervalIndex = 2;
+      else if (i >= 1804 && i <= 2703) intervalIndex = 3;
+      else intervalIndex = 4;
 
       const intervalValue = checkBidValues[intervalIndex];
 
       if (intervalValue <= 0) {
         hourRange.push(10000);
       } else {
-        if (
-          result.docs[i] &&
-          result.docs[i].System &&
-          result.docs[i].System["400037"] !== undefined
-        ) {
-          const data = result.docs[i].System["400037"];
-          hourRange.push(data);
-        } else {
-          valueMissingNumber++;
-          hourRange.push(0);
-        }
+        const data = result.docs[i]?.System?.["400037"] ?? 0;
+        hourRange.push(data);
+        if (data === 0) valueMissingNumber++;
       }
     }
     console.log("該小時缺少秒數之數量: ", valueMissingNumber);
-    //console.log("hourRange: ", hourRange);
     console.log("---------------獲取該小時的原始執行率已結束---------------");
     return { hourRange, valueMissingNumber };
   } catch (error) {
     console.error("getHourRange在查詢或處理數據時出錯: ", error);
-    return null;
+    return { hourRange: Array(3603).fill(0), valueMissingNumber: 3603 };
   }
 }
 
@@ -953,12 +938,12 @@ async function getReportsInRange(startDate, endDate) {
   }
 }
 
-// // 設定開始和結束日期;
-// const startDate = "2024-10-27T00:00:13.816+08:00";
-// const endDate = "2024-10-29T00:00:59.999+08:00";
+// 設定開始和結束日期;
+const startDate = "2024-06-01T00:00:13.816+08:00";
+const endDate = "2024-09-30T00:00:59.999+08:00";
 
-// //執行範圍內的報告生成;
-// getReportsInRange(startDate, endDate);
+//執行範圍內的報告生成;
+getReportsInRange(startDate, endDate);
 
 // * ************************************************************ * //
 // * 每小時執行主程式: 定期執行 每小時的五分會進行前一個小時的資料撈取主程式

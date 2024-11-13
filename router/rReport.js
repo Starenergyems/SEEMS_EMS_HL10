@@ -116,18 +116,23 @@ const queryReport = async (req, res) => {
     updateExcel2DHorizon(workbook, thisMonth.sbspm, 1, "D6"); // sbspm - 二維陣列
     updateExcel1DHorizon(
       workbook,
-      thisMonth.auxPower.slice(1).map((val) => (val === null ? 0 : val)),
+      Array.isArray(thisMonth.auxPower)
+        ? thisMonth.auxPower.map((val) => (val === null ? 0 : val))
+        : [], // 如果 auxPower 不是陣列，則使用空陣列
       0,
       "E6"
     );
+
     // auxPower - 從第二個元素(陣列位置1)開始，一維陣列，null 值轉為 0
     updateExcel1DHorizon(workbook, [thisMonth.powerUseSum_calculate], 0, "D6"); // powerUseSum_calculate - 單一數值
 
     // 2. 將 lastMonth 的特定數值放入 Excel
     // 提取 lastMonth 中 sbspm 的第 32 筆數據、auxPower 和 powerUseSum_calculate
-    const lastMonthSbspm32 = lastMonth.sbspm[31] || [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]; // 若第 32 筆不存在則返回都是0的陣列
+    // lastMonth sbspm 第 32 筆數據，如果長度不足 32，使用預設空陣列
+    const lastMonthSbspm32 =
+      lastMonth.sbspm && lastMonth.sbspm.length > 31
+        ? lastMonth.sbspm[31]
+        : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // 若第 32 筆不存在則返回都是0的陣列
     const lastMonthAuxPower = lastMonth.auxPower.map((val) =>
       val === null ? 0 : val
     ); // auxPower，null 值轉為 0
@@ -146,9 +151,11 @@ const queryReport = async (req, res) => {
 
     // 3. lastYear 的特定數值放入 Excel
     // 提取 lastYear 中 sbspm 的第 32 筆數據、auxPower 和 powerUseSum_calculate
-    const lastYearSbspm32 = lastYear.sbspm[31] || [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]; // 若第 32 筆不存在則返回空陣列
+    // lastYear sbspm 第 32 筆數據，如果長度不足 32，使用預設空陣列
+    const lastYearSbspm32 =
+      lastYear.sbspm && lastYear.sbspm.length > 31
+        ? lastYear.sbspm[31]
+        : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const lastYearAuxPower = lastYear.auxPower.map((val) =>
       val === null ? 0 : val
     ); // auxPower，null 值轉為 0
