@@ -203,6 +203,21 @@ async function getDataForSet(blockId) {
 
     const data = await response.json();
     console.log(data);
+
+    if (data === "1"){ //渲染打勾
+      radioOption1.checked = true;
+      radioOption2.checked = false;
+      radioOption3.checked = false;
+    } else if (data==="2"){
+      radioOption1.checked = false;
+      radioOption2.checked = true;
+      radioOption3.checked = false;
+    } else if (data==="3"){
+      radioOption1.checked = false;
+      radioOption2.checked = false;
+      radioOption3.checked = true;
+    } 
+    
   } catch (error) {
     console.error("Error fetching data:", error);
   }
