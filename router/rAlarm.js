@@ -37,8 +37,8 @@ app.use(cors());
 // const otherrf10nanoDb = nano.use("other_rf10");
 // const alarmnanoDb = nano.use("alarm");
 // const hisalarmnanoDb = nano.use("hisalarm");
-const test_alarmnanoDb = nano.use("test_alarm");
-const test_hisalarmnanoDb = nano.use("test_hisalarm");
+const test_alarmnanoDb = nano.use("alarm");
+const test_hisalarmnanoDb = nano.use("alarm_his");
 
 // let alarm_db_event_lock = false;
 // // const alarm_test_nanoDb = nano.use("alarm_test");

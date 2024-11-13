@@ -27,8 +27,8 @@ const heartbeat = "heartbeat";
 const heartbeatDb = nano.use(heartbeat);
 const gc_rf10 = "gc_rf10";
 const gc_rf10Db = nano.use(gc_rf10);
-const test_alarm = "test_alarm";
-const test_alarm_nanoDb = nano.use(test_alarm);
+const test_alarm = "alarm";
+const test_alarm_nanoDb = nano.use(alarm);
 
 // 時間索引
 const indexDef = {

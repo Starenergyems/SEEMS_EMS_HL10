@@ -5,8 +5,8 @@ module.exports = {
     port: 3000
   },
   database: {
-    host: "192.168.1.10", // EMS1
-    //host: "192.168.1.12", // EMS2
+    //host: "192.168.1.10", // EMS1
+    host: "192.168.1.12", // EMS2
     port: 5984,
     username: "admin",
     password: "ems45877096",

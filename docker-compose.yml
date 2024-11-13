@@ -8,7 +8,7 @@ services:
     # container_name: ems-service
     environment:
       - TZ=Asia/Taipei
-      - HOST_IP=192.168.1.12
+      # - HOST_IP=192.168.1.12
     # volumes:
     # - ./router:/usr/src/app/router # Mount the <local directory>:<container directory>
     # - .:/usr/src/app
@@ -22,7 +22,7 @@ services:
     deploy:
       replicas: 1 # Set the desired number of replicas
       restart_policy:
-        condition: unless-stopped
+        condition: on-failure
         delay: 5s
         # max_attempts: 3
         window: 120s

@@ -15,8 +15,8 @@ const nano = require("nano")(
 
 require("dotenv").config();
 
-const test_alarm = "test_alarm";
-const test_alarm_nanoDb = nano.use(test_alarm);
+const alarm = "alarm";
+const test_alarm_nanoDb = nano.use(alarm);
 
 //********************************************************************************* */
 router.use(express.urlencoded({ extended: true }));
