@@ -59,7 +59,6 @@ const alarmnanoDb = nano.use("alarm");
 const report_hourDb = nano.use("report_hour");
 const report_dayDb = nano.use("report_day");
 const powerusageDb = nano.use("powerusage");
-const reportDb = nano.use("report");
 const report_monthlyDb = nano.use("report_monthly");
 
 //***************************************************************************************************************** */
@@ -83,35 +82,8 @@ alarmnanoDb.createIndex(indexDef);
 report_hourDb.createIndex(indexDef);
 report_dayDb.createIndex(indexDef);
 powerusageDb.createIndex(indexDef);
-reportDb.createIndex(indexDef);
 report_monthlyDb.createIndex(indexDef);
 //***************************************************************************************************************** */
-app.get("/test", async (req, res) => {
-  const CREDENTIALS = Buffer.from(
-    `${couchdbConfig.username}:${couchdbConfig.password}`
-  ).toString("base64");
-  const AUTHORIZATION = "Basic " + CREDENTIALS;
-  const URL = `http://${couchdbConfig.host}:${couchdbConfig.port}/${couchdbConfig.account}/_all_docs?include_docs=true`;
-  const response = await fetch(URL, {
-    method: "GET",
-    headers: { Authorization: AUTHORIZATION },
-    credentials: "include",
-  });
-  data = await response.json();
-  //console.log(typeof(data))
-  // for (let i =0 )
-  let rrr = [];
-  //
-  for (let i = 0; i < 4; i++) {
-    rrrr = {};
-    for (const [key, value] of Object.entries(data.rows[i].doc)) {
-      rrrr[key] = value;
-    }
-    rrr.push(rrrr);
-  }
-  //console.log(rrr)
-});
-
 // Login page. URL = "/login", LOGIN_URL can redirect.
 app.get("/login", async (req, res) => {
   // console.log("login lalala")
@@ -289,14 +261,14 @@ app.post("/repassword", async (req, res) => {
 });
 //////////////////////////////////////////////////////////////////////////////
 
-app.get("/health", (req, res) => {
-  const isHealthy = true;
-  if (isHealthy) {
-    res.status(200).json({ status: "OK" });
-  } else {
-    res.status(500).json({ status: "Error" });
-  }
-});
+// app.get("/health", (req, res) => {
+//   const isHealthy = true;
+//   if (isHealthy) {
+//     res.status(200).json({ status: "OK" });
+//   } else {
+//     res.status(500).json({ status: "Error" });
+//   }
+// });
 
 //身分驗證
 app.use("*", async (req, res, next) => {
@@ -804,7 +776,7 @@ server.listen(port, () => {
     content: `EMS${emsnumber}主程式重新啟動 !! 主機IP為：${HOST_IP}`,
   };
 
-  sendLineNotify(message.content); // 只發送文字訊息至 LINE
+  //sendLineNotify(message.content); // 只發送文字訊息至 LINE
   sendSlackNotification(message); // 發送物件到 Slack
 });
 
