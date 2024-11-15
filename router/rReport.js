@@ -117,7 +117,7 @@ const queryReport = async (req, res) => {
     updateExcel1DHorizon(
       workbook,
       Array.isArray(thisMonth.auxPower)
-        ? thisMonth.auxPower.map((val) => (val === null ? 0 : val))
+        ? thisMonth.auxPower.slice(1).map((val) => (val === null ? 0 : val))
         : [], // 如果 auxPower 不是陣列，則使用空陣列
       0,
       "E6"
@@ -133,9 +133,10 @@ const queryReport = async (req, res) => {
       lastMonth.sbspm && lastMonth.sbspm.length > 31
         ? lastMonth.sbspm[31]
         : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // 若第 32 筆不存在則返回都是0的陣列
-    const lastMonthAuxPower = lastMonth.auxPower.map((val) =>
-      val === null ? 0 : val
-    ); // auxPower，null 值轉為 0
+    const lastMonthAuxPower = Array.isArray(lastMonth.auxPower)
+      ? lastMonth.auxPower.map((val) => (val === null ? 0 : val))
+      : Array(10).fill(0); // 如果 auxPower 不是陣列，則回傳一個長度為10的陣列，所有值為0
+
     const lastMonthPowerUseSum = [lastMonth.powerUseSum_calculate]; // powerUseSum_calculate - 單一數值
 
     // 更新 Excel 以 lastMonth 資料
@@ -263,60 +264,101 @@ const queryReport_auto = async (template) => {
   const templatePath = `../public/report/${template}.xlsx`;
   const workbook = await xlsx.fromFileAsync(templatePath);
   if (reportType === "年報") {
-    couchData = await getYearReportData(specified_date);
-    updateExcel1DHorizon(workbook, couchData.result.sbspm, 0, "D6"); //每個月的數值含每月加總(但不含輔助用電)
-    updateExcel1DHorizon(workbook, couchData.previousYearData.sbspm, 0, "D19");
-    //-輔助用電 垂直放入就好
-    updateExcel1DVertical(workbook, couchData.result.powerUseSum[12], 0, "P6"); //加總
-    updateExcel1DVertical(
-      workbook,
-      couchData.previousYearData.powerUseSum[12],
-      0,
-      "P19"
-    );
+    const couchData = await getYearReportData(specified_date);
+    const year = specified_date.format("YYYY");
+    const yearNumber = parseInt(year, 10); // 這樣轉成數字格式
+    const { result = {}, previousYearData = {} } = couchData; // 提供預設值
+
+    // 檢查並使用 result 的 sbspm 和 powerUseSum，並提供空陣列和 0 的預設值
+    const resultSbspm = result.sbspm || Array(12).fill(Array(13).fill(0)); // 預設為包含 12 個空的 13 位陣列
+    const resultPowerUseSum = result.powerUseSum || Array(13).fill(0); // 預設為包含 13 個 0 的陣列
+
+    // 檢查並使用 previousYearData 的 sbspm 和 powerUseSum
+    const previousYearSbspm = previousYearData.sbspm || [Array(13).fill(0)]; // 預設為包含 13 個 0 的一維陣列
+    const previousYearPowerUseSum =
+      previousYearData.powerUseSum || Array(13).fill(0); // 預設為包含 13 個 0 的陣列
+    // updateExcel1DHorizon(workbook, yearNumber, 0, "N3"); // 年份
+    // 更新 Excel
+    updateExcel2DHorizon(workbook, resultSbspm, 0, "D6"); // 每個月的數值含每月加總(但不含輔助用電)
+    updateExcel1DHorizon(workbook, previousYearSbspm[0], 0, "D19"); // 上一年同月份的 sbspm
+
+    // 將輔助用電加總值包裝成陣列後垂直放入
+    updateExcel1DVertical(workbook, [resultPowerUseSum[12]], 0, "P6"); // 當前年加總
+    updateExcel1DVertical(workbook, [previousYearPowerUseSum[12]], 0, "P19"); // 上一年加總
   } else if (reportType === "月報") {
-    couchData = await getMonthlyReportData(specified_date);
-    updateExcel2DHorizon(workbook, couchData.date, 0, "H3"); //日期
-    updateExcel2DHorizon(workbook, couchData.date, 1, "K3"); //日期
+    // 從 getMonthlyReportData 取得 couchData 的三個物件
+    const couchData = await getMonthlyReportData(specified_date);
 
-    updateExcel2DHorizon(workbook, couchData.thisMonth.sbspm, 1, "D6"); //服務品質指標+SPM
-    updateExcel1DHorizon(workbook, couchData.lastMonth.sbspm, 1, "D38"); //上期
-    updateExcel1DHorizon(workbook, couchData.lastYear.sbspm, 1, "D39"); //去年同期
+    // 解構取得 thisMonth, lastMonth, lastYear
+    const { thisMonth, lastMonth, lastYear } = couchData;
 
+    // 1. 將 thisMonth 資料以二維、一維、一維的格式放入 Excel
+    updateExcel2DHorizon(workbook, thisMonth.sbspm, 1, "D6"); // sbspm - 二維陣列
     updateExcel1DHorizon(
       workbook,
-      couchData.thisMonth.powerUseSum_calculate,
+      Array.isArray(thisMonth.auxPower)
+        ? thisMonth.auxPower.slice(1).map((val) => (val === null ? 0 : val))
+        : [], // 如果 auxPower 不是陣列，則使用空陣列
       0,
-      "D6"
+      "E6"
     );
-    updateExcel1DHorizon(workbook, couchData.thisMonth.auxPower[1], 0, "D6");
-    updateExcel1DHorizon(
-      workbook,
-      couchData.lastMonth.powerUseSum_calculate,
-      0,
-      "D7"
-    );
-    updateExcel1DHorizon(workbook, couchData.lastMonth.auxPower[1], 0, "D7");
-    updateExcel1DHorizon(
-      workbook,
-      couchData.lastYear.powerUseSum_calculate,
-      0,
-      "D8"
-    );
-    updateExcel1DHorizon(workbook, couchData.lastYear.auxPower[1], 0, "D8");
 
-    // tempFilePath = path.join(__dirname, "temp.xlsx");
-    // await workbook.toFileAsync(tempFilePath);
+    // auxPower - 從第二個元素(陣列位置1)開始，一維陣列，null 值轉為 0
+    updateExcel1DHorizon(workbook, [thisMonth.powerUseSum_calculate], 0, "D6"); // powerUseSum_calculate - 單一數值
+
+    // 2. 將 lastMonth 的特定數值放入 Excel
+    // 提取 lastMonth 中 sbspm 的第 32 筆數據、auxPower 和 powerUseSum_calculate
+    // lastMonth sbspm 第 32 筆數據，如果長度不足 32，使用預設空陣列
+    const lastMonthSbspm32 =
+      lastMonth.sbspm && lastMonth.sbspm.length > 31
+        ? lastMonth.sbspm[31]
+        : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // 若第 32 筆不存在則返回都是0的陣列
+    const lastMonthAuxPower = Array.isArray(lastMonth.auxPower)
+      ? lastMonth.auxPower.map((val) => (val === null ? 0 : val))
+      : Array(10).fill(0); // 如果 auxPower 不是陣列，則回傳一個長度為10的陣列，所有值為0
+
+    const lastMonthPowerUseSum = [lastMonth.powerUseSum_calculate]; // powerUseSum_calculate - 單一數值
+
+    // 更新 Excel 以 lastMonth 資料
+    updateExcel1DHorizon(workbook, lastMonthSbspm32, 1, "D38"); // sbspm 第 32 筆數據 - 一維陣列
+    updateExcel1DHorizon(
+      workbook,
+      lastMonthAuxPower.slice(1).map((val) => (val === null ? 0 : val)),
+      0,
+      "E7"
+    ); // auxPower - 從第二個元素開始，一維陣列，null 值轉為 0
+
+    updateExcel1DHorizon(workbook, lastMonthPowerUseSum, 0, "D7"); // powerUseSum_calculate - 單一數值
+
+    // 3. lastYear 的特定數值放入 Excel
+    // 提取 lastYear 中 sbspm 的第 32 筆數據、auxPower 和 powerUseSum_calculate
+    // lastYear sbspm 第 32 筆數據，如果長度不足 32，使用預設空陣列
+    const lastYearSbspm32 =
+      lastYear.sbspm && lastYear.sbspm.length > 31
+        ? lastYear.sbspm[31]
+        : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const lastYearAuxPower = lastYear.auxPower.map((val) =>
+      val === null ? 0 : val
+    ); // auxPower，null 值轉為 0
+    const lastYearPowerUseSum = [lastYear.powerUseSum_calculate]; // powerUseSum_calculate - 單一數值
+
+    // 更新 Excel 以 lastYear 資料
+    updateExcel1DHorizon(workbook, lastYearSbspm32, 1, "D39"); // sbspm 第 32 筆數據 - 一維陣列
+    updateExcel1DHorizon(
+      workbook,
+      lastYearAuxPower.slice(1).map((val) => (val === null ? 0 : val)),
+      0,
+      "E8"
+    ); // auxPower - 從第二個元素開始，一維陣列，null 值轉為 0
+
+    updateExcel1DHorizon(workbook, lastYearPowerUseSum, 0, "D8"); // powerUseSum_calculate - 單一數值
   } else if (reportType === "日報") {
     couchData = await getDailyReportData(specified_date);
 
-    // Update the Excel file with MongoDB data，使用取得的MongoDB資料更新Excel工作簿。
     updateExcel2DHorizon(workbook, couchData.hour_final, 0, "D6"); //服務品質+SBSPM
     updateExcel1DVertical(workbook, couchData.elsedata1, 0, "F33"); //總用電量
     updateExcel1DVertical(workbook, couchData.elsedata2, 0, "J33"); //中止服務
     updateExcel2DHorizon(workbook, couchData.Date, 0, "H3"); //日期
-    // tempFilePath = path.join(__dirname, "temp.xlsx");
-    // await workbook.toFileAsync(tempFilePath);
   } else {
     console.log("前端回傳之報表種類異常: 應為年報/月報/日報");
   }
@@ -656,4 +698,5 @@ cron.schedule("0 45 11 * * *", async () => {
 //   }
 // }
 // test();
+
 module.exports = router;
