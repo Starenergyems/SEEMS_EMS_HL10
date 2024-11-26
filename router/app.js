@@ -259,16 +259,6 @@ app.post("/repassword", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-//////////////////////////////////////////////////////////////////////////////
-
-// app.get("/health", (req, res) => {
-//   const isHealthy = true;
-//   if (isHealthy) {
-//     res.status(200).json({ status: "OK" });
-//   } else {
-//     res.status(500).json({ status: "Error" });
-//   }
-// });
 
 //身分驗證
 app.use("*", async (req, res, next) => {
@@ -776,7 +766,7 @@ server.listen(port, () => {
     content: `EMS${emsnumber}主程式重新啟動 !! 主機IP為：${HOST_IP}`,
   };
 
-  //sendLineNotify(message.content); // 只發送文字訊息至 LINE
+  sendLineNotify(message.content); // 只發送文字訊息至 LINE
   sendSlackNotification(message); // 發送物件到 Slack
 });
 
@@ -794,6 +784,17 @@ process.on("SIGINT", () => {
     process.exit(0);
   });
 });
+
+//////////////////////////////////////////////////////////////////////////////
+
+// app.get("/health", (req, res) => {
+//   const isHealthy = true;
+//   if (isHealthy) {
+//     res.status(200).json({ status: "OK" });
+//   } else {
+//     res.status(500).json({ status: "Error" });
+//   }
+// });
 
 //module.exports = { nano };
 app.get("/getPermission", (req, res) => {
