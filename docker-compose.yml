@@ -15,14 +15,7 @@ services:
     ports:
       - "3000:3000"
     working_dir: /usr/src/app/router # 指定工作目錄為 /usr/src/app/router
-    command:
-      [
-        "node",
-        "app.js",
-        "alarmFilter.js",
-        "lineForPower.js",
-        "getReportData.js",
-      ]
+    #command: ["node", "app.js"]
     # depends_on:
     #   - mqtt
     deploy:

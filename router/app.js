@@ -5,6 +5,7 @@ const path = require("path");
 const cors = require("cors");
 const http = require("http");
 const socketIO = require("socket.io");
+const cron = require("node-cron"); //指定幾點做什麼
 const EventEmitter = require("events");
 const cookieParser = require("cookie-parser");
 const port = 3000;
@@ -19,7 +20,15 @@ const {
   findaccount,
   updateaccount,
 } = require("./rLogin");
+const { fetchDataAndNotify } = require("./lineForPower.js");
 const { sendSlackNotification } = require("./slack_api.js");
+const {
+  getDailyReportData,
+  getMonthlyReportData,
+  getYearReportData,
+  startHourlyCheck,
+} = require("./getReportData.js");
+const { delprocessDocs, resetRequestCount } = require("./alarmFilter.js");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
@@ -801,3 +810,38 @@ app.get("/getPermission", (req, res) => {
   var permission = req.body.permission;
   res.send({ permission: permission });
 });
+
+startHourlyCheck();
+
+schedule.scheduleJob("0 8 * * *", () => {
+  fetchDataAndNotify();
+});
+
+// 1. 定期在當天 00:30 執行日報生成，傳入前一天的時間
+cron.schedule("30 0 * * *", async () => {
+  const specifiedTime = moment().subtract(1, "days").startOf("day");
+  console.log(`執行日報生成，傳入時間：${specifiedTime.format()}`);
+  await getDailyReportData(specifiedTime);
+});
+
+// 2. 定期在每月 1 日 01:15 執行月報生成，傳入前一個月的時間並指定為每月1日1:15
+cron.schedule("30 1 1 * *", async () => {
+  const specifiedTime = moment().subtract(1, "months").startOf("month").set({
+    hour: 1,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+  console.log(`執行月報生成，傳入時間：${specifiedTime.format()}`);
+  await getMonthlyReportData(specifiedTime);
+});
+
+// 3. 每年 1 月 1 日 02:00:00 執行年報生成，傳入前一年的時間
+cron.schedule("0 0 2 1 *", async () => {
+  const specifiedTime = moment().subtract(1, "years").startOf("year");
+  console.log(`執行年報生成，傳入時間：${specifiedTime.format()}`);
+  await getYearReportData(specifiedTime);
+});
+
+resetRequestCount();
+setInterval(delprocessDocs, 2000);

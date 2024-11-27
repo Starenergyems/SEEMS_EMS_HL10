@@ -230,7 +230,9 @@ const timer = setInterval(async () => {
 }, intervalTime);
 
 // 初始設置重置計數
-resetRequestCount();
+// resetRequestCount();
 
 // 假設delprocessDocs函數每2秒執行一次
-setInterval(delprocessDocs, 2000);
+// setInterval(delprocessDocs, 2000);
+
+module.exports = { delprocessDocs, resetRequestCount };

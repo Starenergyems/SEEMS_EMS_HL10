@@ -959,6 +959,7 @@ function startHourlyCheck() {
   });
   console.log("已啟動定時任務，每小時的5分鐘執行一次。");
 }
+
 startHourlyCheck();
 
 // * ************************************************************ * //
@@ -1729,35 +1730,36 @@ async function getYearReportData(specifiedTime) {
 // const specifiedTime = moment("2024-07-30T00:30:00.000+08:00");
 // getYearReportData(specifiedTime);
 
-// 1. 定期在當天 00:30 執行日報生成，傳入前一天的時間
-cron.schedule("30 0 * * *", async () => {
-  const specifiedTime = moment().subtract(1, "days").startOf("day");
-  console.log(`執行日報生成，傳入時間：${specifiedTime.format()}`);
-  await getDailyReportData(specifiedTime);
-});
+// // 1. 定期在當天 00:30 執行日報生成，傳入前一天的時間
+// cron.schedule("30 0 * * *", async () => {
+//   const specifiedTime = moment().subtract(1, "days").startOf("day");
+//   console.log(`執行日報生成，傳入時間：${specifiedTime.format()}`);
+//   await getDailyReportData(specifiedTime);
+// });
 
-// 2. 定期在每月 1 日 01:15 執行月報生成，傳入前一個月的時間並指定為每月1日1:15
-cron.schedule("30 1 1 * *", async () => {
-  const specifiedTime = moment().subtract(1, "months").startOf("month").set({
-    hour: 1,
-    minute: 0,
-    second: 0,
-    millisecond: 0,
-  });
-  console.log(`執行月報生成，傳入時間：${specifiedTime.format()}`);
-  await getMonthlyReportData(specifiedTime);
-});
+// // 2. 定期在每月 1 日 01:15 執行月報生成，傳入前一個月的時間並指定為每月1日1:15
+// cron.schedule("30 1 1 * *", async () => {
+//   const specifiedTime = moment().subtract(1, "months").startOf("month").set({
+//     hour: 1,
+//     minute: 0,
+//     second: 0,
+//     millisecond: 0,
+//   });
+//   console.log(`執行月報生成，傳入時間：${specifiedTime.format()}`);
+//   await getMonthlyReportData(specifiedTime);
+// });
 
-// 3. 每年 1 月 1 日 02:00:00 執行年報生成，傳入前一年的時間
-cron.schedule("0 0 2 1 *", async () => {
-  const specifiedTime = moment().subtract(1, "years").startOf("year");
-  console.log(`執行年報生成，傳入時間：${specifiedTime.format()}`);
-  await getYearReportData(specifiedTime);
-});
+// // 3. 每年 1 月 1 日 02:00:00 執行年報生成，傳入前一年的時間
+// cron.schedule("0 0 2 1 *", async () => {
+//   const specifiedTime = moment().subtract(1, "years").startOf("year");
+//   console.log(`執行年報生成，傳入時間：${specifiedTime.format()}`);
+//   await getYearReportData(specifiedTime);
+// });
 
 // /////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
   getDailyReportData,
   getMonthlyReportData,
   getYearReportData,
+  startHourlyCheck,
 };
