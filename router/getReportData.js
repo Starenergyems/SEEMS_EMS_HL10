@@ -960,7 +960,7 @@ function startHourlyCheck() {
   console.log("已啟動定時任務，每小時的5分鐘執行一次。");
 }
 
-startHourlyCheck();
+//startHourlyCheck();
 
 // * ************************************************************ * //
 // * 每天用電量補值
