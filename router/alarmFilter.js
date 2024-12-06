@@ -17,7 +17,7 @@ const { sendSlackNotification } = require("./slack_api.js");
 const { sendLineNotify } = require("./line");
 
 require("dotenv").config();
-const test_alarm = "test_alarm";
+const test_alarm = "alarm";
 const test_alarm_nanoDb = nano.use(test_alarm);
 
 //********************************************************************************* */

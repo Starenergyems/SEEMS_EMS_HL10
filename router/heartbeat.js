@@ -5,8 +5,8 @@ const cors = require("cors");
 const app = express();
 const config = require("./config");
 const couchdbConfig = config.database;
-const moment = require('moment');
-const crypto = require('crypto');
+const moment = require("moment");
+const crypto = require("crypto");
 const { sendLineNotify } = require("./line");
 const { Console } = require("console");
 
@@ -21,19 +21,19 @@ app.use(cors());
 
 // 連接到 CouchDB
 const nano = require("nano")(
-    `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
+  `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
 const heartbeat = "heartbeat";
 const heartbeatDb = nano.use(heartbeat);
 const gc_rf10 = "gc_rf10";
 const gc_rf10Db = nano.use(gc_rf10);
-const test_alarm = "test_alarm";
+const test_alarm = "alarm";
 const test_alarm_nanoDb = nano.use(test_alarm);
 
 // 時間索引
 const indexDef = {
-    index: { fields: ["time"] },
-    name: "time_index"
+  index: { fields: ["time"] },
+  name: "time_index",
 };
 
 // 為資料庫創建時間索引
@@ -44,10 +44,9 @@ let flag = 0;
 
 // 函數：取得當前時間，格式化為指定格式
 function getCurrentTime() {
-    const now = moment().format("YYYY-MM-DDTHH:mm:ss.000[Z]");
-    return now;
+  const now = moment().format("YYYY-MM-DDTHH:mm:ss.000[Z]");
+  return now;
 }
-
 
 // let countflag = 0;
 // async function main(state) {
@@ -102,7 +101,7 @@ function getCurrentTime() {
 // async function emsHeartbeatAddition() {
 //     console.log("-------------------------------------------------------------------------");
 //     console.log("emsHeartbeatAddition 執行中...");
-    
+
 //     try {
 //         const result = await checkDatabaseChanges();
 //         console.log("result: ", result);
@@ -147,7 +146,6 @@ function getCurrentTime() {
 //     }
 // }
 
-
 // // 嘗試將資料插入資料庫，返回成功或失敗的結果
 // async function attemptInsert(data) {
 //     try {
@@ -163,9 +161,8 @@ function getCurrentTime() {
 //   console.log("-------------------------------------------------------------------------");
 //   console.log("checkDatabaseChanges 執行中...");
 
-
 //   try {
-    
+
 //       let EMS_Move = await heartbeatDb.get('EMS_Move');
 //       let Move_value = 0;
 //       console.log("previousValue: ",previousValue);
@@ -205,63 +202,61 @@ function getCurrentTime() {
 
 // 取得最新的兩筆文件
 async function getLatestDocuments() {
-    try {
-        // 從資料庫中按時間排序取得最新的兩筆document
-        const latestDocuments = await gc_rf10Db.find({
-            selector: {},
-            fields: ["_id", "System", "time"], // 包含必要的字段
-            sort: [{"time": "desc"}], // 按時間排序
-            limit: 3, // 取得最新的兩筆文件
-            use_index: "time_index" // 使用time_index索引
-        });
+  try {
+    // 從資料庫中按時間排序取得最新的兩筆document
+    const latestDocuments = await gc_rf10Db.find({
+      selector: {},
+      fields: ["_id", "System", "time"], // 包含必要的字段
+      sort: [{ time: "desc" }], // 按時間排序
+      limit: 3, // 取得最新的兩筆文件
+      use_index: "time_index", // 使用time_index索引
+    });
 
-        // 將文件返回
-        return latestDocuments.docs;
-    } catch (error) {
-        console.error("Error fetching documents:", error);
-        throw error;
-    }
+    // 將文件返回
+    return latestDocuments.docs;
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+    throw error;
+  }
 }
 
 // 比較最新兩筆文件的System屬性中的400086值
 async function compareSystem400087() {
-    try {
-        // 取得最新兩筆文件
-        const documents = await getLatestDocuments();
-        console.log("documents: ",documents)
-        if (documents.length >= 2) {
-            // 取得兩筆文件中System屬性中的400086值
-            const value1 = documents[0].System['400087'];
-            const value1time = documents[0].time;
-            const value2 = documents[1].System['400087'];
-            const value2time = documents[1].time;
-            const value3 = documents[2].System['400087'];
-            console.log("value1: ",value1)
-            console.log("value1time: ",value1time)
-            console.log("value2: ",value2)
-            console.log("value2time: ",value2time)
-            // 比較大小
-            if (value1 !== value2) {
-                console.log("有變化");
-            } else if (value1 < value2) {
-            } else {
-                console.log("錯誤 心跳死掉了");
-                //壓資料到alarmdb&hisalarmdb
-                //alarmdb要檢查有沒有舊有資料 如果有要進行修改 沒有的話要新增
-                //his 配合alarm產生的資料進行新增 回復正常則要修改
-            }
-        } else {
-            console.log("文件數量不足以進行比較");
-        }
-    } catch (error) {
-        console.error("Error:", error);
+  try {
+    // 取得最新兩筆文件
+    const documents = await getLatestDocuments();
+    console.log("documents: ", documents);
+    if (documents.length >= 2) {
+      // 取得兩筆文件中System屬性中的400086值
+      const value1 = documents[0].System["400087"];
+      const value1time = documents[0].time;
+      const value2 = documents[1].System["400087"];
+      const value2time = documents[1].time;
+      const value3 = documents[2].System["400087"];
+      console.log("value1: ", value1);
+      console.log("value1time: ", value1time);
+      console.log("value2: ", value2);
+      console.log("value2time: ", value2time);
+      // 比較大小
+      if (value1 !== value2) {
+        console.log("有變化");
+      } else if (value1 < value2) {
+      } else {
+        console.log("錯誤 心跳死掉了");
+        //壓資料到alarmdb&hisalarmdb
+        //alarmdb要檢查有沒有舊有資料 如果有要進行修改 沒有的話要新增
+        //his 配合alarm產生的資料進行新增 回復正常則要修改
+      }
+    } else {
+      console.log("文件數量不足以進行比較");
     }
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
 // 使用示例
 compareSystem400087();
-
-
 
 // async function checkDataIncrease(systemKey) {
 //     try {
@@ -298,11 +293,6 @@ compareSystem400087();
 //     checkDataIncrease(400086);
 //     checkDataIncrease(400087);
 // }
-  
+
 // // 每 1 秒檢查一次
 // setInterval(delprocessDocs, 1000);
-
-
-
-
-

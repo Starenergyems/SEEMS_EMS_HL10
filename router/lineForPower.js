@@ -73,7 +73,7 @@ async function fetchDataAndNotify() {
 
     if (body.docs.length > 0) {
       const data = body.docs[0];
-      const message = `花蓮 4-1 案場\nDate: ${data.date}\n輸入電量(Imp): ${data.day_kWh_Import} kWh\n輸出電量(Exp): ${data.day_kWh_Export} kWh\n用電量(Net): ${data.kWh_Net} kWh\nRTE: ${data.kWh_RTE} %`;
+      const message = `花蓮 13-21 案場\nDate: ${data.date}\n輸入電量(Imp): ${data.day_kWh_Import} kWh\n輸出電量(Exp): ${data.day_kWh_Export} kWh\n用電量(Net): ${data.kWh_Net} kWh\nRTE: ${data.kWh_RTE} %`;
       await sendLineNotify(message);
     } else {
       const yesterdaytime = moment().subtract(1, "days"); // 保持 moment 對象
@@ -83,8 +83,8 @@ async function fetchDataAndNotify() {
       // 處理返回的結果，這裡假設 result 包含需要的電量數據，如果 result 是空的，則代表無法獲取數據
       const message =
         result && result.data
-          ? `花蓮 4-1 案場\nDate: ${yesterday}\n輸入電量(Imp): ${result.data.day_kWh_Import} kWh\n輸出電量(Exp): ${result.data.day_kWh_Export} kWh\n用電量(Net): ${result.data.kWh_Net} kWh\nRTE: ${result.data.kWh_RTE} %`
-          : `花蓮 4-1 案場\nDate: ${yesterday}\n昨日數值不存在`;
+          ? `花蓮 13-21 案場\nDate: ${yesterday}\n輸入電量(Imp): ${result.data.day_kWh_Import} kWh\n輸出電量(Exp): ${result.data.day_kWh_Export} kWh\n用電量(Net): ${result.data.kWh_Net} kWh\nRTE: ${result.data.kWh_RTE} %`
+          : `花蓮 13-21 案場\nDate: ${yesterday}\n昨日數值不存在`;
 
       console.log(message);
       await sendLineNotify(message);

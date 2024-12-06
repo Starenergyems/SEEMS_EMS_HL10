@@ -4,7 +4,7 @@ module.exports = {
   },
   database: {
     //host: "192.168.1.10", // EMS1
-    host: "192.168.1.12", // EMS2
+    host: "192.168.1.10", // EMS2
     port: 5984,
     username: "admin",
     password: "ems45877096",
@@ -29,8 +29,8 @@ module.exports = {
       //控制
       "dwctrl",
       //告警
-      "test_alarm",
-      "test_hisalarm",
+      "alarm",
+      "alarm_his",
       //紀錄
       "log",
       "log_door",
@@ -45,9 +45,9 @@ module.exports = {
     ],
   },
   systemInfo: {
-    serviceActivationTime: "2024-06-22",
+    serviceActivationTime: "2024-09-05",
     location: "Hualien Heping",
     DeviceCapacity: 10,
-    PlaceNumber: "4-1",
+    PlaceNumber: "13-21",
   },
 };

@@ -27,8 +27,8 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(cors());
 //************************************************************* */
 
-const test_alarmnanoDb = nano.use("test_alarm");
-const test_hisalarmnanoDb = nano.use("test_hisalarm");
+const test_alarmnanoDb = nano.use("alarm");
+const test_hisalarmnanoDb = nano.use("alarm_his");
 
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +47,7 @@ router.get("/alarm", (req, res) => {
 router.get("/alarm/realtime", (req, res) => {
   // num與fun
   let permission = req.body.permission;
-  res.render("Alm_RealTime",{permission:permission});
+  res.render("Alm_RealTime", { permission: permission });
 });
 
 router.post("/alarm/realtime/edit", (req, res) => {
@@ -99,7 +99,7 @@ router.post("/alarm/realtime/edit", (req, res) => {
           }
         });
     }
-    //單一已讀 
+    //單一已讀
     else {
       promise = test_alarmnanoDb
         .get(ID)
@@ -222,9 +222,8 @@ router.get("/alarm/realtime/edit", (req, res) => {
 router.get("/alarm/history", (req, res) => {
   // num與fun
   let permission = req.body.permission;
-  res.render("Alm_History", {permission:permission});
+  res.render("Alm_History", { permission: permission });
 });
-
 
 router.get("/alarm/history/edit", (req, res) => {
   const From_date = new Date().toISOString().split("T")[0]; // From_date set to today's date;
