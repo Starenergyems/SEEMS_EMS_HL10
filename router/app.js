@@ -354,7 +354,6 @@ async function getData() {
       }
     }
 
-    //console.log("呼叫getdata");
     flag = 1;
   }
 }

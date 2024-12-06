@@ -26,6 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(cors());
 //************************************************************* */
+// const lc1nanoDb = nano.use("lc1_rf10");
+// const lc2nanoDb = nano.use("lc2_rf10");
+// const lc3nanoDb = nano.use("lc3_rf10");
+// const lc4nanoDb = nano.use("lc4_rf10");
+// const dcnanoDb = nano.use("dc_rf10");
+// const gcnanoDb = nano.use("gc_rf10"); //新增
 
 const test_alarmnanoDb = nano.use("alarm");
 const test_hisalarmnanoDb = nano.use("alarm_his");

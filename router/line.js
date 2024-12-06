@@ -6,6 +6,9 @@ const couchdbConfig = config.database;
 const axios = require("axios");
 require("dotenv").config();
 
+const alarm = "alarm";
+const test_alarm_nanoDb = nano.use(alarm);
+
 //********************************************************************************* */
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
