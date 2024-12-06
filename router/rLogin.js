@@ -1,11 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////////////
-// How JavaScript URL works.
-// window.location.href = 'https://domain/path';   // absolute
-// window.location.href = '//domain/path';         // relative to current schema
-// window.location.href = 'path';                  // relative to current path
-// window.location.href = '/path';                 // relative to domain
-// window.location.href = '../';                   // one level up
-////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Node.js setting, do not change.
 // const express = require("express");
 // const path = require("path");
@@ -26,7 +19,7 @@
 //如果要換資料庫的host改掉".database"
 const config = require("./config");
 const couchdbConfig = config.database;
-const db = couchdbConfig
+const db = couchdbConfig;
 const moment = require("moment");
 ////////////////////////////////////////////////////////////////////////////////////////
 // Do not need change.
@@ -41,7 +34,9 @@ const doc_CONFIG = couchdbConfig.config; // The account setting doc id.
 const db_URL = "http://" + db_IP + ":" + db_PORT; // Use for fetch database function.
 // const db_URL = couchDBUrl; // Use for fetch database function.
 // const AUTHORIZATION = "Basic " + btoa(`${db_USERNAME}:${db_PASSWORD}`);
-const CREDENTIALS = Buffer.from(`${db_USERNAME}:${db_PASSWORD}`).toString('base64');
+const CREDENTIALS = Buffer.from(`${db_USERNAME}:${db_PASSWORD}`).toString(
+  "base64"
+);
 const AUTHORIZATION = "Basic " + CREDENTIALS;
 ////////////////////////////////////////////////////////////////////////////////////////
 // Variable declare, config data.
@@ -93,25 +88,41 @@ async function getconfig() {
       ? (logintext = "登入頁面提示字元")
       : (logintext = data.logintext);
     data.duration === undefined ? (duration = "") : (duration = data.duration);
+
+    //回傳資料格式
     const res = {
-      "id": data._id,
-      "rev": data._rev,
-      "atleast": atleast,
-      "atmost": atmost,
-      "upper": upper,
-      "lower": lower,
-      "special": special,
-      "number": num,
-      "locktimes": locktimes,
-      "suspendtime": suspendtime,
-      "logintext": logintext,
-      "duration": duration
-    }
+      id: data._id,
+      rev: data._rev,
+      atleast: atleast,
+      atmost: atmost,
+      upper: upper,
+      lower: lower,
+      special: special,
+      number: num,
+      locktimes: locktimes,
+      suspendtime: suspendtime,
+      logintext: logintext,
+      duration: duration,
+    };
     // console.log("doc",res)
-    return res
+
+    return res;
   } catch (error) {
     console.error("config Error:", error.message);
   }
+}
+
+const bcrypt = require("bcrypt");
+
+// 密碼加密方法
+async function hashPassword(password) {
+  const saltRounds = 10; // 加密強度
+  return await bcrypt.hash(password, saltRounds);
+}
+
+// 密碼驗證方法
+async function verifyPassword(inputPassword, hashedPassword) {
+  return await bcrypt.compare(inputPassword, hashedPassword);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +145,7 @@ var password; // User's system password.
 var bantill; // New var, use for record if user is locked when to unlock.
 var token; // New var, when user login success, system will random generate for validation.
 var validtime; // New var, the token will be validate to validtime.
-var repwd
+var repwd;
 
 async function findaccount(inmail = "", intoken = "") {
   // use login page submit email or token to search account db.
@@ -161,7 +172,6 @@ async function findaccount(inmail = "", intoken = "") {
     data = await data.json();
     // console.log("545645314DDD",data)
     if (data.docs) {
-      
       id = data.docs[0]._id; // Impossible  undefined.
       rev = data.docs[0]._rev; // Impossible  undefined.
       time = datetime(); // function findaccount execute time.
@@ -176,7 +186,9 @@ async function findaccount(inmail = "", intoken = "") {
         ? (department = "")
         : (department = user.department);
       user.level === undefined ? (level = "viewer") : (level = user.level);
-      user.permission === undefined ? (level = "viewer") : (level = user.permission);
+      user.permission === undefined
+        ? (level = "viewer")
+        : (level = user.permission);
       user.state === undefined ? (state = "deactivate") : (state = user.state);
       user.errcount === (undefined || "" || "NaN")
         ? (errcount = 0)
@@ -193,28 +205,25 @@ async function findaccount(inmail = "", intoken = "") {
       user.validtime === undefined
         ? (validtime = "")
         : (validtime = user.validtime);
-      user.repwd === undefined
-        ? (repwd = "")
-        : (repwd = user.repwd);
+      user.repwd === undefined ? (repwd = "") : (repwd = user.repwd);
     }
     if (inmail !== "" && intoken === "" && data.docs.length !== 1) {
       response = `Keyin user mail or password is incorrect.`;
     }
     if (inmail === "" && intoken !== "" && data.docs.length === 1) {
-      response = { 
-        id: id, 
-        token: token, 
-        level: level ,
-        num : employeenum,
-        name : namee,
-        company : company,
-        department : department,
-        state : state,
-        note : note,
+      response = {
+        id: id,
+        token: token,
+        level: level,
+        num: employeenum,
+        name: namee,
+        company: company,
+        department: department,
+        state: state,
+        note: note,
         last_time: last_time,
         password: password,
-        repwd:repwd
-        
+        repwd: repwd,
       };
     } else {
       response = `Error findaccount token.`;
@@ -229,18 +238,24 @@ async function findaccount(inmail = "", intoken = "") {
 ////////////////////////////////////////////////////////////////////////////////////////
 // Use _id update account doc. put method need content, if not will be null.
 
-async function updateaccount(id, configdata="", passwordd="", createdata="", repwdd="") {
+async function updateaccount(
+  id,
+  configdata = "",
+  passwordd = "",
+  createdata = "",
+  repwdd = ""
+) {
   const URL = `${db_URL}/${db_account}/${id}`;
-  
-  findaccount(inmail = "", intoken = "")
 
-  if (passwordd !== "" ){
-    password = passwordd
-    repwd = 1
+  findaccount((inmail = ""), (intoken = ""));
+
+  if (passwordd !== "") {
+    password = await hashPassword(passwordd); // 密碼加密
+    repwd = 1;
   }
 
-  if (repwd !== "" ){
-    repwd = repwdd
+  if (repwd !== "") {
+    repwd = repwdd;
     // repwd = 0
   }
 
@@ -264,17 +279,17 @@ async function updateaccount(id, configdata="", passwordd="", createdata="", rep
       bantill: `${bantill}`,
       token: `${token}`,
       validtime: `${validtime}`,
-      repwd: `${repwd}`
+      repwd: `${repwd}`,
     },
   };
   // console.log(updatedDoc)
-  let bodyy 
+  let bodyy;
   if (id === doc_CONFIG) {
-    bodyy = JSON.stringify(configdata[0])
+    bodyy = JSON.stringify(configdata[0]);
   } else if (createdata.length === 1) {
-    bodyy = JSON.stringify(createdata[0])
-  }else {
-  bodyy = JSON.stringify(updatedDoc)
+    bodyy = JSON.stringify(createdata[0]);
+  } else {
+    bodyy = JSON.stringify(updatedDoc);
   }
   await fetch(URL, {
     method: "PUT",
@@ -341,46 +356,56 @@ async function uuid() {
 // The function for login page submit.
 
 async function submit(EMAIL, PASSWORD) {
-
-  let response = { // Empty response.
+  let response = {
+    // Empty response.
     result: "",
     text: "",
     mail: "",
     token: "",
     validtime: "",
     permission: "",
-    repwd:""
+    repwd: "",
   };
-  
+
   if (!EMAIL.includes("@hdrenewables.com")) {
     response["result"] = false;
-    response["text"] = `帳號或密碼錯誤 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`
+    response["text"] =
+      `帳號或密碼錯誤 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`;
     const HOST_IP = process.env.HOST_IP;
-    addlog(`不明使用者`,`來自${HOST_IP}不明使用者登入`)
-    return response
+    addlog(`不明使用者`, `來自${HOST_IP}不明使用者登入`);
+    return response;
   }
 
   // SuperUser Login.
-  if (EMAIL===process.env.superuser_account && PASSWORD ===process.env.superuser_password){
+  if (
+    EMAIL === process.env.superuser_account &&
+    PASSWORD === process.env.superuser_password
+  ) {
     response["result"] = true;
     response["token"] = process.env.LineNotifyToken;
     response["text"] = `Superuser Login Success`;
-    response["level"] = `admin`
-    return response
-    updateaccount()
-    }
-  
-  await getconfig();
-  await findaccount(EMAIL,"");
-
-  if (new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime() > new Date(bantill).getTime() && state === "lock" && suspendtime !== "永久" && errcount >= locktimes){
-    console.log("解鎖")
-    state = "activate" // lock and bantime passed.
-    errcount = 0
+    response["level"] = `admin`;
+    return response;
+    updateaccount();
   }
 
-  if (state === "activate"){ 
-    if (PASSWORD === password){
+  await getconfig();
+  await findaccount(EMAIL, "");
+
+  if (
+    new Date(moment(time).format("YYYY/MM/DD HH:mm:ss")).getTime() >
+      new Date(bantill).getTime() &&
+    state === "lock" &&
+    suspendtime !== "永久" &&
+    errcount >= locktimes
+  ) {
+    console.log("解鎖");
+    state = "activate"; // lock and bantime passed.
+    errcount = 0;
+  }
+
+  if (state === "activate") {
+    if (PASSWORD === password) {
       errcount = 0;
       bantill = "";
       last_time = datetime();
@@ -393,10 +418,11 @@ async function submit(EMAIL, PASSWORD) {
       response["token"] = token;
       response["validtime"] = validtime;
       response["permission"] = level;
-    } else if(PASSWORD !== password){
-      errcount += 1
+    } else if (PASSWORD !== password) {
+      errcount += 1;
       response["result"] = false;
-      response["text"] = `帳號或密碼錯誤 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`
+      response["text"] =
+        `帳號或密碼錯誤 - 目前累積 ${errcount} 次\n若登入失敗超過 ${locktimes} 次，此用戶將被鎖定`;
       // `Login failed ${errcount} time. If continuous login fail up to ${locktimes} the user will be lock.`
       response["id"] = id;
       response["mail"] = mail;
@@ -407,13 +433,13 @@ async function submit(EMAIL, PASSWORD) {
     // await updateaccount(id,"","","");
   }
 
-  if (errcount === locktimes){
-    state = "lock"
-    response["text"] = `The user is locked. Please contact system manager.`
-    if (suspendtime !== "永久"){
+  if (errcount === locktimes) {
+    state = "lock";
+    response["text"] = `The user is locked. Please contact system manager.`;
+    if (suspendtime !== "永久") {
       formattedDateTime = datetime(parseFloat(suspendtime));
-      bantill= moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss")
-      response["text"] = `登入失敗次數達 ${locktimes} 次, 此帳號已被鎖定!`
+      bantill = moment(formattedDateTime).format("YYYY/MM/DD HH:mm:ss");
+      response["text"] = `登入失敗次數達 ${locktimes} 次, 此帳號已被鎖定!`;
       // `The user is locked until ${bantill}.`
     }
   }
@@ -421,46 +447,53 @@ async function submit(EMAIL, PASSWORD) {
   // await updateaccount(id,"","","");
 
   if (response["result"] === true) {
-  // judge password format
+    // judge password format
 
-  let digitCount = 0;
-  let upperCaseCount = 0;
-  let lowerCaseCount = 0;
-  let specialCharCount = 0;
+    let digitCount = 0;
+    let upperCaseCount = 0;
+    let lowerCaseCount = 0;
+    let specialCharCount = 0;
 
-  for (let i = 0; i < password.length; i++) {
+    for (let i = 0; i < password.length; i++) {
       const char = password[i];
       if (/[0-9]/.test(char)) {
-          digitCount++;
+        digitCount++;
       } else if (/[A-Z]/.test(char)) {
-          upperCaseCount++;
+        upperCaseCount++;
       } else if (/[a-z]/.test(char)) {
-          lowerCaseCount++;
+        lowerCaseCount++;
       } else {
-          specialCharCount++;
+        specialCharCount++;
       }
-  }
-  // console.log(digitCount, upperCaseCount, lowerCaseCount, specialCharCount)
-  if (digitCount < num || upperCaseCount < upper || lowerCaseCount < lower || specialCharCount < special || password.length < atleast || password.length > atmost){
-    repwd = "1"
-    // console.log("repwd",repwd)
-  } else {
-    repwd = "0"
-  }
+    }
+    // console.log(digitCount, upperCaseCount, lowerCaseCount, specialCharCount)
+    if (
+      digitCount < num ||
+      upperCaseCount < upper ||
+      lowerCaseCount < lower ||
+      specialCharCount < special ||
+      password.length < atleast ||
+      password.length > atmost
+    ) {
+      repwd = "1";
+      // console.log("repwd",repwd)
+    } else {
+      repwd = "0";
+    }
 
-  if (repwd === 1 || password === id ) {
-    response["repwd"] = repwd
-    // console.log(repwd)
+    if (repwd === 1 || password === id) {
+      response["repwd"] = repwd;
+      // console.log(repwd)
+    }
   }
-  }
-  await updateaccount(id,"","","",repwd);
+  await updateaccount(id, "", "", "", repwd);
   return response;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The function for get all document in database.
 async function alldoc(database) {
-  const URL = `${db_URL}/${database}/_all_docs?include_docs=true`
+  const URL = `${db_URL}/${database}/_all_docs?include_docs=true`;
   const response = await fetch(URL, {
     method: "GET",
     headers: { Authorization: AUTHORIZATION },
@@ -469,48 +502,46 @@ async function alldoc(database) {
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
-  return  response
+  return response;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The function for get all document in database.
 async function getbyid(id) {
-  const URL = `${db_URL}/${db.account}/${id}?include_docs=true`
+  const URL = `${db_URL}/${db.account}/${id}?include_docs=true`;
   const response = await fetch(URL, {
     method: "GET",
     headers: { Authorization: AUTHORIZATION },
     credentials: "include",
   });
-  data = await response.json()
-  let rrr = {}
-  for (const [key, value] of Object.entries(data)) 
-{
-  rrr[key] = value
-} 
+  data = await response.json();
+  let rrr = {};
+  for (const [key, value] of Object.entries(data)) {
+    rrr[key] = value;
+  }
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
-  // 
-  return await rrr
+  //
+  return await rrr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Delete account specify user.
 async function deleteuser(docid) {
-  const rr = await getbyid(docid)
-  const URL = `${db_URL}/${db.account}/${docid}/?rev=${rr._rev}`
+  const rr = await getbyid(docid);
+  const URL = `${db_URL}/${db.account}/${docid}/?rev=${rr._rev}`;
   fetch(URL, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: { Authorization: AUTHORIZATION },
     credentials: "include",
-  })
-    .then(response => {
-      console.log(response.status)
-      if (!response.ok) {
-        throw new Error('Failed to delete user');
-      }
-      console.log('User deleted successfully');
-    })
+  }).then((response) => {
+    console.log(response.status);
+    if (!response.ok) {
+      throw new Error("Failed to delete user");
+    }
+    console.log("User deleted successfully");
+  });
   // }
   // if (!response.ok) {
   //   throw new Error(`Request failed with status ${response.status}`);
@@ -519,17 +550,17 @@ async function deleteuser(docid) {
 ////////////////////////////////////////////////////////////////////////////////////////
 // User log.
 async function userlog(userid) {
-  const URL = `${db_URL}/${db.log}/_find`
-  const mangoQuery = { selector: { "username": { $eq: userid } } };
+  const URL = `${db_URL}/${db.log}/_find`;
+  const mangoQuery = { selector: { username: { $eq: userid } } };
   logdata = await fetch(URL, {
-    method: 'POST',
-    headers: { 
-      'Content-Type': "application/json",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
       Authorization: AUTHORIZATION,
     },
     credentials: "include",
     body: JSON.stringify(mangoQuery),
-  })
+  });
   //   .then(response => {
   //     if (!response.ok) {
   //       throw new Error('Failed to delete user');
@@ -538,109 +569,151 @@ async function userlog(userid) {
   //   })
   // }
   logdata = await logdata.json();
-  return logdata
-  }
-
-////////////////////////////////////////////////////////////////////////////////////////
+  return logdata;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // User log.
-async function addlog(user, content) {
-  const URL = `${db_URL}/${db.log}/`
+async function addlog(userId, content) {
+  const account = await findaccount("", userId); // 根據 token 或 ID 獲取用戶資訊
+  const URL = `${db_URL}/${db.log}/`;
   const data = {
     tag: "account",
     time: datetime(),
     category: "帳戶管理",
     device: "帳戶管理",
-    username: user,
-    content: content
-  }
+    username: account.name || "未知用戶", // 帶入真實用戶名稱
+    content: content,
+    userId: account.id, // 帶入用戶 ID
+  };
   await fetch(URL, {
-    method: 'POST',
-    headers: { 
-      'Content-Type': "application/json",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
       Authorization: AUTHORIZATION,
     },
     credentials: "include",
     body: JSON.stringify(data),
-  })}
-  // .then(response => {
-  //     if (!response.ok) {
-  //       throw new Error('Failed to add userlog');
-  //     }
-  //     console.log('User log add successfully');
-  //   })
-  // }
+  });
+}
 
-  // addlog("test", "ttt")
+// async function addlog(user, content) {
+//   const URL = `${db_URL}/${db.log}/`;
+//   const data = {
+//     tag: "account",
+//     time: datetime(),
+//     category: "帳戶管理",
+//     device: "帳戶管理",
+//     username: user,
+//     content: content,
+//   };
+//   await fetch(URL, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: AUTHORIZATION,
+//     },
+//     credentials: "include",
+//     body: JSON.stringify(data),
+//   });
+// }
+// .then(response => {
+//     if (!response.ok) {
+//       throw new Error('Failed to add userlog');
+//     }
+//     console.log('User log add successfully');
+//   })
+// }
+
+// addlog("test", "ttt")
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-
 async function authentication(req) {
-    let token = ""
-    let browser_token = ""
-    req.cookies.token === undefined ? browser_token = "" : browser_token = req.cookies.token
-    if (browser_token === process.env.LineNotifyToken){
-      // console.log("The token is not exist in browser's cookie.")
-      return true
-    }
-    if (browser_token === "" || browser_token === undefined){
-        // console.log("The token is not exist in browser's cookie.")
-        return false
-    }
-    else if (browser_token !== ""){
-        await findaccount("", browser_token).then(temp => {
-            id = temp['id']
-            token = temp['token']
-            level = temp['level']
-            repwd = temp['repwd']
-            passwordddd = temp.password
-        })
-        // const res = `\ncookie's token is ${browser_token}\naccount token is ${token}`
+  let token = "";
+  let browser_token = "";
+  req.cookies.token === undefined
+    ? (browser_token = "")
+    : (browser_token = req.cookies.token);
+  if (browser_token === process.env.LineNotifyToken) {
+    // console.log("The token is not exist in browser's cookie.")
+    return true;
+  }
+  if (browser_token === "" || browser_token === undefined) {
+    // console.log("The token is not exist in browser's cookie.")
+    return false;
+  } else if (browser_token !== "") {
+    await findaccount("", browser_token).then((temp) => {
+      id = temp["id"];
+      token = temp["token"];
+      level = temp["level"];
+      repwd = temp["repwd"];
+      passwordddd = temp.password;
+    });
+    // const res = `\ncookie's token is ${browser_token}\naccount token is ${token}`
 
-        const config = await getconfig()
-        // const token = req.cookies.token
-        // const account = await findaccount("", token);
-        // const id = account.id
-        // let password = account.password
-        let digitCount = 0;
-        let upperCaseCount = 0;
-        let lowerCaseCount = 0;
-        let specialCharCount = 0;
-        for (let i = 0; i < passwordddd.length; i++) {
-            const char = passwordddd[i];
-            if (/[0-9]/.test(char)) {
-                digitCount++;
-            } else if (/[A-Z]/.test(char)) {
-                upperCaseCount++;
-            } else if (/[a-z]/.test(char)) {
-                lowerCaseCount++;
-            } else {
-                specialCharCount++;
-            }
-        }
-
-        if (digitCount < config["number"] || upperCaseCount < config["upper"] || lowerCaseCount < config["lower"] || specialCharCount < config["special"]) {
-        return 1 
-        }
-        
-        if (token === browser_token && repwd !== "1") {
-          // console.log("Authentication is OK.", res)
-          // console.log({"id": id, "permission": level})
-          return {"id": id, "permission": level}
-        } else if (token === browser_token && repwd === "1"){
-            return 1;
-        } else {
-            console.log("Authentication is not OK.", res)
-            return false
-        }
+    const config = await getconfig();
+    // const token = req.cookies.token
+    // const account = await findaccount("", token);
+    // const id = account.id
+    // let password = account.password
+    let digitCount = 0;
+    let upperCaseCount = 0;
+    let lowerCaseCount = 0;
+    let specialCharCount = 0;
+    for (let i = 0; i < passwordddd.length; i++) {
+      const char = passwordddd[i];
+      if (/[0-9]/.test(char)) {
+        digitCount++;
+      } else if (/[A-Z]/.test(char)) {
+        upperCaseCount++;
+      } else if (/[a-z]/.test(char)) {
+        lowerCaseCount++;
+      } else {
+        specialCharCount++;
+      }
     }
+
+    if (
+      digitCount < config["number"] ||
+      upperCaseCount < config["upper"] ||
+      lowerCaseCount < config["lower"] ||
+      specialCharCount < config["special"]
+    ) {
+      return 1;
+    }
+
+    if (token === browser_token && repwd !== "1") {
+      // console.log("Authentication is OK.", res)
+      // console.log({"id": id, "permission": level})
+      return { id: id, permission: level };
+    } else if (token === browser_token && repwd === "1") {
+      return 1;
+    } else {
+      console.log("Authentication is not OK.", res);
+      return false;
+    }
+  }
 }
 
-
-
-
+// 獲取目前 IP 的方法
+async function getCurrentIP() {
+  const firewallIP = "http://192.168.1.9"; // 防火牆 IP 地址
+  try {
+    const response = await fetch(`${firewallIP}/get-current-ip`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to get IP: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.ip; // 假設返回格式為 { ip: "x.x.x.x" }
+  } catch (error) {
+    console.error("Error fetching IP from firewall:", error.message);
+    return "未知 IP";
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -656,5 +729,5 @@ module.exports = {
   deleteuser,
   userlog,
   authentication,
-  addlog
+  addlog,
 };

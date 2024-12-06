@@ -6,7 +6,6 @@ const router = express.Router();
 const app = express();
 const cors = require("cors");
 
-//const nano = require("nano");
 const { Console } = require("console");
 const { ok } = require("assert");
 const config = require("./config");
@@ -32,7 +31,7 @@ const createNanoInstance = (dbName) => nano.db.use(dbName);
 router.get("/systeminfo/device", (req, res) => {
   let permission = req.body.permission;
   //以下app要改回router
-  res.render("Sys_Device", {permission:permission});
+  res.render("Sys_Device", { permission: permission });
 });
 
 router.get("/systeminfo/device/edit", (req, res) => {

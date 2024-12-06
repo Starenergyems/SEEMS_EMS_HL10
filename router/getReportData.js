@@ -32,8 +32,6 @@ const other_rf01 = "other_rf01";
 const other01Db = nano.use(other_rf01);
 const other_rf10 = "other_rf10";
 const other10Db = nano.use(other_rf10);
-const report = "report";
-const reportDb = nano.use(report);
 const report_monthly = "report_monthly";
 const report_monthlyDb = nano.use(report_monthly);
 //const year_report = "year_report";
@@ -102,7 +100,7 @@ async function checkDocumentByDate(date, hour) {
 //- 獲得該小時的得標結果時間軸 用以計算該時間所對應的資料庫得標 ID。
 async function checkBidID(formattedTime) {
   //formattedTimeStart是字串
-  const targetTimeStatus = 410000; // 每十五分鐘得標量的ID基礎值
+  const targetTimeStatus = 401000; // 每十五分鐘得標量的ID基礎值
   // 使用正則表達式提取時間部分
 
   const timeMatch = formattedTime.match(/T(\d{2}):(\d{2}):/);
@@ -176,7 +174,6 @@ async function getHourRange(formattedTimeStart, formattedTimeEnd) {
 
     for (let i = 0; i < 3603; i++) {
       let intervalIndex;
-
       if (i >= 0 && i <= 3) intervalIndex = 0;
       else if (i >= 4 && i <= 903) intervalIndex = 1;
       else if (i >= 904 && i <= 1803) intervalIndex = 2;
@@ -185,12 +182,18 @@ async function getHourRange(formattedTimeStart, formattedTimeEnd) {
 
       const intervalValue = checkBidValues[intervalIndex];
 
+      //檢查得標情形 如果沒得標就直接假設該日執行率7654(服務品質指標0,無法賺錢)
       if (intervalValue <= 0) {
-        hourRange.push(10000);
+        hourRange.push(7654);
       } else {
-        const data = result.docs[i]?.System?.["400037"] ?? 0;
-        hourRange.push(data);
-        if (data === 0) valueMissingNumber++;
+        const data = result.docs[i]?.System?.["400037"];
+        if (data === undefined || data === null) {
+          valueMissingNumber++; // 計算缺失數據
+          hourRange.push(0); // 缺失數據設為 0
+        } else {
+          hourRange.push(data); // 正常數據存入 hourRange
+          //if (data === 0) valueMissingNumber++; // 若數據為 0，也增加缺失計數
+        }
       }
     }
     console.log("該小時缺少秒數之數量: ", valueMissingNumber);
@@ -938,12 +941,12 @@ async function getReportsInRange(startDate, endDate) {
   }
 }
 
-// 設定開始和結束日期;
-const startDate = "2024-06-01T00:00:13.816+08:00";
-const endDate = "2024-09-30T00:00:59.999+08:00";
+// // 設定開始和結束日期;
+// const startDate = "2024-06-01T00:00:13.816+08:00";
+// const endDate = "2024-09-30T00:00:59.999+08:00";
 
-//執行範圍內的報告生成;
-getReportsInRange(startDate, endDate);
+// //執行範圍內的報告生成;
+// getReportsInRange(startDate, endDate);
 
 // * ************************************************************ * //
 // * 每小時執行主程式: 定期執行 每小時的五分會進行前一個小時的資料撈取主程式
@@ -956,7 +959,8 @@ function startHourlyCheck() {
   });
   console.log("已啟動定時任務，每小時的5分鐘執行一次。");
 }
-startHourlyCheck();
+
+//startHourlyCheck();
 
 // * ************************************************************ * //
 // * 每天用電量補值
@@ -1014,100 +1018,88 @@ async function checkMonthExists(specifiedTime) {
   // 查詢數據庫
   const result = await report_dayDb.find(filter);
 
-  // 判斷是否有足夠的資料
+  // 判斷是否有足夠的資料並按日期排序
   if (result.docs && result.docs.length === daysInMonth) {
-    console.log(`所有 ${daysInMonth} 天的資料都已存在。`);
-    //console.log(`${daysInMonth}的數值是:`, result.docs[0]);
+    // 對資料依照 Date 屬性進行排序
+    result.docs.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+
+    console.log(`所有 ${daysInMonth} 天的資料都已存在，並已按日期排序。`);
 
     return { state: true, result }; // 找到該月所有日期的資料，回傳 true
   } else {
     console.log(`部分資料缺失，已找到 ${result.docs.length} 天的資料。`);
+
+    // 如果有部分資料缺失，也進行排序以便後續處理
+    result.docs.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+
     return { state: false, result }; // 資料不完整，回傳 false
   }
 }
 
 //-陣列數值提取並進行計算(獲取當月的資料並統整包含當月total);
 function extractAndStoreDailyData(docs, completeData) {
-  let hourFinalSums = Array(7).fill(0); // 初始化加總 hour_final[24] 的陣列
-  let elsedata1Sums = [0, 0, 0]; // elsedata1[0], [1], [2] 的加總
-  let elsedata2Sums = [0, 0, 0]; // elsedata2[0], [1], [2] 的加總
+  let hourFinalSums = Array(7).fill(0); // 用於 completeData[31] 的加總
+  let elsedata1Sums = [0, 0, 0]; // 用於 completeData[31] 的 elsedata1 加總
+  let elsedata2Sums = [0, 0, 0]; // 用於 completeData[31] 的 elsedata2 加總
 
-  let hourFinalMax = -Infinity; // 初始設定為最小值，用於找最大值
-  let hourFinalMin = Infinity; // 初始設定為最大值，用於找最小值
-  let hourFinalAvgSum = 0; // 用於計算平均值
+  let hourFinalMax = -Infinity; // 月份的最大值
+  let hourFinalMin = Infinity; // 月份的最小值
+  let hourFinalAvgSum = 0; // 月份平均值的累計和
 
-  docs.forEach((doc, docIndex) => {
-    const date = moment(doc.Date, "YYYY-MM-DD");
-    const dayIndex = date.date() - 1; // 日期減去1作為索引
+  docs.forEach((doc, dayIndex) => {
+    // 若當天的 doc 或其屬性為 null，則設定預設值
+    const hourFinal = doc?.hour_final?.[24] || Array(10).fill(0);
+    const elsedata1 = doc?.elsedata1 || [0, 0];
+    const elsedata2 = doc?.elsedata2 || [0, 0, 0];
 
-    //console.log(`\n處理日期: ${doc.Date} (索引: ${dayIndex})`);
-
-    // 加總 hour_final[24] 的前7個值
-    doc.hour_final[24].slice(0, 7).forEach((value, index) => {
-      hourFinalSums[index] += value;
-      //console.log(`hour_final[24][${index}] 加總結果: ${hourFinalSums[index]}`);
-    });
-
-    // 判斷最大值
-    hourFinalMax = Math.max(hourFinalMax, doc.hour_final[24][7]);
-    //console.log(`目前最大值: ${hourFinalMax}`);
-
-    // 累加用於計算平均值的值
-    hourFinalAvgSum += doc.hour_final[24][8];
-
-    // 判斷最小值
-    hourFinalMin = Math.min(hourFinalMin, doc.hour_final[24][9]);
-    //console.log(`目前最小值: ${hourFinalMin}`);
-
-    // 加總 elsedata1 的前兩個值
-    elsedata1Sums[0] += doc.elsedata1[0];
-    elsedata1Sums[1] += doc.elsedata1[1];
-
-    // 計算 elsedata1 的第三個值
-    elsedata1Sums[2] = parseFloat(
-      ((elsedata1Sums[0] - elsedata1Sums[1]) / 1000).toFixed(2)
-    );
-
-    // 加總 elsedata2 的前兩個值
-    elsedata2Sums[0] += doc.elsedata2[0];
-    elsedata2Sums[1] += doc.elsedata2[1];
-
-    // 計算 elsedata2 的第三個值
-    elsedata2Sums[2] =
-      elsedata1Sums[0] !== 0
-        ? parseFloat(((elsedata1Sums[1] / elsedata1Sums[0]) * 100).toFixed(2))
-        : 0;
-
-    // 只取需要的值並且轉換為單層結構
+    // 取出需要的數據，並檢查是否為 null 或 undefined，若是則補 0
     const filteredData = [
-      ...doc.hour_final[24].slice(0, 7), // 取出 hour_final 的第24行前7個數值
-      doc.hour_final[24][7], // 第8個數值（最大值候選）
-      doc.hour_final[24][8], // 第9個數值（平均值候選）
-      doc.hour_final[24][9], // 第10個數值（最小值候選）
-      parseFloat((elsedata1Sums[0] / 1000).toFixed(2)), // elsedata1 第1個加總並除以1000
-      parseFloat((elsedata1Sums[1] / 1000).toFixed(2)), // elsedata1 第2個加總並除以1000
-      elsedata1Sums[2], // elsedata1 第三個值，前兩個相減
-      ...elsedata2Sums.slice(0, 3), // elsedata2 的數值
+      ...hourFinal.slice(0, 7).map((val) => (val == null ? 0 : val)),
+      hourFinal[7] ?? 0, // 最大值
+      hourFinal[8] ?? 0, // 平均值
+      hourFinal[9] ?? 0, // 最小值
+      parseFloat((elsedata1[0] / 1000).toFixed(2)) || 0, // elsedata1[0] 除以1000
+      parseFloat((elsedata1[1] / 1000).toFixed(2)) || 0, // elsedata1[1] 除以1000
+      parseFloat(((elsedata1[0] - elsedata1[1]) / 1000).toFixed(2)) || 0, // elsedata1 差值
+      ...elsedata2.slice(0, 3).map((val) => (val == null ? 0 : val)), // elsedata2 的數值
     ];
-    //console.log(`完整數據存入 completeData[${dayIndex}]:`, filteredData);
-    completeData[dayIndex] = filteredData; // 將數據存入對應的索引位置
+
+    completeData[dayIndex] = filteredData; // 將每日數據放入對應的索引位置
+
+    // 用於 completeData[31] 的整月加總
+    hourFinal.slice(0, 7).forEach((value, index) => {
+      hourFinalSums[index] += value || 0;
+    });
+    hourFinalMax = Math.max(hourFinalMax, hourFinal[7] ?? 0);
+    hourFinalAvgSum += hourFinal[8] ?? 0;
+    hourFinalMin = Math.min(hourFinalMin, hourFinal[9] ?? 0);
+    elsedata1Sums[0] += elsedata1[0] || 0;
+    elsedata1Sums[1] += elsedata1[1] || 0;
+    elsedata2Sums[0] += elsedata2[0] || 0;
+    elsedata2Sums[1] += elsedata2[1] || 0;
   });
 
-  // 計算 hour_final[24][8] 的平均值
+  // 計算 completeData[31]（整月的加總數據）
   const hourFinalAvg = parseFloat((hourFinalAvgSum / docs.length).toFixed(2));
+  elsedata1Sums[2] = parseFloat(
+    ((elsedata1Sums[0] - elsedata1Sums[1]) / 1000).toFixed(2)
+  );
+  elsedata2Sums[2] =
+    elsedata1Sums[0] !== 0
+      ? parseFloat(((elsedata1Sums[1] / elsedata1Sums[0]) * 100).toFixed(2))
+      : 0;
 
-  // 最終結果存進 completeData[31]
   completeData[31] = [
-    ...hourFinalSums, // 取出 hour_final[24] 的加總結果前7個
-    hourFinalMax, // hour_final[24][7] 最大值
-    hourFinalAvg, // hour_final[24][8] 平均值
-    hourFinalMin, // hour_final[24][9] 最小值
-    parseFloat((elsedata1Sums[0] / 1000).toFixed(2)), // elsedata1 第1個加總並除以1000
-    parseFloat((elsedata1Sums[1] / 1000).toFixed(2)), // elsedata1 第2個加總並除以1000
-    elsedata1Sums[2], // elsedata1 第三個值，前兩個相減
-    ...elsedata2Sums, // elsedata2 的加總值
+    ...hourFinalSums, // hour_final[24] 的前7個加總結果
+    hourFinalMax, // 最大值
+    hourFinalAvg, // 平均值
+    hourFinalMin, // 最小值
+    parseFloat((elsedata1Sums[0] / 1000).toFixed(2)), // elsedata1[0] 的加總
+    parseFloat((elsedata1Sums[1] / 1000).toFixed(2)), // elsedata1[1] 的加總
+    elsedata1Sums[2], // elsedata1 的差值
+    ...elsedata2Sums, // elsedata2 的加總
   ];
-  //console.log("\n最終的 completeData:", completeData);
+
   return completeData;
 }
 
@@ -1738,35 +1730,36 @@ async function getYearReportData(specifiedTime) {
 // const specifiedTime = moment("2024-07-30T00:30:00.000+08:00");
 // getYearReportData(specifiedTime);
 
-// 1. 定期在當天 00:30 執行日報生成，傳入前一天的時間
-cron.schedule("30 0 * * *", async () => {
-  const specifiedTime = moment().subtract(1, "days").startOf("day");
-  console.log(`執行日報生成，傳入時間：${specifiedTime.format()}`);
-  await getDailyReportData(specifiedTime);
-});
+// // 1. 定期在當天 00:30 執行日報生成，傳入前一天的時間
+// cron.schedule("30 0 * * *", async () => {
+//   const specifiedTime = moment().subtract(1, "days").startOf("day");
+//   console.log(`執行日報生成，傳入時間：${specifiedTime.format()}`);
+//   await getDailyReportData(specifiedTime);
+// });
 
-// 2. 定期在每月 1 日 01:15 執行月報生成，傳入前一個月的時間並指定為每月1日1:15
-cron.schedule("30 1 1 * *", async () => {
-  const specifiedTime = moment().subtract(1, "months").startOf("month").set({
-    hour: 1,
-    minute: 0,
-    second: 0,
-    millisecond: 0,
-  });
-  console.log(`執行月報生成，傳入時間：${specifiedTime.format()}`);
-  await getMonthlyReportData(specifiedTime);
-});
+// // 2. 定期在每月 1 日 01:15 執行月報生成，傳入前一個月的時間並指定為每月1日1:15
+// cron.schedule("30 1 1 * *", async () => {
+//   const specifiedTime = moment().subtract(1, "months").startOf("month").set({
+//     hour: 1,
+//     minute: 0,
+//     second: 0,
+//     millisecond: 0,
+//   });
+//   console.log(`執行月報生成，傳入時間：${specifiedTime.format()}`);
+//   await getMonthlyReportData(specifiedTime);
+// });
 
-// 3. 每年 1 月 1 日 02:00:00 執行年報生成，傳入前一年的時間
-cron.schedule("0 0 2 1 *", async () => {
-  const specifiedTime = moment().subtract(1, "years").startOf("year");
-  console.log(`執行年報生成，傳入時間：${specifiedTime.format()}`);
-  await getYearReportData(specifiedTime);
-});
+// // 3. 每年 1 月 1 日 02:00:00 執行年報生成，傳入前一年的時間
+// cron.schedule("0 0 2 1 *", async () => {
+//   const specifiedTime = moment().subtract(1, "years").startOf("year");
+//   console.log(`執行年報生成，傳入時間：${specifiedTime.format()}`);
+//   await getYearReportData(specifiedTime);
+// });
 
 // /////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
   getDailyReportData,
   getMonthlyReportData,
   getYearReportData,
+  startHourlyCheck,
 };

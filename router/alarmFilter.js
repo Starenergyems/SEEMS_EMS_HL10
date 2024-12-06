@@ -50,8 +50,8 @@ const ignoreIds = [
   "lc2_rf10.System.402020",
   "lc3_rf10.System.402020",
   "lc4_rf10.System.402020",
-  //"gc_rf10.System.400080:5",
-  //"gc_rf10.System.400080:6",
+  "gc_rf10.System.400080:5",
+  "gc_rf10.System.400080:6",
 ];
 
 async function formatDocData(doc) {
@@ -229,8 +229,10 @@ const timer = setInterval(async () => {
   }
 }, intervalTime);
 
-// 初始設置重置計數
+//初始設置重置計數;
 resetRequestCount();
 
-// 假設delprocessDocs函數每3秒執行一次
-setInterval(delprocessDocs, 3000);
+//假設delprocessDocs函數每2秒執行一次;
+setInterval(delprocessDocs, 2000);
+
+module.exports = { delprocessDocs, resetRequestCount };

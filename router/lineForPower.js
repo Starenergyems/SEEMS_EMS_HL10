@@ -96,9 +96,9 @@ async function fetchDataAndNotify() {
 }
 
 // 每天八點執行一次
-schedule.scheduleJob("0 8 * * *", () => {
-  fetchDataAndNotify();
-});
+// schedule.scheduleJob("0 8 * * *", () => {
+//   fetchDataAndNotify();
+// });
 
 // 服務啟動時立即發送測試通知
 // sendLineNotify("電量通知服務v.1 啟用中~");
@@ -107,8 +107,7 @@ schedule.scheduleJob("0 8 * * *", () => {
 //message = "Hello!";
 //sendLineNotify(message);
 
-module.exports = router;
-
+module.exports = { router, getFullDayPowerUsage, fetchDataAndNotify };
 // - 副程式: 獲得全天(日報)電力使用資訊
 async function getFullDayPowerUsage(type, specifiedTime) {
   console.log("執行日報中電力資訊獲取，執行日期為: ", specifiedTime.format());
