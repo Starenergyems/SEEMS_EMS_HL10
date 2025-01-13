@@ -455,10 +455,7 @@ function Convert_socRef_kWh_to_pct(rawData) {
     return "#*#";
   }
 
-  return (
-    ((rawData + (4472 * 7 - 10000 * 2.5) / 2) / (4472 * 7)) *
-    100
-  ).toFixed(1);
+  return ((rawData / (4472 * 7)) * 100).toFixed(1);
 }
 
 function Scale_Diff_of_Data(Data1, Data2, scale, decPlace) {
