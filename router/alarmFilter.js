@@ -210,7 +210,10 @@ const resetRequestCount = () => {
   }, millisecondsUntilNextHour);
 };
 
+var isProcessing = false;
 const timer = setInterval(async () => {
+  if (isProcessing) return;
+  isProcessing = true;
   const now = new Date();
   if (requestCount >= maxRequestsPerHour) {
     clearInterval(timer); // 如果超過每小時請求上限，停止計時器
@@ -227,6 +230,7 @@ const timer = setInterval(async () => {
   if (sended === true) {
     requestCount++; // 每次執行processDocs()時增加請求計數
   }
+  isProcessing = false;
 }, intervalTime);
 
 //初始設置重置計數;

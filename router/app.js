@@ -29,6 +29,7 @@ const {
   startHourlyCheck,
 } = require("./getReportData.js");
 const { delprocessDocs, resetRequestCount } = require("./alarmFilter.js");
+const { startMonitoring, startMonitoring400087 } = require("./heartbeat.js");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
@@ -762,7 +763,7 @@ app.get("/error", (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`app.js 應用程式正在監聽端口 ${port}`);
+  console.log(`4-1 應用程式正在監聽端口 ${port}`);
   const emsnumber = process.env.EMS_NUM;
   const HOST_IP = process.env.HOST_IP;
   const message = {
@@ -813,8 +814,21 @@ app.get("/getPermission", (req, res) => {
 
 startHourlyCheck();
 
-schedule.scheduleJob("0 8 * * *", () => {
-  fetchDataAndNotify();
+let isRunning = false;
+
+schedule.scheduleJob("0 8 * * *", async () => {
+  if (isRunning) {
+    //console.log("Task is already running. Skipping...");
+    return;
+  }
+  isRunning = true; // 設置鎖
+  try {
+    await fetchDataAndNotify();
+  } catch (error) {
+    console.error("Error during task execution:", error);
+  } finally {
+    isRunning = false; // 解鎖
+  }
 });
 
 // 1. 定期在當天 00:30 執行日報生成，傳入前一天的時間
@@ -845,3 +859,5 @@ cron.schedule("0 0 2 1 *", async () => {
 
 resetRequestCount();
 setInterval(delprocessDocs, 2000);
+startMonitoring();
+startMonitoring400087();
