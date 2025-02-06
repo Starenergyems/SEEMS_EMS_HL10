@@ -1,14 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const methodOverride = require("method-override");
-const cors = require("cors");
-const socket = require("socket.io");
-const http = require("http");
-const e = require("connect-flash");
 const config = require("./config");
 const couchdbConfig = config.database;
 const moment = require("moment");
-const axios = require("axios");
 const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
@@ -24,7 +19,8 @@ const test_alarm_nanoDb = nano.use(test_alarm);
 router.use(express.urlencoded({ extended: true }));
 router.use(methodOverride("_method"));
 //********************************************************************************* */
-// 要忽略的 id 列表
+
+// - 要忽略的 id 列表
 const ignoreIds = [
   "lc1_rf10.BMS1.404011:14",
   "lc2_rf10.BMS1.404011:14",
@@ -54,6 +50,7 @@ const ignoreIds = [
   "gc_rf10.System.400080:6",
 ];
 
+//-格式化傳輸格式
 async function formatDocData(doc) {
   let recoverstatus, formattedDate, formattedTime;
 
@@ -102,11 +99,24 @@ ID : ${doc._id}
   return message;
 }
 
+// - 訊息發送處理程序
 async function processDocs() {
   try {
-    const response = await test_alarm_nanoDb.list({ include_docs: true });
-    const docs = response.rows.map((row) => row.doc);
-
+    const response = await test_alarm_nanoDb.find({
+      selector: { line_notify: { $ne: true } }, // 只選擇還沒通知的資料
+      fields: [
+        "_id",
+        "_rev",
+        "device",
+        "content",
+        "value",
+        "occurrence_time",
+        "recover_time",
+        "recover",
+        "level",
+      ],
+    });
+    const docs = response.docs;
     let sended = false;
     let flag = 0;
 
@@ -134,14 +144,15 @@ async function processDocs() {
       while (!insertAttempt) {
         try {
           const latestDoc = await test_alarm_nanoDb.get(doc._id);
-          latestDoc.line_notify = true;
-          await test_alarm_nanoDb.insert(latestDoc);
-          insertAttempt = true;
-        } catch (conflictError) {
-          console.log("更新文檔時發生衝突，正在重新讀取最新版本並重試更新...");
+          if (!latestDoc.line_notify) {
+            // 確保沒被其他程序更改
+            latestDoc.line_notify = true;
+            await test_alarm_nanoDb.insert(latestDoc);
+          }
+        } catch (error) {
+          console.error("更新 line_notify 時發生錯誤:", error);
         }
       }
-
       sended = true;
       // 繼續處理下一個文檔
     }
@@ -177,6 +188,17 @@ async function delprocessDocs() {
         } catch (error) {
           console.error("刪除文檔時發生錯誤:", error);
         }
+      } else if (
+        doc.level == "Event" &&
+        doc.read === true &&
+        doc.line_notify === true
+      ) {
+        try {
+          await test_alarm_nanoDb.destroy(doc._id, doc._rev);
+          flag++;
+        } catch (error) {
+          console.error("刪除文檔時發生錯誤:", error);
+        }
       }
     }
     // 回傳符合條件文檔的數量
@@ -188,7 +210,7 @@ async function delprocessDocs() {
 
 const maxRequestsPerHour = 1000;
 let requestCount = 0;
-const intervalTime = 1000; // 每1秒執行一次
+const intervalTime = 3000; // 每1秒執行一次
 
 const resetRequestCount = () => {
   const now = new Date();
@@ -237,6 +259,6 @@ const timer = setInterval(async () => {
 resetRequestCount();
 
 //假設delprocessDocs函數每2秒執行一次;
-setInterval(delprocessDocs, 2000);
+setInterval(delprocessDocs, 10000);
 
-module.exports = { delprocessDocs, resetRequestCount };
+module.exports = { processDocs, delprocessDocs, resetRequestCount };

@@ -28,8 +28,12 @@ const {
   getYearReportData,
   startHourlyCheck,
 } = require("./getReportData.js");
-const { delprocessDocs, resetRequestCount } = require("./alarmFilter.js");
-const { startMonitoring, startMonitoring400087 } = require("./heartbeat.js");
+const {
+  processDocs,
+  delprocessDocs,
+  resetRequestCount,
+} = require("./alarmFilter.js");
+const { startMonitoring } = require("./heartbeat.js");
 const schedule = require("node-schedule");
 const config = require("./config");
 const moment = require("moment");
@@ -736,7 +740,6 @@ const reportRouter = require("./rReport");
 const chartRouter = require("./rChart");
 const alarmRouter = require("./rAlarm");
 // const { nextTick } = require("process");-**-/*-/*-
-
 const login = require("./rLogin");
 const { permission } = require("process");
 
@@ -857,7 +860,10 @@ cron.schedule("0 0 2 1 *", async () => {
   await getYearReportData(specifiedTime);
 });
 
+// sendLineNotify("2025122 測試");
+
 resetRequestCount();
-setInterval(delprocessDocs, 2000);
+setInterval(processDocs, 1000);
+setInterval(delprocessDocs, 3000);
+
 startMonitoring();
-startMonitoring400087();

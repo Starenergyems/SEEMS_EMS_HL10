@@ -2,13 +2,8 @@ const express = require("express");
 const router = express.Router();
 const methodOverride = require("method-override");
 const config = require("./config");
-const couchdbConfig = config.database;
 const axios = require("axios");
 require("dotenv").config();
-
-//********************************************************************************* */
-router.use(express.urlencoded({ extended: true }));
-router.use(methodOverride("_method"));
 //********************************************************************************* */
 //發訊息通用
 //const accessToken = '7brkubEfNqOzx8Y4PEgiwrRXqU7sdMwXBWgfoLHwWI6'; //測試用的token
@@ -42,6 +37,5 @@ function sendLineNotify(message) {
 }
 // 修改為：
 module.exports = {
-  router,
   sendLineNotify,
 };
