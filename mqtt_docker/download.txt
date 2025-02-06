@@ -1,0 +1,22 @@
+在 Ubuntu 上安裝
+
+sudo apt update
+sudo apt install mosquitto mosquitto-clients -y
+
+確認 Mosquitto 和工具是否安裝成功：
+mosquitto -h
+mosquitto_passwd -h
+
+如果能夠看到幫助信息，表示安裝成功。
+
+設定帳號
+sudo mosquitto_passwd -c /home/seems/SEEMS_EMS/mqtt_docker/config/password.txt seems
+設定密碼
+ems45877096
+
+如果需要添加更多用戶，可以使用 -b（batch）模式：
+sudo mosquitto_passwd -b /home/seems/SEEMS_EMS/mqtt_docker/config/password.txt another_user another_password
+
+確認客戶端身份驗證
+檢查連接到 Mosquitto 的 MQTT 客戶端是否正確配置用戶名和密碼。以 mosquitto_pub測試為例
+mosquitto_pub -h localhost -p 1883 -u seems -P ems45877096 -t "test/topic" -m "Hello MQTT"

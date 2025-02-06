@@ -1,0 +1,18 @@
+services:
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt_broker # 確保容器名稱唯一
+    restart: always
+    ports:
+      - "1883:1883" # MQTT 通信端口
+      - "9001:9001" # WebSocket
+    volumes:
+      - ./config:/mosquitto/config
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+    networks:
+      - mqtt_network # 獨立網路名稱
+
+networks:
+  mqtt_network:
+    name: mqtt_network # 定義專屬網路名稱，避免與其他服務衝突
