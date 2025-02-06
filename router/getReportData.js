@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require("uuid"); // 用於生成隨機的 _id
 const fs = require("fs");
 const cron = require("node-cron"); //指定幾點做什麼
 const axios = require("axios"); //在server執行get
-
+const { sendLineNotify } = require("./line");
 const config = require("./config");
 const {
   formatDateAndTime,
@@ -124,11 +124,11 @@ async function checkBidID(formattedTime) {
 // - 檢查是否有缺漏 非3603筆 記得確認這兩個小時有沒有得標!
 async function getHourRange(formattedTimeStart, formattedTimeEnd) {
   try {
-    console.log(
-      "#############################################################"
-    );
-    console.log("該小時原始執行率搜尋起始時間:", formattedTimeStart);
-    console.log("該小時原始執行率搜尋結束時間:", formattedTimeEnd);
+    // console.log(
+    //   "#############################################################"
+    // );
+    // console.log("該小時原始執行率搜尋起始時間:", formattedTimeStart);
+    // console.log("該小時原始執行率搜尋結束時間:", formattedTimeEnd);
 
     const checkBidIDid1 = await checkBidID(formattedTimeStart);
     const checkBidIDsecondIntervalTime = formatTimecount(
@@ -186,7 +186,10 @@ async function getHourRange(formattedTimeStart, formattedTimeEnd) {
       if (intervalValue <= 0) {
         hourRange.push(7654);
       } else {
-        const data = result.docs[i]?.System?.["400037"];
+        const data =
+          result.docs[i] &&
+          result.docs[i].System &&
+          result.docs[i].System["400037"];
         if (data === undefined || data === null) {
           valueMissingNumber++; // 計算缺失數據
           hourRange.push(0); // 缺失數據設為 0
@@ -196,8 +199,8 @@ async function getHourRange(formattedTimeStart, formattedTimeEnd) {
         }
       }
     }
-    console.log("該小時缺少秒數之數量: ", valueMissingNumber);
-    console.log("---------------獲取該小時的原始執行率已結束---------------");
+    // console.log("該小時缺少秒數之數量: ", valueMissingNumber);
+    // console.log("---------------獲取該小時的原始執行率已結束---------------");
     return { hourRange, valueMissingNumber };
   } catch (error) {
     console.error("getHourRange在查詢或處理數據時出錯: ", error);
@@ -272,7 +275,7 @@ function getFormattedDate(formattedHour, date) {
   let formattedDate;
   if (formattedHour === 0) {
     formattedDate = formatDate(date, -1);
-    console.log("0點，進行日期變更，向前推一天");
+    //console.log("0點，進行日期變更，向前推一天");
   } else {
     formattedDate = formatDate(date, 0);
   }
@@ -283,10 +286,10 @@ function getFormattedDate(formattedHour, date) {
 // - (核心) 獲取每小時的執行率 會先判斷是否已存在該小時數值才進行撈取
 // 依據時間範圍查詢資料庫內是否有該小時的數據，若無則透過 getHourRange 進行數據提取，並計算最大、最小和平均執行率，最終將資料存入資料庫。
 async function getSnigleHourValue(date) {
-  console.log(
-    "########################################################################"
-  );
-  console.log("date: ", date);
+  // console.log(
+  //   "########################################################################"
+  // );
+  // console.log("date: ", date);
   try {
     const formattedHour = formatHour(date); // 獲取目前小時
     const oneHourAgo = formattedHour - 1 < 0 ? 23 : formattedHour - 1; // 目標時間往前推一小時
@@ -325,7 +328,7 @@ async function getSnigleHourValue(date) {
     );
 
     if (isDocumentExists.found) {
-      console.log("當日該小時資料已存在。");
+      //console.log("當日該小時資料已存在。");
       return isDocumentExists.documents; // 若資料存在則直接返回
     }
 
@@ -378,10 +381,10 @@ async function getSnigleHourValue(date) {
 // * 完整日報************************************************************************************************************ *//
 // - 檢查全日完整資料是否已存在
 async function checkDayExists(specifiedTime) {
-  console.log(
-    "########################################################################"
-  );
-  console.log("執行日報檢查，檢查之傳入時間:", specifiedTime);
+  // console.log(
+  //   "########################################################################"
+  // );
+  // console.log("執行日報檢查，檢查之傳入時間:", specifiedTime);
   const targetDay = formatDate(specifiedTime);
   const today = specifiedTime;
   //console.log("日報檢查的目標日期(targetDay): ", targetDay);
@@ -396,7 +399,7 @@ async function checkDayExists(specifiedTime) {
   //console.log("report_hourDb: ", result);
   // 判斷是否有符合條件的資料
   if (result.docs && result.docs.length > 0) {
-    console.log("當日資料已存在，直接回傳結果。");
+    //console.log("當日資料已存在，直接回傳結果。");
     return { state: true, result }; // 找到符合條件的資料，回傳 true
   } else {
     console.log("當日資料不存在，請繼續完成...");
@@ -406,13 +409,13 @@ async function checkDayExists(specifiedTime) {
 
 async function check24HourExists(specifiedTime) {
   try {
-    console.log(
-      "########################################################################"
-    );
-    console.log("------ 執行檢查全日24小時的執行率是否存在 ------");
+    // console.log(
+    //   "########################################################################"
+    // );
+    //console.log("------ 執行檢查全日24小時的執行率是否存在 ------");
     const today = specifiedTime;
     const targetDay = formatDate(today);
-    console.log("targetDay: ", targetDay);
+    //console.log("targetDay: ", targetDay);
 
     // 設定查詢條件，查詢指定日期的 24 小時資料
     const filter = {
@@ -441,16 +444,16 @@ async function check24HourExists(specifiedTime) {
         hourlyDataArray[i] = doc;
       }
     }
-    console.log("缺少的時段 missingTimeIndexes:", missingTimeIndexes);
+    //console.log("缺少的時段 missingTimeIndexes:", missingTimeIndexes);
 
     // 如果沒有缺少時段，資料完整，直接回傳完整數據
     if (missingTimeIndexes.length === 0) {
-      console.log("資料完整，存在 24 筆資料。");
+      //console.log("資料完整，存在 24 筆資料。");
       return { complete: true, result: hourlyDataArray };
     } else {
-      console.log(
-        `資料不完整，缺少的時間段: ${missingTimeIndexes.join(", ")}。`
-      );
+      // console.log(
+      //   `資料不完整，缺少的時間段: ${missingTimeIndexes.join(", ")}。`
+      // );
 
       // 逐一補值，每次只補一個小時，補完再補下一個小時
       for (const Hour of missingTimeIndexes) {
@@ -486,7 +489,7 @@ async function check24HourExists(specifiedTime) {
           const recheckDoc = await checkDocumentByDate(targetDay, Hour);
           if (recheckDoc.found) {
             hourlyDataArray[Hour] = recheckDoc.documents[0];
-            console.log(`小時 ${Hour} 的數據已存在，跳過補值。`);
+            //console.log(`小時 ${Hour} 的數據已存在，跳過補值。`);
             continue;
           }
 
@@ -519,7 +522,7 @@ async function check24HourExists(specifiedTime) {
       }
 
       if (remainingMissingIndexes.length === 0) {
-        console.log("所有缺失的時段資料已補齊。");
+        //console.log("所有缺失的時段資料已補齊。");
         return { complete: true, result: hourlyDataArray };
       } else {
         console.log(
@@ -536,8 +539,8 @@ async function check24HourExists(specifiedTime) {
 
 // - 副程式: 獲得全天(日報)電力使用資訊
 async function getFullDayPowerUsage(type, specifiedTime) {
-  console.log("執行日報中電力資訊獲取，執行日期為: ", specifiedTime.format());
-  console.log("類型(type): ", type);
+  //console.log("執行日報中電力資訊獲取，執行日期為: ", specifiedTime.format());
+  //console.log("類型(type): ", type);
   // 設定 startTime 和 endTime 為當天的00:00:00.000和23:59:59.000，並加上時區偏移
   const targetDay = specifiedTime.format("YYYY-MM-DD");
   const startTime = moment(targetDay + "T00:00:00.000+08:00").format(
@@ -561,7 +564,7 @@ async function getFullDayPowerUsage(type, specifiedTime) {
   const existingData = await powerusageDb.find(filter);
   //console.log("existingData:", existingData);
   if (existingData.docs.length > 0) {
-    console.log("已存在相應數據，跳過讀取other01Db，並直接回傳數值。");
+    //console.log("已存在相應數據，跳過讀取other01Db，並直接回傳數值。");
     const data = existingData.docs[0];
     //console.log("該日充放電資料為: ", existingData.docs);
     return {
@@ -570,9 +573,9 @@ async function getFullDayPowerUsage(type, specifiedTime) {
       message: "Data already exists.",
     };
   } else {
-    console.log(
-      "未找到相應數據，繼續處理讀取other01Db，以獲取全日用電量數據..."
-    );
+    // console.log(
+    //   "未找到相應數據，繼續處理讀取other01Db，以獲取全日用電量數據..."
+    // );
 
     // 設置一秒後的時間
     const startTimePlusOneSecond = moment(startTime)
@@ -732,8 +735,8 @@ async function statisticsOutOfService(specifiedTime) {
 // - 當搜索日晚於目前系統時間不執行 檢查是否已有當日資料 有資料直接產表
 // - 無當日則檢查全天資料是否完整 檢查當日用電資料 檢查中止資料 都存在才執行 並儲存當日資料到day資料庫 最後回傳數值 報表產生
 async function getDailyReportData(specifiedTime) {
-  console.log("------------------------------------------------------------");
-  console.log("1.開始執行日報");
+  // console.log("------------------------------------------------------------");
+  // console.log("1.開始執行日報");
 
   const now = moment();
   const oneDayBeforeNow = now.clone().subtract(1, "days");
@@ -890,7 +893,7 @@ async function getDailyReportData(specifiedTime) {
         };
 
         const saveResult = await report_dayDb.insert(newDoc);
-        console.log("新文檔已存入資料庫: ", saveResult);
+        //console.log("新文檔已存入資料庫: ", saveResult);
 
         return {
           Date: formatDate(specifiedTime),
@@ -957,7 +960,7 @@ function startHourlyCheck() {
     //console.log("正在獲取該小時執行率詳細數據! getSnigleHourValue() 執行中");
     await getSnigleHourValue(now);
   });
-  console.log("已啟動定時任務，每小時的5分鐘執行一次。");
+  //console.log("已啟動定時任務，每小時的5分鐘執行一次。");
 }
 
 //startHourlyCheck();
@@ -989,14 +992,14 @@ function startHourlyCheck() {
 // -  月報
 // - 檢查月報裡的每日資料是否存在
 async function checkMonthExists(specifiedTime) {
-  console.log("正在檢查當月每日的完整資料是否存在");
+  //console.log("正在檢查當月每日的完整資料是否存在");
 
   // 獲取指定時間的月份和年份
   const year = specifiedTime.year();
   const month = specifiedTime.month() + 1; // month() 是 0-11，需要 +1 轉為 1-12
   const daysInMonth = specifiedTime.daysInMonth(); // 獲取該月的天數
 
-  console.log(`檢查年份 ${year} 月份 ${month} 的資料`);
+  // console.log(`檢查年份 ${year} 月份 ${month} 的資料`);
 
   // 初始化一個空數組來儲存要檢查的日期
   const dateArray = [];
@@ -1023,11 +1026,11 @@ async function checkMonthExists(specifiedTime) {
     // 對資料依照 Date 屬性進行排序
     result.docs.sort((a, b) => new Date(a.Date) - new Date(b.Date));
 
-    console.log(`所有 ${daysInMonth} 天的資料都已存在，並已按日期排序。`);
+    //console.log(`所有 ${daysInMonth} 天的資料都已存在，並已按日期排序。`);
 
     return { state: true, result }; // 找到該月所有日期的資料，回傳 true
   } else {
-    console.log(`部分資料缺失，已找到 ${result.docs.length} 天的資料。`);
+    //console.log(`部分資料缺失，已找到 ${result.docs.length} 天的資料。`);
 
     // 如果有部分資料缺失，也進行排序以便後續處理
     result.docs.sort((a, b) => new Date(a.Date) - new Date(b.Date));
@@ -1133,7 +1136,7 @@ async function getBeforeMonthlyData(specifiedTime) {
         },
         limit: 1,
       };
-      console.log("前月:", lastPeriod.format("YYYY-MM"));
+      //console.log("前月:", lastPeriod.format("YYYY-MM"));
       const lastPeriodResult = await report_monthlyDb.find(filter1);
       //console.log("lastPeriodResult", lastPeriodResult);
 
@@ -1146,11 +1149,11 @@ async function getBeforeMonthlyData(specifiedTime) {
         lastPeriodData = lastPeriodResult.docs[0]; // 取出第一個文檔
         //console.log("查詢到的上一期資料:", lastPeriodData);
       } else {
-        console.log(`查無上一個月 (${lastPeriod.format("YYYY-MM")}) 的資料`);
+        //console.log(`查無上一個月 (${lastPeriod.format("YYYY-MM")}) 的資料`);
         lastPeriodData = defaultData;
       }
     } catch (err) {
-      console.log(`查詢上一個月資料時發生錯誤: ${err.message}`);
+      //console.log(`查詢上一個月資料時發生錯誤: ${err.message}`);
       lastPeriodData = defaultData;
     }
   }
@@ -1171,7 +1174,7 @@ async function getBeforeMonthlyData(specifiedTime) {
         },
         limit: 1,
       };
-      console.log("去年:", lastYearSamePeriod.format("YYYY-MM"));
+      //console.log("去年:", lastYearSamePeriod.format("YYYY-MM"));
       const lastYearResult = await report_monthlyDb.find(filter2);
       //console.log("lastYearResult", lastYearResult);
 
@@ -1232,8 +1235,8 @@ function handleBorrowing(kWh_H_diff, kWh_M_diff, kWh_L_diff) {
 // (is mean 1-1, 1-2, … , 4-1, EMS, MVCB )
 // - 獲得指定月份輔助用電資料(可用在過去時間)
 async function getAUXpowerData(type, specifiedTime) {
-  console.log("電力資訊-傳入的時間: ", specifiedTime.format());
-  console.log("type: ", type);
+  // console.log("電力資訊-傳入的時間: ", specifiedTime.format());
+  // console.log("type: ", type);
 
   const startTime = specifiedTime
     .startOf("month")
@@ -1242,8 +1245,8 @@ async function getAUXpowerData(type, specifiedTime) {
     .endOf("month")
     .format("YYYY-MM-DDT23:59:59.000+08:00");
   const targetDay = specifiedTime.format("YYYY-MM");
-  console.log("全月的電量之startTime: ", startTime);
-  console.log("全月的電量之endTime: ", endTime);
+  // console.log("全月的電量之startTime: ", startTime);
+  // console.log("全月的電量之endTime: ", endTime);
 
   const filter = {
     selector: {
@@ -1255,16 +1258,16 @@ async function getAUXpowerData(type, specifiedTime) {
   const existingData = await powerusageDb.find(filter);
   if (existingData.docs.length > 0) {
     const data = existingData.docs[0];
-    console.log("已存在相應數據，跳過讀取other01Db:");
-    console.log("數值是:", data);
-    console.log("--------------------------------------------------------");
+    // console.log("已存在相應數據，跳過讀取other01Db:");
+    // console.log("數值是:", data);
+    // console.log("--------------------------------------------------------");
     return {
       complete: true,
       data: data,
       message: "Data already exists.",
     };
   } else {
-    console.log("未找到相應數據，繼續讀取other01Db電表數值...");
+    //console.log("未找到相應數據，繼續讀取other01Db電表數值...");
 
     const startTimePlusOneSecond = moment(startTime)
       .add(1, "seconds")
@@ -1376,7 +1379,7 @@ async function getAUXpowerData(type, specifiedTime) {
       auxPower.push(roundedValue);
     }
 
-    console.log("AuxMtot1、AuxM1 到 AuxM9 的計算結果：", auxPower);
+    //console.log("AuxMtot1、AuxM1 到 AuxM9 的計算結果：", auxPower);
     // 計算 auxPower 的第1到第9格的總和
     const auxSum_calculate = parseFloat(
       auxPower
@@ -1385,7 +1388,7 @@ async function getAUXpowerData(type, specifiedTime) {
         .toFixed(1)
     );
 
-    console.log("第1到第9格的總和：", auxSum_calculate);
+    //console.log("第1到第9格的總和：", auxSum_calculate);
 
     const newDoc = {
       type: type,
@@ -1395,7 +1398,7 @@ async function getAUXpowerData(type, specifiedTime) {
     };
 
     const saveResult = await powerusageDb.insert(newDoc);
-    console.log("新文檔已存入資料庫: ", saveResult);
+    //console.log("新文檔已存入資料庫: ", saveResult);
 
     return {
       complete: true,
@@ -1427,7 +1430,7 @@ async function getMonthData(specifiedTime) {
     const completeData = Array(31 + 1).fill(null); // 初始化大小為該月份天數+1的陣列
 
     if (monthCheckResult.state === true) {
-      console.log("該月份的所有數值資料已存在。");
+      //console.log("該月份的所有數值資料已存在。");
       extractAndStoreDailyData(monthCheckResult.result.docs, completeData);
 
       // 填補空缺的資料
@@ -1448,7 +1451,7 @@ async function getMonthData(specifiedTime) {
       };
 
       const saveResult = await report_monthlyDb.insert(newDoc);
-      console.log("新文檔已存入資料庫: ", saveResult);
+      //console.log("新文檔已存入資料庫: ", saveResult);
 
       return {
         state: true,
@@ -1457,7 +1460,7 @@ async function getMonthData(specifiedTime) {
         beforeMonthlyData,
       };
     } else {
-      console.log("該月份的部分數值資料缺失。");
+      //console.log("該月份的部分數值資料缺失。");
 
       // 設定起始日為指定時間當月的00:00:00
       const startDate = specifiedTime
@@ -1470,7 +1473,7 @@ async function getMonthData(specifiedTime) {
         .startOf("month")
         .format("YYYY-MM-DDTHH:mm:ss.SSSZ");
 
-      console.log(`補植資料，從 ${startDate} 到 ${endDate}`);
+      //console.log(`補植資料，從 ${startDate} 到 ${endDate}`);
 
       // 執行範圍內的報告生成
       await getReportsInRange(startDate, endDate);
@@ -1588,11 +1591,11 @@ async function getMonthlyReportData(specifiedTime) {
           : result.data; // 如果補值失敗，返回預設資料
     }
   }
-  console.log("-----------------------------------------");
-  console.log("月報數值");
-  console.log("thisMonth", thisMonth);
-  console.log("lastMonth", lastMonth);
-  console.log("lastYear", lastYear);
+  // console.log("-----------------------------------------");
+  // console.log("月報數值");
+  // console.log("thisMonth", thisMonth);
+  // console.log("lastMonth", lastMonth);
+  // console.log("lastYear", lastYear);
   // 最後整合回傳結果
   return {
     thisMonth,
@@ -1703,9 +1706,9 @@ async function getYearReportData(specifiedTime) {
 
     // 最後返回包括去年的結果
 
-    console.log("result:\n", result);
-    console.log("----------");
-    console.log("previousYearResult:\n", previousYearResult);
+    // console.log("result:\n", result);
+    // console.log("----------");
+    // console.log("previousYearResult:\n", previousYearResult);
 
     return {
       ...result,
@@ -1722,7 +1725,7 @@ async function getYearReportData(specifiedTime) {
         (_, i) => defaultData(i + 1).powerUseSum_calculate
       ),
     };
-    console.log("返回的預設資料內容：", errorResult);
+    //console.log("返回的預設資料內容：", errorResult);
     return errorResult;
   }
 }
@@ -1755,7 +1758,6 @@ async function getYearReportData(specifiedTime) {
 //   console.log(`執行年報生成，傳入時間：${specifiedTime.format()}`);
 //   await getYearReportData(specifiedTime);
 // });
-
 // /////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
   getDailyReportData,
