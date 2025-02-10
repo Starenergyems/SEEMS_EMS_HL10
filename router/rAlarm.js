@@ -10,14 +10,6 @@ const router = express.Router();
 const app = express();
 const cors = require("cors");
 const moment = require("moment");
-// const {
-//   LC_error_result_gen,
-//   DC_error_result_gen,
-//   Other_error_result_gen,
-//   GC_error_result_gen,
-//   alarm_processor,
-// } = require("./alarmFunctions");
-//const { rejects } = require("assert");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -47,7 +39,7 @@ router.get("/alarm", (req, res) => {
 router.get("/alarm/realtime", (req, res) => {
   // num與fun
   let permission = req.body.permission;
-  res.render("Alm_RealTime",{permission:permission});
+  res.render("Alm_RealTime", { permission: permission });
 });
 
 router.post("/alarm/realtime/edit", (req, res) => {
@@ -99,7 +91,7 @@ router.post("/alarm/realtime/edit", (req, res) => {
           }
         });
     }
-    //單一已讀 
+    //單一已讀
     else {
       promise = test_alarmnanoDb
         .get(ID)
@@ -222,9 +214,8 @@ router.get("/alarm/realtime/edit", (req, res) => {
 router.get("/alarm/history", (req, res) => {
   // num與fun
   let permission = req.body.permission;
-  res.render("Alm_History", {permission:permission});
+  res.render("Alm_History", { permission: permission });
 });
-
 
 router.get("/alarm/history/edit", (req, res) => {
   const From_date = new Date().toISOString().split("T")[0]; // From_date set to today's date;

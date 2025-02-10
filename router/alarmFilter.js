@@ -188,17 +188,6 @@ async function delprocessDocs() {
         } catch (error) {
           console.error("刪除文檔時發生錯誤:", error);
         }
-      } else if (
-        doc.level == "Event" &&
-        doc.read === true &&
-        doc.line_notify === true
-      ) {
-        try {
-          await test_alarm_nanoDb.destroy(doc._id, doc._rev);
-          flag++;
-        } catch (error) {
-          console.error("刪除文檔時發生錯誤:", error);
-        }
       }
     }
     // 回傳符合條件文檔的數量
