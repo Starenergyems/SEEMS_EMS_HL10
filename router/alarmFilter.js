@@ -230,9 +230,10 @@ const timer = setInterval(async () => {
     clearInterval(timer); // 如果超過每小時請求上限，停止計時器
     const message = `
   ${now}:
-  已達到每小時上限1000則訊息，已暫停發送通知!
+  已達到每小時上限1500則訊息，已暫停發送通知!
   請注意該小時系統情況，待整點後恢復Line告警功能`;
-    s//endLineNotify(message);
+    //sendLineNotify(message);
+    sendSlackNotification(message);
     return;
   }
   // 每一秒執行一次processDocs()功能
