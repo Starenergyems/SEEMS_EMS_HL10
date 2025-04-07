@@ -1,11 +1,8 @@
 const os = require("os");
-
 // 獲取網絡介面資訊
 const networkInterfaces = os.networkInterfaces();
-
 // 使用標誌來控制網絡資訊只輸出一次
 let isInfoLogged = false;
-
 Object.entries(networkInterfaces).forEach(([name, interfaces]) => {
   interfaces.forEach((iface) => {
     // 過濾掉內部 (localhost) 和非IPv4的介面
@@ -24,7 +21,6 @@ Object.entries(networkInterfaces).forEach(([name, interfaces]) => {
       console.log("系統執行時間 (秒):", os.uptime());
       console.log("使用者資訊:", os.userInfo());
       console.log("網絡介面資訊:", os.networkInterfaces());
-
       // 設置標誌為 true，停止後續輸出
       isInfoLogged = true;
     }
@@ -37,7 +33,6 @@ setInterval(() => {
   const freeMemMB = (os.freemem() / 1024 / 1024).toFixed(2);
   const usedMemMB = (totalMemMB - freeMemMB).toFixed(2);
   const memoryUsagePercent = ((usedMemMB / totalMemMB) * 100).toFixed(2);
-
   console.log("\n=== 記憶體使用狀態 ===");
   console.log(`總記憶體 (MB): ${totalMemMB}`);
   console.log(`已使用記憶體 (MB): ${usedMemMB}`);

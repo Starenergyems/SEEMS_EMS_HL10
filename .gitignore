@@ -7,3 +7,4 @@ git.txt
 /models/
 /mongoDBData/
 /router/C
+/mqtt_docker/config/password.txt

@@ -108,6 +108,7 @@ async function fetchDataAndNotify() {
 //sendLineNotify(message);
 
 module.exports = { router, getFullDayPowerUsage, fetchDataAndNotify };
+
 // - 副程式: 獲得全天(日報)電力使用資訊
 async function getFullDayPowerUsage(type, specifiedTime) {
   console.log("執行日報中電力資訊獲取，執行日期為: ", specifiedTime.format());

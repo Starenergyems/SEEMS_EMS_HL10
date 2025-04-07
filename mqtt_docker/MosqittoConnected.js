@@ -1,3 +1,5 @@
+// - 測試與本地的Mosqitto 通訊收發(包含sub與pub)
+
 require("dotenv").config();
 const mqtt = require("mqtt");
 

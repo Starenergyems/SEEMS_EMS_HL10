@@ -9,7 +9,7 @@ const nano = require("nano")(
 );
 
 const { sendSlackNotification } = require("./slack_api.js");
-const { sendLineNotify } = require("./line");
+//const { sendLineNotify } = require("./line");
 
 require("dotenv").config();
 const test_alarm = "test_alarm";
@@ -137,7 +137,7 @@ async function processDocs() {
       await sendSlackNotification(doc);
       //console.log("再發送 line 通知", message);
       // 確保 Slack 通知完成後，再發送 LINE 通知
-      await sendLineNotify(message);
+      //await sendLineNotify(message);
 
       // 更新資料庫中的 line_notify 屬性為 true
       let insertAttempt = false;
@@ -232,7 +232,7 @@ const timer = setInterval(async () => {
   ${now}:
   已達到每小時上限1000則訊息，已暫停發送通知!
   請注意該小時系統情況，待整點後恢復Line告警功能`;
-    sendLineNotify(message);
+    s//endLineNotify(message);
     return;
   }
   // 每一秒執行一次processDocs()功能
