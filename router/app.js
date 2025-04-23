@@ -47,7 +47,7 @@ const nano = require("nano")(
   `http://${couchdbConfig.username}:${couchdbConfig.password}@${couchdbConfig.host}:${couchdbConfig.port}`
 );
 const { mapL_M_systemMode, scaleProcess, mapminSOH } = require("./function");
-const { sendLineNotify } = require("./line");
+//const { sendLineNotify } = require("./line");
 // Middleware
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../views"));
@@ -779,7 +779,7 @@ server.listen(port, () => {
     content: `EMS${emsnumber}主程式重新啟動 !! 主機IP為：${HOST_IP}`,
   };
 
-  sendLineNotify(message.content); // 只發送文字訊息至 LINE
+  //sendLineNotify(message.content); // 只發送文字訊息至 LINE
   sendSlackNotification(message); // 發送物件到 Slack
 });
 
@@ -792,7 +792,7 @@ process.on("SIGINT", () => {
     const message = `
   EMS${emsnumber}主程式已停止運作 !!
   主機IP為：${HOST_IP}`;
-    sendLineNotify(message);
+    //sendLineNotify(message);
     sendSlackNotification(message);
     process.exit(0);
   });

@@ -74,7 +74,7 @@ async function fetchDataAndNotify() {
     if (body.docs.length > 0) {
       const data = body.docs[0];
       const message = `花蓮 4-1 案場\nDate: ${data.date}\n輸入電量(Imp): ${data.day_kWh_Import} kWh\n輸出電量(Exp): ${data.day_kWh_Export} kWh\n用電量(Net): ${data.kWh_Net} kWh\nRTE: ${data.kWh_RTE} %`;
-      await sendLineNotify(message);
+      //await sendLineNotify(message);
     } else {
       const yesterdaytime = moment().subtract(1, "days"); // 保持 moment 對象
       // 呼叫 getFullDayPowerUsage 函數，傳入參數 type = "D" 和 specifiedTime = yesterday
@@ -87,7 +87,7 @@ async function fetchDataAndNotify() {
           : `花蓮 4-1 案場\nDate: ${yesterday}\n昨日數值不存在`;
 
       console.log(message);
-      await sendLineNotify(message);
+      //await sendLineNotify(message);
       await sendSlackNotification(message);
     }
   } catch (err) {

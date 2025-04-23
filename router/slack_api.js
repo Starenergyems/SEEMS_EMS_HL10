@@ -16,8 +16,16 @@ function sendSlackNotification(doc) {
   } else if (doc.level === "Fault") {
     color = "#FF0000";
     title = "❌ Fault";
+  } else if (doc.level === "event") {
+    if (doc.resourceType === "GC") {
+      color = "#FF0000";
+      title = "❌ Fault";
+    } else {
+      color = "#FFCC00";
+      title = "⚠️ Alart";
+    }
   }
-
+  
   const formattedDate = moment(
     doc.recover ? doc.recover_time : doc.occurrence_time
   ).format("YYYY-MM-DD HH:mm:ss");
